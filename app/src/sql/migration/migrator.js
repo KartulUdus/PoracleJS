@@ -11,7 +11,6 @@ const gymInfo = `CREATE TABLE \`gym-info\` (
   \`longitude\` double NOT NULL,
   KEY \`geocoded_id\` (\`id\`),
   KEY \`geocoded_park\` (\`park\`),
-  KEY \`geocoded_gym_name\` (\`gym_name\`),
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 const humans = `CREATE TABLE \`humans\` (

@@ -96,7 +96,7 @@ module.exports = {
         let query =
             `select * from monsters 
             join humans on humans.id = monsters.id
-            where human.enabled = 1 and
+            where humans.enabled = 1 and
             pokemon_id=${data.pokemon_id} and 
             min_iv<=${data.iv} and
             max_iv>=${data.iv} and
@@ -125,7 +125,7 @@ module.exports = {
         let query =
             `select * from raid 
             join humans on humans.id = raid.id
-            where human.enabled = 1 and
+            where humans.enabled = 1 and
             pokemon_id=${data.pokemon_id} and 
             (raid.team = ${data.team_id} or raid.team = 4) and 
             (ST_Distance_Sphere(point(humans.latitude, humans.longitude), POINT(${data.latitude}, ${data.longitude}))<raid.distance ${areastring})`;
@@ -144,7 +144,7 @@ module.exports = {
         let query =
             `select * from egg 
             join humans on humans.id = egg.id
-            where human.enabled = 1 and 
+            where humans.enabled = 1 and 
             raid_level=${data.level} and 
             (egg.team = ${data.team_id} or egg.team = 4) and 
             (ST_Distance_Sphere(point(humans.latitude, humans.longitude), POINT(${data.latitude}, ${data.longitude}))<egg.distance ${areastring})`;

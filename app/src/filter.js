@@ -154,7 +154,7 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                             });
                             query.raidWhoCares(data, function(whocares){
                                 if(whocares.length !== 0) {
-                                    gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(err, address){
+                                    gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(address){
 
                                         let view = {
                                             time : data.distime,
@@ -173,7 +173,7 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                             mapurl : data.mapurl,
                                             rocketmap : data.rocketmap,
                                             imgurl : data.imgurl.toLowerCase(),
-                                            color : data.color,
+                                            color : data.color
                                         };
 
                                         let template = JSON.stringify(dts.raid);

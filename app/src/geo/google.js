@@ -13,7 +13,7 @@ let geocoder = NodeGeocoder({
 let getCoords = NodeGeocoder({
     provider: 'google',
     httpAdapter: 'https',
-    apiKey: config.gmaps.key,
+    apiKey: config.gmaps.key
 });
 
 module.exports = {
@@ -35,7 +35,7 @@ module.exports = {
     },
 
     pointInArea: function(point, callback){
-        let confAreas = config.geofence.map(area => area.name.toLowerCase());
+        let confAreas = config.geofence.map(area => area.name.toLowerCase())
         let matchAreas = [];
         confAreas.forEach(function(area) {
             let areaObj = _.find(config.geofence, function(path){ return path.name.toLowerCase() === area });
