@@ -1,4 +1,4 @@
-logs/*
+logs/*.log
 config/*.json
 node_modules
 build
