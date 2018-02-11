@@ -15,7 +15,7 @@ let dts = require('../../config/dts');
 let moveData = require(config.locale.movesJson);
 let moment = require('moment');
     require('moment-precise-range-plugin');
-moment.locale(config.locale.timelocale);
+moment.locale(config.locale.timeformat);
 
 amqp.connect(config.rabbit.conn, function(err, conn) {
     conn.createChannel(function(err, ch) {
@@ -88,7 +88,7 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                 rocketmap : data.rocketmap,
                                 form : data.formname,
                                 imgurl : data.imgurl.toLowerCase(),
-                                color : data.color,
+                                color : data.color
                             };
                             let template = JSON.stringify(dts.monster);
                             let message = mustache.render(template,view);
@@ -134,7 +134,6 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                 data.imgurl = `${config.general.imgurl}${data.pokemon_id}.png`;
                 let e = [];
                 data.emoji = monsterData[data.pokemon_id].types.forEach(function(type){e.push(type.emoji)});
-                log.error(e);
                 data.teamname = teamData[data.team_id].name;
                 data.color = teamData[data.team_id].color;
                 data.quick_move = moveData[data.move_1].name;
@@ -184,7 +183,6 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                         let template = JSON.stringify(dts.raid);
                                         let message = mustache.render(template,view);
                                         message = JSON.parse(message);
-                                        log.error(e);
                                         whocares.forEach(function (cares) {
 
                                             if (cares.id < 300000000000000000) {
@@ -196,6 +194,7 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                                 log.info(`Alerted #${cares.name} about ${data.name} raid`)
 
                                             }
+                                            query.addOneQuery('humans','alerts_sent','id', cares.id);
 
                                         });
 
@@ -250,7 +249,7 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                             mapurl : data.mapurl,
                                             rocketmap : data.rocketmap,
                                             imgurl : data.imgurl.toLowerCase(),
-                                            color : data.color,
+                                            color : data.color
                                         };
 
                                         let template = JSON.stringify(dts.egg);

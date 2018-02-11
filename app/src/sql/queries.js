@@ -109,7 +109,11 @@ module.exports = {
             sta<=${data.individual_stamina} and
             min_weight<=${data.weight} and
             max_weight>=${data.weight} and
-            (ST_Distance_Sphere(point(humans.latitude, humans.longitude), POINT(${data.latitude}, ${data.longitude}))<monsters.distance ${areastring})`;
+            		       round( 63710000 * acos( cos( radians(${data.latitude}) ) 
+              * cos( radians( humans.latitude ) ) 
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
+              + sin( radians(${data.latitude}) ) 
+              * sin( radians( humans.latitude ) ) )<monsters.distance ${areastring})`;
         log.debug(query);
         pool.query(query, function (err, result) {
             if (err) throw err;
@@ -128,7 +132,11 @@ module.exports = {
             where humans.enabled = 1 and
             pokemon_id=${data.pokemon_id} and 
             (raid.team = ${data.team_id} or raid.team = 4) and 
-            (ST_Distance_Sphere(point(humans.latitude, humans.longitude), POINT(${data.latitude}, ${data.longitude}))<raid.distance ${areastring})`;
+            		       round( 63710000 * acos( cos( radians(${data.latitude}) ) 
+              * cos( radians( humans.latitude ) ) 
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
+              + sin( radians(${data.latitude}) ) 
+              * sin( radians( humans.latitude ) ) )<raid.distance ${areastring})`;
         log.debug(query);
         pool.query(query, function (err, result) {
             if (err) throw err;
@@ -147,7 +155,11 @@ module.exports = {
             where humans.enabled = 1 and 
             raid_level=${data.level} and 
             (egg.team = ${data.team_id} or egg.team = 4) and 
-            (ST_Distance_Sphere(point(humans.latitude, humans.longitude), POINT(${data.latitude}, ${data.longitude}))<egg.distance ${areastring})`;
+            		       round( 63710000 * acos( cos( radians(${data.latitude}) ) 
+              * cos( radians( humans.latitude ) ) 
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
+              + sin( radians(${data.latitude}) ) 
+              * sin( radians( humans.latitude ) ) )<egg.distance ${areastring})`;
         log.debug(query);
         pool.query(query, function (err, result) {
             if (err) throw err;

@@ -14,7 +14,6 @@ module.exports = {
         if (map === 0) {message.embed.image.url = ''}
         user = client.users.get(human);
         user.send(message).then(msg =>  {
-
             if(config.discord.typereact){
                 e.forEach(function(emoji){
                     client.users.get(human).dmChannel.lastMessage.react(emoji)
