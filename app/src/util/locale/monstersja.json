@@ -1,0 +1,10307 @@
+{
+  "1": {
+    "name": "フシギダネ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "61"
+  },
+  "2": {
+    "name": "フシギソウ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "421"
+  },
+  "3": {
+    "name": "フシギバナ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "641"
+  },
+  "4": {
+    "name": "ヒトカゲ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "119"
+  },
+  "5": {
+    "name": "リザード",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "1025"
+  },
+  "6": {
+    "name": "リザードン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "879"
+  },
+  "7": {
+    "name": "ゼニガメ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "65"
+  },
+  "8": {
+    "name": "カメール",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "484"
+  },
+  "9": {
+    "name": "カメックス",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "843"
+  },
+  "10": {
+    "name": "キャタピー",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": "51"
+  },
+  "11": {
+    "name": "トランセル",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": "433"
+  },
+  "12": {
+    "name": "バタフリー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "843"
+  },
+  "13": {
+    "name": "ビードル",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "21"
+  },
+  "14": {
+    "name": "コクーン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "204"
+  },
+  "15": {
+    "name": "スピアー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "377"
+  },
+  "16": {
+    "name": "ポッポ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "10"
+  },
+  "17": {
+    "name": "ピジョン",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "75"
+  },
+  "18": {
+    "name": "ピジョット",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "203"
+  },
+  "19": {
+    "name": "コラッタ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "13"
+  },
+  "20": {
+    "name": "ラッタ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "159"
+  },
+  "21": {
+    "name": "オニスズメ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "31"
+  },
+  "22": {
+    "name": "オニドリル",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "221"
+  },
+  "23": {
+    "name": "アーボ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "75"
+  },
+  "24": {
+    "name": "アーボック",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "544"
+  },
+  "25": {
+    "name": "ピカチュウ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "92"
+  },
+  "26": {
+    "name": "ライチュウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "27": {
+    "name": "サンド",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "163"
+  },
+  "28": {
+    "name": "サンドパン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1619"
+  },
+  "29": {
+    "name": "ニドラン♀",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "30": {
+    "name": "ニドリーナ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "504"
+  },
+  "31": {
+    "name": "ニドクイン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1398"
+  },
+  "32": {
+    "name": "ニドラン♂",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "33": {
+    "name": "ニドリーノ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "586"
+  },
+  "34": {
+    "name": "ニドキング",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1025"
+  },
+  "35": {
+    "name": "ピッピ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "85"
+  },
+  "36": {
+    "name": "ピクシー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "1309"
+  },
+  "37": {
+    "name": "ロコン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "188"
+  },
+  "38": {
+    "name": "キュウコン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "1538"
+  },
+  "39": {
+    "name": "プリン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "101"
+  },
+  "40": {
+    "name": "プクリン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "41": {
+    "name": "ズバット",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "24"
+  },
+  "42": {
+    "name": "ゴルバット",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "209"
+  },
+  "43": {
+    "name": "ナゾノクサ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "91"
+  },
+  "44": {
+    "name": "クサイハナ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "592"
+  },
+  "45": {
+    "name": "ラフレシア",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "1864"
+  },
+  "46": {
+    "name": "パラス",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": "44"
+  },
+  "47": {
+    "name": "パラセクト",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": "397"
+  },
+  "48": {
+    "name": "コンパン",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "38"
+  },
+  "49": {
+    "name": "モルフォン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "300"
+  },
+  "50": {
+    "name": "ディグダ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "211"
+  },
+  "51": {
+    "name": "ダグトリオ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1663"
+  },
+  "52": {
+    "name": "ニャース",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "106"
+  },
+  "53": {
+    "name": "ペルシアン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "1282"
+  },
+  "54": {
+    "name": "コダック",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "108"
+  },
+  "55": {
+    "name": "ゴルダック",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "707"
+  },
+  "56": {
+    "name": "マンキー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "114"
+  },
+  "57": {
+    "name": "オコリザル",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "1061"
+  },
+  "58": {
+    "name": "ガーディ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "59": {
+    "name": "ウインディ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "932"
+  },
+  "60": {
+    "name": "ニョロモ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "95"
+  },
+  "61": {
+    "name": "ニョロゾ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "481"
+  },
+  "62": {
+    "name": "ニョロボン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "1709"
+  },
+  "63": {
+    "name": "ケーシィ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "104"
+  },
+  "64": {
+    "name": "ユンゲラー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "779"
+  },
+  "65": {
+    "name": "フーディン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "2461"
+  },
+  "66": {
+    "name": "ワンリキー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "217"
+  },
+  "67": {
+    "name": "ゴーリキー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "1465"
+  },
+  "68": {
+    "name": "カイリキー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "3418"
+  },
+  "69": {
+    "name": "マダツボミ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "86"
+  },
+  "70": {
+    "name": "ウツドン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "496"
+  },
+  "71": {
+    "name": "ウツボット",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "72": {
+    "name": "メノクラゲ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "275"
+  },
+  "73": {
+    "name": "ドククラゲ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "615"
+  },
+  "74": {
+    "name": "イシツブテ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "121"
+  },
+  "75": {
+    "name": "ゴローン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "707"
+  },
+  "76": {
+    "name": "ゴローニャ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "2797"
+  },
+  "77": {
+    "name": "ポニータ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "121"
+  },
+  "78": {
+    "name": "ギャロップ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "992"
+  },
+  "79": {
+    "name": "ヤドン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "175"
+  },
+  "80": {
+    "name": "ヤドラン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "947"
+  },
+  "81": {
+    "name": "コイル",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": "200"
+  },
+  "82": {
+    "name": "レアコイル",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "83": {
+    "name": "カモネギ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "61527"
+  },
+  "84": {
+    "name": "ドードー",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "85": {
+    "name": "ドードリオ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "634"
+  },
+  "86": {
+    "name": "パウワウ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "196"
+  },
+  "87": {
+    "name": "ジュゴン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": "1578"
+  },
+  "88": {
+    "name": "ベトベター",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "879"
+  },
+  "89": {
+    "name": "ベトベトン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "7691"
+  },
+  "90": {
+    "name": "シェルダー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "177"
+  },
+  "91": {
+    "name": "パルシェン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": "1578"
+  },
+  "92": {
+    "name": "ゴース",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "93": {
+    "name": "ゴースト",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "419"
+  },
+  "94": {
+    "name": "ゲンガー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "1758"
+  },
+  "95": {
+    "name": "イワーク",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "269"
+  },
+  "96": {
+    "name": "スリープ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "39"
+  },
+  "97": {
+    "name": "スリーパー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "322"
+  },
+  "98": {
+    "name": "クラブ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "73"
+  },
+  "99": {
+    "name": "キングラー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "530"
+  },
+  "100": {
+    "name": "ビリリダマ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "276"
+  },
+  "101": {
+    "name": "マルマイン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "1985"
+  },
+  "102": {
+    "name": "タマタマ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "123"
+  },
+  "103": {
+    "name": "ナッシー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "1231"
+  },
+  "104": {
+    "name": "カラカラ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "163"
+  },
+  "105": {
+    "name": "ガラガラ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1431"
+  },
+  "106": {
+    "name": "サワムラー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "504"
+  },
+  "107": {
+    "name": "エビワラー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "446"
+  },
+  "108": {
+    "name": "ベロリンガ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "443"
+  },
+  "109": {
+    "name": "ドガース",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "213"
+  },
+  "110": {
+    "name": "マタドガス",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "1398"
+  },
+  "111": {
+    "name": "サイホーン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": "110"
+  },
+  "112": {
+    "name": "サイドン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": "867"
+  },
+  "113": {
+    "name": "ラッキー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "1256"
+  },
+  "114": {
+    "name": "モンジャラ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": "346"
+  },
+  "115": {
+    "name": "ガルーラ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "2461"
+  },
+  "116": {
+    "name": "タッツー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "104"
+  },
+  "117": {
+    "name": "シードラ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "760"
+  },
+  "118": {
+    "name": "トサキント",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "103"
+  },
+  "119": {
+    "name": "アズマオウ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "684"
+  },
+  "120": {
+    "name": "ヒトデマン",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "97"
+  },
+  "121": {
+    "name": "スターミー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "1206"
+  },
+  "122": {
+    "name": "バリヤード",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "1431"
+  },
+  "123": {
+    "name": "ストライク",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "155"
+  },
+  "124": {
+    "name": "ルージュラ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "152"
+  },
+  "125": {
+    "name": "エレブー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "261"
+  },
+  "126": {
+    "name": "ブーバー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "213"
+  },
+  "127": {
+    "name": "カイロス",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": "99"
+  },
+  "128": {
+    "name": "ケンタロス",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "153"
+  },
+  "129": {
+    "name": "コイキング",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "79"
+  },
+  "130": {
+    "name": "ギャラドス",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "2279"
+  },
+  "131": {
+    "name": "ラプラス",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": "1183"
+  },
+  "132": {
+    "name": "メタモン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "30764"
+  },
+  "133": {
+    "name": "イーブイ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "24"
+  },
+  "134": {
+    "name": "シャワーズ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "1465"
+  },
+  "135": {
+    "name": "サンダース",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "1309"
+  },
+  "136": {
+    "name": "ブースター",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "1568"
+  },
+  "137": {
+    "name": "ポリゴン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "867"
+  },
+  "138": {
+    "name": "オムナイト",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "346"
+  },
+  "139": {
+    "name": "オムスター",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "6153"
+  },
+  "140": {
+    "name": "カブト",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "356"
+  },
+  "141": {
+    "name": "カブトプス",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "2930"
+  },
+  "142": {
+    "name": "プテラ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "879"
+  },
+  "143": {
+    "name": "カビゴン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "284"
+  },
+  "144": {
+    "name": "フリーザー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "145": {
+    "name": "サンダー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "146": {
+    "name": "ファイヤー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "147": {
+    "name": "ミニリュウ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": "91"
+  },
+  "148": {
+    "name": "ハクリュー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": "699"
+  },
+  "149": {
+    "name": "カイリュー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "580"
+  },
+  "150": {
+    "name": "ミュウツー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "151": {
+    "name": "ミュウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "152": {
+    "name": "チコリータ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "153": {
+    "name": "ベイリーフ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "154": {
+    "name": "メガニウム",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "155": {
+    "name": "ヒノアラシ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "156": {
+    "name": "マグマラシ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "157": {
+    "name": "バクフーン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "158": {
+    "name": "ワニノコ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "159": {
+    "name": "アリゲイツ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "160": {
+    "name": "オーダイル",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "161": {
+    "name": "オタチ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "162": {
+    "name": "オオタチ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "163": {
+    "name": "ホーホー",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "164": {
+    "name": "ヨルノズク",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "165": {
+    "name": "レディバ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "166": {
+    "name": "レディアン",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "167": {
+    "name": "イトマル",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "168": {
+    "name": "アリアドス",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "169": {
+    "name": "クロバット",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "170": {
+    "name": "チョンチー",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "171": {
+    "name": "ランターン",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "172": {
+    "name": "ピチュー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "173": {
+    "name": "ピィ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "174": {
+    "name": "ププリン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "175": {
+    "name": "トゲピー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "176": {
+    "name": "トゲチック",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "177": {
+    "name": "ネイティ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "178": {
+    "name": "ネイティオ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "179": {
+    "name": "メリープ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "180": {
+    "name": "モココ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "181": {
+    "name": "デンリュウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "182": {
+    "name": "キレイハナ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "183": {
+    "name": "マリル",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "184": {
+    "name": "マリルリ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "185": {
+    "name": "ウソッキー",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "186": {
+    "name": "ニョロトノ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "187": {
+    "name": "ハネッコ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "188": {
+    "name": "ポポッコ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "189": {
+    "name": "ワタッコ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "190": {
+    "name": "エイパム",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "191": {
+    "name": "ヒマナッツ",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "192": {
+    "name": "キマワリ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "193": {
+    "name": "ヤンヤンマ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "194": {
+    "name": "ウパー",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "195": {
+    "name": "ヌオー",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "196": {
+    "name": "エーフィ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "197": {
+    "name": "ブラッキー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "198": {
+    "name": "ヤミカラス",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "199": {
+    "name": "ヤドキング",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "200": {
+    "name": "ムウマ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "201": {
+    "name": "アンノーン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "202": {
+    "name": "ソーナンス",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "203": {
+    "name": "キリンリキ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "204": {
+    "name": "クヌギダマ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "205": {
+    "name": "フォレトス",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "206": {
+    "name": "ノコッチ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "207": {
+    "name": "グライガー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "208": {
+    "name": "ハガネール",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "209": {
+    "name": "ブルー",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "210": {
+    "name": "グランブル",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "211": {
+    "name": "ハリーセン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "212": {
+    "name": "ハッサム",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "213": {
+    "name": "ツボツボ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "214": {
+    "name": "ヘラクロス",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "215": {
+    "name": "ニューラ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "216": {
+    "name": "ヒメグマ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "217": {
+    "name": "リングマ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "218": {
+    "name": "マグマッグ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "219": {
+    "name": "マグカルゴ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "220": {
+    "name": "ウリムー",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "221": {
+    "name": "イノムー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "222": {
+    "name": "サニーゴ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "223": {
+    "name": "テッポウオ",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "224": {
+    "name": "オクタン",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "225": {
+    "name": "デリバード",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "226": {
+    "name": "マンタイン",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "227": {
+    "name": "エアームド",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "228": {
+    "name": "デルビル",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "229": {
+    "name": "ヘルガー",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "230": {
+    "name": "キングドラ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "231": {
+    "name": "ゴマゾウ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "232": {
+    "name": "ドンファン",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "233": {
+    "name": "ポリゴン２",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "234": {
+    "name": "オドシシ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "235": {
+    "name": "ドーブル",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "236": {
+    "name": "バルキー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "237": {
+    "name": "カポエラー",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "238": {
+    "name": "ムチュール",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "239": {
+    "name": "エレキッド",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "240": {
+    "name": "ブビィ",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "241": {
+    "name": "ミルタンク",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "242": {
+    "name": "ハピナス",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "243": {
+    "name": "ライコウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "244": {
+    "name": "エンテイ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "245": {
+    "name": "スイクン",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "246": {
+    "name": "ヨーギラス",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "247": {
+    "name": "サナギラス",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "248": {
+    "name": "バンギラス",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "249": {
+    "name": "ルギア",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "250": {
+    "name": "ホウオウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "251": {
+    "name": "セレビィ",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "252": {
+    "name": "キモリ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "253": {
+    "name": "ジュプトル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "254": {
+    "name": "ジュカイン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "255": {
+    "name": "アチャモ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "256": {
+    "name": "ワカシャモ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "257": {
+    "name": "バシャーモ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "258": {
+    "name": "ミズゴロウ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "259": {
+    "name": "ヌマクロー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "260": {
+    "name": "ラグラージ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "261": {
+    "name": "ポチエナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "262": {
+    "name": "グラエナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "263": {
+    "name": "ジグザグマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "264": {
+    "name": "マッスグマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "265": {
+    "name": "ケムッソ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "266": {
+    "name": "カラサリス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "267": {
+    "name": "アゲハント",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "268": {
+    "name": "マユルド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "269": {
+    "name": "ドクケイル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "270": {
+    "name": "ハスボー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "271": {
+    "name": "ハスブレロ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "272": {
+    "name": "ルンパッパ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "273": {
+    "name": "タネボー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "274": {
+    "name": "コノハナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "275": {
+    "name": "ダーテング",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "276": {
+    "name": "スバメ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "277": {
+    "name": "オオスバメ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "278": {
+    "name": "キャモメ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "279": {
+    "name": "ペリッパー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "280": {
+    "name": "ラルトス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "281": {
+    "name": "キルリア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "282": {
+    "name": "サーナイト",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "283": {
+    "name": "アメタマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "284": {
+    "name": "アメモース",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "285": {
+    "name": "キノココ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "286": {
+    "name": "キノガッサ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "287": {
+    "name": "ナマケロ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "288": {
+    "name": "ヤルキモノ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "289": {
+    "name": "ケッキング",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "290": {
+    "name": "ツチニン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "291": {
+    "name": "テッカニン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "292": {
+    "name": "ヌケニン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "293": {
+    "name": "ゴニョニョ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "294": {
+    "name": "ドゴーム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "295": {
+    "name": "バクオング",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "296": {
+    "name": "マクノシタ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "297": {
+    "name": "ハリテヤマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "298": {
+    "name": "ルリリ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "299": {
+    "name": "ノズパス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "300": {
+    "name": "エネコ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "301": {
+    "name": "エネコロロ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "302": {
+    "name": "ヤミラミ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "303": {
+    "name": "クチート",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "304": {
+    "name": "ココドラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "305": {
+    "name": "コドラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "306": {
+    "name": "ボスゴドラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "307": {
+    "name": "アサナン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "308": {
+    "name": "チャーレム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "309": {
+    "name": "ラクライ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "310": {
+    "name": "ライボルト",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "311": {
+    "name": "プラスル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "312": {
+    "name": "マイナン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "313": {
+    "name": "バルビート",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "314": {
+    "name": "イルミーゼ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "315": {
+    "name": "ロゼリア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "316": {
+    "name": "ゴクリン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "317": {
+    "name": "マルノーム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "318": {
+    "name": "キバニア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "319": {
+    "name": "サメハダー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "320": {
+    "name": "ホエルコ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "321": {
+    "name": "ホエルオー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "322": {
+    "name": "ドンメル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "323": {
+    "name": "バクーダ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "324": {
+    "name": "コータス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "325": {
+    "name": "バネブー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "326": {
+    "name": "ブーピッグ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "327": {
+    "name": "パッチール",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "328": {
+    "name": "ナックラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "329": {
+    "name": "ビブラーバ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "330": {
+    "name": "フライゴン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "331": {
+    "name": "サボネア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "332": {
+    "name": "ノクタス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "333": {
+    "name": "チルット",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "334": {
+    "name": "チルタリス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "335": {
+    "name": "ザングース",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "336": {
+    "name": "ハブネーク",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "337": {
+    "name": "ルナトーン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "338": {
+    "name": "ソルロック",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "339": {
+    "name": "ドジョッチ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "340": {
+    "name": "ナマズン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "341": {
+    "name": "ヘイガニ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "342": {
+    "name": "シザリガー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "343": {
+    "name": "ヤジロン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "344": {
+    "name": "ネンドール",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "345": {
+    "name": "リリーラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "346": {
+    "name": "ユレイドル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "347": {
+    "name": "アノプス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "348": {
+    "name": "アーマルド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "349": {
+    "name": "ヒンバス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "350": {
+    "name": "ミロカロス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "351": {
+    "name": "ポワルン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "352": {
+    "name": "カクレオン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "353": {
+    "name": "カゲボウズ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "354": {
+    "name": "ジュペッタ",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "355": {
+    "name": "ヨマワル",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "356": {
+    "name": "サマヨール",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "357": {
+    "name": "トロピウス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "358": {
+    "name": "チリーン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "359": {
+    "name": "アブソル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "360": {
+    "name": "ソーナノ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "361": {
+    "name": "ユキワラシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "362": {
+    "name": "オニゴーリ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "363": {
+    "name": "タマザラシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "364": {
+    "name": "トドグラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "365": {
+    "name": "トドゼルガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "366": {
+    "name": "パールル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "367": {
+    "name": "ハンテール",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "368": {
+    "name": "サクラビス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "369": {
+    "name": "ジーランス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "370": {
+    "name": "ラブカス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "371": {
+    "name": "タツベイ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "372": {
+    "name": "コモルー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "373": {
+    "name": "ボーマンダ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "374": {
+    "name": "ダンバル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "375": {
+    "name": "メタング",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "376": {
+    "name": "メタグロス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "377": {
+    "name": "レジロック",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "378": {
+    "name": "レジアイス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "379": {
+    "name": "レジスチル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "380": {
+    "name": "ラティアス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "381": {
+    "name": "ラティオス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "382": {
+    "name": "カイオーガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "383": {
+    "name": "グラードン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "384": {
+    "name": "レックウザ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "385": {
+    "name": "ジラーチ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "386": {
+    "name": "デオキシス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "387": {
+    "name": "ナエトル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "388": {
+    "name": "ハヤシガメ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "389": {
+    "name": "ドダイトス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "390": {
+    "name": "ヒコザル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "391": {
+    "name": "モウカザル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "392": {
+    "name": "ゴウカザル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "393": {
+    "name": "ポッチャマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "394": {
+    "name": "ポッタイシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "395": {
+    "name": "エンペルト",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "396": {
+    "name": "ムックル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "397": {
+    "name": "ムクバード",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "398": {
+    "name": "ムクホーク",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "399": {
+    "name": "ビッパ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "400": {
+    "name": "ビーダル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "401": {
+    "name": "コロボーシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "402": {
+    "name": "コロトック",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "403": {
+    "name": "コリンク",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "404": {
+    "name": "ルクシオ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "405": {
+    "name": "レントラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "406": {
+    "name": "スボミー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "407": {
+    "name": "ロズレイド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "408": {
+    "name": "ズガイドス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "409": {
+    "name": "ラムパルド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "410": {
+    "name": "タテトプス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "411": {
+    "name": "トリデプス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "412": {
+    "name": "ミノムッチ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "413": {
+    "name": "ミノマダム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "414": {
+    "name": "ガーメイル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "415": {
+    "name": "ミツハニー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "416": {
+    "name": "ビークイン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "417": {
+    "name": "パチリス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "418": {
+    "name": "ブイゼル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "419": {
+    "name": "フローゼル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "420": {
+    "name": "チェリンボ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "421": {
+    "name": "チェリム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "422": {
+    "name": "カラナクシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "423": {
+    "name": "トリトドン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "424": {
+    "name": "エテボース",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "425": {
+    "name": "フワンテ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "426": {
+    "name": "フワライド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "427": {
+    "name": "ミミロル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "428": {
+    "name": "ミミロップ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "429": {
+    "name": "ムウマージ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "430": {
+    "name": "ドンカラス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "431": {
+    "name": "ニャルマー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "432": {
+    "name": "ブニャット",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "433": {
+    "name": "リーシャン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "434": {
+    "name": "スカンプー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "435": {
+    "name": "スカタンク",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "436": {
+    "name": "ドーミラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "437": {
+    "name": "ドータクン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "438": {
+    "name": "ウソハチ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "439": {
+    "name": "マネネ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "440": {
+    "name": "ピンプク",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "441": {
+    "name": "ペラップ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "442": {
+    "name": "ミカルゲ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "443": {
+    "name": "フカマル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "444": {
+    "name": "ガバイト",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "445": {
+    "name": "ガブリアス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "446": {
+    "name": "ゴンベ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "447": {
+    "name": "リオル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "448": {
+    "name": "ルカリオ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "449": {
+    "name": "ヒポポタス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "450": {
+    "name": "カバルドン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "451": {
+    "name": "スコルピ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "452": {
+    "name": "ドラピオン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "453": {
+    "name": "グレッグル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "454": {
+    "name": "ドクロッグ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "455": {
+    "name": "マスキッパ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "456": {
+    "name": "ケイコウオ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "457": {
+    "name": "ネオラント",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "458": {
+    "name": "タマンタ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "459": {
+    "name": "ユキカブリ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "460": {
+    "name": "ユキノオー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "461": {
+    "name": "マニューラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "462": {
+    "name": "ジバコイル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "463": {
+    "name": "ベロベルト",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "464": {
+    "name": "ドサイドン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "465": {
+    "name": "モジャンボ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "466": {
+    "name": "エレキブル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "467": {
+    "name": "ブーバーン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "468": {
+    "name": "トゲキッス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "469": {
+    "name": "メガヤンマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "470": {
+    "name": "リーフィア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "471": {
+    "name": "グレイシア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "472": {
+    "name": "グライオン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "473": {
+    "name": "マンムー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "474": {
+    "name": "ポリゴンＺ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "475": {
+    "name": "エルレイド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "476": {
+    "name": "ダイノーズ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "477": {
+    "name": "ヨノワール",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "478": {
+    "name": "ユキメノコ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "479": {
+    "name": "ロトム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "480": {
+    "name": "ユクシー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "481": {
+    "name": "エムリット",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "482": {
+    "name": "アグノム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "483": {
+    "name": "ディアルガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "484": {
+    "name": "パルキア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "485": {
+    "name": "ヒードラン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "486": {
+    "name": "レジギガス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "487": {
+    "name": "ギラティナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "488": {
+    "name": "クレセリア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "489": {
+    "name": "フィオネ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "490": {
+    "name": "マナフィ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "491": {
+    "name": "ダークライ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "492": {
+    "name": "シェイミ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "493": {
+    "name": "アルセウス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "494": {
+    "name": "ビクティニ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "495": {
+    "name": "ツタージャ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "496": {
+    "name": "ジャノビー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "497": {
+    "name": "ジャローダ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "498": {
+    "name": "ポカブ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "499": {
+    "name": "チャオブー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "500": {
+    "name": "エンブオー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "501": {
+    "name": "ミジュマル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "502": {
+    "name": "フタチマル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "503": {
+    "name": "ダイケンキ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "504": {
+    "name": "ミネズミ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "505": {
+    "name": "ミルホッグ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "506": {
+    "name": "ヨーテリー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "507": {
+    "name": "ハーデリア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "508": {
+    "name": "ムーランド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "509": {
+    "name": "チョロネコ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "510": {
+    "name": "レパルダス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "511": {
+    "name": "ヤナップ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "512": {
+    "name": "ヤナッキー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "513": {
+    "name": "バオップ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "514": {
+    "name": "バオッキー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "515": {
+    "name": "ヒヤップ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "516": {
+    "name": "ヒヤッキー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "517": {
+    "name": "ムンナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "518": {
+    "name": "ムシャーナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "519": {
+    "name": "マメパト",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "520": {
+    "name": "ハトーボー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "521": {
+    "name": "ケンホロウ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "522": {
+    "name": "シママ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "523": {
+    "name": "ゼブライカ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "524": {
+    "name": "ダンゴロ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "525": {
+    "name": "ガントル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "526": {
+    "name": "ギガイアス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "527": {
+    "name": "コロモリ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "528": {
+    "name": "ココロモリ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "529": {
+    "name": "モグリュー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "530": {
+    "name": "ドリュウズ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "531": {
+    "name": "タブンネ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "532": {
+    "name": "ドッコラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "533": {
+    "name": "ドテッコツ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "534": {
+    "name": "ローブシン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "535": {
+    "name": "オタマロ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "536": {
+    "name": "ガマガル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "537": {
+    "name": "ガマゲロゲ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "538": {
+    "name": "ナゲキ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "539": {
+    "name": "ダゲキ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "540": {
+    "name": "クルミル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "541": {
+    "name": "クルマユ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "542": {
+    "name": "ハハコモリ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "543": {
+    "name": "フシデ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "544": {
+    "name": "ホイーガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "545": {
+    "name": "ペンドラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "546": {
+    "name": "モンメン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "547": {
+    "name": "エルフーン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "548": {
+    "name": "チュリネ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "549": {
+    "name": "ドレディア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "550": {
+    "name": "バスラオ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "551": {
+    "name": "メグロコ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "552": {
+    "name": "ワルビル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "553": {
+    "name": "ワルビアル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "554": {
+    "name": "ダルマッカ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "555": {
+    "name": "ヒヒダルマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "556": {
+    "name": "マラカッチ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "557": {
+    "name": "イシズマイ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "558": {
+    "name": "イワパレス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "559": {
+    "name": "ズルッグ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "560": {
+    "name": "ズルズキン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "561": {
+    "name": "シンボラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "562": {
+    "name": "デスマス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "563": {
+    "name": "デスカーン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "564": {
+    "name": "プロトーガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "565": {
+    "name": "アバゴーラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "566": {
+    "name": "アーケン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "567": {
+    "name": "アーケオス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "568": {
+    "name": "ヤブクロン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "569": {
+    "name": "ダストダス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "570": {
+    "name": "ゾロア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "571": {
+    "name": "ゾロアーク",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "572": {
+    "name": "チラーミィ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "573": {
+    "name": "チラチーノ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "574": {
+    "name": "ゴチム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "575": {
+    "name": "ゴチミル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "576": {
+    "name": "ゴチルゼル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "577": {
+    "name": "ユニラン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "578": {
+    "name": "ダブラン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "579": {
+    "name": "ランクルス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "580": {
+    "name": "コアルヒー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "581": {
+    "name": "スワンナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "582": {
+    "name": "バニプッチ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "583": {
+    "name": "バニリッチ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "584": {
+    "name": "バイバニラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "585": {
+    "name": "シキジカ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "586": {
+    "name": "メブキジカ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "587": {
+    "name": "エモンガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "588": {
+    "name": "カブルモ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "589": {
+    "name": "シュバルゴ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "590": {
+    "name": "タマゲタケ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "591": {
+    "name": "モロバレル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "592": {
+    "name": "プルリル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "593": {
+    "name": "ブルンゲル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "594": {
+    "name": "ママンボウ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "595": {
+    "name": "バチュル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "596": {
+    "name": "デンチュラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "597": {
+    "name": "テッシード",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "598": {
+    "name": "ナットレイ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "599": {
+    "name": "ギアル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "600": {
+    "name": "ギギアル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "601": {
+    "name": "ギギギアル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "602": {
+    "name": "シビシラス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "603": {
+    "name": "シビビール",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "604": {
+    "name": "シビルドン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "605": {
+    "name": "リグレー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "606": {
+    "name": "オーベム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "607": {
+    "name": "ヒトモシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "608": {
+    "name": "ランプラー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "609": {
+    "name": "シャンデラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "610": {
+    "name": "キバゴ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "611": {
+    "name": "オノンド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "612": {
+    "name": "オノノクス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "613": {
+    "name": "クマシュン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "614": {
+    "name": "ツンベアー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "615": {
+    "name": "フリージオ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "616": {
+    "name": "チョボマキ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "617": {
+    "name": "アギルダー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "618": {
+    "name": "マッギョ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "619": {
+    "name": "コジョフー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "620": {
+    "name": "コジョンド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "621": {
+    "name": "クリムガン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "622": {
+    "name": "ゴビット",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "623": {
+    "name": "ゴルーグ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "624": {
+    "name": "コマタナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "625": {
+    "name": "キリキザン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "626": {
+    "name": "バッフロン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "627": {
+    "name": "ワシボン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "628": {
+    "name": "ウォーグル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "629": {
+    "name": "バルチャイ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "630": {
+    "name": "バルジーナ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "631": {
+    "name": "クイタラン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "632": {
+    "name": "アイアント",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "633": {
+    "name": "モノズ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "634": {
+    "name": "ジヘッド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "635": {
+    "name": "サザンドラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "636": {
+    "name": "メラルバ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "637": {
+    "name": "ウルガモス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "638": {
+    "name": "コバルオン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "639": {
+    "name": "テラキオン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "640": {
+    "name": "ビリジオン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "641": {
+    "name": "トルネロス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "642": {
+    "name": "ボルトロス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "643": {
+    "name": "レシラム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "644": {
+    "name": "ゼクロム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "645": {
+    "name": "ランドロス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "646": {
+    "name": "キュレム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "647": {
+    "name": "ケルディオ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "648": {
+    "name": "メロエッタ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "649": {
+    "name": "ゲノセクト",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "650": {
+    "name": "ハリマロン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "651": {
+    "name": "ハリボーグ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "652": {
+    "name": "ブリガロン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "653": {
+    "name": "フォッコ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "654": {
+    "name": "テールナー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "655": {
+    "name": "マフォクシー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "656": {
+    "name": "ケロマツ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "657": {
+    "name": "ゲコガシラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "658": {
+    "name": "ゲッコウガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "659": {
+    "name": "ホルビー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "660": {
+    "name": "ホルード",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "661": {
+    "name": "ヤヤコマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "662": {
+    "name": "ヒノヤコマ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "663": {
+    "name": "ファイアロー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "664": {
+    "name": "コフキムシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "665": {
+    "name": "コフーライ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "666": {
+    "name": "ビビヨン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "667": {
+    "name": "シシコ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "668": {
+    "name": "カエンジシ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "669": {
+    "name": "フラベベ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "670": {
+    "name": "フラエッテ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "671": {
+    "name": "フラージェス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "672": {
+    "name": "メェークル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "673": {
+    "name": "ゴーゴート",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "674": {
+    "name": "ヤンチャム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "675": {
+    "name": "ゴロンダ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "676": {
+    "name": "トリミアン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "677": {
+    "name": "ニャスパー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "678": {
+    "name": "ニャオニクス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "679": {
+    "name": "ヒトツキ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "680": {
+    "name": "ニダンギル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "681": {
+    "name": "ギルガルド",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "682": {
+    "name": "シュシュプ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "683": {
+    "name": "フレフワン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "684": {
+    "name": "ペロッパフ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "685": {
+    "name": "ペロリーム",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "686": {
+    "name": "マーイーカ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "687": {
+    "name": "カラマネロ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "688": {
+    "name": "カメテテ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "689": {
+    "name": "ガメノデス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "690": {
+    "name": "クズモー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "691": {
+    "name": "ドラミドロ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "692": {
+    "name": "ウデッポウ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "693": {
+    "name": "ブロスター",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "694": {
+    "name": "エリキテル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "695": {
+    "name": "エレザード",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "696": {
+    "name": "チゴラス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "697": {
+    "name": "ガチゴラス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "698": {
+    "name": "アマルス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "699": {
+    "name": "アマルルガ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "700": {
+    "name": "ニンフィア",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "701": {
+    "name": "ルチャブル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "702": {
+    "name": "デデンネ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "703": {
+    "name": "メレシー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "704": {
+    "name": "ヌメラ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "705": {
+    "name": "ヌメイル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "706": {
+    "name": "ヌメルゴン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "707": {
+    "name": "クレッフィ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "708": {
+    "name": "ボクレー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "709": {
+    "name": "オーロット",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "710": {
+    "name": "バケッチャ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "711": {
+    "name": "パンプジン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "712": {
+    "name": "カチコール",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "713": {
+    "name": "クレベース",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "714": {
+    "name": "オンバット",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "715": {
+    "name": "オンバーン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "716": {
+    "name": "ゼルネアス",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "717": {
+    "name": "イベルタル",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "718": {
+    "name": "ジガルデ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "719": {
+    "name": "ディアンシー",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "720": {
+    "name": "フーパ",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "721": {
+    "name": "ボルケニオン",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  }
+}

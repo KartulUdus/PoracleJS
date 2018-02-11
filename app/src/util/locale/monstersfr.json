@@ -1,0 +1,10307 @@
+{
+  "1": {
+    "name": "Bulbizarre",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "61"
+  },
+  "2": {
+    "name": "Herbizarre",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "421"
+  },
+  "3": {
+    "name": "Florizarre",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "641"
+  },
+  "4": {
+    "name": "Salamèche",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "119"
+  },
+  "5": {
+    "name": "Reptincel",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "1025"
+  },
+  "6": {
+    "name": "Dracaufeu",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "879"
+  },
+  "7": {
+    "name": "Carapuce",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "65"
+  },
+  "8": {
+    "name": "Carabaffe",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "484"
+  },
+  "9": {
+    "name": "Tortank",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "843"
+  },
+  "10": {
+    "name": "Chenipan",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": "51"
+  },
+  "11": {
+    "name": "Chrysacier",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": "433"
+  },
+  "12": {
+    "name": "Papilusion",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "843"
+  },
+  "13": {
+    "name": "Aspicot",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "21"
+  },
+  "14": {
+    "name": "Coconfort",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "204"
+  },
+  "15": {
+    "name": "Dardargnan",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "377"
+  },
+  "16": {
+    "name": "Roucool",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "10"
+  },
+  "17": {
+    "name": "Roucoups",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "75"
+  },
+  "18": {
+    "name": "Roucarnage",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "203"
+  },
+  "19": {
+    "name": "Rattata",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "13"
+  },
+  "20": {
+    "name": "Rattatac",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "159"
+  },
+  "21": {
+    "name": "Piafabec",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "31"
+  },
+  "22": {
+    "name": "Rapasdepic",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "221"
+  },
+  "23": {
+    "name": "Abo",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "75"
+  },
+  "24": {
+    "name": "Arbok",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "544"
+  },
+  "25": {
+    "name": "Pikachu",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "92"
+  },
+  "26": {
+    "name": "Raichu",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "27": {
+    "name": "Sabelette",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "163"
+  },
+  "28": {
+    "name": "Sablaireau",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1619"
+  },
+  "29": {
+    "name": "Nidoran♀",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "30": {
+    "name": "Nidorina",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "504"
+  },
+  "31": {
+    "name": "Nidoqueen",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1398"
+  },
+  "32": {
+    "name": "Nidoran♂",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "33": {
+    "name": "Nidorino",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "586"
+  },
+  "34": {
+    "name": "Nidoking",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1025"
+  },
+  "35": {
+    "name": "Mélofée",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "85"
+  },
+  "36": {
+    "name": "Mélodelfe",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "1309"
+  },
+  "37": {
+    "name": "Goupix",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "188"
+  },
+  "38": {
+    "name": "Feunard",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "1538"
+  },
+  "39": {
+    "name": "Rondoudou",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "101"
+  },
+  "40": {
+    "name": "Grodoudou",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "41": {
+    "name": "Nosferapti",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "24"
+  },
+  "42": {
+    "name": "Nosferalto",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "209"
+  },
+  "43": {
+    "name": "Mystherbe",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "91"
+  },
+  "44": {
+    "name": "Ortide",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "592"
+  },
+  "45": {
+    "name": "Rafflesia",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "1864"
+  },
+  "46": {
+    "name": "Paras",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": "44"
+  },
+  "47": {
+    "name": "Parasect",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": "397"
+  },
+  "48": {
+    "name": "Mimitoss",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "38"
+  },
+  "49": {
+    "name": "Aéromite",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "300"
+  },
+  "50": {
+    "name": "Taupiqueur",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "211"
+  },
+  "51": {
+    "name": "Triopikeur",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1663"
+  },
+  "52": {
+    "name": "Miaouss",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "106"
+  },
+  "53": {
+    "name": "Persian",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "1282"
+  },
+  "54": {
+    "name": "Psykokwak",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "108"
+  },
+  "55": {
+    "name": "Akwakwak",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "707"
+  },
+  "56": {
+    "name": "Férosinge",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "114"
+  },
+  "57": {
+    "name": "Colossinge",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "1061"
+  },
+  "58": {
+    "name": "Caninos",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "59": {
+    "name": "Arcanin",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "932"
+  },
+  "60": {
+    "name": "Ptitard",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "95"
+  },
+  "61": {
+    "name": "Têtarte",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "481"
+  },
+  "62": {
+    "name": "Tartard",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "1709"
+  },
+  "63": {
+    "name": "Abra",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "104"
+  },
+  "64": {
+    "name": "Kadabra",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "779"
+  },
+  "65": {
+    "name": "Alakazam",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "2461"
+  },
+  "66": {
+    "name": "Machoc",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "217"
+  },
+  "67": {
+    "name": "Machopeur",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "1465"
+  },
+  "68": {
+    "name": "Mackogneur",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "3418"
+  },
+  "69": {
+    "name": "Chétiflor",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "86"
+  },
+  "70": {
+    "name": "Boustiflor",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "496"
+  },
+  "71": {
+    "name": "Empiflor",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "72": {
+    "name": "Tentacool",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "275"
+  },
+  "73": {
+    "name": "Tentacruel",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "615"
+  },
+  "74": {
+    "name": "Racaillou",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "121"
+  },
+  "75": {
+    "name": "Gravalanch",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "707"
+  },
+  "76": {
+    "name": "Grolem",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "2797"
+  },
+  "77": {
+    "name": "Ponyta",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "121"
+  },
+  "78": {
+    "name": "Galopa",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "992"
+  },
+  "79": {
+    "name": "Ramoloss",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "175"
+  },
+  "80": {
+    "name": "Flagadoss",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "947"
+  },
+  "81": {
+    "name": "Magnéti",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": "200"
+  },
+  "82": {
+    "name": "Magnéton",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": "2051"
+  },
+  "83": {
+    "name": "Canarticho",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "61527"
+  },
+  "84": {
+    "name": "Doduo",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "85": {
+    "name": "Dodrio",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "634"
+  },
+  "86": {
+    "name": "Otaria",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "196"
+  },
+  "87": {
+    "name": "Lamantine",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": "1578"
+  },
+  "88": {
+    "name": "Tadmorv",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "879"
+  },
+  "89": {
+    "name": "Grotadmorv",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "7691"
+  },
+  "90": {
+    "name": "Kokiyas",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "177"
+  },
+  "91": {
+    "name": "Crustabri",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": "1578"
+  },
+  "92": {
+    "name": "Fantominus",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "77"
+  },
+  "93": {
+    "name": "Spectrum",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "419"
+  },
+  "94": {
+    "name": "Ectoplasma",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "1758"
+  },
+  "95": {
+    "name": "Onix",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "269"
+  },
+  "96": {
+    "name": "Soporifik",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "39"
+  },
+  "97": {
+    "name": "Hypnomade",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "322"
+  },
+  "98": {
+    "name": "Krabby",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "73"
+  },
+  "99": {
+    "name": "Krabboss",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "530"
+  },
+  "100": {
+    "name": "Voltorbe",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "276"
+  },
+  "101": {
+    "name": "Électrode",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "1985"
+  },
+  "102": {
+    "name": "Nœunœuf",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "123"
+  },
+  "103": {
+    "name": "Noadkoko",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "1231"
+  },
+  "104": {
+    "name": "Osselait",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "163"
+  },
+  "105": {
+    "name": "Ossatueur",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": "1431"
+  },
+  "106": {
+    "name": "Kicklee",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "504"
+  },
+  "107": {
+    "name": "Tygnon",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": "446"
+  },
+  "108": {
+    "name": "Excelangue",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "443"
+  },
+  "109": {
+    "name": "Smogo",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "213"
+  },
+  "110": {
+    "name": "Smogogo",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": "1398"
+  },
+  "111": {
+    "name": "Rhinocorne",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": "110"
+  },
+  "112": {
+    "name": "Rhinoféros",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": "867"
+  },
+  "113": {
+    "name": "Leveinard",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "1256"
+  },
+  "114": {
+    "name": "Saquedeneu",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": "346"
+  },
+  "115": {
+    "name": "Kangourex",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "2461"
+  },
+  "116": {
+    "name": "Hypotrempe",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "104"
+  },
+  "117": {
+    "name": "Hypocéan",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "760"
+  },
+  "118": {
+    "name": "Poissirène",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "103"
+  },
+  "119": {
+    "name": "Poissoroy",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "684"
+  },
+  "120": {
+    "name": "Stari",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "97"
+  },
+  "121": {
+    "name": "Staross",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "1206"
+  },
+  "122": {
+    "name": "Mime",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": "1431"
+  },
+  "123": {
+    "name": "Insécateur",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "155"
+  },
+  "124": {
+    "name": "Lippoutou",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "152"
+  },
+  "125": {
+    "name": "Élektek",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "261"
+  },
+  "126": {
+    "name": "Magmar",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "213"
+  },
+  "127": {
+    "name": "Scarabrute",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": "99"
+  },
+  "128": {
+    "name": "Tauros",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "153"
+  },
+  "129": {
+    "name": "Magicarpe",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "79"
+  },
+  "130": {
+    "name": "Léviator",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "2279"
+  },
+  "131": {
+    "name": "Lokhlass",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": "1183"
+  },
+  "132": {
+    "name": "Métamorph",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "30764"
+  },
+  "133": {
+    "name": "Évoli",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "24"
+  },
+  "134": {
+    "name": "Aquali",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "1465"
+  },
+  "135": {
+    "name": "Voltali",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": "1309"
+  },
+  "136": {
+    "name": "Pyroli",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": "1568"
+  },
+  "137": {
+    "name": "Porygon",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "867"
+  },
+  "138": {
+    "name": "Amonita",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "346"
+  },
+  "139": {
+    "name": "Amonistar",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "6153"
+  },
+  "140": {
+    "name": "Kabuto",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "356"
+  },
+  "141": {
+    "name": "Kabutops",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": "2930"
+  },
+  "142": {
+    "name": "Ptéra",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "879"
+  },
+  "143": {
+    "name": "Ronflex",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": "284"
+  },
+  "144": {
+    "name": "Artikodin",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "145": {
+    "name": "Électhor",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "146": {
+    "name": "Sulfura",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "147": {
+    "name": "Minidraco",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": "91"
+  },
+  "148": {
+    "name": "Draco",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": "699"
+  },
+  "149": {
+    "name": "Dracolosse",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": "580"
+  },
+  "150": {
+    "name": "Mewtwo",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "151": {
+    "name": "Mew",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": "99999"
+  },
+  "152": {
+    "name": "Germignon",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "153": {
+    "name": "Macronium",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "154": {
+    "name": "Méganium",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "155": {
+    "name": "Héricendre",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "156": {
+    "name": "Feurisson",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "157": {
+    "name": "Typhlosion",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "158": {
+    "name": "Kaiminus",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "159": {
+    "name": "Crocrodil",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "160": {
+    "name": "Aligatueur",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "161": {
+    "name": "Fouinette",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "162": {
+    "name": "Fouinar",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "163": {
+    "name": "Hoothoot",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "164": {
+    "name": "Noarfang",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "165": {
+    "name": "Coxy",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "166": {
+    "name": "Coxyclaque",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "167": {
+    "name": "Mimigal",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "168": {
+    "name": "Migalos",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "169": {
+    "name": "Nostenfer",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "170": {
+    "name": "Loupio",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "171": {
+    "name": "Lanturn",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "172": {
+    "name": "Pichu",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "173": {
+    "name": "Mélo",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "174": {
+    "name": "Toudoudou",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "175": {
+    "name": "Togepi",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "176": {
+    "name": "Togetic",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "177": {
+    "name": "Natu",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "178": {
+    "name": "Xatu",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "179": {
+    "name": "Wattouat",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "180": {
+    "name": "Lainergie",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "181": {
+    "name": "Pharamp",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "182": {
+    "name": "Joliflor",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "183": {
+    "name": "Marill",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "184": {
+    "name": "Azumarill",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "185": {
+    "name": "Simularbre",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "186": {
+    "name": "Tarpaud",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "187": {
+    "name": "Granivol",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "188": {
+    "name": "Floravol",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "189": {
+    "name": "Cotovol",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "190": {
+    "name": "Capumain",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "191": {
+    "name": "Tournegrin",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "192": {
+    "name": "Héliatronc",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "193": {
+    "name": "Yanma",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "194": {
+    "name": "Axoloto",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "195": {
+    "name": "Maraiste",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "196": {
+    "name": "Mentali",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "197": {
+    "name": "Noctali",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "198": {
+    "name": "Cornèbre",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "199": {
+    "name": "Roigada",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "200": {
+    "name": "Feuforêve",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "201": {
+    "name": "Zarbi",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "202": {
+    "name": "Qulbutoké",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "203": {
+    "name": "Girafarig",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "204": {
+    "name": "Pomdepic",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "205": {
+    "name": "Foretress",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "206": {
+    "name": "Insolourdo",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "207": {
+    "name": "Scorplane",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "208": {
+    "name": "Steelix",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "209": {
+    "name": "Snubbull",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "210": {
+    "name": "Granbull",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "211": {
+    "name": "Qwilfish",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "212": {
+    "name": "Cizayox",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "213": {
+    "name": "Caratroc",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "214": {
+    "name": "Scarhino",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "215": {
+    "name": "Farfuret",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "216": {
+    "name": "Teddiursa",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "217": {
+    "name": "Ursaring",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "218": {
+    "name": "Limagma",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "219": {
+    "name": "Volcaropod",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "220": {
+    "name": "Marcacrin",
+    "rarity": "Common",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "221": {
+    "name": "Cochignon",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "222": {
+    "name": "Corayon",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "223": {
+    "name": "Rémoraid",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "224": {
+    "name": "Octillery",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "225": {
+    "name": "Cadoizo",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "226": {
+    "name": "Démanta",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "227": {
+    "name": "Airmure",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "228": {
+    "name": "Malosse",
+    "rarity": "Uncommon",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "229": {
+    "name": "Démolosse",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "230": {
+    "name": "Hyporoi",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "231": {
+    "name": "Phanpy",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "232": {
+    "name": "Donphan",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "233": {
+    "name": "Porygon2",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "234": {
+    "name": "Cerfrousse",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "235": {
+    "name": "Queulorior",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "236": {
+    "name": "Debugant",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "237": {
+    "name": "Kapoera",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "238": {
+    "name": "Lippouti",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "239": {
+    "name": "Élekid",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "240": {
+    "name": "Magby",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "241": {
+    "name": "Écrémeuh",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "242": {
+    "name": "Leuphorie",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "243": {
+    "name": "Raikou",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "244": {
+    "name": "Entei",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "245": {
+    "name": "Suicune",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "246": {
+    "name": "Embrylex",
+    "rarity": "Very Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "247": {
+    "name": "Ymphect",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "248": {
+    "name": "Tyranocif",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "249": {
+    "name": "Lugia",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "250": {
+    "name": "Ho-Oh",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "251": {
+    "name": "Celebi",
+    "rarity": "Ultra Rare",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "252": {
+    "name": "Arcko",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "253": {
+    "name": "Massko",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "254": {
+    "name": "Jungko",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "255": {
+    "name": "Poussifeu",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "256": {
+    "name": "Galifeu",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "257": {
+    "name": "Braségali",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "258": {
+    "name": "Gobou",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "259": {
+    "name": "Flobio",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "260": {
+    "name": "Laggron",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "261": {
+    "name": "Medhyèna",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "262": {
+    "name": "Grahyèna",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "263": {
+    "name": "Zigzaton",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "264": {
+    "name": "Linéon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "265": {
+    "name": "Chenipotte",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "266": {
+    "name": "Armulys",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "267": {
+    "name": "Charmillon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "268": {
+    "name": "Blindalys",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "269": {
+    "name": "Papinox",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "270": {
+    "name": "Nénupiot",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "271": {
+    "name": "Lombre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "272": {
+    "name": "Ludicolo",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "273": {
+    "name": "Grainipiot",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "274": {
+    "name": "Pifeuil",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "275": {
+    "name": "Tengalice",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "276": {
+    "name": "Nirondelle",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "277": {
+    "name": "Hélédelle",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "278": {
+    "name": "Goélise",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "279": {
+    "name": "Bekipan",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "280": {
+    "name": "Tarsal",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "281": {
+    "name": "Kirlia",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "282": {
+    "name": "Gardevoir",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "283": {
+    "name": "Arakdo",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "284": {
+    "name": "Maskadra",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "285": {
+    "name": "Balignon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "286": {
+    "name": "Chapignon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "287": {
+    "name": "Parecool",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "288": {
+    "name": "Vigoroth",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "289": {
+    "name": "Monaflèmit",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "290": {
+    "name": "Ningale",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "291": {
+    "name": "Ninjask",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "292": {
+    "name": "Munja",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "293": {
+    "name": "Chuchmur",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "294": {
+    "name": "Ramboum",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "295": {
+    "name": "Brouhabam",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "296": {
+    "name": "Makuhita",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "297": {
+    "name": "Hariyama",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "298": {
+    "name": "Azurill",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "299": {
+    "name": "Tarinor",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "300": {
+    "name": "Skitty",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "301": {
+    "name": "Delcatty",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "302": {
+    "name": "Ténéfix",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "303": {
+    "name": "Mysdibule",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "304": {
+    "name": "Galekid",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "305": {
+    "name": "Galegon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "306": {
+    "name": "Galeking",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "307": {
+    "name": "Méditikka",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "308": {
+    "name": "Charmina",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "309": {
+    "name": "Dynavolt",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "310": {
+    "name": "Élecsprint",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "311": {
+    "name": "Posipi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "312": {
+    "name": "Négapi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "313": {
+    "name": "Muciole",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "314": {
+    "name": "Lumivole",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "315": {
+    "name": "Rosélia",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "316": {
+    "name": "Gloupti",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "317": {
+    "name": "Avaltout",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "318": {
+    "name": "Carvanha",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "319": {
+    "name": "Sharpedo",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "320": {
+    "name": "Wailmer",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "321": {
+    "name": "Wailord",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "322": {
+    "name": "Chamallot",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "323": {
+    "name": "Camérupt",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "324": {
+    "name": "Chartor",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "325": {
+    "name": "Spoink",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "326": {
+    "name": "Groret",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "327": {
+    "name": "Spinda",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "328": {
+    "name": "Kraknoix",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "329": {
+    "name": "Vibraninf",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "330": {
+    "name": "Libégon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "331": {
+    "name": "Cacnea",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "332": {
+    "name": "Cacturne",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "333": {
+    "name": "Tylton",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "334": {
+    "name": "Altaria",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "335": {
+    "name": "Mangriff",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "336": {
+    "name": "Séviper",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "337": {
+    "name": "Séléroc",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "338": {
+    "name": "Solaroc",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "339": {
+    "name": "Barloche",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "340": {
+    "name": "Barbicha",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "341": {
+    "name": "Écrapince",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "342": {
+    "name": "Colhomard",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "343": {
+    "name": "Balbuto",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "344": {
+    "name": "Kaorine",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "345": {
+    "name": "Lilia",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "346": {
+    "name": "Vacilys",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "347": {
+    "name": "Anorith",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "348": {
+    "name": "Armaldo",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "349": {
+    "name": "Barpau",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "350": {
+    "name": "Milobellus",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "351": {
+    "name": "Morphéo",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "352": {
+    "name": "Kecleon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "353": {
+    "name": "Polichombr",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "354": {
+    "name": "Branette",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "355": {
+    "name": "Skelénox",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "356": {
+    "name": "Téraclope",
+    "rarity": "Rare",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "357": {
+    "name": "Tropius",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "358": {
+    "name": "Éoko",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "359": {
+    "name": "Absol",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "360": {
+    "name": "Okéoké",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "361": {
+    "name": "Stalgamin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "362": {
+    "name": "Oniglali",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "363": {
+    "name": "Obalie",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "364": {
+    "name": "Phogleur",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "365": {
+    "name": "Kaimorse",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "366": {
+    "name": "Coquiperl",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "367": {
+    "name": "Serpang",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "368": {
+    "name": "Rosabyss",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "369": {
+    "name": "Relicanth",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "370": {
+    "name": "Lovdisc",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "371": {
+    "name": "Draby",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "372": {
+    "name": "Drackhaus",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "373": {
+    "name": "Drattak",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "374": {
+    "name": "Terhal",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "375": {
+    "name": "Métang",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "376": {
+    "name": "Métalosse",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "377": {
+    "name": "Regirock",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "378": {
+    "name": "Regice",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "379": {
+    "name": "Registeel",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "380": {
+    "name": "Latias",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "381": {
+    "name": "Latios",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "382": {
+    "name": "Kyogre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "383": {
+    "name": "Groudon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "384": {
+    "name": "Rayquaza",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "385": {
+    "name": "Jirachi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "386": {
+    "name": "Deoxys",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "387": {
+    "name": "Tortipouss",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "388": {
+    "name": "Boskara",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "389": {
+    "name": "Torterra",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "390": {
+    "name": "Ouisticram",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "391": {
+    "name": "Chimpenfeu",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "392": {
+    "name": "Simiabraz",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "393": {
+    "name": "Tiplouf",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "394": {
+    "name": "Prinplouf",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "395": {
+    "name": "Pingoléon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "396": {
+    "name": "Étourmi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "397": {
+    "name": "Étourvol",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "398": {
+    "name": "Étouraptor",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "399": {
+    "name": "Keunotor",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "400": {
+    "name": "Castorno",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "401": {
+    "name": "Crikzik",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "402": {
+    "name": "Mélokrik",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "403": {
+    "name": "Lixy",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "404": {
+    "name": "Luxio",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "405": {
+    "name": "Luxray",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "406": {
+    "name": "Rozbouton",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "407": {
+    "name": "Roserade",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "408": {
+    "name": "Kranidos",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "409": {
+    "name": "Charkos",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "410": {
+    "name": "Dinoclier",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "411": {
+    "name": "Bastiodon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "412": {
+    "name": "Cheniti",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "413": {
+    "name": "Cheniselle",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "414": {
+    "name": "Papilord",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "415": {
+    "name": "Apitrini",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "416": {
+    "name": "Apireine",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "417": {
+    "name": "Pachirisu",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "418": {
+    "name": "Mustébouée",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "419": {
+    "name": "Mustéflott",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "420": {
+    "name": "Ceribou",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "421": {
+    "name": "Ceriflor",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "422": {
+    "name": "Sancoki",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "423": {
+    "name": "Tritosor",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "424": {
+    "name": "Capidextre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "425": {
+    "name": "Baudrive",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "426": {
+    "name": "Grodrive",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "427": {
+    "name": "Laporeille",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "428": {
+    "name": "Lockpin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "429": {
+    "name": "Magirêve",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "430": {
+    "name": "Corboss",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "431": {
+    "name": "Chaglam",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "432": {
+    "name": "Chaffreux",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "433": {
+    "name": "Korillon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "434": {
+    "name": "Moufouette",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "435": {
+    "name": "Moufflair",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "436": {
+    "name": "Archéomire",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "437": {
+    "name": "Archéodong",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "438": {
+    "name": "Manzaï",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "439": {
+    "name": "Jr",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "440": {
+    "name": "Ptiravi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "441": {
+    "name": "Pijako",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "442": {
+    "name": "Spiritomb",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "443": {
+    "name": "Griknot",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "444": {
+    "name": "Carmache",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "445": {
+    "name": "Carchacrok",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "446": {
+    "name": "Goinfrex",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "447": {
+    "name": "Riolu",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "448": {
+    "name": "Lucario",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "449": {
+    "name": "Hippopotas",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "450": {
+    "name": "Hippodocus",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "451": {
+    "name": "Rapion",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "452": {
+    "name": "Drascore",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "453": {
+    "name": "Cradopaud",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "454": {
+    "name": "Coatox",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "455": {
+    "name": "Vortente",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "456": {
+    "name": "Écayon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "457": {
+    "name": "Luminéon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "458": {
+    "name": "Babimanta",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "459": {
+    "name": "Blizzi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "460": {
+    "name": "Blizzaroi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "461": {
+    "name": "Dimoret",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "462": {
+    "name": "Magnézone",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "463": {
+    "name": "Coudlangue",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "464": {
+    "name": "Rhinastoc",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "465": {
+    "name": "Bouldeneu",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "466": {
+    "name": "Élekable",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "467": {
+    "name": "Maganon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "468": {
+    "name": "Togekiss",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "469": {
+    "name": "Yanméga",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "470": {
+    "name": "Phyllali",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "471": {
+    "name": "Givrali",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "472": {
+    "name": "Scorvol",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "473": {
+    "name": "Mammochon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "474": {
+    "name": "Z",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "475": {
+    "name": "Gallame",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "476": {
+    "name": "Tarinorme",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "477": {
+    "name": "Noctunoir",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "478": {
+    "name": "Momartik",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "479": {
+    "name": "Motisma",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "480": {
+    "name": "Créhelf",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "481": {
+    "name": "Créfollet",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "482": {
+    "name": "Créfadet",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "483": {
+    "name": "Dialga",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "484": {
+    "name": "Palkia",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "485": {
+    "name": "Heatran",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "486": {
+    "name": "Regigigas",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "487": {
+    "name": "Giratina",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "488": {
+    "name": "Cresselia",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "489": {
+    "name": "Phione",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "490": {
+    "name": "Manaphy",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "491": {
+    "name": "Darkrai",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "492": {
+    "name": "Shaymin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "493": {
+    "name": "Arceus",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "494": {
+    "name": "Victini",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "495": {
+    "name": "Vipélierre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "496": {
+    "name": "Lianaja",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "497": {
+    "name": "Majaspic",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "498": {
+    "name": "Gruikui",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "499": {
+    "name": "Grotichon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "500": {
+    "name": "Roitiflam",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "501": {
+    "name": "Moustillon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "502": {
+    "name": "Mateloutre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "503": {
+    "name": "Clamiral",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "504": {
+    "name": "Ratentif",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "505": {
+    "name": "Miradar",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "506": {
+    "name": "Ponchiot",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "507": {
+    "name": "Ponchien",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "508": {
+    "name": "Mastouffe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "509": {
+    "name": "Chacripan",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "510": {
+    "name": "Léopardus",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "511": {
+    "name": "Feuillajou",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "512": {
+    "name": "Feuiloutan",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "513": {
+    "name": "Flamajou",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "514": {
+    "name": "Flamoutan",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "515": {
+    "name": "Flotajou",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "516": {
+    "name": "Flotoutan",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "517": {
+    "name": "Munna",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "518": {
+    "name": "Mushana",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "519": {
+    "name": "Poichigeon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "520": {
+    "name": "Colombeau",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "521": {
+    "name": "Déflaisan",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "522": {
+    "name": "Zébribon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "523": {
+    "name": "Zéblitz",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "524": {
+    "name": "Nodulithe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "525": {
+    "name": "Géolithe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "526": {
+    "name": "Gigalithe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "527": {
+    "name": "Chovsourir",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "528": {
+    "name": "Rhinolove",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "529": {
+    "name": "Rototaupe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "530": {
+    "name": "Minotaupe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "531": {
+    "name": "Nanméouïe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "532": {
+    "name": "Charpenti",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "533": {
+    "name": "Ouvrifier",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "534": {
+    "name": "Bétochef",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "535": {
+    "name": "Tritonde",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "536": {
+    "name": "Batracné",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "537": {
+    "name": "Crapustule",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "538": {
+    "name": "Judokrak",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "539": {
+    "name": "Karaclée",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "540": {
+    "name": "Larveyette",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "541": {
+    "name": "Couverdure",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "542": {
+    "name": "Manternel",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "543": {
+    "name": "Venipatte",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "544": {
+    "name": "Scobolide",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "545": {
+    "name": "Brutapode",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "546": {
+    "name": "Doudouvet",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "547": {
+    "name": "Farfaduvet",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "548": {
+    "name": "Chlorobule",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "549": {
+    "name": "Fragilady",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "550": {
+    "name": "Bargantua",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "551": {
+    "name": "Mascaïman",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "552": {
+    "name": "Escroco",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "553": {
+    "name": "Crocorible",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "554": {
+    "name": "Darumarond",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "555": {
+    "name": "Darumacho",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "556": {
+    "name": "Maracachi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "557": {
+    "name": "Crabicoque",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "558": {
+    "name": "Crabaraque",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "559": {
+    "name": "Baggiguane",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "560": {
+    "name": "Baggaïd",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "561": {
+    "name": "Cryptéro",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "562": {
+    "name": "Tutafeh",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "563": {
+    "name": "Tutankafer",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "564": {
+    "name": "Carapagos",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "565": {
+    "name": "Mégapagos",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "566": {
+    "name": "Arkéapti",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "567": {
+    "name": "Aéroptéryx",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "568": {
+    "name": "Miamiasme",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "569": {
+    "name": "Miasmax",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "570": {
+    "name": "Zorua",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "571": {
+    "name": "Zoroark",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "572": {
+    "name": "Chinchidou",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "573": {
+    "name": "Pashmilla",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "574": {
+    "name": "Scrutella",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "575": {
+    "name": "Mesmérella",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "576": {
+    "name": "Sidérella",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "577": {
+    "name": "Nucléos",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "578": {
+    "name": "Méios",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "579": {
+    "name": "Symbios",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "580": {
+    "name": "Couaneton",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "581": {
+    "name": "Lakmécygne",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "582": {
+    "name": "Sorbébé",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "583": {
+    "name": "Sorboul",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "584": {
+    "name": "Sorbouboul",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "585": {
+    "name": "Vivaldaim",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "586": {
+    "name": "Haydaim",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "587": {
+    "name": "Emolga",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "588": {
+    "name": "Carabing",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "589": {
+    "name": "Lançargot",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "590": {
+    "name": "Trompignon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "591": {
+    "name": "Gaulet",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "592": {
+    "name": "Viskuse",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "593": {
+    "name": "Moyade",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "594": {
+    "name": "Mamanbo",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "595": {
+    "name": "Statitik",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "596": {
+    "name": "Mygavolt",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "597": {
+    "name": "Grindur",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "598": {
+    "name": "Noacier",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "599": {
+    "name": "Tic",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "600": {
+    "name": "Clic",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "601": {
+    "name": "Cliticlic",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "602": {
+    "name": "Anchwatt",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "603": {
+    "name": "Lampéroie",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "604": {
+    "name": "Ohmassacre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "605": {
+    "name": "Lewsor",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "606": {
+    "name": "Neitram",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "607": {
+    "name": "Funécire",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "608": {
+    "name": "Mélancolux",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "609": {
+    "name": "Lugulabre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "610": {
+    "name": "Coupenotte",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "611": {
+    "name": "Incisache",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "612": {
+    "name": "Tranchodon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "613": {
+    "name": "Polarhume",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "614": {
+    "name": "Polagriffe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "615": {
+    "name": "Hexagel",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "616": {
+    "name": "Escargaume",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "617": {
+    "name": "Limaspeed",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "618": {
+    "name": "Limonde",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "619": {
+    "name": "Kungfouine",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "620": {
+    "name": "Shaofouine",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "621": {
+    "name": "Drakkarmin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "622": {
+    "name": "Gringolem",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "623": {
+    "name": "Golemastoc",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "624": {
+    "name": "Scalpion",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "625": {
+    "name": "Scalproie",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "626": {
+    "name": "Frison",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "627": {
+    "name": "Furaiglon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "628": {
+    "name": "Gueriaigle",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "629": {
+    "name": "Vostourno",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "630": {
+    "name": "Vaututrice",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "631": {
+    "name": "Aflamanoir",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "632": {
+    "name": "Fermite",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "633": {
+    "name": "Solochi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "634": {
+    "name": "Diamat",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "635": {
+    "name": "Trioxhydre",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "636": {
+    "name": "Pyronille",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "637": {
+    "name": "Pyrax",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "638": {
+    "name": "Cobaltium",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "639": {
+    "name": "Terrakium",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "640": {
+    "name": "Viridium",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "641": {
+    "name": "Boréas",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "642": {
+    "name": "Fulguris",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "643": {
+    "name": "Reshiram",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "644": {
+    "name": "Zekrom",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "645": {
+    "name": "Démétéros",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "646": {
+    "name": "Kyurem",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "647": {
+    "name": "Keldeo",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "648": {
+    "name": "Meloetta",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "649": {
+    "name": "Genesect",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "650": {
+    "name": "Marisson",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "651": {
+    "name": "Boguérisse",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "652": {
+    "name": "Blindépique",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      },
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "653": {
+    "name": "Feunnec",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "654": {
+    "name": "Roussil",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "655": {
+    "name": "Goupelin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "656": {
+    "name": "Grenousse",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "657": {
+    "name": "Croâporal",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "658": {
+    "name": "Amphinobi",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "659": {
+    "name": "Sapereau",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "660": {
+    "name": "Excavarenne",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "661": {
+    "name": "Passerouge",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "662": {
+    "name": "Braisillon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "663": {
+    "name": "Flambusard",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "664": {
+    "name": "Lépidonille",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "665": {
+    "name": "Pérégrain",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "666": {
+    "name": "Prismillon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Bug",
+        "emoji": "🐞️",
+        "color": 11057184
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "667": {
+    "name": "Hélionceau",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "668": {
+    "name": "Némélios",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "669": {
+    "name": "Flabébé",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "670": {
+    "name": "Floette",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "671": {
+    "name": "Florges",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "672": {
+    "name": "Cabriolaine",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "673": {
+    "name": "Chevroum",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "674": {
+    "name": "Pandespiègle",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "675": {
+    "name": "Pandarbare",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "676": {
+    "name": "Couafarel",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "677": {
+    "name": "Psystigri",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "678": {
+    "name": "Mistigrix",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "679": {
+    "name": "Monorpale",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "680": {
+    "name": "Dimoclès",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "681": {
+    "name": "Exagide",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "682": {
+    "name": "Fluvetin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "683": {
+    "name": "Cocotine",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "684": {
+    "name": "Sucroquin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "685": {
+    "name": "Cupcanaille",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "686": {
+    "name": "Sepiatop",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "687": {
+    "name": "Sepiatroce",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "688": {
+    "name": "Opermine",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "689": {
+    "name": "Golgopathe",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "690": {
+    "name": "Venalgue",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "691": {
+    "name": "Kravarech",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Poison",
+        "emoji": "☠",
+        "color": 10502304
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "692": {
+    "name": "Flingouste",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "693": {
+    "name": "Gamblast",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "694": {
+    "name": "Galvaran",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "695": {
+    "name": "Iguolta",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Normal",
+        "color": 9079385
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "696": {
+    "name": "Ptyranidur",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "697": {
+    "name": "Rexillius",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "698": {
+    "name": "Amagara",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "699": {
+    "name": "Dragmara",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "700": {
+    "name": "Nymphali",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "701": {
+    "name": "Brutalibré",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fighting",
+        "emoji": "👊",
+        "color": 12595240
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "702": {
+    "name": "Dedenne",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Electric",
+        "emoji": "⚡",
+        "color": 16306224
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "703": {
+    "name": "Strassie",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "704": {
+    "name": "Mucuscule",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "705": {
+    "name": "Colimucus",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "706": {
+    "name": "Muplodocus",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "707": {
+    "name": "Trousselin",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Steel",
+        "emoji": "🔩",
+        "color": 12105936
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "708": {
+    "name": "Brocélôme",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "709": {
+    "name": "Desséliande",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "710": {
+    "name": "Pitrouille",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "711": {
+    "name": "Banshitrouye",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      },
+      {
+        "type": "Grass",
+        "emoji": "🌿",
+        "color": 7915600
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "712": {
+    "name": "Grelaçon",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "713": {
+    "name": "Séracrawl",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Ice",
+        "emoji": "❄",
+        "color": 10016984
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "714": {
+    "name": "Sonistrelle",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "715": {
+    "name": "Bruyverne",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      },
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "716": {
+    "name": "Xerneas",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "717": {
+    "name": "Yveltal",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dark",
+        "emoji": "🕶️",
+        "color": 7368816
+      },
+      {
+        "type": "Flying",
+        "emoji": "🐦",
+        "color": 11047152
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "718": {
+    "name": "Zygarde",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Dragon",
+        "emoji": "🐲",
+        "color": 7354616
+      },
+      {
+        "type": "Ground",
+        "emoji": "⛰️",
+        "color": 14729320
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "719": {
+    "name": "Diancie",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Rock",
+        "emoji": "🗿️",
+        "color": 12099640
+      },
+      {
+        "type": "Fairy",
+        "emoji": "🦋",
+        "color": 15243496
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "720": {
+    "name": "Hoopa",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Psychic",
+        "emoji": "🔮",
+        "color": 16275592
+      },
+      {
+        "type": "Ghost",
+        "emoji": "👻",
+        "color": 7362712
+      }
+    ],
+    "spawn_rate": ""
+  },
+  "721": {
+    "name": "Volcanion",
+    "rarity": "",
+    "types": [
+      {
+        "type": "Fire",
+        "emoji": "🔥",
+        "color": 15761456
+      },
+      {
+        "type": "Water",
+        "emoji": "💧",
+        "color": 6852848
+      }
+    ],
+    "spawn_rate": ""
+  }
+}
