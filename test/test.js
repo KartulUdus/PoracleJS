@@ -8,7 +8,6 @@ let sender = require("../app/src/send");
 const log = require("../app/src/logger");
 const fastify = require('fastify')();
 let chai = require('chai');
-chai.use(require('chai-fs'));
 
 
 describe('Functional', function() {

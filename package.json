@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "description": "Webhook processig and personalised alarms",
   "main": "index.js",
-  "repository" :
-  { "type" : "git"
-  , "url" : "https://github.com/KartulUdus/PoracleJS.git"
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KartulUdus/PoracleJS.git"
   },
   "scripts": {
     "test": "mocha --exit",
