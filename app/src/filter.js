@@ -10,6 +10,7 @@ let mustache = require('mustache');
 let monsterData = require(config.locale.monstersJson);
 let formData = require('./util/forms');
 let teamData = require('./util/teams');
+let raidCpData = require('./util/raidcp');
 let dts = require('../../config/dts');
 let moveData = require(config.locale.movesJson);
 let moment = require('moment');
@@ -163,6 +164,10 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                             tths : data.tth.seconds,
                                             addr : address,
                                             name : data.name,
+                                            cp20 : raidCpData[data.pokemon_id].max_cp_20,
+                                            cp25 : raidCpData[data.pokemon_id].max_cp_25,
+                                            mincp20 : raidCpData[data.pokemon_id].min_cp_20,
+                                            mincp25 : raidCpData[data.pokemon_id].min_cp_25,
                                             gymname : data.gymname,
                                             description : data.description,
                                             move1 : data.quick_move,
