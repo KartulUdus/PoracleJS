@@ -95,15 +95,8 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                             message = JSON.parse(message);
                             whocares.forEach(function (cares) {
 
-                                if (cares.id < 300000000000000000) {
-                                    alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
-                                    log.info(`Alerted ${cares.name} about ${data.name}`)
-
-                                } else {
-                                    alarm.sendTextAlarm(message, cares.id, e, cares.map_enabled);
-                                    log.info(`Alerted #${cares.name} about ${data.name}`)
-
-                                }
+                                alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
+                                log.info(`Alerted ${cares.name} about ${data.name} raid`);
                             })
 
                         });
@@ -185,15 +178,11 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                         message = JSON.parse(message);
                                         whocares.forEach(function (cares) {
 
-                                            if (cares.id < 300000000000000000) {
-                                                alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
-                                                log.info(`Alerted ${cares.name} about ${data.name} raid`)
 
-                                            } else {
-                                                alarm.sendTextAlarm(message, cares.id, e, cares.map_enabled);
-                                                log.info(`Alerted #${cares.name} about ${data.name} raid`)
+                                            alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
+                                            log.info(`Alerted ${cares.name} about ${data.name} raid`);
 
-                                            }
+
                                             query.addOneQuery('humans','alerts_sent','id', cares.id);
 
                                         });
@@ -257,15 +246,8 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                         message = JSON.parse(message);
                                         whocares.forEach(function (cares) {
 
-                                            if (cares.id < 300000000000000000) {
-                                                alarm.sendDMAlarm(message, cares.id, [], cares.map_enabled);
-                                                log.info(`Alerted ${cares.name} about ${data.name} raid`)
-
-                                            } else {
-                                                alarm.sendTextAlarm(message, cares.id, [], cares.map_enabled);
-                                                log.info(`Alerted #${cares.name} about ${data.name} raid`)
-
-                                            }
+                                            alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
+                                            log.info(`Alerted ${cares.name} about ${data.name} raid`);
 
                                         });
 

@@ -13,23 +13,20 @@ module.exports = {
     sendDMAlarm: function (message, human, e, map) {
         if (map === 0) {message.embed.image.url = ''}
         user = client.users.get(human);
+        if(user === undefined) user = client.channels.get(human);
         user.send(message).then(msg =>  {
             if(config.discord.typereact){
-                e.forEach(function(emoji){
-                    client.users.get(human).dmChannel.lastMessage.react(emoji)
-                })
+                humanCheck = client.users.get(human);
+                if(humanCheck === undefined){
+                    e.forEach(function(emoji) {
+                        client.channels.get(human).lastMessage.react(emoji)
+                    });
+                } else {
+                    e.forEach(function(emoji){
+                        client.users.get(human).dmChannel.lastMessage.react(emoji)
+                    })
+                }
             }
         })
-    },
-    sendTextAlarm: function (message, human, e, map) {
-        if (map === 0){message.embed.image.url = ''}
-        user = client.channels.get(human);
-        user.send(message).then(msg =>  {
-            if(config.discord.typereact){
-                e.forEach(function(emoji){
-                    client.channels.get(human).lastMessage.react(emoji)
-                })
-            }
-        })
-    },
+    }
 };

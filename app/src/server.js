@@ -47,7 +47,6 @@ fastify.listen(config.general.port, config.general.host, function (err) {
 // db_schema version check
 
 query.countQuery('TABLE_NAME','information_schema.tables','table_schema',config.db.database, function (err, tables) {
-    //log.debug(baseMigration);
     if(tables === 0){
         log.info('No tables detected, running mysql base migration');
         migrator.migration1()
