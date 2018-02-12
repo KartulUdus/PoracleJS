@@ -99,6 +99,14 @@ Any of the fields can be cusomtized with the following:
 |{{tthm}}| Full minutes until raid ends|
 |{{tths}}| Full seconds until raid ends|
 |{{addr}}| Address of the alerted location|
+|{{streetNumber}| Street number of the alerted location|
+|{{streetName}| Street name of the alerted location|
+|{{zipcode}| Zip code of the alerted location|
+|{{country}| Country of the alerted location|
+|{{countryCode}| 2 letter country code of the alerted location|
+|{{city}| City name of the alerted location|
+|{{state}| State name of the alerted location|
+|{{stateCode}| 2 letter state code of the alerted location|
 |{{move1}}| Monsers quick move|
 |{{move2}}| Monsters charge move|
 |{{cp20}}| Monsters cp with 100% perfect IV and level 20|
@@ -149,6 +157,14 @@ Any of the fields can be cusomtized with the following:
 |{{tthm}}| Full minutes until raid ends|
 |{{tths}}| Full seconds until raid ends|
 |{{addr}}| Address of the alerted location|
+|{{streetNumber}| Street number of the alerted location|
+|{{streetName}| Street name of the alerted location|
+|{{zipcode}| Zip code of the alerted location|
+|{{country}| Country of the alerted location|
+|{{countryCode}| 2 letter country code of the alerted location|
+|{{city}| City name of the alerted location|
+|{{state}| State name of the alerted location|
+|{{stateCode}| 2 letter state code of the alerted location|
 |{{gymname}}| Name of the gym|
 |{{description}}| Description of the gym|
 |{{level}}| Raid level|
