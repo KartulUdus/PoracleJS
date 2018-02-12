@@ -22,8 +22,8 @@ const opts = {
 //webserver healthcheck
 
     fastify.get('/', opts, function (request, reply){
-    reply.type('application/json').code(200);
-    reply.send({ Webserver: 'Happy' });
+        reply.type('application/json').code(200);
+        reply.send({ Webserver: 'Happy' });
     });
 
 //receive hooks

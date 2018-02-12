@@ -11,7 +11,6 @@ const hastebin = require('hastebin-gen');
 const dts = require('../../../config/dts');
 
 
-
 // Register command
 client.on('message', msg => {
     if (msg.content === `${prefix}poracle`){
@@ -32,7 +31,6 @@ client.on('message', msg => {
         }
     }
 
-
     // Unregister command
 
     else if (msg.content === `${prefix}unregister`){
@@ -48,7 +46,9 @@ client.on('message', msg => {
             }
         })
     }
+
     // admin unregister someone
+
     else if (msg.content.startsWith(`${prefix}unregister `)){
         if (config.discord.admins.indexOf(msg.author.id) > -1) {
             let target = msg.mentions.users.first();
@@ -88,8 +88,6 @@ client.on('message', msg => {
         } else msg.react('🙅')
     }
 
-
-
     // Add Channel command
 
     else if (msg.content === `${prefix}channel add`){
@@ -110,8 +108,6 @@ client.on('message', msg => {
         }
     }
 
-
-
     // Remove Channel command
 
     else if (msg.content === `${prefix}channel remove`) {
@@ -129,7 +125,6 @@ client.on('message', msg => {
             })
         }
     }
-
 
     // Channel location command
 
@@ -150,7 +145,6 @@ client.on('message', msg => {
         } else msg.react('🙅')
     }
 
-
     // start
 
     else if (msg.content === `${prefix}start`) {
@@ -164,7 +158,6 @@ client.on('message', msg => {
             });
         }
     }
-
 
     // stop
 
@@ -180,7 +173,6 @@ client.on('message', msg => {
         }
     }
 
-
     // turn map on
 
     else if (msg.content === `${prefix}map enable`) {
@@ -194,7 +186,6 @@ client.on('message', msg => {
             });
         }
     }
-
 
     // turn map off
 
@@ -448,7 +439,6 @@ client.on('message', msg => {
                         }
                         else if(element.match(/everything/gi)) {
                             monsters = [...Array(config.general.max_pokemon).keys()].map(x => ++x);
-
                         }
 
                     });
@@ -495,7 +485,6 @@ client.on('message', msg => {
             })
         }
     }
-
 
     // channel track
 
@@ -609,7 +598,6 @@ client.on('message', msg => {
     }
 
 
-
     // raid tracking
     else if (msg.content.startsWith(`${prefix}raid `)){
         if (msg.channel.type === 'dm') {
@@ -645,7 +633,6 @@ client.on('message', msg => {
                         else if(element.match(/harmony/gi)){
                             team = 0
                         }
-
 
                     });
 
@@ -724,7 +711,6 @@ client.on('message', msg => {
                         else if(element.match(/harmony/gi)){
                             team = 0
                         }
-
 
                     });
 
@@ -1016,7 +1002,6 @@ client.on('message', msg => {
                                             msg.reply(`you're tracking list is quite long. Have a look at ${hastelink}`)
                                         }).catch(console.error);
                                     }
-
                                 })
                             })
                         })
@@ -1025,10 +1010,6 @@ client.on('message', msg => {
             })
         }
     }
-
-
-    // end of on.message below
-
 
 });
 

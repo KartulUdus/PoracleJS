@@ -68,7 +68,7 @@ module.exports = {
         pool.query('DELETE FROM ?? WHERE ?? = ?', [table, column, value], function (err, result) {
             if (err) throw err;
             log.debug(`Deleted ${result.affectedRows} from ${table}`);
-            });
+        });
     },
     deleteMonsterQuery: function (table, column, value, id) {
         pool.query('DELETE FROM ?? WHERE ?? = ? and id = ?', [table, column, value, id], function (err, result) {
@@ -115,6 +115,7 @@ module.exports = {
               + sin( radians(${data.latitude}) ) 
               * sin( radians( humans.latitude ) ) )<monsters.distance ${areastring})`;
         log.debug(query);
+
         pool.query(query, function (err, result) {
             if (err) throw err;
             callback(result);
