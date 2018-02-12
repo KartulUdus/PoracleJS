@@ -11,22 +11,24 @@ let _ = require('lodash');
 module.exports = {
 
     sendDMAlarm: function (message, human, e, map) {
-        if (map === 0) {message.embed.image.url = ''}
+
+        let finalMessage = _.cloneDeep(message);
+        if (map === 0) finalMessage.embed.image.url = '';
         let user = client.users.get(human);
         if(user === undefined) user = client.channels.get(human);
-        user.send(message).then(msg =>  {
+        user.send(finalMessage).then(msg =>  {
             if(config.discord.typereact){
             let humanCheck = client.users.get(human);
-                if(humanCheck === undefined){
-                    e.forEach(function(emoji) {
-                        client.channels.get(human).lastMessage.react(emoji)
-                    });
-                } else {
-                    e.forEach(function(emoji){
-                        client.users.get(human).dmChannel.lastMessage.react(emoji)
-                    })
-                }
+            if(humanCheck === undefined){
+                e.forEach(function(emoji) {
+                    client.channels.get(human).lastMessage.react(emoji)
+                });
+            } else {
+                e.forEach(function(emoji){
+                    client.users.get(human).dmChannel.lastMessage.react(emoji)
+                })
             }
-        })
+        }
+    })
     }
 };
