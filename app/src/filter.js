@@ -66,13 +66,13 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                 query.monsterWhoCares(data, function (whocares) {
                     if(whocares.length !== 0) {
 
-                        gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(err, address){
+                        gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(err, geoResult){
+
                             let view = {
                                 time : data.distime,
                                 tthh : data.tth.hours,
                                 tthm : data.tth.minutes,
                                 tths : data.tth.seconds,
-                                addr : address,
                                 name : data.name,
                                 move1 : data.quick_move,
                                 move2 : data.charge_move,
@@ -88,15 +88,26 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                 rocketmap : data.rocketmap,
                                 form : data.formname,
                                 imgurl : data.imgurl.toLowerCase(),
-                                color : data.color
+                                color : data.color,
+                                // geocode stuff
+                                addr: geoResult.addr,
+                                streetNumber: geoResult.streetNumber,
+                                streetName: geoResult.streetName,
+                                zipcode: geoResult.zipcode,
+                                country: geoResult.country,
+                                countryCode: geoResult.countryCode,
+                                city: geoResult.city,
+                                state: geoResult.state,
+                                stateCode: geoResult.stateCode
                             };
+
                             let template = JSON.stringify(dts.monster);
                             let message = mustache.render(template,view);
                             message = JSON.parse(message);
                             whocares.forEach(function (cares) {
 
                                 alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
-                                log.info(`Alerted ${cares.name} about ${data.name} raid`);
+                                log.info(`Alerted ${cares.name} about ${data.name} monster`);
                             })
 
                         });
@@ -147,14 +158,13 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                             });
                             query.raidWhoCares(data, function(whocares){
                                 if(whocares.length !== 0) {
-                                    gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(address){
+                                    gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(err, geoResult){
 
                                         let view = {
                                             time : data.distime,
                                             tthh : data.tth.hours,
                                             tthm : data.tth.minutes,
                                             tths : data.tth.seconds,
-                                            addr : address,
                                             name : data.name,
                                             cp20 : raidCpData[data.pokemon_id].max_cp_20,
                                             cp25 : raidCpData[data.pokemon_id].max_cp_25,
@@ -170,7 +180,17 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                             mapurl : data.mapurl,
                                             rocketmap : data.rocketmap,
                                             imgurl : data.imgurl.toLowerCase(),
-                                            color : data.color
+                                            color : data.color,
+                                            // geocode stuff
+                                            addr: geoResult.addr,
+                                            streetNumber: geoResult.streetNumber,
+                                            streetName: geoResult.streetName,
+                                            zipcode: geoResult.zipcode,
+                                            country: geoResult.country,
+                                            countryCode: geoResult.countryCode,
+                                            city: geoResult.city,
+                                            state: geoResult.state,
+                                            stateCode: geoResult.stateCode
                                         };
 
                                         let template = JSON.stringify(dts.raid);
@@ -222,14 +242,13 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                             });
                             query.eggWhoCares(data, function(whocares){
                                 if(whocares.length !== 0) {
-                                    gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(err, address){
+                                    gmaps.getAddress({lat:data.latitude, lon:data.longitude}, function(err, geoResult){
 
                                         let view = {
                                             time : data.hatchtime,
                                             tthh : data.tth.hours,
                                             tthm : data.tth.minutes,
                                             tths : data.tth.seconds,
-                                            addr : address,
                                             gymname : data.gymname,
                                             description : data.description,
                                             level : data.level,
@@ -238,7 +257,17 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                             mapurl : data.mapurl,
                                             rocketmap : data.rocketmap,
                                             imgurl : data.imgurl.toLowerCase(),
-                                            color : data.color
+                                            color : data.color,
+                                            // geocode stuff
+                                            addr: geoResult.addr,
+                                            streetNumber: geoResult.streetNumber,
+                                            streetName: geoResult.streetName,
+                                            zipcode: geoResult.zipcode,
+                                            country: geoResult.country,
+                                            countryCode: geoResult.countryCode,
+                                            city: geoResult.city,
+                                            state: geoResult.state,
+                                            stateCode: geoResult.stateCode
                                         };
 
                                         let template = JSON.stringify(dts.egg);
