@@ -10,7 +10,7 @@
   "scripts": {
     "test": "mocha --exit",
     "pm2": "npm i -g pm2",
-    "start": "./node_modules/.bin/pm2 start ecosystem.config.json",
+    "start": "pm2 start ecosystem.config.json",
     "webserver": "node app/src/server.js",
     "worker": "node app/src/filter.js",
     "discord": "node app/src/discord/commands.js"
