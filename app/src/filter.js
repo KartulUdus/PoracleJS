@@ -323,6 +323,7 @@ function sendDMAlarm(message, human, e, map) {
     if (map === 0) finalMessage.embed.image.url = '';
     let user = client.users.get(human);
     if (user === undefined) user = client.channels.get(human);
+    query.addOneQuery('humans','alerts_sent','id',human);
     user.send(finalMessage).then(msg => {
         if(config.discord.typereact
 )
