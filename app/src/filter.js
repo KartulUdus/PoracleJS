@@ -246,7 +246,7 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                         message = JSON.parse(message);
                                         whocares.forEach(function (cares) {
 
-                                            alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
+                                            alarm.sendDMAlarm(message, cares.id, [], cares.map_enabled);
                                             log.info(`Alerted ${cares.name} about ${data.name} raid`);
 
                                         });
