@@ -43,6 +43,14 @@ Any of the fields can be cusomtized with the following:
 |{{tthm}}| Full minutes until hidden|
 |{{tths}}| Full seconds until hidden|
 |{{addr}}| Address of the alerted location|
+|{{streetNumber}| Street number of the alerted location|
+|{{streetName}| Street name of the alerted location|
+|{{zipcode}| Zip code of the alerted location|
+|{{country}| Country of the alerted location|
+|{{countryCode}| 2 letter country code of the alerted location|
+|{{city}| City name of the alerted location|
+|{{state}| State name of the alerted location|
+|{{stateCode}| 2 letter state code of the alerted location|
 |{{move1}}| Monsers quick move|
 |{{move2}}| Monsters charge move|
 |{{iv}}| Monsters Individual Value Precentage|

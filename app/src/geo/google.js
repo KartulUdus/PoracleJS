@@ -9,16 +9,11 @@ let geocoder = NodeGeocoder({
     httpAdapter: 'https',
     apiKey: config.gmaps.key
 });
-let getCoords = NodeGeocoder({
-    provider: 'google',
-    httpAdapter: 'https',
-    apiKey: config.gmaps.key
-});
 
 module.exports = {
 
     geolocate: function(location, callback) {
-        getCoords.geocode(location, function(err, res) {
+        geocoder.geocode(location, function(err, res) {
             if (err) log.error(err);
             log.info(`Figuring out where ${location} is`);
             callback(err, res[0]);
@@ -26,29 +21,29 @@ module.exports = {
     },
 
     getAddress: function(location, callback) {
-        geocoder.reverse(location, function(err, data) {
+        geocoder.reverse(location, function(err, geocodeResult) {
             if (err) log.error(err);
 
 			var res = {};
-			if(data && data.length > 0) {
+			if(geocodeResult && geocodeResult.length > 0) {
 				//we found it
 				res.addr = config.locale.addressformat
-				.replace(/%n/, data[0].streetNumber)
-				.replace(/%S/, data[0].streetName)
-				.replace(/%z/, data[0].zipcode)
-				.replace(/%P/, data[0].country)
-				.replace(/%p/, data[0].countryCode)
-				.replace(/%c/, data[0].city)
-				.replace(/%T/, data[0].state)
-				.replace(/%t/, data[0].stateCode);
-				res.streetNumber = data[0].streetNumber;
-				res.streetName = data[0].streetName;
-				res.zipcode = data[0].zipcode;
-				res.country = data[0].country;
-				res.countryCode = data[0].countryCode;
-				res.city = data[0].city;
-				res.state = data[0].state;
-				res.stateCode = data[0].stateCode;
+				.replace(/%n/, geocodeResult[0].streetNumber || '')
+				.replace(/%S/, geocodeResult[0].streetName || '')
+				.replace(/%z/, geocodeResult[0].zipcode || '')
+				.replace(/%P/, geocodeResult[0].country || '')
+				.replace(/%p/, geocodeResult[0].countryCode || '')
+				.replace(/%c/, geocodeResult[0].city || '')
+				.replace(/%T/, geocodeResult[0].state || '')
+				.replace(/%t/, geocodeResult[0].stateCode || '');
+				res.streetNumber = geocodeResult[0].streetNumber || '';
+				res.streetName = geocodeResult[0].streetName || '';
+				res.zipcode = geocodeResult[0].zipcode || '';
+				res.country = geocodeResult[0].country || '';
+				res.countryCode = geocodeResult[0].countryCode || '';
+				res.city = geocodeResult[0].city || '';
+				res.state = geocodeResult[0].state || '';
+				res.stateCode = geocodeResult[0].stateCode || '';
 			} else {
 				//didn't find anything, default it
 				res.addr = '';
