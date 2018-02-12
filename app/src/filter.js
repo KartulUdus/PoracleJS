@@ -109,13 +109,10 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                 alarm.sendDMAlarm(message, cares.id, e, cares.map_enabled);
                                 log.info(`Alerted ${cares.name} about ${data.name} monster`);
                             })
-
                         });
-
                     }
                 })
             } else log.warn(`Weird, the ${data.name} already disappeared`)
-
         }, {noAck: true});
     });
 });
@@ -206,20 +203,12 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
                                             query.addOneQuery('humans','alerts_sent','id', cares.id);
 
                                         });
-
                                     });
-
                                 }
                             })
                         }
-
-
-
                     } else log.warn(`Raid against ${data.name} appeared; alas, I did not have gym-details`);
-
                 });
-
-
             }else {
                 data.rocketmap = config.gmaps.rocketmap.concat(`?lat=${data.latitude}&lon=${data.longitude}`);
                 data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
@@ -277,24 +266,14 @@ amqp.connect(config.rabbit.conn, function(err, conn) {
 
                                             alarm.sendDMAlarm(message, cares.id, [], cares.map_enabled);
                                             log.info(`Alerted ${cares.name} about ${data.name} raid`);
-
                                         });
-
                                     });
-
                                 }
                             })
                         }
-
-
-
                     } else log.warn(`Raid against ${data.name} appeared; alas, I did not have gym-details`);
-
                 });
-
-
             }
-
         }, {noAck: true});
     });
 });

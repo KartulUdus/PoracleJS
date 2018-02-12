@@ -28,7 +28,7 @@ module.exports = {
                     client.users.get(human).dmChannel.lastMessage.react(emoji)
                 })
             }
-        }
-    })
+            }
+        })
     }
 };
