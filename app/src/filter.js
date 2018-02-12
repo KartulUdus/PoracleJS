@@ -15,6 +15,7 @@ const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 const moveData = require(config.locale.movesJson);
 const moment = require('moment');
+let gkey = config.gmaps.key;
 require('moment-precise-range-plugin');
 moment.locale(config.locale.timeformat);
 
@@ -28,7 +29,7 @@ client.on('ready', () => {
             ch.consume(q, function (msg) {
                 let data = JSON.parse(msg.content.toString());
                 data.rocketmap = config.gmaps.rocketmap.concat(`?lat=${data.latitude}&lon=${data.longitude}`);
-                data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${config.gmaps.key}`;
+                data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
                 if (data.individual_attack === null) {
                     data.iv = -1;
                     data.individual_attack = 0;
@@ -146,7 +147,7 @@ client.on('ready', () => {
                     data.color = teamData[data.team_id].color;
                     data.quick_move = moveData[data.move_1].name;
                     data.charge_move = moveData[data.move_2].name;
-                    data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${config.gmaps.key}`;
+                    data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
 
                     query.selectOneQuery('gym-info', 'id', data.gym_id, function (err, gym) {
                         if (gym !== undefined) {
@@ -228,7 +229,7 @@ client.on('ready', () => {
                     data.imgurl = `${config.general.imgurl}egg${data.level}.png`;
                     data.teamname = teamData[data.team_id].name;
                     data.color = teamData[data.team_id].color;
-                    data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${config.gmaps.key}`;
+                    data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
 
                     query.selectOneQuery('gym-info', 'id', data.gym_id, function (err, gym) {
                         if (gym !== undefined) {
