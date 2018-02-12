@@ -109,7 +109,7 @@ module.exports = {
             sta<=${data.individual_stamina} and
             min_weight<=${data.weight} and
             max_weight>=${data.weight} and
-            		       round( 63710000 * acos( cos( radians(${data.latitude}) ) 
+            		       round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
@@ -132,7 +132,7 @@ module.exports = {
             where humans.enabled = 1 and
             pokemon_id=${data.pokemon_id} and 
             (raid.team = ${data.team_id} or raid.team = 4) and 
-            		       round( 63710000 * acos( cos( radians(${data.latitude}) ) 
+            		       round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
@@ -155,7 +155,7 @@ module.exports = {
             where humans.enabled = 1 and 
             raid_level=${data.level} and 
             (egg.team = ${data.team_id} or egg.team = 4) and 
-            		       round( 63710000 * acos( cos( radians(${data.latitude}) ) 
+            		       round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
