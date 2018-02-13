@@ -17,6 +17,24 @@
       }
     }
   },
+  "monsterNoIv": {
+    "embed": {
+      "title": "a wild {{{name}}} has appeared!",
+      "description": "It will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \naddress: {{addr}} ",
+      "url": "{{{rocketmap}}}",
+      "color": "{{color}}",
+      "thumbnail": {
+        "url": "{{{imgurl}}}"
+      },
+      "image": {
+        "url": "{{{staticmap}}}"
+      },
+      "author": {
+        "name": "{{name}}",
+        "url": "{{{rocketmap}}}"
+      }
+    }
+  },
   "raid": {
     "embed": {
       "title": "Raid against {{name}} has started! at {{gymname}}",
