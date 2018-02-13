@@ -30,6 +30,7 @@ client.on('ready', () => {
                 let data = JSON.parse(msg.content.toString());
                 data.rocketmap = config.gmaps.rocketmap.concat(`?lat=${data.latitude}&lon=${data.longitude}`);
                 data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
+                data.name = monsterData[data.pokemon_id].name;
                 if (data.individual_attack === null) {
                     data.iv = -1;
                     data.individual_attack = 0;
@@ -40,13 +41,11 @@ client.on('ready', () => {
                     data.move_1 = 0;
                     data.move_2 = 0;
                     data.weight = 0;
-                    data.name = monsterData[data.pokemon_id].name;
-                    data.quick_move = moveData[data.move_1].name;
-                    data.charge_move = moveData[data.move_2].name;
+                    data.quick_move = '';
+                    data.charge_move = '';
                 } else {
                     data.iv = ((data.individual_attack + data.individual_defense + data.individual_stamina) / 45 * 100).toFixed(2);
                     data.weight = data.weight.toFixed(1);
-                    data.name = monsterData[data.pokemon_id].name;
                     data.quick_move = moveData[data.move_1].name;
                     data.charge_move = moveData[data.move_2].name;
                 }
@@ -106,7 +105,10 @@ client.on('ready', () => {
                                         stateCode: geoResult.stateCode
                                     };
 
-                                    let template = JSON.stringify(dts.monster);
+                                     let monsterDts = data.iv == -1 && dts.monsterNoIv
+                                                    ? dts.monsterNoIv
+                                                    : dts.monster;
+                                    let template = JSON.stringify(monsterDts);
                                     let message = mustache.render(template, view);
                                     message = JSON.parse(message);
                                     whocares.forEach(function (cares) {

@@ -32,6 +32,29 @@ These are separated by the type of alarm.
   }
 ```
 
+For monsters without IV information, you can specify a different message.
+
+```json
+"monsterNoIv": {
+    "embed": {
+      "title": "a wild {{{name}}} has appeared!",
+      "description": "It will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \naddress: {{addr}} ",
+      "url": "{{{rocketmap}}}",
+      "color": "{{color}}",
+      "thumbnail": {
+        "url": "{{{imgurl}}}"
+      },
+      "image": {
+        "url": "{{{staticmap}}}"
+      },
+      "author": {
+        "name": "{{name}}",
+        "url": "{{{rocketmap}}}"
+      }
+    }
+  },
+```
+
 
 Any of the fields can be cusomtized with the following:
 
