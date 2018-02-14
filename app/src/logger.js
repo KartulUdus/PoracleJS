@@ -7,6 +7,6 @@ module.exports =
         transports: [
             new (winston.transports.Console)({level:config.general.logLevel}),
             new (winston.transports.File)({filename: 'logs/worker.log',
-                level: 'debug'})
+                level: config.general.logLevel})
         ]
     });
