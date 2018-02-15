@@ -925,7 +925,7 @@ client.on('message', msg => {
                                         let monster_name = monsterData[monster.pokemon_id].name;
                                         let miniv = monster.min_iv;
                                         if(miniv === -1) miniv = 0;
-                                        message = message.concat(`\n**${monster_name}** distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} weight: ${monster.min_weight}-${monster.max_weight}kg minimum stats: ATK:${monster.atk} DEF:${monster.def} STA:${monster.sta}`)
+                                        message = message.concat(`\n**${monster_name}** distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} minimum stats: ATK:${monster.atk} DEF:${monster.def} STA:${monster.sta}`)
                                     });
                                     if (raids.length !== 0 || eggs.length !== 0) {
                                         message = message.concat(`\n\nYou're tracking the following raids:\n`);
