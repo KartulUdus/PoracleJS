@@ -1,4 +1,4 @@
-![logo](/docs/_assets/PoracleJs.png)  
+![logo](https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/docs/_assets/PoracleJS.png)  
 
 
 #### Introduction
