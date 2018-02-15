@@ -1,6 +1,5 @@
 <!-- docs/_sidebar.md -->
 
-- [Home](/)
 - [Getting started](install.md)
 - [Creating a discord bot](discordbot.md)
 - [Google maps API key](gmaps.md)

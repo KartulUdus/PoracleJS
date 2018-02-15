@@ -85,6 +85,7 @@ Any of the fields can be cusomtized with the following:
 |{{weight}}| Monsters weight in kilograms|
 |{{{staticmap}}}| Static link to map|
 |{{{rocketmap}}}| Link to Rocketmap with alerted location|
+|{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
 |{{form}}| Monsters form|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
@@ -142,6 +143,7 @@ Any of the fields can be cusomtized with the following:
 |{{{detailsurl}}}| Descriptive picture url|
 |{{{staticmap}}}| Static link to map|
 |{{{rocketmap}}}| Link to Rocketmap with alerted location|
+|{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 
@@ -194,6 +196,7 @@ Any of the fields can be cusomtized with the following:
 |{{{detailsurl}}}| Descriptive picture url|
 |{{{staticmap}}}| Static link to map|
 |{{{rocketmap}}}| Link to Rocketmap with alerted location|
+|{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 

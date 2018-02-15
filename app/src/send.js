@@ -53,7 +53,7 @@ function sendRabbitMQ(queue, data){
             let q = queue;
             ch.assertQueue(q, {durable: false});
             ch.sendToQueue(q, new Buffer(JSON.stringify(data)), {persistent: true});
-            log.info("Sent " + queue + " to bunnywabbit");
+            log.debug("Sent " + queue + " to bunnywabbit");
         });
         setTimeout(function () {
             conn.close();

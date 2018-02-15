@@ -107,8 +107,8 @@ module.exports = {
             atk<=${data.individual_attack} and
             def<=${data.individual_defense} and
             sta<=${data.individual_stamina} and
-            min_weight<=${data.weight} and
-            max_weight>=${data.weight} and
+            min_weight<=${data.weight} * 1000 and
+            max_weight>=${data.weight} * 1000 and
             		       round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
