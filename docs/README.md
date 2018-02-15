@@ -1,4 +1,4 @@
-![logo](assets/PoracleJs.png)  
+![logo](_assets/PoracleJs.png)  
 
 
 #### Introduction
