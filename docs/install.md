@@ -39,9 +39,9 @@
     ```
 7. Start the compontets:
 
-`npm run webserver` - starts the webserver (and on initial run creates database)
-`npm run worker` - starts queue consuming filter process
-`npm run discord` - starts discord bot for registration and tracking
+`npm run webserver` - starts the webserver (and on initial run creates database)  
+`npm run worker` - starts queue consuming filter process  
+`npm run discord` - starts discord bot for registration and tracking  
 
 8. That's it, now proceed to [enter some discord commands](commands.md).
         
@@ -52,8 +52,8 @@
 Optionally for better process management, install [pm2](http://pm2.keymetrics.io/) with included script:
 `npm run pm2`. Once installed, you can start the application by `npm start` and check running services
  with similar commands:
-    * `pm2 list` - will show a list of running pm2 processes  
-    * `pm2 restart all` - restarts all pm2 services  
-    * `pm2 stop Poracle-Commands` - stops discord command bot  
-    * `pm2 monit` - monitors running processes  
-    * `pm2 stop all` - stops all services running in pm2  
+* `pm2 list` - will show a list of running pm2 processes  
+* `pm2 restart all` - restarts all pm2 services  
+* `pm2 stop Poracle-Commands` - stops discord command bot  
+* `pm2 monit` - monitors running processes  
+* `pm2 stop all` - stops all services running in pm2  

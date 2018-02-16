@@ -24,11 +24,11 @@ Once you successfully register, the bot will send you a DM with a greeting messa
 
 ###### !unregister
 
-`!unreggister` Deletes all users tracking information. After !unregistering, you would need to register again with `!poracle` beofere new alarms.
+`!unregister` Deletes all users tracking information. After !unregistering, you would need to register again with `!poracle` before new alarms.
 
 ###### !location 
 
-`!loaction Tallinn kesklinn` for example, would register a users's location to `59.42685179999999,24.7595564`  
+`!location Tallinn kesklinn` for example, would register a users's location to `59.42685179999999,24.7595564`  
 Instead of "Tallinn kesklinn" you can search for any address, city, country or known area available in google.
 
 ###### !area add
@@ -63,13 +63,13 @@ available filters:
 |d          |`!track pikachu d750`           | Tracks pikachu within 750 meters of  |
 |iv         |`!track pikachu iv90`           | Tracks pikachu inside a tracked area with a minimum IV of 90%  |
 |maxiv      |`!track pikachu maxiv0`         | Tracks pikachu with 0% IV   |
-|cp         |`!track shuckle cp 300`         | Tracks shuckle with a minimum CP of 300|
-|maxcp      |`!track shuckle cp 400`         | Tracks shuckle with a maximum CP of 400 |
+|cp         |`!track shuckle cp300`         | Tracks shuckle with a minimum CP of 300|
+|maxcp      |`!track shuckle cp400`         | Tracks shuckle with a maximum CP of 400 |
 |level      |`!track shuckle level20`        | Tracks shuckle with a minimum level 20|
 |maxlevel   |`!track shuckle maxlevel1`      | Tracks shuckle with maximum level 1|
 |atk        |`!track eevee atk15`            | Tracks eevee with a (minimum) 15 point attack value|
 |def        |`!track eevee def14`            | Tracks eevee with a (minimum) 14 point defense value|
-|sta        |`!track eevee atk10`            | Tracks eevee with a (minimum) 10 point stamina value|
+|sta        |`!track eevee sta10`            | Tracks eevee with a (minimum) 10 point stamina value|
 |weight     |`!track magikarp weight131300`  | Tracks "big" magikarp (131300 grams and higher|
 |maxweight  |`!track rattata maxweight24100` | Tracks "tiny" rarrara (24100 grams and lower)|
 |everything |`!track everything iv90 level20`| Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
@@ -165,13 +165,13 @@ available filters:
 |d          |`!channel track pikachu d750`           | Tracks pikachu within 750 meters of  |
 |iv         |`!channel track pikachu iv90`           | Tracks pikachu inside a tracked area with a minimum IV of 90%  |
 |maxiv      |`!channel track pikachu maxiv0`         | Tracks pikachu with 0% IV   |
-|cp         |`!channel track shuckle cp 300`         | Tracks shuckle with a minimum CP of 300|
-|maxcp      |`!channel track shuckle cp 400`         | Tracks shuckle with a maximum CP of 400 |
+|cp         |`!channel track shuckle cp300`         | Tracks shuckle with a minimum CP of 300|
+|maxcp      |`!channel track shuckle cp400`         | Tracks shuckle with a maximum CP of 400 |
 |level      |`!channel track shuckle level20`        | Tracks shuckle with a minimum level 20|
 |maxlevel   |`!channel track shuckle maxlevel1`      | Tracks shuckle with maximum level 1|
 |atk        |`!channel track eevee atk15`            | Tracks eevee with a (minimum) 15 point attack value|
 |def        |`!channel track eevee def14`            | Tracks eevee with a (minimum) 14 point defense value|
-|sta        |`!channel track eevee atk10`            | Tracks eevee with a (minimum) 10 point stamina value|
+|sta        |`!channel track eevee sta10`            | Tracks eevee with a (minimum) 10 point stamina value|
 |weight     |`!channel track magikarp weight131300`  | Tracks "big" magikarp (131300 grams and higher|
 |maxweight  |`!channel track rattata maxweight24100` | Tracks "tiny" rarrara (24100 grams and lower)|
 |everything |`!channel track everything iv90 level20`| Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
