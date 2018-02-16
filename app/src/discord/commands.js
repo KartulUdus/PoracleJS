@@ -506,7 +506,7 @@ client.on('message', msg => {
                     let def = 0;
                     let sta = 0;
                     let weight = 0;
-                    let maxweight = 9000;
+                    let maxweight = 9000000;
 
                     args.forEach(function(element) {
                         let pid = _.findKey(monsterData, function(mon){return mon.name.toLowerCase() === element});
