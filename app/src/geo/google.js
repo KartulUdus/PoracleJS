@@ -16,7 +16,7 @@ module.exports = {
         geocoder.geocode(location, function(err, res) {
             if (err) log.error(err);
             log.info(`Figuring out where ${location} is`);
-            callback(err, res[0]);
+            callback(err, res);
         });
     },
 
