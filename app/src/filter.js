@@ -307,6 +307,8 @@ client.on('ready', () => {
                 let data = JSON.parse(msg.content.toString());
                 query.countQuery(`id`, `gym-info`, `id`, data.id, function (err, exists) {
                     if (exists === 0) {
+                        data.name = data.name.replace(/"/g,"");
+                        data.description = data.description.replace(/"/g,"");
                         query.insertQuery('gym-info',
                             ['`id`', '`gym_name`', '`description`', '`url`', '`latitude`', '`longitude`'],
                             [`${data.id}`, `${data.name}`, `${data.description}`, `${data.url}`, `${data.latitude}`, `${data.longitude}`]);

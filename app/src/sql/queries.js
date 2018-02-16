@@ -18,7 +18,7 @@ module.exports = {
 
         pool.query('SELECT *  FROM ?? WHERE ?? = ?', [where, column, value], function (err, result) {
             if (err) log.error(err);
-            callback(null, result[0]);
+            callback(err, result[0]);
         });
     },
 
@@ -59,7 +59,7 @@ module.exports = {
         pool.query(query, function (err, result) {
             if (err) log.error(err);
             log.debug(`Mystery query executed`);
-            callback(null, result);
+            callback(err, result);
         });
     },
 
