@@ -14,7 +14,7 @@
 
 1. Start by cloning the repository:  
    ```
-   git clone https://github.com/KartulUdus/Poracle.git
+   git clone https://github.com/KartulUdus/PoracleJS.git
    ```
 
 2. Create A [discord bot](discordbot.md), add it to your server and take not of your token for later
