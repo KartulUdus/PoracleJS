@@ -34,7 +34,7 @@ Instead of "Tallinn kesklinn" you can search for any address, city, country or k
 ###### !area add
 
 `!area add Tallinn` If the admin has set up a [Geofence](config.md)  name Tallinn, this command will add tracking from that area to the user.  
-In case the area is not configured, the bot will reply with the areas that are avialable.  
+In case the area is not configured, the bot will reply with the areas that are available.  
 You can also use multiple areas in the same command (separated by spaces) and only availble ones will be added.  
 
 ###### !area remove
@@ -64,7 +64,7 @@ available filters:
 |iv         |`!track pikachu iv90`           | Tracks pikachu inside a tracked area with a minimum IV of 90%  |
 |maxiv      |`!track pikachu maxiv0`         | Tracks pikachu with 0% IV   |
 |cp         |`!track shuckle cp300`         | Tracks shuckle with a minimum CP of 300|
-|maxcp      |`!track shuckle cp400`         | Tracks shuckle with a maximum CP of 400 |
+|maxcp      |`!track shuckle maxcp400`         | Tracks shuckle with a maximum CP of 400 |
 |level      |`!track shuckle level20`        | Tracks shuckle with a minimum level 20|
 |maxlevel   |`!track shuckle maxlevel1`      | Tracks shuckle with maximum level 1|
 |atk        |`!track eevee atk15`            | Tracks eevee with a (minimum) 15 point attack value|
