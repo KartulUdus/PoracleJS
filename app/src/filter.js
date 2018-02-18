@@ -50,7 +50,7 @@ client.on('ready', () => {
                     data.charge_move = moveData[data.move_2].name;
                 }
                 data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
-                data.mapurl = `https://www.google.com/maps/search/?q=${data.latitude},${data.longitude}`;
+                data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                 data.color = monsterData[data.pokemon_id].types[0].color;
                 data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
                 data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
@@ -138,7 +138,7 @@ client.on('ready', () => {
 
                 if (data.pokemon_id !== null && data.pokemon_id !== undefined && data.pokemon_id !== 0) {
                     data.rocketmap = config.gmaps.rocketmap.concat(`?lat=${data.latitude}&lon=${data.longitude}`);
-                    data.mapurl = `https://www.google.com/maps/search/?q=${data.latitude},${data.longitude}`;
+                    data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                     data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
                     data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true);
                     data.distime = moment(data.end * 1000).format(config.locale.time);
@@ -229,7 +229,7 @@ client.on('ready', () => {
                     });
                 } else {
                     data.rocketmap = config.gmaps.rocketmap.concat(`?lat=${data.latitude}&lon=${data.longitude}`);
-                    data.mapurl = `https://www.google.com/maps/search/?q=${data.latitude},${data.longitude}`;
+                    data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                     data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
                     data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true);
                     data.hatchtime = moment(data.start * 1000).format(config.locale.time);
