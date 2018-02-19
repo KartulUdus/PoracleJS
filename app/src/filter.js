@@ -334,22 +334,23 @@ function sendDMAlarm(message, human, e, map) {
     let finalMessage = _.cloneDeep(message);
     if (map === 0) finalMessage.embed.image.url = '';
     let user = client.users.get(human);
+    let channel = client.channels.get(human);
     if (user === undefined) user = client.channels.get(human);
-    query.addOneQuery('humans','alerts_sent','id',human);
-    user.send(finalMessage).then(msg => {
-        if(config.discord.typereact
-)
-    {
-        let humanCheck = client.users.get(human);
-        if (humanCheck === undefined) {
-            e.forEach(function (emoji) {
-                client.channels.get(human).lastMessage.react(emoji)
-            });
-        } else {
-            e.forEach(function (emoji) {
-                client.users.get(human).dmChannel.lastMessage.react(emoji)
-            })
-        }
-    }
-})
+    if (user !== undefined && channel !== undefined) {
+        query.addOneQuery('humans','alerts_sent','id',human);
+        user.send(finalMessage).then(msg => {
+            if(config.discord.typereact){
+                let humanCheck = client.users.get(human);
+                if (humanCheck === undefined) {
+                    e.forEach(function (emoji) {
+                        client.channels.get(human).lastMessage.react(emoji)
+                    });
+                } else {
+                    e.forEach(function (emoji) {
+                        client.users.get(human).dmChannel.lastMessage.react(emoji)
+                    })
+                }
+            }
+        })
+    } else log.warn(`Tried to send message to ID ${human}, but didn't find it`);
 }
