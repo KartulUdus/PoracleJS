@@ -209,6 +209,7 @@ client.on('ready', () => {
 
                                                 let template = JSON.stringify(dts.raid);
                                                 let message = mustache.render(template, view);
+                                                log.debug(message);
                                                 message = JSON.parse(message);
                                                 whocares.forEach(function (cares) {
 
@@ -284,6 +285,7 @@ client.on('ready', () => {
 
                                                 let template = JSON.stringify(dts.egg);
                                                 let message = mustache.render(template, view);
+                                                log.debug(message);
                                                 message = JSON.parse(message);
                                                 whocares.forEach(function (cares) {
 
@@ -328,8 +330,7 @@ client.on('ready', () => {
 })
 
 function sendDMAlarm(message, human, e, map) {
-    
-    log.debug(message);
+
     let finalMessage = _.cloneDeep(message);
     if (map === 0) finalMessage.embed.image.url = '';
     let user = client.users.get(human);
