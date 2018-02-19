@@ -328,7 +328,8 @@ client.on('ready', () => {
 })
 
 function sendDMAlarm(message, human, e, map) {
-
+    
+    log.debug(message);
     let finalMessage = _.cloneDeep(message);
     if (map === 0) finalMessage.embed.image.url = '';
     let user = client.users.get(human);
