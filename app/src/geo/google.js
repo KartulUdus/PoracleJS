@@ -10,13 +10,22 @@ let geocoder = NodeGeocoder({
     apiKey: config.gmaps.key
 });
 
+let opengeocoder = NodeGeocoder({
+	provider: 'openstreetmap'
+});
+
 module.exports = {
 
     geolocate: function(location, callback) {
         geocoder.geocode(location, function(err, res) {
             if (err) log.error(err);
             log.info(`Figuring out where ${location} is`);
-            callback(err, res);
+            if(!res){
+            	opengeocoder.geocode(location, function(err, res){
+                    if (err) log.error(err);
+					callback(err, res)
+				})
+			} else  callback(err, res);
         });
     },
 
