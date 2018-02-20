@@ -61,7 +61,7 @@ client.on('ready', () => {
                 data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
                 data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                 data.color = monsterData[data.pokemon_id].types[0].color;
-                data.rarityColor =  findRarityColor(data.iv);
+                data.ivcolor =  config.general.iv_color[findIvColorIdx(data.iv)];
                 data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
                 data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
                 data.imgurl = `${config.general.imgurl}${data.pokemon_id}`;
@@ -105,7 +105,7 @@ client.on('ready', () => {
                                         form: data.formname,
                                         imgurl: data.imgurl.toLowerCase(),
                                         color: data.color,
-                                        rarityColor: data.rarityColor,
+                                        ivcolor: data.ivcolor,
                                         // geocode stuff
                                         addr: geoResult.addr,
                                         streetNumber: geoResult.streetNumber,
@@ -381,25 +381,23 @@ function sendDMAlarm(message, human, e, map) {
 }
 
 
-function findRarityColor(iv) {
-    if(!iv || iv < 25) {
-        //gray / trash / missing
-        return 0x9D9D9D;
-    } else if(iv < 50) {
-        //white / common
-        return 0xFFFFFF;
-    } else if(iv < 82) {
-        // green / uncommon
-        return 0x1EFF00;
-    } else if(iv < 90) {
-        // blue / rare
-        return 0x0070DD;
-    } else if(iv < 100 ) {
-        // purple / epic
-        return 0xA335EE;
-    }
+function findIvColorIdx(iv) {
+    //gray / trash / missing
+    if(iv < 25) return 0;
+
+    //white / common
+    if(iv < 50) return 1;
+
+    // green / uncommon
+    if(iv < 82) return 2;
+
+    // blue / rare
+    if(iv < 90) return 3;
+
+    // purple epic
+    if(iv < 100 ) return 4;
 
     //it must be perfect
     // orange / legendary
-    return 0xFF8000;
+    return 5;
 }
