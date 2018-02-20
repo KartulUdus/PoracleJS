@@ -317,6 +317,8 @@ client.on('ready', () => {
                     if (exists === 0) {
                         data.name = data.name.replace(/"/g,"");
                         data.description = data.description.replace(/"/g,"");
+                        data.name = data.name.replace(/\n/g,"");
+                        data.description = data.description.replace(/\n/g,"");
                         query.insertQuery('gym-info',
                             ['`id`', '`gym_name`', '`description`', '`url`', '`latitude`', '`longitude`'],
                             [`${data.id}`, `${data.name}`, `${data.description}`, `${data.url}`, `${data.latitude}`, `${data.longitude}`]);
@@ -333,24 +335,24 @@ function sendDMAlarm(message, human, e, map) {
 
     let finalMessage = _.cloneDeep(message);
     if (map === 0) finalMessage.embed.image.url = '';
-    let user = client.users.get(human);
-    let channel = client.channels.get(human);
-    if (user === undefined) user = client.channels.get(human);
-    if (user !== undefined && channel !== undefined) {
-        query.addOneQuery('humans','alerts_sent','id',human);
-        user.send(finalMessage).then(msg => {
+    query.addOneQuery('humans','alerts_sent','id',human);
+    if(client.channels.keyArray().includes(human)){
+        client.channels.get(human).send(finalMessage).then(msg => {
             if(config.discord.typereact){
-                let humanCheck = client.users.get(human);
-                if (humanCheck === undefined) {
-                    e.forEach(function (emoji) {
-                        client.channels.get(human).lastMessage.react(emoji)
-                    });
-                } else {
-                    e.forEach(function (emoji) {
-                        client.users.get(human).dmChannel.lastMessage.react(emoji)
-                    })
-                }
+                e.forEach(function (emoji) {
+                    msg.react(emoji)
+                });
             }
         })
-    } else log.warn(`Tried to send message to ID ${human}, but didn't find it`);
+    }
+    else if(client.users.keyArray().includes(human)){
+        client.users.get(human).send(finalMessage).then(msg => {
+            if(config.discord.typereact){
+                e.forEach(function (emoji) {
+                    msg.react(emoji)
+                });
+            }
+        })
+    } else log.warn(`Tried to send message to ID ${human}, but error ocurred`)
+
 }
