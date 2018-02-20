@@ -37,26 +37,24 @@ module.exports = {
     },
 
     getAddress: function(location, callback) {
-        var cacheKey = location.lat + "-" + location.lon;
+        let cacheKey = `${location.lat}-${location.lon}`;
         addrCache.get(cacheKey, function(err, addr) {
-            if(err) {
-                log.error(err);
-            }
+            if(err) log.error(err);
 
             if(addr) {
                 parseAddr(err, addr, callback);
                 return;
             }
 
-            geocoder.reverse(location, function(gerr, geocodeResult) {
-                if (gerr) log.error(gerr);
+            geocoder.reverse(location, function(err, geocodeResult) {
+                if (err) log.error(err);
 
                 if(geocodeResult && geocodeResult.length > 0) {
-                    addrCache.put(cacheKey, geocodeResult, function(aerr, r) {
-                        if(aerr) log.error(`Error saving addr of ${cacheKey}: ${aerr}`)
+                    addrCache.put(cacheKey, geocodeResult, function(err, r) {
+                        if(err) log.error(`Error saving addr of ${cacheKey}: ${err}`)
                     });
                 }
-                parseAddr(gerr, geocodeResult ,callback);
+                parseAddr(err, geocodeResult ,callback);
             });
         });
     },
