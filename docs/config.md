@@ -38,7 +38,8 @@ This config file consist of different objects for different configurations.
     "host": "127.0.0.1",
     "port": "3031",
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
-    "max_pokemon": 326
+    "max_pokemon": 326,
+    "iv_colors": [0x9D9D9D, 0xFFFFFF, 0x1EFF00, 0x0070DD, 0xA335EE, 0xFF8000]
   }
   ```
   
@@ -47,9 +48,24 @@ This config file consist of different objects for different configurations.
   |logLevel | Logging level, can be `debug`, `info` or `error`.|
   |host |   Webserver host. |
   |port | Webserver port. | 
-  |imgurl | source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/images) |
+  |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/images) |
   | max_pokemon | Biggest released pokemon_id. Needed for tracking batch tracking of mainimum/maximum IV.|
-  
+  | iv_colors | An array of colors for iv color DTS from lowest quality tier to highest quality tier. Has to be 6 elements |
+
+**IV colors**
+There must be 6 colors defined, from worst IV to best. The Colors have to be defined as numbers. Luckily you can use hex syntax (0xrrggbb) to input rgb hexes.
+
+The tiers of IV colors are as follows:
+
+  | Min IV      | Max IV      | Default color  |
+  | ----------- | ----------- | -------------- |
+  | 0 %         | 24.9 %      | Gray           |
+  | 25 %        | 49.9 %      | White          |
+  | 50 %        | 81.9 %      | Green          |
+  | 82 %        | 89.9 %      | Blue           |
+  | 90 %        | 99.9 %      | Purple         |
+  | 100 %       | 100 %       | Orange         |
+
 ##### Locale settings
   ```json
     "locale": {
