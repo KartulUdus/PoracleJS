@@ -41,6 +41,7 @@
     "mustache": "^2.3.0",
     "mysql2": "^1.5.1",
     "node-geocoder": "^3.21.1",
+    "persistent-cache": "^1.1.1",
     "pm2": "^2.9.3",
     "point-in-polygon": "^1.0.1",
     "prettyjson": "^1.2.1",

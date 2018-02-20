@@ -3,6 +3,7 @@ let config = require('config');
 let inside = require('point-in-polygon');
 let _ = require('lodash');
 let NodeGeocoder = require('node-geocoder');
+let pcache = require('persistent-cache');
 
 let geocoder = NodeGeocoder({
     provider: 'google',
@@ -12,6 +13,12 @@ let geocoder = NodeGeocoder({
 
 let opengeocoder = NodeGeocoder({
 	provider: 'openstreetmap'
+});
+
+let addrCache = pcache({
+    base: '.cache',
+    name: 'addrCache',
+    duration: 30 * 24 * 3600 * 1000 //30 days is what google allows
 });
 
 module.exports = {
@@ -30,43 +37,27 @@ module.exports = {
     },
 
     getAddress: function(location, callback) {
-        geocoder.reverse(location, function(err, geocodeResult) {
-            if (err) log.error(err);
+        var cacheKey = location.lat + "-" + location.lon;
+        addrCache.get(cacheKey, function(err, addr) {
+            if(err) {
+                log.error(err);
+            }
 
-			var res = {};
-			if(geocodeResult && geocodeResult.length > 0) {
-				//we found it
-				res.addr = config.locale.addressformat
-				.replace(/%n/, geocodeResult[0].streetNumber || '')
-				.replace(/%S/, geocodeResult[0].streetName || '')
-				.replace(/%z/, geocodeResult[0].zipcode || '')
-				.replace(/%P/, geocodeResult[0].country || '')
-				.replace(/%p/, geocodeResult[0].countryCode || '')
-				.replace(/%c/, geocodeResult[0].city || '')
-				.replace(/%T/, geocodeResult[0].state || '')
-				.replace(/%t/, geocodeResult[0].stateCode || '');
-				res.streetNumber = geocodeResult[0].streetNumber || '';
-				res.streetName = geocodeResult[0].streetName || '';
-				res.zipcode = geocodeResult[0].zipcode || '';
-				res.country = geocodeResult[0].country || '';
-				res.countryCode = geocodeResult[0].countryCode || '';
-				res.city = geocodeResult[0].city || '';
-				res.state = geocodeResult[0].state || '';
-				res.stateCode = geocodeResult[0].stateCode || '';
-			} else {
-				//didn't find anything, default it
-				res.addr = '';
-				res.streetNumber = '';
-				res.streetName = '';
-				res.zipcode = '';
-				res.country = '';
-				res.countryCode = '';
-				res.city = '';
-				res.state = '';
-				res.stateCode = '';
-			}
+            if(addr) {
+                parseAddr(err, addr, callback);
+                return;
+            }
 
-            callback(err, res);
+            geocoder.reverse(location, function(gerr, geocodeResult) {
+                if (gerr) log.error(gerr);
+
+                if(geocodeResult && geocodeResult.length > 0) {
+                    addrCache.put(cacheKey, geocodeResult, function(aerr, r) {
+                        if(aerr) log.error(`Error saving addr of ${cacheKey}: ${aerr}`)
+                    });
+                }
+                parseAddr(gerr, geocodeResult ,callback);
+            });
         });
     },
 
@@ -82,3 +73,40 @@ module.exports = {
         callback(matchAreas);
     }
 };
+
+function parseAddr(err, geocodeResult, callback) {
+    var res = {};
+    if(geocodeResult && geocodeResult.length > 0) {
+        //we found it
+        res.addr = config.locale.addressformat
+        .replace(/%n/, geocodeResult[0].streetNumber || '')
+        .replace(/%S/, geocodeResult[0].streetName || '')
+        .replace(/%z/, geocodeResult[0].zipcode || '')
+        .replace(/%P/, geocodeResult[0].country || '')
+        .replace(/%p/, geocodeResult[0].countryCode || '')
+        .replace(/%c/, geocodeResult[0].city || '')
+        .replace(/%T/, geocodeResult[0].state || '')
+        .replace(/%t/, geocodeResult[0].stateCode || '');
+        res.streetNumber = geocodeResult[0].streetNumber || '';
+        res.streetName = geocodeResult[0].streetName || '';
+        res.zipcode = geocodeResult[0].zipcode || '';
+        res.country = geocodeResult[0].country || '';
+        res.countryCode = geocodeResult[0].countryCode || '';
+        res.city = geocodeResult[0].city || '';
+        res.state = geocodeResult[0].state || '';
+        res.stateCode = geocodeResult[0].stateCode || '';
+    } else {
+        //didn't find anything, default it
+        res.addr = '';
+        res.streetNumber = '';
+        res.streetName = '';
+        res.zipcode = '';
+        res.country = '';
+        res.countryCode = '';
+        res.city = '';
+        res.state = '';
+        res.stateCode = '';
+    }
+
+    callback(err, res);
+}
