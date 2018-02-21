@@ -1009,7 +1009,7 @@ client.on('message', msg => {
                                         msg.reply(message, {split: true})
                                     } else {
                                         hastebin(message).then(hastelink => {
-                                            msg.reply(`you're tracking list is quite long. Have a look at ${hastelink}`)
+                                            msg.reply(`your tracking list is quite long. Have a look at ${hastelink}`)
                                         }).catch(console.error);
                                     }
                                 })
