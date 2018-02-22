@@ -5,6 +5,7 @@ const log = require("./logger");
 const sender = require("./send");
 const query = require('./sql/queries');
 const migrator = require('./sql/migration/migrator');
+const amqpc = require('util/helpers/AMQPConnHelper');
 
 const opts = {
     schema: {
@@ -19,6 +20,8 @@ const opts = {
     }
 };
 
+let connection = undefined;
+
 //webserver healthcheck
 
     fastify.get('/', opts, function (request, reply){
@@ -32,7 +35,7 @@ const opts = {
 fastify.post('/', opts, function(request, reply){
     request.body.forEach(function(hook){
         log.debug(prettyjson.render(hook));
-        sender.sendHooks(hook.type, hook.message);
+        sender.sendHooks(connection, hook.type, hook.message);
     });
     reply.type('application/json').code(200);
     reply.send({ Webserver: 'Happy' });
@@ -41,6 +44,12 @@ fastify.post('/', opts, function(request, reply){
 
 fastify.listen(config.general.port, config.general.host, function (err) {
     if (err) throw err;
+    amqpc.connection(function(err, conn){
+       if(err){ log.error(`AMQP Not happy, please check bunnywabbit ${err}`);
+       throw err;
+       }
+       connection = conn;
+    });
     log.info(`Poracle started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 });
 
