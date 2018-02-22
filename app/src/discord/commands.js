@@ -81,10 +81,12 @@ client.on('message', msg => {
                             log.error(err);
                             msg.reply('I was Unable to fetch location data ☹️')
                         } else {
-                            query.updateLocation('humans', location[0].latitude, location[0].longitude, 'id', msg.author.id);
-                            let maplink = `https://www.google.com/maps/search/?api=1&query=${location[0].latitude},${location[0].longitude}`;
-                            msg.author.send(`:wave:, I set your location to : \n${maplink}`);
-                            msg.react('✅')
+                            if(location[0] !== undefined) {
+                                query.updateLocation('humans', location[0].latitude, location[0].longitude, 'id', msg.author.id);
+                                let maplink = `https://www.google.com/maps/search/?api=1&query=${location[0].latitude},${location[0].longitude}`;
+                                msg.author.send(`:wave:, I set your location to : \n${maplink}`);
+                                msg.react('✅')
+                            } else msg.reply('I was Unable to fetch location data ☹️');
                         }
                     })
 
@@ -143,10 +145,12 @@ client.on('message', msg => {
                             log.error(err);
                             msg.reply('I was Unable to fetch location data ☹️')
                         } else {
-                            query.updateLocation('humans', location[0].latitude, location[0].longitude, 'id', msg.channel.id);
-                            var maplink = `https://www.google.com/maps/search/?api=1&query=${location[0].latitude},${location[0].longitude}`;
-                            msg.reply(`I set ${msg.channel.name} to: \n${maplink}`);
-                            msg.react('✅')
+                            if(location[0] !== undefined) {
+                                query.updateLocation('humans', location[0].latitude, location[0].longitude, 'id', msg.channel.id);
+                                var maplink = `https://www.google.com/maps/search/?api=1&query=${location[0].latitude},${location[0].longitude}`;
+                                msg.reply(`I set ${msg.channel.name} to: \n${maplink}`);
+                                msg.react('✅')
+                            } else msg.reply('I was Unable to fetch location data ☹️');
                         }
                     })
 
