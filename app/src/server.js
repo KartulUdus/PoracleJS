@@ -5,7 +5,7 @@ const log = require("./logger");
 const sender = require("./send");
 const query = require('./sql/queries');
 const migrator = require('./sql/migration/migrator');
-const amqpc = require('util/helpers/AMQPConnHelper');
+const amqpc = require('./util/helpers/AMQPConnHelper');
 
 const opts = {
     schema: {

@@ -10,10 +10,10 @@ module.exports = {
 
         amqp.connect(config.rabbit.conn, function (err, conn) {
 
-            if(err)log.error(err);
-            callback(conn)
+            if(err) log.error(err);
+            callback(err, conn);
 
-        };
+        })
 
     }
 };
