@@ -38,8 +38,7 @@ This config file consist of different objects for different configurations.
     "host": "127.0.0.1",
     "port": "3031",
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
-    "max_pokemon": 326,
-    "iv_colors": [0x9D9D9D, 0xFFFFFF, 0x1EFF00, 0x0070DD, 0xA335EE, 0xFF8000]
+    "max_pokemon": 326
   }
   ```
   
