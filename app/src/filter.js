@@ -14,7 +14,7 @@ const teamData = require('./util/teams');
 const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 const moveData = require(config.locale.movesJson);
-const colorData = require(config.locale.colorsJson);
+const colorData = require(config.locale.hasOwnProperty('colorsJson') ? config.locale.colorsJson : './util/colors');
 const moment = require('moment');
 let gkey = config.gmaps.key;
 require('moment-precise-range-plugin');
