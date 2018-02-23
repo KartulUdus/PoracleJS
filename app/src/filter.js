@@ -14,6 +14,7 @@ const teamData = require('./util/teams');
 const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 const moveData = require(config.locale.movesJson);
+const colorData = require(config.locale.colorsJson);
 const moment = require('moment');
 const Cache = require('ttl');
 let cache = new Cache({
@@ -61,7 +62,7 @@ client.on('ready', () => {
                 data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
                 data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                 data.color = monsterData[data.pokemon_id].types[0].color;
-                data.ivcolor =  config.general.iv_color[findIvColorIdx(data.iv)];
+                data.ivcolor =  findIvColor(data.iv);
                 data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
                 data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
                 data.imgurl = `${config.general.imgurl}${data.pokemon_id}`;
@@ -381,23 +382,26 @@ function sendDMAlarm(message, human, e, map) {
 }
 
 
-function findIvColorIdx(iv) {
+function findIvColor(iv) {
+
+    //it must be perfect if none of the ifs kick in
+    // orange / legendary
+    let colorIdx = 5;
+
     //gray / trash / missing
-    if(iv < 25) return 0;
+    if(iv < 25) colorId = 0;
 
     //white / common
-    if(iv < 50) return 1;
+    if(iv < 50) colorId = 1;
 
     // green / uncommon
-    if(iv < 82) return 2;
+    if(iv < 82) colorId = 2;
 
     // blue / rare
-    if(iv < 90) return 3;
+    if(iv < 90) colorId = 3;
 
     // purple epic
-    if(iv < 100 ) return 4;
+    if(iv < 100 ) colorId = 4;
 
-    //it must be perfect
-    // orange / legendary
-    return 5;
+    return parseInt(colorData[colorId].replace(/^#/, ''), 16);
 }
