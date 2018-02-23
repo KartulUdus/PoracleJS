@@ -38,7 +38,8 @@ This config file consist of different objects for different configurations.
     "host": "127.0.0.1",
     "port": "3031",
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
-    "max_pokemon": 326
+    "max_pokemon": 326,
+    "iv_colors": [0x9D9D9D, 0xFFFFFF, 0x1EFF00, 0x0070DD, 0xA335EE, 0xFF8000]
   }
   ```
   
@@ -47,9 +48,9 @@ This config file consist of different objects for different configurations.
   |logLevel | Logging level, can be `debug`, `info` or `error`.|
   |host |   Webserver host. |
   |port | Webserver port. | 
-  |imgurl | source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/images) |
+  |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/images) |
   | max_pokemon | Biggest released pokemon_id. Needed for tracking batch tracking of mainimum/maximum IV.|
-  
+
 ##### Locale settings
   ```json
     "locale": {
@@ -58,7 +59,8 @@ This config file consist of different objects for different configurations.
       "addressformat": "%S %n",
       "commandMonstersJson": "../util/monsters",
       "monstersJson": "./util/monsters",
-      "movesJson": "./util/moves"
+      "movesJson": "./util/moves",
+      "colorsJson": "./util/colors"
     }
   ```
   | Option        | Value         | 
@@ -69,7 +71,23 @@ This config file consist of different objects for different configurations.
   | commandMonstersJson | Monster locale file for discord commands. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
   | monstersJson    | Monster locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
   | movesJson    | Moves locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
-  
+  | colorsJson   | Colors for IV brackets |
+
+**IV colors**
+There must be 6 colors defined, from worst IV to best. The Colors are defined as you would in a html file: #rrggbb eg: #ff0000 for red. etc
+
+The tiers of IV colors are as follows:
+
+  | Min IV      | Max IV      | Default color  |
+  | ----------- | ----------- | -------------- |
+  | 0 %         | 24.9 %      | Gray   #9D9D9D |
+  | 25 %        | 49.9 %      | White  #FFFFFF |
+  | 50 %        | 81.9 %      | Green  #1EFF00 |
+  | 82 %        | 89.9 %      | Blue   #0070DD |
+  | 90 %        | 99.9 %      | Purple #A335EE |
+  | 100 %       | 100 %       | Orange #FF8000 |
+
+
 ##### Google Maps settings
 
 ```json

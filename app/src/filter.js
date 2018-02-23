@@ -14,6 +14,7 @@ const teamData = require('./util/teams');
 const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 const moveData = require(config.locale.movesJson);
+const colorData = require(config.locale.hasOwnProperty('colorsJson') ? config.locale.colorsJson : './util/colors');
 const moment = require('moment');
 let gkey = config.gmaps.key;
 require('moment-precise-range-plugin');
@@ -52,6 +53,7 @@ client.on('ready', () => {
                 data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
                 data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                 data.color = monsterData[data.pokemon_id].types[0].color;
+                data.ivcolor =  findIvColor(data.iv);
                 data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
                 data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
                 data.imgurl = `${config.general.imgurl}${data.pokemon_id}`;
@@ -95,6 +97,7 @@ client.on('ready', () => {
                                         form: data.formname,
                                         imgurl: data.imgurl.toLowerCase(),
                                         color: data.color,
+                                        ivcolor: data.ivcolor,
                                         // geocode stuff
                                         addr: geoResult.addr,
                                         streetNumber: geoResult.streetNumber,
@@ -355,4 +358,29 @@ function sendDMAlarm(message, human, e, map) {
         })
     } else log.warn(`Tried to send message to ID ${human}, but error ocurred`)
 
+}
+
+
+function findIvColor(iv) {
+
+    //it must be perfect if none of the ifs kick in
+    // orange / legendary
+    let colorIdx = 5;
+
+    //gray / trash / missing
+    if(iv < 25) colorId = 0;
+
+    //white / common
+    if(iv < 50) colorId = 1;
+
+    // green / uncommon
+    if(iv < 82) colorId = 2;
+
+    // blue / rare
+    if(iv < 90) colorId = 3;
+
+    // purple epic
+    if(iv < 100 ) colorId = 4;
+
+    return parseInt(colorData[colorId].replace(/^#/, ''), 16);
 }
