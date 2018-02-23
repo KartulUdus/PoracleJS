@@ -35,12 +35,12 @@ Instead of "Tallinn kesklinn" you can search for any address, city, country or k
 
 `!area add Tallinn` If the admin has set up a [Geofence](config.md)  name Tallinn, this command will add tracking from that area to the user.  
 In case the area is not configured, the bot will reply with the areas that are available.  
-You can also use multiple areas in the same command (separated by spaces) and only availble ones will be added.  
+You can also use multiple areas in the same command (separated by spaces) and only available ones will be added.  
 
 ###### !area remove
 
 `!area remove Tallinn` Removes Tallinn from tracked areas if configured and currently tracked.
-You can also use multiple areas in the same command (separated by spaces) and only availble ones will be removed.
+You can also use multiple areas in the same command (separated by spaces) and only available ones will be removed.
 
 ###### !tracked  
 
