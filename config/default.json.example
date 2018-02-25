@@ -42,7 +42,7 @@
   },
 
   "rabbit": {
-    "conn": "amqp://Username:Password@localhost:5672"
+    "conn": "amqp://poracle:poracle@localhost:5672"
   },
 
   "geofence": []
