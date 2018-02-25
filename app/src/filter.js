@@ -15,6 +15,13 @@ const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 const moveData = require(config.locale.movesJson);
 const moment = require('moment');
+const Cache = require('ttl');
+let cache = new Cache({
+    ttl: config.discord.limitsec * 1000
+});
+cache.on('put', function(key, val, ttl) { });
+cache.on('hit', function(key, val) { });
+
 let gkey = config.gmaps.key;
 require('moment-precise-range-plugin');
 moment.locale(config.locale.timeformat);
@@ -332,28 +339,40 @@ client.on('ready', () => {
 
 })
 
+
+
 function sendDMAlarm(message, human, e, map) {
 
+    let ch = _.cloneDeep(cache.get(human));
+    if(ch === undefined){
+        cache.put(human, 1)
+    }else if (ch !== undefined){
+        cache.put(human, ch + 1, cache._store[human].expire - Date.now())
+    }
     let finalMessage = _.cloneDeep(message);
     if (map === 0) finalMessage.embed.image.url = '';
-    query.addOneQuery('humans','alerts_sent','id',human);
-    if(client.channels.keyArray().includes(human)){
-        client.channels.get(human).send(finalMessage).then(msg => {
-            if(config.discord.typereact){
-                e.forEach(function (emoji) {
-                    msg.react(emoji)
-                });
-            }
-        })
-    }
-    else if(client.users.keyArray().includes(human)){
-        client.users.get(human).send(finalMessage).then(msg => {
-            if(config.discord.typereact){
-                e.forEach(function (emoji) {
-                    msg.react(emoji)
-                });
-            }
-        })
-    } else log.warn(`Tried to send message to ID ${human}, but error ocurred`)
+    if (cache.get(human) === config.discord.limitamount + 1) finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`;
+    if (cache.get(human) <= config.discord.limitamount + 1){
+        query.addOneQuery('humans','alerts_sent','id',human);
+        if(client.channels.keyArray().includes(human)){
+            client.channels.get(human).send(finalMessage).then(msg => {
+                if(config.discord.typereact){
+                    e.forEach(function (emoji) {
+                        msg.react(emoji)
+                    });
+                }
+            })
+        }
+        else if(client.users.keyArray().includes(human)){
+            client.users.get(human).send(finalMessage).then(msg => {
+                if(config.discord.typereact){
+                    e.forEach(function (emoji) {
+                        msg.react(emoji)
+                    });
+                }
+            })
+        } else log.warn(`Tried to send message to ID ${human}, but error ocurred`)
+
+    } else log.warn(`ID ${human} went over his message quota, ignoring message`)
 
 }

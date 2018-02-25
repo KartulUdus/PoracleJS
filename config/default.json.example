@@ -38,7 +38,9 @@
     "channel": "general",
     "admins": ["222222222222222222"],
     "prefix": "!",
-    "typereact": true
+    "typereact": true,
+    "limitsec": 300,
+    "limitamount": 20
   },
 
   "rabbit": {
