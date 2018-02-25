@@ -89,7 +89,7 @@ module.exports = {
         });
     },
     monsterWhoCares: function (data, callback) {
-        let areastring = '';
+        let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `;
         data.matched.forEach(function(area) {
             areastring = areastring.concat(`or humans.area like '%${area}%' `)
         });
@@ -109,11 +109,12 @@ module.exports = {
             sta<=${data.individual_stamina} and
             min_weight<=${data.weight} * 1000 and
             max_weight>=${data.weight} * 1000 and
-            		       round( 6371000 * acos( cos( radians(${data.latitude}) ) 
+            (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
-              * sin( radians( humans.latitude ) ) )<monsters.distance ${areastring})`;
+              * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
+               monsters.distance = 0 and (${areastring}))`;
         log.debug(query);
 
         pool.query(query, function (err, result) {
@@ -123,7 +124,7 @@ module.exports = {
         });
     },
     raidWhoCares: function (data, callback) {
-        let areastring = '';
+        let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `;
         data.matched.forEach(function(area) {
             areastring = areastring.concat(`or humans.area like '%${area}%' `)
         });
@@ -133,11 +134,12 @@ module.exports = {
             where humans.enabled = 1 and
             pokemon_id=${data.pokemon_id} and 
             (raid.team = ${data.team_id} or raid.team = 4) and 
-            		       round( 6371000 * acos( cos( radians(${data.latitude}) ) 
+            (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
-              * sin( radians( humans.latitude ) ) )<raid.distance ${areastring})`;
+              * sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
+               raid.distance = 0 and (${areastring}))`;
         log.debug(query);
         pool.query(query, function (err, result) {
             if (err) log.error(err);
@@ -146,7 +148,7 @@ module.exports = {
         });
     },
     eggWhoCares: function (data, callback) {
-        let areastring = '';
+        let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `;
         data.matched.forEach(function(area) {
             areastring = areastring.concat(`or humans.area like '%${area}%' `)
         });
@@ -156,11 +158,12 @@ module.exports = {
             where humans.enabled = 1 and 
             raid_level=${data.level} and 
             (egg.team = ${data.team_id} or egg.team = 4) and 
-            		       round( 6371000 * acos( cos( radians(${data.latitude}) ) 
+            (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
-              * sin( radians( humans.latitude ) ) )<egg.distance ${areastring})`;
+              * sin( radians( humans.latitude ) ) ) < egg.distance and egg.distance != 0) or
+               egg.distance = 0 and (${areastring}))`;
         log.debug(query);
         pool.query(query, function (err, result) {
             if (err) log.error(err);
