@@ -49,6 +49,20 @@ fastify.listen(config.general.port, config.general.host, function (err) {
 query.countQuery('TABLE_NAME','information_schema.tables','table_schema',config.db.database, function (err, tables) {
     if(tables === 0){
         log.info('No tables detected, running mysql base migration');
-        migrator.migration1()
+        migrator.migration1(function(result){
+            log.info(result)
+        })
+    }else{
+        query.selectOneQuery('schema_version','key','db_version', function (err, res){
+            if(res.val === 1){
+                log.info(`Database version ${res.val} not ok, doing magic ...`);
+                migrator.migration2(function(result){
+                log.info(result);
+                })
+
+            } else{
+                log.info(`Database version ${res.val} is ok`)
+            }
+        })
     }
 });

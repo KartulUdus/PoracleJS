@@ -16,7 +16,7 @@ module.exports = {
 
     selectOneQuery: function (where, column, value, callback) {
 
-        pool.query('SELECT *  FROM ?? WHERE ?? = ?', [where, column, value], function (err, result) {
+        pool.query('SELECT * FROM ?? WHERE ?? = ?', [where, column, value], function (err, result) {
             if (err) log.error(err);
             callback(err, result[0]);
         });
@@ -102,6 +102,7 @@ module.exports = {
             max_iv>=${data.iv} and
             min_cp<=${data.cp} and
             max_cp>=${data.cp} and
+            (form = ${data.form} or form = 0) and
             min_level<=${data.pokemon_level} and
             max_level>=${data.pokemon_level} and
             atk<=${data.individual_attack} and
@@ -114,7 +115,8 @@ module.exports = {
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
               * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
-               monsters.distance = 0 and (${areastring}))`;
+               monsters.distance = 0 and (${areastring}))
+               group by humans.id`;
         log.debug(query);
 
         pool.query(query, function (err, result) {
@@ -132,14 +134,15 @@ module.exports = {
             `select * from raid 
             join humans on humans.id = raid.id
             where humans.enabled = 1 and
-            pokemon_id=${data.pokemon_id} and 
+            (pokemon_id=${data.pokemon_id} or (pokemon_id=721 and raid.level=${data.level})) and 
             (raid.team = ${data.team_id} or raid.team = 4) and 
             (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
               * sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
-               raid.distance = 0 and (${areastring}))`;
+               raid.distance = 0 and (${areastring}))
+               group by humans.id`;
         log.debug(query);
         pool.query(query, function (err, result) {
             if (err) log.error(err);

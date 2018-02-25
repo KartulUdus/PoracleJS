@@ -13,6 +13,7 @@ const gymInfo = `CREATE TABLE \`gym-info\` (
   KEY \`geocoded_park\` (\`park\`),
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
 const humans = `CREATE TABLE \`humans\` (
   \`id\` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   \`name\` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -27,6 +28,7 @@ const humans = `CREATE TABLE \`humans\` (
   KEY \`humans_alerts_sent\` (\`alerts_sent\`),
   KEY \`humans_latitude_longitude\` (\`latitude\`,\`longitude\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;`;
+
 const monsters = `CREATE TABLE \`monsters\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   \`pokemon_id\` smallint(6) NOT NULL,
@@ -42,11 +44,13 @@ const monsters = `CREATE TABLE \`monsters\` (
   \`sta\` smallint(2) NOT NULL,
   \`min_weight\` double NOT NULL,
   \`max_weight\` double NOT NULL,
-  PRIMARY KEY monsters_tracking (\`id\`, \`pokemon_id\`),
+  \`form\` smallint(3) DEFAULT 0,
+  PRIMARY KEY monsters_tracking (\`id\`, \`pokemon_id\`, \`min_iv\`, \`max_iv\`, \`min_cp\`, \`max_cp\`, \`min_level\`, \`max_level\`, \`atk\`, \`def\`, \`sta\`, \`min_weight\`, \`max_weight\`, \`form\`),
   KEY \`monsters_pokemon_id\` (\`pokemon_id\`),
   KEY \`monsters_distance\` (\`distance\`),
   KEY \`monsters_min_iv\` (\`min_iv\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
 const raid = `
 CREATE TABLE \`raid\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
@@ -54,10 +58,12 @@ CREATE TABLE \`raid\` (
   \`park\` tinyint(1) NOT NULL,
   \`distance\` int(11) NOT NULL,
   \`team\` smallint(1) DEFAULT 4,
-  PRIMARY KEY raid_tracking (\`id\`, \`pokemon_id\`),
+  \`level\` smallint(1) DEFAULT 0,
+  PRIMARY KEY raid_tracking (\`id\`, \`pokemon_id\`, \`park\`, \`level\`),
   KEY \`raid_pokemon_id\` (\`pokemon_id\`),
   KEY \`raid_distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
 const egg = `CREATE TABLE \`egg\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   \`raid_level\` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
@@ -68,22 +74,50 @@ const egg = `CREATE TABLE \`egg\` (
   KEY \`raid_level\` (\`raid_level\`),
   KEY \`raid_distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
 const schema_version = `CREATE TABLE \`schema_version\` (
   \`key\` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   \`val\` smallint(6) NOT NULL,
   PRIMARY KEY (\`key\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 
+const add_monster_forms = `ALTER TABLE monsters ADD COLUMN form smallint(3) DEFAULT 0;`;
+
+const add_raid_levels = `ALTER TABLE raid ADD COLUMN level smallint(1) DEFAULT 0;`;
+
+const monsters_key_2 = `ALTER TABLE monsters DROP PRIMARY KEY, ADD PRIMARY KEY(id, pokemon_id, min_iv, max_iv, min_cp, max_cp, min_level, max_level, atk, def, sta, min_weight, max_weight, form);`;
+
+const raid_key_2 = `ALTER TABLE raid DROP PRIMARY KEY, ADD PRIMARY KEY(id, pokemon_id, park, level);`;
+
 module.exports = {
-    migration1: function () {
-        queries.mysteryQuery(humans, function () {});
-        queries.mysteryQuery(gymInfo, function () {});
-        queries.mysteryQuery(monsters, function () {});
-        queries.mysteryQuery(raid, function () {});
-        queries.mysteryQuery(egg, function () {});
-        queries.mysteryQuery(schema_version, function () {
-            queries.insertQuery('schema_version',['`key`','`val`'],['db_version','1']);
-            log.info('Database tables created, db_version 1 applied')
+    migration1: function (callback) {
+        queries.mysteryQuery(humans, function () {
+            queries.mysteryQuery(gymInfo, function () {
+                queries.mysteryQuery(monsters, function () {
+                    queries.mysteryQuery(raid, function () {
+                        queries.mysteryQuery(egg, function () {
+                            queries.mysteryQuery(schema_version, function () {
+                                queries.insertQuery('schema_version',['`key`','`val`'],['db_version','2']);
+                                callback('Database tables created, db_version 2 applied')
+                            });
+                        });
+                    });
+                });
+            });
         });
+    },
+    migration2: function(callback){
+        queries.mysteryQuery(add_monster_forms, function(){
+            log.info('Adding "form" column to monsters');
+            queries.mysteryQuery(add_raid_levels, function(){
+                log.info('Adding "level" column to raid');
+                queries.mysteryQuery(monsters_key_2, function(){
+                    queries.mysteryQuery(raid_key_2, function(){
+                        queries.addOneQuery('schema_version', 'val', 'key', 'db_version');
+                        callback('Database schema updated, db_version 2 applied')
+                    })
+                })
+            })
+        })
     }
 };

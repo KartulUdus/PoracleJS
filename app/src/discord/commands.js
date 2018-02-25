@@ -6,6 +6,7 @@ const query = require('../sql/queries');
 const gmaps = require('../geo/google');
 const monsterData = require(config.locale.commandMonstersJson);
 const teamData = require('../util/teams');
+const formData = require('../util/forms');
 const _ = require('lodash');
 const hastebin = require('hastebin-gen');
 const dts = require('../../../config/dts');
@@ -408,6 +409,7 @@ client.on('message', msg => {
                     let sta = 0;
                     let weight = 0;
                     let maxweight = 9000000;
+                    let forms = [];
 
                     args.forEach(function(element) {
                         let pid = _.findKey(monsterData, function(mon){return mon.name.toLowerCase() === element});
@@ -451,22 +453,53 @@ client.on('message', msg => {
                         else if(element.match(/weight\d/gi)){
                             weight = element.replace(/weight/gi, '');
                         }
+                        else if(element.match(/form\w/gi)) {
+                            forms.push(element.replace(/form/gi, ''));
+                        }
                         else if(element.match(/everything/gi)) {
                             monsters = [...Array(config.general.max_pokemon).keys()].map(x => ++x);
                         }
 
                     });
 
-                    if(monsters.length !== 0){
+                    if(monsters.length !== 0 && forms.length === 0){
+                        let form = 0;
                         monsters.forEach(function(monster) {
                             query.insertOrUpdateQuery('monsters',
-                                [`id`,`pokemon_id`,`distance`,`min_iv`,`max_iv`,`min_cp`,`max_cp`,`min_level`,`max_level`,`atk`,`def`,`sta`,`min_weight`,`max_weight`],
-                                [`'${msg.author.id}'`,`'${monster}'`,`'${distance}'`,`'${iv}'`,`'${maxiv}'`,`'${cp}'`,`'${maxcp}'`,`'${level}'`,`'${maxlevel}'`,`'${atk}'`,`'${def}'`,`'${sta}'`,`'${weight}'`,`'${maxweight}'`])
+                                [`id`,`pokemon_id`,`distance`,`min_iv`,`max_iv`,`min_cp`,`max_cp`,`min_level`,`max_level`,`atk`,`def`,`sta`,`min_weight`,`max_weight`,`form`],
+                                [`'${msg.author.id}'`,`'${monster}'`,`'${distance}'`,`'${iv}'`,`'${maxiv}'`,`'${cp}'`,`'${maxcp}'`,`'${level}'`,`'${maxlevel}'`,`'${atk}'`,`'${def}'`,`'${sta}'`,`'${weight}'`,`'${maxweight}'`,`'${form}'`])
                         });
                         msg.react('✅');
                         log.info(`${msg.author.username} started tracking ${monsters}`)
 
-                    } else msg.reply('404 NO MONSTERS FOUND');
+                    } else if(monsters.length > 1 && forms.length !== 0){
+                        msg.reply('Form filters can be added to 1 monster at a time');
+                    } else if(monsters.length === 0){
+                        msg.reply('404 NO MONSTERS FOUND');
+                    } else if(monsters.length === 1 && forms.length !== 0){
+                        if(_.has(formData, monsters[0])){
+                            let fids = [];
+                            forms.forEach(function(form){
+                                let fid = _.findKey(formData[monsters[0]], function(monforms){return monforms.toLowerCase() === form});
+                                if (fid !== undefined) fids.push(fid);
+                            });
+                            fids.forEach(function(form){
+                                query.insertOrUpdateQuery('monsters',
+                                    [`id`,`pokemon_id`,`distance`,`min_iv`,`max_iv`,`min_cp`,`max_cp`,`min_level`,`max_level`,`atk`,`def`,`sta`,`min_weight`,`max_weight`,`form`],
+                                    [`'${msg.author.id}'`,`'${monsters[0]}'`,`'${distance}'`,`'${iv}'`,`'${maxiv}'`,`'${cp}'`,`'${maxcp}'`,`'${level}'`,`'${maxlevel}'`,`'${atk}'`,`'${def}'`,`'${sta}'`,`'${weight}'`,`'${maxweight}'`,`'${form}'`])
+
+                            });
+                            if(fids.length > 0){
+                                msg.react('✅');
+                                log.info(`${msg.author.username} started tracking ${monsters[0]}, forms ${fids}`)
+                            } else {
+                                msg.reply(`Sorry, I didn't find those forms for ID ${monsters[0]}`)
+                            }
+
+                        }else{
+                            msg.reply(`Sorry, ${monsters[0]} doesn't have forms`)
+                        }
+                    }
                 } else msg.react('🙅');
             })
         }
@@ -521,6 +554,7 @@ client.on('message', msg => {
                     let sta = 0;
                     let weight = 0;
                     let maxweight = 9000000;
+                    let forms = [];
 
                     args.forEach(function(element) {
                         let pid = _.findKey(monsterData, function(mon){return mon.name.toLowerCase() === element});
@@ -564,26 +598,58 @@ client.on('message', msg => {
                         else if(element.match(/weight\d/gi)){
                             weight = element.replace(/weight/gi, '');
                         }
+                        else if(element.match(/form\w/gi)) {
+                            forms.push(element.replace(/form/gi, ''));
+                        }
                         else if(element.match(/everything/gi)) {
                             monsters = [...Array(config.general.max_pokemon).keys()].map(x => ++x);
-
                         }
 
                     });
 
-                    if(monsters.length !== 0){
+                    if(monsters.length !== 0 && forms.length === 0){
+                        let form = 0;
                         monsters.forEach(function(monster) {
                             query.insertOrUpdateQuery('monsters',
-                                [`id`,`pokemon_id`,`distance`,`min_iv`,`max_iv`,`min_cp`,`max_cp`,`min_level`,`max_level`,`atk`,`def`,`sta`,`min_weight`,`max_weight`],
-                                [`'${msg.channel.id}'`,`'${monster}'`,`'${distance}'`,`'${iv}'`,`'${maxiv}'`,`'${cp}'`,`'${maxcp}'`,`'${level}'`,`'${maxlevel}'`,`'${atk}'`,`'${def}'`,`'${sta}'`,`'${weight}'`,`'${maxweight}'`])
+                                [`id`,`pokemon_id`,`distance`,`min_iv`,`max_iv`,`min_cp`,`max_cp`,`min_level`,`max_level`,`atk`,`def`,`sta`,`min_weight`,`max_weight`,`form`],
+                                [`'${msg.channel.id}'`,`'${monster}'`,`'${distance}'`,`'${iv}'`,`'${maxiv}'`,`'${cp}'`,`'${maxcp}'`,`'${level}'`,`'${maxlevel}'`,`'${atk}'`,`'${def}'`,`'${sta}'`,`'${weight}'`,`'${maxweight}'`,`'${form}'`])
                         });
                         msg.react('✅');
                         log.info(`${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`)
-                    } else msg.reply('404 NO MONSTERS FOUND');
+
+                    } else if(monsters.length > 1 && forms.length !== 0){
+                        msg.reply('Form filters can be added to 1 monster at a time');
+                    } else if(monsters.length === 0){
+                        msg.reply('404 NO MONSTERS FOUND');
+                    } else if(monsters.length === 1 && forms.length !== 0){
+                        if(_.has(formData, monsters[0])){
+                            let fids = [];
+                            forms.forEach(function(form){
+                                let fid = _.findKey(formData[monsters[0]], function(monforms){return monforms.toLowerCase() === form});
+                                if (fid !== undefined) fids.push(fid);
+                            });
+                            fids.forEach(function(form){
+                                query.insertOrUpdateQuery('monsters',
+                                    [`id`,`pokemon_id`,`distance`,`min_iv`,`max_iv`,`min_cp`,`max_cp`,`min_level`,`max_level`,`atk`,`def`,`sta`,`min_weight`,`max_weight`,`form`],
+                                    [`'${msg.channel.id}'`,`'${monsters[0]}'`,`'${distance}'`,`'${iv}'`,`'${maxiv}'`,`'${cp}'`,`'${maxcp}'`,`'${level}'`,`'${maxlevel}'`,`'${atk}'`,`'${def}'`,`'${sta}'`,`'${weight}'`,`'${maxweight}'`,`'${form}'`])
+
+                            });
+                            if(fids.length > 0){
+                                msg.react('✅');
+                                log.info(`${msg.author.username} started tracking ${monsters[0]}, forms ${fids} in ${msg.channel.name}`)
+                            } else {
+                                msg.reply(`Sorry, I didn't find those forms for ID ${monsters[0]}`)
+                            }
+
+                        }else{
+                            msg.reply(`Sorry, ${monsters[0]} doesn't have forms`)
+                        }
+                    }
                 } else msg.react('🙅');
             })
         }
     }
+
 
     else if (msg.content.startsWith(`${prefix}channel untrack `)) {
         if (config.discord.admins.indexOf(msg.author.id) > -1 && msg.channel.type === 'text') {
@@ -623,6 +689,7 @@ client.on('message', msg => {
                     let park = 0;
                     let distance = 0;
                     let team = 4;
+                    let levels = [];
 
                     args.forEach(function(element) {
                         let pid = _.findKey(monsterData, function(mon){return mon.name.toLowerCase() === element});
@@ -634,6 +701,9 @@ client.on('message', msg => {
                         }
                         else if(element.match(/d\d/gi)){
                             distance = element.replace(/d/gi, '');
+                        }
+                        else if(element.match(/level\d/gi)){
+                            levels.push(element.replace(/level/gi, ''));
                         }
                         else if(element.match(/instinct/gi)){
                             team = 3;
@@ -650,16 +720,27 @@ client.on('message', msg => {
 
                     });
 
-                    if(monsters.length !== 0){
+                    if(monsters.length !== 0 && levels.length === 0){
+                        let level = 0;
                         monsters.forEach(function(monster) {
                             query.insertOrUpdateQuery('raid',
-                                [`id`,`pokemon_id`,`distance`,`park`,`team`],
-                                [`'${msg.author.id}'`,`'${monster}'`,`'${distance}'`,`'${park}'`,`'${team}'`])
+                                [`id`,`pokemon_id`,`distance`,`park`,`team`, `level`],
+                                [`'${msg.author.id}'`,`'${monster}'`,`'${distance}'`,`'${park}'`,`'${team}'`,`'${level}'`])
                         });
                         msg.react('✅');
                         log.info(`${msg.author.username} started tracking ${monsters}`)
 
-                    } else msg.reply('404 NO MONSTERS FOUND');
+                    } else if (monsters.length === 0 && levels.length === 0 ) msg.reply('404 NO MONSTERS FOUND');
+                    else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time');
+                    else if (monsters.length === 0 && levels.length !== 0){
+                        levels.forEach(function(level){
+                            query.insertOrUpdateQuery('raid',
+                                [`id`,`pokemon_id`,`distance`,`park`,`team`, `level`],
+                                [`'${msg.author.id}'`,`'721'`,`'${distance}'`,`'${park}'`,`'${team}'`,`'${level}'`])
+                        });
+                        msg.react('✅');
+                        log.info(`${msg.author.username} started tracking raid levels${levels}`)
+                    }
                 } else msg.react('🙅');
             })
         }
@@ -674,16 +755,28 @@ client.on('message', msg => {
                     const rawArgs = msg.content.slice(`${prefix}unraid`.length).split(' ');
                     args = sorted=rawArgs.join('|').toLowerCase().split('|');
                     let monsters = [];
+                    let levels = [];
                     args.forEach(function(element) {
                         let pid = _.findKey(monsterData, function(mon){return mon.name.toLowerCase() === element});
                         if(pid !== undefined) monsters.push(pid);
+                        if(element.match(/level\d/gi)){
+                            levels.push(element.replace(/level/gi, ''));
+                        }
+
                     });
                     if(monsters.length !== 0){
                         monsters.forEach(function(monster) {
                             query.deleteMonsterQuery('raid','pokemon_id', `${monster}`, msg.author.id)
                         });
                         msg.react('✅');
-                    } else msg.reply('404 NO MONSTERS FOUND');
+                    }
+                    if(levels.length !== 0){
+                        levels.forEach(function(level){
+                            query.deleteMonsterQuery('raid','level', `${level}`, msg.author.id)
+                        });
+                        msg.react('✅');
+                    }
+                    if (monsters.length === 0 && levels.length === 0) msg.reply('404 No raid bosses or levels found')
                 } else msg.react('🙅');
             })
         }
@@ -701,6 +794,7 @@ client.on('message', msg => {
                     let park = 0;
                     let distance = 0;
                     let team = 4;
+                    let levels = [];
 
                     args.forEach(function(element) {
                         let pid = _.findKey(monsterData, function(mon){return mon.name.toLowerCase() === element});
@@ -712,6 +806,9 @@ client.on('message', msg => {
                         }
                         else if(element.match(/d\d/gi)){
                             distance = element.replace(/d/gi, '');
+                        }
+                        else if(element.match(/level\d/gi)){
+                            levels.push(element.replace(/level/gi, ''));
                         }
                         else if(element.match(/instinct/gi)){
                             team = 3;
@@ -728,16 +825,28 @@ client.on('message', msg => {
 
                     });
 
-                    if(monsters.length !== 0){
+                    if(monsters.length !== 0 && levels.length === 0){
+                        let level = 0;
                         monsters.forEach(function(monster) {
                             query.insertOrUpdateQuery('raid',
-                                [`id`,`pokemon_id`,`distance`,`park`,`team`],
-                                [`'${msg.channel.id}'`,`'${monster}'`,`'${distance}'`,`'${park}'`,`'${team}'`])
+                                [`id`,`pokemon_id`,`distance`,`park`,`team` ,`level`],
+                                [`'${msg.channel.id}'`,`'${monster}'`,`'${distance}'`,`'${park}'`,`'${team}'`,`'${level}'`])
                         });
                         msg.react('✅');
-                        log.info(`${msg.author.username} started tracking ${monsters}`)
+                        log.info(`${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`)
 
-                    } else msg.reply('404 NO MONSTERS FOUND');
+                    } else if (monsters.length === 0 && levels.length === 0 ) msg.reply('404 NO MONSTERS FOUND');
+                    else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time');
+                    else if (monsters.length === 0 && levels.length !== 0){
+                        levels.forEach(function(level){
+                            query.insertOrUpdateQuery('raid',
+                                [`id`,`pokemon_id`,`distance`,`park`,`team`, `level`],
+                                [`'${msg.channel.id}'`,`'721'`,`'${distance}'`,`'${park}'`,`'${team}'`,`'${level}'`])
+                        });
+                        msg.react('✅');
+                        log.info(`${msg.author.username} started tracking raid levels:${levels} raids in ${msg.channel.name} `)
+                    }
+
                 } else msg.react('🙅');
             })
         }
@@ -752,16 +861,27 @@ client.on('message', msg => {
                     const rawArgs = msg.content.slice(`${prefix}channel unraid`.length).split(' ');
                     args = sorted=rawArgs.join('|').toLowerCase().split('|');
                     let monsters = [];
+                    let levels = [];
                     args.forEach(function(element) {
                         let pid = _.findKey(monsterData, function(mon){return mon.name.toLowerCase() === element});
                         if(pid !== undefined) monsters.push(pid);
+                        if(element.match(/level\d/gi)){
+                            levels.push(element.replace(/level/gi, ''));
+                        }
                     });
                     if(monsters.length !== 0){
                         monsters.forEach(function(monster) {
                             query.deleteMonsterQuery('raid','pokemon_id', `${monster}`, msg.channel.id)
                         });
                         msg.react('✅');
-                    } else msg.reply('404 NO MONSTERS FOUND');
+                    }
+                    if(levels.length !== 0){
+                        levels.forEach(function(level){
+                            query.deleteMonsterQuery('raid','level', `${level}`, msg.channel.id)
+                        });
+                        msg.react('✅');
+                    }
+                    if (monsters.length === 0 && levels.length === 0) msg.reply('404 No raid bosses or levels found')
                 } else msg.react('🙅');
             })
         }

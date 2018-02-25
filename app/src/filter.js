@@ -49,6 +49,7 @@ client.on('ready', () => {
                     data.quick_move = moveData[data.move_1].name;
                     data.charge_move = moveData[data.move_2].name;
                 }
+                if (data.form === undefined || data.form === null) data.form = 0;
                 data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
                 data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                 data.color = monsterData[data.pokemon_id].types[0].color;
