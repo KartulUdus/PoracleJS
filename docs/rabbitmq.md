@@ -31,7 +31,9 @@ Once installed, the Management plugin can be enabled by
 
 ##### Administration panel
 
-The administration panel of RabbitMQ provides  a clear overview of how many messages are being handeld and the current queue.   
+The administration panel of RabbitMQ provides  a clear overview of how many messages are being handeld and the current queue.  
+The administration panel can be accessed on `http://localhost:15672` with your username and password.  
+If you host RabbitMQ on a separate server, you will need to forward port `15672` and access it on `http://YourServerIP:15672`   
 ![](/_assets/Screen Shot 2018-02-25 at 12.46.03.png)  
 
 Ideally the "Queued messages" should always stay at 0. Should you notice an increase in queued messaged, please make sure your worker is running `npm run worker`  
