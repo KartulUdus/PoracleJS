@@ -38,6 +38,7 @@ client.on('ready', () => {
                 data.rocketmap = config.gmaps.rocketmap.concat(`?lat=${data.latitude}&lon=${data.longitude}`);
                 data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
                 data.name = monsterData[data.pokemon_id].name;
+                data.formname = '';
                 if (data.individual_attack === null) {
                     data.iv = -1;
                     data.individual_attack = 0;
