@@ -29,7 +29,7 @@
     "addressformat": "%S %n",
     "commandMonstersJson": "../util/monsters",
     "monstersJson": "./util/monsters",
-    "movesJson": "./util/moves",
+    "movesJson": "./util/moves"
   },
 
   "gmaps": {
