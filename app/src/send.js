@@ -3,60 +3,69 @@ const amqp = require('amqplib/callback_api');
 const config = require('config');
 const log = require('./logger');
 const Cache = require('ttl');
-let cache = new Cache({
-    ttl: 300 * 1000
+
+const cache = new Cache({
+	ttl: 300 * 1000,
 });
 
-cache.on('put', function(key, val, ttl) { });
+cache.on('put', (key, val, ttl) => { });
+
+
+function sendRabbitMQ(queue, data) {
+
+	amqp.connect(config.rabbit.conn, (err, conn) => {
+		conn.createChannel((erro, ch) => {
+			const q = queue;
+			ch.assertQueue(q, { durable: false });
+			ch.sendToQueue(q, Buffer.from(JSON.stringify(data)), { persistent: true });
+			log.debug(`Sent ${queue} to bunnywabbit`);
+		});
+		setTimeout(() => {
+			conn.close();
+		}, 500);
+	});
+}
+
+
+function sendHooks(queue, data) {
+
+	if (queue === 'pokemon' || queue === 'raid' || queue === 'gym_details') {
+		if (queue === 'pokemon') {
+			if (cache.get(data.encounter_id) === undefined) {
+				cache.put(data.encounter_id, 'cached');
+				sendRabbitMQ(queue, data);
+			}
+			else log.warn(`Encounter ${data.encounter_id} was sent again too fast`);
+		}
+		else if (queue === 'raid') {
+			if (cache.get(data.gym_id) === undefined) {
+				cache.put(data.gym_id, 'cachedGym');
+				sendRabbitMQ(queue, data);
+			}
+			else log.warn(`Encounter ${data.gym_id} was sent again too fast`);
+		}
+		else sendRabbitMQ(queue, data);
+	}
+}
+function sendTestHook(queue, data, callback) {
+
+	amqp.connect(config.rabbit.conn, (err, conn) => {
+		conn.createChannel((erro, ch) => {
+			const q = queue;
+			ch.assertQueue(q, { durable: false });
+			ch.sendToQueue(q, Buffer.from(JSON.stringify(data)), { persistent: true });
+			log.info(`Sent ${queue} to bunnywabbit`);
+			callback(erro);
+		});
+		setTimeout(() => {
+			conn.close();
+		}, 500);
+	});
+
+}
 
 module.exports = {
-
-    sendHooks: function(queue, data) {
-
-        if(queue === 'pokemon' || queue === 'raid' || queue === 'gym_details') {
-            if(queue === 'pokemon'){
-                if(cache.get(data.encounter_id) === undefined){
-                    cache.put(data.encounter_id, 'cached');
-                    sendRabbitMQ(queue, data)
-                } else log.warn(`Encounter ${data.encounter_id} was sent again too fast`)
-            }else if(queue === 'raid'){
-                if(cache.get(data.gym_id) === undefined) {
-                    cache.put(data.gym_id, 'cachedGym');
-                    sendRabbitMQ(queue, data)
-                } else log.warn(`Encounter ${data.gym_id} was sent again too fast`)
-            } else sendRabbitMQ(queue, data);
-        }
-    },
-    sendTestHook: function(queue, data, callback) {
-
-        amqp.connect(config.rabbit.conn, function (err, conn) {
-            conn.createChannel(function (err, ch) {
-                let q = queue;
-                ch.assertQueue(q, {durable: false});
-                ch.sendToQueue(q, new Buffer(JSON.stringify(data)), {persistent: true});
-                log.info("Sent " + queue + " to bunnywabbit");
-                callback(err);
-            });
-            setTimeout(function () {
-                conn.close();
-            }, 500);
-        });
-
-    }
-
+	sendTestHook,
+	sendHooks,
 };
 
-function sendRabbitMQ(queue, data){
-
-    amqp.connect(config.rabbit.conn, function (err, conn) {
-        conn.createChannel(function (err, ch) {
-            let q = queue;
-            ch.assertQueue(q, {durable: false});
-            ch.sendToQueue(q, new Buffer(JSON.stringify(data)), {persistent: true});
-            log.debug("Sent " + queue + " to bunnywabbit");
-        });
-        setTimeout(function () {
-            conn.close();
-        }, 500);
-    });
-}
