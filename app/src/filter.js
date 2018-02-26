@@ -388,20 +388,11 @@ function findIvColor(iv) {
     // orange / legendary
     let colorIdx = 5;
 
-    //gray / trash / missing
-    if(iv < 25) colorId = 0;
-
-    //white / common
-    if(iv < 50) colorId = 1;
-
-    // green / uncommon
-    if(iv < 82) colorId = 2;
-
-    // blue / rare
-    if(iv < 90) colorId = 3;
-
-    // purple epic
-    if(iv < 100 ) colorId = 4;
+    if(iv < 25) colorId = 0;        //gray / trash / missing
+    else if(iv < 50) colorId = 1;   // white / common
+    else if(iv < 82) colorId = 2;   // green / uncommon
+    else if(iv < 90) colorId = 3;   // blue / rare
+    else if(iv < 100 ) colorId = 4; // purple epic
 
     return parseInt(ivColorData[colorId].replace(/^#/, ''), 16);
 }
