@@ -14,6 +14,7 @@ const teamData = require('./util/teams');
 const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 const moveData = require(config.locale.movesJson);
+const ivColorData = config.discord.iv_colors;
 const moment = require('moment');
 const Cache = require('ttl');
 let cache = new Cache({
@@ -61,6 +62,7 @@ client.on('ready', () => {
                 data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
                 data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
                 data.color = monsterData[data.pokemon_id].types[0].color;
+                data.ivcolor =  findIvColor(data.iv);
                 data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
                 data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
                 data.imgurl = `${config.general.imgurl}${data.pokemon_id}`;
@@ -104,6 +106,7 @@ client.on('ready', () => {
                                         form: data.formname,
                                         imgurl: data.imgurl.toLowerCase(),
                                         color: data.color,
+                                        ivcolor: data.ivcolor,
                                         // geocode stuff
                                         addr: geoResult.addr,
                                         streetNumber: geoResult.streetNumber,
@@ -376,4 +379,20 @@ function sendDMAlarm(message, human, e, map) {
 
     } else log.warn(`ID ${human} went over his message quota, ignoring message`)
 
+}
+
+
+function findIvColor(iv) {
+
+    //it must be perfect if none of the ifs kick in
+    // orange / legendary
+    let colorIdx = 5;
+
+    if(iv < 25) colorIdx = 0;        //gray / trash / missing
+    else if(iv < 50) colorIdx = 1;   // white / common
+    else if(iv < 82) colorIdx = 2;   // green / uncommon
+    else if(iv < 90) colorIdx = 3;   // blue / rare
+    else if(iv < 100 ) colorIdx = 4; // purple epic
+
+    return parseInt(ivColorData[colorIdx].replace(/^#/, ''), 16);
 }

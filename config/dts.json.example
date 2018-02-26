@@ -4,7 +4,7 @@
       "title": "a wild {{{name}}} has appeared!",
       "description": "It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
       "url": "{{{mapurl}}}",
-      "color": "{{color}}",
+      "color": "{{ivcolor}}",
       "thumbnail": {
         "url": "{{{imgurl}}}"
       },
