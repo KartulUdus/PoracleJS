@@ -13,7 +13,14 @@
     "port": "3030",
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
     "max_pokemon": 375,
-
+    "iv_colors": [
+        "#9D9D9D",
+        "#FFFFFF",
+        "#1EFF00",
+        "#0070DD",
+        "#A335EE",
+        "#FF8000"
+    ]
   },
 
   "locale": {
@@ -23,7 +30,6 @@
     "commandMonstersJson": "../util/monsters",
     "monstersJson": "./util/monsters",
     "movesJson": "./util/moves",
-    "colorsJson": "./util/colors"
   },
 
   "gmaps": {

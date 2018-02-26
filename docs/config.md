@@ -38,7 +38,15 @@ This config file consist of different objects for different configurations.
     "host": "127.0.0.1",
     "port": "3031",
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
-    "max_pokemon": 326
+    "max_pokemon": 326,
+    "iv_colors": [
+        "#9D9D9D",
+        "#FFFFFF",
+        "#1EFF00",
+        "#0070DD",
+        "#A335EE",
+        "#FF8000"
+    ]
   }
   ```
   
@@ -49,6 +57,23 @@ This config file consist of different objects for different configurations.
   |port | Webserver port. | 
   |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/images) |
   | max_pokemon | Biggest released pokemon_id. Needed for tracking batch tracking of mainimum/maximum IV.|
+  | iv_colors   | A list of css style hex colors for iv quality. |
+
+**IV colors**
+There must be 6 colors defined, from worst IV to best.
+
+The Colors are defined as you would in a html or css file: #rrggbb eg: #ff0000 for red.
+
+The tiers of IV colors are as follows:
+
+  | Min IV      | Max IV      | Default color  |
+  | ----------- | ----------- | -------------- |
+  | 0 %         | 24.9 %      | Gray   #9D9D9D |
+  | 25 %        | 49.9 %      | White  #FFFFFF |
+  | 50 %        | 81.9 %      | Green  #1EFF00 |
+  | 82 %        | 89.9 %      | Blue   #0070DD |
+  | 90 %        | 99.9 %      | Purple #A335EE |
+  | 100 %       | 100 %       | Orange #FF8000 |
 
 ##### Locale settings
   ```json
@@ -58,8 +83,7 @@ This config file consist of different objects for different configurations.
       "addressformat": "%S %n",
       "commandMonstersJson": "../util/monsters",
       "monstersJson": "./util/monsters",
-      "movesJson": "./util/moves",
-      "colorsJson": "./util/colors"
+      "movesJson": "./util/moves"
     }
   ```
   | Option        | Value         | 
@@ -72,19 +96,6 @@ This config file consist of different objects for different configurations.
   | movesJson    | Moves locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
   | colorsJson   | Colors for IV brackets |
 
-**IV colors**
-There must be 6 colors defined, from worst IV to best. The Colors are defined as you would in a html file: #rrggbb eg: #ff0000 for red. etc
-
-The tiers of IV colors are as follows:
-
-  | Min IV      | Max IV      | Default color  |
-  | ----------- | ----------- | -------------- |
-  | 0 %         | 24.9 %      | Gray   #9D9D9D |
-  | 25 %        | 49.9 %      | White  #FFFFFF |
-  | 50 %        | 81.9 %      | Green  #1EFF00 |
-  | 82 %        | 89.9 %      | Blue   #0070DD |
-  | 90 %        | 99.9 %      | Purple #A335EE |
-  | 100 %       | 100 %       | Orange #FF8000 |
 
 
 ##### Google Maps settings

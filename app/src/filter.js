@@ -14,7 +14,7 @@ const teamData = require('./util/teams');
 const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 const moveData = require(config.locale.movesJson);
-const colorData = require(config.locale.hasOwnProperty('colorsJson') ? config.locale.colorsJson : './util/colors');
+const ivColorData = config.general.iv_colors;
 const moment = require('moment');
 const Cache = require('ttl');
 let cache = new Cache({
@@ -403,5 +403,5 @@ function findIvColor(iv) {
     // purple epic
     if(iv < 100 ) colorId = 4;
 
-    return parseInt(colorData[colorId].replace(/^#/, ''), 16);
+    return parseInt(ivColorData[colorId].replace(/^#/, ''), 16);
 }
