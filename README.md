@@ -1,5 +1,6 @@
 ![logo](https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/docs/_assets/PoracleJS.png)  
 
+[![Build Status](https://travis-ci.org/KartulUdus/PoracleJS.svg?branch=develop)](https://travis-ci.org/KartulUdus/PoracleJS)
 
 #### Introduction
 
