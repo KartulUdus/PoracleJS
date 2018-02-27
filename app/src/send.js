@@ -35,14 +35,14 @@ function sendHooks(queue, data) {
 				cache.put(data.encounter_id, 'cached');
 				sendRabbitMQ(queue, data);
 			}
-			else log.warn(`Encounter ${data.encounter_id} was sent again too fast`);
+			else log.warn(`Monster ${data.encounter_id} was sent again too soon`);
 		}
 		else if (queue === 'raid') {
 			if (cache.get(data.gym_id) === undefined) {
-				cache.put(data.gym_id, 'cachedGym');
+				cache.put(data.gym_id, 'cachedRaid');
 				sendRabbitMQ(queue, data);
 			}
-			else log.warn(`Encounter ${data.gym_id} was sent again too fast`);
+			else log.warn(`Raid on ${data.gym_id} was sent again too soon`);
 		}
 		else sendRabbitMQ(queue, data);
 	}
