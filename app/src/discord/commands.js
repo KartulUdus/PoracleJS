@@ -1129,7 +1129,8 @@ client.on('message', (msg) => {
 								query.selectOneQuery('humans', 'id', msg.author.id, (err, human) => {
 
 									const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`;
-									let message = `👋\nYour location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`;
+									msg.reply(`👋\nYour location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`);
+									let message = '';
 									if (monsters.length !== 0) {
 										message = message.concat('\n\nYou\'re  tracking the following monsters:\n');
 									}
@@ -1161,9 +1162,15 @@ client.on('message', (msg) => {
 										msg.reply(message, { split: true });
 									}
 									else {
-										hastebin(message).then((hastelink) => {
-											msg.reply(`Your tracking list is quite long. Have a look at ${hastelink}`);
-										}).catch(err);
+										const hastebinMessage = hastebin(message);
+										hastebinMessage.then((hastelink) => {
+											msg.reply(`${msg.channel.name} tracking list is quite long. Have a look at ${hastelink}`);
+										})
+											.catch((err) => {
+												log.error(`Hastebin unhappy: ${err}`);
+												msg.reply(`${msg.channel.name} tracking list is long, but Hastebin is also down. ☹️ \nPlease try again later.`);
+
+											});
 									}
 								});
 							});
@@ -1187,7 +1194,8 @@ client.on('message', (msg) => {
 								query.selectOneQuery('humans', 'id', msg.channel.id, (err, human) => {
 
 									const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`;
-									let message = `👋 \n${msg.channel.name} location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`;
+									msg.reply(`👋 \n${msg.channel.name} location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`);
+									let message = '';
 									if (monsters.length !== 0) {
 										message = message.concat(`\n\n${msg.channel.name} is tracking the following monsters:\n`);
 									}
@@ -1197,7 +1205,7 @@ client.on('message', (msg) => {
 										const monsterName = monsterData[monster.pokemon_id].name;
 										let miniv = monster.min_iv;
 										if (miniv === -1) miniv = 0;
-										message = message.concat(`\n**${monsterName}** distance: ${monster.distance}m iv: ${monster.min_iv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} minimum stats: ATK:${monster.atk} DEF:${monster.def} STA:${monster.sta}`);
+										message = message.concat(`\n**${monsterName}** distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} minimum stats: ATK:${monster.atk} DEF:${monster.def} STA:${monster.sta}`);
 									});
 									if (raids.length !== 0 || eggs.length !== 0) {
 										message = message.concat(`\n\n${msg.channel.name} is tracking the following raids:\n`);
@@ -1218,9 +1226,15 @@ client.on('message', (msg) => {
 										msg.reply(message, { split: true });
 									}
 									else {
-										hastebin(message).then((hastelink) => {
+										const hastebinMessage = hastebin(message);
+										hastebinMessage.then((hastelink) => {
 											msg.reply(`your tracking list is quite long. Have a look at ${hastelink}`);
-										}).catch(err);
+										})
+											.catch((err) => {
+												log.error(`Hastebin unhappy: ${err}`);
+												msg.reply(`${msg.channel.name} tracking list is long, but Hastebin is also down. ☹️\nPlease try again later.`);
+
+											});
 									}
 								});
 							});
