@@ -46,5 +46,7 @@
     "no-underscore-dangle": 0,
     // geocoding backup to OSM on error is unhappy, make these separate and delete this rule please
     "consistent-return": 0
+    // because Travis-ci does not have config files, therefore this rule cannot error
+    "import/no-unresolved": 0
   }
 }

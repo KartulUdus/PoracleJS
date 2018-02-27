@@ -6,8 +6,7 @@ Should that not succeed in solving your problem, you're also welcome to [raise a
 
 ## How do I get started contributing?
 
-The project has its own developer dependencies that you can install with  
-`npm install --dev`  
+The project has its own developer dependencies that are automatically installed along with `npm i`.    
 It includes packages to run the [wiki](https://kartuludus.github.io/PoracleJS/#/) and check your code against the project [style guide](https://github.com/KartulUdus/PoracleJS/blob/master/.eslintrc.json)  
 
 Linting rules will be checked automatically by travis; however, should you wish to save some time, you can run the check locally by running:  
