@@ -38,8 +38,12 @@ function sendHooks(queue, data) {
 			else log.warn(`Monster ${data.encounter_id} was sent again too soon`);
 		}
 		else if (queue === 'raid') {
-			if (cache.get(data.gym_id) === undefined) {
-				cache.put(data.gym_id, 'cachedRaid');
+		    let raidPkmn = !data.pokemon_id || data.pokemon_id === 0 ? 0 : data.pokemon_id;
+		    let cacheId = `${data.gym_id}_${raidPkmn}`;
+
+			if (cache.get(cacheId) === undefined) {
+
+				cache.put(cacheId, 'cachedRaid');
 				sendRabbitMQ(queue, data);
 			}
 			else log.warn(`Raid on ${data.gym_id} was sent again too soon`);
