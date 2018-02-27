@@ -103,6 +103,8 @@ This config file consist of different objects for different configurations.
     "admins": ["222742859059560458"],
     "prefix": "!",
     "typereact": true,
+    "limitsec": 300,
+    "limitamount": 30,
     "iv_colors": [
         "#9D9D9D",
         "#FFFFFF",
@@ -121,6 +123,8 @@ This config file consist of different objects for different configurations.
 |admins| List of admin ID's that can register channel tracking and unregister users.|
 |prefix| Prefix to all discord `!commands`|
 |typereact| `true` or `false`. If true, bot will react to alarms with the type of that alarmed monster.|
+|limitsec| Amount of seconds during which a user can only receive `limitamount` alerts |
+|limitamount| Amount of alerts that a user can receive during `limitsec` seconds |
 |iv_colors| A list of css style hex colors for iv quality.|
 
 **IV colors**

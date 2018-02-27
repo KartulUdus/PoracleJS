@@ -57,22 +57,23 @@ The command needs to include at least one monster and any amount of filters
 
 available filters:
 
-| Filter    | Example                        | More words  |
-| --------- |:------------------------------:| -----------:|
-|           |`!track pikachu`                | No filters, tracks pikachu within an area you are tracking in |
-|d          |`!track pikachu d750`           | Tracks pikachu within 750 meters of  |
-|iv         |`!track pikachu iv90`           | Tracks pikachu inside a tracked area with a minimum IV of 90%  |
-|maxiv      |`!track pikachu maxiv0`         | Tracks pikachu with 0% IV   |
-|cp         |`!track shuckle cp300`         | Tracks shuckle with a minimum CP of 300|
-|maxcp      |`!track shuckle maxcp400`         | Tracks shuckle with a maximum CP of 400 |
-|level      |`!track shuckle level20`        | Tracks shuckle with a minimum level 20|
-|maxlevel   |`!track shuckle maxlevel1`      | Tracks shuckle with maximum level 1|
-|atk        |`!track eevee atk15`            | Tracks eevee with a (minimum) 15 point attack value|
-|def        |`!track eevee def14`            | Tracks eevee with a (minimum) 14 point defense value|
-|sta        |`!track eevee sta10`            | Tracks eevee with a (minimum) 10 point stamina value|
-|weight     |`!track magikarp weight131300`  | Tracks "big" magikarp (131300 grams and higher|
-|maxweight  |`!track rattata maxweight24100` | Tracks "tiny" rarrara (24100 grams and lower)|
-|everything |`!track everything iv90 level20`| Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
+| Filter    | Example                         | More words  |
+| --------- |:-------------------------------:| -----------:|
+|           |`!track pikachu`                 | No filters, tracks pikachu within an area you are tracking in |
+|d          |`!track pikachu d750`            | Tracks pikachu within 750 meters of  |
+|iv         |`!track pikachu iv90`            | Tracks pikachu inside a tracked area with a minimum IV of 90%  |
+|maxiv      |`!track pikachu maxiv0`          | Tracks pikachu with 0% IV   |
+|cp         |`!track shuckle cp300`           | Tracks shuckle with a minimum CP of 300|
+|form       |`!track unown forma formquestion`| Tracks unown with questionmark form or form A. Can only be used with one monster at a time. Monster needs to have forms|
+|maxcp      |`!track shuckle maxcp400`        | Tracks shuckle with a maximum CP of 400 |
+|level      |`!track shuckle level20`         | Tracks shuckle with a minimum level 20|
+|maxlevel   |`!track shuckle maxlevel1`       | Tracks shuckle with maximum level 1|
+|atk        |`!track eevee atk15`             | Tracks eevee with a (minimum) 15 point attack value|
+|def        |`!track eevee def14`             | Tracks eevee with a (minimum) 14 point defense value|
+|sta        |`!track eevee sta10`             | Tracks eevee with a (minimum) 10 point stamina value|
+|weight     |`!track magikarp weight131300`   | Tracks "big" magikarp (131300 grams and higher|
+|maxweight  |`!track rattata maxweight24100`  | Tracks "tiny" rarrara (24100 grams and lower)|
+|everything |`!track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
 
 ###### !untrack
 
@@ -90,6 +91,7 @@ Available filters:
 | --------- |:------------------------------:| -----------:|
 ||`!raid snorlax`| No filters, snorlax raids within your tracked area|
 |d|`!raid snorlax d1000`| Tracks snorlax raids within a kilometer|
+|level|`!raid level5 d1000`| Tracks all level 5 raids within a kilometer, can only be used with no monsters in the command|
 |instinct|`!raid zapdos instinct`| Tracks zapdos raids where controlling team is Instinct|
 |mystic|`!raid articuno mystic`| Tracks articuno raids where controlling team is mystic|
 |valor|`!raid moltres valor`| Tracks moltres raids where controlling team is valor|
@@ -159,22 +161,23 @@ The command needs to include at least one monster and any amount of filters
 
 available filters:
 
-| Filter    | Example                        | More words  |
-| --------- |:------------------------------:| -----------:|
-|           |`!channel track pikachu`                | No filters, tracks pikachu within an area you are tracking in |
-|d          |`!channel track pikachu d750`           | Tracks pikachu within 750 meters of  |
-|iv         |`!channel track pikachu iv90`           | Tracks pikachu inside a tracked area with a minimum IV of 90%  |
-|maxiv      |`!channel track pikachu maxiv0`         | Tracks pikachu with 0% IV   |
-|cp         |`!channel track shuckle cp300`         | Tracks shuckle with a minimum CP of 300|
-|maxcp      |`!channel track shuckle cp400`         | Tracks shuckle with a maximum CP of 400 |
-|level      |`!channel track shuckle level20`        | Tracks shuckle with a minimum level 20|
-|maxlevel   |`!channel track shuckle maxlevel1`      | Tracks shuckle with maximum level 1|
-|atk        |`!channel track eevee atk15`            | Tracks eevee with a (minimum) 15 point attack value|
-|def        |`!channel track eevee def14`            | Tracks eevee with a (minimum) 14 point defense value|
-|sta        |`!channel track eevee sta10`            | Tracks eevee with a (minimum) 10 point stamina value|
-|weight     |`!channel track magikarp weight131300`  | Tracks "big" magikarp (131300 grams and higher|
-|maxweight  |`!channel track rattata maxweight24100` | Tracks "tiny" rarrara (24100 grams and lower)|
-|everything |`!channel track everything iv90 level20`| Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
+| Filter    | Example                                 | More words  |
+| --------- |:---------------------------------------:| -----------:|
+|           |`!channel track pikachu`                 | No filters, tracks pikachu within an area you are tracking in |
+|d          |`!channel track pikachu d750`            | Tracks pikachu within 750 meters of  |
+|iv         |`!channel track pikachu iv90`            | Tracks pikachu inside a tracked area with a minimum IV of 90%  |
+|maxiv      |`!channel track pikachu maxiv0`          | Tracks pikachu with 0% IV   |
+|cp         |`!channel track shuckle cp300`           | Tracks shuckle with a minimum CP of 300|
+|form       |`!channel track unown forma formquestion`| Tracks unown with form ? or form A. Can only be used with one monster at a time. Monster needs to have forms|
+|maxcp      |`!channel track shuckle cp400`           | Tracks shuckle with a maximum CP of 400 |
+|level      |`!channel track shuckle level20`         | Tracks shuckle with a minimum level 20|
+|maxlevel   |`!channel track shuckle maxlevel1`       | Tracks shuckle with maximum level 1|
+|atk        |`!channel track eevee atk15`             | Tracks eevee with a (minimum) 15 point attack value|
+|def        |`!channel track eevee def14`             | Tracks eevee with a (minimum) 14 point defense value|
+|sta        |`!channel track eevee sta10`             | Tracks eevee with a (minimum) 10 point stamina value|
+|weight     |`!channel track magikarp weight131300`   | Tracks "big" magikarp (131300 grams and higher|
+|maxweight  |`!channel track rattata maxweight24100`  | Tracks "tiny" rarrara (24100 grams and lower)|
+|everything |`!channel track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
 
 ###### !channel untrack
 
@@ -190,6 +193,7 @@ Available filters:
 | --------- |:------------------------------:| -----------:|
 ||`!channel raid snorlax`| No filters, snorlax raids within your tracked area|
 |d|`!channel raid snorlax d1000`| Tracks snorlax raids within a kilometer|
+|level|`!channel raid level5 d1000`| Tracks all level 5 raids within a kilometer, can only be used with no monsters in the command|
 |instinct|`!channel raid zapdos instinct`| Tracks zapdos raids where controlling team is Instinct|
 |mystic|`!channel raid articuno mystic`| Tracks articuno raids where controlling team is mystic|
 |valor|`!channel raid moltres valor`| Tracks moltres raids where controlling team is valor|

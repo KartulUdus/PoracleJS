@@ -89,6 +89,7 @@ Any of the fields can be cusomtized with the following:
 |{{{imgurl}}}| Link to monsters picture|
 |{{form}}| Monsters form|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
+|{{ivcolor}}| Color to be used for embed (Color of monsters perfection based on config.discord.iv_colors)|
 
 
 ###### Raid alarms
