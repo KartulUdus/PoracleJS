@@ -7,3 +7,4 @@
 - [Config file options](config.md)
 - [Custom alarm messages](dts.md)
 - [Discord commands](commands.md)
+- [Contributing to the project](contributing.md)
