@@ -1,12 +1,12 @@
-var mysql = require('promise-mysql');
-var config = require('config');
+const mysql = require('mysql2');
+const config = require('config');
 
-pool = mysql.createPool(config.db);
+const pool = mysql.createPool(config.db);
 
 function getSqlConnection() {
-    return pool.getConnection().disposer(function(connection) {
-        pool.releaseConnection(connection);
-    });
+	return pool.getConnection().disposer((connection) => {
+		pool.releaseConnection(connection);
+	});
 }
 
 module.exports = getSqlConnection;

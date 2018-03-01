@@ -38,11 +38,21 @@
     "channel": "general",
     "admins": ["222222222222222222"],
     "prefix": "!",
-    "typereact": true
+    "typereact": true,
+    "limitsec": 300,
+    "limitamount": 20,
+    "iv_colors": [
+        "#9D9D9D",
+        "#FFFFFF",
+        "#1EFF00",
+        "#0070DD",
+        "#A335EE",
+        "#FF8000"
+    ]
   },
 
   "rabbit": {
-    "conn": "amqp://Username:Password@localhost:5672"
+    "conn": "amqp://poracle:poracle@localhost:5672"
   },
 
   "geofence": []

@@ -89,6 +89,7 @@ Any of the fields can be cusomtized with the following:
 |{{{imgurl}}}| Link to monsters picture|
 |{{form}}| Monsters form|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
+|{{ivcolor}}| Color to be used for embed (Color of monsters perfection based on config.discord.iv_colors)|
 
 
 ###### Raid alarms
@@ -211,7 +212,7 @@ Any of the fields can be cusomtized with the following:
       "fields":[
         {
           "name": "General commands",
-          "value": "`!register`: Adds you to database and enables tracking` \n`!unregister`: Removes you from tracking \n`!stop`: Temporarily stops alarms \n`!start`: Re-enables alarms \n`!location yourArea`: Searches for yourArea and sets it as your location \n`!area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`!area remove somePlace`: Removes a configured area"
+          "value": "`!poracle`: Adds you to database and enables tracking` \n`!unregister`: Removes you from tracking \n`!stop`: Temporarily stops alarms \n`!start`: Re-enables alarms \n`!location yourArea`: Searches for yourArea and sets it as your location \n`!area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`!area remove somePlace`: Removes a configured area"
         },
         {
           "name": "Monster tracking commands",
