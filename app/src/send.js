@@ -29,7 +29,7 @@ function sendRabbitMQ(queue, data) {
 
 function sendHooks(queue, data) {
 
-	if (queue === 'pokemon' || queue === 'raid' || queue === 'gym_details') {
+	if (queue === 'pokemon' || queue === 'raid' || queue === 'gym_details' || queue === 'gym') {
 		if (queue === 'pokemon') {
 			if (cache.get(data.encounter_id) === undefined) {
 				cache.put(data.encounter_id, 'cached');

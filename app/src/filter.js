@@ -408,5 +408,24 @@ client.on('ready', () => {
 		});
 	});
 
+
+	amqp.connect(config.rabbit.conn, (err, conn) => {
+		conn.createChannel((err, ch) => {
+			const q = 'gym';
+
+			ch.assertQueue(q, { durable: false });
+			log.debug(`Reading ${q} bunnywabbit`);
+			ch.consume(q, (msg) => {
+				const data = JSON.parse(msg.content.toString());
+				query.countQuery('id', 'gym-info', 'id', data.gym_id, (err, exists) => {
+					if (exists) {
+						query.updateQuery('gym_info', 'park', data.park, 'id', data.gym_id);
+					}
+					else log.warn('Cannot update Park before gym-details');
+				});
+			}, { noAck: true });
+		});
+	});
+
 });
 
