@@ -12,6 +12,7 @@ const mustache = require('mustache');
 const monsterData = require(config.locale.monstersJson);
 const formData = require('./util/forms');
 const teamData = require('./util/teams');
+const weatherData = require('./util/weather');
 const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 
@@ -119,6 +120,9 @@ client.on('ready', () => {
 					data.charge_move = moveData[data.move_2].name;
 				}
 				if (data.form === undefined || data.form === null) data.form = 0;
+				if (!data.weather_boosted_condition) data.weather_boosted_condition = 0;
+				data.boost = weatherData[data.weather_boosted_condition]['name'];
+				data.boostemoji = weatherData[data.weather_boosted_condition]['emoji'];
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
 				data.color = monsterData[data.pokemon_id].types[0].color;
@@ -168,6 +172,8 @@ client.on('ready', () => {
 										imgurl: data.imgurl.toLowerCase(),
 										color: data.color,
 										ivcolor: data.ivcolor,
+										boost: data.boost,
+										boostemoji: data.boostemoji,
 										// geocode stuff
 										addr: geoResult.addr,
 										streetNumber: geoResult.streetNumber,
