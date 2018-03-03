@@ -121,8 +121,8 @@ client.on('ready', () => {
 				}
 				if (data.form === undefined || data.form === null) data.form = 0;
 				if (!data.weather_boosted_condition) data.weather_boosted_condition = 0;
-				data.boost = weatherData[data.weather_boosted_condition]['name'];
-				data.boostemoji = weatherData[data.weather_boosted_condition]['emoji'];
+				data.boost = weatherData[data.weather_boosted_condition].name;
+				data.boostemoji = weatherData[data.weather_boosted_condition].emoji;
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
 				data.color = monsterData[data.pokemon_id].types[0].color;
