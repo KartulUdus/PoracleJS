@@ -38,8 +38,8 @@ function sendHooks(queue, data) {
 			else log.warn(`Monster ${data.encounter_id} was sent again too soon`);
 		}
 		else if (queue === 'raid') {
-		    let raidPkmn = !data.pokemon_id || data.pokemon_id === 0 ? 0 : data.pokemon_id;
-		    let cacheId = `${data.gym_id}_${raidPkmn}`;
+			const raidPkmn = !data.pokemon_id || data.pokemon_id === 0 ? 0 : data.pokemon_id;
+			const cacheId = `${data.gym_id}_${raidPkmn}`;
 
 			if (cache.get(cacheId) === undefined) {
 
