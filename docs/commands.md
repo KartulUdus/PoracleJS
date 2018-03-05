@@ -71,8 +71,8 @@ available filters:
 |atk        |`!track eevee atk15`             | Tracks eevee with a (minimum) 15 point attack value|
 |def        |`!track eevee def14`             | Tracks eevee with a (minimum) 14 point defense value|
 |sta        |`!track eevee sta10`             | Tracks eevee with a (minimum) 10 point stamina value|
-|weight     |`!track magikarp weight131300`   | Tracks "big" magikarp (131300 grams and higher|
-|maxweight  |`!track rattata maxweight24100`  | Tracks "tiny" rarrara (24100 grams and lower)|
+|weight     |`!track magikarp weight13130`   | Tracks "big" magikarp (13130 grams and higher|
+|maxweight  |`!track rattata maxweight24100`  | Tracks "tiny" rattata (24100 grams and lower)|
 |everything |`!track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
 
 ###### !untrack
@@ -96,6 +96,10 @@ Available filters:
 |mystic|`!raid articuno mystic`| Tracks articuno raids where controlling team is mystic|
 |valor|`!raid moltres valor`| Tracks moltres raids where controlling team is valor|
 |harmony|`!raid venusaur harmony`| Tracks venusaur raids in uncontested gyms|
+
+###### !unraid
+
+`!unraid snorlax` Removes tracking of Snorlax raids. 
 
 
 ###### !egg 
@@ -175,8 +179,8 @@ available filters:
 |atk        |`!channel track eevee atk15`             | Tracks eevee with a (minimum) 15 point attack value|
 |def        |`!channel track eevee def14`             | Tracks eevee with a (minimum) 14 point defense value|
 |sta        |`!channel track eevee sta10`             | Tracks eevee with a (minimum) 10 point stamina value|
-|weight     |`!channel track magikarp weight131300`   | Tracks "big" magikarp (131300 grams and higher|
-|maxweight  |`!channel track rattata maxweight24100`  | Tracks "tiny" rarrara (24100 grams and lower)|
+|weight     |`!channel track magikarp weight13130`   | Tracks "big" magikarp (13130 grams and higher|
+|maxweight  |`!channel track rattata maxweight24100`  | Tracks "tiny" rattata (24100 grams and lower)|
 |everything |`!channel track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
 
 ###### !channel untrack
@@ -199,6 +203,9 @@ Available filters:
 |valor|`!channel raid moltres valor`| Tracks moltres raids where controlling team is valor|
 |harmony|`!channel raid venusaur harmony`| Tracks venusaur raids in uncontested gyms|
 
+###### !unraid
+
+`!channel unraid snorlax` Removes tracking of Snorlax raids. 
 
 ###### !channel egg 
 
