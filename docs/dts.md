@@ -94,6 +94,7 @@ Any of the fields can be cusomtized with the following:
 |{{boostemoji}}| Monsters weather boost emoji|
 
 
+
 ###### Raid alarms
 
 ```json

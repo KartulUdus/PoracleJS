@@ -47,6 +47,7 @@ function sendHooks(queue, data) {
 				sendRabbitMQ(queue, data);
 			}
 			else log.warn(`Raid on ${data.gym_id} was sent again too soon`);
+
 		}
 		else sendRabbitMQ(queue, data);
 	}
