@@ -21,7 +21,7 @@
     "poracle"
   ],
   "author": "Kartul",
-  "license": "BSD-3-Clause",
+  "license": "GPL-3.0-only",
   "dependencies": {
     "@google/maps": "^0.4.5",
     "amqplib": "^0.5.2",
