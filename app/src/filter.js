@@ -427,7 +427,7 @@ client.on('ready', () => {
 				const data = JSON.parse(msg.content.toString());
 				query.countQuery('id', 'gym-info', 'id', data.gym_id, (err, exists) => {
 					if (exists) {
-						query.updateQuery('gym_info', 'park', data.park, 'id', data.gym_id);
+						query.updateQuery('gym-info', 'park', data.park, 'id', data.gym_id);
 					}
 					else log.warn('Cannot update Park before gym-details');
 				});
