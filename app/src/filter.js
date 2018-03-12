@@ -242,6 +242,8 @@ client.on('ready', () => {
 							data.description = gym.description;
 							data.url = gym.url;
 							data.park = gym.park;
+							data.ex = '';
+							if (gym.park) data.ex = 'EX';
 							log.debug(prettyjson.render(data));
 							if (data.tth.firstDateWasLater !== true) {
 
@@ -270,6 +272,7 @@ client.on('ready', () => {
 													move1: data.quick_move,
 													move2: data.charge_move,
 													level: data.level,
+													ex: data.ex,
 													staticmap: data.staticmap,
 													detailsurl: data.url,
 													mapurl: data.mapurl,
@@ -329,6 +332,8 @@ client.on('ready', () => {
 							data.description = gym.description;
 							data.url = gym.url;
 							data.park = gym.park;
+							data.ex = '';
+							if (gym.park) data.ex = 'EX';
 							if (data.tth.firstDateWasLater !== true) {
 								gmaps.pointInArea([data.latitude, data.longitude], (matched) => {
 									data.matched = matched;
@@ -355,6 +360,7 @@ client.on('ready', () => {
 													rocketmap: data.rocketmap,
 													imgurl: data.imgurl.toLowerCase(),
 													color: data.color,
+													ex: data.ex,
 													// geocode stuff
 													addr: geoResult.addr,
 													streetNumber: geoResult.streetNumber,
