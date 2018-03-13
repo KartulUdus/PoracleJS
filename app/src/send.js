@@ -29,20 +29,25 @@ function sendRabbitMQ(queue, data) {
 
 function sendHooks(queue, data) {
 
-	if (queue === 'pokemon' || queue === 'raid' || queue === 'gym_details') {
+	if (queue === 'pokemon' || queue === 'raid' || queue === 'gym_details' || queue === 'gym') {
 		if (queue === 'pokemon') {
 			if (cache.get(data.encounter_id) === undefined) {
 				cache.put(data.encounter_id, 'cached');
 				sendRabbitMQ(queue, data);
 			}
-			else log.warn(`Encounter ${data.encounter_id} was sent again too fast`);
+			else log.warn(`Monster ${data.encounter_id} was sent again too soon`);
 		}
 		else if (queue === 'raid') {
-			if (cache.get(data.gym_id) === undefined) {
-				cache.put(data.gym_id, 'cachedGym');
+			const raidPkmn = !data.pokemon_id || data.pokemon_id === 0 ? 0 : data.pokemon_id;
+			const cacheId = `${data.gym_id}_${raidPkmn}`;
+
+			if (cache.get(cacheId) === undefined) {
+
+				cache.put(cacheId, 'cachedRaid');
 				sendRabbitMQ(queue, data);
 			}
-			else log.warn(`Encounter ${data.gym_id} was sent again too fast`);
+			else log.warn(`Raid on ${data.gym_id} was sent again too soon`);
+
 		}
 		else sendRabbitMQ(queue, data);
 	}

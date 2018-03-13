@@ -1,34 +1,34 @@
 {
   "0": {
-    "name":"Not boosted",
-    "emoji":"🤷"
+    "name":"",
+    "emoji":""
   },
   "1": {
     "name":"sunny",
-    "emoji":"☀️"
+    "emoji":":sunny:️"
   },
   "2": {
     "name":"rain",
-    "emoji":"🌧️"
+    "emoji":":cloud_rain:"
   },
   "3": {
     "name":"partly cloudy",
-    "emoji":"🌤️"
+    "emoji":":white_sun_small_cloud:"
   },
   "4": {
     "name":"cloudy",
-    "emoji":"☁️"
+    "emoji":":cloud:"
   },
   "5": {
     "name":"windy",
-    "emoji":"🍃"
+    "emoji":":leaves:"
   },
   "6": {
     "name":"snow",
-    "emoji":"❄️"
+    "emoji":":snowflake:️"
   },
   "7": {
     "name":"fog",
-    "emoji":"🌁"
+    "emoji":":foggy:"
   }
 }

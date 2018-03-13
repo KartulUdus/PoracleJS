@@ -12,6 +12,7 @@ const mustache = require('mustache');
 const monsterData = require(config.locale.monstersJson);
 const formData = require('./util/forms');
 const teamData = require('./util/teams');
+const weatherData = require('./util/weather');
 const raidCpData = require('./util/raidcp');
 const dts = require('../../config/dts');
 
@@ -119,6 +120,10 @@ client.on('ready', () => {
 					data.charge_move = moveData[data.move_2].name;
 				}
 				if (data.form === undefined || data.form === null) data.form = 0;
+				if (!data.weather_boosted_condition) data.weather_boosted_condition = 0;
+				data.boost = weatherData[data.weather_boosted_condition].name;
+				data.boostemoji = weatherData[data.weather_boosted_condition].emoji;
+
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
 				data.color = monsterData[data.pokemon_id].types[0].color;
@@ -168,6 +173,9 @@ client.on('ready', () => {
 										imgurl: data.imgurl.toLowerCase(),
 										color: data.color,
 										ivcolor: data.ivcolor,
+										boost: data.boost,
+										boostemoji: data.boostemoji,
+
 										// geocode stuff
 										addr: geoResult.addr,
 										streetNumber: geoResult.streetNumber,
@@ -234,6 +242,8 @@ client.on('ready', () => {
 							data.description = gym.description;
 							data.url = gym.url;
 							data.park = gym.park;
+							data.ex = '';
+							if (gym.park) data.ex = 'EX';
 							log.debug(prettyjson.render(data));
 							if (data.tth.firstDateWasLater !== true) {
 
@@ -262,6 +272,7 @@ client.on('ready', () => {
 													move1: data.quick_move,
 													move2: data.charge_move,
 													level: data.level,
+													ex: data.ex,
 													staticmap: data.staticmap,
 													detailsurl: data.url,
 													mapurl: data.mapurl,
@@ -321,6 +332,8 @@ client.on('ready', () => {
 							data.description = gym.description;
 							data.url = gym.url;
 							data.park = gym.park;
+							data.ex = '';
+							if (gym.park) data.ex = 'EX';
 							if (data.tth.firstDateWasLater !== true) {
 								gmaps.pointInArea([data.latitude, data.longitude], (matched) => {
 									data.matched = matched;
@@ -347,6 +360,7 @@ client.on('ready', () => {
 													rocketmap: data.rocketmap,
 													imgurl: data.imgurl.toLowerCase(),
 													color: data.color,
+													ex: data.ex,
 													// geocode stuff
 													addr: geoResult.addr,
 													streetNumber: geoResult.streetNumber,
@@ -403,6 +417,25 @@ client.on('ready', () => {
 						);
 						log.info(`Saved gym-details for ${data.name}`);
 					}
+				});
+			}, { noAck: true });
+		});
+	});
+
+
+	amqp.connect(config.rabbit.conn, (err, conn) => {
+		conn.createChannel((err, ch) => {
+			const q = 'gym';
+
+			ch.assertQueue(q, { durable: false });
+			log.debug(`Reading ${q} bunnywabbit`);
+			ch.consume(q, (msg) => {
+				const data = JSON.parse(msg.content.toString());
+				query.countQuery('id', 'gym-info', 'id', data.gym_id, (err, exists) => {
+					if (exists) {
+						query.updateQuery('gym-info', 'park', data.park, 'id', data.gym_id);
+					}
+					else log.warn('Cannot update Park before gym-details');
 				});
 			}, { noAck: true });
 		});
