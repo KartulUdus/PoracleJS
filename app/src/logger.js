@@ -3,7 +3,7 @@ const config = require('config');
 
 module.exports =
 
-    new (winston.Logger)({
+	new (winston.Logger)({
 		transports: [
 			new (winston.transports.Console)({ level: config.general.logLevel }),
 			new (winston.transports.File)({
