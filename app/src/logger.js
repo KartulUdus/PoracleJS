@@ -11,4 +11,4 @@ module.exports =
 				level: config.general.logLevel,
 			}),
 		],
-	})
+	});
