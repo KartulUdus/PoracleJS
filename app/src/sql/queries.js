@@ -184,10 +184,38 @@ function eggWhoCares(data, callback) {
 	});
 }
 
+function questWhoCares(data, callback) {
+	let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `;
+	data.matched.forEach((area) => {
+		areastring = areastring.concat(`or humans.area like '%${area}%' `);
+	});
+	const query =
+            `select * from quest
+            join humans on humans.id = quest.id
+            where humans.enabled = 1 and
+            (quest_id = ${data.quest_id} or reward_id = ${data.quest_id}) and
+            (round( 6371000 * acos( cos( radians(${data.latitude}) )
+              * cos( radians( humans.latitude ) )
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) )
+              + sin( radians(${data.latitude}) )
+              * sin( radians( humans.latitude ) ) ) < quest.distance and egg.distance != 0) or
+               egg.distance = 0 and (${areastring}))`;
+	log.debug(query);
+	pool.query(query, (err, result) => {
+		if (err) {
+			log.error(err);
+			return callback(err);
+		}
+		log.info(`Quest id ${data.quest.id} for reward ${data.reward_id} was reported and ${result.length} humans cared`);
+		return callback(result);
+	});
+}
+
 module.exports = {
 	eggWhoCares,
 	raidWhoCares,
 	monsterWhoCares,
+	questWhoCares,
 	insertOrUpdateQuery,
 	insertQuery,
 	updateLocation,

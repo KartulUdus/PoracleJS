@@ -62,7 +62,13 @@ query.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', conf
 				});
 
 			}
-			else {
+			if (res.val === 2) {
+				log.info(`Database version ${res.val} not ok, doing magic ...`);
+				migrator.migration3((result) => {
+					log.info(result);
+				});
+			}
+			if (res.val === 3) {
 				log.info(`Database version ${res.val} is ok`);
 			}
 		});
