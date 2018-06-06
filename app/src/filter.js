@@ -14,6 +14,8 @@ const formData = require('./util/forms');
 const teamData = require('./util/teams');
 const weatherData = require('./util/weather');
 const raidCpData = require('./util/raidcp');
+const questData = require('./util/quests');
+const rewardData = require('./util/rewards');
 const dts = require('../../config/dts');
 
 const moveData = require(config.locale.movesJson);
@@ -436,6 +438,65 @@ client.on('ready', () => {
 						query.updateQuery('gym-info', 'park', data.park, 'id', data.gym_id);
 					}
 					else log.warn('Cannot update Park before gym-details');
+				});
+			}, { noAck: true });
+		});
+	});
+
+	amqp.connect(config.rabbit.conn, (err, conn) => {
+		conn.createChannel((err, ch) => {
+			const q = 'quest';
+
+			ch.assertQueue(q, { durable: false });
+			log.debug(`Reading ${q} bunnywabbit`);
+			ch.consume(q, (msg) => {
+				const data = JSON.parse(msg.content.toString());
+
+				query.questWhoCares(data, (whocares) => {
+
+					if (whocares.length !== 0) {
+						gmaps.getAddress({
+							lat: data.latitude,
+							lon: data.longitude,
+						}, (err, geoResult) => {
+
+							data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
+							data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
+							data.tth = moment.preciseDiff(Date.now(), moment().endOf('day') * 1000, true);
+
+							const view = {
+								time: data.hatchtime,
+								tthh: data.tth.hours,
+								tthm: data.tth.minutes,
+								tths: data.tth.seconds,
+								name: data.name,
+								quest: questData[data.quest_id].name,
+								reward: rewardData[data.reward_id].name,
+								staticmap: data.staticmap,
+								mapurl: data.mapurl,
+								applemap: data.applemap,
+								// geocode stuff
+								addr: geoResult.addr,
+								streetNumber: geoResult.streetNumber,
+								streetName: geoResult.streetName,
+								zipcode: geoResult.zipcode,
+								country: geoResult.country,
+								countryCode: geoResult.countryCode,
+								city: geoResult.city,
+								state: geoResult.state,
+								stateCode: geoResult.stateCode,
+							};
+
+							const template = JSON.stringify(dts.quest);
+							let message = mustache.render(template, view);
+							log.debug(message);
+							message = JSON.parse(message);
+							whocares.forEach((cares) => {
+								sendDMAlarm(message, cares.id, [], cares.map_enabled);
+								log.info(`Alerted ${cares.name} about quest:'${data.quest}' with reward: '${data.reward}' `);
+							});
+						});
+					}
 				});
 			}, { noAck: true });
 		});
