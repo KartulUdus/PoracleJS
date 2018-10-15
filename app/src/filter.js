@@ -137,7 +137,7 @@ client.on('ready', () => {
 				data.emoji = monsterData[data.pokemon_id].types.forEach((type) => {
 					e.push(type.emoji);
 				});
-				if (!data.form) {
+				if (!data.form || data.form === '0') {
 					data.formname = formData[data.pokemon_id][data.form];
 					data.imgurl = data.imgurl.concat(`-${data.formname}.png`);
 				}
