@@ -408,6 +408,7 @@ client.on('ready', () => {
 				const data = JSON.parse(msg.content.toString());
 				query.countQuery('id', 'gym-info', 'id', data.id, (err, exists) => {
 					if (exists === 0) {
+						if (!data.description) data.description = '';
 						data.name = data.name.replace(/"/g, '');
 						data.description = data.description.replace(/"/g, '');
 						data.name = data.name.replace(/\n/g, '');
