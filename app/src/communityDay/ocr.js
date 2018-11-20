@@ -35,11 +35,13 @@ function detect(imgLocation, callback) {
 			img
 				.resize(567, 1007)
 				.grayscale()
-				.posterize(6)
+				.posterize(5)
 				.invert()
+				.contrast(1)
 				.crop(15, 300, 550, 300)
 				.write(tmpFilename);
 			recognize(`${tmpFilename}`, (err, text) => {
+				if(err) log.error(err)
 				if(!config.general.logLevel === 'debug') fs.unlinkSync(tmpFilename);		// delete temp file
 
 				const dataArray = text.replace(/ /g, '').split('\n');
@@ -48,9 +50,9 @@ function detect(imgLocation, callback) {
 
 					dataArray.forEach((element) => {				// Search for known datapoints in detected text
 
-					const matchSeen = seenregex.exec(element);
-					const matchCaught = caughtregex.exec(element);
-					const matchLucky = luckyregex.exec(element);
+					const matchSeen = seenregex.exec(element.replace('/o/gi', '0'));
+					const matchCaught = caughtregex.exec(element.replace('/o/gi', '0'));
+					const matchLucky = luckyregex.exec(element.replace('/o/gi', '0'));
 
 					if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace('SEEN:', ''));
 					if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace('CAUGHT:', ''));

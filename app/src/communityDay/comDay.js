@@ -63,7 +63,7 @@ client.on('message', (msg) => {
 					const endTime = moment(now).add(duration, 'hour').format().slice(0, 19)
 						.replace('T', ' ');
 					msg.guild.createChannel(args[0]).then(channel =>
-					query.insertQuery(
+						query.insertQuery(
 							'comevent',
 							['`creator_id`', '`creator_name`', '`channel_id`', '`end_timestamp`', '`create_timestamp`', '`monster_id`', '`finished`'],
 							[`${msg.author.id}`, `${msg.author.username}`, `${channel.id}`, endTime, now, `${monsters[0]}`, '0']
@@ -86,7 +86,7 @@ client.on('message', (msg) => {
 				} else {
 					query.getComEventResults(event.monster_id, event.create_timestamp, (err, results)=>{
 						if(results[0]){
-							let message = `:) :) The event for ${monsterData[event.monster_id].name} was manually ended by <@${msg.author.id}> :) :):\n Here are the results: \n\n`;
+							let message = `:slight_smile: :slight_smile:  The event for ${monsterData[event.monster_id].name} was manually ended by <@${msg.author.id}> :slight_smile: :slight_smile: \n Here are the results: \n\n`;
 							results.forEach((result) => {
 								message = message.concat(`${result.n}: <@${result.discord_id}> SEEN:${result.seen} CAUGHT:${result.caught} LUCKY:${result.lucky} \n`);
 							});
