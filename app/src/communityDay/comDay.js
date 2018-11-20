@@ -68,6 +68,8 @@ client.on('message', (msg) => {
 							['`creator_id`', '`creator_name`', '`channel_id`', '`end_timestamp`', '`create_timestamp`', '`monster_id`', '`finished`'],
 							[`${msg.author.id}`, `${msg.author.username}`, `${channel.id}`, endTime, now, `${monsters[0]}`, '0']
 						)
+					).finally(channel =>
+						channel.send('potato')
 					)
 				}
 				else {
