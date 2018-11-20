@@ -39,7 +39,7 @@ client.on('message', (msg) => {
 	}
 
 
-	if (msg.content.startsWith(`${config.discord.prefix}createevent `) && msg.channel.id === config.discord.comDayChannelId) {
+	if (msg.content.startsWith(`${config.discord.prefix}createevent `) && msg.member.roles.find(x => x.name === config.discord.modRole)) {
 		const rawArgs = msg.content.slice(`${config.discord.prefix}createevent `.length).split(' ');
 		const args = rawArgs.join('|').toLowerCase().split('|');
 		let channelExists = false;
