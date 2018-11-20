@@ -12,9 +12,9 @@ const recognize = tesseract.withOptions({
 const monsterData = require(config.locale.commandMonstersJson);
 const query = require('../sql/queries');
 
-const seenregex = new RegExp('SEEN:\\d+', 'gi');
-const caughtregex = new RegExp('CAUGHT:\\d+', 'gi');
-const luckyregex = new RegExp('LUCKY:\\d+', 'gi');
+const seenregex = new RegExp('[sen]{4}:\\d+', 'gi');
+const caughtregex = new RegExp('[caughto]{6}:\\d+', 'gi');
+const luckyregex = new RegExp('[luckyvro]{5}:\\d+', 'gi');
 
 const log = require('../logger');
 
@@ -54,9 +54,9 @@ function detect(imgLocation, callback) {
 					const matchCaught = caughtregex.exec(element.replace('/o/gi', '0'));
 					const matchLucky = luckyregex.exec(element.replace('/o/gi', '0'));
 
-					if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace('SEEN:', ''));
-					if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace('CAUGHT:', ''));
-					if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace('LUCKY:', ''));
+					if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace(new RegExp('[sen]{4}:', 'gi'), ''));
+					if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace(new RegExp('[caughto]{6}:', 'gi'), ''));
+					if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace(new RegExp('[luckyvro]{5}:', 'gi'), ''));
 					if (element.match(monregex)) data.correctPokemon = true;
 				});
 				log.debug(data);
