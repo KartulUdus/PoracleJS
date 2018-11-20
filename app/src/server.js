@@ -48,9 +48,18 @@ fastify.listen(config.general.port, config.general.host, (err) => {
 
 query.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database, (err, tables) => {
 	if (tables === 0) {
-		log.info('No tables detected, running mysql base migration');
+		log.info('No tables detected, running all migrations');
 		migrator.migration1((result) => {
 			log.info(result);
+			migrator.migration2((result) => {
+				log.info(result);
+				migrator.migration3((result) => {
+					log.info(result);
+					migrator.migration4((result) => {
+						log.info(result);
+					});
+				});
+			});
 		});
 	}
 	else {
@@ -69,6 +78,12 @@ query.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', conf
 				});
 			}
 			if (res.val === 3) {
+				log.info(`Database version ${res.val} not ok, doing magic ...`);
+				migrator.migration4((result) => {
+					log.info(result);
+				});
+			}
+			if (res.val === 4) {
 				log.info(`Database version ${res.val} is ok`);
 			}
 		});

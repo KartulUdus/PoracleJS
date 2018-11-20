@@ -99,6 +99,28 @@ CREATE TABLE \`quest\` (
   KEY \`distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 
+const comevent = `
+CREATE TABLE \`comevent\` (
+  \`creator_id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  \`creator_name\` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  \`channel_id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  \`end_timestamp\` TIMESTAMP NULL DEFAULT NULL,
+  \`create_timestamp\` TIMESTAMP NULL DEFAULT NULL,
+  \`monster_id\` int(11) DEFAULT NULL,
+  \`finished\` tinyint(1) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
+const comentry = `
+CREATE TABLE \`comsubmission\` (
+  \`discord_id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  \`discord_name\` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
+  \`submit_timestamp\` TIMESTAMP NULL DEFAULT NULL,
+  \`monster_id\` int(11) DEFAULT NULL,
+  \`seen\` int(11) DEFAULT NULL,
+  \`caught\` int(11) DEFAULT NULL,
+  \`lucky\` int(11) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
 function migration1(callback) {
 	queries.mysteryQuery(humans, () => {
 		queries.mysteryQuery(gymInfo, () => {
@@ -138,8 +160,20 @@ function migration3(callback) {
 	});
 }
 
+function migration4(callback) {
+	log.info('Adding "comevent" table to database');
+	queries.mysteryQuery(comevent, () => {
+		log.info('Adding "comentry" table to database');
+		queries.mysteryQuery(comentry, () => {
+			queries.addOneQuery('schema_version', 'val', 'key', 'db_version');
+			callback('Database schema updated, db_version 4 applied');
+		});
+	});
+}
+
 module.exports = {
 	migration1,
 	migration2,
 	migration3,
+	migration4,
 };

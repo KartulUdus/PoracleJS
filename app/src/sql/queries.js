@@ -49,7 +49,7 @@ function insertOrUpdateQuery(table, columns, values) {
 function updateQuery(table, field, newvalue, col, value) {
 	pool.query('UPDATE ?? SET ?? = ? where ?? = ?', [table, field, newvalue, col, value], (err, result) => {
 		if (err) log.error(err);
-		log.debug(`updated ${field} in ${table}`);
+		log.debug(`updates ${field} in ${table}`);
 	});
 }
 
@@ -211,6 +211,39 @@ function questWhoCares(data, callback) {
 	});
 }
 
+function findActiveComEvent(callback) {
+
+	pool.query('SELECT * FROM comevent WHERE end_timestamp > now() and finished = false', (err, result) => {
+		if (err) log.error(err);
+		callback(err, result[0]);
+	});
+}
+
+function findExpiredComEvent(callback) {
+
+	pool.query('SELECT * FROM comevent WHERE end_timestamp < now() and finished = false', (err, result) => {
+		if (err) log.error(err);
+		callback(err, result[0]);
+	});
+}
+
+
+function getComEventResults(monsterId, eventStart, callback) {
+
+	const query = `
+		SELECT @n := @n + 1 n, discord_id, (max(seen) - min(seen)) seen, (max(caught) - min(caught)) caught, (max(lucky) - min(lucky)) lucky 
+		FROM comsubmission, (SELECT @n := 0) m
+		WHERE monster_id=${monsterId} 
+		AND (submit_timestamp BETWEEN '${eventStart}' AND now())
+		GROUP BY discord_id
+		ORDER BY caught DESC`;
+	pool.query(query, (err, result) => {
+		if (err) log.error(err);
+		callback(err, result);
+	});
+}
+
+
 module.exports = {
 	eggWhoCares,
 	raidWhoCares,
@@ -227,5 +260,8 @@ module.exports = {
 	deleteMonsterQuery,
 	addOneQuery,
 	mysteryQuery,
+	findActiveComEvent,
+	findExpiredComEvent,
+	getComEventResults,
 };
 
