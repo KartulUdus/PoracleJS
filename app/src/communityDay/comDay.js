@@ -63,6 +63,7 @@ client.on('message', (msg) => {
 					const endTime = moment(now).add(duration, 'hour').format().slice(0, 19)
 						.replace('T', ' ');
 					msg.guild.createChannel(args[0]).then(channel =>
+						channel.send(`${msg.author.id} Started an event to catch ${monsters[0]}. \n Please upload your Pokédex screenshots of  ${monsters[0]} here`);
 						query.insertQuery(
 							'comevent',
 							['`creator_id`', '`creator_name`', '`channel_id`', '`end_timestamp`', '`create_timestamp`', '`monster_id`', '`finished`'],

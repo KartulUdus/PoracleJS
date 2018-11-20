@@ -35,16 +35,18 @@ function detect(imgLocation, callback) {
 			img
 				.resize(567, 1007)
 				.grayscale()
-				.posterize(9)
+				.posterize(6)
 				.invert()
 				.crop(15, 300, 550, 300)
 				.write(tmpFilename);
 			recognize(`${tmpFilename}`, (err, text) => {
-				fs.unlinkSync(tmpFilename);		// delete temp file
+				if(!config.general.logLevel === 'debug') fs.unlinkSync(tmpFilename);		// delete temp file
 
 				const dataArray = text.replace(/ /g, '').split('\n');
 
-				dataArray.forEach((element) => {				// Search for known datapoints in detected text
+				data.detectedOCR = dataArray
+
+					dataArray.forEach((element) => {				// Search for known datapoints in detected text
 
 					const matchSeen = seenregex.exec(element);
 					const matchCaught = caughtregex.exec(element);
@@ -55,6 +57,7 @@ function detect(imgLocation, callback) {
 					if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace('LUCKY:', ''));
 					if (element.match(monregex)) data.correctPokemon = true;
 				});
+				log.debug(data);
 				return callback(err, data);		// send object of data
 			});
 		});
