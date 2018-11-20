@@ -20,7 +20,7 @@ client.on('message', (msg) => {
 			if (event && msg.channel.id === event.channel_id) {
 				ocr.detect(Attachment.url, (err, data) => {
 					if (err) log.error(err);
-					if (data.correctPokemon) {
+					if (data.correctPokemon && data.seenCount.toString() &&  data.caughtCount.toString() && data.luckyCount.toString()) {
 						query.insertQuery(
 							'comsubmission',
 							['discord_id', 'discord_name', 'submit_timestamp', 'monster_id', 'seen', 'caught', 'lucky'],
@@ -31,7 +31,7 @@ client.on('message', (msg) => {
 						log.info(msg.author.id, msg.author.username, new Date().getTime(), event.monster_id, data.seenCount, data.caughtCount, data.luckyCount);
 					}
 					else {
-						msg.reply('Thre\'s currently no event for this monster, try again');
+						msg.reply(`Couldn't match needed data \n eventmon detected:${data.correctPokemon}\n seen:${data.seenCount}\n caught:${data.caughtCount}\n lucky:${data.luckyCount}`);
 					}
 				});
 			}

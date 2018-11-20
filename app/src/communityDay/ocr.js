@@ -2,6 +2,7 @@ const tesseract = require('tesseractocr');
 const Jimp = require('jimp');
 const fs = require('fs');
 const config = require('config');
+const replaceColor = require('replace-color');
 
 const recognize = tesseract.withOptions({
 	psm: 11,
@@ -35,33 +36,49 @@ function detect(imgLocation, callback) {
 			img
 				.resize(567, 1007)
 				.grayscale()
-				.posterize(5)
-				.invert()
-				.contrast(1)
+				.brightness(0.77)
+				.contrast(0.15)
 				.crop(15, 300, 550, 300)
 				.write(tmpFilename);
-			recognize(`${tmpFilename}`, (err, text) => {
-				if(err) log.error(err)
-				if(!config.general.logLevel === 'debug') fs.unlinkSync(tmpFilename);		// delete temp file
 
-				const dataArray = text.replace(/ /g, '').split('\n');
+			replaceColor({
+				image: tmpFilename,
+				colors: {
+					type: 'hex',
+					targetColor: '#FFFFFF',
+					replaceColor: '#000000'
+				}
+			}, (err, jimpObject) => {
+				if (err) log.error(err)
+				jimpObject.write(tmpFilename, (err) => {
+					if (err) log.error(err)
 
-				data.detectedOCR = dataArray
+					recognize(`${tmpFilename}`, (err, text) => {
+						if(err) log.error(err)
+						if(!config.general.logLevel === 'debug') fs.unlinkSync(tmpFilename);		// delete temp file
 
-					dataArray.forEach((element) => {				// Search for known datapoints in detected text
+						const dataArray = text.replace(/ /g, '').split('\n');
 
-					const matchSeen = seenregex.exec(element.replace('/o/gi', '0'));
-					const matchCaught = caughtregex.exec(element.replace('/o/gi', '0'));
-					const matchLucky = luckyregex.exec(element.replace('/o/gi', '0'));
+						data.detectedOCR = dataArray
 
-					if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace(new RegExp('[sen]{4}:', 'gi'), ''));
-					if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace(new RegExp('[caughto]{6}:', 'gi'), ''));
-					if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace(new RegExp('[luckyvro]{5}:', 'gi'), ''));
-					if (element.match(monregex)) data.correctPokemon = true;
-				});
-				log.debug(data);
-				return callback(err, data);		// send object of data
-			});
+						dataArray.forEach((element) => {				// Search for known datapoints in detected text
+
+							const matchSeen = seenregex.exec(element.replace('/o/gi', '0'));
+							const matchCaught = caughtregex.exec(element.replace('/o/gi', '0'));
+							const matchLucky = luckyregex.exec(element.replace('/o/gi', '0'));
+
+							if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace(new RegExp('[sen]{4}:', 'gi'), ''));
+							if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace(new RegExp('[caughto]{6}:', 'gi'), ''));
+							if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace(new RegExp('[luckyvro]{5}:', 'gi'), ''));
+							if (element.match(monregex)) data.correctPokemon = true;
+						});
+						log.debug(data);
+						return callback(err, data);		// send object of data
+					});
+				})
+			})
+
+
 		});
 	});
 }
