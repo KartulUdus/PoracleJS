@@ -19,15 +19,15 @@ const luckyregex = new RegExp('[luckyvro]{5}:\\d+', 'gi');
 
 const log = require('../logger');
 
-const data = { activeEvent: false };
+let data = { activeEvent: false };
 
 
 function detect(imgLocation, callback) {
 	query.findActiveComEvent((err, event) => {
 		if (err) log.error(err);
 		if (!event) return callback(err, data);
-		const eventmon = monsterData[event.monster_id].name;
-		const monregex = new RegExp(eventmon, 'gi');
+		let eventmon = event.monster_id.split(',').map(id => monsterData[id].name.toUpperCase())
+
 		data.correctPokemon = false;
 		data.activeEvent = eventmon;
 
@@ -56,9 +56,9 @@ function detect(imgLocation, callback) {
 					recognize(`${tmpFilename}`, (err, text) => {
 						if(err) log.error(err)
 						if(!config.general.logLevel === 'debug') fs.unlinkSync(tmpFilename);		// delete temp file
+						text = text.toUpperCase()
 
 						const dataArray = text.replace(/ /g, '').split('\n');
-
 						data.detectedOCR = dataArray
 
 						dataArray.forEach((element) => {				// Search for known datapoints in detected text
@@ -70,7 +70,10 @@ function detect(imgLocation, callback) {
 							if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace(new RegExp('[sen]{4}:', 'gi'), ''));
 							if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace(new RegExp('[caughto]{6}:', 'gi'), ''));
 							if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace(new RegExp('[luckyvro]{5}:', 'gi'), ''));
-							if (element.match(monregex)) data.correctPokemon = true;
+							if (_.includes([eventmon, element)){
+								data.correctPokemon = true;
+								data.monster_id = _.findKey(monsterData, mon => mon.name.toUpperCase() === element);
+							}
 						});
 						log.debug(data);
 						return callback(err, data);		// send object of data

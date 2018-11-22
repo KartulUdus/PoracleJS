@@ -106,7 +106,7 @@ CREATE TABLE \`comevent\` (
   \`channel_id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   \`end_timestamp\` TIMESTAMP NULL DEFAULT NULL,
   \`create_timestamp\` TIMESTAMP NULL DEFAULT NULL,
-  \`monster_id\` int(11) DEFAULT NULL,
+  \`monster_id\` longtext COLLATE utf8_unicode_ci,
   \`finished\` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 

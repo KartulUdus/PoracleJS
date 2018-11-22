@@ -24,9 +24,9 @@ client.on('message', (msg) => {
 						query.insertQuery(
 							'comsubmission',
 							['discord_id', 'discord_name', 'submit_timestamp', 'monster_id', 'seen', 'caught', 'lucky'],
-							[msg.author.id, msg.author.username, now, event.monster_id, data.seenCount, data.caughtCount, data.luckyCount]
+							[msg.author.id, msg.author.username, now, data.monster_id, data.seenCount, data.caughtCount, data.luckyCount]
 						);
-						msg.reply(`Thanks, I have submitted your ${monsterData[event.monster_id].name} seen:${data.seenCount} caught:${data.caughtCount} lucky:${data.luckyCount} `);
+						msg.reply(`Thanks, I have submitted your ${monsterData[data.monster_id].name} seen:${data.seenCount} caught:${data.caughtCount} lucky:${data.luckyCount} `);
 						// log.info(data)
 						log.info(msg.author.id, msg.author.username, new Date().getTime(), event.monster_id, data.seenCount, data.caughtCount, data.luckyCount);
 					}
@@ -66,7 +66,7 @@ client.on('message', (msg) => {
 						query.insertQuery(
 							'comevent',
 							['`creator_id`', '`creator_name`', '`channel_id`', '`end_timestamp`', '`create_timestamp`', '`monster_id`', '`finished`'],
-							[`${msg.author.id}`, `${msg.author.username}`, `${channel.id}`, endTime, now, `${monsters[0]}`, '0']
+							[`${msg.author.id}`, `${msg.author.username}`, `${channel.id}`, endTime, now, `${monsters}`, '0']
 						)
 					)
 				}
@@ -84,17 +84,19 @@ client.on('message', (msg) => {
 				if(!event){
 					msg.reply('No active event to cancel')
 				} else {
-					query.getComEventResults(event.monster_id, event.create_timestamp, (err, results)=>{
-						if(results[0]){
-							let message = `:slight_smile: :slight_smile:  The event for ${monsterData[event.monster_id].name} was manually ended by <@${msg.author.id}> :slight_smile: :slight_smile: \n Here are the results: \n\n`;
-							results.forEach((result) => {
-								message = message.concat(`${result.n}: <@${result.discord_id}> SEEN:${result.seen} CAUGHT:${result.caught} LUCKY:${result.lucky} \n`);
-							});
-							client.channels.get(config.discord.comDayResultChannelId).send(message, { split: true });
-							query.updateQuery('comevent', 'finished', 1, 'monster_id', event.monster_id);
-						}
-
-						msg.reply(`${monsterData[event.monster_id].name} event cancelled`)
+					let monsters = endedEvent.monster_id.split(',')
+					monsters.forEach((monster) => {
+						query.getComEventResults(monster, event.create_timestamp, (err, results)=>{
+							if(results[0]){
+								let message = `:slight_smile: :slight_smile:  The event for ${monsterData[event.monster_id].name} was manually ended by <@${msg.author.id}> :slight_smile: :slight_smile: \n Here are the results: \n\n`;
+								results.forEach((result) => {
+									message = message.concat(`${result.n}: <@${result.discord_id}> SEEN:${result.seen} CAUGHT:${result.caught} LUCKY:${result.lucky} \n`);
+								});
+								client.channels.get(config.discord.comDayResultChannelId).send(message, { split: true });
+								query.updateQuery('comevent', 'finished', 1, 'monster_id', event.monster_id);
+							}
+							msg.reply(`${monsterData[event.monster_id].name} event cancelled`)
+						})
 					})
 				}
 			})
@@ -112,16 +114,18 @@ function endComEvent() {
 	query.findExpiredComEvent((err, endedEvent) => {
 		if (err) log.error(err);
 		if (endedEvent) {
-			query.getComEventResults(endedEvent.monster_id, moment(endedEvent.create_timestamp).format().slice(0, 19).replace('T', ' '), (err, results) => {
-				let message = `:tada::tada: The grind for ${monsterData[endedEvent.monster_id].name} has ended :tada::tada:\n Here are the results: \n\n`;
-				results.forEach((result) => {
-					message = message.concat(`${result.n}: <@${result.discord_id}> SEEN:${result.seen} CAUGHT:${result.caught} LUCKY:${result.lucky} \n`);
+			let monsters = endedEvent.monster_id.split(',')
+			monsters.forEach((monster) => {
+				query.getComEventResults(monster, moment(endedEvent.create_timestamp).format().slice(0, 19).replace('T', ' '), (err, results) => {
+					let message = `:tada::tada: The grind for ${monsterData[endedEvent.monster_id].name} has ended :tada::tada:\n Here are the results: \n\n`;
+					results.forEach((result) => {
+						message = message.concat(`${result.n}: <@${result.discord_id}> SEEN:${result.seen} CAUGHT:${result.caught} LUCKY:${result.lucky} \n`);
+					});
+					log.debug(message);
+					client.channels.get(config.discord.comDayResultChannelId).send(message, { split: true });
+					query.updateQuery('comevent', 'finished', 1, 'monster_id', endedEvent.monster_id);
 				});
-				log.debug(message);
-				client.channels.get(config.discord.comDayResultChannelId).send(message, { split: true });
-				query.updateQuery('comevent', 'finished', 1, 'monster_id', endedEvent.monster_id);
-			});
-
+			})
 		}
 	});
 
