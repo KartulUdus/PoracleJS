@@ -148,7 +148,8 @@ client.on('ready', () => {
 						data.matched = matched;
 
 						query.monsterWhoCares(data, (whocares) => {
-							if (whocares.length !== 0) {
+							if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+							if (whocares.length !== 0 && Array.isArray(whocares)) {
 
 								gmaps.getAddress({ lat: data.latitude, lon: data.longitude }, (err, geoResult) => {
 
@@ -196,8 +197,9 @@ client.on('ready', () => {
 									const template = JSON.stringify(monsterDts);
 									let message = mustache.render(template, view);
 									message = JSON.parse(message);
+									log.debug(typeof whocares);
 									whocares.forEach((cares) => {
-
+										log.debug(cares)
 										sendDMAlarm(message, cares.id, e, cares.map_enabled);
 										log.info(`Alerted ${cares.name} about ${data.name} monster`);
 									});
@@ -253,7 +255,8 @@ client.on('ready', () => {
 									data.matched = matched;
 
 									query.raidWhoCares(data, (whocares) => {
-										if (whocares.length !== 0) {
+										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+										if (whocares.length !== 0 && Array.isArray(whocares)) {
 											gmaps.getAddress({
 												lat: data.latitude,
 												lon: data.longitude,
@@ -341,7 +344,8 @@ client.on('ready', () => {
 									data.matched = matched;
 
 									query.eggWhoCares(data, (whocares) => {
-										if (whocares.length !== 0) {
+										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+										if (whocares.length !== 0 && Array.isArray(whocares)) {
 											gmaps.getAddress({
 												lat: data.latitude,
 												lon: data.longitude,
@@ -454,8 +458,8 @@ client.on('ready', () => {
 				const data = JSON.parse(msg.content.toString());
 
 				query.questWhoCares(data, (whocares) => {
-
-					if (whocares.length !== 0) {
+					if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+					if (whocares.length !== 0 && Array.isArray(whocares)) {
 						gmaps.getAddress({
 							lat: data.latitude,
 							lon: data.longitude,
