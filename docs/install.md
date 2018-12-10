@@ -6,7 +6,7 @@
 * [NodeJS](https://nodejs.org/en/) 8 or newer
 * [RabbitMQ](rabbitmq.md) Amqp server
 * A working build of [RocketMap](http://rocketmap.readthedocs.io/en/develop/)
-* Dedicated [MySQL database](http://rocketmap.readthedocs.io/en/develop/basic-install/mysql.html) version 5.7.6 or newer
+* Dedicated [MySQL database](mysql.md) version 5.7.6 or newer
 
 
 #### Install
