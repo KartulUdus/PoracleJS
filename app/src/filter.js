@@ -10,7 +10,6 @@ const gmaps = require('./geo/google');
 const mustache = require('mustache');
 
 const monsterData = require(config.locale.monstersJson);
-const formData = require('./util/forms');
 const teamData = require('./util/teams');
 const weatherData = require('./util/weather');
 const raidCpData = require('./util/raidcp');
@@ -132,16 +131,11 @@ client.on('ready', () => {
 				data.ivcolor = findIvColor(data.iv);
 				data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
 				data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
-				data.imgurl = `${config.general.imgurl}${data.pokemon_id}`;
+				data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.padStart(3, '0')}_${data.form.padStart(2, '0')}.png`;
 				const e = [];
 				data.emoji = monsterData[data.pokemon_id].types.forEach((type) => {
 					e.push(type.emoji);
 				});
-				if (data.form && data.form !== '0' && data.pokemon_id in formData) {
-					data.formname = formData[data.pokemon_id][data.form];
-					data.imgurl = data.imgurl.concat(`-${data.formname}.png`);
-				}
-				else data.imgurl = data.imgurl.concat('.png');
 				if (data.tth.firstDateWasLater !== true) {
 
 					gmaps.pointInArea([data.latitude, data.longitude], (matched) => {
@@ -231,7 +225,7 @@ client.on('ready', () => {
 					data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true);
 					data.distime = moment(data.end * 1000).format(config.locale.time);
 					data.name = monsterData[data.pokemon_id].name;
-					data.imgurl = `${config.general.imgurl}${data.pokemon_id}.png`;
+					data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.padStart(3, '0')}_${data.form.padStart(2, '0')}.png`;
 					const e = [];
 					data.emoji = monsterData[data.pokemon_id].types.forEach((type) => {
 						e.push(type.emoji);
@@ -330,7 +324,7 @@ client.on('ready', () => {
 					data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 					data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true);
 					data.hatchtime = moment(data.start * 1000).format(config.locale.time);
-					data.imgurl = `${config.general.imgurl}egg${data.level}.png`;
+					data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/egg${data.level}.png`;
 					data.teamname = teamData[data.team_id].name;
 					data.color = teamData[data.team_id].color;
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
