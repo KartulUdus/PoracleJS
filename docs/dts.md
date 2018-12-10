@@ -65,6 +65,8 @@ Any of the fields can be cusomtized with the following:
 |{{tthh}}| Full hours until hidden|
 |{{tthm}}| Full minutes until hidden|
 |{{tths}}| Full seconds until hidden|
+|{{lat}}| Latitude of the alerted location|
+|{{lon}}| Longitude of the alerted location|
 |{{addr}}| Address of the alerted location|
 |{{streetNumber}}| Street number of the alerted location|
 |{{streetName}}| Street name of the alerted location|
@@ -126,6 +128,8 @@ Any of the fields can be cusomtized with the following:
 |{{tthh}}| Full hours until raid ends|
 |{{tthm}}| Full minutes until raid ends|
 |{{tths}}| Full seconds until raid ends|
+|{{lat}}| Latitude of the alerted location|
+|{{lon}}| Longitude of the alerted location|
 |{{addr}}| Address of the alerted location|
 |{{streetNumber}}| Street number of the alerted location|
 |{{streetName}}| Street name of the alerted location|
@@ -187,6 +191,8 @@ Any of the fields can be cusomtized with the following:
 |{{tthm}}| Full minutes until raid ends|
 |{{tths}}| Full seconds until raid ends|
 |{{addr}}| Address of the alerted location|
+|{{lat}}| Latitude of the alerted location|
+|{{lon}}| Longitude of the alerted location|
 |{{streetNumber}}| Street number of the alerted location|
 |{{streetName}}| Street name of the alerted location|
 |{{zipcode}}| Zip code of the alerted location|

@@ -148,7 +148,7 @@ client.on('ready', () => {
 						data.matched = matched;
 
 						query.monsterWhoCares(data, (whocares) => {
-							if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+							if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
 							if (whocares.length !== 0 && Array.isArray(whocares)) {
 
 								gmaps.getAddress({ lat: data.latitude, lon: data.longitude }, (err, geoResult) => {
@@ -180,6 +180,8 @@ client.on('ready', () => {
 										boostemoji: data.boostemoji,
 
 										// geocode stuff
+										lat: data.latitude,
+										lon: data.longitude,
 										addr: geoResult.addr,
 										streetNumber: geoResult.streetNumber,
 										streetName: geoResult.streetName,
@@ -199,7 +201,7 @@ client.on('ready', () => {
 									message = JSON.parse(message);
 									log.debug(typeof whocares);
 									whocares.forEach((cares) => {
-										log.debug(cares)
+										log.debug(cares);
 										sendDMAlarm(message, cares.id, e, cares.map_enabled);
 										log.info(`Alerted ${cares.name} about ${data.name} monster`);
 									});
@@ -255,7 +257,7 @@ client.on('ready', () => {
 									data.matched = matched;
 
 									query.raidWhoCares(data, (whocares) => {
-										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
 										if (whocares.length !== 0 && Array.isArray(whocares)) {
 											gmaps.getAddress({
 												lat: data.latitude,
@@ -286,6 +288,8 @@ client.on('ready', () => {
 													imgurl: data.imgurl.toLowerCase(),
 													color: data.color,
 													// geocode stuff
+													lat: data.latitude,
+													lon: data.longitude,
 													addr: geoResult.addr,
 													streetNumber: geoResult.streetNumber,
 													streetName: geoResult.streetName,
@@ -344,7 +348,7 @@ client.on('ready', () => {
 									data.matched = matched;
 
 									query.eggWhoCares(data, (whocares) => {
-										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
 										if (whocares.length !== 0 && Array.isArray(whocares)) {
 											gmaps.getAddress({
 												lat: data.latitude,
@@ -368,6 +372,8 @@ client.on('ready', () => {
 													color: data.color,
 													ex: data.ex,
 													// geocode stuff
+													lat: data.latitude,
+													lon: data.longitude,
 													addr: geoResult.addr,
 													streetNumber: geoResult.streetNumber,
 													streetName: geoResult.streetName,
@@ -458,7 +464,7 @@ client.on('ready', () => {
 				const data = JSON.parse(msg.content.toString());
 
 				query.questWhoCares(data, (whocares) => {
-					if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`)
+					if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
 					if (whocares.length !== 0 && Array.isArray(whocares)) {
 						gmaps.getAddress({
 							lat: data.latitude,
@@ -481,6 +487,8 @@ client.on('ready', () => {
 								mapurl: data.mapurl,
 								applemap: data.applemap,
 								// geocode stuff
+								lat: data.latitude,
+								lon: data.longitude,
 								addr: geoResult.addr,
 								streetNumber: geoResult.streetNumber,
 								streetName: geoResult.streetName,

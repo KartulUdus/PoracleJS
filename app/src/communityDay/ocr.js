@@ -3,6 +3,7 @@ const Jimp = require('jimp');
 const fs = require('fs');
 const config = require('config');
 const replaceColor = require('replace-color');
+const _ = require('lodash');
 
 const recognize = tesseract.withOptions({
 	psm: 11,
@@ -19,14 +20,14 @@ const luckyregex = new RegExp('[luckyvro]{5}:\\d+', 'gi');
 
 const log = require('../logger');
 
-let data = { activeEvent: false };
+const data = { activeEvent: false };
 
 
 function detect(imgLocation, callback) {
 	query.findActiveComEvent((err, event) => {
 		if (err) log.error(err);
 		if (!event) return callback(err, data);
-		let eventmon = event.monster_id.split(',').map(id => monsterData[id].name.toUpperCase())
+		const eventmon = event.monster_id.split(',').map(id => monsterData[id].name.toUpperCase());
 
 		data.correctPokemon = false;
 		data.activeEvent = eventmon;
@@ -49,17 +50,17 @@ function detect(imgLocation, callback) {
 					replaceColor: '#000000'
 				}
 			}, (err, jimpObject) => {
-				if (err) log.error(err)
+				if (err) log.error(err);
 				jimpObject.write(tmpFilename, (err) => {
-					if (err) log.error(err)
+					if (err) log.error(err);
 
 					recognize(`${tmpFilename}`, (err, text) => {
-						if(err) log.error(err)
-						if(!config.general.logLevel === 'debug') fs.unlinkSync(tmpFilename);		// delete temp file
-						text = text.toUpperCase()
+						if (err) log.error(err);
+						if (!config.general.logLevel === 'debug') fs.unlinkSync(tmpFilename);		// delete temp file
+						text = text.toUpperCase();
 
 						const dataArray = text.replace(/ /g, '').split('\n');
-						data.detectedOCR = dataArray
+						data.detectedOCR = dataArray;
 
 						dataArray.forEach((element) => {				// Search for known datapoints in detected text
 
@@ -67,10 +68,10 @@ function detect(imgLocation, callback) {
 							const matchCaught = caughtregex.exec(element.replace('/o/gi', '0'));
 							const matchLucky = luckyregex.exec(element.replace('/o/gi', '0'));
 
-							if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace(new RegExp('[sen]{4}:', 'gi'), ''));
-							if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace(new RegExp('[caughto]{6}:', 'gi'), ''));
-							if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace(new RegExp('[luckyvro]{5}:', 'gi'), ''));
-							if (_.includes([eventmon, element)){
+							if (matchSeen) data.seenCount = parseInt(matchSeen[0].replace(new RegExp('[sen]{4}:', 'gi'), ''), 10);
+							if (matchCaught) data.caughtCount = parseInt(matchCaught[0].replace(new RegExp('[caughto]{6}:', 'gi'), ''), 10);
+							if (matchLucky) data.luckyCount = parseInt(matchLucky[0].replace(new RegExp('[luckyvro]{5}:', 'gi'), ''), 10);
+							if (_.includes(eventmon, element)) {
 								data.correctPokemon = true;
 								data.monster_id = _.findKey(monsterData, mon => mon.name.toUpperCase() === element);
 							}
@@ -78,8 +79,8 @@ function detect(imgLocation, callback) {
 						log.debug(data);
 						return callback(err, data);		// send object of data
 					});
-				})
-			})
+				});
+			});
 
 
 		});
