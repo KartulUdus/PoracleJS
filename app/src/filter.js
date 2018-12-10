@@ -131,7 +131,7 @@ client.on('ready', () => {
 				data.ivcolor = findIvColor(data.iv);
 				data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
 				data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
-				data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.padStart(3, '0')}_${data.form.padStart(2, '0')}.png`;
+				data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`;
 				const e = [];
 				data.emoji = monsterData[data.pokemon_id].types.forEach((type) => {
 					e.push(type.emoji);
@@ -225,7 +225,7 @@ client.on('ready', () => {
 					data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true);
 					data.distime = moment(data.end * 1000).format(config.locale.time);
 					data.name = monsterData[data.pokemon_id].name;
-					data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.padStart(3, '0')}_${data.form.padStart(2, '0')}.png`;
+					data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`;
 					const e = [];
 					data.emoji = monsterData[data.pokemon_id].types.forEach((type) => {
 						e.push(type.emoji);
