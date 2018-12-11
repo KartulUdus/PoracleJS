@@ -101,6 +101,8 @@ This config file consist of different objects for different configurations.
     "token": "",
     "channel": "general",
     "admins": ["222742859059560458"],
+    "comDayResultChannelId":"514465201911758849",
+    "modRole":"",
     "prefix": "!",
     "typereact": true,
     "limitsec": 300,
@@ -121,6 +123,8 @@ This config file consist of different objects for different configurations.
 |token | Your [discord token](discordbot.md)|
 |channel | The text channel where registering `!poracle` is possible. |
 |admins| List of admin ID's that can register channel tracking and unregister users.|
+|comDayResultChannelId| channel where community bot results will be posted|
+|modRole| Role required to start community day events via `!createevent channelname pokemonname hours`|
 |prefix| Prefix to all discord `!commands`|
 |typereact| `true` or `false`. If true, bot will react to alarms with the type of that alarmed monster.|
 |limitsec| Amount of seconds during which a user can only receive `limitamount` alerts |

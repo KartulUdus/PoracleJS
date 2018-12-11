@@ -10,10 +10,11 @@ const gmaps = require('./geo/google');
 const mustache = require('mustache');
 
 const monsterData = require(config.locale.monstersJson);
-const formData = require('./util/forms');
 const teamData = require('./util/teams');
 const weatherData = require('./util/weather');
 const raidCpData = require('./util/raidcp');
+const questData = require('./util/quests');
+const rewardData = require('./util/rewards');
 const dts = require('../../config/dts');
 
 const moveData = require(config.locale.movesJson);
@@ -100,7 +101,7 @@ client.on('ready', () => {
 				data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
 				data.name = monsterData[data.pokemon_id].name;
 				data.formname = '';
-				if (data.individual_attack === null) {
+				if (!data.weight) {
 					data.iv = -1;
 					data.individual_attack = 0;
 					data.individual_defense = 0;
@@ -130,23 +131,19 @@ client.on('ready', () => {
 				data.ivcolor = findIvColor(data.iv);
 				data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
 				data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
-				data.imgurl = `${config.general.imgurl}${data.pokemon_id}`;
+				data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`;
 				const e = [];
 				data.emoji = monsterData[data.pokemon_id].types.forEach((type) => {
 					e.push(type.emoji);
 				});
-				if (data.form !== null && data.form !== 0) {
-					data.formname = formData[data.pokemon_id][data.form];
-					data.imgurl = data.imgurl.concat(`-${data.formname}.png`);
-				}
-				else data.imgurl = data.imgurl.concat('.png');
 				if (data.tth.firstDateWasLater !== true) {
 
 					gmaps.pointInArea([data.latitude, data.longitude], (matched) => {
 						data.matched = matched;
 
 						query.monsterWhoCares(data, (whocares) => {
-							if (whocares.length !== 0) {
+							if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
+							if (whocares.length !== 0 && Array.isArray(whocares)) {
 
 								gmaps.getAddress({ lat: data.latitude, lon: data.longitude }, (err, geoResult) => {
 
@@ -177,6 +174,8 @@ client.on('ready', () => {
 										boostemoji: data.boostemoji,
 
 										// geocode stuff
+										lat: data.latitude,
+										lon: data.longitude,
 										addr: geoResult.addr,
 										streetNumber: geoResult.streetNumber,
 										streetName: geoResult.streetName,
@@ -194,8 +193,9 @@ client.on('ready', () => {
 									const template = JSON.stringify(monsterDts);
 									let message = mustache.render(template, view);
 									message = JSON.parse(message);
+									log.debug(typeof whocares);
 									whocares.forEach((cares) => {
-
+										log.debug(cares);
 										sendDMAlarm(message, cares.id, e, cares.map_enabled);
 										log.info(`Alerted ${cares.name} about ${data.name} monster`);
 									});
@@ -225,7 +225,7 @@ client.on('ready', () => {
 					data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true);
 					data.distime = moment(data.end * 1000).format(config.locale.time);
 					data.name = monsterData[data.pokemon_id].name;
-					data.imgurl = `${config.general.imgurl}${data.pokemon_id}.png`;
+					data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`;
 					const e = [];
 					data.emoji = monsterData[data.pokemon_id].types.forEach((type) => {
 						e.push(type.emoji);
@@ -251,7 +251,8 @@ client.on('ready', () => {
 									data.matched = matched;
 
 									query.raidWhoCares(data, (whocares) => {
-										if (whocares.length !== 0) {
+										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
+										if (whocares.length !== 0 && Array.isArray(whocares)) {
 											gmaps.getAddress({
 												lat: data.latitude,
 												lon: data.longitude,
@@ -281,6 +282,8 @@ client.on('ready', () => {
 													imgurl: data.imgurl.toLowerCase(),
 													color: data.color,
 													// geocode stuff
+													lat: data.latitude,
+													lon: data.longitude,
 													addr: geoResult.addr,
 													streetNumber: geoResult.streetNumber,
 													streetName: geoResult.streetName,
@@ -321,7 +324,7 @@ client.on('ready', () => {
 					data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 					data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true);
 					data.hatchtime = moment(data.start * 1000).format(config.locale.time);
-					data.imgurl = `${config.general.imgurl}egg${data.level}.png`;
+					data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/egg${data.level}.png`;
 					data.teamname = teamData[data.team_id].name;
 					data.color = teamData[data.team_id].color;
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${gkey}`;
@@ -339,7 +342,8 @@ client.on('ready', () => {
 									data.matched = matched;
 
 									query.eggWhoCares(data, (whocares) => {
-										if (whocares.length !== 0) {
+										if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
+										if (whocares.length !== 0 && Array.isArray(whocares)) {
 											gmaps.getAddress({
 												lat: data.latitude,
 												lon: data.longitude,
@@ -362,6 +366,8 @@ client.on('ready', () => {
 													color: data.color,
 													ex: data.ex,
 													// geocode stuff
+													lat: data.latitude,
+													lon: data.longitude,
 													addr: geoResult.addr,
 													streetNumber: geoResult.streetNumber,
 													streetName: geoResult.streetName,
@@ -406,6 +412,7 @@ client.on('ready', () => {
 				const data = JSON.parse(msg.content.toString());
 				query.countQuery('id', 'gym-info', 'id', data.id, (err, exists) => {
 					if (exists === 0) {
+						if (!data.description) data.description = '';
 						data.name = data.name.replace(/"/g, '');
 						data.description = data.description.replace(/"/g, '');
 						data.name = data.name.replace(/\n/g, '');
@@ -436,6 +443,67 @@ client.on('ready', () => {
 						query.updateQuery('gym-info', 'park', data.park, 'id', data.gym_id);
 					}
 					else log.warn('Cannot update Park before gym-details');
+				});
+			}, { noAck: true });
+		});
+	});
+
+	amqp.connect(config.rabbit.conn, (err, conn) => {
+		conn.createChannel((err, ch) => {
+			const q = 'quest';
+
+			ch.assertQueue(q, { durable: false });
+			log.debug(`Reading ${q} bunnywabbit`);
+			ch.consume(q, (msg) => {
+				const data = JSON.parse(msg.content.toString());
+
+				query.questWhoCares(data, (whocares) => {
+					if (!Array.isArray(whocares)) log.error(`Unable to iterate query result ${whocares}`);
+					if (whocares.length !== 0 && Array.isArray(whocares)) {
+						gmaps.getAddress({
+							lat: data.latitude,
+							lon: data.longitude,
+						}, (err, geoResult) => {
+
+							data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
+							data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
+							data.tth = moment.preciseDiff(Date.now(), moment().endOf('day') * 1000, true);
+
+							const view = {
+								time: data.hatchtime,
+								tthh: data.tth.hours,
+								tthm: data.tth.minutes,
+								tths: data.tth.seconds,
+								name: data.name,
+								quest: questData[data.quest_id].name,
+								reward: rewardData[data.reward_id].name,
+								staticmap: data.staticmap,
+								mapurl: data.mapurl,
+								applemap: data.applemap,
+								// geocode stuff
+								lat: data.latitude,
+								lon: data.longitude,
+								addr: geoResult.addr,
+								streetNumber: geoResult.streetNumber,
+								streetName: geoResult.streetName,
+								zipcode: geoResult.zipcode,
+								country: geoResult.country,
+								countryCode: geoResult.countryCode,
+								city: geoResult.city,
+								state: geoResult.state,
+								stateCode: geoResult.stateCode,
+							};
+
+							const template = JSON.stringify(dts.quest);
+							let message = mustache.render(template, view);
+							log.debug(message);
+							message = JSON.parse(message);
+							whocares.forEach((cares) => {
+								sendDMAlarm(message, cares.id, [], cares.map_enabled);
+								log.info(`Alerted ${cares.name} about quest:'${data.quest}' with reward: '${data.reward}' `);
+							});
+						});
+					}
 				});
 			}, { noAck: true });
 		});

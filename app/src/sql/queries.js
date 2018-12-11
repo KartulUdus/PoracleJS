@@ -49,7 +49,7 @@ function insertOrUpdateQuery(table, columns, values) {
 function updateQuery(table, field, newvalue, col, value) {
 	pool.query('UPDATE ?? SET ?? = ? where ?? = ?', [table, field, newvalue, col, value], (err, result) => {
 		if (err) log.error(err);
-		log.debug(`updated ${field} in ${table}`);
+		log.debug(`updates ${field} in ${table}`);
 	});
 }
 
@@ -184,10 +184,71 @@ function eggWhoCares(data, callback) {
 	});
 }
 
+function questWhoCares(data, callback) {
+	let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `;
+	data.matched.forEach((area) => {
+		areastring = areastring.concat(`or humans.area like '%${area}%' `);
+	});
+	const query =
+            `select * from quest
+            join humans on humans.id = quest.id
+            where humans.enabled = 1 and
+            (quest_id = ${data.quest_id} or reward_id = ${data.quest_id}) and
+            (round( 6371000 * acos( cos( radians(${data.latitude}) )
+              * cos( radians( humans.latitude ) )
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) )
+              + sin( radians(${data.latitude}) )
+              * sin( radians( humans.latitude ) ) ) < quest.distance and egg.distance != 0) or
+               egg.distance = 0 and (${areastring}))`;
+	log.debug(query);
+	pool.query(query, (err, result) => {
+		if (err) {
+			log.error(err);
+			return callback(err);
+		}
+		log.info(`Quest id ${data.quest.id} for reward ${data.reward_id} was reported and ${result.length} humans cared`);
+		return callback(result);
+	});
+}
+
+function findActiveComEvent(callback) {
+
+	pool.query('SELECT * FROM comevent WHERE end_timestamp > now() and finished = false', (err, result) => {
+		if (err) log.error(err);
+		callback(err, result[0]);
+	});
+}
+
+function findExpiredComEvent(callback) {
+
+	pool.query('SELECT * FROM comevent WHERE end_timestamp < now() and finished = false', (err, result) => {
+		if (err) log.error(err);
+		callback(err, result[0]);
+	});
+}
+
+
+function getComEventResults(monsterId, eventStart, callback) {
+
+	const query = `
+		SELECT @n := @n + 1 n, discord_id, (max(seen) - min(seen)) seen, (max(caught) - min(caught)) caught, (max(lucky) - min(lucky)) lucky 
+		FROM comsubmission, (SELECT @n := 0) m
+		WHERE monster_id=${monsterId} 
+		AND (submit_timestamp BETWEEN '${eventStart}' AND now())
+		GROUP BY discord_id
+		ORDER BY caught DESC`;
+	pool.query(query, (err, result) => {
+		if (err) log.error(err);
+		callback(err, result);
+	});
+}
+
+
 module.exports = {
 	eggWhoCares,
 	raidWhoCares,
 	monsterWhoCares,
+	questWhoCares,
 	insertOrUpdateQuery,
 	insertQuery,
 	updateLocation,
@@ -199,5 +260,8 @@ module.exports = {
 	deleteMonsterQuery,
 	addOneQuery,
 	mysteryQuery,
+	findActiveComEvent,
+	findExpiredComEvent,
+	getComEventResults,
 };
 

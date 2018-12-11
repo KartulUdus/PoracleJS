@@ -471,6 +471,7 @@ client.on('message', (msg) => {
 						}
 						else if (element.match(/d\d/gi)) {
 							distance = element.replace(/d/gi, '');
+							if (distance.length >= 10) distance = distance.substr(0, 9);
 						}
 						else if (element.match(/atk\d/gi)) {
 							atk = element.replace(/atk/gi, '');
@@ -492,7 +493,6 @@ client.on('message', (msg) => {
 						}
 
 					});
-
 					if (monsters.length !== 0 && forms.length === 0) {
 						const form = 0;
 						monsters.forEach((monster) => {
@@ -628,6 +628,7 @@ client.on('message', (msg) => {
 						}
 						else if (element.match(/d\d/gi)) {
 							distance = element.replace(/d/gi, '');
+							if (distance.length >= 10) distance = distance.substr(0, 9);
 						}
 						else if (element.match(/atk\d/gi)) {
 							atk = element.replace(/atk/gi, '');
@@ -755,6 +756,7 @@ client.on('message', (msg) => {
 						}
 						else if (element.match(/d\d/gi)) {
 							distance = element.replace(/d/gi, '');
+							if (distance.length >= 10) distance = distance.substr(0, 9);
 						}
 						else if (element.match(/level\d/gi)) {
 							levels.push(element.replace(/level/gi, ''));
@@ -867,6 +869,7 @@ client.on('message', (msg) => {
 						}
 						else if (element.match(/d\d/gi)) {
 							distance = element.replace(/d/gi, '');
+							if (distance.length >= 10) distance = distance.substr(0, 9);
 						}
 						else if (element.match(/level\d/gi)) {
 							levels.push(element.replace(/level/gi, ''));
@@ -973,6 +976,7 @@ client.on('message', (msg) => {
 						}
 						else if (element.match(/d\d/gi)) {
 							distance = element.replace(/d/gi, '');
+							if (distance.length >= 10) distance = distance.substr(0, 9);
 						}
 						else if (element.match(/level\d/gi)) {
 							level = element.replace(/level/gi, '');
@@ -1057,6 +1061,7 @@ client.on('message', (msg) => {
 						}
 						else if (element.match(/d\d/gi)) {
 							distance = element.replace(/d/gi, '');
+							if (distance.length >= 10) distance = distance.substr(0, 9);
 						}
 						else if (element.match(/level\d/gi)) {
 							level = element.replace(/level/gi, '');

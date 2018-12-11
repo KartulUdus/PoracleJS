@@ -1,0 +1,290 @@
+{
+  "1": {
+    "name": "1 Charge TM"
+  },
+  "2": {
+    "name": "1 Max Revive"
+  },
+  "3": {
+    "name": "1 Pinap Berry"
+  },
+  "4": {
+    "name": "1 Rare Candy"
+  },
+  "5": {
+    "name": "1 Ultra Ball"
+  },
+  "6": {
+    "name": "10 Nanab Berries"
+  },
+  "7": {
+    "name": "10 Pokeballs"
+  },
+  "8": {
+    "name": "10 Ultra Balls"
+  },
+  "9": {
+    "name": "1000 Stardust"
+  },
+  "10": {
+    "name": "1000 XP"
+  },
+  "11": {
+    "name": "1-2 Pinap Berries"
+  },
+  "12": {
+    "name": "1-2 Rare Candy"
+  },
+  "13": {
+    "name": "1-3 Max Revives"
+  },
+  "14": {
+    "name": "1-3 Pinap Berries"
+  },
+  "15": {
+    "name": "1500 Stardust"
+  },
+  "16": {
+    "name": "2 Golden Razzberries"
+  },
+  "17": {
+    "name": "2 Pinap Berries"
+  },
+  "18": {
+    "name": "2 Revives"
+  },
+  "19": {
+    "name": "2 Ultra Balls"
+  },
+  "20": {
+    "name": "200 Stardust"
+  },
+  "21": {
+    "name": "200-500 Stardust"
+  },
+  "22": {
+    "name": "2-3 Rare Candies"
+  },
+  "23": {
+    "name": "2-4 Revives"
+  },
+  "24": {
+    "name": "3 Hyper Potions"
+  },
+  "25": {
+    "name": "3 Max Potions"
+  },
+  "26": {
+    "name": "3 Nanab Berries"
+  },
+  "27": {
+    "name": "3 Pinap Berries"
+  },
+  "28": {
+    "name": "3 Rare Candies"
+  },
+  "29": {
+    "name": "3 Razz Berries"
+  },
+  "30": {
+    "name": "3 Super Potions"
+  },
+  "31": {
+    "name": "3-6 Razz Berries"
+  },
+  "32": {
+    "name": "4 Revives"
+  },
+  "33": {
+    "name": "4-6 Razz Berries"
+  },
+  "34": {
+    "name": "5 Great Balls"
+  },
+  "35": {
+    "name": "5 Nanab Berries"
+  },
+  "36": {
+    "name": "5 Pokeballs"
+  },
+  "37": {
+    "name": "5 Potions"
+  },
+  "38": {
+    "name": "5 Razz Berries"
+  },
+  "39": {
+    "name": "5 Ultra Balls"
+  },
+  "40": {
+    "name": "500 Stardust"
+  },
+  "41": {
+    "name": "500 XP"
+  },
+  "42": {
+    "name": "5-10 Pokeballs"
+  },
+  "43": {
+    "name": "5-10 Ultra Balls"
+  },
+  "44": {
+    "name": "6 Nanab Berries"
+  },
+  "45": {
+    "name": "6 Razz Berries"
+  },
+  "46": {
+    "name": "6 Revives"
+  },
+  "47": {
+    "name": "9 Razz Berries"
+  },
+  "48": {
+    "name": "Aerodactyl"
+  },
+  "49": {
+    "name": "Bulbasaur"
+  },
+  "50": {
+    "name": "Chansey"
+  },
+  "51": {
+    "name": "Charmander"
+  },
+  "52": {
+    "name": "Charmeleon"
+  },
+  "53": {
+    "name": "Doduo"
+  },
+  "54": {
+    "name": "Dratini"
+  },
+  "55": {
+    "name": "Eevee"
+  },
+  "56": {
+    "name": "Ekans"
+  },
+  "57": {
+    "name": "Electabuzz"
+  },
+  "58": {
+    "name": "Electrike"
+  },
+  "59": {
+    "name": "Electrode"
+  },
+  "60": {
+    "name": "Exeggcute"
+  },
+  "61": {
+    "name": "Exeggutor"
+  },
+  "62": {
+    "name": "Flaafy"
+  },
+  "63": {
+    "name": "Flareon"
+  },
+  "64": {
+    "name": "Gastly"
+  },
+  "65": {
+    "name": "Gligar"
+  },
+  "66": {
+    "name": "Grimer"
+  },
+  "67": {
+    "name": "Growlithe"
+  },
+  "68": {
+    "name": "Houndour"
+  },
+  "69": {
+    "name": "Jolteon"
+  },
+  "70": {
+    "name": "Jynx"
+  },
+  "71": {
+    "name": "Larvitar"
+  },
+  "72": {
+    "name": "Machop"
+  },
+  "73": {
+    "name": "Magcargo"
+  },
+  "74": {
+    "name": "Magikarp"
+  },
+  "75": {
+    "name": "Magmar"
+  },
+  "76": {
+    "name": "Magneton"
+  },
+  "77": {
+    "name": "Mankey"
+  },
+  "78": {
+    "name": "Minum"
+  },
+  "79": {
+    "name": "Ninetales"
+  },
+  "80": {
+    "name": "Numel"
+  },
+  "81": {
+    "name": "Onix"
+  },
+  "82": {
+    "name": "Pikachu"
+  },
+  "83": {
+    "name": "Pinsir"
+  },
+  "84": {
+    "name": "Plusle"
+  },
+  "85": {
+    "name": "Poliwag"
+  },
+  "86": {
+    "name": "Ponyta"
+  },
+  "87": {
+    "name": "Quilava"
+  },
+  "88": {
+    "name": "Squirtle"
+  },
+  "89": {
+    "name": "Swablu"
+  },
+  "90": {
+    "name": "Tangela"
+  },
+  "91": {
+    "name": "Torchic"
+  },
+  "92": {
+    "name": "Typhlosion"
+  },
+  "93": {
+    "name": "Voltorb"
+  },
+  "94": {
+    "name": "Vulpix"
+  },
+  "95": {
+    "name": "Omanyte"
+  },
+  "96": {
+    "name": "Kabuto"
+  }
+}

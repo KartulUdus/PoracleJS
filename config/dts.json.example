@@ -73,6 +73,25 @@
       }
     }
   },
+  "quest": {
+    "embed": {
+      "title": "Quest to {{quest}} is available in {{name}}",
+      "description": "The reward for this quest is {{reward}}\nIt will be available until {{time}} \naddress: {{addr}}",
+      "url": "{{{mapurl}}}",
+      "color": "{{color}}",
+      "thumbnail": {
+        "url": "{{{detailsurl}}}"
+      },
+      "image": {
+        "url": "{{{staticmap}}}"
+      },
+      "author": {
+        "name": "Quest to {{quest}} is available",
+        "url": "{{{mapurl}}}",
+        "icon_url": "{{{imgurl}}}"
+      }
+    }
+  },
   "greeting": {
     "embed": {
       "title": "Welcome",

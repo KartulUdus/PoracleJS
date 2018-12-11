@@ -37,6 +37,8 @@
     "token": "",
     "channel": "general",
     "admins": ["222222222222222222"],
+    "comDayResultChannelId":"514465201911758849",
+    "modRole":"",
     "prefix": "!",
     "typereact": true,
     "limitsec": 300,
