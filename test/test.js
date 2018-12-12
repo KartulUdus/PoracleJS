@@ -1,11 +1,11 @@
 const config = require('config');
-const query = require('../app/src/sql/queries');
-const google = require('../app/src/geo/google');
+const query = require('../src/app/sql/queries');
+const google = require('../src/app/geo/google');
 const Discordjs = require('discord.js');
 const client = new Discordjs.Client();
 let token = config.discord.token;
-let sender = require("../app/src/send");
-const log = require("../app/src/logger");
+let sender = require("../src/app/send");
+const log = require("../src/app/logger");
 const fastify = require('fastify')();
 let chai = require('chai');
 

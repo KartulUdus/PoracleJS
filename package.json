@@ -11,11 +11,11 @@
     "test": "mocha --exit",
     "pm2": "npm i -g pm2",
     "start": "pm2 start ecosystem.config.json",
-    "webserver": "node app/src/server.js",
-    "worker": "node app/src/filter.js",
-    "discord": "node app/src/discord/commands.js",
-    "lint": "./node_modules/.bin/eslint ./app/src",
-    "community": "node app/src/communityDay/comDay.js",
+    "webserver": "node src/app/server.js",
+    "worker": "node src/app/filter.js",
+    "discord": "node src/app/discord/commands.js",
+    "lint": "./node_modules/.bin/eslint ./src/app",
+    "community": "node src/app/communityDay/comDay.js",
     "docs": "./node_modules/docsify-cli/bin/docsify serve docs"
   },
   "keywords": [

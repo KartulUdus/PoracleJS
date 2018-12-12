@@ -69,7 +69,6 @@ query.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', conf
 				migrator.migration2((result) => {
 					log.info(result);
 				});
-
 			}
 			if (res.val === 2) {
 				log.info(`Database version ${res.val} not ok, doing magic ...`);
