@@ -1,7 +1,7 @@
 class Monster{
 	discord;
 	db;
-
+	log;
 
 }
 
