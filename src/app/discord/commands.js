@@ -1171,7 +1171,7 @@ client.on('message', (msg) => {
 										hastebinMessage.then((hastelink) => {
 											msg.reply(`${msg.channel.name} tracking list is quite long. Have a look at ${hastelink}`);
 										})
-											.catch((err) => {
+											.catch(
 												log.error(`Hastebin unhappy: ${err}`);
 												msg.reply(`${msg.channel.name} tracking list is long, but Hastebin is also down. ☹️ \nPlease try again later.`);
 

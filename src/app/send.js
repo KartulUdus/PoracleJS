@@ -44,7 +44,6 @@ function sendHooks(queue, data) {
 			const cacheId = `${data.gym_id}_${raidPkmn}`;
 
 			if (cache.get(cacheId) === undefined) {
-
 				cache.put(cacheId, 'cachedRaid');
 				sendRabbitMQ(queue, data);
 			}

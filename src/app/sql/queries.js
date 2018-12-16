@@ -22,9 +22,9 @@ function selectOneQuery(where, column, value, callback) {
 
 function countQuery(what, from, where, value, callback) {
 
-	pool.query('SELECT count(??) as d FROM ?? WHERE ?? = ?', [what, from, where, value], (err, result) => {
+	pool.query('SELECT count(??) as count FROM ?? WHERE ?? = ?', [what, from, where, value], (err, result) => {
 		if (err) log.error(err);
-		callback(err, result[0].d);
+		callback(err, result[0].count);
 	});
 }
 function insertQuery(table, columns, values) {
