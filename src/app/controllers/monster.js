@@ -108,7 +108,7 @@ class Monster extends Controller{
 			data.pokemon_level = data.pokemon_level || 0
 			data.move_1 = data.move_1 || 0
 			data.move_2 = data.move_2 || 0
-			data.weight = data.weight.toFixed(1) ? data.weight.toFixed(1) : 0
+			data.weight = data.weight ? data.weight.toFixed(1) : 0
 			data.quick_move = moveData[data.move_1].name || ''
 			data.charge_move = moveData[data.move_2].name || ''
 			if (data.form === undefined || data.form === null) data.form = 0;
