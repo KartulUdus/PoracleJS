@@ -16,6 +16,8 @@
     "strict": [ "off" ],
     // when setting the property of an object, you can specify the name even if it's unnecessary (ie: { foo: foo })
     "object-shorthand": [ "off" ],
+    // semicolons at line ends make code less readable and are generally useless
+    "semi": [ "error", "never" ],
     // unused vars are an error, except for function arguments.
     // particularly with callbacks we may not use all the args, but we still like knowing they're available
     "no-unused-vars": [ "error", { "vars": "all", "args": "none", "ignoreRestSiblings": true } ],

@@ -103,7 +103,6 @@ module.exports =  async (req, reply) => {
 				}
 				console.log(hook)
 				raidController.handle(hook.message).then((work) => {
-					console.log(work)
 					work.forEach((job) => {
 						const ch = _.cloneDeep(discordcache.get(job.target));
 						if (ch === undefined) {
@@ -124,7 +123,6 @@ module.exports =  async (req, reply) => {
 						}
 					})
 				})
-
 
 				reply.send({webserver: 'happy'})
 				break

@@ -4,14 +4,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "61"
@@ -21,14 +17,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "421"
@@ -38,14 +30,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "641"
@@ -55,9 +43,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "119"
@@ -67,9 +53,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "1025"
@@ -79,14 +63,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "879"
@@ -96,9 +76,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "65"
@@ -108,9 +86,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "484"
@@ -120,9 +96,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "843"
@@ -132,9 +106,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": "51"
@@ -144,9 +116,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": "433"
@@ -156,14 +126,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "843"
@@ -173,14 +139,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "21"
@@ -190,14 +152,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "204"
@@ -207,14 +165,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "377"
@@ -224,14 +178,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "10"
@@ -241,14 +191,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "75"
@@ -258,14 +204,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "203"
@@ -275,9 +217,7 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "13"
@@ -287,9 +227,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "159"
@@ -299,14 +237,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "31"
@@ -316,14 +250,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "221"
@@ -333,9 +263,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "75"
@@ -345,9 +273,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "544"
@@ -357,9 +283,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": "92"
@@ -369,9 +293,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": "2051"
@@ -381,9 +303,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "163"
@@ -393,9 +313,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "1619"
@@ -405,9 +323,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "77"
@@ -417,9 +333,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "504"
@@ -429,14 +343,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "1398"
@@ -446,9 +356,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "77"
@@ -458,9 +366,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "586"
@@ -470,14 +376,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "1025"
@@ -487,9 +389,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": "85"
@@ -499,9 +399,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": "1309"
@@ -511,9 +409,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "188"
@@ -523,9 +419,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "1538"
@@ -535,14 +429,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": "101"
@@ -552,14 +442,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": "2051"
@@ -569,14 +455,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "24"
@@ -586,14 +468,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "209"
@@ -603,14 +481,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "91"
@@ -620,14 +494,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "592"
@@ -637,14 +507,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "1864"
@@ -654,14 +520,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": "44"
@@ -671,14 +533,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": "397"
@@ -688,14 +546,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "38"
@@ -705,14 +559,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "300"
@@ -722,9 +572,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "211"
@@ -734,9 +582,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "1663"
@@ -746,9 +592,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "106"
@@ -758,9 +602,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "1282"
@@ -770,9 +612,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "108"
@@ -782,9 +622,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "707"
@@ -794,9 +632,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "114"
@@ -806,9 +642,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "1061"
@@ -818,9 +652,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "77"
@@ -830,9 +662,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "932"
@@ -842,9 +672,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "95"
@@ -854,9 +682,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "481"
@@ -866,14 +692,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "1709"
@@ -883,9 +705,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "104"
@@ -895,9 +715,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "779"
@@ -907,9 +725,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "2461"
@@ -919,9 +735,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "217"
@@ -931,9 +745,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "1465"
@@ -943,9 +755,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "3418"
@@ -955,14 +765,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "86"
@@ -972,14 +778,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "496"
@@ -989,14 +791,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "2051"
@@ -1006,14 +804,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "275"
@@ -1023,14 +817,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "615"
@@ -1040,14 +830,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "121"
@@ -1057,14 +843,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "707"
@@ -1074,14 +856,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "2797"
@@ -1091,9 +869,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "121"
@@ -1103,9 +879,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "992"
@@ -1115,14 +889,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "175"
@@ -1132,14 +902,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "947"
@@ -1149,14 +915,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": "200"
@@ -1166,14 +928,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": "2051"
@@ -1183,14 +941,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "61527"
@@ -1200,14 +954,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "77"
@@ -1217,14 +967,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "634"
@@ -1234,9 +980,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "196"
@@ -1246,14 +990,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": "1578"
@@ -1263,9 +1003,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "879"
@@ -1275,9 +1013,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "7691"
@@ -1287,9 +1023,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "177"
@@ -1299,14 +1033,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": "1578"
@@ -1316,14 +1046,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "77"
@@ -1333,14 +1059,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "419"
@@ -1350,14 +1072,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "1758"
@@ -1367,14 +1085,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "269"
@@ -1384,9 +1098,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "39"
@@ -1396,9 +1108,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "322"
@@ -1408,9 +1118,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "73"
@@ -1420,9 +1128,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "530"
@@ -1432,9 +1138,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": "276"
@@ -1444,9 +1148,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": "1985"
@@ -1456,14 +1158,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "123"
@@ -1473,14 +1171,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "1231"
@@ -1490,9 +1184,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "163"
@@ -1502,9 +1194,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": "1431"
@@ -1514,9 +1204,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "504"
@@ -1526,9 +1214,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": "446"
@@ -1538,9 +1224,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "443"
@@ -1550,9 +1234,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "213"
@@ -1562,9 +1244,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": "1398"
@@ -1574,14 +1254,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": "110"
@@ -1591,14 +1267,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": "867"
@@ -1608,9 +1280,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "1256"
@@ -1620,9 +1290,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": "346"
@@ -1632,9 +1300,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "2461"
@@ -1644,9 +1310,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "104"
@@ -1656,9 +1320,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "760"
@@ -1668,9 +1330,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "103"
@@ -1680,9 +1340,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "684"
@@ -1692,9 +1350,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "97"
@@ -1704,14 +1360,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "1206"
@@ -1721,14 +1373,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": "1431"
@@ -1738,14 +1386,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "155"
@@ -1755,14 +1399,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "152"
@@ -1772,9 +1412,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": "261"
@@ -1784,9 +1422,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "213"
@@ -1796,9 +1432,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": "99"
@@ -1808,9 +1442,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "153"
@@ -1820,9 +1452,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "79"
@@ -1832,14 +1462,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "2279"
@@ -1849,14 +1475,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": "1183"
@@ -1866,9 +1488,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "30764"
@@ -1878,9 +1498,7 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "24"
@@ -1890,9 +1508,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "1465"
@@ -1902,9 +1518,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": "1309"
@@ -1914,9 +1528,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": "1568"
@@ -1926,9 +1538,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "867"
@@ -1938,14 +1548,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "346"
@@ -1955,14 +1561,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "6153"
@@ -1972,14 +1574,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "356"
@@ -1989,14 +1587,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": "2930"
@@ -2006,14 +1600,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "879"
@@ -2023,9 +1613,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": "284"
@@ -2035,14 +1623,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "99999"
@@ -2052,14 +1636,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "99999"
@@ -2069,14 +1649,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "99999"
@@ -2086,9 +1662,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": "91"
@@ -2098,9 +1672,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": "699"
@@ -2110,14 +1682,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": "580"
@@ -2127,9 +1695,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "99999"
@@ -2139,9 +1705,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": "99999"
@@ -2151,9 +1715,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -2163,9 +1725,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -2175,9 +1735,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -2187,9 +1745,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -2199,9 +1755,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -2211,9 +1765,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -2223,9 +1775,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -2235,9 +1785,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -2247,9 +1795,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -2259,9 +1805,7 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -2271,9 +1815,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -2283,14 +1825,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2300,14 +1838,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2317,14 +1851,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2334,14 +1864,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2351,14 +1877,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -2368,14 +1890,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -2385,14 +1903,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2402,14 +1916,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -2419,14 +1929,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -2436,9 +1942,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -2448,9 +1952,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -2460,14 +1962,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -2477,9 +1975,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -2489,14 +1985,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2506,14 +1998,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2523,14 +2011,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2540,9 +2024,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -2552,9 +2034,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -2564,9 +2044,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -2576,9 +2054,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -2588,14 +2064,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -2605,14 +2077,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -2622,9 +2090,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -2634,9 +2100,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -2646,14 +2110,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2663,14 +2123,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2680,14 +2136,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2697,9 +2149,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -2709,9 +2159,7 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -2721,9 +2169,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -2733,14 +2179,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2750,14 +2192,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -2767,14 +2205,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -2784,9 +2218,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -2796,9 +2228,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -2808,14 +2238,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2825,14 +2251,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -2842,9 +2264,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -2854,9 +2274,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -2866,9 +2284,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -2878,14 +2294,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -2895,9 +2307,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -2907,14 +2317,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -2924,9 +2330,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -2936,14 +2340,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -2953,14 +2353,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -2970,9 +2366,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -2982,9 +2376,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -2994,14 +2386,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -3011,14 +2399,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -3028,14 +2412,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -3045,14 +2425,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -3062,14 +2438,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -3079,9 +2451,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3091,9 +2461,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3103,9 +2471,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -3115,14 +2481,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -3132,14 +2494,10 @@
     "rarity": "Common",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3149,14 +2507,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3166,14 +2520,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -3183,9 +2533,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -3195,9 +2543,7 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -3207,14 +2553,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3224,14 +2566,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3241,14 +2579,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3258,14 +2592,10 @@
     "rarity": "Uncommon",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -3275,14 +2605,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -3292,14 +2618,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -3309,9 +2631,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3321,9 +2641,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3333,9 +2651,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3345,9 +2661,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3357,9 +2671,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3369,9 +2681,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -3381,9 +2691,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -3393,14 +2701,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -3410,9 +2714,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -3422,9 +2724,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -3434,9 +2734,7 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3446,9 +2744,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3458,9 +2754,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -3470,9 +2764,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -3482,9 +2774,7 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -3494,14 +2784,10 @@
     "rarity": "Very Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3511,14 +2797,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3528,14 +2810,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -3545,14 +2823,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3562,14 +2836,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3579,14 +2849,10 @@
     "rarity": "Ultra Rare",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3596,9 +2862,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3608,9 +2872,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3620,9 +2882,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3632,9 +2892,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -3644,14 +2902,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -3661,14 +2915,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -3678,9 +2928,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -3690,14 +2938,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3707,14 +2951,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -3724,9 +2964,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -3736,9 +2974,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -3748,9 +2984,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3760,9 +2994,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -3772,9 +3004,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -3784,9 +3014,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -3796,14 +3024,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3813,9 +3037,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -3825,14 +3047,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -3842,14 +3060,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3859,14 +3073,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3876,14 +3086,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3893,9 +3099,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -3905,14 +3109,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -3922,14 +3122,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -3939,14 +3135,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3956,14 +3148,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3973,14 +3161,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -3990,14 +3174,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -4007,14 +3187,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -4024,14 +3200,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -4041,14 +3213,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -4058,14 +3226,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -4075,14 +3239,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -4092,9 +3252,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -4104,14 +3262,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -4121,9 +3275,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4133,9 +3285,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4145,9 +3295,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4157,14 +3305,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -4174,14 +3318,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -4191,14 +3331,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -4208,9 +3344,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4220,9 +3354,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4232,9 +3364,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4244,9 +3374,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -4256,9 +3384,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -4268,14 +3394,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -4285,9 +3407,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -4297,9 +3417,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4309,9 +3427,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4321,14 +3437,10 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -4338,14 +3450,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -4355,14 +3463,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -4372,14 +3476,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -4389,14 +3489,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -4406,14 +3502,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4423,14 +3515,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4440,9 +3528,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -4452,9 +3538,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -4464,9 +3548,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -4476,9 +3558,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -4488,9 +3568,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -4500,9 +3578,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -4512,14 +3588,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -4529,9 +3601,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -4541,9 +3611,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -4553,14 +3621,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -4570,14 +3634,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -4587,9 +3647,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -4599,9 +3657,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -4611,14 +3667,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -4628,14 +3680,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -4645,9 +3693,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -4657,9 +3703,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4669,9 +3713,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4681,9 +3723,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4693,9 +3733,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -4705,14 +3743,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -4722,14 +3756,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -4739,9 +3769,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -4751,14 +3779,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -4768,14 +3792,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -4785,14 +3805,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -4802,9 +3818,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -4814,9 +3828,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -4826,14 +3838,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4843,14 +3851,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4860,14 +3864,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -4877,14 +3877,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -4894,9 +3890,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -4906,14 +3900,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -4923,14 +3913,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4940,14 +3926,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -4957,14 +3939,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -4974,14 +3952,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -4991,14 +3965,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -5008,14 +3978,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -5025,9 +3991,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5037,9 +4001,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5049,9 +4011,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -5061,9 +4021,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -5073,9 +4031,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -5085,9 +4041,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -5097,9 +4051,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -5109,9 +4061,7 @@
     "rarity": "Rare",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -5121,14 +4071,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5138,9 +4084,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5150,9 +4094,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -5162,9 +4104,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5174,9 +4114,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -5186,9 +4124,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -5198,14 +4134,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5215,14 +4147,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5232,14 +4160,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5249,9 +4173,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5261,9 +4183,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5273,9 +4193,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5285,14 +4203,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -5302,9 +4216,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5314,9 +4226,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -5326,9 +4236,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -5338,14 +4246,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5355,14 +4259,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5372,14 +4272,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5389,14 +4285,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5406,9 +4298,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -5418,9 +4308,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -5430,9 +4318,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -5442,14 +4328,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5459,14 +4341,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5476,9 +4354,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5488,9 +4364,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -5500,14 +4374,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5517,14 +4387,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5534,9 +4400,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -5546,9 +4410,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -5558,9 +4420,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -5570,14 +4430,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -5587,9 +4443,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -5599,14 +4453,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -5616,14 +4466,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -5633,9 +4479,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5645,9 +4489,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5657,14 +4499,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -5674,14 +4512,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5691,14 +4525,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5708,14 +4538,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5725,9 +4551,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -5737,14 +4561,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -5754,9 +4574,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -5766,9 +4584,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -5778,9 +4594,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -5790,9 +4604,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -5802,9 +4614,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -5814,14 +4624,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -5831,14 +4637,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -5848,9 +4650,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -5860,9 +4660,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -5872,14 +4670,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -5889,14 +4683,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -5906,9 +4696,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -5918,14 +4706,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -5935,14 +4719,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5952,14 +4732,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5969,14 +4745,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -5986,9 +4758,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -5998,9 +4768,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -6010,9 +4778,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -6022,9 +4788,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -6034,9 +4798,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -6046,9 +4808,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -6058,14 +4818,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -6075,9 +4831,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6087,14 +4841,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6104,14 +4854,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6121,9 +4867,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6133,9 +4877,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6145,9 +4887,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -6157,14 +4897,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6174,9 +4910,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6186,9 +4920,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6198,9 +4930,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -6210,14 +4940,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -6227,14 +4953,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -6244,14 +4966,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -6261,14 +4979,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -6278,9 +4992,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -6290,14 +5002,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -6307,9 +5015,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6319,14 +5025,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6336,14 +5038,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -6353,14 +5051,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -6370,14 +5064,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -6387,14 +5077,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -6404,9 +5090,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6416,9 +5100,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -6428,14 +5110,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -6445,9 +5123,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -6457,9 +5133,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -6469,14 +5143,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -6486,14 +5156,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -6503,14 +5169,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -6520,14 +5182,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -6537,9 +5195,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -6549,9 +5205,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -6561,9 +5215,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -6573,14 +5225,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6590,14 +5238,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -6607,14 +5251,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -6624,14 +5264,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -6641,14 +5277,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -6658,9 +5290,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6670,14 +5300,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -6687,9 +5313,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -6699,9 +5323,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -6711,9 +5333,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -6723,14 +5343,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6740,14 +5356,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6757,9 +5369,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -6769,9 +5379,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -6781,14 +5389,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -6798,14 +5402,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -6815,9 +5415,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -6827,14 +5425,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -6844,14 +5438,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -6861,9 +5451,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -6873,14 +5461,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -6890,14 +5474,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -6907,9 +5487,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -6919,9 +5497,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -6931,9 +5507,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -6943,14 +5517,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -6960,14 +5530,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -6977,14 +5543,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -6994,9 +5556,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7006,14 +5566,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -7023,9 +5579,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -7035,9 +5589,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7047,9 +5599,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7059,9 +5609,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -7071,9 +5619,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7083,9 +5629,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7095,14 +5639,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -7112,9 +5652,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7124,9 +5662,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7136,9 +5672,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7148,9 +5682,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -7160,14 +5692,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -7177,14 +5705,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -7194,9 +5718,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7206,9 +5728,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7218,9 +5738,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7230,9 +5748,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7242,9 +5758,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7254,9 +5768,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7266,9 +5778,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7278,9 +5788,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7290,9 +5798,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -7302,9 +5808,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -7314,9 +5818,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7326,9 +5828,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7338,9 +5838,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -7350,9 +5848,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -7362,9 +5858,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7374,9 +5868,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7386,9 +5878,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -7398,9 +5888,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -7410,14 +5898,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -7427,14 +5911,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -7444,14 +5924,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -7461,9 +5937,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -7473,9 +5947,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -7485,9 +5957,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -7497,9 +5967,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -7509,9 +5977,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -7521,14 +5987,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -7538,14 +6000,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -7555,9 +6013,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -7567,14 +6023,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -7584,9 +6036,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -7596,9 +6046,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -7608,9 +6056,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -7620,9 +6066,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -7632,9 +6076,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7644,14 +6086,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -7661,14 +6099,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -7678,9 +6112,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -7690,9 +6122,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -7702,14 +6132,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7719,14 +6145,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7736,14 +6158,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7753,14 +6171,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -7770,14 +6184,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -7787,14 +6197,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -7804,14 +6210,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -7821,14 +6223,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -7838,9 +6236,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7850,9 +6246,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7862,9 +6256,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -7874,14 +6266,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -7891,14 +6279,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -7908,14 +6292,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -7925,9 +6305,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -7937,9 +6315,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -7949,9 +6325,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -7961,14 +6335,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -7978,14 +6348,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -7995,14 +6361,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -8012,14 +6374,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -8029,14 +6387,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8046,9 +6400,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -8058,9 +6410,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -8070,14 +6420,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -8087,14 +6433,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       }
     ],
     "spawn_rate": ""
@@ -8104,14 +6446,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8121,14 +6459,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8138,9 +6472,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -8150,9 +6482,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -8162,9 +6492,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -8174,9 +6502,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -8186,9 +6512,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -8198,9 +6522,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -8210,9 +6532,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8222,9 +6542,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8234,9 +6552,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8246,9 +6562,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8258,9 +6572,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8270,9 +6582,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8282,14 +6592,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8299,14 +6605,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8316,9 +6618,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -8328,9 +6628,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -8340,9 +6638,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -8352,14 +6648,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -8369,14 +6661,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -8386,14 +6674,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8403,9 +6687,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -8415,14 +6697,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8432,14 +6710,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -8449,14 +6723,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       }
     ],
     "spawn_rate": ""
@@ -8466,14 +6736,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -8483,14 +6749,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -8500,9 +6762,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -8512,14 +6772,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -8529,14 +6785,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -8546,14 +6798,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8563,14 +6811,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8580,9 +6824,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8592,9 +6834,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8604,9 +6844,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8616,9 +6854,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -8628,9 +6864,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -8640,9 +6874,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -8652,9 +6884,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8664,9 +6894,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -8676,14 +6904,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -8693,14 +6917,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -8710,14 +6930,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -8727,9 +6943,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -8739,9 +6953,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -8751,9 +6963,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -8763,9 +6973,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -8775,9 +6983,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -8787,9 +6993,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -8799,9 +7003,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -8811,9 +7013,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -8823,14 +7023,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -8840,9 +7036,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -8852,9 +7046,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -8864,9 +7056,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -8876,14 +7066,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -8893,14 +7079,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -8910,14 +7092,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8927,14 +7105,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -8944,9 +7118,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -8956,14 +7128,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8973,14 +7141,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -8990,14 +7154,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9007,14 +7167,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9024,9 +7180,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -9036,14 +7190,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -9053,14 +7203,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -9070,14 +7216,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -9087,14 +7229,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -9104,14 +7242,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -9121,14 +7255,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -9138,14 +7268,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -9155,14 +7281,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -9172,14 +7294,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -9189,9 +7307,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9201,14 +7317,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9218,14 +7330,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -9235,14 +7343,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       }
     ],
     "spawn_rate": ""
@@ -9252,14 +7356,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9269,14 +7369,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -9286,14 +7382,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -9303,14 +7395,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -9320,14 +7408,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       }
     ],
     "spawn_rate": ""
@@ -9337,9 +7421,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -9349,9 +7431,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -9361,14 +7441,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       },
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -9378,9 +7454,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -9390,9 +7464,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       }
     ],
     "spawn_rate": ""
@@ -9402,14 +7474,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -9419,9 +7487,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -9431,9 +7497,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -9443,14 +7507,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -9460,9 +7520,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -9472,14 +7530,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -9489,14 +7543,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9506,14 +7556,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9523,14 +7569,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9540,9 +7582,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -9552,9 +7592,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       }
     ],
     "spawn_rate": ""
@@ -9564,14 +7602,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Bug",
-        "emoji": "🐛",
-        "color": 11057184
+        "type": "Bug"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -9581,14 +7615,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -9598,14 +7628,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -9615,9 +7641,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -9627,9 +7651,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -9639,9 +7661,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -9651,9 +7671,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -9663,9 +7681,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -9675,9 +7691,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       }
     ],
     "spawn_rate": ""
@@ -9687,14 +7701,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       },
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       }
     ],
     "spawn_rate": ""
@@ -9704,9 +7714,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -9716,9 +7724,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -9728,9 +7734,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -9740,14 +7744,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -9757,14 +7757,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -9774,14 +7770,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -9791,9 +7783,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -9803,9 +7793,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -9815,9 +7803,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -9827,9 +7813,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -9839,14 +7823,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -9856,14 +7836,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       }
     ],
     "spawn_rate": ""
@@ -9873,14 +7849,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -9890,14 +7862,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -9907,14 +7875,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -9924,14 +7888,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Poison",
-        "emoji": "☠",
-        "color": 10502304
+        "type": "Poison"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -9941,9 +7901,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -9953,9 +7911,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
@@ -9965,14 +7921,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -9982,14 +7934,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Normal",
-        "emoji": "⭕",
-        "color": 9079385
+        "type": "Normal"
       }
     ],
     "spawn_rate": ""
@@ -9999,14 +7947,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -10016,14 +7960,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -10033,14 +7973,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -10050,14 +7986,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -10067,9 +7999,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -10079,14 +8009,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fighting",
-        "emoji": "👊",
-        "color": 12595240
+        "type": "Fighting"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -10096,14 +8022,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Electric",
-        "emoji": "⚡",
-        "color": 16306224
+        "type": "Electric"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -10113,14 +8035,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -10130,9 +8048,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -10142,9 +8058,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -10154,9 +8068,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -10166,14 +8078,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Steel",
-        "emoji": "🔩",
-        "color": 12105936
+        "type": "Steel"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -10183,14 +8091,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -10200,14 +8104,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -10217,14 +8117,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -10234,14 +8130,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       },
       {
-        "type": "Grass",
-        "emoji": "🌿",
-        "color": 7915600
+        "type": "Grass"
       }
     ],
     "spawn_rate": ""
@@ -10251,9 +8143,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -10263,9 +8153,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Ice",
-        "emoji": "❄",
-        "color": 10016984
+        "type": "Ice"
       }
     ],
     "spawn_rate": ""
@@ -10275,14 +8163,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -10292,14 +8176,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       },
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       }
     ],
     "spawn_rate": ""
@@ -10309,9 +8189,7 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -10321,14 +8199,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dark",
-        "emoji": "🌑",
-        "color": 7368816
+        "type": "Dark"
       },
       {
-        "type": "Flying",
-        "emoji": "🐦",
-        "color": 11047152
+        "type": "Flying"
       }
     ],
     "spawn_rate": ""
@@ -10338,14 +8212,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Dragon",
-        "emoji": "🐲",
-        "color": 7354616
+        "type": "Dragon"
       },
       {
-        "type": "Ground",
-        "emoji": "🗿",
-        "color": 14729320
+        "type": "Ground"
       }
     ],
     "spawn_rate": ""
@@ -10355,14 +8225,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Rock",
-        "emoji": "🗿",
-        "color": 12099640
+        "type": "Rock"
       },
       {
-        "type": "Fairy",
-        "emoji": "🦋",
-        "color": 15243496
+        "type": "Fairy"
       }
     ],
     "spawn_rate": ""
@@ -10372,14 +8238,10 @@
     "rarity": "",
     "types": [
       {
-        "type": "Psychic",
-        "emoji": "🔮",
-        "color": 16275592
+        "type": "Psychic"
       },
       {
-        "type": "Ghost",
-        "emoji": "👻",
-        "color": 7362712
+        "type": "Ghost"
       }
     ],
     "spawn_rate": ""
@@ -10389,17 +8251,12 @@
     "rarity": "",
     "types": [
       {
-        "type": "Fire",
-        "emoji": "🔥",
-        "color": 15761456
+        "type": "Fire"
       },
       {
-        "type": "Water",
-        "emoji": "💧",
-        "color": 6852848
+        "type": "Water"
       }
     ],
     "spawn_rate": ""
-
   }
 }

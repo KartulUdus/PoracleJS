@@ -4,14 +4,13 @@ const config = require('config');
 
 const _ = require('lodash')
 const mustache = require('mustache');
-
+const emojiFlags = require('emoji-flags')
+const pokemonGif = require('pokemon-gif');
 
 const monsterData = require(config.locale.monstersJson)
-const teamData = require('../util/teams')
 const weatherData = require('../util/weather')
-const raidCpData = require('../util/raidcp')
-const questData = require('../util/quests')
-const rewardData = require('../util/rewards')
+
+const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
 const ivColorData = config.discord.iv_colors
 const moment = require('moment')
@@ -118,18 +117,19 @@ class Monster extends Controller{
 			data.boostemoji = weatherData[data.weather_boosted_condition].emoji || '';
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
-			data.color = monsterData[data.pokemon_id].types[0].color || 0;
+			data.color = types[monsterData[data.pokemon_id].types[0].type].color || 0;
 			data.ivcolor = this.findIvColor(data.iv);
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
 			data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`;
 			let e = [];
 			monsterData[data.pokemon_id].types.forEach((type) => {
-				e.push(type.emoji);
+				e.push(types[type.type].emoji);
 			});
 			data.emoji = e
+			data.emojiString = e.join('')
 
-				// Stop handling if it already disappeared
+			// Stop handling if it already disappeared
 			if (data.tth.firstDateWasLater){
 				log.warn(`Weird, the ${data.name} already disappeared`)
 				return null
@@ -168,6 +168,7 @@ class Monster extends Controller{
 								rocketmap: data.rocketmap,
 								form: data.formname,
 								imgurl: data.imgurl.toLowerCase(),
+								gif: pokemonGif(Number(data.pokemon_id)),
 								color: data.color,
 								ivcolor: data.ivcolor,
 								boost: data.boost,
@@ -185,13 +186,16 @@ class Monster extends Controller{
 								city: geoResult.city,
 								state: geoResult.state,
 								stateCode: geoResult.stateCode,
+								flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji,
+								emojiString: data.emojiString
+
 							};
 							const monsterDts = data.iv === -1 && dts.monsterNoIv
-								? dts.monsterNoIv
-								: dts.monster;
-							const template = JSON.stringify(monsterDts);
-							let message = mustache.render(template, view);
-							message = JSON.parse(message);
+								? dts.monsterNoIv[`${cares.template}`]
+								: dts.monster[`${cares.template}`]
+							const template = JSON.stringify(monsterDts)
+							let message = mustache.render(template, view)
+							message = JSON.parse(message)
 
 							let work = {
 								message: message,

@@ -1,21 +1,18 @@
 const Controller = require('./controller')
-const config = require('config');
-const log = require('../logger');
+const config = require('config')
+const log = require('../logger')
+const emojiFlags = require('emoji-flags')
+const pokemonGif = require('pokemon-gif');
 
 const _ = require('lodash')
-const mustache = require('mustache');
-
+const mustache = require('mustache')
 
 const monsterData = require(config.locale.monstersJson)
 const teamData = require('../util/teams')
-const weatherData = require('../util/weather')
-const raidCpData = require('../util/raidcp')
-const questData = require('../util/quests')
-const rewardData = require('../util/rewards')
+const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
-const ivColorData = config.discord.iv_colors
 const moment = require('moment')
-require('moment-precise-range-plugin');
+require('moment-precise-range-plugin')
 
 const dts = require('../../../config/dts')
 
@@ -114,9 +111,10 @@ class Raid extends Controller{
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00}.png`;
 				const e = [];
 				monsterData[data.pokemon_id].types.forEach((type) => {
-					e.push(type.emoji);
+					e.push(types[type.type].emoji);
 				})
 				data.emoji = e
+				data.emojiString = e.join('')
 				data.teamname = !!(data.team_id) ? teamData[data.team_id].name : 'Harmony'
 				data.color = !!(data.team_id) ? teamData[data.team_id].color : 0
 				if(!data.team_id) data.team_id = 4
@@ -142,56 +140,67 @@ class Raid extends Controller{
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
 										let jobs = []
-										whoCares.forEach((cares) => {
+											whoCares.forEach((cares) => {
+											Promise.all([
+												this.getCp(data.pokemon_id, 20, 10,10,10),
+												this.getCp(data.pokemon_id, 20, 15,15,15),
+												this.getCp(data.pokemon_id, 25, 10,10,10),
+												this.getCp(data.pokemon_id, 25, 15,15,15)
+											]).then((cps) => {
+												const view = {
+													id: data.pokemon_id,
+													time: data.distime,
+													tthh: data.tth.hours,
+													tthm: data.tth.minutes,
+													tths: data.tth.seconds,
+													name: data.name,
+													mincp20: cps[0],
+													cp20: cps[1],
+													mincp25: cps[2],
+													cp25: cps[3],
+													gymname: data.gymname,
+													description: data.description,
+													move1: data.quick_move,
+													move2: data.charge_move,
+													level: data.level,
+													ex: data.ex,
+													staticmap: data.staticmap,
+													detailsurl: data.url,
+													mapurl: data.mapurl,
+													applemap: data.applemap,
+													rocketmap: data.rocketmap,
+													imgurl: data.imgurl.toLowerCase(),
+													gif : pokemonGif(Number(data.pokemon_id)),
+													color: data.color,
+													// geocode stuff
+													lat: data.latitude.toString().substring(0, 8),
+													lon: data.longitude.toString().substring(0, 8),
+													addr: geoResult.addr,
+													streetNumber: geoResult.streetNumber,
+													streetName: geoResult.streetName,
+													zipcode: geoResult.zipcode,
+													country: geoResult.country,
+													countryCode: geoResult.countryCode,
+													city: geoResult.city,
+													state: geoResult.state,
+													stateCode: geoResult.stateCode,
+													flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji,
+													emojistring: data.emojiString
 
-											const view = {
-												time: data.distime,
-												tthh: data.tth.hours,
-												tthm: data.tth.minutes,
-												tths: data.tth.seconds,
-												name: data.name,
-												cp20: raidCpData[data.pokemon_id].max_cp_20,
-												cp25: raidCpData[data.pokemon_id].max_cp_25,
-												mincp20: raidCpData[data.pokemon_id].min_cp_20,
-												mincp25: raidCpData[data.pokemon_id].min_cp_25,
-												gymname: data.gymname,
-												description: data.description,
-												move1: data.quick_move,
-												move2: data.charge_move,
-												level: data.level,
-												ex: data.ex,
-												staticmap: data.staticmap,
-												detailsurl: data.url,
-												mapurl: data.mapurl,
-												applemap: data.applemap,
-												rocketmap: data.rocketmap,
-												imgurl: data.imgurl.toLowerCase(),
-												color: data.color,
-												// geocode stuff
-												lat: data.latitude.toString().substring(0, 8),
-												lon: data.longitude.toString().substring(0, 8),
-												addr: geoResult.addr,
-												streetNumber: geoResult.streetNumber,
-												streetName: geoResult.streetName,
-												zipcode: geoResult.zipcode,
-												country: geoResult.country,
-												countryCode: geoResult.countryCode,
-												city: geoResult.city,
-												state: geoResult.state,
-												stateCode: geoResult.stateCode,
-											};
-											const template = JSON.stringify(dts.raid);
-											let message = mustache.render(template, view);
-											log.debug(message);
-											message = JSON.parse(message);
+												};
+												const template = JSON.stringify(dts.raid[`${cares.template}`]);
+												let message = mustache.render(template, view);
+												log.debug(message);
+												message = JSON.parse(message);
 
-											let work = {
-												message: message,
-												target: cares.id,
-												name: cares.name,
-												emoji: data.emoji
-											}
-											jobs.push(work)
+												let work = {
+													message: message,
+													target: cares.id,
+													name: cares.name,
+													emoji: data.emoji
+												}
+												jobs.push(work)
+											})
 										})
 										resolve(jobs)
 									})
@@ -255,9 +264,10 @@ class Raid extends Controller{
 												city: geoResult.city,
 												state: geoResult.state,
 												stateCode: geoResult.stateCode,
+												flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji
 											};
 
-											const template = JSON.stringify(dts.egg);
+											const template = JSON.stringify(dts.egg[`${cares.template}`]);
 											let message = mustache.render(template, view);
 											log.debug(message);
 											message = JSON.parse(message)

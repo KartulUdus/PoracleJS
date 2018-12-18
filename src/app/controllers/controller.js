@@ -5,6 +5,8 @@ const _ = require('lodash');
 const NodeGeocoder = require('node-geocoder');
 const pcache = require('persistent-cache');
 const geofence = require(config.geocoding.geofence)
+const baseStats = require("../util/base_stats");
+const cp_multipliers = require("../util/cp-multipliers");
 
 // Init the chosen geocoder
 const geocoder = (() => {
@@ -195,13 +197,13 @@ class Controller{
 	async mysteryQuery(query) {
 		return new Promise(resolve => {
 			this.db.query(query)
-				.then(
+				.then(() => {
 					log.debug(`Mystery query executed`)
-				)
+					resolve()
+				})
 				.catch((err) => {log.error(`mysteryQuery errored with: ${err}`)})
 		})
 	}
-
 
 	async deleteQuery(table, column, value) {
 		return new Promise(resolve => {
@@ -252,7 +254,32 @@ class Controller{
 		})
 	}
 
+	async getCp(monster, level, ivAttack, ivDefense, ivStamina) {
+		return new Promise(resolve => {
+			let cp_multi = cp_multipliers[level];
+			let atk = baseStats[monster].attack;
+			let def = baseStats[monster].defense;
+			let sta = baseStats[monster].stamina;
 
+			let cp = Math.max(10 ,Math.floor(
+				(atk + ivAttack) *
+				Math.pow(def + ivDefense, 0.5) *
+				Math.pow(sta + ivStamina, 0.5) *
+				Math.pow(cp_multi, 2) /	10
+				))
+			resolve(cp)
+		})
+	}
+	async checkSchema() {
+		return new Promise(resolve => {
+			this.db.query(`select count(*) as c from information_schema.tables where table_schema='${config.db.database}' 
+							and table_name in('egg', 'raid', 'monsters', 'schema_version', 'gym-info', 'humans', 'quest', 'comevent', 'comsubmission')`)
+				.then((schematablesMatched) => {
+					resolve(schematablesMatched[0][0].c)
+				})
+				.catch((err) => {log.error(`schema checker errored with: ${err}`)})
+		})
+	}
 
 }
 

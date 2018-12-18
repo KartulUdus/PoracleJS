@@ -1,5 +1,5 @@
-const winston = require('winston');
-const config = require('config');
+const winston = require('winston')
+const config = require('config')
 
 module.exports =
 
@@ -11,4 +11,4 @@ module.exports =
 				level: config.general.logLevel,
 			}),
 		],
-	});
+	})

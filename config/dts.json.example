@@ -1,120 +1,502 @@
 {
-  "monster": {
-    "embed": {
-      "title": "a wild {{{name}}} has appeared!",
-      "description": "It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
-      "url": "{{{mapurl}}}",
-      "color": "{{ivcolor}}",
-      "thumbnail": {
-        "url": "{{{imgurl}}}"
+   "monster":{
+      "1":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
       },
-      "image": {
-        "url": "{{{staticmap}}}"
+      "2":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
       },
-      "author": {
-        "name": "{{name}}",
-        "url": "{{{mapurl}}}"
+      "3":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
+      },
+      "4":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
+      },
+      "5":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
       }
-    }
-  },
-  "monsterNoIv": {
-    "embed": {
-      "title": "a wild {{{name}}} has appeared!",
-      "description": "It will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \naddress: {{addr}} ",
-      "url": "{{{mapurl}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{imgurl}}}"
+   },
+   "monsterNoIv":{
+      "1":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
       },
-      "image": {
-        "url": "{{{staticmap}}}"
+      "2":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
       },
-      "author": {
-        "name": "{{name}}",
-        "url": "{{{mapurl}}}"
+      "3":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
+      },
+      "4":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
+      },
+      "5":{
+         "embed":{
+            "title":"a wild {{{name}}} has appeared!",
+            "description":"It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{ivcolor}}",
+            "thumbnail":{
+               "url":"{{{imgurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}"
+            }
+         }
       }
-    }
-  },
-  "raid": {
-    "embed": {
-      "title": "Raid against {{name}} has started! at {{gymname}}",
-      "description": "It will end at {{time}}, you have {{tthm}}m {{tths}}s left \n{{move1}}|{{move2}} Level:{{level}} \naddress: {{addr}} ",
-      "url": "{{{mapurl}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{detailsurl}}}"
+   },
+   "raid":{
+      "1":{
+         "embed":{
+            "title":"Raid against {{name}} has started! at {{gymname}}",
+            "description":"It will end at {{time}}, you have {{tthm}}m {{tths}}s left \n{{move1}}|{{move2}} Level:{{level}} \naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       },
-      "image": {
-        "url": "{{{staticmap}}}"
+      "2":{
+         "embed":{
+            "title":"Raid against {{name}} has started! at {{gymname}}",
+            "description":"It will end at {{time}}, you have {{tthm}}m {{tths}}s left \n{{move1}}|{{move2}} Level:{{level}} \naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       },
-      "author": {
-        "name": "{{name}}",
-        "url": "{{{mapurl}}}",
-        "icon_url": "{{{imgurl}}}"
+      "3":{
+         "embed":{
+            "title":"Raid against {{name}} has started! at {{gymname}}",
+            "description":"It will end at {{time}}, you have {{tthm}}m {{tths}}s left \n{{move1}}|{{move2}} Level:{{level}} \naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
+      },
+      "4":{
+         "embed":{
+            "title":"Raid against {{name}} has started! at {{gymname}}",
+            "description":"It will end at {{time}}, you have {{tthm}}m {{tths}}s left \n{{move1}}|{{move2}} Level:{{level}} \naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
+      },
+      "5":{
+         "embed":{
+            "title":"Raid against {{name}} has started! at {{gymname}}",
+            "description":"It will end at {{time}}, you have {{tthm}}m {{tths}}s left \n{{move1}}|{{move2}} Level:{{level}} \naddress: {{addr}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"{{name}}",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       }
-    }
-  },
-  "egg": {
-    "embed": {
-      "title": "Raid level {{level}} will start soon at {{gymname}}",
-      "description": "It will hatch at {{time}}, in{{tthm}}m {{tths}}s \naddress: {{addr}} \n{{{description}}} ",
-      "url": "{{{mapurl}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{detailsurl}}}"
+   },
+   "egg":{
+      "1":{
+         "embed":{
+            "title":"Raid level {{level}} will start soon at {{gymname}}",
+            "description":"It will hatch at {{time}}, in{{tthm}}m {{tths}}s \naddress: {{addr}} \n{{{description}}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Level{{level}} Raid",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       },
-      "image": {
-        "url": "{{{staticmap}}}"
+      "2":{
+         "embed":{
+            "title":"Raid level {{level}} will start soon at {{gymname}}",
+            "description":"It will hatch at {{time}}, in{{tthm}}m {{tths}}s \naddress: {{addr}} \n{{{description}}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Level{{level}} Raid",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       },
-      "author": {
-        "name": "Level{{level}} Raid",
-        "url": "{{{mapurl}}}",
-        "icon_url": "{{{imgurl}}}"
+      "3":{
+         "embed":{
+            "title":"Raid level {{level}} will start soon at {{gymname}}",
+            "description":"It will hatch at {{time}}, in{{tthm}}m {{tths}}s \naddress: {{addr}} \n{{{description}}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Level{{level}} Raid",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
+      },
+      "4":{
+         "embed":{
+            "title":"Raid level {{level}} will start soon at {{gymname}}",
+            "description":"It will hatch at {{time}}, in{{tthm}}m {{tths}}s \naddress: {{addr}} \n{{{description}}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Level{{level}} Raid",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
+      },
+      "5":{
+         "embed":{
+            "title":"Raid level {{level}} will start soon at {{gymname}}",
+            "description":"It will hatch at {{time}}, in{{tthm}}m {{tths}}s \naddress: {{addr}} \n{{{description}}} ",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Level{{level}} Raid",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       }
-    }
-  },
-  "quest": {
-    "embed": {
-      "title": "Quest to {{quest}} is available in {{name}}",
-      "description": "The reward for this quest is {{reward}}\nIt will be available until {{time}} \naddress: {{addr}}",
-      "url": "{{{mapurl}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{detailsurl}}}"
+   },
+   "quest":{
+      "1":{
+         "embed":{
+            "title":"Quest to {{quest}} is available in {{name}}",
+            "description":"The reward for this quest is {{reward}}\nIt will be available until {{time}} \naddress: {{addr}}",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Quest to {{quest}} is available",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       },
-      "image": {
-        "url": "{{{staticmap}}}"
+      "2":{
+         "embed":{
+            "title":"Quest to {{quest}} is available in {{name}}",
+            "description":"The reward for this quest is {{reward}}\nIt will be available until {{time}} \naddress: {{addr}}",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Quest to {{quest}} is available",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       },
-      "author": {
-        "name": "Quest to {{quest}} is available",
-        "url": "{{{mapurl}}}",
-        "icon_url": "{{{imgurl}}}"
+      "3":{
+         "embed":{
+            "title":"Quest to {{quest}} is available in {{name}}",
+            "description":"The reward for this quest is {{reward}}\nIt will be available until {{time}} \naddress: {{addr}}",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Quest to {{quest}} is available",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
+      },
+      "4":{
+         "embed":{
+            "title":"Quest to {{quest}} is available in {{name}}",
+            "description":"The reward for this quest is {{reward}}\nIt will be available until {{time}} \naddress: {{addr}}",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Quest to {{quest}} is available",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
+      },
+      "5":{
+         "embed":{
+            "title":"Quest to {{quest}} is available in {{name}}",
+            "description":"The reward for this quest is {{reward}}\nIt will be available until {{time}} \naddress: {{addr}}",
+            "url":"{{{mapurl}}}",
+            "color":"{{color}}",
+            "thumbnail":{
+               "url":"{{{detailsurl}}}"
+            },
+            "image":{
+               "url":"{{{staticmap}}}"
+            },
+            "author":{
+               "name":"Quest to {{quest}} is available",
+               "url":"{{{mapurl}}}",
+               "icon_url":"{{{imgurl}}}"
+            }
+         }
       }
-    }
-  },
-  "greeting": {
-    "embed": {
-      "title": "Welcome",
-      "description": "Thank you for registering \nPlease set a location `!location name of place` or add ares where to receive alarms from",
-      "fields":[
-        {
-          "name": "General commands",
-          "value": "`!poracle`: Adds you to database and enables tracking` \n`!unregister`: Removes you from tracking \n`!stop`: Temporarily stops alarms \n`!start`: Re-enables alarms \n`!location yourArea`: Searches for yourArea and sets it as your location \n`!area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`!area remove somePlace`: Removes a configured area"
-        },
-        {
-          "name": "Monster tracking commands",
-          "value": "`!track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: Any arguments are optional, this command would alert you about snorlax and lapras within 500 meters of your location or inside an added area. The set filters require them to have IV between 50% - 90% be at least level 15 and minimum CP of 1000 \n`!untrack lapras vileplume`: will remove tracking for lapras and vileplume"
-        },
-        {
-          "name": "Raid tracking commands",
-          "value": "`!raid snorlax lapras d500 instinct`: Any arguments are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!unraid lapras vileplume`: will remove tracking for lapras and vileplume raids"
-        },
-        {
-          "name": "Raid egg tracking commands",
-          "value": "`!egg level3 d500 instinct`: Any arguments are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!unegg level3`: will remove tracking for level 3 raid eggs"
-        }
-      ]
-    }
-  },
-  "tracked": ""
+   },
+   "greeting":{
+      "embed":{
+         "title":"Welcome",
+         "description":"Thank you for registering \nPlease set a location `!location name of place` or add ares where to receive alarms from",
+         "fields":[
+            {
+               "name":"General commands",
+               "value":"`!poracle`: Adds you to database and enables tracking` \n`!unregister`: Removes you from tracking \n`!stop`: Temporarily stops alarms \n`!start`: Re-enables alarms \n`!location yourArea`: Searches for yourArea and sets it as your location \n`!area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`!area remove somePlace`: Removes a configured area"
+            },
+            {
+               "name":"Monster tracking commands",
+               "value":"`!track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: Any arguments are optional, this command would alert you about snorlax and lapras within 500 meters of your location or inside an added area. The set filters require them to have IV between 50% - 90% be at least level 15 and minimum CP of 1000 \n`!untrack lapras vileplume`: will remove tracking for lapras and vileplume"
+            },
+            {
+               "name":"Raid tracking commands",
+               "value":"`!raid snorlax lapras d500 instinct`: Any arguments are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!unraid lapras vileplume`: will remove tracking for lapras and vileplume raids"
+            },
+            {
+               "name":"Raid egg tracking commands",
+               "value":"`!egg level3 d500 instinct`: Any arguments are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!unegg level3`: will remove tracking for level 3 raid eggs"
+            }
+         ]
+      }
+   },
+   "tracked":""
 }
