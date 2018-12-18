@@ -224,9 +224,9 @@ class Raid extends Controller{
 				if(!data.team_id) data.team_id = 4
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
-						data.gymname = gymInfo.gym_name || '';
-						data.description = gymInfo.description || '';
-						data.url = gymInfo.url || '';
+						data.gymname = gymInfo.gym_name? gymInfo.gym_name : '';
+						data.description = gymInfo.description? gymInfo.description : '';
+						data.url = gymInfo.url? gymInfo.uwurmple : '';
 						data.park = gymInfo.park || false;
 						data.ex = ''
 						if (gymInfo.park) data.ex = 'EX'
