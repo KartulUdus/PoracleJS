@@ -171,7 +171,6 @@ class Controller{
 		const query = `INSERT INTO ${table} (${cols})
                       VALUES (${placeholders})
                       ON DUPLICATE KEY UPDATE ${duplicate}`;
-
 		return new Promise(resolve => {
 			this.db.query(query)
 				.then((result) => {

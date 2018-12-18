@@ -350,7 +350,7 @@ client.on('message', (msg) => {
 
 			if (monsters.length) {
 				monsters.forEach((monster) => {
-					query.deleteMonsterQuery('monsters', 'pokemon_id', `${monster}`, msg.author.id)
+					query.deleteByIdQuery('monsters', 'pokemon_id', `${monster}`, msg.author.id)
 						.then(log.info(`${msg.author.username} removed pokemon tracking ${monsterData[monster].name}`))
 				})
 				msg.react('✅')
@@ -537,7 +537,7 @@ client.on('message', (msg) => {
 			})
 
 			if (level) {
-				query.deleteMonsterQuery('egg', 'raid_level', `${level}`, msg.author.id)
+				query.deleteByIdQuery('egg', 'raid_level', `${level}`, msg.author.id)
 				msg.react('✅')
 			}
 			else msg.reply('404 NO MONSTERS FOUND')
@@ -893,7 +893,7 @@ client.on('message', (msg) => {
 			})
 			if (monsters.length) {
 				monsters.forEach((monster) => {
-					query.deleteMonsterQuery('monsters', 'pokemon_id', `${monster}`, msg.channel.id)
+					query.deleteByIdQuery('monsters', 'pokemon_id', `${monster}`, msg.channel.id)
 				})
 				msg.react('✅')
 			}
@@ -990,13 +990,13 @@ client.on('message', (msg) => {
 			})
 			if (monsters.length) {
 				monsters.forEach((monster) => {
-					query.deleteMonsterQuery('raid', 'pokemon_id', `${monster}`, msg.channel.id)
+					query.deleteByIdQuery('raid', 'pokemon_id', `${monster}`, msg.channel.id)
 				})
 				msg.react('✅')
 			}
 			if (levels.length) {
 				levels.forEach((level) => {
-					query.deleteMonsterQuery('raid', 'level', `${level}`, msg.channel.id)
+					query.deleteByIdQuery('raid', 'level', `${level}`, msg.channel.id)
 				})
 				msg.react('✅')
 			}
@@ -1064,7 +1064,7 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				if (element.match(/level/gi)) level = element.replace(/level/gi, '')
 				if (level !== 0) {
-					query.deleteMonsterQuery('egg', 'raid_level', `${level}`, msg.channel.id)
+					query.deleteByIdQuery('egg', 'raid_level', `${level}`, msg.channel.id)
 					msg.react('✅')
 				}
 				else msg.reply('404 NO MONSTERS FOUND')

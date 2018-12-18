@@ -21,6 +21,8 @@ const cache = new Cache({
 
 const MonsterController = require('../controllers/monster')
 const RaidController = require('../controllers/raid')
+const monsterController = new MonsterController(db)
+
 //check how long the queue is every 30s. ideally empty
 setInterval(() => {
 	if(queue.length > 30){
@@ -65,7 +67,6 @@ module.exports =  async (req, reply) => {
 	data.forEach((hook) => {
 		switch(hook.type ){
 			case "pokemon":{
-				const monsterController = new MonsterController(db)
 				if (!cache.get(`${hook.message.encounter_id}_${hook.message.weight}`)) {
 					cache.put(`${hook.message.encounter_id}_${hook.message.weight}`, 'cached')
 					monsterController.handle(hook.message).then((work) => {
@@ -96,37 +97,60 @@ module.exports =  async (req, reply) => {
 				reply.send({webserver: 'happy'})
 				break
 			}
-			case "raid":{
+			case "raid": {
 				const raidController = new RaidController(db)
 				if (!discordcache.get(`${hook.message.gym_id}_${hook.message.pokemon_id}`)) {
 					discordcache.put(`${hook.message.gym_id}_${hook.message.pokemon_id}`, 'cached')
 				}
-				console.log(hook)
-				raidController.handle(hook.message).then((work) => {
-					work.forEach((job) => {
-						const ch = _.cloneDeep(discordcache.get(job.target));
-						if (ch === undefined) {
-							discordcache.put(job.target, 1);
-						}
-						else if (ch !== undefined) {
-							discordcache.put(job.target, ch + 1);
-						}
-						let finalMessage = _.cloneDeep(job.message);
-						if (discordcache.get(job.target) === config.discord.limitamount + 1){
-							finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
-							log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
-						}
-						if (discordcache.get(job.target) <= config.discord.limitamount + 1) {
-							job.message = finalMessage
-							queue.push(job)
-							raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
-						}
+				raidController.handle(hook.message)
+					.then((work) => {
+						work.forEach((job) => {
+							const ch = _.cloneDeep(discordcache.get(job.target));
+							if (ch === undefined) {
+								discordcache.put(job.target, 1);
+							}
+							else if (ch !== undefined) {
+								discordcache.put(job.target, ch + 1);
+							}
+							let finalMessage = _.cloneDeep(job.message);
+							if (discordcache.get(job.target) === config.discord.limitamount + 1) {
+								finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
+								log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
+							}
+							if (discordcache.get(job.target) <= config.discord.limitamount + 1) {
+								job.message = finalMessage
+								queue.push(job)
+								raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+							}
+						})
 					})
-				})
+			}
+			case "gym_details":{
+
+					const data = hook.message
+					data.park = false
+					if (!data.description) data.description = ''
+					if (!data.sponsor_id) data.sponsor_id = 0
+					if (!data.team) data.team = 4
+					if (!data.name) data.name = ''
+					if (data.exclusive) data.park = true
+					if (!data.url) data.url = ''
+				data.name = data.name.replace(/"/g, '')
+					data.description = data.description.replace(/"/g, '')
+					data.name = data.name.replace(/\n/g, '')
+					data.description = data.description.replace(/\n/g, '')
+					monsterController.insertOrUpdateQuery(
+						'`gym-info`',
+						['id', 'gym_name', 'park', 'sponsor_id', 'description', 'url', 'latitude', 'longitude'],
+						[`'${data.id}'`, `'${data.name}'`,`${data.park}`, `${data.sponsor_id}`,  `'${data.description}'`, `'${data.url}'`, `${data.latitude}`, `${data.longitude}`]
+					);
+					log.info(`Saved gym-details for ${data.name}`);
+
+				}
 
 				reply.send({webserver: 'happy'})
 				break
-			}
+
 		}
 	})
 

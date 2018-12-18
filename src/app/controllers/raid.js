@@ -188,6 +188,12 @@ class Raid extends Controller{
 													emojistring: data.emojiString
 
 												};
+
+												if(config.map.enabled){
+													this.insertOrUpdateQuery(
+
+													)
+												}
 												const template = JSON.stringify(dts.raid[`${cares.template}`]);
 												let message = mustache.render(template, view);
 												log.debug(message);

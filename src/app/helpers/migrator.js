@@ -5,15 +5,67 @@ const db = mysql.createPool(config.db, {multipleStatements: true})
 const queries = new Controller(db)
 const log = require('../logger')
 
+const pokestop = `CREATE TABLE \`pokestop\` (
+  \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  \`name\` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
+  \`url\` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
+  \`lured\` TIMESTAMP NULL DEFAULT NULL,
+  \`latitude\` double NOT NULL,
+  \`longitude\` double NOT NULL,
+  KEY \`pokemstop_id\` (\`id\`),
+  KEY \`pokestop_latitude_longitude\` (\`latitude\`,\`longitude\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
+const activeRaid = `CREATE TABLE \`activeRaid\` (
+  \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  \`gym_id\` varchar(50) NOT NULL DEFAULT 0,
+  \`gym_name\` longtext COLLATE utf8_unicode_ci,
+  \`start\` TIMESTAMP NULL DEFAULT NULL,
+  \`end\` TIMESTAMP NULL DEFAULT NULL,
+  \`move_1\` smallint(6) NOT NULL,
+  \`move_2\` smallint(6) NOT NULL,
+  \`sponsor_id\` varchar(50) NOT NULL DEFAULT 0,
+  \`is_exclusive\` tinyint(1) NOT NULL DEFAULT 0,
+  \`team\` smallint(1) DEFAULT 4,
+  \`latitude\` double NOT NULL,
+  \`longitude\` double NOT NULL,
+  KEY \`geocoded_id\` (\`id\`),
+  KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
+const pokemon = `CREATE TABLE \`pokemon\` (
+  \`encounter_id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  \`pokemon_id\` smallint(6) NOT NULL,
+  \`atk\` smallint(2) NOT NULL,
+  \`def\` smallint(2) NOT NULL,
+  \`sta\` smallint(2) NOT NULL,
+  \`level\` smallint(2) NOT NULL,
+  \`gender\` smallint(2) NOT NULL,
+  \`form\` smallint(6) NOT NULL,
+  \`weight\` double NOT NULL,
+  \`weather\` smallint(6) NOT NULL,
+  \`cp\` smallint(6) NOT NULL,
+  \`move_1\` smallint(6) NOT NULL,
+  \`move_2\` smallint(6) NOT NULL,
+  \`latitude\` double NOT NULL,
+  \`longitude\` double NOT NULL,
+  \`disappear_time\` TIMESTAMP NULL DEFAULT NULL,
+  \`created_timestamp\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (\`encounter_id\`),
+  KEY \`geocoded_id\` (\`encounter_id\`),
+  KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+
 const gymInfo = `CREATE TABLE \`gym-info\` (
   \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   \`park\` tinyint(1) NOT NULL DEFAULT 0,
+  \`sponsor_id\` varchar(50) NOT NULL DEFAULT 0,
   \`gym_name\` longtext COLLATE utf8_unicode_ci,
   \`description\` longtext COLLATE utf8_unicode_ci,
   \`url\` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
   \`latitude\` double NOT NULL,
   \`longitude\` double NOT NULL,
-  KEY \`geocoded_id\` (\`id\`),
+  PRIMARY KEY (\`id\`),
   KEY \`geocoded_park\` (\`park\`),
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
@@ -44,8 +96,8 @@ const monsters = `CREATE TABLE \`monsters\` (
   \`max_level\` smallint(2) NOT NULL,
   \`atk\` smallint(2) NOT NULL,
   \`def\` smallint(2) NOT NULL,
-  \`template\` smallint(5) DEFAULT 3,
   \`sta\` smallint(2) NOT NULL,
+  \`template\` smallint(5) DEFAULT 3,
   \`min_weight\` double NOT NULL,
   \`max_weight\` double NOT NULL,
   \`form\` smallint(3) DEFAULT 0,
@@ -133,6 +185,9 @@ module.exports = async () => {
 				queries.mysteryQuery(comevent),
 				queries.mysteryQuery(comentry),
 				queries.mysteryQuery(egg),
+				queries.mysteryQuery(pokemon),
+				queries.mysteryQuery(pokestop),
+				queries.mysteryQuery(activeRaid),
 				queries.mysteryQuery(schemaVersion)
 			]).then(() => {
 				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '1'])
