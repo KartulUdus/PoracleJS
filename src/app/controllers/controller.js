@@ -60,9 +60,9 @@ class Controller{
 			addrCache.get(cacheKey, (err, addr) => {
 				if (err) log.error(err);
 				if (!addr) {
+					log.debug(`making geocode requerst and caching results`)
 					geocoder.reverse(locationObject)
 						.then(function(geocodeResult){
-							console.log(geocodeResult)
 							res.addr = config.locale.addressformat
 								.replace(/%n/, geocodeResult[0].streetNumber || '')
 								.replace(/%S/, geocodeResult[0].streetName || '')
@@ -131,7 +131,7 @@ class Controller{
 			this.db.query('SELECT * FROM ?? WHERE ?? = ?', [table, column, value])
 				.then(
 					function(result){
-						resolve(result[0])
+						resolve(result[0][0])
 					}
 				)
 				.catch((err) => {log.error(`selectOneQuery errored with: ${err}`)})
@@ -142,8 +142,8 @@ class Controller{
 		return new Promise(resolve => {
 			this.db.query('SELECT count(??) as count FROM ?? WHERE ?? = ?', [what, from, where, value])
 				.then(
-					function(result){
-						resolve(result[0].count)
+					(result) => {
+						resolve(result[0][0].count)
 					}
 				)
 				.catch((err) => {log.error(`countQuery errored with: ${err}`)})
@@ -172,9 +172,10 @@ class Controller{
 
 		return new Promise(resolve => {
 			this.db.query(query)
-				.then(
-					log.debug(`Inserted to ${table}`)
-				)
+				.then((result) => {
+						log.debug(`Inserted or maybe updated ${table}`)
+						resolve(result)
+				})
 				.catch((err) => {log.error(`inseertOrUpdateQuery errored with: ${err}`)})
 		})
 	}
@@ -234,7 +235,7 @@ class Controller{
 			this.db.query('SELECT * FROM ?? WHERE ?? = ?', [table, column, value])
 				.then(
 					function(result){
-						resolve(result)
+						resolve(result[0])
 					}
 				)
 				.catch((err) => {log.error(`selectAllQuery errored with: ${err}`)})

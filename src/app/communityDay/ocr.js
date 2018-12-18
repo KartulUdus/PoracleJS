@@ -27,7 +27,9 @@ function detect(imgLocation, callback) {
 	query.findActiveComEvent((err, event) => {
 		if (err) log.error(err);
 		if (!event) return callback(err, data);
+		console.log(event)
 		const eventmon = event.monster_id.split(',').map(id => monsterData[id].name.toUpperCase());
+		console.log('eventmon')
 
 		data.correctPokemon = false;
 		data.activeEvent = eventmon;

@@ -196,7 +196,7 @@ client.on('message', (msg) => {
 			});
 		}
 	}
-
+/*
 	// turn map on
 
 	else if (msg.content === `${config.discord.prefix}map enable`) {
@@ -226,7 +226,7 @@ client.on('message', (msg) => {
 			});
 		}
 	}
-
+*/
 	// channel alarms on
 	else if (msg.content === `${config.discord.prefix}channel start`) {
 		if (config.discord.admins.indexOf(msg.author.id) > -1 && msg.channel.type === 'text') {
@@ -257,7 +257,7 @@ client.on('message', (msg) => {
 		else msg.react('🙅');
 	}
 
-	// channel map on
+	/* channel map on
 	else if (msg.content === `${config.discord.prefix}channel map enable`) {
 		if (config.discord.admins.indexOf(msg.author.id) > -1 && msg.channel.type === 'text') {
 			query.countQuery('id', 'humans', 'id', msg.channel.id, (err, isregistered) => {
@@ -272,7 +272,7 @@ client.on('message', (msg) => {
 		else msg.react('🙅');
 	}
 
-	// channel map off
+	/ channel map off
 	else if (msg.content === `${config.discord.prefix}channel map disable`) {
 		if (config.discord.admins.indexOf(msg.author.id) > -1 && msg.channel.type === 'text') {
 			query.countQuery('id', 'humans', 'id', msg.channel.id, (err, isregistered) => {
@@ -287,7 +287,7 @@ client.on('message', (msg) => {
 		else msg.react('🙅');
 	}
 
-	// add area
+	/*/ //add area
 
 	else if (msg.content.startsWith(`${config.discord.prefix}area add `)) {
 		if (msg.channel.type === 'dm') {
@@ -1175,7 +1175,7 @@ client.on('message', (msg) => {
 												log.error(`Hastebin unhappy: ${err}`);
 												msg.reply(`${msg.channel.name} tracking list is long, but Hastebin is also down. ☹️ \nPlease try again later.`);
 
-											});
+											)
 									}
 								});
 							});

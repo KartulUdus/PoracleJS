@@ -1,9 +1,10 @@
 const log = require('../logger')
 const cp = require('child_process')
 const _ = require('lodash')
-const mysql = require('promise-mysql2')
 const config = require('config')
+const mysql = require('promise-mysql2')
 const db = mysql.createPool(config.db)
+
 const Cache = require('ttl');
 
 const discordcache = new Cache({
@@ -19,10 +20,10 @@ const cache = new Cache({
 });
 
 const MonsterController = require('../controllers/monster')
-
+const RaidController = require('../controllers/raid')
 //check how long the queue is every 30s. ideally empty
 setInterval(() => {
-	if(queue.length > 50){
+	if(queue.length > 30){
 		log.warn(`Job queue is ${queue.length} items long`)
 	}
 }, 30000)
@@ -37,16 +38,11 @@ _.forEach(config.discord.token, function(k) {
 
 
 discord.on('exit', (err) => {
-	console.log('A discrod slave died')
-	//log.error(`Discord slave exited with errorCode:${err.process._events((x)=> {console.log(x)})}`)
-	//discord.fork({k: _.sample(config.discord.token)})
-
-	//console.log(discord.workers)
+	log.warn(`A discord slave died with exitCode: ${err.process.exitCode}`)
 })
 
 discord.on('message', (worker, msg) => {
 	if(msg.reason === 'seppuku'){
-		console.log(msg.key)
 		log.warn('discord worker commited seppuku, cloning new')
 		discord.fork({k: msg.key})
 	}
@@ -66,10 +62,10 @@ discord.on('warning', (worker, msg) => {
 module.exports =  async (req, reply) => {
 	let data = req.body
 	if (!Array.isArray(data)) data = [ data ]
-	switch(data[0].type ){
-		case "pokemon":{
-			const monsterController = new MonsterController(db)
-			_.forEach(data, function(hook){
+	data.forEach((hook) => {
+		switch(hook.type ){
+			case "pokemon":{
+				const monsterController = new MonsterController(db)
 				if (!cache.get(`${hook.message.encounter_id}_${hook.message.weight}`)) {
 					cache.put(`${hook.message.encounter_id}_${hook.message.weight}`, 'cached')
 					monsterController.handle(hook.message).then((work) => {
@@ -79,7 +75,7 @@ module.exports =  async (req, reply) => {
 								discordcache.put(job.target, 1);
 							}
 							else if (ch !== undefined) {
-								discordcache.put(job.target, ch + 1, cache._store[job.target].expire - Date.now());
+								discordcache.put(job.target, ch + 1);
 							}
 							let finalMessage = _.cloneDeep(job.message);
 							if (discordcache.get(job.target) === config.discord.limitamount + 1){
@@ -91,27 +87,51 @@ module.exports =  async (req, reply) => {
 								queue.push(job)
 								monsterController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 							}
-
 						})
 					})
-
-				}else{
+				} else {
 					log.warn(`Monster encounter:${hook.message.encounter_id} was sent again too soon`)
 				}
-			})
 
-			//let something = await monsterController.pointInArea([data[0].message.latitude, data[0].message.longitude])
-			//let something = await monsterController.selectOneQuery('humans', 'name', 'help')
-			reply.send({webserver: 'happy'})
+				reply.send({webserver: 'happy'})
+				break
+			}
+			case "raid":{
+				const raidController = new RaidController(db)
+				if (!discordcache.get(`${hook.message.gym_id}_${hook.message.pokemon_id}`)) {
+					discordcache.put(`${hook.message.gym_id}_${hook.message.pokemon_id}`, 'cached')
+				}
+				console.log(hook)
+				raidController.handle(hook.message).then((work) => {
+					console.log(work)
+					work.forEach((job) => {
+						const ch = _.cloneDeep(discordcache.get(job.target));
+						if (ch === undefined) {
+							discordcache.put(job.target, 1);
+						}
+						else if (ch !== undefined) {
+							discordcache.put(job.target, ch + 1);
+						}
+						let finalMessage = _.cloneDeep(job.message);
+						if (discordcache.get(job.target) === config.discord.limitamount + 1){
+							finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
+							log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
+						}
+						if (discordcache.get(job.target) <= config.discord.limitamount + 1) {
+							job.message = finalMessage
+							queue.push(job)
+							raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+						}
+					})
+				})
 
-			break
+
+				reply.send({webserver: 'happy'})
+				break
+			}
 		}
-		case "raid":{
-			log.info('raid')
-			reply.send({webserver: 'happy'})
-			break
-		}
-	}
+	})
+
 
 
 	reply.send(

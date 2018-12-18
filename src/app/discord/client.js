@@ -10,5 +10,5 @@ client.on('ready', () => {
 	log.info(`Discord botto "${client.user.tag}" ready for action!`);
 });
 
-client.login(config.discord.token);
+client.login(config.discord.token[0]);
 

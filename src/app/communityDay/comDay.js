@@ -5,6 +5,7 @@ const client = require('../discord/client');
 const query = require('../sql/queries');
 const config = require('config');
 const moment = require('moment');
+const ComDayController = require('../controllers/comDay')
 
 const monsterData = require(config.locale.commandMonstersJson);
 
@@ -14,8 +15,10 @@ const now = new Date().toISOString().slice(0, 19).replace('T', ' ');
 
 client.on('message', (msg) => {
 	// handle messages with attachments
-	const Attachment = (msg.attachments).array()[0];
+	let Attachment = (msg.attachments).array()[0];
+	//const comDayController = new ComDayController
 	if (Attachment) {
+
 		query.findActiveComEvent((err, event) => {
 			if (event && msg.channel.id === event.channel_id) {
 				ocr.detect(Attachment.url, (err, data) => {
@@ -27,7 +30,6 @@ client.on('message', (msg) => {
 							[msg.author.id, msg.author.username, now, data.monster_id, data.seenCount, data.caughtCount, data.luckyCount]
 						);
 						msg.reply(`Thanks, I have submitted your ${monsterData[data.monster_id].name} seen:${data.seenCount} caught:${data.caughtCount} lucky:${data.luckyCount} `);
-						// log.info(data)
 						log.info(msg.author.id, msg.author.username, new Date().getTime(), event.monster_id, data.seenCount, data.caughtCount, data.luckyCount);
 					}
 					else {

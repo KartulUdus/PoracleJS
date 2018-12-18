@@ -4,8 +4,10 @@ const prettyjson = require('prettyjson')
 const fastify = require('fastify')()
 const log = require('./logger')
 const cp = require('child_process')
-
-
+let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
+commandWorker.on('exit', () => {
+	let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
+})
 // register schema and routes
 
 fastify.register(require('./schemas'))
