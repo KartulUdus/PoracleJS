@@ -1,8 +1,8 @@
 
 const config = require('config')
-const prettyjson = require('prettyjson')
 const fastify = require('fastify')()
 const log = require('./logger')
+
 const cp = require('child_process')
 let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
 commandWorker.on('exit', () => {
@@ -26,6 +26,15 @@ const start = async () => {
 	}
 }
 
-
 start()
 
+if(config.map.enabled){
+
+	let map = cp.fork(`${__dirname}/map.js`)
+	map.on('exit', (err) => {
+		console.log('map died')
+	})
+
+
+
+}

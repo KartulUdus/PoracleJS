@@ -21,9 +21,6 @@ class Monster extends Controller{
 
 /*
 *
-*
-*
-*
 * monsterWhoCares, takes data object
 */
 	async monsterWhoCares(data) {

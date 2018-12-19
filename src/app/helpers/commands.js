@@ -198,7 +198,7 @@ client.on('message', (msg) => {
 			}
 			const rawArgs = msg.content.slice(`${config.discord.prefix}area remove`.length).split(' ')
 			const args = rawArgs.join('|').toLowerCase().split('|')
-			const confAreas = config.geofence.map(area => area.name.toLowerCase())
+			const confAreas = geofence.map(area => area.name.toLowerCase())
 			query.selectOneQuery('humans', 'id', msg.author.id).then((human) => {
 				const oldArea = JSON.parse(human.area.split())
 				const validAreas = oldArea.filter(x => args.includes(x))
@@ -719,7 +719,7 @@ client.on('message', (msg) => {
 			}
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel area add`.length).split(' ')
 			const args = rawArgs.join('|').toLowerCase().split('|')
-			const confAreas = config.geofence.map(area => area.name.toLowerCase())
+			const confAreas = geofence.map(area => area.name.toLowerCase())
 			query.selectOneQuery('humans', 'id', msg.channel.id).then((channel) => {
 				const oldArea = JSON.parse(channel.area.split())
 				const validAreas = confAreas.filter(x => args.includes(x))
@@ -752,7 +752,7 @@ client.on('message', (msg) => {
 			}
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel area remove`.length).split(' ')
 			const args = rawArgs.join('|').toLowerCase().split('|')
-			const confAreas = config.geofence.map(area => area.name.toLowerCase())
+			const confAreas = geofence.map(area => area.name.toLowerCase())
 			query.selectOneQuery('humans', 'id', msg.channel.id).then((channel) => {
 				const oldArea = JSON.parse(channel.area.split())
 				const validAreas = oldArea.filter(x => args.includes(x))
