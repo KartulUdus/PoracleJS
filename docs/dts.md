@@ -93,7 +93,7 @@ Any of the fields can be cusomtized with the following:
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ivcolor}}| Color to be used for embed (Color of monsters perfection based on config.discord.iv_colors)|
 |{{boost}}| Monsters weather boost name|
-|{{boostemoji}}| Monsters weather boost emoji|
+|{{boostemoji}}| Monsters weather boost emoji)|
 
 
 
@@ -154,7 +154,7 @@ Any of the fields can be cusomtized with the following:
 |{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
-|{{ex}}| If raid takes place in a potential EX gym (empty string if false|
+|{{ex}}| If raid takes place in a potential EX gym (empty string if false)|
 
 
 
