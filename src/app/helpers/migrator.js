@@ -17,19 +17,20 @@ const pokestop = `CREATE TABLE \`pokestop\` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 
 const activeRaid = `CREATE TABLE \`activeRaid\` (
-  \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  \`gym_id\` varchar(50) NOT NULL DEFAULT 0,
+  \`pokemon_id\` varchar(50) COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+  \`gym_id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 0,
   \`gym_name\` longtext COLLATE utf8_unicode_ci,
   \`start\` TIMESTAMP NULL DEFAULT NULL,
   \`end\` TIMESTAMP NULL DEFAULT NULL,
+  \`created_timestamp\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   \`move_1\` smallint(6) NOT NULL DEFAULT 0,
   \`move_2\` smallint(6) NOT NULL DEFAULT 0,
-  \`sponsor_id\` varchar(50) NOT NULL DEFAULT 0,
+  \`cp\` smallint(6) NOT NULL DEFAULT 0,
   \`is_exclusive\` tinyint(1) NOT NULL DEFAULT 0,
   \`team\` smallint(1) DEFAULT 4,
   \`latitude\` double NOT NULL,
-  \`longitude\` double NOT NULL,
-  KEY \`geocoded_id\` (\`id\`),
+  \`longitude\` double NOT NULL,  
+  PRIMARY KEY ActiveRaid (\`pokemon_id\`, \`gym_id\`, \`start\`),
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 

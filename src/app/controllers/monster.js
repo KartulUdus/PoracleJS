@@ -109,9 +109,9 @@ class Monster extends Controller{
 			data.quick_move = data.weight? moveData[data.move_1].name : ''
 			data.charge_move = data.weight? moveData[data.move_2].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0;
-			if (!data.weather_boosted_condition) data.weather_boosted_condition = 0;
-			data.boost = weatherData[data.weather_boosted_condition].name ? weatherData[data.weather_boosted_condition].name : '';
-			data.boostemoji = weatherData[data.weather_boosted_condition].emoji ? weatherData[data.weather_boosted_condition].emoji : '';
+			if (!data.weather) data.weather = 0;
+			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : '';
+			data.boostemoji = weatherData[data.weather].emoji ? weatherData[data.weather].emoji : '';
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
 			data.color = types[monsterData[data.pokemon_id].types[0]].color ? types[monsterData[data.pokemon_id].types[0]].color : 0;
@@ -131,6 +131,12 @@ class Monster extends Controller{
 				log.warn(`Weird, the ${data.name} already disappeared`)
 				return null
 			}
+
+			this.insertOrUpdateQuery(
+				'`pokemon`',
+				['encounter_id', 'pokemon_id', 'atk', 'def', 'sta', 'level','gender', 'form', 'weight','weather', 'cp', 'move_1','move_2', 'disappear_time', 'created_timestamp','latitude', 'longitude'],
+				[`'${data.encounter_id}'`, `'${data.pokemon_id}'`,`${data.individual_attack}`, `'${data.individual_defense}'`, `'${data.individual_stamina}'`,`${data.pokemon_level}`,`'${data.gender}'`, `'${data.form}'`,`${data.weight}`,`'${data.weather}'`, `'${data.cp}'`,`${data.move_1}`,`'${data.move_2}'`, `'${moment(data.disappear_time * 1000).format('YYYY-MM-DD HH:MM:SS')}'`,`NOW()`, `${data.latitude}`, `${data.longitude}`]
+			).catch((err) => {log.error(`Updating Pokemon table errored with: ${err}`)})
 
 			this.pointInArea([data.latitude, data.longitude]).then((matchedAreas) => {
 				data.matched = matchedAreas

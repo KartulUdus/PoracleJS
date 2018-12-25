@@ -174,6 +174,7 @@ class Controller{
                       VALUES (${placeholders})
                       ON DUPLICATE KEY UPDATE ${duplicate}`;
 		return new Promise(resolve => {
+			log.debug(`constructed query for insertOrUpdateQuery: \n${query}`)
 			this.db.query(query)
 				.then((result) => {
 						log.debug(`Inserted or maybe updated ${table}`)

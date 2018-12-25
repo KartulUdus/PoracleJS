@@ -46,7 +46,7 @@ class Raid extends Controller{
 			this.db.query(query)
 				.then(
 					function(result){
-						log.info(`Raid against ${data.name} appeared and ${result.length} humans cared`);
+						log.info(`Raid against ${data.name} appeared and ${result[0].length} humans cared`);
 						resolve(result[0])
 					}
 				)
@@ -78,7 +78,7 @@ class Raid extends Controller{
 			this.db.query(query)
 				.then(
 					function(result){
-						log.info(`Raid egg level ${data.level} appeared and ${result.length} humans cared`);
+						log.info(`Raid egg level ${data.level} appeared and ${result[0].length} humans cared`);
 						resolve(result[0])
 					}
 				)
@@ -117,9 +117,11 @@ class Raid extends Controller{
 				if(!!(data.team_id)) data.team_id = 0
 				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
-
+				if (!data.move_1) data.move_1 = 0
+				if (!data.move_2) data.move_2 = 0
 				data.quick_move = data.move_1 ? moveData[data.move_1].name : ''
 				data.charge_move = data.move_2 ? moveData[data.move_2].name : ''
+				data.cp = data.cp? data.cp : 0
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 
@@ -134,6 +136,12 @@ class Raid extends Controller{
 							log.warn(`Raid against ${data.name} was sent but already ended`)
 							return null
 						}
+						this.insertOrUpdateQuery(
+							'`activeRaid`',
+							['gym_id', 'pokemon_id', 'gym_name', 'start', 'end', 'created_timestamp', 'move_1', 'move_2', 'is_exclusive', 'team', 'cp', 'latitude', 'longitude'],
+							[`'${data.gym_id}'`, `'${data.pokemon_id}'`,`'${data.gymname}'`, `'${moment(data.start * 1000).format('YYYY-MM-DD HH:MM:SS')}'`, `'${moment(data.end * 1000).format('YYYY-MM-DD HH:MM:SS')}'`,`NOW()`,`'${data.move_1}'`, `'${data.move_2}'`,`${data.park}`,`'${data.team_id}'`, `'${data.cp}'`, `${data.latitude}`, `${data.longitude}`]
+						).catch((err) => {log.error(`Updating activeRaid table errored with: ${err}`)})
+
 						this.pointInArea([data.latitude, data.longitude])
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
@@ -219,6 +227,10 @@ class Raid extends Controller{
 				if(!!(data.team_id)) data.team_id = 0
 				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
+				if (!data.move_1) data.move_1 = 0
+				if (!data.move_2) data.move_2 = 0
+				data.cp = data.cp? data.cp : 0
+
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 
@@ -233,6 +245,13 @@ class Raid extends Controller{
 							log.warn(`Raid level${data.level} appearead, but it seems it already hatched`)
 							return null
 						}
+
+						this.insertOrUpdateQuery(
+							'`activeRaid`',
+							['gym_id', 'pokemon_id', 'gym_name', 'start', 'end', 'created_timestamp', 'move_1', 'move_2', 'is_exclusive', 'team', 'cp', 'latitude', 'longitude'],
+							[`'${data.gym_id}'`, `0`,`'${data.gymname}'`, `'${moment(data.start * 1000).format('YYYY-MM-DD HH:MM:SS')}'`, `'${moment(data.end * 1000).format('YYYY-MM-DD HH:MM:SS')}'`,`NOW()`,`'${data.move_1}'`, `'${data.move_2}'`,`${data.park}`,`'${data.team_id}'`, `'${data.cp}'`, `${data.latitude}`, `${data.longitude}`]
+						).catch((err) => {log.error(`Updating activeRaid table errored with: ${err}`)})
+
 						this.pointInArea([data.latitude, data.longitude])
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
