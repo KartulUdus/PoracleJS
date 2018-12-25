@@ -3,7 +3,7 @@ module.exports = {
 	loading: {
 		color: 'purple'
 	},
-    plugins: [{ src: '@/plugins/menu', ssr: false }],
+    plugins: [{ src: '~/plugins/menu', ssr: false }],
 	modules: ['nuxt-leaflet'],
 	css: ['@/assets/css/PoracleMap.css'],
 

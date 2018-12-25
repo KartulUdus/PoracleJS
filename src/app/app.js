@@ -30,7 +30,7 @@ start()
 
 if(config.map.enabled){
 
-	let map = cp.fork(`${__dirname}/map.js`)
+	let map = cp.fork(`${__dirname}/../../map.js`)
 	map.on('exit', (err) => {
 		console.log('map died')
 	})
