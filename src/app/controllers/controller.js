@@ -7,6 +7,7 @@ const pcache = require('persistent-cache');
 const geofence = require(config.geocoding.geofence)
 const baseStats = require("../util/base_stats");
 const cp_multipliers = require("../util/cp-multipliers");
+const emojiFlags = require('emoji-flags')
 
 // Init the chosen geocoder
 const geocoder = (() => {
@@ -82,6 +83,8 @@ class Controller{
 							res.city = geocodeResult[0].city || ''
 							res.state = geocodeResult[0].state || ''
 							res.stateCode = geocodeResult[0].stateCode || ''
+							let flag = emojiFlags[`${res.countryCode}`]
+							res.flag = flag? flag.emoji : ''
 
 							if (res && geocodeResult.length > 0) {
 								addrCache.put(cacheKey, res, (error, r) => {

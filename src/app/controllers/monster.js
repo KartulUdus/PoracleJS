@@ -4,7 +4,6 @@ const config = require('config');
 
 const _ = require('lodash')
 const mustache = require('mustache');
-const emojiFlags = require('emoji-flags')
 const pokemonGif = require('pokemon-gif');
 
 const monsterData = require(config.locale.monstersJson)
@@ -186,7 +185,7 @@ class Monster extends Controller{
 								city: geoResult.city,
 								state: geoResult.state,
 								stateCode: geoResult.stateCode,
-								flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji,
+								flagemoji: geoResult.flag,
 								emojiString: data.emojiString
 
 							};

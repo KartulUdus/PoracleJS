@@ -1,7 +1,6 @@
 const Controller = require('./controller')
 const config = require('config')
 const log = require('../logger')
-const emojiFlags = require('emoji-flags')
 const pokemonGif = require('pokemon-gif');
 
 const _ = require('lodash')
@@ -186,7 +185,7 @@ class Raid extends Controller{
 													city: geoResult.city,
 													state: geoResult.state,
 													stateCode: geoResult.stateCode,
-													flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji,
+													flagemoji: geoResult.flag,
 													emojistring: data.emojiString
 
 												};
@@ -268,7 +267,7 @@ class Raid extends Controller{
 												city: geoResult.city,
 												state: geoResult.state,
 												stateCode: geoResult.stateCode,
-												flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji
+												flagemoji: geoResult.flag
 											};
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`]);
