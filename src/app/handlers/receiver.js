@@ -22,6 +22,7 @@ const cache = new Cache({
 const MonsterController = require('../controllers/monster')
 const RaidController = require('../controllers/raid')
 const monsterController = new MonsterController(db)
+const raidController = new RaidController(db)
 
 //check how long the queue is every 30s. ideally empty
 setInterval(() => {
@@ -98,7 +99,6 @@ module.exports =  async (req, reply) => {
 				break
 			}
 			case "raid": {
-				const raidController = new RaidController(db)
 				if (!discordcache.get(`${hook.message.gym_id}_${hook.message.pokemon_id}`)) {
 					discordcache.put(`${hook.message.gym_id}_${hook.message.pokemon_id}`, 'cached')
 				}
@@ -124,33 +124,34 @@ module.exports =  async (req, reply) => {
 							}
 						})
 					})
+
+				reply.send({webserver: 'happy'})
+				break
 			}
-			case "gym_details":{
+			case "gym_details": {
 
 					const data = hook.message
 					data.park = false
 					if (!data.description) data.description = ''
-					if (!data.sponsor_id) data.sponsor_id = 0
-					if (!data.team) data.team = 4
+					if (!!(data.sponsor_id)) data.sponsor_id = false
+					if (!data.team) data.team = 0
 					if (!data.name) data.name = ''
-					if (data.exclusive) data.park = true
 					if (!data.url) data.url = ''
-				data.name = data.name.replace(/"/g, '')
+					data.park = data.sponsor_id ? true : false
+					data.name = data.name.replace(/"/g, '')
 					data.description = data.description.replace(/"/g, '')
 					data.name = data.name.replace(/\n/g, '')
 					data.description = data.description.replace(/\n/g, '')
 					monsterController.insertOrUpdateQuery(
 						'`gym-info`',
-						['id', 'gym_name', 'park', 'sponsor_id', 'description', 'url', 'latitude', 'longitude'],
-						[`'${data.id}'`, `'${data.name}'`,`${data.park}`, `${data.sponsor_id}`,  `'${data.description}'`, `'${data.url}'`, `${data.latitude}`, `${data.longitude}`]
+						['id', 'gym_name', 'park', 'description', 'url', 'latitude', 'longitude'],
+						[`'${data.id}'`, `'${data.name}'`,`${data.park}`, `'${data.description}'`, `'${data.url}'`, `${data.latitude}`, `${data.longitude}`]
 					);
 					log.info(`Saved gym-details for ${data.name}`);
 
-				}
-
-				reply.send({webserver: 'happy'})
-				break
-
+					reply.send({webserver: 'happy'})
+					break
+			}
 		}
 	})
 

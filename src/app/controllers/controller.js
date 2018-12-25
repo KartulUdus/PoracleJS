@@ -88,6 +88,8 @@ class Controller{
 									if (error) log.error(`Error saving addr of ${cacheKey}: ${error}`);
 								})
 							}
+						log.debug(`fetched address ${JSON.stringify(res)}`)
+
 						resolve(res)
 						})
 						.catch((err) => {log.error(`GetAddress failed with error: ${err}`)})
@@ -177,7 +179,7 @@ class Controller{
 						log.debug(`Inserted or maybe updated ${table}`)
 						resolve(result)
 				})
-				.catch((err) => {log.error(`inseertOrUpdateQuery errored with: ${err}`)})
+				.catch((err) => {log.error(`insertOrUpdateQuery errored with: ${err}`)})
 		})
 	}
 

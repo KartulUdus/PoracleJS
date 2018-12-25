@@ -102,31 +102,33 @@ class Raid extends Controller{
 			// If there's a pokemon_id in the raid hook, we assume it's hatched
 			if(data.pokemon_id){
 
-				console.log(data)
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.distime = moment(data.end * 1000).format(config.locale.time)
-				data.name = monsterData[data.pokemon_id].name || 'errormon'
+				data.name = monsterData[data.pokemon_id]? monsterData[data.pokemon_id].name : 'errormon'
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00}.png`;
 				const e = [];
 				monsterData[data.pokemon_id].types.forEach((type) => {
-					e.push(types[type.type].emoji);
+					e.push(types[type].emoji);
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
-				data.teamname = !!(data.team_id) ? teamData[data.team_id].name : 'Harmony'
-				data.color = !!(data.team_id) ? teamData[data.team_id].color : 0
-				if(!data.team_id) data.team_id = 4
-				data.quick_move = !!(data.move_1) ? moveData[data.move_1].name : ''
-				data.charge_move = !!(data.move_2) ? moveData[data.move_2].name : ''
+				if(!!(data.team_id)) data.team_id = 0
+				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
+				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
+
+				data.quick_move = data.move_1 ? moveData[data.move_1].name : ''
+				data.charge_move = data.move_2 ? moveData[data.move_2].name : ''
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 
-						data.gymname = gymInfo ? gymInfo.gym_name : '';
+						if (!!(data.sponsor_id)) data.sponsor_id = false
+						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name;
 						data.description = gymInfo ? gymInfo.description : '';
 						data.url = gymInfo ? gymInfo.url : '';
-						data.park = gymInfo ? gymInfo.park : false;
+						data.park = gymInfo ? gymInfo.park : false
+						data.park = data.sponsor_id ? true : data.park;
 						data.ex = data.park ?  'EX' : ''
 						if (data.tth.firstDateWasLater){
 							log.warn(`Raid against ${data.name} was sent but already ended`)
@@ -189,11 +191,6 @@ class Raid extends Controller{
 
 												};
 
-												if(config.map.enabled){
-													this.insertOrUpdateQuery(
-
-													)
-												}
 												const template = JSON.stringify(dts.raid[`${cares.template}`]);
 												let message = mustache.render(template, view);
 												log.debug(message);
@@ -209,27 +206,28 @@ class Raid extends Controller{
 											})
 										})
 										resolve(jobs)
-									})
-								})
-							})
-					})
+									}).catch((err) => {log.error(`getAddress on hatched Raid errored with: ${err}`)})
+								}).catch((err) => {log.error(`raidWhoCares on hatched Raid errored with: ${err}`)})
+							}).catch((err) => {log.error(`pointInArea on hatched Raid errored with: ${err}`)})
+					}).catch((err) => {log.error(`Fetching gym_info on hatched Raid errored with: ${err}`)})
 			} else {
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true);
 				data.hatchtime = moment(data.start * 1000).format(config.locale.time);
 				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/egg${data.level}.png`;
-				data.teamname = !!(data.team_id) ? teamData[data.team_id].name : 'Harmony'
-				data.color = !!(data.team_id) ? teamData[data.team_id].color : 0
-				if(!data.team_id) data.team_id = 4
+				if(!!(data.team_id)) data.team_id = 0
+				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
+				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
-						data.gymname = gymInfo.gym_name? gymInfo.gym_name : '';
-						data.description = gymInfo.description? gymInfo.description : '';
-						data.url = gymInfo.url? gymInfo.uwurmple : '';
-						data.park = gymInfo.park || false;
-						data.ex = ''
-						if (gymInfo.park) data.ex = 'EX'
+						if (!!(data.sponsor_id)) data.sponsor_id = false
+						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name;
+						data.description = gymInfo ? gymInfo.description : '';
+						data.url = gymInfo ? gymInfo.url : '';
+						data.park = gymInfo ? gymInfo.park : false
+						data.park = data.sponsor_id ? true : data.park;
+						data.ex = data.park ?  'EX' : ''
 						if (data.tth.firstDateWasLater){
 							log.warn(`Raid level${data.level} appearead, but it seems it already hatched`)
 							return null
@@ -287,13 +285,11 @@ class Raid extends Controller{
 											jobs.push(work)
 										})
 										resolve(jobs)
-									})
-								})
-							})
-						})
+									}).catch((err) => {log.error(`getAddress on Raid errored with: ${err}`)})
+								}).catch((err) => {log.error(`eggWhoCares on Raid errored with: ${err}`)})
+							}).catch((err) => {log.error(`pointInArea on Raid errored with: ${err}`)})
+						}).catch((err) => {log.error(`Fetching gym_info on Raid errored with: ${err}`)})
 					}
-
-
 
 		})
 
