@@ -1,3 +1,12 @@
+var map = new Vue({
+	el: '#app',
+	data: {
+		message: 'Hello Vue!'
+	}
+})
+
+
+/*
 var map = L.map('map').setView([59.6, 24.4 ], 13);
 
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -26,4 +35,4 @@ map.getBounds()
 map.on('moveend', function(move){
 	console.log(map.getBounds(move))
 
-})
+})*/

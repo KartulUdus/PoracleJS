@@ -1,0 +1,15 @@
+
+module.exports = {
+	loading: {
+		color: 'purple'
+	},
+    plugins: [{ src: '@/plugins/menu', ssr: false }],
+	modules: ['nuxt-leaflet'],
+	css: ['@/assets/css/PoracleMap.css'],
+
+	env: {
+		tileServer: "TILESERVER",
+		startPos: "STARTPOS",
+		startZoom: "STARTZOOM"
+	}
+}

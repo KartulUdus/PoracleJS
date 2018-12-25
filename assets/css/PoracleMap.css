@@ -1,0 +1,10 @@
+#map {
+    position: absolute;
+    top: 0;
+    left: 500;
+    width: 90%;
+    height: 100%;
+    text-align: center;
+    font-size: 30px;
+    font-family: sans-serif;
+}
