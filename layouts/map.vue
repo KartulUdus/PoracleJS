@@ -2,9 +2,9 @@
     <div>
         <div id="menu">
             <no-ssr>
-                <SlideMenu right/>
-                <div>
-                </div>
+                <SlideMenu noOverlay right>
+                    <span>Home</span>
+                </a>
                 </SlideMenu>
             </no-ssr>
         </div>
