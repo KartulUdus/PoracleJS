@@ -117,7 +117,7 @@ class Monster extends Controller{
 			data.boostemoji = weatherData[data.weather_boosted_condition].emoji ? weatherData[data.weather_boosted_condition].emoji : '';
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
-			data.color = types[monsterData[data.pokemon_id].types[0]].color ? types[monsterData[data.pokemon_id].types[0]].color : 0;
+			data.color = monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0;
 			data.ivcolor = this.findIvColor(data.iv);
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
 			data.distime = moment(data.disappear_time * 1000).format(config.locale.time);

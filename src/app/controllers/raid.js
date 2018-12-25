@@ -110,7 +110,7 @@ class Raid extends Controller{
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00}.png`;
 				const e = [];
 				monsterData[data.pokemon_id].types.forEach((type) => {
-					e.push(types[type].emoji);
+					if(types[type]) e.push(types[type].emoji);
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
