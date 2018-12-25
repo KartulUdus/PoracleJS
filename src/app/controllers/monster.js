@@ -95,33 +95,33 @@ class Monster extends Controller{
 				}
 			}
 
-			data.name = monsterData[data.pokemon_id].name || 'errormon'
+			data.name = monsterData[data.pokemon_id].name? monsterData[data.pokemon_id].name : 'errormon'
 			data.formname = '';
-			data.iv = ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) || -1
-			data.individual_attack = data.individual_attack || 0
-			data.individual_defense = data.individual_defense || 0
-			data.individual_stamina = data.individual_stamina || 0
-			data.cp = data.cp || 0
-			data.pokemon_level = data.pokemon_level || 0
-			data.move_1 = data.move_1 || 0
-			data.move_2 = data.move_2 || 0
+			data.iv = data.weight? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
+			data.individual_attack = data.weight?  data.individual_attack : 0
+			data.individual_defense = data.weight? data.individual_defense : 0
+			data.individual_stamina = data.weight? data.individual_stamina : 0
+			data.cp = data.weight? data.cp : 0
+			data.pokemon_level = data.weight? data.pokemon_level : 0
+			data.move_1 = data.weight? data.move_1 : 0
+			data.move_2 = data.weight? data.move_2 : 0
 			data.weight = data.weight ? data.weight.toFixed(1) : 0
-			data.quick_move = moveData[data.move_1].name || ''
-			data.charge_move = moveData[data.move_2].name || ''
+			data.quick_move = data.weight? moveData[data.move_1].name : ''
+			data.charge_move = data.weight? moveData[data.move_2].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0;
 			if (!data.weather_boosted_condition) data.weather_boosted_condition = 0;
-			data.boost = weatherData[data.weather_boosted_condition].name || '';
-			data.boostemoji = weatherData[data.weather_boosted_condition].emoji || '';
+			data.boost = weatherData[data.weather_boosted_condition].name ? weatherData[data.weather_boosted_condition].name : '';
+			data.boostemoji = weatherData[data.weather_boosted_condition].emoji ? weatherData[data.weather_boosted_condition].emoji : '';
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
-			data.color = types[monsterData[data.pokemon_id].types[0].type].color || 0;
+			data.color = types[monsterData[data.pokemon_id].types[0]].color ? types[monsterData[data.pokemon_id].types[0]].color : 0;
 			data.ivcolor = this.findIvColor(data.iv);
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
 			data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`;
 			let e = [];
 			monsterData[data.pokemon_id].types.forEach((type) => {
-				e.push(types[type.type].emoji);
+				e.push(types[type].emoji);
 			});
 			data.emoji = e
 			data.emojiString = e.join('')
@@ -205,10 +205,9 @@ class Monster extends Controller{
 						})
 						resolve(jobs)
 
-					})
-				})
-			})
-
+					}).catch((err) => {log.error(`getAddress errored with: ${err}`)})
+				}).catch((err) => {log.error(`monsterWhoCares errored with: ${err}`)})
+			}).catch((err) => {log.error(`pointsInArea errored with: ${err}`)})
 		})
 	}
 }

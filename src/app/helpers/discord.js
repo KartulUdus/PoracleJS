@@ -15,11 +15,11 @@ client.on('ready', () => {
 					if (config.discord.typereact) {
 						msg.job.emoji.forEach((emoji) => {
 							message.react(emoji)
-							const hungryInterval = startBeingHungry()
+							let hungryInterval = startBeingHungry()
 						})
 					}
 					else {
-						const hungryInterval = startBeingHungry()
+						let hungryInterval = startBeingHungry()
 					}
 				})
 			}
@@ -32,7 +32,7 @@ client.on('ready', () => {
 						})
 					}
 					else {
-						const hungryInterval = startBeingHungry()
+						let hungryInterval = startBeingHungry()
 					}
 				})
 			}
@@ -51,8 +51,13 @@ function startBeingHungry() {
 }
 
 client.on('rateLimitInfo', (rateLimit) => {
-	log.debug(`Discord ${client.user.tag} rate limit info: ${rateLimit}`)
+	log.warn(`Discord ${client.user.tag} rate limit info: ${rateLimit}`)
 })
+
+client.on('warn', (warning) => {
+	log.warn(`Discord ${client.user.tag} sent general warning: ${warning}`)
+})
+
 
 client.login(process.env.k)
 	.catch((err) => {
