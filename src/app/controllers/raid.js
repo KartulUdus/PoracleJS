@@ -46,7 +46,7 @@ class Raid extends Controller{
 			this.db.query(query)
 				.then(
 					function(result){
-						log.info(`Raid against ${data.name} appeared and ${result.length} humans cared`);
+						log.info(`Raid against ${data.name} appeared and ${result[0].length} humans cared`);
 						resolve(result[0])
 					}
 				)
@@ -78,7 +78,7 @@ class Raid extends Controller{
 			this.db.query(query)
 				.then(
 					function(result){
-						log.info(`Raid egg level ${data.level} appeared and ${result.length} humans cared`);
+						log.info(`Raid egg level ${data.level} appeared and ${result[0].length} humans cared`);
 						resolve(result[0])
 					}
 				)
