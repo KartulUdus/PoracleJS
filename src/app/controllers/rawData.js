@@ -80,6 +80,7 @@ class RawData extends Controller{
 
 	async imageCreator(spriteObj) {
 		return new Promise(resolve => {
+
 			resolve(true)
 		})
 	}
