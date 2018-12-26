@@ -17,9 +17,10 @@ const pokestop = `CREATE TABLE \`pokestop\` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 
 const activeRaid = `CREATE TABLE \`activeRaid\` (
-  \`pokemon_id\` varchar(50) COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+  \`pokemon_id\` smallint(6) NOT NULL DEFAULT 0,
   \`gym_id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 0,
   \`gym_name\` longtext COLLATE utf8_unicode_ci,
+  \`raid_level\` smallint(6) NOT NULL DEFAULT 0,
   \`start\` TIMESTAMP NULL DEFAULT NULL,
   \`end\` TIMESTAMP NULL DEFAULT NULL,
   \`created_timestamp\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

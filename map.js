@@ -28,7 +28,14 @@ mapController.getStartPos(config.map.startPos).then(function(startPoint){
 		console.log(msg.body)
 	})
 
-	fastify.register(require('fastify-vue-plugin'), {
+	fastify
+		.use('/static', serveStatic(path.join(__dirname, `/assets/${config.map.spriteDir}`)))
+		.setErrorHandler(function (error, request, reply) {
+			log.warn(`Fastify unhappy with error: ${error.message}`)
+			reply.send({message: error.message})
+		})
+		.register(require('./src/app/routes/rawData'))
+		.register(require('fastify-vue-plugin'), {
 		config: require('./nuxt.config.js'),
 		attachProperties: ['session']
 
