@@ -1,7 +1,6 @@
 const Controller = require('./controller')
 const config = require('config')
 const log = require('../logger')
-const emojiFlags = require('emoji-flags')
 const pokemonGif = require('pokemon-gif');
 
 const _ = require('lodash')
@@ -13,6 +12,7 @@ const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
 const moment = require('moment')
 require('moment-precise-range-plugin')
+moment.locale(config.locale.timeformat)
 
 const dts = require('../../../config/dts')
 
@@ -110,7 +110,7 @@ class Raid extends Controller{
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00}.png`;
 				const e = [];
 				monsterData[data.pokemon_id].types.forEach((type) => {
-					e.push(types[type].emoji);
+					if(types[type]) e.push(types[type].emoji);
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
@@ -194,7 +194,7 @@ class Raid extends Controller{
 													city: geoResult.city,
 													state: geoResult.state,
 													stateCode: geoResult.stateCode,
-													flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji,
+													flagemoji: geoResult.flag,
 													emojistring: data.emojiString
 
 												};
@@ -288,7 +288,7 @@ class Raid extends Controller{
 												city: geoResult.city,
 												state: geoResult.state,
 												stateCode: geoResult.stateCode,
-												flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji
+												flagemoji: geoResult.flag
 											};
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`]);

@@ -4,7 +4,6 @@ const config = require('config');
 
 const _ = require('lodash')
 const mustache = require('mustache');
-const emojiFlags = require('emoji-flags')
 const pokemonGif = require('pokemon-gif');
 
 const monsterData = require(config.locale.monstersJson)
@@ -14,7 +13,8 @@ const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
 const ivColorData = config.discord.iv_colors
 const moment = require('moment')
-require('moment-precise-range-plugin');
+require('moment-precise-range-plugin')
+moment.locale(config.locale.timeformat)
 
 const dts = require('../../../config/dts')
 class Monster extends Controller{
@@ -114,7 +114,7 @@ class Monster extends Controller{
 			data.boostemoji = weatherData[data.weather].emoji ? weatherData[data.weather].emoji : '';
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
-			data.color = types[monsterData[data.pokemon_id].types[0]].color ? types[monsterData[data.pokemon_id].types[0]].color : 0;
+			data.color = monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0;
 			data.ivcolor = this.findIvColor(data.iv);
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
 			data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
@@ -189,7 +189,7 @@ class Monster extends Controller{
 								city: geoResult.city,
 								state: geoResult.state,
 								stateCode: geoResult.stateCode,
-								flagemoji: emojiFlags[`${geoResult.countryCode}`].emoji,
+								flagemoji: geoResult.flag,
 								emojiString: data.emojiString
 
 							};

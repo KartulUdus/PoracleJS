@@ -5,6 +5,7 @@ const client = require('../discord/client')
 const query = require('../sql/queries')
 const config = require('config')
 const moment = require('moment')
+moment.locale(config.locale.timeformat);
 const ComDayController = require('../controllers/comDay')
 
 const monsterData = require(config.locale.commandMonstersJson)
