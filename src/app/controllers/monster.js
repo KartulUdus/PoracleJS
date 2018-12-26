@@ -13,7 +13,8 @@ const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
 const ivColorData = config.discord.iv_colors
 const moment = require('moment')
-require('moment-precise-range-plugin');
+require('moment-precise-range-plugin')
+moment.locale(config.locale.timeformat)
 
 const dts = require('../../../config/dts')
 class Monster extends Controller{

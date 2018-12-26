@@ -12,6 +12,7 @@ const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
 const moment = require('moment')
 require('moment-precise-range-plugin')
+moment.locale(config.locale.timeformat)
 
 const dts = require('../../../config/dts')
 
