@@ -15,7 +15,6 @@ client.on('ready', () => {
 					if (config.discord.typereact) {
 						msg.job.emoji.forEach((emoji) => {
 							message.react(emoji)
-							let hungryInterval = startBeingHungry()
 						})
 					}
 					else {
@@ -36,7 +35,10 @@ client.on('ready', () => {
 					}
 				})
 			}
-			else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
+			else{
+				let hungryInterval = startBeingHungry()
+				log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
+			}
 		}
 	})
 	let hungryInterval = startBeingHungry()
