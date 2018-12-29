@@ -50,7 +50,8 @@
                         <div class="raidGymPopup">
                             <img v-if="r.id" :src="r.pLink">
                             <img v-else :src="r.eLink">
-                            <h4 v-if="r.id">Raid lvl {{ r.raw.raid_level }} {{r.humanWords.name}} <br> {{r.humanWords.typeString}}</h4><br>
+                            <h4 v-if="r.id">Raid lvl {{ r.raw.raid_level }} {{r.humanWords.name}} <br> {{r.humanWords.typeString}}</h4>
+                            <h4 v-else>Raid lvl {{ r.raw.raid_level }} {{r.humanWords.name}} <br> {{r.humanWords.typeString}}</h4>
                             <a :href="r.mapLink">Google Maps</a> <br>
                         </div>
                         <div v-if="convertUTCDateToLocalDate(new Date(r.start)) > new Date()" class="raidGymPopup">

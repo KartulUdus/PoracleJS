@@ -107,7 +107,7 @@ class Raid extends Controller{
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.distime = moment(data.end * 1000).format(config.locale.time)
 				data.name = monsterData[data.pokemon_id]? monsterData[data.pokemon_id].name : 'errormon'
-				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00}.png`;
+				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00.png`;
 				const e = [];
 				monsterData[data.pokemon_id].types.forEach((type) => {
 					if(types[type]) e.push(types[type].emoji);

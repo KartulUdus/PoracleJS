@@ -11,6 +11,7 @@ client.on('ready', () => {
 		if (msg.reason === 'food') {
 			clearInterval(hungryInterval)
 			if (client.channels.keyArray().includes(msg.job.target)) {
+				log.warn(msg.job.message)
 				client.channels.get(msg.job.target).send(msg.job.message).then((message) => {
 					if (config.discord.typereact) {
 						msg.job.emoji.forEach((emoji) => {
