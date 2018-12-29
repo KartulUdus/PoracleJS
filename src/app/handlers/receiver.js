@@ -140,13 +140,11 @@ module.exports =  async (req, reply) => {
 					if (!data.url) data.url = ''
 					data.park = data.sponsor_id ? true : false
 					data.name = data.name.replace(/"/g, '')
-					data.description = data.description.replace(/"/g, '')
 					data.name = data.name.replace(/\n/g, '')
-					data.description = data.description.replace(/\n/g, '')
 					monsterController.insertOrUpdateQuery(
 						'`gym-info`',
-						['id', 'gym_name', 'park', 'description', 'url', 'latitude', 'longitude'],
-						[`'${data.id}'`, `'${data.name}'`,`${data.park}`, `'${data.description}'`, `'${data.url}'`, `${data.latitude}`, `${data.longitude}`]
+						['id', 'gym_name', 'park', 'url', 'latitude', 'longitude'],
+						[`'${data.id}'`, `'${data.name}'`,`${data.park}`, `'${data.url}'`, `${data.latitude}`, `${data.longitude}`]
 					);
 					log.info(`Saved gym-details for ${data.name}`);
 

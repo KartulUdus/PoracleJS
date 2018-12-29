@@ -35,19 +35,12 @@ class RawData extends Controller{
 
 	async getLiveRaids(lat1, lat2, lon1, lon2) {
 		return new Promise(resolve => {
-			this.db.query('SELECT * from activeRaid where latitude between ? and ? and longitude between ? and ? and end > UTC_TIMESTAMP() and pokemon_id!=0', [lat1, lat2, lon1, lon2])
+			this.db.query('SELECT * from activeRaid where latitude between ? and ? and longitude between ? and ? and end > UTC_TIMESTAMP()', [lat1, lat2, lon1, lon2])
 				.then((result) => {resolve(result[0])})
 				.catch((err) => {log.error(`getLiveRaids errored with: ${err}`)})
 		})
 	}
 
-	async getLiveEggs(lat1, lat2, lon1, lon2) {
-		return new Promise(resolve => {
-			this.db.query('SELECT * from activeRaid where latitude between ? and ? and longitude between ? and ? and end > UTC_TIMESTAMP() and pokemon_id=0', [lat1, lat2, lon1, lon2])
-				.then((result) => {resolve(result[0])})
-				.catch((err) => {log.error(`getLiveEggs errored with: ${err}`)})
-		})
-	}
 
 	async getGyms(lat1, lat2, lon1, lon2) {
 		return new Promise(resolve => {
@@ -57,7 +50,7 @@ class RawData extends Controller{
 		})
 	}
 
-	async checkSprites(lat1, lat2, lon1, lon2) {
+	async checkRaidSprites(lat1, lat2, lon1, lon2) {
 		return new Promise(resolve => {
 			const query = `
 				select concat('raid',pokemon_id,'level', raid_level,'t', team,'ex', is_exclusive) as identifier,  pokemon_id, raid_level, team, is_exclusive from activeRaid where 
@@ -66,21 +59,46 @@ class RawData extends Controller{
 				group by identifier;`
 			this.db.query(query, [lat1, lat2, lon1, lon2])
 				.then((result) => {
-
+					let spritePromises = []
 					_.forEach(result[0], (sprite) => {
-						if(!fs.existsSync(path.join( imgPath, `/raid/${sprite.identifier}.png`))){
+						if (!fs.existsSync(path.join(imgPath, `/raid/${sprite.identifier}.png`))) {
 							log.debug(`Sprite for ${sprite.identifier} not found, generating from ${path.join(__dirname, `../../../assets/${config.map.spriteDir}`)}`)
-							this.imageCreator(sprite)
-								.then(resolve(log.info(`Created new pretty picture ${sprite.identifier}.png`)))
-								.catch((err) => {log.error(`checkSprites call errored with: ${err}`)})						}
+							spritePromises.push(this.raidImageCreator(sprite))
+						}
 					})
+					Promise.all(spritePromises)
+						.then(() => {resolve()})
+						.catch((err) => {log.error(`checkRaidSprites DB call errored with: ${err}`)})
 
 				})
-				.catch((err) => {log.error(`checkSprites DB call errored with: ${err}`)})
 		})
 	}
 
-	async imageCreator(spriteObj) {
+	async checkGymSprites(lat1, lat2, lon1, lon2) {
+		return new Promise(resolve => {
+			const query = `
+				select concat('gym',team,'ex', park) as identifier, team, park from \`gym-info\`  where 
+				latitude between ? and ? and
+				longitude between ? and ?
+				group by identifier;`
+			this.db.query(query, [lat1, lat2, lon1, lon2])
+				.then((result) => {
+					let spritePromises = []
+					_.forEach(result[0], (sprite) => {
+						if (!fs.existsSync(path.join(imgPath, `/raid/${sprite.identifier}.png`))) {
+							log.debug(`Sprite for ${sprite.identifier} not found, generating from ${path.join(__dirname, `../../../assets/${config.map.spriteDir}`)}`)
+							spritePromises.push(this.gymImageCreator(sprite))
+						}
+					})
+					Promise.all(spritePromises)
+						.then(() => {resolve()})
+						.catch((err) => {log.error(`checkGymSprites DB call errored with: ${err}`)})
+
+				})
+		})
+	}
+
+	async raidImageCreator(spriteObj) {
 		return new Promise(resolve => {
 			let raidoregg = spriteObj.pokemon_id ? path.join(imgPath, `pokemon_icon_${spriteObj.pokemon_id.toString().padStart(3, '0')}_00.png`) : path.join(imgPath, `egg${spriteObj.raid_level}.png`)
 
@@ -102,6 +120,20 @@ class RawData extends Controller{
 		})
 	}
 
+	async gymImageCreator(spriteObj) {
+		return new Promise(resolve => {
+			//load all needed images
+			Promise.all([
+				Jimp.read(path.join(imgPath, `gym${spriteObj.team}.png`)),			// Base shield
+				Jimp.read(path.join(imgPath, `ex.png`))
+			]).then(images => {
+				if (spriteObj.park) images[0].composite(images[1], 30, 40)
+				images[0]
+					.write(path.join( imgPath, `/raid/${spriteObj.identifier}.png`))
+				resolve()
+			}).catch((err) => {log.error(`imageCreator errored with: ${err}`)})
+		})
+	}
 }
 
 module.exports = RawData

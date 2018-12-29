@@ -8,11 +8,21 @@
     "connectionLimit": 30
   },
   "general": {
-    "logLevel": "info",
+    "logLevel": "debug",
     "host": "127.0.0.1",
     "port": "3030",
-    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
-    "max_pokemon": 500
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
+    "max_pokemon": 375
+  },
+
+  "map": {
+    "enabled": true,
+    "host": "127.0.0.1",
+    "port": "4040",
+    "startPos": "59.4372155, 24.7453688",
+    "startZoom": 13,
+    "tileServer": "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+    "spriteDir": "images"
   },
 
   "locale": {
@@ -26,19 +36,18 @@
 
   "geocoding": {
     "provider": "OSM",
-    "googleKey":["YOUR GOOGLE KEY"],
+    "googleKey":["AIzaSyD4nFUhRqGYw4f06H9zmNURafnwbdvMMh4"],
     "width": 250,
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
-    "rocketmap":"http://yourmap.com/RocketMap/",
-    "geofence": "../../../config/geofence.json"
+    "geofence": "../../../config/geofence_example.json"
   },
 
   "discord": {
-    "token": ["YOUR DISCORD TOKEN"],
-    "channel": "testing",
-    "admins": ["222742859059560458"],
+    "token": ["YourDiscordToken"],
+    "channel": "general",
+    "admins": ["2222222222222222222"],
     "comDayResultChannelId":"383608765972217857",
     "modRole":"sudo",
     "prefix": "!",

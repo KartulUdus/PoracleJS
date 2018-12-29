@@ -16,6 +16,15 @@
     align-content: center;
 }
 
+.raidGymPopup {
+    text-align: center;
+    align-content: center;
+
+}
+#gymImg {
+    width: 90px
+}
+
 .bm-burger-button {
     position: inherit;
     z-index: 500;

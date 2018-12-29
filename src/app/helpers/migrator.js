@@ -62,7 +62,7 @@ const gymInfo = `CREATE TABLE \`gym-info\` (
   \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   \`park\` tinyint(1) NOT NULL DEFAULT 0,
   \`gym_name\` longtext COLLATE utf8_unicode_ci,
-  \`description\` longtext COLLATE utf8_unicode_ci,
+  \`team\` smallint(1) DEFAULT 4,
   \`url\` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
   \`latitude\` double NOT NULL,
   \`longitude\` double NOT NULL,

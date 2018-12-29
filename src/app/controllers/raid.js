@@ -119,8 +119,8 @@ class Raid extends Controller{
 				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
 				if (!data.move_1) data.move_1 = 0
 				if (!data.move_2) data.move_2 = 0
-				data.quick_move = data.move_1 ? moveData[data.move_1].name : ''
-				data.charge_move = data.move_2 ? moveData[data.move_2].name : ''
+				data.quick_move = data.move_1 && moveData[data.move_1]? moveData[data.move_1].name : ''
+				data.charge_move = data.move_2 && moveData[data.move_2]? moveData[data.move_2].name : ''
 				data.cp = data.cp? data.cp : 0
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
@@ -139,7 +139,7 @@ class Raid extends Controller{
 						this.insertOrUpdateQuery(
 							'`activeRaid`',
 							['gym_id', 'pokemon_id', 'raid_level', 'gym_name', 'start', 'end', 'created_timestamp', 'move_1', 'move_2', 'is_exclusive', 'team', 'cp', 'latitude', 'longitude'],
-							[`'${data.gym_id}'`, `'${data.pokemon_id}'`, `'${data.level}'`, `'${data.gymname}'`, `'${moment(data.start * 1000).format('YYYY-MM-DD HH:MM:SS')}'`, `'${moment(data.end * 1000).format('YYYY-MM-DD HH:MM:SS')}'`,`NOW()`,`'${data.move_1}'`, `'${data.move_2}'`,`${data.park}`,`'${data.team_id}'`, `'${data.cp}'`, `${data.latitude}`, `${data.longitude}`]
+							[`'${data.gym_id}'`, `'${data.pokemon_id}'`, `'${data.level}'`, `'${data.gymname}'`, `FROM_UNIXTIME(${data.start})` , `FROM_UNIXTIME(${data.end})` ,`UTC_TIMESTAMP()`,`'${data.move_1}'`, `'${data.move_2}'`,`${data.park}`,`'${data.team_id}'`, `'${data.cp}'`, `${data.latitude}`, `${data.longitude}`]
 						).catch((err) => {log.error(`Updating activeRaid table errored with: ${err}`)})
 
 						this.pointInArea([data.latitude, data.longitude])

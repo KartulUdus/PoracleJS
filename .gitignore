@@ -1,4 +1,5 @@
 logs/*.log
+logs/*.json
 config/*.json
 !config/geofence_example.json
 app/src/communityDay/images/*
