@@ -249,7 +249,7 @@ class Raid extends Controller{
 						this.insertOrUpdateQuery(
 							'`activeRaid`',
 							['gym_id', 'pokemon_id', 'raid_level', 'gym_name', 'start', 'end', 'created_timestamp', 'move_1', 'move_2', 'is_exclusive', 'team', 'cp', 'latitude', 'longitude'],
-							[`'${data.gym_id}'`, `0`,`'${data.level}'`,`'${data.gymname}'`, `'${moment(data.start * 1000).format('YYYY-MM-DD HH:MM:SS')}'`, `'${moment(data.end * 1000).format('YYYY-MM-DD HH:MM:SS')}'`,`NOW()`,`'${data.move_1}'`, `'${data.move_2}'`,`${data.park}`,`'${data.team_id}'`, `'${data.cp}'`, `${data.latitude}`, `${data.longitude}`]
+							[`'${data.gym_id}'`, `0`,`'${data.level}'`,`'${data.gymname}'`, `FROM_UNIXTIME(${data.start})` , `FROM_UNIXTIME(${data.end})` ,`UTC_TIMESTAMP()`,`'${data.move_1}'`, `'${data.move_2}'`,`${data.park}`,`'${data.team_id}'`, `'${data.cp}'`, `${data.latitude}`, `${data.longitude}`]
 						).catch((err) => {log.error(`Updating activeRaid table errored with: ${err}`)})
 
 						this.pointInArea([data.latitude, data.longitude])

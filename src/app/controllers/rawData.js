@@ -2,8 +2,10 @@ const log = require('../logger')
 const fs = require('fs')
 const _ = require('lodash')
 const config = require('config')
+const Jimp = require('jimp')
 const path = require('path')
 const Controller = require('./controller')
+const imgPath = path.join(__dirname, `../../../assets/${config.map.spriteDir}/`)
 
 class RawData extends Controller{
 
@@ -66,13 +68,13 @@ class RawData extends Controller{
 				.then((result) => {
 
 					_.forEach(result[0], (sprite) => {
-						console.log(sprite.identifier)
-						if(!fs.existsSync(path.join(__dirname, `../../../assets/${config.map.spriteDir}/raid/${sprite.identifier}.png`))){
+						if(!fs.existsSync(path.join( imgPath, `/raid/${sprite.identifier}.png`))){
 							log.debug(`Sprite for ${sprite.identifier} not found, generating from ${path.join(__dirname, `../../../assets/${config.map.spriteDir}`)}`)
 							this.imageCreator(sprite)
-						}
+								.then(resolve(log.info(`Created new pretty picture ${sprite.identifier}.png`)))
+								.catch((err) => {log.error(`checkSprites call errored with: ${err}`)})						}
 					})
-					resolve(result[0])
+
 				})
 				.catch((err) => {log.error(`checkSprites DB call errored with: ${err}`)})
 		})
@@ -80,8 +82,23 @@ class RawData extends Controller{
 
 	async imageCreator(spriteObj) {
 		return new Promise(resolve => {
+			let raidoregg = spriteObj.pokemon_id ? path.join(imgPath, `pokemon_icon_${spriteObj.pokemon_id.toString().padStart(3, '0')}_00.png`) : path.join(imgPath, `egg${spriteObj.raid_level}.png`)
 
-			resolve(true)
+			//load all needed images
+			Promise.all([
+				Jimp.read(path.join(imgPath, `gym${spriteObj.team}.png`)),			// Base shield
+				Jimp.read(raidoregg),  												// Monster or egg
+				Jimp.read(path.join(imgPath, `badge${spriteObj.raid_level}.png`)),  // Raid level
+				Jimp.read(path.join(imgPath, `ex.png`))
+			]).then(images => {
+				images[1].resize(60, 60)
+				if (spriteObj.is_exclusive) images[0].composite(images[3], 0, 8)
+				images[0]
+					.composite(images[1], 20, 20)
+					.composite(images[2], 60, 60)
+					.write(path.join( imgPath, `/raid/${spriteObj.identifier}.png`))
+				resolve()
+			}).catch((err) => {log.error(`imageCreator errored with: ${err}`)})
 		})
 	}
 

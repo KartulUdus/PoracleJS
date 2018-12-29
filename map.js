@@ -31,20 +31,17 @@ mapController.getStartPos(config.map.startPos).then(function(startPoint){
 	fastify
 		.use('/static', serveStatic(path.join(__dirname, `/assets/${config.map.spriteDir}`)))
 		.setErrorHandler(function (error, request, reply) {
-			log.warn(`Fastify unhappy with error: ${error.message}`)
+			log.warn(`Fastify unhappy with error: ${error}`)
 			reply.send({message: error.message})
 		})
 		.register(require('./src/app/routes/rawData'))
 		.register(require('fastify-vue-plugin'), {
-		config: require('./nuxt.config.js'),
-		attachProperties: ['session']
-
-	}).after(e => {
-		if (e) log.error(e)
-		fastify.nuxt('/')
-	})
-
-// other stuff/routes
+			config: require('./nuxt.config.js'),
+			attachProperties: ['session']
+		}).after(e => {
+			if (e) log.error(e)
+			fastify.nuxt('/')
+		})
 
 	fastify.listen(config.map.port, config.map.host , (e) => {
 		if (e) log.error(e)

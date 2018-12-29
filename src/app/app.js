@@ -13,6 +13,10 @@ commandWorker.on('exit', () => {
 fastify.register(require('./schemas'))
 	.register(require('./routes/healthcheck'))
 	.register(require('./routes/receiver'))
+	.setErrorHandler(function (error, request, reply) {
+		log.warn(`Fastify unhappy with error: ${error.message}`)
+		reply.send({message: error.message})
+	})
 
 
 const start = async () => {
@@ -28,11 +32,12 @@ const start = async () => {
 
 start()
 
+// if map is enabled fork it as a child process and bounce it on exit
 if(config.map.enabled){
-
 	let map = cp.fork(`${__dirname}/../../map.js`)
 	map.on('exit', (err) => {
-		console.log('map died')
+		log.warn(`Map process died and said: ${err}. Restarting ...`)
+		let map = cp.fork(`${__dirname}/../../map.js`)
 	})
 
 

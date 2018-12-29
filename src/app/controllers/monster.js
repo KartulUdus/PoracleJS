@@ -135,7 +135,7 @@ class Monster extends Controller{
 			this.insertOrUpdateQuery(
 				'`pokemon`',
 				['encounter_id', 'pokemon_id', 'atk', 'def', 'sta', 'level','gender', 'form', 'weight','weather', 'cp', 'move_1','move_2', 'disappear_time', 'created_timestamp','latitude', 'longitude'],
-				[`'${data.encounter_id}'`, `'${data.pokemon_id}'`,`${data.individual_attack}`, `'${data.individual_defense}'`, `'${data.individual_stamina}'`,`${data.pokemon_level}`,`'${data.gender}'`, `'${data.form}'`,`${data.weight}`,`'${data.weather}'`, `'${data.cp}'`,`${data.move_1}`,`'${data.move_2}'`, `'${moment(data.disappear_time * 1000).format('YYYY-MM-DD HH:MM:SS')}'`,`NOW()`, `${data.latitude}`, `${data.longitude}`]
+				[`'${data.encounter_id}'`, `'${data.pokemon_id}'`,`${data.individual_attack}`, `'${data.individual_defense}'`, `'${data.individual_stamina}'`,`${data.pokemon_level}`,`'${data.gender}'`, `'${data.form}'`,`${data.weight}`,`'${data.weather}'`, `'${data.cp}'`,`${data.move_1}`,`'${data.move_2}'`, `FROM_UNIXTIME(${data.disappear_time})`,`UTC_TIMESTAMP()`, `${data.latitude}`, `${data.longitude}`]
 			).catch((err) => {log.error(`Updating Pokemon table errored with: ${err}`)})
 
 			this.pointInArea([data.latitude, data.longitude]).then((matchedAreas) => {

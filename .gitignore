@@ -10,3 +10,5 @@ npm-debug.log
 .idea/*
 nuxt.config.js
 .nuxt/*
+assets/customimages/*
+assets/images/raid/*

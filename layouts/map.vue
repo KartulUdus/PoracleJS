@@ -8,7 +8,11 @@
                 </SlideMenu>
             </no-ssr>
         </div>
+        <Map/>
         <nuxt/>
     </div>
 
 </template>
+<script>
+
+</script>

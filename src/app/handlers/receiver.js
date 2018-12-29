@@ -58,6 +58,7 @@ discord.on('message', (worker, msg) => {
 })
 
 discord.on('warning', (worker, msg) => {
+	log.warn(`discord worker ${worker} emitted wargning: ${msg}`)
 
 })
 

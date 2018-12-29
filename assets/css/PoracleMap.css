@@ -11,6 +11,11 @@
     font-family: sans-serif;
 }
 
+.popupPoracle {
+    text-align: center;
+    align-content: center;
+}
+
 .bm-burger-button {
     position: inherit;
     z-index: 500;
