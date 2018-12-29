@@ -109,8 +109,8 @@ class Monster extends Controller{
 			data.move_1 = data.weight? data.move_1 : 0
 			data.move_2 = data.weight? data.move_2 : 0
 			data.weight = data.weight ? data.weight.toFixed(1) : 0
-			data.quick_move = data.weight? moveData[data.move_1].name : ''
-			data.charge_move = data.weight? moveData[data.move_2].name : ''
+			data.quick_move = data.weight && moveData[data.move_1] ? moveData[data.move_1].name : ''
+			data.charge_move = data.weight && moveData[data.move_2] ? moveData[data.move_1].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0;
 			if (!data.weather_boosted_condition) data.weather_boosted_condition = 0;
 			data.boost = weatherData[data.weather_boosted_condition].name ? weatherData[data.weather_boosted_condition].name : '';
