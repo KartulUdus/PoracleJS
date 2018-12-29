@@ -40,10 +40,6 @@ _.forEach(config.discord.token, function(k) {
 
 
 
-discord.on('exit', (err) => {
-	log.warn(`A discord slave died with exitCode: ${err.process.exitCode}`)
-})
-
 discord.on('message', (worker, msg) => {
 	if(msg.reason === 'seppuku'){
 		log.warn('discord worker commited seppuku, cloning new')
@@ -53,13 +49,9 @@ discord.on('message', (worker, msg) => {
 		if (queue.length){
 			discord.workers[worker.id].send({reason: 'food', job: queue.shift()})
 		}
-
 	}
 })
 
-discord.on('warning', (worker, msg) => {
-
-})
 
 
 module.exports =  async (req, reply) => {

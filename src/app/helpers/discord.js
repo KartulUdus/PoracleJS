@@ -15,12 +15,9 @@ client.on('ready', () => {
 					if (config.discord.typereact) {
 						msg.job.emoji.forEach((emoji) => {
 							message.react(emoji)
-							let hungryInterval = startBeingHungry()
 						})
 					}
-					else {
-						let hungryInterval = startBeingHungry()
-					}
+					let hungryInterval = startBeingHungry()
 				})
 			}
 			else if (client.users.keyArray().includes(msg.job.target)) {
@@ -28,12 +25,9 @@ client.on('ready', () => {
 					if (config.discord.typereact) {
 						msg.job.emoji.forEach((emoji) => {
 							message.react(emoji)
-							const hungryInterval = startBeingHungry()
 						})
 					}
-					else {
-						let hungryInterval = startBeingHungry()
-					}
+					let hungryInterval = startBeingHungry()
 				})
 			}
 			else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
@@ -44,9 +38,9 @@ client.on('ready', () => {
 
 function startBeingHungry() {
 	log.debug(`Discord worker ${process.pid} started being hungry`)
-	const hungryInterval = setInterval(() => {
+	let hungryInterval = setInterval(() => {
 		process.send({ reason: 'hungry' })
-	}, 10)
+	}, 100)
 	return hungryInterval
 }
 
@@ -58,6 +52,15 @@ client.on('warn', (warning) => {
 	log.warn(`Discord ${client.user.tag} sent general warning: ${warning}`)
 })
 
+process.on('disconnect', exit => {
+	process.send({ reason: 'seppuku', key: process.env.k })
+	process.exit()
+})
+client.on('error', e => {
+	process.send({ reason: 'seppuku', key: process.env.k })
+	log.info(`Discord worker sent me an errot, commiting seppuku just in case`)
+	process.exit()
+});
 
 client.login(process.env.k)
 	.catch((err) => {
@@ -65,4 +68,5 @@ client.login(process.env.k)
 		process.send({ reason: 'seppuku', key: process.env.k })
 		process.exit()
 	})
+
 
