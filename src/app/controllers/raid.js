@@ -114,7 +114,7 @@ class Raid extends Controller{
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
-				if(!!(data.team_id)) data.team_id = 0
+				if(!(data.team_id)) data.team_id = 0
 				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
 				if (!data.move_1) data.move_1 = 0
@@ -125,7 +125,7 @@ class Raid extends Controller{
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 
-						if (!!(data.sponsor_id)) data.sponsor_id = false
+						if (!data.sponsor_id) data.sponsor_id = false
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name;
 						data.description = gymInfo ? gymInfo.description : '';
 						data.url = gymInfo ? gymInfo.url : '';
@@ -224,7 +224,7 @@ class Raid extends Controller{
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true);
 				data.hatchtime = moment(data.start * 1000).format(config.locale.time);
 				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/egg${data.level}.png`;
-				if(!!(data.team_id)) data.team_id = 0
+				if(!data.team_id) data.team_id = 0
 				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
 				if (!data.move_1) data.move_1 = 0
@@ -234,7 +234,7 @@ class Raid extends Controller{
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 
-						if (!!(data.sponsor_id)) data.sponsor_id = false
+						if (!data.sponsor_id) data.sponsor_id = false
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name;
 						data.description = gymInfo ? gymInfo.description : '';
 						data.url = gymInfo ? gymInfo.url : '';

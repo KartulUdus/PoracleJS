@@ -143,9 +143,9 @@ const schemaVersion = `CREATE TABLE \`schema_version\` (
 const quest = `
 CREATE TABLE \`quest\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  \`quest_id\` int(11) DEFAULT NULL,
+  \`quest_id\` int(11) NOT NULL DEFAULT 0,
   \`template\` smallint(5) DEFAULT 3,
-  \`reward_id\` int(11) DEFAULT NULL,
+  \`reward_id\` int(11) NOT NULL DEFAULT 0,
   \`distance\` int(11) NOT NULL,
   PRIMARY KEY quest_tracking (\`id\`, \`quest_id\`, \`reward_id\`),
   KEY \`distance\` (\`distance\`)

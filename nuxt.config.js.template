@@ -21,6 +21,8 @@ module.exports = {
 	env: {
 		tileServer: "TILESERVER",
 		startPos: "STARTPOS",
-		startZoom: "STARTZOOM"
+		startZoom: "STARTZOOM",
+		minZoom: "MINZOOM",
+		maxZoom: "MAXZOOM"
 	}
 }

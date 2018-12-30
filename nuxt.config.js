@@ -21,6 +21,8 @@ module.exports = {
 	env: {
 		tileServer: "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
 		startPos: "59.4372155, 24.7453688",
-		startZoom: "13"
+		startZoom: "13",
+		minZoom: "11",
+		maxZoom: "16"
 	}
 }

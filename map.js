@@ -22,6 +22,8 @@ mapController.getStartPos(config.map.startPos).then(function(startPoint){
 		.replace(/TILESERVER/g, config.map.tileServer)
 		.replace(/STARTPOS/g, startPoint)
 		.replace(/STARTZOOM/g, config.map.startZoom)
+		.replace(/MINZOOM/g, config.map.minZoom)
+		.replace(/MAXZOOM/g, config.map.maxZoom)
 	fs.writeFileSync('./nuxt.config.js', nuxtconf)
 
 	process.on('message', (msg) => {

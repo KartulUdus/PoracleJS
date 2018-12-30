@@ -4,42 +4,27 @@
             <l-map  ref="Lmap"
                     :zoom=startZoom
                     :center="{lat: startLat, lng : startLon}"
-                    :min-zoom="5"
-                    :max-zoom="15"
+                    :min-zoom="minZoom"
+                    :max-zoom="maxZoom"
                     @update:bounds="loadMap"
             >
 
                 <l-tile-layer :url=tileserver></l-tile-layer>
-
                 <!-- Render array of Monster markers -->
                 <l-marker v-for="p in pokemonMarkers" :key="p.encounter_id" :lat-lng="{lat: p.lat, lng : p.lon}" :icon="p.icon">
-                    <l-popup v-if="p.raw.weight">
+                    <l-popup>
                         <div class="popupPoracle">
                             <img :src="p.link" width='65px'/>
-                            <h3>{{p.humanWords.name}} <br> {{p.humanWords.typeString}}</h3>
+                            <h3>#{{p.raw.pokemon_id}}:{{p.humanWords.name}} <br> {{p.humanWords.typeString}}</h3>
                             <vac :end-time="convertUTCDateToLocalDate(new Date(p.raw.disappear_time))">
                              <span slot-scope="{ timeObj }">
                                  Disappear time: {{ (convertUTCDateToLocalDate(new Date(p.raw.disappear_time))).toLocaleTimeString() }} <br>
                                  {{ `Time til hidden: ${timeObj.m}:${timeObj.s}` }} <br>
 
                                  <a :href="p.mapLink">Google Maps</a> <br>
-                                 <b>IV: {{ ((p.raw.atk + p.raw.def + p.raw.sta) / 0.45).toFixed(2) }}% level:{{p.raw.level}} {{p.raw.atk}}/{{p.raw.def}}/{{p.raw.sta}}  </b> <br>
-                                 {{ $getMoveData(p.raw.move_1) }} / {{ $getMoveData(p.raw.move_2) }}
+                                 <b v-if="p.raw.weight" >IV: {{ ((p.raw.atk + p.raw.def + p.raw.sta) / 0.45).toFixed(2) }}% level:{{p.raw.level}} {{p.raw.atk}}/{{p.raw.def}}/{{p.raw.sta}}  </b> <br>
+                                 <a v-if="p.raw.weight" >{{ $getMoveData(p.raw.move_1) }} / {{ $getMoveData(p.raw.move_2) }}</a>
                             </span>
-                            </vac>
-                        </div>
-                    </l-popup>
-                    <l-popup v-else>
-                        <div class="popupPoracle">
-                            <img :src="p.link" width='65px'/>
-                            <h3>{{p.humanWords.name}} <br> {{p.humanWords.typeString}}</h3>
-                            <vac :end-time="convertUTCDateToLocalDate(new Date(p.raw.disappear_time)).getTime()">
-                             <span slot-scope="{ timeObj }">
-                                 Disappear time: {{ (convertUTCDateToLocalDate(new Date(p.raw.disappear_time))).toLocaleTimeString() }} <br>
-                                     {{ `Time til hidden: ${timeObj.m}:${timeObj.s}` }} <br>
-                                 <a :href="p.mapLink">Google Maps</a> <br>
-
-                             </span>
                             </vac>
                         </div>
                     </l-popup>
@@ -83,7 +68,6 @@
                             <h3>{{g.name}}</h3>
                             <h4 v-if="g.ex">This gym is eligible for EX raids</h4>
                             <a :href="g.mapLink">Google Maps</a> <br>
-
                         </div>
                     </l-popup>
                 </l-marker>
@@ -99,7 +83,6 @@
 	if (process.browser) L = require('leaflet');
 
 	export default {
-		layout: 'map',
 
 		data() {
 			return {
@@ -107,164 +90,100 @@
                 startLat: process.env.startPos.split(',')[0],
                 startLon: process.env.startPos.split(',')[1],
                 startZoom: parseInt(process.env.startZoom),
-                monsterData: {},
-                pokemonMarkers: [],
-                raidMarkers: [],
-                gymMarkers: []
+				minZoom: parseInt(process.env.minZoom),
+                maxZoom: parseInt(process.env.maxZoom),
+                icons: {},
+                initLoad: true
 			}
 		},
-		updated() {
-			this.loadMap(this.$refs.Lmap.mapObject.getBounds())
+        updated(){
+            this.initMap()
+        },
+		computed: {
+			pokemonFilters () {
+				return this.$store.state.filters.pokemon
+			},
+            pokemonMarkers () {	return this.$store.state.markers.pokemonMarkers },
+            raidMarkers () { return this.$store.state.markers.raidMarkers },
+			gymMarkers () {	return this.$store.state.markers.gymMarkers	}
 		},
-
         methods: {
+
 			async loadMap (bounds){
-
 				// first we remove all elements that are outside the viewport
-				for( let i = 0; i < this.pokemonMarkers.length-1; i++){
-					if (this.pokemonMarkers[i].lat > bounds._northEast.lat ||
-						this.pokemonMarkers[i].lat < bounds._southWest.lat ||
-						this.pokemonMarkers[i].lon > bounds._northEast.lng ||
-						this.pokemonMarkers[i].lon < bounds._southWest.lng ||
-                        this.convertUTCDateToLocalDate(new Date(this.pokemonMarkers[i].disappear_time)) < new Date
-                    ) {
-						this.pokemonMarkers.splice(i, 1);
-					}
-				}
-				for( let i = 0; i < this.raidMarkers.length-1; i++){
-					if (this.raidMarkers[i].lat > bounds._northEast.lat ||
-						this.raidMarkers[i].lat < bounds._southWest.lat ||
-						this.raidMarkers[i].lon > bounds._northEast.lng ||
-						this.raidMarkers[i].lon < bounds._southWest.lng ||
-                        this.convertUTCDateToLocalDate(new Date(this.raidMarkers[i].end)) < new Date
-					) {
-						this.raidMarkers.splice(i, 1);
-					}
-				}
-				for( let i = 0; i < this.gymMarkers.length-1; i++){
-					if (this.gymMarkers[i].lat > bounds._northEast.lat ||
-						this.gymMarkers[i].lat < bounds._southWest.lat ||
-						this.gymMarkers[i].lon > bounds._northEast.lng ||
-						this.gymMarkers[i].lon < bounds._southWest.lng
-					) {
-						this.gymMarkers.splice(i, 1);
-					}
-				}
-
+				this.$store.commit('markers/clearBadMarkers', bounds)
+                // then call for raw_data
 				let raw_data = await axios.get(`/raw/${bounds._southWest.lat}/${bounds._northEast.lat}/${bounds._southWest.lng}/${bounds._northEast.lng}`)
-				// Code to compare if markers are already included
-                Array.prototype.inArray = function(comparer) {for(var i=0; i < this.length; i++) {if(comparer(this[i]))return true}return false}
-				Array.prototype.pushIfNotExist = function(element, comparer) {if (!this.inArray(comparer)){this.push(element)}}
-
+                // deal with the raw_data and send to $store
 				raw_data.data.pokemon.forEach((pokemon) => {
-
-                    let link = this.getPokemonLink(pokemon)
-					let marker = {
-						encounter_id: pokemon.encounter_id,
-						lat: pokemon.latitude,
-						lon: pokemon.longitude,
-						icon: this.createMonsterIcon(link),
-                        link: link,
-                        disappear_time: pokemon.disappear_time,
-                        raw: pokemon,
-                        mapLink: `https://www.google.com/maps/search/?api=1&query=${pokemon.latitude},${pokemon.longitude}`,
-						humanWords: this.$getBasicMonsterData(pokemon.pokemon_id)
-					}
-                    // Add not existing Raid to markers
-                    this.pokemonMarkers.pushIfNotExist(marker, function(e) {
-						return e.lat === marker.lat && e.lon === marker.lon && e.encounter_id === marker.encounter_id;
-					})
-
+					pokemon.link = this.getPokemonLink(pokemon)
+                    pokemon.icon = this.createMonsterIcon(pokemon.link, pokemon.pokemon_id)
+                    pokemon.humanwords = this.$getBasicMonsterData(pokemon.pokemon_id)
+					this.$store.commit('markers/addP', pokemon)
 				})
-
                 raw_data.data.raids.forEach((raid) => {
-					let link = `static/raid/raid${raid.pokemon_id}level${raid.raid_level}t${raid.team}ex${raid.is_exclusive}.png`
-					let marker = {
-						id: raid.pokemon_id,
-						gym_id: raid.gym_id,
-						lat: raid.latitude,
-						lon: raid.longitude,
-						icon: this.createRaidIcon(link),
-						link: link,
-						start: raid.start,
-                        end: raid.end,
-						raw: raid,
-						mapLink: `https://www.google.com/maps/search/?api=1&query=${raid.latitude},${raid.longitude}`,
-						humanWords: this.$getBasicMonsterData(raid.pokemon_id),
-                        pLink: this.getPokemonLink(raid),
-                        eLink: `static/egg${raid.raid_level}.png`,
-                        key: `${raid.gym_id}${raid.pokemon_id}${raid.end}${raid.team}${raid.is_exclusive}`
-					}
-					// First Try to update raid marker, then add not existing Raid to markers
-
-					this.raidMarkers.map(obj => [marker].find(o => o.lat === obj.lat && o.lon === obj.lon && obj.pokemon_id === 0) || obj)
-					this.raidMarkers.pushIfNotExist(marker, function(e) {
-						return e.lat === marker.lat && e.lon === marker.lon && e.link === marker.link;
-					})
-
+                    raid.link = `static/raid/raid${raid.pokemon_id}level${raid.raid_level}t${raid.team}ex${raid.is_exclusive}.png`
+                    raid.humanWords= this.$getBasicMonsterData(raid.pokemon_id)
+                    raid.pLink = this.getPokemonLink(raid)
+					raid.icon = this.createRaidIcon(raid.link, `raid${raid.pokemon_id}level${raid.raid_level}t${raid.team}ex${raid.is_exclusive}`)
+					this.$store.commit('markers/addR', raid)
 				})
-
 				raw_data.data.gyms.forEach((gym) => {
-					let link = `static/raid/gym${gym.team}ex${gym.park}.png`
-					let marker = {
-						id: gym.gym_id,
-						lat: gym.latitude,
-						lon: gym.longitude,
-                        ex: gym.park,
-                        name: gym.gym_name,
-                        url: gym.url,
-						link: link,
-						icon: this.createRaidIcon(link),
-						mapLink: `https://www.google.com/maps/search/?api=1&query=${gym.latitude},${gym.longitude}`,
-						key: `${gym.gym_id}${gym.latitude}${gym.longitude}${gym.team}${gym.sponsor_id}`
-					}
-					// First Try to update raid marker, then add not existing Raid to markers
-                    let shouldAddGym = true
-                    this.raidMarkers.forEach(r => {
-                    	if (r.lat.toString().substring(0, 8) === marker.lat.toString().substring(0, 8) &&
-                            r.lon.toString().substring(0, 8) === marker.lon.toString().substring(0, 8)){shouldAddGym = false}
-                    })
-
-                    if (shouldAddGym){
-						this.gymMarkers.pushIfNotExist(marker, function(r) {
-							return r.lat.toString().substring(0, 8) === marker.lat.toString().substring(0, 8) &&
-								r.lon.toString().substring(0, 8) === marker.lon.toString().substring(0, 8);
-						})
-                    }
-
-
+					gym.link = `static/raid/gym${gym.team}ex${gym.park}.png`
+                    gym.icon = this.createRaidIcon(gym.link, `gym${gym.team}ex${gym.park}`)
+					this.$store.commit('markers/addG', gym)
 				})
-
 			},
 			getPokemonLink(rawPokemon){
 				return `static/pokemon_icon_${rawPokemon.pokemon_id.toString().padStart(3, '0')}_00.png`
 			},
 
-			createMonsterIcon(link){
-				return L.icon({
-					iconUrl:      link,
-					iconSize:     [30, 30],
-					iconAnchor:   [0, 0],
-					popupAnchor:  [10, 0]
-				})
+			createMonsterIcon(link, key){
+				 if (this.icons[key]){
+				 	return this.icons[key]
+                 }
+                 else {
+                 	let icon = L.icon({
+						iconUrl:      link,
+						iconSize:     [30, 30],
+						iconAnchor:   [15, 30],
+						popupAnchor:  [0 , -25]
+					})
+                     this.icons[key] = icon
+                     return icon
+                 }
             },
-			createRaidIcon(link){
-				return L.icon({
-					iconUrl:      link,
-					iconSize:     [50, 50],
-					iconAnchor:   [0, 0],
-					popupAnchor:  [20, 0]
-				})
+			createRaidIcon(link, key){
+				if (this.icons[key]){
+					return this.icons[key]
+				}
+				else {
+					let icon = L.icon({
+						iconUrl:      link,
+						iconSize:     [50, 50],
+						iconAnchor:   [25, 50],
+						popupAnchor:  [0 , -45]
+					})
+					this.icons[key] = icon
+					return icon
+				}
 			},
 
 			convertUTCDateToLocalDate(date) {
-				var newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
-				var offset = date.getTimezoneOffset() / 60;
-				var hours = date.getHours();
+				let newDate = new Date(date.getTime()+date.getTimezoneOffset()*60*1000);
+				let offset = date.getTimezoneOffset() / 60;
+				let hours = date.getHours();
 				newDate.setHours(hours - offset);
 				return newDate;
-			}
+			},
 
+            initMap(){
+				if (this.initLoad) {
+					this.loadMap(this.$refs.Lmap.mapObject.getBounds())
+
+					this.initLoad = false
+				}
+            }
         }
 	}
 </script>
