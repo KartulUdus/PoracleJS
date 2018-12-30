@@ -268,7 +268,8 @@ class Raid extends Controller{
 												city: geoResult.city,
 												state: geoResult.state,
 												stateCode: geoResult.stateCode,
-												flagemoji: geoResult.flag
+												flagemoji: geoResult.flag,
+												areas: data.matched.join(','),
 											};
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`]);

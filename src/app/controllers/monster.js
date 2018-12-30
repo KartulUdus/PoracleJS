@@ -173,6 +173,7 @@ class Monster extends Controller{
 								ivcolor: data.ivcolor,
 								boost: data.boost,
 								boostemoji: data.boostemoji,
+								areas: data.matched.join(','),
 
 								// geocode stuff
 								lat: data.latitude.toString().substring(0, 8),
