@@ -1,6 +1,7 @@
 <template>
     <div id="map">
         <no-ssr>
+            <SidebarToggle/>
             <l-map  ref="Lmap"
                     :zoom=startZoom
                     :center="{lat: startLat, lng : startLon}"
@@ -78,6 +79,7 @@
 
 <script>
 
+	import SidebarToggle from './starchy'
 	import axios from 'axios'
 	let L = { icon(){} };
 	if (process.browser) L = require('leaflet');

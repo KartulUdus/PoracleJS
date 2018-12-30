@@ -7,7 +7,8 @@ export const state = () => ({
 	},
 	gym: {
 		enabled:true
-	}
+	},
+	sidebarOpen: false
 })
 
 export const mutations = {

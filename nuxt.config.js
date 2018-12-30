@@ -8,7 +8,7 @@ module.exports = {
         { src: '~/plugins/monsterData', ssr: false }
 
     ],
-	modules: ['@nuxtjs/axios', 'nuxt-leaflet'],
+	modules: ['@nuxtjs/axios', 'nuxt-leaflet', 'nuxt-svg'],
 
 	axios: {
       retry: { retries: 3 }
