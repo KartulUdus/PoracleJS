@@ -132,6 +132,8 @@ module.exports =  async (req, reply) => {
 					data.park = data.sponsor_id ? true : false
 					data.name = data.name.replace(/"/g, '')
 					data.description = data.description.replace(/"/g, '')
+					data.name = data.name.replace(/'/g, '')
+					data.description = data.description.replace(/'/g, '')
 					data.name = data.name.replace(/\n/g, '')
 					data.description = data.description.replace(/\n/g, '')
 					monsterController.insertOrUpdateQuery(
