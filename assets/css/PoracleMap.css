@@ -37,9 +37,9 @@
 
 }
 .Sidebar {
-    position: absolute;
+    position: fixed;
     z-index: 999;
-    right: 0px;
+    right:  0px;
     width: 500px;
 
 
