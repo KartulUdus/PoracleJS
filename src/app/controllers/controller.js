@@ -201,9 +201,9 @@ class Controller{
 	async mysteryQuery(query) {
 		return new Promise(resolve => {
 			this.db.query(query)
-				.then(() => {
+				.then((result) => {
 					log.debug(`Mystery query executed`)
-					resolve()
+					resolve(result[0])
 				})
 				.catch((err) => {log.error(`mysteryQuery errored with: ${err}`)})
 		})

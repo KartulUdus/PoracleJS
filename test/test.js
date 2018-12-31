@@ -20,13 +20,12 @@ describe('Functional', function() {
     })
 
     it('Database connection should be happy to have 9 tables', function(done) {
-        query.countQuery('TABLE_NAME','information_schema.tables','table_schema',config.db.database).then((count) => {
+        query.checkSchema().then((count) => {
 		    chai.assert.equal(count, 9)
             done()
 		}).catch((err) => {
 			done(err)
         })
-
     })
 
 	it('Discord token & owner should be happy', function(done) {
@@ -37,7 +36,7 @@ describe('Functional', function() {
 			user.send('This Is A Test Message').then(done()).catch((error) => {done(error)})
 		})
 	})
-	
+
     it('Google key should be happy', function(done) {
         query.geolocate('Tallinn Estonia').then((location) => {
 			done()
