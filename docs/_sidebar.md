@@ -2,7 +2,6 @@
 
 - [Getting started](install.md)
 - [Creating a discord bot](discordbot.md)
-- [RabbitMQ](rabbitmq.md)
 - [Mysql](mysql.md)
 - [Google maps API key](gmaps.md)
 - [Config file options](config.md)

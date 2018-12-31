@@ -1,10 +1,9 @@
 # Discord Commands
 
-Generally, PoracleJS will respond to valid commands with either: 
+You may notice, PoracleJS will react to valid commands with either: 
 
 * ✅ - Command successful
 * 👌 - Already done
-* 🙅 - Invalid conditions (wrong channel, not admin etc)
 
 ##### General commands
 
@@ -71,8 +70,8 @@ available filters:
 |atk        |`!track eevee atk15`             | Tracks eevee with a (minimum) 15 point attack value|
 |def        |`!track eevee def14`             | Tracks eevee with a (minimum) 14 point defense value|
 |sta        |`!track eevee sta10`             | Tracks eevee with a (minimum) 10 point stamina value|
-|weight     |`!track magikarp weight13130`   | Tracks "big" magikarp (13130 grams and higher|
-|maxweight  |`!track rattata maxweight2410`  | Tracks "tiny" rattata (2410 grams and lower)|
+|weight     |`!track magikarp weight13130`    | Tracks "big" magikarp (13130 grams and higher|
+|maxweight  |`!track rattata maxweight2410`   | Tracks "tiny" rattata (2410 grams and lower)|
 |everything |`!track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
 
 ###### !untrack
@@ -226,7 +225,7 @@ Available filters:
 
 
 
-###### !unegg
+###### !channel unegg
 
 `!channel unegg level2` Removes tracking of level 2 raid eggs.  
 Level is required to remove egg tracking.

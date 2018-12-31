@@ -2,11 +2,14 @@
 
 #### Api key
 
-As mentioned in the [RoecketMap wiki](http://rocketmap.readthedocs.io/en/develop/basic-install/google-maps.html) a Google Maps API key is required. 
-
+The default geocoder for Poracle uses OSM; however, you can enable Google Maps api.  
 Please log in to [Google Developers console](https://console.developers.google.com/) and make sure you have the following API's enabled:  
-*  Google Maps Geocoding
-*  Google Static Maps
+   
+* Google Maps Javascript API 
+* Google Maps Geocoding API
+* Google Reverse Geocoding API
+* Google Static Maps API  
+
 
 
 You can test if your API key manually by adding your key to the below urls:  
