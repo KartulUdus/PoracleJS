@@ -1,18 +1,18 @@
 {
   "db": {
-    "host": "",
-    "user": "",
-    "password": "",
-    "database": "",
-    "port": "",
-    "connectionLimit": 100
+    "host": "127.0.0.1",
+    "user": "poracle",
+    "password": "potato",
+    "database": "poracle",
+    "port": "3306",
+    "connectionLimit": 30
   },
   "general": {
     "logLevel": "info",
     "host": "127.0.0.1",
     "port": "3030",
-    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
-    "max_pokemon": 375
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
+    "max_pokemon": 500
   },
 
   "locale": {
@@ -20,28 +20,30 @@
     "time": "LTS",
     "addressformat": "%S %n",
     "commandMonstersJson": "../util/monsters",
-    "monstersJson": "./util/monsters",
-    "movesJson": "./util/moves"
+    "monstersJson": "../util/monsters",
+    "movesJson": "../util/moves"
   },
 
-  "gmaps": {
-    "key":"",
+  "geocoding": {
+    "provider": "OSM",
+    "googleKey":["YOUR GOOGLE KEY"],
     "width": 250,
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
-    "rocketmap":"http://yourmap.com/RocketMap/"
+    "rocketmap":"http://yourmap.com/RocketMap/",
+    "geofence": "../../../config/geofence.json"
   },
 
   "discord": {
-    "token": "",
+    "token": ["YOUR DISCORD TOKEN"],
     "channel": "general",
-    "admins": ["222222222222222222"],
-    "comDayResultChannelId":"514465201911758849",
-    "modRole":"",
+    "admins": ["222742859059560458"],
+    "comDayResultChannelId":"383608765972217857",
+    "modRole":"sudo",
     "prefix": "!",
     "typereact": true,
-    "limitsec": 300,
+    "limitsec": 30,
     "limitamount": 20,
     "iv_colors": [
         "#9D9D9D",
@@ -51,12 +53,5 @@
         "#A335EE",
         "#FF8000"
     ]
-  },
-
-  "rabbit": {
-    "conn": "amqp://poracle:poracle@localhost:5672"
-  },
-
-  "geofence": []
-
+  }
 }

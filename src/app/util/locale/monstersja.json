@@ -1,0 +1,6120 @@
+{
+  "1": {
+    "name": "フシギダネ",
+    "rarity": "Uncommon",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "61"
+  },
+  "2": {
+    "name": "フシギソウ",
+    "rarity": "Rare",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "421"
+  },
+  "3": {
+    "name": "フシギバナ",
+    "rarity": "Very Rare",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "641"
+  },
+  "4": {
+    "name": "ヒトカゲ",
+    "rarity": "Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "119"
+  },
+  "5": {
+    "name": "リザード",
+    "rarity": "Very Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "1025"
+  },
+  "6": {
+    "name": "リザードン",
+    "rarity": "Very Rare",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "spawn_rate": "879"
+  },
+  "7": {
+    "name": "ゼニガメ",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "65"
+  },
+  "8": {
+    "name": "カメール",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "484"
+  },
+  "9": {
+    "name": "カメックス",
+    "rarity": "Very Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "843"
+  },
+  "10": {
+    "name": "キャタピー",
+    "rarity": "Uncommon",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": "51"
+  },
+  "11": {
+    "name": "トランセル",
+    "rarity": "Rare",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": "433"
+  },
+  "12": {
+    "name": "バタフリー",
+    "rarity": "Very Rare",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": "843"
+  },
+  "13": {
+    "name": "ビードル",
+    "rarity": "Common",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": "21"
+  },
+  "14": {
+    "name": "コクーン",
+    "rarity": "Rare",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": "204"
+  },
+  "15": {
+    "name": "スピアー",
+    "rarity": "Rare",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": "377"
+  },
+  "16": {
+    "name": "ポッポ",
+    "rarity": "Common",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "10"
+  },
+  "17": {
+    "name": "ピジョン",
+    "rarity": "Uncommon",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "75"
+  },
+  "18": {
+    "name": "ピジョット",
+    "rarity": "Rare",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "203"
+  },
+  "19": {
+    "name": "コラッタ",
+    "rarity": "Common",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "13"
+  },
+  "20": {
+    "name": "ラッタ",
+    "rarity": "Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "159"
+  },
+  "21": {
+    "name": "オニスズメ",
+    "rarity": "Uncommon",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "31"
+  },
+  "22": {
+    "name": "オニドリル",
+    "rarity": "Rare",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "221"
+  },
+  "23": {
+    "name": "アーボ",
+    "rarity": "Uncommon",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "75"
+  },
+  "24": {
+    "name": "アーボック",
+    "rarity": "Very Rare",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "544"
+  },
+  "25": {
+    "name": "ピカチュウ",
+    "rarity": "Uncommon",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": "92"
+  },
+  "26": {
+    "name": "ライチュウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": "2051"
+  },
+  "27": {
+    "name": "サンド",
+    "rarity": "Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": "163"
+  },
+  "28": {
+    "name": "サンドパン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": "1619"
+  },
+  "29": {
+    "name": "ニドラン♀",
+    "rarity": "Uncommon",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "77"
+  },
+  "30": {
+    "name": "ニドリーナ",
+    "rarity": "Very Rare",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "504"
+  },
+  "31": {
+    "name": "ニドクイン",
+    "rarity": "Very Rare",
+    "types": [
+      "Poison",
+      "Ground"
+    ],
+    "spawn_rate": "1398"
+  },
+  "32": {
+    "name": "ニドラン♂",
+    "rarity": "Uncommon",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "77"
+  },
+  "33": {
+    "name": "ニドリーノ",
+    "rarity": "Very Rare",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "586"
+  },
+  "34": {
+    "name": "ニドキング",
+    "rarity": "Very Rare",
+    "types": [
+      "Poison",
+      "Ground"
+    ],
+    "spawn_rate": "1025"
+  },
+  "35": {
+    "name": "ピッピ",
+    "rarity": "Uncommon",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": "85"
+  },
+  "36": {
+    "name": "ピクシー",
+    "rarity": "Very Rare",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": "1309"
+  },
+  "37": {
+    "name": "ロコン",
+    "rarity": "Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "188"
+  },
+  "38": {
+    "name": "キュウコン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "1538"
+  },
+  "39": {
+    "name": "プリン",
+    "rarity": "Rare",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "spawn_rate": "101"
+  },
+  "40": {
+    "name": "プクリン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "spawn_rate": "2051"
+  },
+  "41": {
+    "name": "ズバット",
+    "rarity": "Common",
+    "types": [
+      "Poison",
+      "Flying"
+    ],
+    "spawn_rate": "24"
+  },
+  "42": {
+    "name": "ゴルバット",
+    "rarity": "Rare",
+    "types": [
+      "Poison",
+      "Flying"
+    ],
+    "spawn_rate": "209"
+  },
+  "43": {
+    "name": "ナゾノクサ",
+    "rarity": "Uncommon",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "91"
+  },
+  "44": {
+    "name": "クサイハナ",
+    "rarity": "Very Rare",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "592"
+  },
+  "45": {
+    "name": "ラフレシア",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "1864"
+  },
+  "46": {
+    "name": "パラス",
+    "rarity": "Uncommon",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "spawn_rate": "44"
+  },
+  "47": {
+    "name": "パラセクト",
+    "rarity": "Rare",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "spawn_rate": "397"
+  },
+  "48": {
+    "name": "コンパン",
+    "rarity": "Uncommon",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": "38"
+  },
+  "49": {
+    "name": "モルフォン",
+    "rarity": "Rare",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": "300"
+  },
+  "50": {
+    "name": "ディグダ",
+    "rarity": "Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": "211"
+  },
+  "51": {
+    "name": "ダグトリオ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": "1663"
+  },
+  "52": {
+    "name": "ニャース",
+    "rarity": "Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "106"
+  },
+  "53": {
+    "name": "ペルシアン",
+    "rarity": "Very Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "1282"
+  },
+  "54": {
+    "name": "コダック",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "108"
+  },
+  "55": {
+    "name": "ゴルダック",
+    "rarity": "Very Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "707"
+  },
+  "56": {
+    "name": "マンキー",
+    "rarity": "Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": "114"
+  },
+  "57": {
+    "name": "オコリザル",
+    "rarity": "Very Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": "1061"
+  },
+  "58": {
+    "name": "ガーディ",
+    "rarity": "Uncommon",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "77"
+  },
+  "59": {
+    "name": "ウインディ",
+    "rarity": "Very Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "932"
+  },
+  "60": {
+    "name": "ニョロモ",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "95"
+  },
+  "61": {
+    "name": "ニョロゾ",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "481"
+  },
+  "62": {
+    "name": "ニョロボン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water",
+      "Fighting"
+    ],
+    "spawn_rate": "1709"
+  },
+  "63": {
+    "name": "ケーシィ",
+    "rarity": "Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": "104"
+  },
+  "64": {
+    "name": "ユンゲラー",
+    "rarity": "Very Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": "779"
+  },
+  "65": {
+    "name": "フーディン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": "2461"
+  },
+  "66": {
+    "name": "ワンリキー",
+    "rarity": "Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": "217"
+  },
+  "67": {
+    "name": "ゴーリキー",
+    "rarity": "Very Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": "1465"
+  },
+  "68": {
+    "name": "カイリキー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": "3418"
+  },
+  "69": {
+    "name": "マダツボミ",
+    "rarity": "Uncommon",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "86"
+  },
+  "70": {
+    "name": "ウツドン",
+    "rarity": "Rare",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "496"
+  },
+  "71": {
+    "name": "ウツボット",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": "2051"
+  },
+  "72": {
+    "name": "メノクラゲ",
+    "rarity": "Rare",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "spawn_rate": "275"
+  },
+  "73": {
+    "name": "ドククラゲ",
+    "rarity": "Very Rare",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "spawn_rate": "615"
+  },
+  "74": {
+    "name": "イシツブテ",
+    "rarity": "Rare",
+    "types": [
+      "Rock",
+      "Ground"
+    ],
+    "spawn_rate": "121"
+  },
+  "75": {
+    "name": "ゴローン",
+    "rarity": "Very Rare",
+    "types": [
+      "Rock",
+      "Ground"
+    ],
+    "spawn_rate": "707"
+  },
+  "76": {
+    "name": "ゴローニャ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Rock",
+      "Ground"
+    ],
+    "spawn_rate": "2797"
+  },
+  "77": {
+    "name": "ポニータ",
+    "rarity": "Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "121"
+  },
+  "78": {
+    "name": "ギャロップ",
+    "rarity": "Very Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "992"
+  },
+  "79": {
+    "name": "ヤドン",
+    "rarity": "Rare",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "spawn_rate": "175"
+  },
+  "80": {
+    "name": "ヤドラン",
+    "rarity": "Very Rare",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "spawn_rate": "947"
+  },
+  "81": {
+    "name": "コイル",
+    "rarity": "Rare",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "spawn_rate": "200"
+  },
+  "82": {
+    "name": "レアコイル",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "spawn_rate": "2051"
+  },
+  "83": {
+    "name": "カモネギ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "61527"
+  },
+  "84": {
+    "name": "ドードー",
+    "rarity": "Uncommon",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "77"
+  },
+  "85": {
+    "name": "ドードリオ",
+    "rarity": "Very Rare",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": "634"
+  },
+  "86": {
+    "name": "パウワウ",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "196"
+  },
+  "87": {
+    "name": "ジュゴン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water",
+      "Ice"
+    ],
+    "spawn_rate": "1578"
+  },
+  "88": {
+    "name": "ベトベター",
+    "rarity": "Very Rare",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "879"
+  },
+  "89": {
+    "name": "ベトベトン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "7691"
+  },
+  "90": {
+    "name": "シェルダー",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "177"
+  },
+  "91": {
+    "name": "パルシェン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water",
+      "Ice"
+    ],
+    "spawn_rate": "1578"
+  },
+  "92": {
+    "name": "ゴース",
+    "rarity": "Uncommon",
+    "types": [
+      "Ghost",
+      "Poison"
+    ],
+    "spawn_rate": "77"
+  },
+  "93": {
+    "name": "ゴースト",
+    "rarity": "Rare",
+    "types": [
+      "Ghost",
+      "Poison"
+    ],
+    "spawn_rate": "419"
+  },
+  "94": {
+    "name": "ゲンガー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Ghost",
+      "Poison"
+    ],
+    "spawn_rate": "1758"
+  },
+  "95": {
+    "name": "イワーク",
+    "rarity": "Rare",
+    "types": [
+      "Rock",
+      "Ground"
+    ],
+    "spawn_rate": "269"
+  },
+  "96": {
+    "name": "スリープ",
+    "rarity": "Uncommon",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": "39"
+  },
+  "97": {
+    "name": "スリーパー",
+    "rarity": "Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": "322"
+  },
+  "98": {
+    "name": "クラブ",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "73"
+  },
+  "99": {
+    "name": "キングラー",
+    "rarity": "Very Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "530"
+  },
+  "100": {
+    "name": "ビリリダマ",
+    "rarity": "Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": "276"
+  },
+  "101": {
+    "name": "マルマイン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": "1985"
+  },
+  "102": {
+    "name": "タマタマ",
+    "rarity": "Rare",
+    "types": [
+      "Grass",
+      "Psychic"
+    ],
+    "spawn_rate": "123"
+  },
+  "103": {
+    "name": "ナッシー",
+    "rarity": "Very Rare",
+    "types": [
+      "Grass",
+      "Psychic"
+    ],
+    "spawn_rate": "1231"
+  },
+  "104": {
+    "name": "カラカラ",
+    "rarity": "Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": "163"
+  },
+  "105": {
+    "name": "ガラガラ",
+    "rarity": "Very Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": "1431"
+  },
+  "106": {
+    "name": "サワムラー",
+    "rarity": "Very Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": "504"
+  },
+  "107": {
+    "name": "エビワラー",
+    "rarity": "Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": "446"
+  },
+  "108": {
+    "name": "ベロリンガ",
+    "rarity": "Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "443"
+  },
+  "109": {
+    "name": "ドガース",
+    "rarity": "Rare",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "213"
+  },
+  "110": {
+    "name": "マタドガス",
+    "rarity": "Very Rare",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": "1398"
+  },
+  "111": {
+    "name": "サイホーン",
+    "rarity": "Rare",
+    "types": [
+      "Ground",
+      "Rock"
+    ],
+    "spawn_rate": "110"
+  },
+  "112": {
+    "name": "サイドン",
+    "rarity": "Very Rare",
+    "types": [
+      "Ground",
+      "Rock"
+    ],
+    "spawn_rate": "867"
+  },
+  "113": {
+    "name": "ラッキー",
+    "rarity": "Very Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "1256"
+  },
+  "114": {
+    "name": "モンジャラ",
+    "rarity": "Rare",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": "346"
+  },
+  "115": {
+    "name": "ガルーラ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "2461"
+  },
+  "116": {
+    "name": "タッツー",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "104"
+  },
+  "117": {
+    "name": "シードラ",
+    "rarity": "Very Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "760"
+  },
+  "118": {
+    "name": "トサキント",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "103"
+  },
+  "119": {
+    "name": "アズマオウ",
+    "rarity": "Very Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "684"
+  },
+  "120": {
+    "name": "ヒトデマン",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "97"
+  },
+  "121": {
+    "name": "スターミー",
+    "rarity": "Very Rare",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "spawn_rate": "1206"
+  },
+  "122": {
+    "name": "バリヤード",
+    "rarity": "Very Rare",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "spawn_rate": "1431"
+  },
+  "123": {
+    "name": "ストライク",
+    "rarity": "Rare",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": "155"
+  },
+  "124": {
+    "name": "ルージュラ",
+    "rarity": "Rare",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "spawn_rate": "152"
+  },
+  "125": {
+    "name": "エレブー",
+    "rarity": "Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": "261"
+  },
+  "126": {
+    "name": "ブーバー",
+    "rarity": "Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "213"
+  },
+  "127": {
+    "name": "カイロス",
+    "rarity": "Uncommon",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": "99"
+  },
+  "128": {
+    "name": "ケンタロス",
+    "rarity": "Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "153"
+  },
+  "129": {
+    "name": "コイキング",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "79"
+  },
+  "130": {
+    "name": "ギャラドス",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "spawn_rate": "2279"
+  },
+  "131": {
+    "name": "ラプラス",
+    "rarity": "Very Rare",
+    "types": [
+      "Water",
+      "Ice"
+    ],
+    "spawn_rate": "1183"
+  },
+  "132": {
+    "name": "メタモン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "30764"
+  },
+  "133": {
+    "name": "イーブイ",
+    "rarity": "Common",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "24"
+  },
+  "134": {
+    "name": "シャワーズ",
+    "rarity": "Very Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": "1465"
+  },
+  "135": {
+    "name": "サンダース",
+    "rarity": "Very Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": "1309"
+  },
+  "136": {
+    "name": "ブースター",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": "1568"
+  },
+  "137": {
+    "name": "ポリゴン",
+    "rarity": "Very Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "867"
+  },
+  "138": {
+    "name": "オムナイト",
+    "rarity": "Rare",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "spawn_rate": "346"
+  },
+  "139": {
+    "name": "オムスター",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "spawn_rate": "6153"
+  },
+  "140": {
+    "name": "カブト",
+    "rarity": "Rare",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "spawn_rate": "356"
+  },
+  "141": {
+    "name": "カブトプス",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "spawn_rate": "2930"
+  },
+  "142": {
+    "name": "プテラ",
+    "rarity": "Very Rare",
+    "types": [
+      "Rock",
+      "Flying"
+    ],
+    "spawn_rate": "879"
+  },
+  "143": {
+    "name": "カビゴン",
+    "rarity": "Very Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": "284"
+  },
+  "144": {
+    "name": "フリーザー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Ice",
+      "Flying"
+    ],
+    "spawn_rate": "99999"
+  },
+  "145": {
+    "name": "サンダー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "spawn_rate": "99999"
+  },
+  "146": {
+    "name": "ファイヤー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "spawn_rate": "99999"
+  },
+  "147": {
+    "name": "ミニリュウ",
+    "rarity": "Uncommon",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": "91"
+  },
+  "148": {
+    "name": "ハクリュー",
+    "rarity": "Very Rare",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": "699"
+  },
+  "149": {
+    "name": "カイリュー",
+    "rarity": "Very Rare",
+    "types": [
+      "Dragon",
+      "Flying"
+    ],
+    "spawn_rate": "580"
+  },
+  "150": {
+    "name": "ミュウツー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": "99999"
+  },
+  "151": {
+    "name": "ミュウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": "99999"
+  },
+  "152": {
+    "name": "チコリータ",
+    "rarity": "Uncommon",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "153": {
+    "name": "ベイリーフ",
+    "rarity": "Rare",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "154": {
+    "name": "メガニウム",
+    "rarity": "Very Rare",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "155": {
+    "name": "ヒノアラシ",
+    "rarity": "Uncommon",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "156": {
+    "name": "マグマラシ",
+    "rarity": "Very Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "157": {
+    "name": "バクフーン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "158": {
+    "name": "ワニノコ",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "159": {
+    "name": "アリゲイツ",
+    "rarity": "Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "160": {
+    "name": "オーダイル",
+    "rarity": "Very Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "161": {
+    "name": "オタチ",
+    "rarity": "Common",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "162": {
+    "name": "オオタチ",
+    "rarity": "Uncommon",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "163": {
+    "name": "ホーホー",
+    "rarity": "Common",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "164": {
+    "name": "ヨルノズク",
+    "rarity": "Rare",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "165": {
+    "name": "レディバ",
+    "rarity": "Common",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "166": {
+    "name": "レディアン",
+    "rarity": "Uncommon",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "167": {
+    "name": "イトマル",
+    "rarity": "Common",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "168": {
+    "name": "アリアドス",
+    "rarity": "Uncommon",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "169": {
+    "name": "クロバット",
+    "rarity": "Rare",
+    "types": [
+      "Poison",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "170": {
+    "name": "チョンチー",
+    "rarity": "Uncommon",
+    "types": [
+      "Water",
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "171": {
+    "name": "ランターン",
+    "rarity": "Rare",
+    "types": [
+      "Water",
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "172": {
+    "name": "ピチュー",
+    "rarity": "Very Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "173": {
+    "name": "ピィ",
+    "rarity": "Very Rare",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "174": {
+    "name": "ププリン",
+    "rarity": "Very Rare",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "175": {
+    "name": "トゲピー",
+    "rarity": "Very Rare",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "176": {
+    "name": "トゲチック",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fairy",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "177": {
+    "name": "ネイティ",
+    "rarity": "Common",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "178": {
+    "name": "ネイティオ",
+    "rarity": "Uncommon",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "179": {
+    "name": "メリープ",
+    "rarity": "Very Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "180": {
+    "name": "モココ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "181": {
+    "name": "デンリュウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "182": {
+    "name": "キレイハナ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "183": {
+    "name": "マリル",
+    "rarity": "Common",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "184": {
+    "name": "マリルリ",
+    "rarity": "Rare",
+    "types": [
+      "Water",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "185": {
+    "name": "ウソッキー",
+    "rarity": "Uncommon",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "186": {
+    "name": "ニョロトノ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "187": {
+    "name": "ハネッコ",
+    "rarity": "Common",
+    "types": [
+      "Grass",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "188": {
+    "name": "ポポッコ",
+    "rarity": "Uncommon",
+    "types": [
+      "Grass",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "189": {
+    "name": "ワタッコ",
+    "rarity": "Very Rare",
+    "types": [
+      "Grass",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "190": {
+    "name": "エイパム",
+    "rarity": "Uncommon",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "191": {
+    "name": "ヒマナッツ",
+    "rarity": "Common",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "192": {
+    "name": "キマワリ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "193": {
+    "name": "ヤンヤンマ",
+    "rarity": "Uncommon",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "194": {
+    "name": "ウパー",
+    "rarity": "Common",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "195": {
+    "name": "ヌオー",
+    "rarity": "Rare",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "196": {
+    "name": "エーフィ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "197": {
+    "name": "ブラッキー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "198": {
+    "name": "ヤミカラス",
+    "rarity": "Common",
+    "types": [
+      "Dark",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "199": {
+    "name": "ヤドキング",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "200": {
+    "name": "ムウマ",
+    "rarity": "Rare",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "201": {
+    "name": "アンノーン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "202": {
+    "name": "ソーナンス",
+    "rarity": "Very Rare",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "203": {
+    "name": "キリンリキ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "204": {
+    "name": "クヌギダマ",
+    "rarity": "Very Rare",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "205": {
+    "name": "フォレトス",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "206": {
+    "name": "ノコッチ",
+    "rarity": "Uncommon",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "207": {
+    "name": "グライガー",
+    "rarity": "Very Rare",
+    "types": [
+      "Ground",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "208": {
+    "name": "ハガネール",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Steel",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "209": {
+    "name": "ブルー",
+    "rarity": "Uncommon",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "210": {
+    "name": "グランブル",
+    "rarity": "Rare",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "211": {
+    "name": "ハリーセン",
+    "rarity": "Very Rare",
+    "types": [
+      "Water",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "212": {
+    "name": "ハッサム",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "213": {
+    "name": "ツボツボ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Bug",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "214": {
+    "name": "ヘラクロス",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Bug",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "215": {
+    "name": "ニューラ",
+    "rarity": "Rare",
+    "types": [
+      "Dark",
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "216": {
+    "name": "ヒメグマ",
+    "rarity": "Uncommon",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "217": {
+    "name": "リングマ",
+    "rarity": "Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "218": {
+    "name": "マグマッグ",
+    "rarity": "Uncommon",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "219": {
+    "name": "マグカルゴ",
+    "rarity": "Very Rare",
+    "types": [
+      "Fire",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "220": {
+    "name": "ウリムー",
+    "rarity": "Common",
+    "types": [
+      "Ice",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "221": {
+    "name": "イノムー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Ice",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "222": {
+    "name": "サニーゴ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "223": {
+    "name": "テッポウオ",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "224": {
+    "name": "オクタン",
+    "rarity": "Uncommon",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "225": {
+    "name": "デリバード",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Ice",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "226": {
+    "name": "マンタイン",
+    "rarity": "Uncommon",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "227": {
+    "name": "エアームド",
+    "rarity": "Rare",
+    "types": [
+      "Steel",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "228": {
+    "name": "デルビル",
+    "rarity": "Uncommon",
+    "types": [
+      "Dark",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "229": {
+    "name": "ヘルガー",
+    "rarity": "Very Rare",
+    "types": [
+      "Dark",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "230": {
+    "name": "キングドラ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "231": {
+    "name": "ゴマゾウ",
+    "rarity": "Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "232": {
+    "name": "ドンファン",
+    "rarity": "Very Rare",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "233": {
+    "name": "ポリゴン２",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "234": {
+    "name": "オドシシ",
+    "rarity": "Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "235": {
+    "name": "ドーブル",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "236": {
+    "name": "バルキー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "237": {
+    "name": "カポエラー",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "238": {
+    "name": "ムチュール",
+    "rarity": "Very Rare",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "239": {
+    "name": "エレキッド",
+    "rarity": "Very Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "240": {
+    "name": "ブビィ",
+    "rarity": "Very Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "241": {
+    "name": "ミルタンク",
+    "rarity": "Very Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "242": {
+    "name": "ハピナス",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "243": {
+    "name": "ライコウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "244": {
+    "name": "エンテイ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "245": {
+    "name": "スイクン",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "246": {
+    "name": "ヨーギラス",
+    "rarity": "Very Rare",
+    "types": [
+      "Rock",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "247": {
+    "name": "サナギラス",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Rock",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "248": {
+    "name": "バンギラス",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Rock",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "249": {
+    "name": "ルギア",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "250": {
+    "name": "ホウオウ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "251": {
+    "name": "セレビィ",
+    "rarity": "Ultra Rare",
+    "types": [
+      "Psychic",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "252": {
+    "name": "キモリ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "253": {
+    "name": "ジュプトル",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "254": {
+    "name": "ジュカイン",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "255": {
+    "name": "アチャモ",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "256": {
+    "name": "ワカシャモ",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "257": {
+    "name": "バシャーモ",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "258": {
+    "name": "ミズゴロウ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "259": {
+    "name": "ヌマクロー",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "260": {
+    "name": "ラグラージ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "261": {
+    "name": "ポチエナ",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "262": {
+    "name": "グラエナ",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "263": {
+    "name": "ジグザグマ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "264": {
+    "name": "マッスグマ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "265": {
+    "name": "ケムッソ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "266": {
+    "name": "カラサリス",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "267": {
+    "name": "アゲハント",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "268": {
+    "name": "マユルド",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "269": {
+    "name": "ドクケイル",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "270": {
+    "name": "ハスボー",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "271": {
+    "name": "ハスブレロ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "272": {
+    "name": "ルンパッパ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "273": {
+    "name": "タネボー",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "274": {
+    "name": "コノハナ",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "275": {
+    "name": "ダーテング",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "276": {
+    "name": "スバメ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "277": {
+    "name": "オオスバメ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "278": {
+    "name": "キャモメ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "279": {
+    "name": "ペリッパー",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "280": {
+    "name": "ラルトス",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "281": {
+    "name": "キルリア",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "282": {
+    "name": "サーナイト",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "283": {
+    "name": "アメタマ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "284": {
+    "name": "アメモース",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "285": {
+    "name": "キノココ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "286": {
+    "name": "キノガッサ",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "287": {
+    "name": "ナマケロ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "288": {
+    "name": "ヤルキモノ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "289": {
+    "name": "ケッキング",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "290": {
+    "name": "ツチニン",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "291": {
+    "name": "テッカニン",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "292": {
+    "name": "ヌケニン",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "293": {
+    "name": "ゴニョニョ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "294": {
+    "name": "ドゴーム",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "295": {
+    "name": "バクオング",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "296": {
+    "name": "マクノシタ",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "297": {
+    "name": "ハリテヤマ",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "298": {
+    "name": "ルリリ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "299": {
+    "name": "ノズパス",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "300": {
+    "name": "エネコ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "301": {
+    "name": "エネコロロ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "302": {
+    "name": "ヤミラミ",
+    "rarity": "Rare",
+    "types": [
+      "Dark",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "303": {
+    "name": "クチート",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "304": {
+    "name": "ココドラ",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "305": {
+    "name": "コドラ",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "306": {
+    "name": "ボスゴドラ",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "307": {
+    "name": "アサナン",
+    "rarity": "",
+    "types": [
+      "Fighting",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "308": {
+    "name": "チャーレム",
+    "rarity": "",
+    "types": [
+      "Fighting",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "309": {
+    "name": "ラクライ",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "310": {
+    "name": "ライボルト",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "311": {
+    "name": "プラスル",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "312": {
+    "name": "マイナン",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "313": {
+    "name": "バルビート",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "314": {
+    "name": "イルミーゼ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "315": {
+    "name": "ロゼリア",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "316": {
+    "name": "ゴクリン",
+    "rarity": "",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "317": {
+    "name": "マルノーム",
+    "rarity": "",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "318": {
+    "name": "キバニア",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "319": {
+    "name": "サメハダー",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "320": {
+    "name": "ホエルコ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "321": {
+    "name": "ホエルオー",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "322": {
+    "name": "ドンメル",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "323": {
+    "name": "バクーダ",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "324": {
+    "name": "コータス",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "325": {
+    "name": "バネブー",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "326": {
+    "name": "ブーピッグ",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "327": {
+    "name": "パッチール",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "328": {
+    "name": "ナックラー",
+    "rarity": "",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "329": {
+    "name": "ビブラーバ",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "330": {
+    "name": "フライゴン",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "331": {
+    "name": "サボネア",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "332": {
+    "name": "ノクタス",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "333": {
+    "name": "チルット",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "334": {
+    "name": "チルタリス",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "335": {
+    "name": "ザングース",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "336": {
+    "name": "ハブネーク",
+    "rarity": "",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "337": {
+    "name": "ルナトーン",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "338": {
+    "name": "ソルロック",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "339": {
+    "name": "ドジョッチ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "340": {
+    "name": "ナマズン",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "341": {
+    "name": "ヘイガニ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "342": {
+    "name": "シザリガー",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "343": {
+    "name": "ヤジロン",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "344": {
+    "name": "ネンドール",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "345": {
+    "name": "リリーラ",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "346": {
+    "name": "ユレイドル",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "347": {
+    "name": "アノプス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "348": {
+    "name": "アーマルド",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "349": {
+    "name": "ヒンバス",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "350": {
+    "name": "ミロカロス",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "351": {
+    "name": "ポワルン",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "352": {
+    "name": "カクレオン",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "353": {
+    "name": "カゲボウズ",
+    "rarity": "Rare",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "354": {
+    "name": "ジュペッタ",
+    "rarity": "Rare",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "355": {
+    "name": "ヨマワル",
+    "rarity": "Rare",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "356": {
+    "name": "サマヨール",
+    "rarity": "Rare",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "357": {
+    "name": "トロピウス",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "358": {
+    "name": "チリーン",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "359": {
+    "name": "アブソル",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "360": {
+    "name": "ソーナノ",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "361": {
+    "name": "ユキワラシ",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "362": {
+    "name": "オニゴーリ",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "363": {
+    "name": "タマザラシ",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "364": {
+    "name": "トドグラー",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "365": {
+    "name": "トドゼルガ",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "366": {
+    "name": "パールル",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "367": {
+    "name": "ハンテール",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "368": {
+    "name": "サクラビス",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "369": {
+    "name": "ジーランス",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "370": {
+    "name": "ラブカス",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "371": {
+    "name": "タツベイ",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "372": {
+    "name": "コモルー",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "373": {
+    "name": "ボーマンダ",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "374": {
+    "name": "ダンバル",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "375": {
+    "name": "メタング",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "376": {
+    "name": "メタグロス",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "377": {
+    "name": "レジロック",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "378": {
+    "name": "レジアイス",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "379": {
+    "name": "レジスチル",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "380": {
+    "name": "ラティアス",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "381": {
+    "name": "ラティオス",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "382": {
+    "name": "カイオーガ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "383": {
+    "name": "グラードン",
+    "rarity": "",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "384": {
+    "name": "レックウザ",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "385": {
+    "name": "ジラーチ",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "386": {
+    "name": "デオキシス",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "387": {
+    "name": "ナエトル",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "388": {
+    "name": "ハヤシガメ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "389": {
+    "name": "ドダイトス",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "390": {
+    "name": "ヒコザル",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "391": {
+    "name": "モウカザル",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "392": {
+    "name": "ゴウカザル",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "393": {
+    "name": "ポッチャマ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "394": {
+    "name": "ポッタイシ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "395": {
+    "name": "エンペルト",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "396": {
+    "name": "ムックル",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "397": {
+    "name": "ムクバード",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "398": {
+    "name": "ムクホーク",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "399": {
+    "name": "ビッパ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "400": {
+    "name": "ビーダル",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "401": {
+    "name": "コロボーシ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "402": {
+    "name": "コロトック",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "403": {
+    "name": "コリンク",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "404": {
+    "name": "ルクシオ",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "405": {
+    "name": "レントラー",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "406": {
+    "name": "スボミー",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "407": {
+    "name": "ロズレイド",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "408": {
+    "name": "ズガイドス",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "409": {
+    "name": "ラムパルド",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "410": {
+    "name": "タテトプス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "411": {
+    "name": "トリデプス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "412": {
+    "name": "ミノムッチ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "413": {
+    "name": "ミノマダム",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "414": {
+    "name": "ガーメイル",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "415": {
+    "name": "ミツハニー",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "416": {
+    "name": "ビークイン",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "417": {
+    "name": "パチリス",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "418": {
+    "name": "ブイゼル",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "419": {
+    "name": "フローゼル",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "420": {
+    "name": "チェリンボ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "421": {
+    "name": "チェリム",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "422": {
+    "name": "カラナクシ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "423": {
+    "name": "トリトドン",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "424": {
+    "name": "エテボース",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "425": {
+    "name": "フワンテ",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "426": {
+    "name": "フワライド",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "427": {
+    "name": "ミミロル",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "428": {
+    "name": "ミミロップ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "429": {
+    "name": "ムウマージ",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "430": {
+    "name": "ドンカラス",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "431": {
+    "name": "ニャルマー",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "432": {
+    "name": "ブニャット",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "433": {
+    "name": "リーシャン",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "434": {
+    "name": "スカンプー",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "435": {
+    "name": "スカタンク",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "436": {
+    "name": "ドーミラー",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "437": {
+    "name": "ドータクン",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "438": {
+    "name": "ウソハチ",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "439": {
+    "name": "マネネ",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "440": {
+    "name": "ピンプク",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "441": {
+    "name": "ペラップ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "442": {
+    "name": "ミカルゲ",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "443": {
+    "name": "フカマル",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "444": {
+    "name": "ガバイト",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "445": {
+    "name": "ガブリアス",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "446": {
+    "name": "ゴンベ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "447": {
+    "name": "リオル",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "448": {
+    "name": "ルカリオ",
+    "rarity": "",
+    "types": [
+      "Fighting",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "449": {
+    "name": "ヒポポタス",
+    "rarity": "",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "450": {
+    "name": "カバルドン",
+    "rarity": "",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "451": {
+    "name": "スコルピ",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "452": {
+    "name": "ドラピオン",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "453": {
+    "name": "グレッグル",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "454": {
+    "name": "ドクロッグ",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "455": {
+    "name": "マスキッパ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "456": {
+    "name": "ケイコウオ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "457": {
+    "name": "ネオラント",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "458": {
+    "name": "タマンタ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "459": {
+    "name": "ユキカブリ",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "460": {
+    "name": "ユキノオー",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "461": {
+    "name": "マニューラ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "462": {
+    "name": "ジバコイル",
+    "rarity": "",
+    "types": [
+      "Electric",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "463": {
+    "name": "ベロベルト",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "464": {
+    "name": "ドサイドン",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "465": {
+    "name": "モジャンボ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "466": {
+    "name": "エレキブル",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "467": {
+    "name": "ブーバーン",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "468": {
+    "name": "トゲキッス",
+    "rarity": "",
+    "types": [
+      "Fairy",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "469": {
+    "name": "メガヤンマ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "470": {
+    "name": "リーフィア",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "471": {
+    "name": "グレイシア",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "472": {
+    "name": "グライオン",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "473": {
+    "name": "マンムー",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "474": {
+    "name": "ポリゴンＺ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "475": {
+    "name": "エルレイド",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "476": {
+    "name": "ダイノーズ",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "477": {
+    "name": "ヨノワール",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "478": {
+    "name": "ユキメノコ",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "479": {
+    "name": "ロトム",
+    "rarity": "",
+    "types": [
+      "Electric",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "480": {
+    "name": "ユクシー",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "481": {
+    "name": "エムリット",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "482": {
+    "name": "アグノム",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "483": {
+    "name": "ディアルガ",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "484": {
+    "name": "パルキア",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "485": {
+    "name": "ヒードラン",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "486": {
+    "name": "レジギガス",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "487": {
+    "name": "ギラティナ",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "488": {
+    "name": "クレセリア",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "489": {
+    "name": "フィオネ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "490": {
+    "name": "マナフィ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "491": {
+    "name": "ダークライ",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "492": {
+    "name": "シェイミ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "493": {
+    "name": "アルセウス",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "494": {
+    "name": "ビクティニ",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "495": {
+    "name": "ツタージャ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "496": {
+    "name": "ジャノビー",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "497": {
+    "name": "ジャローダ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "498": {
+    "name": "ポカブ",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "499": {
+    "name": "チャオブー",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "500": {
+    "name": "エンブオー",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "501": {
+    "name": "ミジュマル",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "502": {
+    "name": "フタチマル",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "503": {
+    "name": "ダイケンキ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "504": {
+    "name": "ミネズミ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "505": {
+    "name": "ミルホッグ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "506": {
+    "name": "ヨーテリー",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "507": {
+    "name": "ハーデリア",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "508": {
+    "name": "ムーランド",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "509": {
+    "name": "チョロネコ",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "510": {
+    "name": "レパルダス",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "511": {
+    "name": "ヤナップ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "512": {
+    "name": "ヤナッキー",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "513": {
+    "name": "バオップ",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "514": {
+    "name": "バオッキー",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "515": {
+    "name": "ヒヤップ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "516": {
+    "name": "ヒヤッキー",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "517": {
+    "name": "ムンナ",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "518": {
+    "name": "ムシャーナ",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "519": {
+    "name": "マメパト",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "520": {
+    "name": "ハトーボー",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "521": {
+    "name": "ケンホロウ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "522": {
+    "name": "シママ",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "523": {
+    "name": "ゼブライカ",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "524": {
+    "name": "ダンゴロ",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "525": {
+    "name": "ガントル",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "526": {
+    "name": "ギガイアス",
+    "rarity": "",
+    "types": [
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "527": {
+    "name": "コロモリ",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "528": {
+    "name": "ココロモリ",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "529": {
+    "name": "モグリュー",
+    "rarity": "",
+    "types": [
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "530": {
+    "name": "ドリュウズ",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "531": {
+    "name": "タブンネ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "532": {
+    "name": "ドッコラー",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "533": {
+    "name": "ドテッコツ",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "534": {
+    "name": "ローブシン",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "535": {
+    "name": "オタマロ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "536": {
+    "name": "ガマガル",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "537": {
+    "name": "ガマゲロゲ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "538": {
+    "name": "ナゲキ",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "539": {
+    "name": "ダゲキ",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "540": {
+    "name": "クルミル",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "541": {
+    "name": "クルマユ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "542": {
+    "name": "ハハコモリ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "543": {
+    "name": "フシデ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "544": {
+    "name": "ホイーガ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "545": {
+    "name": "ペンドラー",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "546": {
+    "name": "モンメン",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "547": {
+    "name": "エルフーン",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "548": {
+    "name": "チュリネ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "549": {
+    "name": "ドレディア",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "550": {
+    "name": "バスラオ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "551": {
+    "name": "メグロコ",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "552": {
+    "name": "ワルビル",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "553": {
+    "name": "ワルビアル",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "554": {
+    "name": "ダルマッカ",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "555": {
+    "name": "ヒヒダルマ",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "556": {
+    "name": "マラカッチ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "557": {
+    "name": "イシズマイ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "558": {
+    "name": "イワパレス",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "559": {
+    "name": "ズルッグ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "560": {
+    "name": "ズルズキン",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "561": {
+    "name": "シンボラー",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "562": {
+    "name": "デスマス",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "563": {
+    "name": "デスカーン",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "564": {
+    "name": "プロトーガ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "565": {
+    "name": "アバゴーラ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Rock"
+    ],
+    "spawn_rate": ""
+  },
+  "566": {
+    "name": "アーケン",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "567": {
+    "name": "アーケオス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "568": {
+    "name": "ヤブクロン",
+    "rarity": "",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "569": {
+    "name": "ダストダス",
+    "rarity": "",
+    "types": [
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "570": {
+    "name": "ゾロア",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "571": {
+    "name": "ゾロアーク",
+    "rarity": "",
+    "types": [
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "572": {
+    "name": "チラーミィ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "573": {
+    "name": "チラチーノ",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "574": {
+    "name": "ゴチム",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "575": {
+    "name": "ゴチミル",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "576": {
+    "name": "ゴチルゼル",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "577": {
+    "name": "ユニラン",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "578": {
+    "name": "ダブラン",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "579": {
+    "name": "ランクルス",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "580": {
+    "name": "コアルヒー",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "581": {
+    "name": "スワンナ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "582": {
+    "name": "バニプッチ",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "583": {
+    "name": "バニリッチ",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "584": {
+    "name": "バイバニラ",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "585": {
+    "name": "シキジカ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "586": {
+    "name": "メブキジカ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "587": {
+    "name": "エモンガ",
+    "rarity": "",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "588": {
+    "name": "カブルモ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "589": {
+    "name": "シュバルゴ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "590": {
+    "name": "タマゲタケ",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "591": {
+    "name": "モロバレル",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Poison"
+    ],
+    "spawn_rate": ""
+  },
+  "592": {
+    "name": "プルリル",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "593": {
+    "name": "ブルンゲル",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "594": {
+    "name": "ママンボウ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "595": {
+    "name": "バチュル",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "596": {
+    "name": "デンチュラ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "597": {
+    "name": "テッシード",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "598": {
+    "name": "ナットレイ",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "599": {
+    "name": "ギアル",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "600": {
+    "name": "ギギアル",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "601": {
+    "name": "ギギギアル",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "602": {
+    "name": "シビシラス",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "603": {
+    "name": "シビビール",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "604": {
+    "name": "シビルドン",
+    "rarity": "",
+    "types": [
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "605": {
+    "name": "リグレー",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "606": {
+    "name": "オーベム",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "607": {
+    "name": "ヒトモシ",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "608": {
+    "name": "ランプラー",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "609": {
+    "name": "シャンデラ",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "610": {
+    "name": "キバゴ",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "611": {
+    "name": "オノンド",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "612": {
+    "name": "オノノクス",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "613": {
+    "name": "クマシュン",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "614": {
+    "name": "ツンベアー",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "615": {
+    "name": "フリージオ",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "616": {
+    "name": "チョボマキ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "617": {
+    "name": "アギルダー",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "618": {
+    "name": "マッギョ",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "619": {
+    "name": "コジョフー",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "620": {
+    "name": "コジョンド",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "621": {
+    "name": "クリムガン",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "622": {
+    "name": "ゴビット",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "623": {
+    "name": "ゴルーグ",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "624": {
+    "name": "コマタナ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "625": {
+    "name": "キリキザン",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "626": {
+    "name": "バッフロン",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "627": {
+    "name": "ワシボン",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "628": {
+    "name": "ウォーグル",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "629": {
+    "name": "バルチャイ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "630": {
+    "name": "バルジーナ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "631": {
+    "name": "クイタラン",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "632": {
+    "name": "アイアント",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "633": {
+    "name": "モノズ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "634": {
+    "name": "ジヘッド",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "635": {
+    "name": "サザンドラ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "636": {
+    "name": "メラルバ",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "637": {
+    "name": "ウルガモス",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "638": {
+    "name": "コバルオン",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "639": {
+    "name": "テラキオン",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "640": {
+    "name": "ビリジオン",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "641": {
+    "name": "トルネロス",
+    "rarity": "",
+    "types": [
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "642": {
+    "name": "ボルトロス",
+    "rarity": "",
+    "types": [
+      "Electric",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "643": {
+    "name": "レシラム",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "644": {
+    "name": "ゼクロム",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Electric"
+    ],
+    "spawn_rate": ""
+  },
+  "645": {
+    "name": "ランドロス",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "646": {
+    "name": "キュレム",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "647": {
+    "name": "ケルディオ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "648": {
+    "name": "メロエッタ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "649": {
+    "name": "ゲノセクト",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "650": {
+    "name": "ハリマロン",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "651": {
+    "name": "ハリボーグ",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "652": {
+    "name": "ブリガロン",
+    "rarity": "",
+    "types": [
+      "Grass",
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "653": {
+    "name": "フォッコ",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "654": {
+    "name": "テールナー",
+    "rarity": "",
+    "types": [
+      "Fire"
+    ],
+    "spawn_rate": ""
+  },
+  "655": {
+    "name": "マフォクシー",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "656": {
+    "name": "ケロマツ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "657": {
+    "name": "ゲコガシラ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "658": {
+    "name": "ゲッコウガ",
+    "rarity": "",
+    "types": [
+      "Water",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "659": {
+    "name": "ホルビー",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "660": {
+    "name": "ホルード",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "661": {
+    "name": "ヤヤコマ",
+    "rarity": "",
+    "types": [
+      "Normal",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "662": {
+    "name": "ヒノヤコマ",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "663": {
+    "name": "ファイアロー",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "664": {
+    "name": "コフキムシ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "665": {
+    "name": "コフーライ",
+    "rarity": "",
+    "types": [
+      "Bug"
+    ],
+    "spawn_rate": ""
+  },
+  "666": {
+    "name": "ビビヨン",
+    "rarity": "",
+    "types": [
+      "Bug",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "667": {
+    "name": "シシコ",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "668": {
+    "name": "カエンジシ",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "669": {
+    "name": "フラベベ",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "670": {
+    "name": "フラエッテ",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "671": {
+    "name": "フラージェス",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "672": {
+    "name": "メェークル",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "673": {
+    "name": "ゴーゴート",
+    "rarity": "",
+    "types": [
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "674": {
+    "name": "ヤンチャム",
+    "rarity": "",
+    "types": [
+      "Fighting"
+    ],
+    "spawn_rate": ""
+  },
+  "675": {
+    "name": "ゴロンダ",
+    "rarity": "",
+    "types": [
+      "Fighting",
+      "Dark"
+    ],
+    "spawn_rate": ""
+  },
+  "676": {
+    "name": "トリミアン",
+    "rarity": "",
+    "types": [
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "677": {
+    "name": "ニャスパー",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "678": {
+    "name": "ニャオニクス",
+    "rarity": "",
+    "types": [
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "679": {
+    "name": "ヒトツキ",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "680": {
+    "name": "ニダンギル",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "681": {
+    "name": "ギルガルド",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "682": {
+    "name": "シュシュプ",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "683": {
+    "name": "フレフワン",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "684": {
+    "name": "ペロッパフ",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "685": {
+    "name": "ペロリーム",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "686": {
+    "name": "マーイーカ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "687": {
+    "name": "カラマネロ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "688": {
+    "name": "カメテテ",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "689": {
+    "name": "ガメノデス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "690": {
+    "name": "クズモー",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "691": {
+    "name": "ドラミドロ",
+    "rarity": "",
+    "types": [
+      "Poison",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "692": {
+    "name": "ウデッポウ",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "693": {
+    "name": "ブロスター",
+    "rarity": "",
+    "types": [
+      "Water"
+    ],
+    "spawn_rate": ""
+  },
+  "694": {
+    "name": "エリキテル",
+    "rarity": "",
+    "types": [
+      "Electric",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "695": {
+    "name": "エレザード",
+    "rarity": "",
+    "types": [
+      "Electric",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "696": {
+    "name": "チゴラス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "697": {
+    "name": "ガチゴラス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "698": {
+    "name": "アマルス",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "699": {
+    "name": "アマルルガ",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "700": {
+    "name": "ニンフィア",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "701": {
+    "name": "ルチャブル",
+    "rarity": "",
+    "types": [
+      "Fighting",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "702": {
+    "name": "デデンネ",
+    "rarity": "",
+    "types": [
+      "Electric",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "703": {
+    "name": "メレシー",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "704": {
+    "name": "ヌメラ",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "705": {
+    "name": "ヌメイル",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "706": {
+    "name": "ヌメルゴン",
+    "rarity": "",
+    "types": [
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "707": {
+    "name": "クレッフィ",
+    "rarity": "",
+    "types": [
+      "Steel",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "708": {
+    "name": "ボクレー",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "709": {
+    "name": "オーロット",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "710": {
+    "name": "バケッチャ",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "711": {
+    "name": "パンプジン",
+    "rarity": "",
+    "types": [
+      "Ghost",
+      "Grass"
+    ],
+    "spawn_rate": ""
+  },
+  "712": {
+    "name": "カチコール",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "713": {
+    "name": "クレベース",
+    "rarity": "",
+    "types": [
+      "Ice"
+    ],
+    "spawn_rate": ""
+  },
+  "714": {
+    "name": "オンバット",
+    "rarity": "",
+    "types": [
+      "Flying",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "715": {
+    "name": "オンバーン",
+    "rarity": "",
+    "types": [
+      "Flying",
+      "Dragon"
+    ],
+    "spawn_rate": ""
+  },
+  "716": {
+    "name": "ゼルネアス",
+    "rarity": "",
+    "types": [
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "717": {
+    "name": "イベルタル",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Flying"
+    ],
+    "spawn_rate": ""
+  },
+  "718": {
+    "name": "ジガルデ",
+    "rarity": "",
+    "types": [
+      "Dragon",
+      "Ground"
+    ],
+    "spawn_rate": ""
+  },
+  "719": {
+    "name": "ディアンシー",
+    "rarity": "",
+    "types": [
+      "Rock",
+      "Fairy"
+    ],
+    "spawn_rate": ""
+  },
+  "720": {
+    "name": "フーパ",
+    "rarity": "",
+    "types": [
+      "Psychic",
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "721": {
+    "name": "ボルケニオン",
+    "rarity": "",
+    "types": [
+      "Fire",
+      "Water"
+    ],
+    "spawn_rate": ""
+  }
+}

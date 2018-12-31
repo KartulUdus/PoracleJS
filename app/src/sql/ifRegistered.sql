@@ -1,1 +1,0 @@
-select count(*) from humans where id=
