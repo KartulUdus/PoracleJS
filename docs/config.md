@@ -37,7 +37,7 @@ This config file consist of different objects for different configurations.
     "logLevel": "debug",
     "host": "127.0.0.1",
     "port": "3031",
-    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
     "max_pokemon": 326
   }
   ```
@@ -47,7 +47,7 @@ This config file consist of different objects for different configurations.
   |logLevel | Logging level, can be `debug`, `info` or `error`.|
   |host |   Webserver host. |
   |port | Webserver port. | 
-  |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/images) |
+  |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/images) |
   | max_pokemon | Biggest released pokemon_id. Needed for tracking batch tracking of mainimum/maximum IV.|
 
 ##### Locale settings
@@ -66,9 +66,9 @@ This config file consist of different objects for different configurations.
   | timeformat    | sets 24 or 12h AM/PM time. use `"en-us"` for 12h time.|
   | time | Time string format for disappear time. `LTS` for hours minutes and seconds `LT` for just hours and minutes.|
   | addressformat | Format for the geocoded address. Can be any combination of : <br/>%P - country <br/>%p - country code <br/>%n - street number <br/>%S - street name <br/>%z - zip code <br/>%T - State  <br/>%t - state code|
-  | commandMonstersJson | Monster locale file for discord commands. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
-  | monstersJson    | Monster locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
-  | movesJson    | Moves locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
+  | commandMonstersJson | Monster locale file for discord commands. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
+  | monstersJson    | Monster locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
+  | movesJson    | Moves locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
   | colorsJson   | Colors for IV brackets |
 
 
