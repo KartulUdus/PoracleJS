@@ -2,17 +2,21 @@
     <div>
         <div id="menu">
             <no-ssr>
-                <SlideMenu noOverlay right>
-                    <span>Home</span>
-                </a>
-                </SlideMenu>
+                <Sidebar/>
+                <SidebarToggle/>
             </no-ssr>
         </div>
-        <Map/>
         <nuxt/>
     </div>
 
 </template>
 <script>
+
+	import SidebarToggle from '../pages/starchy'
+	import Sidebar from '../pages/menu'
+	export default {
+		components: { SidebarToggle, Sidebar }
+	}
+
 
 </script>

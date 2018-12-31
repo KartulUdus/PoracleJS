@@ -4,9 +4,7 @@ module.exports = {
 		color: 'purple'
 	},
     plugins: [
-        { src: '~/plugins/menu', ssr: false },
         { src: '~/plugins/monsterData', ssr: false }
-
     ],
 	modules: ['@nuxtjs/axios', 'nuxt-leaflet', 'nuxt-svg'],
 

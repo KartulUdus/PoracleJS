@@ -8,6 +8,7 @@
     height: 100%;
     text-align: center;
     font-size: 30px;
+    z-index: 990;
     font-family: sans-serif;
 }
 
@@ -25,7 +26,21 @@
     width: 90px
 }
 
-.bm-burger-button {
-    position: inherit;
-    z-index: 500;
+.menuButton {
+    position: fixed;
+    z-index: 999;
+    fill: none;
+    border:none;
+    right: 0px;
+    top: 8px;
+    background-color: transparent;
+
+}
+.Sidebar {
+    position: absolute;
+    z-index: 999;
+    right: 0px;
+    width: 500px;
+
+
 }

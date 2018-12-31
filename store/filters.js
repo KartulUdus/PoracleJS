@@ -1,3 +1,4 @@
+
 export const state = () => ({
 	pokemon: {
 		enabled: true
@@ -11,16 +12,16 @@ export const state = () => ({
 	sidebarOpen: false
 })
 
+
+
+const getters = {
+	sidebarOpen: state => state.sidebarOpen
+}
+
 export const mutations = {
 
-	add (state, text) {
-		state.pokemon.push({
-			text: text,
-			done: false
-		})
-	},
-
-	toggleP (state, key) {
-		state.pokemon[key] = !state.pokemon[key]
+	toggleSidebar (state) {
+		state.sidebarOpen = !state.sidebarOpen
 	}
+
 }

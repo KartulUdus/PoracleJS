@@ -1,7 +1,7 @@
 <template>
     <div id="map">
         <no-ssr>
-            <SidebarToggle/>
+
             <l-map  ref="Lmap"
                     :zoom=startZoom
                     :center="{lat: startLat, lng : startLon}"
@@ -79,13 +79,14 @@
 
 <script>
 
-	import SidebarToggle from './starchy'
+
 	import axios from 'axios'
 	let L = { icon(){} };
 	if (process.browser) L = require('leaflet');
 
 	export default {
-
+		name: 'PoracleMap',
+        layout: 'map',
 		data() {
 			return {
 				tileserver: process.env.tileServer,
@@ -189,3 +190,26 @@
         }
 	}
 </script>
+
+<style>
+    :root{
+        --accent-color: #FFCB08;
+        --primary-color: #820263;
+        --dark-color: #2E294E;
+    }
+
+    *{
+        box-sizing: border-box;
+    }
+</style>
+
+<style module>
+    .container{
+        position: fixed;
+        left: 0;
+        top: 0;
+        height: 100vh;
+        width: 100vw;
+        background-color: var(--primary-color);
+    }
+</style>
