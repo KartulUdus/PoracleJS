@@ -27,10 +27,11 @@
 }
 
 .menuButton {
-    position: fixed;
+    position: absolute;
+    rotation: 90deg;
     z-index: 999;
     fill: none;
-    border:none;
+    border: 0px;
     right: 0px;
     top: 8px;
     background-color: transparent;
