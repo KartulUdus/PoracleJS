@@ -1080,7 +1080,7 @@ client.on('message', (msg) => {
 					query.insertOrUpdateQuery(
 						'raid',
 						['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
-						[`'${msg.channel.id}'`, `'${template}'`, '\'721\'', `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
+						[`'${msg.channel.id}'`, '\'721\'', `'${template}'`,`'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
 					)
 				})
 				msg.react('✅')
