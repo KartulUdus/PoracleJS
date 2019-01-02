@@ -12,11 +12,11 @@ commandWorker.on('exit', () => {
 // register schema and routes
 
 if (!fs.existsSync(path.join(__dirname,'../../config/questdts.json'))){
-	let emergQuestDtsConf = fs.readFileSync(path.join( __dirname, '../../config/questdts.json.example', "utf8"))
+	let emergQuestDtsConf = fs.readFileSync(path.join( __dirname, '../../config/questdts.json.example'), "utf8")
 	fs.writeFileSync(path.join(__dirname, '../../config/questdts.json'), emergQuestDtsConf)
 }
 if (!fs.existsSync(path.join(__dirname, '../../config/dts.json'))){
-	let emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/dts.json.example', "utf8"))
+	let emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/dts.json.example'), "utf8")
 	fs.writeFileSync(path.join(__dirname, '../../config/dts.json') , emergQuestDtsConf)
 }
 
