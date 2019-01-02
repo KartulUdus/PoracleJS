@@ -13,6 +13,7 @@ const Controller = require('../controllers/controller')
 const query = new Controller(db)
 const geofence = require(config.geocoding.geofence)
 const dts = require('../../../config/dts')
+const questDts = require('../../../config/questdts')
 
 const monsterData = require(config.locale.commandMonstersJson)
 const teamData = require('../util/teams')
@@ -614,15 +615,135 @@ client.on('message', (msg) => {
 		})
 	}
 
-	/*
- ___   _   _ _____ _   _ _   _ ___   _         ___   _____             _____ _   _ ___   ___
-(  _`\( ) ( (  _  ( ) ( ( ) ( (  _`\( )       (  _`\(  _  /'\_/`/'\_/`(  _  ( ) ( (  _`\(  _`\
-| ( (_| |_| | (_) | `\| | `\| | (_(_| |       | ( (_| ( ) |     |     | (_) | `\| | | ) | (_(_)
-| |  _|  _  |  _  | , ` | , ` |  _)_| |  _    | |  _| | | | (_) | (_) |  _  | , ` | | | `\__ \
-| (_( | | | | | | | |`\ | |`\ | (_( | |_( )   | (_( | (_) | | | | | | | | | | |`\ | |_) ( )_) |
-(____/(_) (_(_) (_(_) (_(_) (_(____/(____/'   (____/(_____(_) (_(_) (_(_) (_(_) (_(____/`\____)
+	else if (msg.content.startsWith(`${config.discord.prefix}quest `)) {
+		if (msg.channel.type !== 'dm') {
+			msg.author.send('Please run commands in Direct Messages')
+			return null
+		}
 
-*/
+
+		query.countQuery('id', 'humans', 'id', msg.author.id).then((isregistered) => {
+			if (!isregistered) {
+				msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${config.discord.prefix}poracle to #${config.discord.channel}`)
+				return null
+			}
+			let monsters = []
+			let items = []
+			let distance = 0
+			let questTracks = []
+			let template = 3
+			const rawArgs = msg.content.slice(`${config.discord.prefix}quest `.length)
+			const args = rawArgs.toLowerCase().split(' ')
+			args.forEach((element) => {
+				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
+				if (pid !== undefined) monsters.push(pid)
+				else if (element.match(/d\d/gi)) {
+					distance = element.replace(/d/gi, '')
+					if (distance.length >= 10) distance = distance.substr(0, 9)
+				}
+				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
+			})
+			_.forEach(questDts.rewardItems, function(item, key){
+				let re = new RegExp(item, "gi");
+				if (rawArgs.match(re)) items.push(key)
+			})
+			if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
+			if (rawArgs.match(/all items/gi)){
+				_.forEach(questDts.rewardItems, function(item, key){
+					items.push(key)
+				})
+			}
+			if(rawArgs.match(/stardust/gi)){
+				questTracks.push({
+					id: msg.author.id,
+					reward: 0,
+					template: template,
+					reward_type: 3,
+					distance: distance
+				})
+			}
+			monsters.forEach(pid => {
+				questTracks.push({
+					id: msg.author.id,
+					reward: pid,
+					template: template,
+					reward_type: 7,
+					distance: distance
+				})
+			})
+			items.forEach(i => {
+				questTracks.push({
+					id: msg.author.id,
+					reward: i,
+					template: template,
+					reward_type: 2,
+					distance: distance
+				})
+			})
+			questTracks.forEach(t => {
+				query.insertOrUpdateQuery('quest',
+					['id', 'reward', 'template', 'reward_type', 'distance'],
+					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`]
+					).then(p => {
+						log.info(`${msg.author.username} Added quest tracking`)
+					})
+			})
+			msg.react('✅')
+		})
+	}
+
+
+	else if (msg.content.startsWith(`${config.discord.prefix}remove quest `)) {
+		if (msg.channel.type !== 'dm') {
+			msg.author.send('Please run commands in Direct Messages')
+			return null
+		}
+		query.countQuery('id', 'humans', 'id', msg.author.id).then((isregistered) => {
+			if (!isregistered) {
+				msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${config.discord.prefix}poracle to #${config.discord.channel}`)
+				return null
+			}
+			let monsters = [0]
+			let items = [0]
+			let stardustTracking = 1
+			const rawArgs = msg.content.slice(`${config.discord.prefix}remove quest `.length)
+			const args = rawArgs.toLowerCase().split(' ')
+			args.forEach((element) => {
+				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
+				if (pid !== undefined) monsters.push(pid)
+			})
+			_.forEach(questDts.rewardItems, function(item, key){
+				let re = new RegExp(item, "gi");
+				if (rawArgs.match(re)) items.push(key)
+			})
+			if(rawArgs.match(/stardust/gi)){
+				stardustTracking = 0
+			}
+			if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
+			if (rawArgs.match(/all items/gi)){
+				_.forEach(questDts.rewardItems, function(item, key){
+					items.push(key)
+				})
+			}
+
+			let remQuery = `
+			delete from quest WHERE id=${msg.author.id} and 
+			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward = ${stardustTracking}))		
+			`
+			query.mysteryQuery(remQuery).then(t => { log.info(`${msg.author.username} removed quest tracking`)})
+			msg.react('✅')
+		})
+	}
+
+	/*
+	 ___   _   _ _____ _   _ _   _ ___   _         ___   _____             _____ _   _ ___   ___
+	(  _`\( ) ( (  _  ( ) ( ( ) ( (  _`\( )       (  _`\(  _  /'\_/`/'\_/`(  _  ( ) ( (  _`\(  _`\
+	| ( (_| |_| | (_) | `\| | `\| | (_(_| |       | ( (_| ( ) |     |     | (_) | `\| | | ) | (_(_)
+	| |  _|  _  |  _  | , ` | , ` |  _)_| |  _    | |  _| | | | (_) | (_) |  _  | , ` | | | `\__ \
+	| (_( | | | | | | | |`\ | |`\ | (_( | |_( )   | (_( | (_) | | | | | | | | | | |`\ | |_) ( )_) |
+	(____/(_) (_(_) (_(_) (_(_) (_(____/(____/'   (____/(_____(_) (_(_) (_(_) (_(_) (_(____/`\____)
+
+	*/
 
 	else if (msg.content === `${config.discord.prefix}channel add`) {
 		if (!_.includes(config.discord.admins, msg.author.id) || msg.channel.type !== 'text') {
@@ -1135,6 +1256,122 @@ client.on('message', (msg) => {
 						})
 				}
 			})
+		})
+	}
+	else if (msg.content.startsWith(`${config.discord.prefix}channel quest `)) {
+		if (!_.includes(config.discord.admins, msg.author.id) || msg.channel.type !== 'text') {
+			return null
+		}
+		query.countQuery('id', 'humans', 'id', msg.channel.id).then((isregistered) => {
+			if (!isregistered) {
+				msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${config.discord.prefix}channel add`)
+				return null
+			}
+			let monsters = []
+			let items = []
+			let distance = 0
+			let questTracks = []
+			let template = 3
+			const rawArgs = msg.content.slice(`${config.discord.prefix}channel quest `.length)
+			const args = rawArgs.toLowerCase().split(' ')
+			args.forEach((element) => {
+				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
+				if (pid !== undefined) monsters.push(pid)
+				else if (element.match(/d\d/gi)) {
+					distance = element.replace(/d/gi, '')
+					if (distance.length >= 10) distance = distance.substr(0, 9)
+				}
+				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
+			})
+			_.forEach(questDts.rewardItems, function(item, key){
+				let re = new RegExp(item, "gi");
+				if (rawArgs.match(re)) items.push(key)
+			})
+			if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
+			if (rawArgs.match(/all items/gi)){
+				_.forEach(questDts.rewardItems, function(item, key){
+					items.push(key)
+				})
+			}
+			if(rawArgs.match(/stardust/gi)){
+				questTracks.push({
+					id: msg.channel.id,
+					reward: 0,
+					template: template,
+					reward_type: 3,
+					distance: distance
+				})
+			}
+			monsters.forEach(pid => {
+				questTracks.push({
+					id: msg.channel.id,
+					reward: pid,
+					template: template,
+					reward_type: 7,
+					distance: distance
+				})
+			})
+			items.forEach(i => {
+				questTracks.push({
+					id: msg.channel.id,
+					reward: i,
+					template: template,
+					reward_type: 2,
+					distance: distance
+				})
+			})
+			questTracks.forEach(t => {
+				query.insertOrUpdateQuery('quest',
+					['id', 'reward', 'template', 'reward_type', 'distance'],
+					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`]
+				).then(p => {
+					log.info(`${msg.channel.name} Added quest tracking`)
+				})
+			})
+			msg.react('✅')
+
+		})
+	}
+
+	else if (msg.content.startsWith(`${config.discord.prefix}channel remove quest `)) {
+		if (!_.includes(config.discord.admins, msg.author.id) || msg.channel.type !== 'text') {
+			return null
+		}
+		query.countQuery('id', 'humans', 'id', msg.channel.id).then((isregistered) => {
+			if (!isregistered) {
+				msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${config.discord.prefix}channel add`)
+				return null
+			}
+			let monsters = [0]
+			let items = [0]
+			let stardustTracking = 1
+			const rawArgs = msg.content.slice(`${config.discord.prefix}channel remove quest `.length)
+			const args = rawArgs.toLowerCase().split(' ')
+			args.forEach((element) => {
+				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
+				if (pid !== undefined) monsters.push(pid)
+			})
+			_.forEach(questDts.rewardItems, function(item, key){
+				let re = new RegExp(item, "gi");
+				if (rawArgs.match(re)) items.push(key)
+			})
+			if(rawArgs.match(/stardust/gi)){
+				stardustTracking = 0
+			}
+			if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
+			if (rawArgs.match(/all items/gi)){
+				_.forEach(questDts.rewardItems, function(item, key){
+					items.push(key)
+				})
+			}
+
+			let remQuery = `
+			delete from quest WHERE id=${msg.channel.id} and 
+			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward = ${stardustTracking}))		
+			`
+			query.mysteryQuery(remQuery).then(t => { log.info(`${msg.channel.name} removed quest tracking`)})
+			msg.react('✅')
+
 		})
 	}
 

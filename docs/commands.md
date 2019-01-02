@@ -116,12 +116,30 @@ Available filters:
 |valor|`!egg level1 valor`| Tracks level 1 eggs controlling team is valor|
 |harmony|`!egg level5 harmony`| Tracks level 5 eggs in uncontested gyms|
 
-
-
 ###### !unegg
 
 `!unegg level2` Removes tracking of level 2 raid eggs.  
 Level is required to remove egg tracking.
+
+###### !quest
+
+`!quest pikachu poke ball stardust d10000` Tracks quests that would reward a pikachu, pokéballs or stardust within 10km
+
+Available filters:
+
+| Filter    | Example                        | More words  |
+| --------- |:------------------------------:| -----------:|
+|all pokemon|`!quest all pokemon`| tracks quests for all pokemon rewards within your area|
+|all items|`!quest all items`| tracks quests for all item rewards within your area|
+|d|`!quest snorlax d50`| Tracks Snorlax awarding quests within 50m of set location|
+|stardust|`!quest stardust d1000`| Tracks quests within 1km that awards stardust|
+
+
+###### !remove quest
+
+`!remove quest all pokemon pinap berry stardust`  
+Removes quest tracking for all pokemon, pinap berries and strdust.
+
 
 
 ##### Admin commands
@@ -229,3 +247,23 @@ Available filters:
 
 `!channel unegg level2` Removes tracking of level 2 raid eggs.  
 Level is required to remove egg tracking.
+
+
+###### !channel quest
+
+`!quest pikachu poke ball stardust d10000` Tracks quests that would reward a pikachu, pokéballs or stardust within 10km
+
+Available filters:
+
+| Filter    | Example                        | More words  |
+| --------- |:------------------------------:| -----------:|
+|all pokemon|`!channel quest all pokemon`| tracks quests for all pokemon rewards within your area|
+|all items|`!channel quest all items`| tracks quests for all item rewards within your area|
+|d|`!channel quest snorlax d50`| Tracks Snorlax awarding quests within 50m of set location|
+|stardust|`!channel quest stardust d1000`| Tracks quests within 1km that awards stardust|
+
+
+###### !remove quest
+
+`!channel remove quest all pokemon pinap berry stardust`  
+Removes quest tracking for all pokemon, pinap berries and strdust.

@@ -14,7 +14,7 @@ const pokestop = `CREATE TABLE \`pokestop\` (
   \`longitude\` double NOT NULL,
   KEY \`pokemstop_id\` (\`id\`),
   KEY \`pokestop_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const activeRaid = `CREATE TABLE \`activeRaid\` (
   \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -31,7 +31,7 @@ const activeRaid = `CREATE TABLE \`activeRaid\` (
   \`longitude\` double NOT NULL,
   KEY \`geocoded_id\` (\`id\`),
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const pokemon = `CREATE TABLE \`pokemon\` (
   \`encounter_id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -54,7 +54,7 @@ const pokemon = `CREATE TABLE \`pokemon\` (
   PRIMARY KEY (\`encounter_id\`),
   KEY \`geocoded_id\` (\`encounter_id\`),
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const gymInfo = `CREATE TABLE \`gym-info\` (
   \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
@@ -67,7 +67,7 @@ const gymInfo = `CREATE TABLE \`gym-info\` (
   PRIMARY KEY (\`id\`),
   KEY \`geocoded_park\` (\`park\`),
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const humans = `CREATE TABLE \`humans\` (
   \`id\` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -81,7 +81,7 @@ const humans = `CREATE TABLE \`humans\` (
   KEY \`humans_name\` (\`name\`),
   KEY \`humans_alerts_sent\` (\`alerts_sent\`),
   KEY \`humans_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;`
 
 const monsters = `CREATE TABLE \`monsters\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
@@ -104,7 +104,7 @@ const monsters = `CREATE TABLE \`monsters\` (
   KEY \`monsters_pokemon_id\` (\`pokemon_id\`),
   KEY \`monsters_distance\` (\`distance\`),
   KEY \`monsters_min_iv\` (\`min_iv\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const raid = `
 CREATE TABLE \`raid\` (
@@ -118,7 +118,7 @@ CREATE TABLE \`raid\` (
   PRIMARY KEY raid_tracking (\`id\`, \`pokemon_id\`, \`park\`, \`level\`),
   KEY \`raid_pokemon_id\` (\`pokemon_id\`),
   KEY \`raid_distance\` (\`distance\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const egg = `CREATE TABLE \`egg\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
@@ -130,22 +130,22 @@ const egg = `CREATE TABLE \`egg\` (
   PRIMARY KEY egg_tracking (\`id\`, \`raid_level\`),
   KEY \`raid_level\` (\`raid_level\`),
   KEY \`raid_distance\` (\`distance\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const schemaVersion = `CREATE TABLE \`schema_version\` (
   \`key\` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
   \`val\` smallint(6) NOT NULL,
   PRIMARY KEY (\`key\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const quest = `
 CREATE TABLE \`quest\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  \`quest_id\` int(11) DEFAULT NULL,
+  \`reward\` int(11) NOT NULL DEFAULT 0,
   \`template\` smallint(5) DEFAULT 3,
-  \`reward_id\` int(11) DEFAULT NULL,
-  \`distance\` int(11) NOT NULL,
-  PRIMARY KEY quest_tracking (\`id\`, \`quest_id\`, \`reward_id\`),
+  \`reward_type\` int(11) NOT NULL DEFAULT 0,
+  \`distance\` int(11) NOT NULL DEFAULT 0,
+  PRIMARY KEY quest_tracking (\`id\`, \`reward_type\`, \`reward\`),
   KEY \`distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
 
@@ -158,7 +158,7 @@ CREATE TABLE \`comevent\` (
   \`create_timestamp\` TIMESTAMP NULL DEFAULT NULL,
   \`monster_id\` longtext COLLATE utf8_unicode_ci,
   \`finished\` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const comentry = `
 CREATE TABLE \`comsubmission\` (
@@ -169,7 +169,7 @@ CREATE TABLE \`comsubmission\` (
   \`seen\` int(11) DEFAULT NULL,
   \`caught\` int(11) DEFAULT NULL,
   \`lucky\` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 
 module.exports = async () => {
@@ -189,7 +189,7 @@ module.exports = async () => {
 				queries.mysteryQuery(activeRaid),
 				queries.mysteryQuery(schemaVersion)
 			]).then(() => {
-				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '1'])
+				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '2'])
 				log.info('Database tables created, db_version 1 applied')
 			})
 		}else {
@@ -200,7 +200,16 @@ module.exports = async () => {
 				else{
 					log.error(`didn't find Tables I like, this house has ${confirmed_tables} similar tables \nPlease check database credentials for my PERSONAL database`)
 				}
+				queries.selectOneQuery('schema_version', 'key', 'db_version').then(version => {
+					if(version.val === 1){
+						queries.dropTableQuery('quest').then(deleted => {
+							queries.mysteryQuery(quest).then()
+							queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+							log.info('applied Db migration 2')
+						})
+					}
+				})
 			})
 		}
 	})
-};
+}

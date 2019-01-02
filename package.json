@@ -10,7 +10,6 @@
   "scripts": {
     "test": "mocha --exit",
     "pm2": "npm i -g pm2",
-
     "start": "node src/app/app.js",
     "lint": "./node_modules/.bin/eslint ./src/app",
     "community": "node src/app/communityDay/comDay.js",
