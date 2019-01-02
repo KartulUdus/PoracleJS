@@ -632,7 +632,7 @@ client.on('message', (msg) => {
 			let distance = 0
 			let questTracks = []
 			let template = 3
-			const rawArgs = msg.content.slice(`${config.discord.prefix}quest `.length)
+			const rawArgs = msg.content.slice(`${config.discord.prefix}quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
@@ -644,7 +644,7 @@ client.on('message', (msg) => {
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 			})
 			_.forEach(questDts.rewardItems, function(item, key){
-				let re = new RegExp(item, "gi");
+				let re = new RegExp(` ${item}`, "gi");
 				if (rawArgs.match(re)) items.push(key)
 			})
 			if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
@@ -1272,7 +1272,7 @@ client.on('message', (msg) => {
 			let distance = 0
 			let questTracks = []
 			let template = 3
-			const rawArgs = msg.content.slice(`${config.discord.prefix}channel quest `.length)
+			const rawArgs = msg.content.slice(`${config.discord.prefix}channel quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
@@ -1284,7 +1284,7 @@ client.on('message', (msg) => {
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 			})
 			_.forEach(questDts.rewardItems, function(item, key){
-				let re = new RegExp(item, "gi");
+				let re = new RegExp(` ${item}`, "gi");
 				if (rawArgs.match(re)) items.push(key)
 			})
 			if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
