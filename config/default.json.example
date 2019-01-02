@@ -31,8 +31,7 @@
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
-    "rocketmap":"http://yourmap.com/RocketMap/",
-    "geofence": "../../../config/geofence.json"
+    "geofence": "../../../config/geofence.example.json"
   },
 
   "discord": {
@@ -42,7 +41,7 @@
     "comDayResultChannelId":"383608765972217857",
     "modRole":"sudo",
     "prefix": "!",
-    "typereact": true,
+    "typereact": false,
     "limitsec": 30,
     "limitamount": 20,
     "iv_colors": [

@@ -14,22 +14,17 @@
    git clone https://github.com/KartulUdus/PoracleJS.git
    ```
 
-2. Create A [discord bot](discordbot.md), add it to your server and take not of your token for later
+2. Create a [discord bot](discordbot.md), add it to your server and take note of your token for later
 
 
-3. Make config files by copying the [examples](https://github.com/KartulUdus/PoracleJS/tree/master/config).
-    * Copy `config/dts.json.example` to `config/dts.json` and edit the file if you wish to have [custom messages](dts.md)    
+3. Make a config file by copying the [examples](https://github.com/KartulUdus/PoracleJS/tree/master/config).
     * Copy `config/default.json.example` to `config/default.json` and [fill the necessary details](config.md)
     
 4. Install package requirements:
     ```
     npm install
     ```
-5. Test if your config is correct and services are available: 
-    ```
-    npm test
-    ```
-6. Start Poracle:
+5. Start Poracle:
 
     ```
     npm start

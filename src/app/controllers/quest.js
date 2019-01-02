@@ -77,20 +77,22 @@ class Quest extends Controller{
 						`${config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
 						: 'saflkansd'
 					if(data.rewardData.items[1]){
-						data['imgurl'] = `${config.general.imgurl}/rewards/reward_${data.rewardData.items[1]}_1.png`
+						data['imgurl'] = `${config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
 					}
 					if(data.type === 3){
-						data['imgurl'] = `${config.general.imgurl}/rewards/reward_stardust.png`
+						data['imgurl'] = `${config.general.imgurl}rewards/reward_stardust.png`
 					}
 
 					this.questWhoCares(data).then(whoCares => {
 						if(whoCares) this.getAddress({ lat: data.latitude, lon: data.longitude }).then(geoResult => {
+							console.log(data)
 							const view = {
 								guestType: data.questType,
 								reward: data.rewardData.rewardstring.replace(/\n/g, " "),
 								conditions: data.conditionstring.replace(/\n/g, " "),
 								monsterNames: monsternames.join(', '),
 								itemNames: itemnames.join(', '),
+								stardust: data.type === 3? "stardust" : "",
 								imgurl: data.imgurl.toLowerCase(),
 								name: data.pokestop_name.replace(/\n/g, " "),
 								url: data.pokestop_url,

@@ -15,7 +15,7 @@ This config file consist of different objects for different configurations.
     "password": "",
     "database": "",
     "port": "",
-    "connectionLimit": 100
+    "connectionLimit": 30
   }
 ```
 
@@ -73,26 +73,29 @@ This config file consist of different objects for different configurations.
 
 
 
-##### Google Maps settings
+##### Geocoding Settings Maps settings
 
 ```json
-  "gmaps": {
-    "key":"",
+  "geocoding": {
+    "provider": "OSM",
+    "googleKey":["YOUR GOOGLE KEY"],
     "width": 250,
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
-    "rocketmap":"https://yourRocketMap.com/"
-  }
+    "geofence": "../../../config/geofence.example.json"
+  },
+
 ```
 | Option        | Value         | 
 | ------------- |:-------------:| 
-|key | Your google maps API key |
+|Proviver| either OSM or google for geocoding|
+|googlekey | Your google maps API key |
 |width| Width in pixels of the static map.|
 |height| Height in pixels of the static map.|
 |zoom | Zoom level of the static map.|
 |type| Style of static map. Can be one of: <br/>roadmap <br/>satellite <br/>hybid <br/>dark |
-|rocketmap | link to your rocketmap, can be used to automatically link locations of alarms. Trailing slash is important. |
+|geofence | Path to a geoJSON file with your geofences |
 
 ##### Discord settings
 
@@ -147,23 +150,6 @@ The tiers of IV colors are as follows:
   | 90 %        | 99.9 %      | Purple #A335EE |
   | 100 %       | 100 %       | Orange #FF8000 |
 
-```json
-  "rabbit": {
-    "conn": "amqp://poracle:poracle@localhost:5672"
-  }
-```
-| Option        | Value         | 
-| ------------- |:-------------:| 
-|conn| Your connection string to [RabbitMQ](http://www.rabbitmq.com/download.html).|
 
-##### Geofence Settings
-
-```json
-"geofence": [...]
-```
-
-| Option        | Value         | 
-| ------------- |:-------------:| 
-|geofence| A list of geojson areas that alarms can be tracked from. [Create and download geofences here](http://geo.jasparke.net/).|
 
 When you are done with your config, you can make sure that it's a [valid JSON format here](https://jsonlint.com/)

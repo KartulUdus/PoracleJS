@@ -109,14 +109,14 @@ class Raid extends Controller{
 				data.name = monsterData[data.pokemon_id]? monsterData[data.pokemon_id].name : 'errormon'
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00.png`;
 				const e = [];
-				monsterData[data.pokemon_id].types.forEach((type) => {
+				monsterData[data.pokemon_id].types.forEach(type => {
 					if(types[type]) e.push(types[type].emoji);
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
-				if(!!(data.team_id)) data.team_id = 0
-				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
-				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
+				if(!data.team_id) data.team_id = 0
+				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
+				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 
 				data.quick_move = data.move_1 ? moveData[data.move_1].name : ''
 				data.charge_move = data.move_2 ? moveData[data.move_2].name : ''
@@ -187,7 +187,9 @@ class Raid extends Controller{
 													state: geoResult.state,
 													stateCode: geoResult.stateCode,
 													flagemoji: geoResult.flag,
-													emojistring: data.emojiString
+													emojistring: data.emojistring,
+													areas: data.matched.join(', '),
+
 
 												};
 
@@ -216,12 +218,12 @@ class Raid extends Controller{
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true);
 				data.hatchtime = moment(data.start * 1000).format(config.locale.time);
 				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/egg${data.level}.png`;
-				if(!!(data.team_id)) data.team_id = 0
+				if(!data.team_id) data.team_id = 0
 				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
-						if (!!(data.sponsor_id)) data.sponsor_id = false
+						if (!data.sponsor_id) data.sponsor_id = false
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name;
 						data.description = gymInfo ? gymInfo.description : '';
 						data.url = gymInfo ? gymInfo.url : '';
@@ -269,7 +271,7 @@ class Raid extends Controller{
 												state: geoResult.state,
 												stateCode: geoResult.stateCode,
 												flagemoji: geoResult.flag,
-												areas: data.matched.join(','),
+												areas: data.matched.join(', '),
 											};
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`]);
