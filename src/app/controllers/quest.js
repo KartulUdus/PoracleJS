@@ -28,7 +28,7 @@ class Quest extends Controller{
 			select * from quest
             join humans on humans.id = quest.id
             where humans.enabled = 1 and
-            ((reward in (${data.rewardData.monsters}) and reward_type=7 ) or (reward_type = 2 and reward in (${data.rewardData.items})) or (reward_type = 3 and reward=0)) 
+            ((reward in (${data.rewardData.monsters}) and reward_type=7 ) or (reward_type = 2 and reward in (${data.rewardData.items})) or (reward_type = ${data.type} and reward=0)) 
             and
             (round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
