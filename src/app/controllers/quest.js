@@ -28,7 +28,7 @@ class Quest extends Controller{
 			select * from quest
             join humans on humans.id = quest.id
             where humans.enabled = 1 and
-            ((reward in (${data.rewardData.monsters}) and reward_type=7 ) or (reward_type = 2 and reward in (${data.rewardData.items})) or (reward_type = ${data.type} and reward=0)) 
+            ((reward in (${data.rewardData.monsters}) and reward_type=7 ) or (reward_type = 2 and reward in (${data.rewardData.items})) or (reward_type = 3 and reward <= ${data.dustAmount})) 
             and
             (round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
@@ -64,6 +64,8 @@ class Quest extends Controller{
 					data['rewardData'] = questData[1]
 					data['conditionstring'] = questData[2]
 					data['matched']  = questData[3]
+					data['dustAmount'] = questData[1].dustAmount
+
 					let jobs = []
 					let monsternames = []
 					let itemnames = []
@@ -79,13 +81,13 @@ class Quest extends Controller{
 					if(data.rewardData.items[1]){
 						data['imgurl'] = `${config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
 					}
-					if(data.type === 3){
+					if(data.dustAmount){
 						data['imgurl'] = `${config.general.imgurl}rewards/reward_stardust.png`
+						data.dustAmount = data.rewards[0].info.amount
 					}
 
 					this.questWhoCares(data).then(whoCares => {
 						if(whoCares) this.getAddress({ lat: data.latitude, lon: data.longitude }).then(geoResult => {
-							console.log(data)
 							const view = {
 								questType: data.questType,
 								reward: data.rewardData.rewardstring.replace(/\n/g, " "),
@@ -148,6 +150,7 @@ class Quest extends Controller{
 			let monsters = [0]
 			let items = [0]
 			let rewardString = ''
+			let dustAmount = 0
 
 
 			data.rewards.forEach(async (reward) =>{
@@ -160,6 +163,7 @@ class Quest extends Controller{
 					else if (reward.type === 3) {
 						let template = dts.questRewardTypes['3']
 						let rew = mustache.render(template, {amount: reward.info.amount})
+						dustAmount = reward.info.amount
 						rewardString = rewardString.concat(rew)
 
 					}
@@ -170,7 +174,7 @@ class Quest extends Controller{
 						rewardString = rewardString.concat(rew)
 					}
 			})
-			resolve({rewardstring: rewardString, monsters: monsters, items: items})
+			resolve({rewardstring: rewardString, monsters: monsters, items: items, dustAmount: dustAmount})
 		})
 	}
 

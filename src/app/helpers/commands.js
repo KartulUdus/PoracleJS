@@ -638,6 +638,7 @@ client.on('message', (msg) => {
 			let template = 3
 			const rawArgs = msg.content.slice(`${config.discord.prefix}quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
+			let minDust = 0
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
@@ -645,6 +646,7 @@ client.on('message', (msg) => {
 					distance = element.replace(/d/gi, '')
 					if (distance.length >= 10) distance = distance.substr(0, 9)
 				}
+				else if (element.match(/stardust\d/gi))  minDust = element.replace(/stardust/gi, '')
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 			})
 			_.forEach(questDts.rewardItems, function(item, key){
@@ -657,10 +659,10 @@ client.on('message', (msg) => {
 					items.push(key)
 				})
 			}
-			if(rawArgs.match(/stardust/gi)){
+			if(rawArgs.match(/stardust\d/gi)){
 				questTracks.push({
 					id: msg.author.id,
-					reward: 0,
+					reward: minDust,
 					template: template,
 					reward_type: 3,
 					distance: distance
@@ -709,7 +711,7 @@ client.on('message', (msg) => {
 			}
 			let monsters = [0]
 			let items = [0]
-			let stardustTracking = 1
+			let stardustTracking = 9999999
 			const rawArgs = msg.content.slice(`${config.discord.prefix}remove quest `.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			args.forEach((element) => {
@@ -732,7 +734,7 @@ client.on('message', (msg) => {
 
 			let remQuery = `
 			delete from quest WHERE id=${msg.author.id} and 
-			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward = ${stardustTracking}))		
+			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}))		
 			`
 			query.mysteryQuery(remQuery).then(t => { log.info(`${msg.author.username} removed quest tracking`)})
 			msg.react('✅')
@@ -1276,11 +1278,13 @@ client.on('message', (msg) => {
 			let distance = 0
 			let questTracks = []
 			let template = 3
+			let minDust = 0
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (element.match(/stardust\d/gi))  minDust = element.replace(/stardust/gi, '')
 				else if (element.match(/d\d/gi)) {
 					distance = element.replace(/d/gi, '')
 					if (distance.length >= 10) distance = distance.substr(0, 9)
@@ -1300,7 +1304,7 @@ client.on('message', (msg) => {
 			if(rawArgs.match(/stardust/gi)){
 				questTracks.push({
 					id: msg.channel.id,
-					reward: 0,
+					reward: minDust,
 					template: template,
 					reward_type: 3,
 					distance: distance
@@ -1348,7 +1352,7 @@ client.on('message', (msg) => {
 			}
 			let monsters = [0]
 			let items = [0]
-			let stardustTracking = 1
+			let stardustTracking = 9999999
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel remove quest `.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			args.forEach((element) => {
@@ -1371,7 +1375,7 @@ client.on('message', (msg) => {
 
 			let remQuery = `
 			delete from quest WHERE id=${msg.channel.id} and 
-			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward = ${stardustTracking}))		
+			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward >= ${stardustTracking}))		
 			`
 			query.mysteryQuery(remQuery).then(t => { log.info(`${msg.channel.name} removed quest tracking`)})
 			msg.react('✅')
