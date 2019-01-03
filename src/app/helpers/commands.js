@@ -638,7 +638,7 @@ client.on('message', (msg) => {
 			let template = 3
 			const rawArgs = msg.content.slice(`${config.discord.prefix}quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
-			let minDust = 0
+			let minDust = 10000000
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
@@ -647,6 +647,7 @@ client.on('message', (msg) => {
 					if (distance.length >= 10) distance = distance.substr(0, 9)
 				}
 				else if (element.match(/stardust\d/gi))  minDust = element.replace(/stardust/gi, '')
+				else if (element === 'stardust')  minDust = 1
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 			})
 			_.forEach(questDts.rewardItems, function(item, key){
@@ -1278,13 +1279,14 @@ client.on('message', (msg) => {
 			let distance = 0
 			let questTracks = []
 			let template = 3
-			let minDust = 0
+			let minDust = 10000000
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
 				else if (element.match(/stardust\d/gi))  minDust = element.replace(/stardust/gi, '')
+				else if (element === 'stardust')  minDust = 1
 				else if (element.match(/d\d/gi)) {
 					distance = element.replace(/d/gi, '')
 					if (distance.length >= 10) distance = distance.substr(0, 9)
@@ -1352,7 +1354,7 @@ client.on('message', (msg) => {
 			}
 			let monsters = [0]
 			let items = [0]
-			let stardustTracking = 9999999
+			let stardustTracking = 99999999
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel remove quest `.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			args.forEach((element) => {
