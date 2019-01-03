@@ -12,7 +12,8 @@ const weatherData = require('../util/weather')
 const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
 const ivColorData = config.discord.iv_colors
-const moment = require('moment')
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 moment.locale(config.locale.timeformat)
 
@@ -117,7 +118,7 @@ class Monster extends Controller{
 			data.color = monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0;
 			data.ivcolor = this.findIvColor(data.iv);
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true);
-			data.distime = moment(data.disappear_time * 1000).format(config.locale.time);
+			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time);
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`;
 			let e = [];
 			monsterData[data.pokemon_id].types.forEach((type) => {
@@ -176,6 +177,7 @@ class Monster extends Controller{
 								ivcolor: data.ivcolor,
 								boost: data.boost,
 								boostemoji: data.boostemoji,
+								areas: data.matched.join(','),
 
 								// geocode stuff
 								lat: data.latitude.toString().substring(0, 8),

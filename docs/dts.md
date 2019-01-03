@@ -13,46 +13,42 @@ These are separated by the type of alarm.
 
 ```json
   "monster": {
-    "embed": {
-      "title": "a wild {{{name}}} has appeared!",
-      "description": "It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
-      "url": "{{{rocketmap}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{imgurl}}}"
-      },
-      "image": {
-        "url": "{{{staticmap}}}"
-      },
-      "author": {
-        "name": "{{name}}",
-        "url": "{{{rocketmap}}}"
+  "3":{
+      "embed": {
+        "title": "a wild {{{name}}} has appeared!",
+        "description": "It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
+        "url": "{{{rocketmap}}}",
+        "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{imgurl}}}"
+        },
+        "image": {
+          "url": "{{{staticmap}}}"
+        },
+        "author": {
+          "name": "{{name}}",
+          "url": "{{{rocketmap}}}"
+        }
       }
     }
   }
+
 ```
 
 For monsters without IV information, you can specify a different message.
 
 ```json
-"monsterNoIv": {
-    "embed": {
-      "title": "a wild {{{name}}} has appeared!",
-      "description": "It will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \naddress: {{addr}} ",
-      "url": "{{{rocketmap}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{imgurl}}}"
-      },
-      "image": {
-        "url": "{{{staticmap}}}"
-      },
-      "author": {
-        "name": "{{name}}",
-        "url": "{{{rocketmap}}}"
+  "monsterNoIv": {
+    "1": {
+      "embed": {
+        "color": "{{color}}",
+        "author": {
+          "name":"#{{id}} {{name}} end: {{time}}, time left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}}",
+          "icon_url": "{{{imgurl}}}"
+        },
+        "description": "\n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})"
       }
-    }
-  },
+    },
 ```
 
 
@@ -60,6 +56,7 @@ Any of the fields can be cusomtized with the following:
 
 | Option        | Value         | 
 | --------------- |:-------------:|
+|{{id}}| Pokemon Id|
 |{{name}}| Monsters name|
 |{{time}}| Disappear time|
 |{{tthh}}| Full hours until hidden|
@@ -93,36 +90,33 @@ Any of the fields can be cusomtized with the following:
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ivcolor}}| Color to be used for embed (Color of monsters perfection based on config.discord.iv_colors)|
 |{{boost}}| Monsters weather boost name|
-|{{boostemoji}}| Monsters weather boost emoji|
-
+|{{boostemoji}}| Monsters weather boost emoji)|
+|{{gif}}| Gif image using pokemon-gif|
+|{{flagemoji}}|Country flag emoji for location|
+|{{lat}}| Latitude of the alert|
+|{{lon}}| Longitude of the alert|
 
 
 ###### Raid alarms
 
 ```json
+  
   "raid": {
-    "embed": {
-      "title": "Raid against {{name}} has started! at {{gymname}}",
-      "description": "It will end at {{time}}, you have {{tthm}}m {{tths}}s left \n{{move1}}|{{move2}} Level:{{level}} \n:100:=={{cp20}}CP or if boosted {{cp25}}CP  \naddress: {{addr}} ",
-      "url": "{{{rocketmap}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{detailsurl}}}"
-      },
-      "image": {
-        "url": "{{{staticmap}}}"
-      },
-      "author": {
-        "name": "{{name}}",
-        "url": "{{{rocketmap}}}",
-        "icon_url": "{{{imgurl}}}"
+    "1": {
+      "embed": {
+        "color": "{{color}}",
+        "author": {
+          "name": "R{{level}} {{name}} {{flagemoji}} {{lat}}, {{lon}} end: {{time}}, {{tthm}}m {{tths}}s",
+          "url": "{{{mapurl}}}",
+          "icon_url": "{{{imgurl}}}"
+        }
       }
-    }
-  }
+    },
 ```
 
 | Option        | Value         | 
 | --------------- |:-------------:|
+|{{id}}| Pokémon id|
 |{{name}}| Monsters name|
 |{{time}}| Disappear time|
 |{{tthh}}| Full hours until raid ends|
@@ -154,32 +148,31 @@ Any of the fields can be cusomtized with the following:
 |{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
-|{{ex}}| If raid takes place in a potential EX gym (empty string if false|
-
+|{{ex}}| If raid takes place in a potential EX gym (empty string if false)|
+|{{gif}}| Gif image using pokemon-gif|
+|{{flagemoji}}|Country flag emoji for location|
+|{{lat}}| Latitude of the alert|
+|{{lon}}| Longitude of the alert|
 
 
 ###### Egg alarms
 
 ```json
-  "egg": {
-    "embed": {
-      "title": "Raid level {{level}} will start soon at {{gymname}}",
-      "description": "It will hatch at {{time}}, in{{tthm}}m {{tths}}s \naddress: {{addr}} \n{{{description}}} ",
-      "url": "{{{rocketmap}}}",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{detailsurl}}}"
-      },
-      "image": {
-        "url": "{{{staticmap}}}"
-      },
-      "author": {
-        "name": "Level{{level}} Raid",
-        "url": "{{{rocketmap}}}",
-        "icon_url": "{{{imgurl}}}"
+  "egg":{
+    "2": {
+      "embed": {
+        "title": "{{gymname}}: {{ex}}, \n {{countryCode}} {{flagemoji}} {{addr}} {{lat}}, {{lon}} )",
+        "description": "[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{detailsurl}}}"
+        },
+        "author": {
+          "name": "lvl{{level}} hatch: {{time}} in {{tthm}}m {{tths}}s",
+          "icon_url": "{{{imgurl}}}"
+        }
       }
-    }
-  }
+    },
 ```
 
 
@@ -211,6 +204,56 @@ Any of the fields can be cusomtized with the following:
 |{{{imgurl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ex}}| If raid takes place in a potential EX gym (empty string if false|
+|{{flagemoji}}|Country flag emoji for location|
+
+
+###### Quest alarms
+
+```json
+"quest":{
+    "4": {
+      "embed": {
+        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "url": "{{{mapurl}}}",
+        "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgurl}}}"
+        },
+        "image": {
+          "url": "{{{url}}}"
+        }
+      }
+    },
+```
+
+
+
+| Option        | Value         | 
+| --------------- |:-------------:|
+|{{questType}}| The type of quest (for example: battle in 3 raids|
+|{{conditions}}| Extra conditions (for example: you must win these battles|
+|{{reward}}| Reward if you finish (Pokemon, item or stardust)|
+|{{monsterNames}}| Names of all reward monsters for this quest|
+|{{itemNames}}| Names of all reward Items for this quest|
+|{{stardust}}| The word "stardust" if it's that tyüe of quest|
+|{{{imgurl}}}| Image of the reward. Could be Pokemon or Item or stardust|
+|{{name}}| Name of the Pokestop|
+|{{url}}| Link to the image of the Pokestop|
+|{{minCp}}| Minimum CP of the reward pokemon |
+|{{maxCp}}| Maximum CP of the reward pokemon|
+|{{{mapurl}}}| Link to google maps|
+|{{{applemap}}}| Link to apple maps|
+|{{lat}}| Latitude of the alerted location|
+|{{lon}}| Longitude of the alerted location|
+|{{streetNumber}}| Street number of the alerted location|
+|{{streetName}}| Street name of the alerted location|
+|{{zipcode}}| Zip code of the alerted location|
+|{{country}}| Country of the alerted location|
+|{{countryCode}}| 2 letter country code of the alerted location|
+|{{city}}| City name of the alerted location|
+|{{state}}| State name of the alerted location|
+|{{stateCode}}| 2 letter state code of the alerted location|
+|{{flagemoji}}|Country flag emoji for location|
 
 
 ###### Greeting Message

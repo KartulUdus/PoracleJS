@@ -39,5 +39,19 @@ module.exports = function (fastify, opts, next) {
 				longitude: { type: 'number' }
 			}
 		})
+		.addSchema({
+			$id: 'questMessage',
+			type: 'object',
+			required: ['type', 'target', 'conditions', 'rewards', 'latitude', 'longitude', 'updated'],
+			properties: {
+				type: { type: 'integer' },
+				target: { type: 'integer' },
+				conditions: { type: 'array' },
+				rewards: { type: 'array' },
+				updated: { type: 'integer' },
+				latitude: { type: 'number' },
+				longitude: { type: 'number' }
+			}
+		})
 	next()
 }

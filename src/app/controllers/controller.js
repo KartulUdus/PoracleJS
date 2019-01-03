@@ -145,6 +145,20 @@ class Controller{
 		})
 	}
 
+	async dropTableQuery(table) {
+		return new Promise(resolve => {
+			let q = `DROP TABLE ${table}`
+			this.db.query(q)
+				.then(
+					function(result){
+						log.info(`Table ${table} was dropped`)
+						resolve(result[0][0])
+					}
+				)
+				.catch((err) => {log.error(`dropTableQuery errored with: ${err}`)})
+		})
+	}
+
 	async countQuery(what, from, where, value) {
 		return new Promise(resolve => {
 			this.db.query('SELECT count(??) as count FROM ?? WHERE ?? = ?', [what, from, where, value])
@@ -202,9 +216,9 @@ class Controller{
 	async mysteryQuery(query) {
 		return new Promise(resolve => {
 			this.db.query(query)
-				.then(() => {
+				.then((result) => {
 					log.debug(`Mystery query executed`)
-					resolve()
+					resolve(result[0])
 				})
 				.catch((err) => {log.error(`mysteryQuery errored with: ${err}`)})
 		})

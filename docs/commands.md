@@ -1,10 +1,9 @@
 # Discord Commands
 
-Generally, PoracleJS will respond to valid commands with either: 
+You may notice, PoracleJS will react to valid commands with either: 
 
 * ✅ - Command successful
 * 👌 - Already done
-* 🙅 - Invalid conditions (wrong channel, not admin etc)
 
 ##### General commands
 
@@ -71,8 +70,8 @@ available filters:
 |atk        |`!track eevee atk15`             | Tracks eevee with a (minimum) 15 point attack value|
 |def        |`!track eevee def14`             | Tracks eevee with a (minimum) 14 point defense value|
 |sta        |`!track eevee sta10`             | Tracks eevee with a (minimum) 10 point stamina value|
-|weight     |`!track magikarp weight13130`   | Tracks "big" magikarp (13130 grams and higher|
-|maxweight  |`!track rattata maxweight2410`  | Tracks "tiny" rattata (2410 grams and lower)|
+|weight     |`!track magikarp weight13130`    | Tracks "big" magikarp (13130 grams and higher|
+|maxweight  |`!track rattata maxweight2410`   | Tracks "tiny" rattata (2410 grams and lower)|
 |everything |`!track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
 
 ###### !untrack
@@ -117,12 +116,30 @@ Available filters:
 |valor|`!egg level1 valor`| Tracks level 1 eggs controlling team is valor|
 |harmony|`!egg level5 harmony`| Tracks level 5 eggs in uncontested gyms|
 
-
-
 ###### !unegg
 
 `!unegg level2` Removes tracking of level 2 raid eggs.  
 Level is required to remove egg tracking.
+
+###### !quest
+
+`!quest pikachu poke ball stardust d10000` Tracks quests that would reward a pikachu, pokéballs or stardust within 10km
+
+Available filters:
+
+| Filter    | Example                        | More words  |
+| --------- |:------------------------------:| -----------:|
+|all pokemon|`!quest all pokemon`| tracks quests for all pokemon rewards within your area|
+|all items|`!quest all items`| tracks quests for all item rewards within your area|
+|d|`!quest snorlax d50`| Tracks Snorlax awarding quests within 50m of set location|
+|stardust|`!quest stardust d1000`| Tracks quests within 1km that awards stardust|
+
+
+###### !remove quest
+
+`!remove quest all pokemon pinap berry stardust`  
+Removes quest tracking for all pokemon, pinap berries and strdust.
+
 
 
 ##### Admin commands
@@ -226,7 +243,27 @@ Available filters:
 
 
 
-###### !unegg
+###### !channel unegg
 
 `!channel unegg level2` Removes tracking of level 2 raid eggs.  
 Level is required to remove egg tracking.
+
+
+###### !channel quest
+
+`!quest pikachu poke ball stardust d10000` Tracks quests that would reward a pikachu, pokéballs or stardust within 10km
+
+Available filters:
+
+| Filter    | Example                        | More words  |
+| --------- |:------------------------------:| -----------:|
+|all pokemon|`!channel quest all pokemon`| tracks quests for all pokemon rewards within your area|
+|all items|`!channel quest all items`| tracks quests for all item rewards within your area|
+|d|`!channel quest snorlax d50`| Tracks Snorlax awarding quests within 50m of set location|
+|stardust|`!channel quest stardust d1000`| Tracks quests within 1km that awards stardust|
+
+
+###### !remove quest
+
+`!channel remove quest all pokemon pinap berry stardust`  
+Removes quest tracking for all pokemon, pinap berries and strdust.

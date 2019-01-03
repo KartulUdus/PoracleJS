@@ -41,17 +41,17 @@
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
-    "geofence": "../../../config/geofence_example.json"
+    "geofence": "../../../config/geofence.example.json"
   },
 
   "discord": {
-    "token": ["YourDiscordToken"],
+    "token": ["YOUR DISCORD TOKEN"],
     "channel": "general",
-    "admins": ["2222222222222222222"],
+    "admins": ["222742859059560458"],
     "comDayResultChannelId":"383608765972217857",
     "modRole":"sudo",
     "prefix": "!",
-    "typereact": true,
+    "typereact": false,
     "limitsec": 30,
     "limitamount": 20,
     "iv_colors": [

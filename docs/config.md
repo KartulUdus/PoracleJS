@@ -15,7 +15,7 @@ This config file consist of different objects for different configurations.
     "password": "",
     "database": "",
     "port": "",
-    "connectionLimit": 100
+    "connectionLimit": 30
   }
 ```
 
@@ -37,8 +37,8 @@ This config file consist of different objects for different configurations.
     "logLevel": "debug",
     "host": "127.0.0.1",
     "port": "3031",
-    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/app/src/util/images/",
-    "max_pokemon": 326
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
+    "max_pokemon": 490
   }
   ```
   
@@ -47,7 +47,7 @@ This config file consist of different objects for different configurations.
   |logLevel | Logging level, can be `debug`, `info` or `error`.|
   |host |   Webserver host. |
   |port | Webserver port. | 
-  |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/images) |
+  |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/images) |
   | max_pokemon | Biggest released pokemon_id. Needed for tracking batch tracking of mainimum/maximum IV.|
 
 ##### Locale settings
@@ -66,33 +66,36 @@ This config file consist of different objects for different configurations.
   | timeformat    | sets 24 or 12h AM/PM time. use `"en-us"` for 12h time.|
   | time | Time string format for disappear time. `LTS` for hours minutes and seconds `LT` for just hours and minutes.|
   | addressformat | Format for the geocoded address. Can be any combination of : <br/>%P - country <br/>%p - country code <br/>%n - street number <br/>%S - street name <br/>%z - zip code <br/>%T - State  <br/>%t - state code|
-  | commandMonstersJson | Monster locale file for discord commands. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
-  | monstersJson    | Monster locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
-  | movesJson    | Moves locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/app/src/util/locale).|
+  | commandMonstersJson | Monster locale file for discord commands. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
+  | monstersJson    | Monster locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
+  | movesJson    | Moves locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
   | colorsJson   | Colors for IV brackets |
 
 
 
-##### Google Maps settings
+##### Geocoding Settings Maps settings
 
 ```json
-  "gmaps": {
-    "key":"",
+  "geocoding": {
+    "provider": "OSM",
+    "googleKey":["YOUR GOOGLE KEY"],
     "width": 250,
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
-    "rocketmap":"https://yourRocketMap.com/"
-  }
+    "geofence": "../../../config/geofence.example.json"
+  },
+
 ```
 | Option        | Value         | 
 | ------------- |:-------------:| 
-|key | Your google maps API key |
+|Proviver| either OSM or google for geocoding|
+|googlekey | Your google maps API key |
 |width| Width in pixels of the static map.|
 |height| Height in pixels of the static map.|
 |zoom | Zoom level of the static map.|
 |type| Style of static map. Can be one of: <br/>roadmap <br/>satellite <br/>hybid <br/>dark |
-|rocketmap | link to your rocketmap, can be used to automatically link locations of alarms. Trailing slash is important. |
+|geofence | Path to a geoJSON file with your geofences |
 
 ##### Discord settings
 
@@ -147,23 +150,6 @@ The tiers of IV colors are as follows:
   | 90 %        | 99.9 %      | Purple #A335EE |
   | 100 %       | 100 %       | Orange #FF8000 |
 
-```json
-  "rabbit": {
-    "conn": "amqp://poracle:poracle@localhost:5672"
-  }
-```
-| Option        | Value         | 
-| ------------- |:-------------:| 
-|conn| Your connection string to [RabbitMQ](http://www.rabbitmq.com/download.html).|
 
-##### Geofence Settings
-
-```json
-"geofence": [...]
-```
-
-| Option        | Value         | 
-| ------------- |:-------------:| 
-|geofence| A list of geojson areas that alarms can be tracked from. [Create and download geofences here](http://geo.jasparke.net/).|
 
 When you are done with your config, you can make sure that it's a [valid JSON format here](https://jsonlint.com/)

@@ -21,8 +21,11 @@ const cache = new Cache({
 
 const MonsterController = require('../controllers/monster')
 const RaidController = require('../controllers/raid')
+const QuestController = require('../controllers/quest')
+
 const monsterController = new MonsterController(db)
 const raidController = new RaidController(db)
+const questController = new QuestController(db)
 
 //check how long the queue is every 30s. ideally empty
 setInterval(() => {
@@ -40,10 +43,6 @@ _.forEach(config.discord.token, function(k) {
 
 
 
-discord.on('exit', (err) => {
-	log.warn(`A discord slave died with exitCode: ${err.process.exitCode}`)
-})
-
 discord.on('message', (worker, msg) => {
 	if(msg.reason === 'seppuku'){
 		log.warn('discord worker commited seppuku, cloning new')
@@ -53,7 +52,6 @@ discord.on('message', (worker, msg) => {
 		if (queue.length){
 			discord.workers[worker.id].send({reason: 'food', job: queue.shift()})
 		}
-
 	}
 })
 
@@ -134,12 +132,15 @@ module.exports =  async (req, reply) => {
 					const data = hook.message
 					data.park = false
 					if (!data.description) data.description = ''
-					if (!!(data.sponsor_id)) data.sponsor_id = false
+					if (!data.sponsor_id) data.sponsor_id = false
 					if (!data.team) data.team = 0
 					if (!data.name) data.name = ''
 					if (!data.url) data.url = ''
 					data.park = data.sponsor_id ? true : false
 					data.name = data.name.replace(/"/g, '')
+					data.description = data.description.replace(/"/g, '')
+					data.name = data.name.replace(/'/g, '')
+					data.description = data.description.replace(/'/g, '')
 					data.name = data.name.replace(/\n/g, '')
 					monsterController.insertOrUpdateQuery(
 						'`gym-info`',
@@ -150,6 +151,34 @@ module.exports =  async (req, reply) => {
 
 					reply.send({webserver: 'happy'})
 					break
+			}
+			case "quest": {
+				const data = hook.message
+
+				questController.handle(data).then(work => {
+					work.forEach((job) => {
+						const ch = _.cloneDeep(discordcache.get(job.target));
+						if (ch === undefined) {
+							discordcache.put(job.target, 1);
+						}
+						else if (ch !== undefined) {
+							discordcache.put(job.target, ch + 1);
+						}
+						let finalMessage = _.cloneDeep(job.message);
+						if (discordcache.get(job.target) === config.discord.limitamount + 1) {
+							finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
+							log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
+						}
+						if (discordcache.get(job.target) <= config.discord.limitamount + 1) {
+							job.message = finalMessage
+							queue.push(job)
+							raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+						}
+					})
+				})
+
+				reply.send({webserver: 'happy'})
+				break
 			}
 		}
 	})

@@ -1,6 +1,6 @@
 {
   "name": "poraclejs",
-  "version": "2.0.0",
+  "version": "1.2.0",
   "description": "Webhook processing and personalised alarms",
   "main": "index.js",
   "repository": {
@@ -35,10 +35,14 @@
     "handlebars": "^4.0.12",
     "hastebin-gen": "^1.3.1",
     "jimp": "^0.6.0",
+    "geo-tz": "^5.0.0",
+    "hyperdiff": "^2.0.4",
+    "jsonfile": "^4.0.0",
     "lodash": "^4.17.4",
     "mocha": "^5.0.0",
     "moment": "^2.20.1",
     "moment-precise-range-plugin": "^1.3.0",
+    "moment-timezone": "^0.5.23",
     "mustache": "^2.3.0",
     "node-geocoder": "^3.21.1",
     "nuxt-leaflet": "0.0.10",

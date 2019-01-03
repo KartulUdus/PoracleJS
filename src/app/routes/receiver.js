@@ -34,6 +34,16 @@ const schema =
 							message: 'gym_detailsMessage#'
 						}
 					},
+					{
+						type : 'object',
+						properties : {
+							type: {
+								type: 'string',
+								enum: ['quest', 'Quest', 'QUEST']
+							},
+							message: 'questMessage#'
+						}
+					},
 
 				]
 			}
