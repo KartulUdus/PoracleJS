@@ -213,7 +213,7 @@ Any of the fields can be cusomtized with the following:
 "quest":{
     "4": {
       "embed": {
-        "title": "{{guestType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
         "url": "{{{mapurl}}}",
         "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
         "thumbnail": {

@@ -247,7 +247,7 @@
       "embed": {
         "description": "[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
         "author": {
-          "name": " {{guestType}}, {{conditions}}, {{reward}} {{flagemoji}} {{lat}}, {{lon}} {{addr}",
+          "name": " {{questType}}, {{conditions}}, {{reward}} {{flagemoji}} {{lat}}, {{lon}} {{addr}",
           "url": "{{{mapurl}}",
           "icon_url": "{{{imgurl}}}"
         }
@@ -259,7 +259,7 @@
         "url": "{{{mapurl}}}",
         "description": "[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
         "author": {
-          "name": " {{guestType}}, {{lat}}, {{lon}} {{addr}",
+          "name": " {{questType}}, {{lat}}, {{lon}} {{addr}",
           "url": "{{{mapurl}}",
           "icon_url": "{{{imgurl}}}"
         }
@@ -267,7 +267,7 @@
     },
     "3": {
       "embed": {
-        "title": "{{guestType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
         "url": "{{{mapurl}}}",
         "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
         "thumbnail": {
@@ -277,7 +277,7 @@
     },
     "4": {
       "embed": {
-        "title": "{{guestType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
         "url": "{{{mapurl}}}",
         "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
         "thumbnail": {
@@ -290,7 +290,7 @@
     },
     "5": {
       "embed": {
-        "title": "{{guestType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
         "url": "{{{mapurl}}}",
         "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
         "thumbnail": {

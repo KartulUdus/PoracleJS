@@ -87,7 +87,7 @@ class Quest extends Controller{
 						if(whoCares) this.getAddress({ lat: data.latitude, lon: data.longitude }).then(geoResult => {
 							console.log(data)
 							const view = {
-								guestType: data.questType,
+								questType: data.questType,
 								reward: data.rewardData.rewardstring.replace(/\n/g, " "),
 								conditions: data.conditionstring.replace(/\n/g, " "),
 								monsterNames: monsternames.join(', '),
