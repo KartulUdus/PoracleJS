@@ -4,8 +4,8 @@
 
 #### Introduction
 
-PoracleJS is a NodeJS application for RocketMap WebHook alarms with amqp 🐰.  
-It allows for high end-user configurability using discord `!commands` and private message alarms.  
+PoracleJS is a NodeJS application for Discord pokemon alarms. It currently supports wild spawns, raids and quests.  
+It allows for high end-user configurability using discord `!commands` and private message or channel alarms.  
 
 #### Links
 
