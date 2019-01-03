@@ -564,12 +564,14 @@ client.on('message', (msg) => {
 				query.selectAllQuery('monsters', 'id', msg.author.id),
 				query.selectAllQuery('raid', 'id', msg.author.id),
 				query.selectAllQuery('egg', 'id', msg.author.id),
-				query.selectOneQuery('humans', 'id', msg.author.id)
+				query.selectOneQuery('humans', 'id', msg.author.id),
+				query.selectAllQuery('quest', 'id', msg.author.id),
 			]).then((data) => {
 				const monsters = data[0]
 				const raids = data[1]
 				const eggs = data[2]
 				const human = data[3]
+				const quests = data[4]
 				const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 				msg.reply(`👋\nYour location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`)
 				let message = ''
@@ -597,6 +599,18 @@ client.on('message', (msg) => {
 				eggs.forEach((egg) => {
 					const raidTeam = teamData[egg.team].name
 					message = message.concat(`\n**Level ${egg.raid_level} eggs** distance: ${egg.distance}m controlled by ${raidTeam} , must be in park: ${egg.park}`)
+				})
+
+				if (quests.length) {
+					message = message.concat('\n\nYou\'re tracking the following quests:\n')
+				}
+
+				quests.forEach( quest => {
+					let rewardThing = ''
+					if (quest.reward_type === 7) rewardThing = monsterData[quest.reward].name
+					if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
+					if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
+					message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 				})
 
 				if (message.length < 6000) {
@@ -1212,16 +1226,18 @@ client.on('message', (msg) => {
 				query.selectAllQuery('monsters', 'id', msg.channel.id),
 				query.selectAllQuery('raid', 'id', msg.channel.id),
 				query.selectAllQuery('egg', 'id', msg.channel.id),
-				query.selectOneQuery('humans', 'id', msg.channel.id)
+				query.selectOneQuery('humans', 'id', msg.channel.id),
+				query.selectAllQuery('quest', 'id', msg.channel.id),
 			]).then((data) => {
 				const monsters = data[0]
 				const raids = data[1]
 				const eggs = data[2]
 				const human = data[3]
+				const quests = data[4]
 				const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 				msg.reply(`👋\nYour location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`)
 				let message = ''
-				if (monsters.length !== 0) {
+				if (monsters.length) {
 					message = message.concat('\n\nYou\'re  tracking the following monsters:\n')
 				}
 				else message = message.concat('\n\nYou\'re not tracking any monsters')
@@ -1232,7 +1248,7 @@ client.on('message', (msg) => {
 					if (miniv === -1) miniv = 0
 					message = message.concat(`\n**${monsterName}** distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} minimum stats: ATK:${monster.atk} DEF:${monster.def} STA:${monster.sta}`)
 				})
-				if (raids.length !== 0 || eggs.length !== 0) {
+				if (raids.length || eggs.length) {
 					message = message.concat('\n\nYou\'re tracking the following raids:\n')
 				}
 				else message = message.concat('\n\nYou\'re not tracking any raids')
@@ -1240,12 +1256,21 @@ client.on('message', (msg) => {
 					const monsterName = monsterData[raid.pokemon_id].name
 					const raidTeam = teamData[raid.team].name
 					message = message.concat(`\n**${monsterName}** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
-
 				})
 				eggs.forEach((egg) => {
 					const raidTeam = teamData[egg.team].name
 					message = message.concat(`\n**Level ${egg.raid_level} eggs** distance: ${egg.distance}m controlled by ${raidTeam} , must be in park: ${egg.park}`)
 
+				})
+				if (quests.length) {
+					message = message.concat('\n\nYou\'re tracking the following quests:\n')
+				}
+				quests.forEach( quest => {
+					let rewardThing = ''
+					if (quest.reward_type === 7) rewardThing = monsterData[quest.reward].name
+					if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
+					if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
+					message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 				})
 
 				if (message.length < 6000) {
