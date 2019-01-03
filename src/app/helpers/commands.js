@@ -23,7 +23,11 @@ const hastebin = require('hastebin-gen')
 
 client.on('ready', () => {
 	log.info(`Commander "${client.user.tag}" awaiting for orders!`)
-
+	client.user.setPresence({
+		game: {
+			name: 'PoracleJS',
+		}
+	})
 
 })
 
