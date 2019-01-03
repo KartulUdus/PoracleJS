@@ -7,6 +7,8 @@ const log = require('../logger')
 
 client.on('ready', () => {
 	log.info(`Discord botto "${client.user.tag}" ready for action!`)
+	client.user.setStatus('invisible')
+
 	process.on('message', (msg) => {
 		if (msg.reason === 'food') {
 			clearInterval(hungryInterval)
