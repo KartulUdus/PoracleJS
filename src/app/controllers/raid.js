@@ -10,7 +10,8 @@ const monsterData = require(config.locale.monstersJson)
 const teamData = require('../util/teams')
 const types = require('../util/types')
 const moveData = require(config.locale.movesJson)
-const moment = require('moment')
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 moment.locale(config.locale.timeformat)
 
@@ -105,7 +106,7 @@ class Raid extends Controller{
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
-				data.distime = moment(data.end * 1000).format(config.locale.time)
+				data.distime = moment(data.end * 1000).tz(toString(geoTz(data.latitude, data.longitude))).format(config.locale.time)
 				data.name = monsterData[data.pokemon_id]? monsterData[data.pokemon_id].name : 'errormon'
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00.png`;
 				const e = [];
@@ -216,7 +217,7 @@ class Raid extends Controller{
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`;
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`;
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true);
-				data.hatchtime = moment(data.start * 1000).format(config.locale.time);
+				data.hatchtime = moment(data.start * 1000).tz(toString(geoTz(data.latitude, data.longitude))).format(config.locale.time);
 				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/egg${data.level}.png`;
 				if(!data.team_id) data.team_id = 0
 				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
