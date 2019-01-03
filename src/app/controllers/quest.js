@@ -25,7 +25,7 @@ class Quest extends Controller{
 				areastring = areastring.concat(`or humans.area like '%${area}%' `);
 			});
 			const query = `
-			select * from quest
+			select humans.id, humans.name, quest.template from quest
             join humans on humans.id = quest.id
             where humans.enabled = 1 and
             ((reward in (${data.rewardData.monsters}) and reward_type=7 ) or (reward_type = 2 and reward in (${data.rewardData.items})) or (reward_type = 3 and reward <= ${data.dustAmount})) 
@@ -36,7 +36,7 @@ class Quest extends Controller{
               + sin( radians(${data.latitude}) )
               * sin( radians( humans.latitude ) ) ) < quest.distance and quest.distance != 0) or
                quest.distance = 0 and (${areastring}))
-			group by humans.id`;
+			group by humans.id, humans.name, quest.template`;
 
 
 			log.debug(`Query constructed for questWhoCares: \n ${query}`)

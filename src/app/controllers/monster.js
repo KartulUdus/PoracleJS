@@ -30,8 +30,8 @@ class Monster extends Controller{
 			data.matched.forEach((area) => {
 				areastring = areastring.concat(`or humans.area like '%${area}%' `);
 			});
-			const query =
-				`select * from monsters 
+			const query = `
+			select humans.id, humans.name, monsters.template from monsters 
             join humans on humans.id = monsters.id
             where humans.enabled = 1 and
             pokemon_id=${data.pokemon_id} and 
@@ -53,7 +53,7 @@ class Monster extends Controller{
               + sin( radians(${data.latitude}) ) 
               * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
                monsters.distance = 0 and (${areastring}))
-               group by humans.id`
+               group by humans.id, humans.name, monsters.template `
 
 
 			log.debug(`Query constructed for monsterhWhoCares: \n ${query}`)
