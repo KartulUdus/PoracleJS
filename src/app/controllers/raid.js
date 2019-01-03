@@ -28,8 +28,8 @@ class Raid extends Controller{
 			data.matched.forEach((area) => {
 				areastring = areastring.concat(`or humans.area like '%${area}%' `);
 			});
-			const query =
-				`select * from raid 
+			const query = `
+			select humans.id, humans.name, raid.template from raid 
             join humans on humans.id = raid.id
             where humans.enabled = 1 and
             (pokemon_id=${data.pokemon_id} or (pokemon_id=721 and raid.level=${data.level})) and 
@@ -41,7 +41,7 @@ class Raid extends Controller{
               + sin( radians(${data.latitude}) ) 
               * sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
                raid.distance = 0 and (${areastring}))
-               group by humans.id`;
+               group by humans.id, humans.name, raid.template`;
 
 			log.debug(`Query constructed for raidWhoCares: \n ${query}`)
 			this.db.query(query)
@@ -61,8 +61,8 @@ class Raid extends Controller{
 			data.matched.forEach((area) => {
 				areastring = areastring.concat(`or humans.area like '%${area}%' `);
 			});
-			const query =
-				`select * from egg 
+			const query = `
+			select humans.id, humans.name, egg.template from egg 
             join humans on humans.id = egg.id
             where humans.enabled = 1 and 
             (egg.park = ${data.park} or egg.park = 0) and
@@ -73,7 +73,8 @@ class Raid extends Controller{
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
               + sin( radians(${data.latitude}) ) 
               * sin( radians( humans.latitude ) ) ) < egg.distance and egg.distance != 0) or
-               egg.distance = 0 and (${areastring}))`;
+               egg.distance = 0 and (${areastring}))
+			group by humans.id, humans.name, egg.template`;
 
 			log.debug(`Query constructed for eggWhoCares: \n ${query}`)
 			this.db.query(query)
