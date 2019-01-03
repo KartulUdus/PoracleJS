@@ -540,7 +540,6 @@ client.on('message', (msg) => {
 					level = element.replace(/level/gi, '')
 				}
 			})
-
 			if (level) {
 				query.deleteByIdQuery('egg', 'raid_level', `${level}`, msg.author.id)
 				msg.react('✅')
@@ -1188,15 +1187,15 @@ client.on('message', (msg) => {
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel unegg`.length).split(' ')
 			const args = rawArgs.join('|').toLowerCase().split('|')
 
-			let level = 0
+			let level = false
 			args.forEach((element) => {
-				if (element.match(/level/gi)) level = element.replace(/level/gi, '')
-				if (level !== 0) {
-					query.deleteByIdQuery('egg', 'raid_level', `${level}`, msg.channel.id)
-					msg.react('✅')
-				}
-				else msg.reply('404 NO MONSTERS FOUND')
+				if (element.match(/level\d/gi)) level = element.replace(/level/gi, '')
 			})
+			if (level) {
+				query.deleteByIdQuery('egg', 'raid_level', `${level}`, msg.channel.id)
+				msg.react('✅')
+			}
+			else {msg.reply('404 Raid level not found')}
 		})
 	}
 
