@@ -1,3 +1,5 @@
+const handler = require('../handlers/rawData.js')
+
 const schema =
 	{
 		params: {
@@ -13,8 +15,8 @@ const schema =
 		}
 	}
 
-module.exports = function (fastify, opts, next) {
+module.exports = function route(fastify, opts, next) {
 
-	fastify.get('/raw/:lat1/:lat2/:lon1/:lon2', { schema },	require('../handlers/rawData.js'))
+	fastify.get('/raw/:lat1/:lat2/:lon1/:lon2', { schema },	handler)
 	next()
 }

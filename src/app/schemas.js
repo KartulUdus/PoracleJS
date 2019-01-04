@@ -1,4 +1,4 @@
-module.exports = function (fastify, opts, next) {
+module.exports = function schema(fastify, opts, next) {
 
 	fastify
 		.addSchema({

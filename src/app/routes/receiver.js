@@ -1,3 +1,5 @@
+const handler = require('../handlers/receiver')
+
 const schema =
 	{
 		body: {
@@ -5,8 +7,8 @@ const schema =
 			items: {
 				oneOf: [
 					{
-						type : 'object',
-						properties : {
+						type: 'object',
+						properties: {
 							type: {
 								type: 'string',
 								enum: ['pokemon', 'Pokemon', 'POKEMON']
@@ -15,8 +17,8 @@ const schema =
 						}
 					},
 					{
-						type : 'object',
-						properties : {
+						type: 'object',
+						properties: {
 							type: {
 								type: 'string',
 								enum: ['raid', 'Raid', 'RAID']
@@ -25,8 +27,8 @@ const schema =
 						}
 					},
 					{
-						type : 'object',
-						properties : {
+						type: 'object',
+						properties: {
 							type: {
 								type: 'string',
 								enum: ['gym_details', 'Gym_Details', 'Gym_details', 'GYM_DETAILS']
@@ -35,8 +37,8 @@ const schema =
 						}
 					},
 					{
-						type : 'object',
-						properties : {
+						type: 'object',
+						properties: {
 							type: {
 								type: 'string',
 								enum: ['quest', 'Quest', 'QUEST']
@@ -51,9 +53,8 @@ const schema =
 	}
 
 
-module.exports = function (fastify, opts, next) {
+module.exports = function route(fastify, opts, next) {
 
-	fastify.post('/', { schema }, require('../handlers/receiver'))
-
+	fastify.post('/', { schema }, handler)
 	next()
 }

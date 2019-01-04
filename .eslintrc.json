@@ -1,5 +1,5 @@
 {
-  "parserOptions": { "ecmaVersion": 6 },
+  "parserOptions": { "ecmaVersion": 8 },
   "extends": "airbnb-base",
   "rules": {
     // use tabs, not spaces, and in switch statements the case statement should indent again (the default is to be level with the switch)

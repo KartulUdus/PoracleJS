@@ -1,7 +1,8 @@
 const Controller = require('../controllers/controller')
 const config = require('config')
 const mysql = require('promise-mysql2')
-const db = mysql.createPool(config.db, {multipleStatements: true})
+
+const db = mysql.createPool(config.db, { multipleStatements: true })
 const queries = new Controller(db)
 const log = require('../logger')
 
@@ -149,7 +150,7 @@ CREATE TABLE \`quest\` (
   \`distance\` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY quest_tracking (\`id\`, \`reward_type\`, \`reward\`),
   KEY \`distance\` (\`distance\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const comevent = `
 CREATE TABLE \`comevent\` (
@@ -175,8 +176,8 @@ CREATE TABLE \`comsubmission\` (
 
 
 module.exports = async () => {
-	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database).then(tables => {
-		if(!tables){
+	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database).then((tables) => {
+		if (!tables) {
 			Promise.all([
 				queries.mysteryQuery(humans),
 				queries.mysteryQuery(gymInfo),
@@ -194,17 +195,18 @@ module.exports = async () => {
 				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '2'])
 				log.info('Database tables created, db_version 1 applied')
 			})
-		}else {
-			queries.checkSchema().then((confirmed_tables) => {
-				if(confirmed_tables === 9){
+		}
+		else {
+			queries.checkSchema().then((confirmedTables) => {
+				if (confirmedTables === 9) {
 					log.info('Database tables confirmed')
 				}
-				else{
-					log.error(`didn't find Tables I like, this house has ${confirmed_tables} similar tables \nPlease check database credentials for my PERSONAL database`)
+				else {
+					log.error(`didn't find Tables I like, this house has ${confirmedTables} similar tables \nPlease check database credentials for my PERSONAL database`)
 				}
-				queries.selectOneQuery('schema_version', 'key', 'db_version').then(version => {
-					if(version.val === 1){
-						queries.dropTableQuery('quest').then(deleted => {
+				queries.selectOneQuery('schema_version', 'key', 'db_version').then((version) => {
+					if (version.val === 1) {
+						queries.dropTableQuery('quest').then((deleted) => {
 							queries.mysteryQuery(quest).then()
 							queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
 							log.info('applied Db migration 2')
