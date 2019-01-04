@@ -1,23 +1,23 @@
 const log = require('../logger')
-const cp = require('child_process')
 const _ = require('lodash')
 const config = require('config')
 const mysql = require('promise-mysql2')
+
 const db = mysql.createPool(config.db)
 
-const Cache = require('ttl');
+const Cache = require('ttl')
 
 const discordcache = new Cache({
 	ttl: config.discord.limitsec * 1000,
-});
-discordcache.on('put', (key, val, ttl) => { });
-discordcache.on('hit', (key, val) => { });
+})
+discordcache.on('put', (key, val, ttl) => { })
+discordcache.on('hit', (key, val) => { })
 
-let queue = []
+const queue = []
 
 const cache = new Cache({
 	ttl: 300 * 1000,
-});
+})
 
 const MonsterController = require('../controllers/monster')
 const RaidController = require('../controllers/raid')
@@ -27,9 +27,9 @@ const monsterController = new MonsterController(db)
 const raidController = new RaidController(db)
 const questController = new QuestController(db)
 
-//check how long the queue is every 30s. ideally empty
+// check how long the queue is every 30s. ideally empty
 setInterval(() => {
-	if(queue.length > 30){
+	if (queue.length > 30) {
 		log.warn(`Job queue is ${queue.length} items long`)
 	}
 }, 30000)
@@ -37,45 +37,43 @@ setInterval(() => {
 
 const discord = require('cluster')
 
-discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js`})
-_.forEach(config.discord.token, function(k) {
- 	discord.fork({k: k}) })
-
-
+discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
+_.forEach(config.discord.token, (k) => {
+	discord.fork({ k: k })
+})
 
 discord.on('message', (worker, msg) => {
-	if(msg.reason === 'seppuku'){
+	if (msg.reason === 'seppuku') {
 		log.warn('discord worker commited seppuku, cloning new')
-		discord.fork({k: msg.key})
+		discord.fork({ k: msg.key })
 	}
-	if(msg.reason === 'hungry'){
-		if (queue.length){
-			discord.workers[worker.id].send({reason: 'food', job: queue.shift()})
+	if (msg.reason === 'hungry') {
+		if (queue.length) {
+			discord.workers[worker.id].send({ reason: 'food', job: queue.shift() })
 		}
 	}
 })
 
 
-
-module.exports =  async (req, reply) => {
+module.exports = async (req, reply) => {
 	let data = req.body
-	if (!Array.isArray(data)) data = [ data ]
+	if (!Array.isArray(data)) data = [data]
 	data.forEach((hook) => {
-		switch(hook.type ){
-			case "pokemon":{
+		switch (hook.type) {
+			case 'pokemon': {
 				if (!cache.get(`${hook.message.encounter_id}_${hook.message.weight}`)) {
 					cache.put(`${hook.message.encounter_id}_${hook.message.weight}`, 'cached')
 					monsterController.handle(hook.message).then((work) => {
 						work.forEach((job) => {
-							const ch = _.cloneDeep(discordcache.get(job.target));
+							const ch = _.cloneDeep(discordcache.get(job.target))
 							if (ch === undefined) {
-								discordcache.put(job.target, 1);
+								discordcache.put(job.target, 1)
 							}
 							else if (ch !== undefined) {
-								discordcache.put(job.target, ch + 1);
+								discordcache.put(job.target, ch + 1)
 							}
-							let finalMessage = _.cloneDeep(job.message);
-							if (discordcache.get(job.target) === config.discord.limitamount + 1){
+							let finalMessage = _.cloneDeep(job.message)
+							if (discordcache.get(job.target) === config.discord.limitamount + 1) {
 								finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
 								log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
 							}
@@ -86,28 +84,29 @@ module.exports =  async (req, reply) => {
 							}
 						})
 					})
-				} else {
+				}
+				else {
 					log.warn(`Monster encounter:${hook.message.encounter_id} was sent again too soon`)
 				}
 
-				reply.send({webserver: 'happy'})
+				reply.send({ webserver: 'happy' })
 				break
 			}
-			case "raid": {
+			case 'raid': {
 				if (!discordcache.get(`${hook.message.gym_id}_${hook.message.pokemon_id}`)) {
 					discordcache.put(`${hook.message.gym_id}_${hook.message.pokemon_id}`, 'cached')
 				}
 				raidController.handle(hook.message)
 					.then((work) => {
 						work.forEach((job) => {
-							const ch = _.cloneDeep(discordcache.get(job.target));
+							const ch = _.cloneDeep(discordcache.get(job.target))
 							if (ch === undefined) {
-								discordcache.put(job.target, 1);
+								discordcache.put(job.target, 1)
 							}
 							else if (ch !== undefined) {
-								discordcache.put(job.target, ch + 1);
+								discordcache.put(job.target, ch + 1)
 							}
-							let finalMessage = _.cloneDeep(job.message);
+							let finalMessage = _.cloneDeep(job.message)
 							if (discordcache.get(job.target) === config.discord.limitamount + 1) {
 								finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
 								log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
@@ -120,48 +119,48 @@ module.exports =  async (req, reply) => {
 						})
 					})
 
-				reply.send({webserver: 'happy'})
+				reply.send({ webserver: 'happy' })
 				break
 			}
-			case "gym_details": {
+			case 'gym_details': {
 
-					const data = hook.message
-					data.park = false
-					if (!data.description) data.description = ''
-					if (!data.sponsor_id) data.sponsor_id = false
-					if (!data.team) data.team = 0
-					if (!data.name) data.name = ''
-					if (!data.url) data.url = ''
-					data.park = data.sponsor_id ? true : false
-					data.name = data.name.replace(/"/g, '')
-					data.description = data.description.replace(/"/g, '')
-					data.name = data.name.replace(/'/g, '')
-					data.description = data.description.replace(/'/g, '')
-					data.name = data.name.replace(/\n/g, '')
-					data.description = data.description.replace(/\n/g, '')
-					monsterController.insertOrUpdateQuery(
-						'`gym-info`',
-						['id', 'gym_name', 'park', 'description', 'url', 'latitude', 'longitude'],
-						[`'${data.id}'`, `'${data.name}'`,`${data.park}`, `'${data.description}'`, `'${data.url}'`, `${data.latitude}`, `${data.longitude}`]
-					);
-					log.info(`Saved gym-details for ${data.name}`);
+				const g = hook.message
+				g.park = false
+				if (!g.description) g.description = ''
+				if (!g.sponsor_id) g.sponsor_id = false
+				if (!g.team) g.team = 0
+				if (!g.name) g.name = ''
+				if (!g.url) g.url = ''
+				g.park = g.sponsor_id
+				g.name = g.name.replace(/"/g, '')
+				g.description = g.description.replace(/"/g, '')
+				g.name = g.name.replace(/'/g, '')
+				g.description = g.description.replace(/'/g, '')
+				g.name = g.name.replace(/\n/g, '')
+				g.description = g.description.replace(/\n/g, '')
+				monsterController.insertOrUpdateQuery(
+					'`gym-info`',
+					['id', 'gym_name', 'park', 'description', 'url', 'latitude', 'longitude'],
+					[`'${g.id}'`, `'${g.name}'`, `${g.park}`, `'${g.description}'`, `'${g.url}'`, `${g.latitude}`, `${g.longitude}`]
+				)
+				log.info(`Saved gym-details for ${g.name}`)
 
-					reply.send({webserver: 'happy'})
-					break
+				reply.send({ webserver: 'happy' })
+				break
 			}
-			case "quest": {
-				const data = hook.message
+			case 'quest': {
+				const q = hook.message
 
-				questController.handle(data).then(work => {
+				questController.handle(q).then((work) => {
 					work.forEach((job) => {
-						const ch = _.cloneDeep(discordcache.get(job.target));
+						const ch = _.cloneDeep(discordcache.get(job.target))
 						if (ch === undefined) {
-							discordcache.put(job.target, 1);
+							discordcache.put(job.target, 1)
 						}
 						else if (ch !== undefined) {
-							discordcache.put(job.target, ch + 1);
+							discordcache.put(job.target, ch + 1)
 						}
-						let finalMessage = _.cloneDeep(job.message);
+						let finalMessage = _.cloneDeep(job.message)
 						if (discordcache.get(job.target) === config.discord.limitamount + 1) {
 							finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
 							log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
@@ -174,19 +173,20 @@ module.exports =  async (req, reply) => {
 					})
 				})
 
-				reply.send({webserver: 'happy'})
+				reply.send({ webserver: 'happy' })
 				break
+			}
+			default: {
+				log.warn(`Received a weird ${hook.type} webhook, complaining!!`)
 			}
 		}
 	})
 
 
-
-	reply.send(
-		{
+	reply.send({
 		objecttype: req.body.type,
 		datatype: typeof req.body,
 		array: Array.isArray(req.body),
 		data: data
-		})
+	})
 }

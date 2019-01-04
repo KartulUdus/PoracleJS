@@ -28,7 +28,6 @@ function detect(imgLocation, callback) {
 		if (err) log.error(err)
 		if (!event) return callback(err, data)
 		const eventmon = event.monster_id.split(',').map(id => monsterData[id].name.toUpperCase())
-		console.log('eventmon')
 
 		data.correctPokemon = false
 		data.activeEvent = eventmon

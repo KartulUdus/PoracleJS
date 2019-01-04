@@ -4,11 +4,18 @@ const client = new Discord.Client()
 const config = require('config')
 const log = require('../logger')
 
+function startBeingHungry() {
+	log.debug(`Discord worker ${process.pid} started being hungry`)
+	const hungryInterval = setInterval(() => {
+		process.send({ reason: 'hungry' })
+	}, 100)
+	return hungryInterval
+}
 
 client.on('ready', () => {
 	log.info(`Discord botto "${client.user.tag}" ready for action!`)
 	client.user.setStatus('invisible')
-
+	let hungryInterval = startBeingHungry()
 	process.on('message', (msg) => {
 		if (msg.reason === 'food') {
 			clearInterval(hungryInterval)
@@ -19,7 +26,7 @@ client.on('ready', () => {
 							message.react(emoji)
 						})
 					}
-					let hungryInterval = startBeingHungry()
+					hungryInterval = startBeingHungry()
 				})
 			}
 			else if (client.users.keyArray().includes(msg.job.target)) {
@@ -29,22 +36,14 @@ client.on('ready', () => {
 							message.react(emoji)
 						})
 					}
-					let hungryInterval = startBeingHungry()
+					hungryInterval = startBeingHungry()
 				})
 			}
 			else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
 		}
 	})
-	let hungryInterval = startBeingHungry()
 })
 
-function startBeingHungry() {
-	log.debug(`Discord worker ${process.pid} started being hungry`)
-	let hungryInterval = setInterval(() => {
-		process.send({ reason: 'hungry' })
-	}, 100)
-	return hungryInterval
-}
 
 client.on('rateLimitInfo', (rateLimit) => {
 	log.warn(`Discord ${client.user.tag} rate limit info: ${rateLimit}`)
@@ -54,15 +53,15 @@ client.on('warn', (warning) => {
 	log.warn(`Discord ${client.user.tag} sent general warning: ${warning}`)
 })
 
-process.on('disconnect', exit => {
+process.on('disconnect', (exit) => {
 	process.send({ reason: 'seppuku', key: process.env.k })
 	process.exit()
 })
-client.on('error', e => {
+client.on('error', (e) => {
 	process.send({ reason: 'seppuku', key: process.env.k })
-	log.info(`Discord worker sent me an errot, commiting seppuku just in case`)
+	log.info('Discord worker sent me an errot, commiting seppuku just in case')
 	process.exit()
-});
+})
 
 client.login(process.env.k)
 	.catch((err) => {
@@ -70,5 +69,4 @@ client.login(process.env.k)
 		process.send({ reason: 'seppuku', key: process.env.k })
 		process.exit()
 	})
-
 
