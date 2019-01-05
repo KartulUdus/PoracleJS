@@ -26,22 +26,22 @@ if (!fs.existsSync(path.join(__dirname, '../../config/dts.json'))) {
 
 // Register routes
 
-fastify.setErrorHandler((error, request, reply) => {
-	log.warn(`Fastify unhappy with error: ${error.message}`)
-	reply.send({ message: error.message })
-		.register(require('./schemas'))
-		.register(require('./routes/staticMap'))
-		.register(require('./routes/receiver'))
-		.register(require('fastify-static'), {
-			root: path.join(__dirname, 'helpers', 'staticmap'),
-			prefix: '/images/', // optional: default '/'
-		})
-		.register(require('point-of-view'), {
-			engine: {
-				mustache: mustache
-			}
-		})
-})
+fastify.register(require('./schemas'))
+	.register(require('./routes/staticMap'))
+	.register(require('./routes/receiver'))
+	.register(require('fastify-static'), {
+		root: path.join(__dirname, 'helpers', 'staticmap'),
+		prefix: '/images/', // optional: default '/'
+	})
+	.register(require('point-of-view'), {
+		engine: {
+			mustache: mustache
+		}
+	})
+	.setErrorHandler((error, request, reply) => {
+		log.warn(`Fastify unhappy with error: ${error.message}`)
+		reply.send({ message: error.message })
+	})
 
 const start = async () => {
 	try {
