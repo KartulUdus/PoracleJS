@@ -405,6 +405,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 			})
 			args.forEach((element) => {
 				if (element.match(/park/gi)) park = 1
@@ -466,7 +474,15 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
-				if (element.match(/level\d/gi)) {
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
+				else if (element.match(/level\d/gi)) {
 					levels.push(element.replace(/level/gi, ''))
 				}
 
@@ -1116,6 +1132,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 			})
 			args.forEach((element) => {
 				if (element.match(/park/gi)) park = 1
@@ -1177,6 +1201,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 				if (element.match(/level\d/gi)) {
 					levels.push(element.replace(/level/gi, ''))
 				}
