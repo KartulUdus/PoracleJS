@@ -95,10 +95,11 @@ class Monster extends Controller {
 					break
 				}
 				case 'osm': {
-					data.staticmap = ''
+					data.staticmap = 'OSMSTATICMAP'
 					break
 				}
 				default:
+					data.staticmap = ''
 			}
 
 			data.name = monsterData[data.pokemon_id].name ? monsterData[data.pokemon_id].name : 'errormon'
@@ -202,6 +203,8 @@ class Monster extends Controller {
 							message = JSON.parse(message)
 
 							const work = {
+								lat: data.latitude.toString().substring(0, 8),
+								lon: data.longitude.toString().substring(0, 8),
 								message: message,
 								target: cares.id,
 								name: cares.name,

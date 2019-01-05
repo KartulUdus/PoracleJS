@@ -1,7 +1,7 @@
-const Discord = require('discord.js')
+const { Client } = require('discord.js')
 const _ = require('lodash')
 
-const client = new Discord.Client()
+const client = new Client()
 const config = require('config')
 const migrator = require('../helpers/migrator')
 const log = require('../logger')
