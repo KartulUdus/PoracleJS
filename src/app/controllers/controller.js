@@ -143,7 +143,7 @@ class Controller {
 			const options = {
 				screenSize: { width: config.geocoding.width, height: config.geocoding.height },
 				shotSize: { width: config.geocoding.width, height: config.geocoding.height },
-				timeout: 5000,
+				timeout: 10000,
 				takeShotOnCallback: true,
 			}
 			const tempPath = path.join(__dirname, '..', 'helpers', 'staticmap', `${lat}-${lon}.png`)
