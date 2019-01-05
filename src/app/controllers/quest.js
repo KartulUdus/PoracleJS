@@ -48,7 +48,19 @@ class Quest extends Controller {
 
 	async handle(data) {
 		return new Promise((resolve) => {
-
+			switch (config.geocoding.provider.toLowerCase()) {
+				case 'google': {
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${_.sample(config.geocoding.googleKey)}`
+					break
+				}
+				case 'osm': {
+					data.staticmap = 'OSMSTATICMAP'
+					break
+				}
+				default: {
+					data.staticmap = ''
+				}
+			}
 			Promise.all([
 				this.getQuestTypeString(data),
 				this.getRewardSting(data),
@@ -95,7 +107,7 @@ class Quest extends Controller {
 								maxCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 15, 15, 15) : '',
 								mapurl: `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`,
 								applemap: `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`,
-
+								staticmap: data.staticmap,
 								// geocode stuff
 								lat: data.latitude.toString().substring(0, 8),
 								lon: data.longitude.toString().substring(0, 8),
@@ -115,6 +127,8 @@ class Quest extends Controller {
 								const template = JSON.stringify(this.mdts.quest[cares.template])
 								const message = mustache.render(template, view)
 								const work = {
+									lat: data.latitude.toString().substring(0, 8),
+									lon: data.longitude.toString().substring(0, 8),
 									message: JSON.parse(message),
 									target: cares.id,
 									name: cares.name,

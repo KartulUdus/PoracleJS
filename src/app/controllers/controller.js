@@ -2,11 +2,12 @@ const log = require('../logger')
 const config = require('config')
 const inside = require('point-in-polygon')
 const _ = require('lodash')
+const webshot = require('webshot')
+const path = require('path')
 const NodeGeocoder = require('node-geocoder')
 const pcache = require('persistent-cache')
 const questDts = require('../../../config/questdts')
 const messageDts = require('../../../config/dts')
-const path = require('path')
 
 
 const imgPath = path.join(__dirname, `../../../assets/${config.map.spriteDir}/`)
@@ -55,6 +56,7 @@ class Controller {
 		this.geofence = geofence
 		this.cpMultipliers = cpMultipliers
 		this.imgPath = imgPath
+		this.webshot = webshot
 	}
 
 	// Geocoding stuff below
@@ -135,6 +137,22 @@ class Controller {
 				}
 			})
 			resolve(matchAreas)
+		})
+	}
+
+	async getOSMStatic(lat, lon) {
+		return new Promise((resolve) => {
+			const link = `http://${config.general.host}:${config.general.port}/?lat=${lat}&lon=${lon}`
+			const options = {
+				screenSize: { width: config.geocoding.width, height: config.geocoding.height },
+				shotSize: { width: config.geocoding.width, height: config.geocoding.height },
+				timeout: 10000,
+				takeShotOnCallback: true,
+			}
+			const tempPath = path.join(__dirname, '..', 'helpers', 'staticmap', `${lat}-${lon}.png`)
+			this.webshot(link, tempPath, options, (err) => {
+				resolve(tempPath)
+			})
 		})
 	}
 

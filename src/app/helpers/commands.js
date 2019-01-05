@@ -1,7 +1,7 @@
-const Discord = require('discord.js')
+const { Client } = require('discord.js')
 const _ = require('lodash')
 
-const client = new Discord.Client()
+const client = new Client()
 const config = require('config')
 const migrator = require('../helpers/migrator')
 const log = require('../logger')
@@ -17,6 +17,7 @@ const questDts = require('../../../config/questdts')
 
 const monsterData = require(config.locale.commandMonstersJson)
 const teamData = require('../util/teams')
+const typeData = require('../util/types')
 const formData = require('../util/forms')
 const hastebin = require('hastebin-gen')
 
@@ -276,6 +277,14 @@ client.on('message', (msg) => {
 				else if (element.match(/sta\d/gi)) sta = element.replace(/sta/gi, '')
 				else if (element.match(/weight\d/gi)) 	weight = element.replace(/weight/gi, '')
 				else if (element.match(/form\w/gi)) forms.push(element.replace(/form/gi, ''))
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 				else if (element.match(/everything/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
 				else if (element.match(/d\d/gi)) {
 					distance = element.replace(/d/gi, '')
@@ -348,6 +357,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 				if (element.match(/everything/gi)) {
 					monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
 				}
@@ -388,6 +405,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 			})
 			args.forEach((element) => {
 				if (element.match(/park/gi)) park = 1
@@ -449,7 +474,15 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
-				if (element.match(/level\d/gi)) {
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
+				else if (element.match(/level\d/gi)) {
 					levels.push(element.replace(/level/gi, ''))
 				}
 
@@ -655,6 +688,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 				else if (element.match(/d\d/gi)) {
 					distance = element.replace(/d/gi, '')
 					if (distance.length >= 10) distance = distance.substr(0, 9)
@@ -732,6 +773,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 			})
 			_.forEach(questDts.rewardItems, (item, key) => {
 				const re = new RegExp(item, 'gi')
@@ -963,6 +1012,14 @@ client.on('message', (msg) => {
 				else if (element.match(/sta\d/gi)) sta = element.replace(/sta/gi, '')
 				else if (element.match(/weight\d/gi)) 	weight = element.replace(/weight/gi, '')
 				else if (element.match(/form\w/gi)) forms.push(element.replace(/form/gi, ''))
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 				else if (element.match(/everything/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
 				else if (element.match(/d\d/gi)) {
 					distance = element.replace(/d/gi, '')
@@ -1031,7 +1088,15 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
-				if (element.match(/everything/gi)) {
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
+				else if (element.match(/everything/gi)) {
 					monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
 				}
 			})
@@ -1067,6 +1132,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 			})
 			args.forEach((element) => {
 				if (element.match(/park/gi)) park = 1
@@ -1128,6 +1201,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 				if (element.match(/level\d/gi)) {
 					levels.push(element.replace(/level/gi, ''))
 				}
@@ -1320,12 +1401,21 @@ client.on('message', (msg) => {
 					distance = element.replace(/d/gi, '')
 					if (distance.length >= 10) distance = distance.substr(0, 9)
 				}
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 			})
 			_.forEach(questDts.rewardItems, (item, key) => {
 				const re = new RegExp(` ${item}`, 'gi')
 				if (rawArgs.match(re)) items.push(key)
 			})
+
 			if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
 			if (rawArgs.match(/all items/gi)) {
 				_.forEach(questDts.rewardItems, (item, key) => {
@@ -1390,6 +1480,14 @@ client.on('message', (msg) => {
 			args.forEach((element) => {
 				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
 				if (pid !== undefined) monsters.push(pid)
+				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					_.filter(monsterData, (o, k) => {
+						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+						} return k
+					})
+				}
 			})
 			_.forEach(questDts.rewardItems, (item, key) => {
 				const re = new RegExp(item, 'gi')

@@ -42,6 +42,8 @@ _.forEach(config.discord.token, (k) => {
 	discord.fork({ k: k })
 })
 
+
+// _.sample(discord.workers).sendMapAttachment('potato')
 discord.on('message', (worker, msg) => {
 	if (msg.reason === 'seppuku') {
 		log.warn('discord worker commited seppuku, cloning new')
