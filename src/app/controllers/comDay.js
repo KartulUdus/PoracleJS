@@ -9,7 +9,7 @@ class ComDay extends Controller {
 		return new Promise((resolve) => {
 			this.db.query('SELECT * FROM comevent WHERE end_timestamp > now() and finished = false')
 				.then((result) => {
-					resolve(result)
+					resolve(result[0][0])
 				})
 				.catch((err) => {
 					this.log.error(`findActiveComEvent errored with: ${err}`)
@@ -21,7 +21,7 @@ class ComDay extends Controller {
 		return new Promise((resolve) => {
 			this.db.query('SELECT * FROM comevent WHERE end_timestamp < now() and finished = false')
 				.then((result) => {
-					resolve(result)
+					resolve(result[0][0])
 				})
 				.catch((err) => {
 					this.log.error(`findExpiredComEvent errored with: ${err}`)
@@ -41,7 +41,7 @@ class ComDay extends Controller {
 				ORDER BY caught DESC`
 			this.db.query(query)
 				.then((result) => {
-					resolve(result)
+					resolve(result[0])
 				})
 				.catch((err) => {
 					this.log.error(`getComEventResults errored with: ${err}`)

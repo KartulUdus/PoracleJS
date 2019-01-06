@@ -1,9 +1,16 @@
 const ocr = require('./ocr')
 const _ = require('lodash')
 const log = require('../logger')
-const client = require('../discord/client')
-const query = require('../sql/queries')
+const { Client } = require('discord.js')
 const config = require('config')
+
+const client = new Client()
+const mysql = require('promise-mysql2')
+
+const db = mysql.createPool(config.db)
+const Controller = require('../controllers/comDay')
+
+const query = new Controller(db)
 const moment = require('moment')
 
 moment.locale(config.locale.timeformat)
@@ -13,6 +20,10 @@ const monsterData = require(config.locale.commandMonstersJson)
 
 const now = new Date().toISOString().slice(0, 19).replace('T', ' ')
 
+client.login(config.discord.token[0])
+	.catch((err) => {
+		log.error(`Discord unhappy: ${err.message}`)
+	})
 
 client.on('message', (msg) => {
 	// handle messages with attachments
@@ -20,10 +31,9 @@ client.on('message', (msg) => {
 	// const comDayController = new ComDayController
 	if (Attachment) {
 
-		query.findActiveComEvent((err, event) => {
+		query.findActiveComEvent().then((event) => {
 			if (event && msg.channel.id === event.channel_id) {
-				ocr.detect(Attachment.url, (err, data) => {
-					if (err) log.error(err)
+				ocr.detect(Attachment.url).then((data) => {
 					if (data.correctPokemon && data.seenCount.toString() && data.caughtCount.toString() && data.luckyCount.toString()) {
 						query.insertQuery(
 							'comsubmission',
@@ -49,7 +59,7 @@ client.on('message', (msg) => {
 		msg.guild.channels.array().forEach((channel) => {
 			if (channel.name.toLowerCase() === args[0].toLowerCase()) channelExists = true
 		})
-		query.findActiveComEvent((err, event) => {
+		query.findActiveComEvent().then((event) => {
 			if (event) {
 				msg.reply('Sorry, there currenlty is a running event')
 			}
@@ -82,16 +92,16 @@ client.on('message', (msg) => {
 
 	if (msg.content === `${config.discord.prefix}stopevent`) {
 		if (msg.member.roles.find(x => x.name === config.discord.modRole)) {
-			query.findActiveComEvent((err, event) => {
+			query.findActiveComEvent().then((event) => {
 				if (!event) {
 					msg.reply('No active event to cancel')
 				}
 				else {
 					const monsters = event.monster_id.split(',')
 					monsters.forEach((monster) => {
-						query.getComEventResults(monster, event.create_timestamp, (err, results) => {
-							if (results[0]) {
-								let message = `:slight_smile: :slight_smile:  The event for ${monsterData[event.monster_id].name} was manually ended by <@${msg.author.id}> :slight_smile: :slight_smile: \n Here are the results: \n\n`
+						query.getComEventResults(monster, event.create_timestamp).then((results) => {
+							if (results) {
+								let message = `:slight_smile: :slight_smile:  The event for ${monsterData[monsters[0]].name} was manually ended by <@${msg.author.id}> :slight_smile: :slight_smile: \n Here are the results: \n\n`
 								results.forEach((result) => {
 									message = message.concat(`${result.n}: <@${result.discord_id}> SEEN:${result.seen} CAUGHT:${result.caught} LUCKY:${result.lucky} \n`)
 								})
@@ -110,12 +120,11 @@ client.on('message', (msg) => {
 
 function endComEvent() {
 	log.debug('checking for expired events')
-	query.findExpiredComEvent((err, endedEvent) => {
-		if (err) log.error(err)
+	query.findExpiredComEvent().then((endedEvent) => {
 		if (endedEvent) {
 			const monsters = endedEvent.monster_id.split(',')
 			monsters.forEach((monster) => {
-				query.getComEventResults(monster, moment(endedEvent.create_timestamp).format().slice(0, 19).replace('T', ' '), (err, results) => {
+				query.getComEventResults(monster, moment(endedEvent.create_timestamp).format().slice(0, 19).replace('T', ' ')).then((err, results) => {
 					let message = `:tada::tada: The grind for ${monsterData[endedEvent.monster_id].name} has ended :tada::tada:\n Here are the results: \n\n`
 					results.forEach((result) => {
 						message = message.concat(`${result.n}: <@${result.discord_id}> SEEN:${result.seen} CAUGHT:${result.caught} LUCKY:${result.lucky} \n`)
@@ -131,6 +140,7 @@ function endComEvent() {
 }
 
 client.on('ready', () => {
+	log.info('Community bot ready')
 	setInterval(endComEvent, 300000)
 })
 
