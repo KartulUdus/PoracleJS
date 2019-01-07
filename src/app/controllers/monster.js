@@ -120,9 +120,9 @@ class Monster extends Controller {
 			data.quick_move = data.weight && moveData[data.move_1] ? moveData[data.move_1].name : ''
 			data.charge_move = data.weight && moveData[data.move_2] ? moveData[data.move_2].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0
-			if (!data.weather_boosted_condition) data.weather_boosted_condition = 0
-			data.boost = weatherData[data.weather_boosted_condition].name ? weatherData[data.weather_boosted_condition].name : ''
-			data.boostemoji = weatherData[data.weather_boosted_condition].emoji ? weatherData[data.weather_boosted_condition].emoji : ''
+			if (!data.weather) data.weather = 0
+			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : ''
+			data.boostemoji = weatherData[data.weather].emoji ? weatherData[data.weather].emoji : ''
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.color = monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0
