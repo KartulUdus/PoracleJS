@@ -26,12 +26,15 @@
 
   "geocoding": {
     "provider": "OSM",
-    "googleKey":["YOUR GOOGLE KEY"],
+    "staticProvider": "OSM",
+    "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
+    "staticKey":["Your MapQuest or Google Key"],
     "width": 250,
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
-    "geofence": "../../../config/geofence.example.json"
+    "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "geofence": "../../../config/geofence.json"
   },
 
   "discord": {

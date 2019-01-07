@@ -89,19 +89,19 @@ class Monster extends Controller {
 
 	async handle(data) {
 		return new Promise((resolve) => {
-			switch (config.geocoding.provider.toLowerCase()) {
+			switch (config.geocoding.staticProvider.toLowerCase()) {
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${_.sample(config.geocoding.googleKey)}`
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
 				case 'osm': {
-					data.staticmap = 'OSMSTATICMAP'
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=13&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
-				default:
+				default: {
 					data.staticmap = ''
+				}
 			}
-
 			data.name = monsterData[data.pokemon_id].name ? monsterData[data.pokemon_id].name : 'errormon'
 			data.formname = ''
 			data.iv = data.weight ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1

@@ -28,7 +28,7 @@ const geocoder = (() => {
 			return NodeGeocoder({
 				provider: 'google',
 				httpAdapter: 'https',
-				apiKey: _.sample(config.geocoding.googleKey),
+				apiKey: _.sample(config.geocoding.geocodingkey),
 			})
 		}
 		default:
