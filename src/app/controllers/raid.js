@@ -129,13 +129,11 @@ class Raid extends Controller {
 				data.charge_move = data.move_2 ? moveData[data.move_2].name : ''
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
-
-						if (data.sponsor_id) data.sponsor_id = false
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
 						data.url = gymInfo ? gymInfo.url : ''
-						data.park = gymInfo ? gymInfo.park : false
-						data.park = data.sponsor_id ? true : data.park
+						data.park = gymInfo ? gymInfo.park : data.sponsor_id
+						data.park = data.sponsor_id ? data.sponsor_id : data.park
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid against ${data.name} was sent but already ended`)
@@ -239,12 +237,11 @@ class Raid extends Controller {
 				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
-						if (!data.sponsor_id) data.sponsor_id = false
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
 						data.url = gymInfo ? gymInfo.url : ''
-						data.park = gymInfo ? gymInfo.park : false
-						data.park = data.sponsor_id ? true : data.park
+						data.park = gymInfo ? gymInfo.park : data.sponsor_id
+						data.park = data.sponsor_id ? data.sponsor_id : data.park
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid level${data.level} appearead, but it seems it already hatched`)
