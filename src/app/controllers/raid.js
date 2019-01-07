@@ -67,7 +67,7 @@ class Raid extends Controller {
 			select humans.id, humans.name, egg.template from egg 
             join humans on humans.id = egg.id
             where humans.enabled = 1 and 
-            (egg.park = ${data.park} or egg.park = 0) and
+            (egg.park = ${!!data.park} or egg.park = 0) and
             raid_level = ${data.level} and 
             (egg.team = ${data.team_id} or egg.team = 4) and 
             (round( 6371000 * acos( cos( radians(${data.latitude}) ) 

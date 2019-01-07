@@ -25,5 +25,32 @@
     "height": 23,
     "weight": 3,
     "gender": 2
-    }
+    },
+  "monsterstatic": {
+    "encounter_id": "{{randomId}}",
+    "spawnpoint_id": "adkjghadf",
+    "pokemon_id": 25,
+    "pokemon_level": 30,
+    "player_level": 31,
+    "latitude": "{{randomLat}}",
+    "longitude": "{{randomLon}}",
+    "disappear_time": "{{timeIn20Min}}",
+    "last_modified_time": 1475033386661,
+    "time_until_hidden_ms": 5000,
+    "seconds_until_despawn": 1754,
+    "spawn_start": 2153,
+    "spawn_end": 3264,
+    "verified": true,
+    "cp_multiplier": 0.7317000031471252,
+    "form": 0,
+    "cp": 768,
+    "individual_attack": "{{randomIV}}",
+    "individual_defense": "{{randomIV}}",
+    "individual_stamina": "{{randomIV}}",
+    "move_1": "{{randomMove}}",
+    "move_2": "{{randomMove}}",
+    "height": 23,
+    "weight": 3,
+    "gender": 2
+  }
 }
