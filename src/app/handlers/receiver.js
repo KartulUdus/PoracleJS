@@ -73,7 +73,7 @@ module.exports = async (req, reply) => {
 								ch = 1
 							}
 							let finalMessage = _.cloneDeep(job.message)
-							if (ch === config.discord.limitamount + 1 ) {
+							if (ch === config.discord.limitamount + 1) {
 								discordcache.put(job.target, ch + 1)
 								finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
 								job.message = finalMessage
@@ -171,7 +171,7 @@ module.exports = async (req, reply) => {
 							queue.push(job)
 							log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
 						}
-						if ( ch <= config.discord.limitamount) {
+						if (ch <= config.discord.limitamount) {
 							discordcache.put(job.target, ch + 1)
 							job.message = finalMessage
 							queue.push(job)
