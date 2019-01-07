@@ -2,9 +2,11 @@ language: node_js
 node_js:
   - "lts/*"
 
-cache:
-  directories:
-    - "node_modules"
+services:
+  - mysql
+
+before_install:
+  - mysql -u root --password="" < test/travis.sql
 
 script:
   - npm run lint
