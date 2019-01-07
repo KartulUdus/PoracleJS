@@ -41,6 +41,7 @@
     "height": 175,
     "zoom": 15,
     "type": "roadmap",
+    "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     "geofence": "../../../config/geofence.example.json"
   },
 

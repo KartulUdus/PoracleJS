@@ -18,7 +18,7 @@
 	    map.addLayer(osm);
 		// make sure that is loaded before taking the screenshot
 		osm.on('load', function(){
-			setTimeout( function(){if (window.callPhantom) window.callPhantom('takeShot') }, 1)   } )
+			setTimeout( function(){if (window.callPhantom) window.callPhantom('takeShot'); console.log('I\'m Taking a pictuire now') }, 1)   } )
 </script>
 </body>
 </html>

@@ -54,7 +54,7 @@ class Quest extends Controller {
 					break
 				}
 				case 'osm': {
-					data.staticmap = 'OSMSTATICMAP'
+					data.staticmap = ''
 					break
 				}
 				default: {

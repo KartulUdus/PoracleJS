@@ -66,33 +66,29 @@ client.on('ready', () => {
 	let hungryInterval = startBeingHungry()
 	process.on('message', (msg) => {
 		if (msg.reason === 'food') {
-			clearInterval(hungryInterval)
-			getOsmStaticMapUrl(msg.job.lat, msg.job.lon).then((osmUrl) => {
-				const template = JSON.stringify(msg.job.message).replace(/OSMSTATICMAP/g, osmUrl)
-				msg.job.message = JSON.parse(template)
-				if (client.channels.keyArray().includes(msg.job.target)) {
-					client.channels.get(msg.job.target).send(msg.job.message).then((message) => {
-						if (config.discord.typereact) {
-							msg.job.emoji.forEach((emoji) => {
-								message.react(emoji)
-							})
-						}
-						hungryInterval = startBeingHungry()
-					})
-				}
-				else if (client.users.keyArray().includes(msg.job.target)) {
-					client.users.get(msg.job.target).send(msg.job.message).then((message) => {
-						if (config.discord.typereact) {
-							msg.job.emoji.forEach((emoji) => {
-								message.react(emoji)
-							})
-						}
-						hungryInterval = startBeingHungry()
-					})
-				}
-				else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
+			if (client.channels.keyArray().includes(msg.job.target)) {
+				client.channels.get(msg.job.target).send(msg.job.message).then((message) => {
+					if (config.discord.typereact) {
+						msg.job.emoji.forEach((emoji) => {
+							message.react(emoji)
+						})
+					}
+					hungryInterval = startBeingHungry()
+				})
+			}
+			else if (client.users.keyArray().includes(msg.job.target)) {
+				client.users.get(msg.job.target).send(msg.job.message).then((message) => {
+					if (config.discord.typereact) {
+						msg.job.emoji.forEach((emoji) => {
+							message.react(emoji)
+						})
+					}
+					hungryInterval = startBeingHungry()
+				})
+			}
+			else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
 
-			})
+
 		}
 	})
 })

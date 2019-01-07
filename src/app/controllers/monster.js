@@ -92,7 +92,7 @@ class Monster extends Controller {
 					break
 				}
 				case 'osm': {
-					data.staticmap = 'OSMSTATICMAP'
+					data.staticmap = ''
 					break
 				}
 				default:
