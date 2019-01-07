@@ -31,7 +31,15 @@ let randomTeam =  Math.floor(Math.random() * 3)
 let randomMove =  Math.floor(Math.random() * 291)
 
 
-
+const view = {
+	randomId: randomId,
+	pokemon: pokemon,
+	randomLat: randomLat,
+	randomLon: randomLon,
+	timeIn20Min: timeIn20Min,
+	randomIV: randomIV,
+	randomMove: randomMove
+}
 
 
 
@@ -69,7 +77,7 @@ describe('Functional', function() {
 
     it('Fastify should be able to host on configured host and port', function(done) {
 
-        fastify.listen(config.general.port, config.general.host, function (err) {
+        fastify.listen(3031, config.general.host, function (err) {
             if (err) done(err)
             else done()
         })
@@ -81,27 +89,20 @@ describe('Functional', function() {
 describe('Pokemon Filters', function() {
 
 
-	it('should process a pokemon', function(done) {
-		let template = JSON.stringify(_.clone(testData.monster))
-		let view = {
-			randomId: randomId,
-			pokemon: pokemon,
-			randomLat: randomLat,
-			randomLon: randomLon,
-			timeIn20Min: timeIn20Min,
-			randomIV: randomIV,
-			randomMove: randomMove
-		}
+	it('should process a bulbasaur with iv filter', function(done) {
+		let template = JSON.stringify(_.clone(testData.monsterstatic))
 		let message = mustache.render(template, view)
 		message = JSON.parse(message)
 		monsterController.handle(message).then((potato) => {
-			console.log('THIS IS POTATO:', potato)
+			console.log(potato[0].message)
+			chai.assert.equal(potato[0].emoji[0], '⚡')
+			chai.assert.equal(potato[0].message.embed.color, 10329501)
+			chai.assert.equal(potato[0].message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_025_00.png`.toLowerCase())
 			done()
 		}).catch((err) => {
-			console.log(err)
 			done(err)
 		})
-		done()
+
 	})
 
 })

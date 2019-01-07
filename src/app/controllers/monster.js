@@ -12,6 +12,7 @@ const weatherData = require('../util/weather')
 const types = require('../util/types')
 
 const moveData = require(config.locale.movesJson)
+const genderData = require('../util/genders')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
@@ -161,6 +162,7 @@ class Monster extends Controller {
 								tthm: data.tth.minutes,
 								tths: data.tth.seconds,
 								name: data.name,
+								gender: genderData[data.gender],
 								move1: data.quick_move,
 								move2: data.charge_move,
 								iv: data.iv,
