@@ -67,7 +67,7 @@ module.exports = async (req, reply) => {
 					cache.put(`${hook.message.encounter_id}_${hook.message.weight}`, 'cached')
 					monsterController.handle(hook.message).then((work) => {
 						work.forEach((job) => {
-							const ch = _.cloneDeep(discordcache.get(job.target))
+							let ch = _.cloneDeep(discordcache.get(job.target))
 							if (ch === undefined) {
 								discordcache.put(job.target, 1)
 								ch = 1
@@ -103,7 +103,7 @@ module.exports = async (req, reply) => {
 				raidController.handle(hook.message)
 					.then((work) => {
 						work.forEach((job) => {
-							const ch = _.cloneDeep(discordcache.get(job.target))
+							let ch = _.cloneDeep(discordcache.get(job.target))
 							if (ch === undefined) {
 								discordcache.put(job.target, 1)
 								ch = 1
@@ -158,7 +158,7 @@ module.exports = async (req, reply) => {
 				const q = hook.message
 				questController.handle(q).then((work) => {
 					work.forEach((job) => {
-						const ch = _.cloneDeep(discordcache.get(job.target))
+						let ch = _.cloneDeep(discordcache.get(job.target))
 						if (ch === undefined) {
 							discordcache.put(job.target, 1)
 							ch = 1

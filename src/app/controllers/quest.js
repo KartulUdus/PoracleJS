@@ -250,10 +250,11 @@ class Quest extends Controller {
 						break
 					}
 					case 11: {
-						const cond = this.qdts.questConditions['11']
-						conditionString = conditionString.concat(cond)
-						break
-					}
+					const template = this.qdts.questConditions['11']
+					const cond = mustache.render(template, { item: this.qdts.rewardItems[condition.info.item_id] })
+					conditionString = conditionString.concat(cond)
+					break
+				}
 					case 14: {
 						const template = this.qdts.questConditions['14']
 						const cond = mustache.render(template, { throw_type: this.qdts.throwType[condition.info.throw_type_id], amount: data.target })
