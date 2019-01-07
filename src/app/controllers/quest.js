@@ -181,7 +181,12 @@ class Quest extends Controller {
 				}
 				else if (reward.type === 7) {
 					const template = this.qdts.questRewardTypes['7']
-					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name })
+					let e = []
+					monsterData[reward.info.pokemon_id].types.forEach((type) => {
+						e.push(typeData[type].emoji)
+					})
+					e = e.join()
+					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, emoji: e })
 					monsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				}

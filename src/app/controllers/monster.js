@@ -141,14 +141,14 @@ class Monster extends Controller {
 			// Stop handling if it already disappeared
 			if (data.tth.firstDateWasLater) {
 				log.warn(`Weird, the ${data.name} already disappeared`)
-				return null
+				resolve([])
 			}
 
 			this.pointInArea([data.latitude, data.longitude]).then((matchedAreas) => {
 				data.matched = matchedAreas
 				this.monsterWhoCares(data).then((whocares) => {
 					// if noone cares or the result is not iterable, break out of processing
-					if (!whocares.length || !Array.isArray(whocares)) return null
+					if (!whocares.length || !Array.isArray(whocares)) resolve([])
 					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
 						const jobs = []

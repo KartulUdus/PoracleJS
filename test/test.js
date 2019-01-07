@@ -18,7 +18,7 @@ const fs = require('fs')
 const path = require('path')
 const fastify = require('fastify')()
 let chai = require('chai')
-
+var should = chai.should()
 
 
 let pokemon = Math.floor(Math.random() * 500)
@@ -90,19 +90,88 @@ describe('Pokemon Filters', function() {
 
 
 	it('should process a bulbasaur with iv filter', function(done) {
-		let template = JSON.stringify(_.clone(testData.monsterstatic))
-		let message = mustache.render(template, view)
-		message = JSON.parse(message)
-		monsterController.handle(message).then((potato) => {
-			console.log(potato[0].message)
-			chai.assert.equal(potato[0].emoji[0], '⚡')
-			chai.assert.equal(potato[0].message.embed.color, 10329501)
-			chai.assert.equal(potato[0].message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_025_00.png`.toLowerCase())
+		let positivetemplate = JSON.stringify(_.clone(testData.monsters.bulbasaur))
+		let positiveMessage = mustache.render(positivetemplate, view)
+		positiveMessage = JSON.parse(positiveMessage)
+		let negativetemplate = JSON.stringify(_.clone(testData.monsters.bulbasaur2))
+		let negativeMessage = mustache.render(negativetemplate, view)
+		negativeMessage = JSON.parse(negativeMessage)
+
+		Promise.all([monsterController.handle(positiveMessage), monsterController.handle(negativeMessage)]).then((work) => {
+			let affirmative = work[0]
+			let negative = work[1]
+
+			console.log(work[0].message)
+			chai.assert.equal(affirmative.emoji[0], '🌿')
+			chai.assert.equal(affirmative.message.embed.color, 10329501)
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_002_00.png`.toLowerCase())
+			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
 			done(err)
 		})
-
 	})
 
+
+	it('should process a ivysaur with maxiv filter', function(done) {
+		let template = JSON.stringify(_.clone(testData.monsters.ivysaur))
+		let message = mustache.render(template, view)
+		message = JSON.parse(message)
+		monsterController.handle(message).then((work) => {
+			console.log(work[0].message)
+			chai.assert.equal(work[0].emoji[0], '🌿')
+			chai.assert.equal(work[0].message.embed.color, 10329501)
+			chai.assert.equal(work[0].message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_002_00.png`.toLowerCase())
+			let template = JSON.stringify(_.clone(testData.monsters.ivysaur2))
+			let message = mustache.render(template, view)
+			message = JSON.parse(message)
+			monsterController.handle(message).then(work => {
+				work.should.have.lengthOf(0)
+				done()
+			}).catch((err) => {
+				done(err)
+			})
+		}).catch((err) => {
+			done(err)
+		})
+	})
+
+	it('should process a venusaur with mincp filter', function(done) {
+		let positivetemplate = JSON.stringify(_.clone(testData.monsters.ivysaur))
+		let positiveMessage = mustache.render(positivetemplate, view)
+		positiveMessage = JSON.parse(positiveMessage)
+		let negativetemplate = JSON.stringify(_.clone(testData.monsters.ivysaur2))
+		let negativeMessage = mustache.render(negativetemplate, view)
+		negativeMessage = JSON.parse(negativeMessage)
+
+		Promise.all([monsterController.handle(positiveMessage), monsterController.handle(negativeMessage)]).then((work) => {
+			let affirmative = work[0]
+			let negative = work[1]
+
+			console.log(work[0].message)
+			chai.assert.equal(affirmative.emoji[0], '🌿')
+			chai.assert.equal(affirmative.message.embed.color, 10329501)
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_002_00.png`.toLowerCase())
+			negative.should.have.lengthOf(0)
+			done()
+		}).catch((err) => {
+			done(err)
+		})
+	})
+
+
+	it('should process a venusaur with maxiv filter', function(done) {
+		let template = JSON.stringify(_.clone(testData.monsters.ivysaur))
+		let message = mustache.render(template, view)
+		message = JSON.parse(message)
+		monsterController.handle(message).then((work) => {
+			console.log(work[0].message)
+			chai.assert.equal(work[0].emoji[0], '🌿')
+			chai.assert.equal(work[0].message.embed.color, 10329501)
+			chai.assert.equal(work[0].message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_002_00.png`.toLowerCase())
+			done()
+		}).catch((err) => {
+			done(err)
+		})
+	})
 })
