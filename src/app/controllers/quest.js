@@ -124,6 +124,7 @@ class Quest extends Controller {
 								city: geoResult.city,
 								state: geoResult.state,
 								stateCode: geoResult.stateCode,
+								neighbourhood: geoResult.neighbourhood,
 								flagemoji: geoResult.flag
 							}
 

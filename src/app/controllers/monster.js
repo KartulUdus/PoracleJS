@@ -198,6 +198,7 @@ class Monster extends Controller {
 								state: geoResult.state,
 								stateCode: geoResult.stateCode,
 								flagemoji: geoResult.flag,
+								neighbourhood: geoResult.neighbourhood,
 								emojiString: data.emojiString
 
 							}

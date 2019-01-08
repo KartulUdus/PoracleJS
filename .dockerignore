@@ -1,0 +1,17 @@
+# Git
+.git
+.gitignore
+
+# Build step outputs
+.cache
+.nuxt
+.idea
+cache/*.log
+
+# Docker configuration
+Dockerfile
+Makefile
+docker-compose.yml
+
+# NPM dependencies
+node_modules

@@ -196,6 +196,7 @@ class Raid extends Controller {
 													city: geoResult.city,
 													state: geoResult.state,
 													stateCode: geoResult.stateCode,
+													neighbourhood: geoResult.neighbourhood,
 													flagemoji: geoResult.flag,
 													emojistring: data.emojistring,
 													areas: data.matched.join(', '),
@@ -289,6 +290,7 @@ class Raid extends Controller {
 												city: geoResult.city,
 												state: geoResult.state,
 												stateCode: geoResult.stateCode,
+												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
 												areas: data.matched.join(', '),
 											}

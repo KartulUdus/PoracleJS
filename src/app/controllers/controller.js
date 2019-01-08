@@ -93,6 +93,7 @@ class Controller {
 								.replace(/%t/, geocodeResult[0].stateCode || '')
 							res.streetNumber = geocodeResult[0].streetNumber || ''
 							res.streetName = geocodeResult[0].streetName || ''
+							res.neighbourhood = geocodeResult[0].neighbourhood || ''
 							res.zipcode = geocodeResult[0].zipcode || ''
 							res.country = geocodeResult[0].country || ''
 							res.countryCode = geocodeResult[0].countryCode || ''
@@ -107,6 +108,7 @@ class Controller {
 									if (error) log.error(`Error saving addr of ${cacheKey}: ${error}`)
 								})
 							}
+							log.error(geocodeResult)
 							log.debug(`fetched address ${JSON.stringify(res)}`)
 
 							resolve(res)
