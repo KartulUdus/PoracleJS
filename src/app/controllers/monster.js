@@ -12,6 +12,7 @@ const weatherData = require('../util/weather')
 const types = require('../util/types')
 
 const moveData = require(config.locale.movesJson)
+const genderData = require('../util/genders')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
@@ -86,19 +87,23 @@ class Monster extends Controller {
 
 	async handle(data) {
 		return new Promise((resolve) => {
-			switch (config.geocoding.provider.toLowerCase()) {
+			switch (config.geocoding.staticProvider.toLowerCase()) {
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${_.sample(config.geocoding.googleKey)}`
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
 				case 'osm': {
-					data.staticmap = ''
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${config.geocoding.zoom}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
-				default:
+				case 'mapbox': {
+					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${config.geocoding.zoom},0,0/${config.geocoding.width}x${config.geocoding.height}?access_token=${_.sample(config.geocoding.staticKey)}`
+					break
+				}
+				default: {
 					data.staticmap = ''
+				}
 			}
-
 			data.name = monsterData[data.pokemon_id].name ? monsterData[data.pokemon_id].name : 'errormon'
 			data.formname = ''
 			data.iv = data.weight ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
@@ -113,9 +118,9 @@ class Monster extends Controller {
 			data.quick_move = data.weight && moveData[data.move_1] ? moveData[data.move_1].name : ''
 			data.charge_move = data.weight && moveData[data.move_2] ? moveData[data.move_2].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0
-			if (!data.weather_boosted_condition) data.weather_boosted_condition = 0
-			data.boost = weatherData[data.weather_boosted_condition].name ? weatherData[data.weather_boosted_condition].name : ''
-			data.boostemoji = weatherData[data.weather_boosted_condition].emoji ? weatherData[data.weather_boosted_condition].emoji : ''
+			if (!data.weather) data.weather = 0
+			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : ''
+			data.boostemoji = weatherData[data.weather].emoji ? weatherData[data.weather].emoji : ''
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.color = monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0
@@ -133,7 +138,7 @@ class Monster extends Controller {
 			// Stop handling if it already disappeared
 			if (data.tth.firstDateWasLater) {
 				log.warn(`Weird, the ${data.name} already disappeared`)
-				return null
+				resolve([])
 			}
 
 			this.insertOrUpdateQuery(
@@ -148,7 +153,7 @@ class Monster extends Controller {
 				data.matched = matchedAreas
 				this.monsterWhoCares(data).then((whocares) => {
 					// if noone cares or the result is not iterable, break out of processing
-					if (!whocares.length || !Array.isArray(whocares)) return null
+					if (!whocares.length || !Array.isArray(whocares)) resolve([])
 					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
 						const jobs = []
@@ -162,6 +167,7 @@ class Monster extends Controller {
 								tthm: data.tth.minutes,
 								tths: data.tth.seconds,
 								name: data.name,
+								gender: genderData[data.gender],
 								move1: data.quick_move,
 								move2: data.charge_move,
 								iv: data.iv,
@@ -197,6 +203,7 @@ class Monster extends Controller {
 								state: geoResult.state,
 								stateCode: geoResult.stateCode,
 								flagemoji: geoResult.flag,
+								neighbourhood: geoResult.neighbourhood,
 								emojiString: data.emojiString
 
 							}

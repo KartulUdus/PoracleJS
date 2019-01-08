@@ -626,8 +626,12 @@ client.on('message', (msg) => {
 				raids.forEach((raid) => {
 					const monsterName = monsterData[raid.pokemon_id].name
 					const raidTeam = teamData[raid.team].name
-					message = message.concat(`\n**${monsterName}** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
-
+					if (parseInt(raid.pokemon_id, 10) === 721) {
+						message = message.concat(`\n**level:${raid.level} raids** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
+					}
+					else {
+						message = message.concat(`\n**${monsterName}** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
+					}
 				})
 				eggs.forEach((egg) => {
 					const raidTeam = teamData[egg.team].name
@@ -1341,7 +1345,12 @@ client.on('message', (msg) => {
 				raids.forEach((raid) => {
 					const monsterName = monsterData[raid.pokemon_id].name
 					const raidTeam = teamData[raid.team].name
-					message = message.concat(`\n**${monsterName}** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
+					if (parseInt(raid.pokemon_id, 10) === 721) {
+						message = message.concat(`\n**level:${raid.level} raids** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
+					}
+					else {
+						message = message.concat(`\n**${monsterName}** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
+					}
 				})
 				eggs.forEach((egg) => {
 					const raidTeam = teamData[egg.team].name

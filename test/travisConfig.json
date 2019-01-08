@@ -1,0 +1,60 @@
+{
+  "db": {
+    "host": "127.0.0.1",
+    "user": "dev",
+    "password": "dev",
+    "database": "poracle",
+    "port": "3306",
+    "connectionLimit": 1
+  },
+  "general": {
+    "logLevel": "warn",
+    "host": "127.0.0.1",
+    "port": "3030",
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
+    "max_pokemon": 475
+  },
+
+  "locale": {
+    "timeformat": "en-gb",
+    "time": "LTS",
+    "addressformat": "%S %n",
+    "commandMonstersJson": "../util/monsters",
+    "monstersJson": "../util/monsters",
+    "movesJson": "../util/moves"
+  },
+
+  "geocoding": {
+    "provider": "OSM",
+    "staticProvider": "",
+    "geocodingKey":["AIzaSyD4nFUhRqGYw4f06H9zmNURafnwbdvMMh4"],
+    "staticKey":[""],
+    "width": 250,
+    "height": 175,
+    "zoom": 10,
+    "type": "roadmap",
+    "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "rocketmap":"http://yourmap.com/RocketMap/",
+    "geofence": "../../../config/geofence.json"
+  },
+
+  "discord": {
+    "token": ["MzQ3Njk5NzIwNTM5NjAyOTQ1.DoljaA.WkVG27sOXuAVCx4bHVSgN67if2Y"],
+    "channel": "testing",
+    "admins": ["222742859059560458"],
+    "comDayResultChannelId":"414388133329764352",
+    "modRole":"sudo",
+    "prefix": "!",
+    "typereact": false,
+    "limitsec": 15,
+    "limitamount": 5,
+    "iv_colors": [
+      "#9D9D9D",
+      "#FFFFFF",
+      "#1EFF00",
+      "#0070DD",
+      "#A335EE",
+      "#FF8000"
+    ]
+  }
+}

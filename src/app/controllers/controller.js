@@ -30,7 +30,7 @@ const geocoder = (() => {
 			return NodeGeocoder({
 				provider: 'google',
 				httpAdapter: 'https',
-				apiKey: _.sample(config.geocoding.googleKey),
+				apiKey: _.sample(config.geocoding.geocodingkey),
 			})
 		}
 		default:
@@ -96,6 +96,7 @@ class Controller {
 								.replace(/%t/, geocodeResult[0].stateCode || '')
 							res.streetNumber = geocodeResult[0].streetNumber || ''
 							res.streetName = geocodeResult[0].streetName || ''
+							res.neighbourhood = geocodeResult[0].neighbourhood || ''
 							res.zipcode = geocodeResult[0].zipcode || ''
 							res.country = geocodeResult[0].country || ''
 							res.countryCode = geocodeResult[0].countryCode || ''

@@ -48,13 +48,17 @@ class Quest extends Controller {
 
 	async handle(data) {
 		return new Promise((resolve) => {
-			switch (config.geocoding.provider.toLowerCase()) {
+			switch (config.geocoding.staticProvider.toLowerCase()) {
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${_.sample(config.geocoding.googleKey)}`
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
 				case 'osm': {
-					data.staticmap = ''
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${config.geocoding.zoom}&key=${_.sample(config.geocoding.staticKey)}`
+					break
+				}
+				case 'mapbox': {
+					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${config.geocoding.zoom},0,0/${config.geocoding.width}x${config.geocoding.height}?access_token=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
 				default: {
@@ -120,6 +124,7 @@ class Quest extends Controller {
 								city: geoResult.city,
 								state: geoResult.state,
 								stateCode: geoResult.stateCode,
+								neighbourhood: geoResult.neighbourhood,
 								flagemoji: geoResult.flag
 							}
 
@@ -177,7 +182,12 @@ class Quest extends Controller {
 				}
 				else if (reward.type === 7) {
 					const template = this.qdts.questRewardTypes['7']
-					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name })
+					let e = []
+					monsterData[reward.info.pokemon_id].types.forEach((type) => {
+						e.push(typeData[type].emoji)
+					})
+					e = e.join()
+					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, emoji: e })
 					monsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				}
@@ -250,7 +260,9 @@ class Quest extends Controller {
 						break
 					}
 					case 11: {
-						const cond = this.qdts.questConditions['11']
+						const template = this.qdts.questConditions['11']
+						const item = condition.info ? this.qdts.rewardItems[condition.info.item_id] : ''
+						const cond = mustache.render(template, { item: item })
 						conditionString = conditionString.concat(cond)
 						break
 					}

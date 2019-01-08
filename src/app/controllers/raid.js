@@ -36,7 +36,7 @@ class Raid extends Controller {
             where humans.enabled = 1 and
             (pokemon_id=${data.pokemon_id} or (pokemon_id=721 and raid.level=${data.level})) and 
             (raid.team = ${data.team_id} or raid.team = 4) and 
-            (raid.park = ${data.park} or raid.park = 0) and
+            (raid.park = ${!!data.park} or raid.park = 0) and
             (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
@@ -67,7 +67,7 @@ class Raid extends Controller {
 			select humans.id, humans.name, egg.template from egg 
             join humans on humans.id = egg.id
             where humans.enabled = 1 and 
-            (egg.park = ${data.park} or egg.park = 0) and
+            (egg.park = ${!!data.park} or egg.park = 0) and
             raid_level = ${data.level} and 
             (egg.team = ${data.team_id} or egg.team = 4) and 
             (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
@@ -92,13 +92,17 @@ class Raid extends Controller {
 
 	async handle(data) {
 		return new Promise((resolve) => {
-			switch (config.geocoding.provider.toLowerCase()) {
+			switch (config.geocoding.staticProvider.toLowerCase()) {
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.gmaps.type}&zoom=${config.gmaps.zoom}&size=${config.gmaps.width}x${config.gmaps.height}&key=${_.sample(config.geocoding.googleKey)}`
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
 				case 'osm': {
-					data.staticmap = ''
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${config.geocoding.zoom}&key=${_.sample(config.geocoding.staticKey)}`
+					break
+				}
+				case 'mapbox': {
+					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${config.geocoding.zoom},0,0/${config.geocoding.width}x${config.geocoding.height}?access_token=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
 				default: {
@@ -129,17 +133,15 @@ class Raid extends Controller {
 				data.charge_move = data.move_2 ? moveData[data.move_2].name : ''
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
-
-						if (data.sponsor_id) data.sponsor_id = false
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
 						data.url = gymInfo ? gymInfo.url : ''
-						data.park = gymInfo ? gymInfo.park : false
-						data.park = data.sponsor_id ? true : data.park
+						data.park = gymInfo ? gymInfo.park : data.sponsor_id
+						data.park = data.sponsor_id ? data.sponsor_id : data.park
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid against ${data.name} was sent but already ended`)
-							return null
+							resolve([])
 						}
 						this.insertOrUpdateQuery(
 							'`activeRaid`',
@@ -153,7 +155,7 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								this.raidWhoCares(data).then((whoCares) => {
-									if (!whoCares.length || !Array.isArray(whoCares)) return null
+									if (!whoCares.length || !Array.isArray(whoCares)) resolve([])
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
 										const jobs = []
@@ -176,6 +178,7 @@ class Raid extends Controller {
 													mincp25: cps[2],
 													cp25: cps[3],
 													gymname: data.gymname,
+													teamname: data.teamname,
 													description: data.description,
 													move1: data.quick_move,
 													move2: data.charge_move,
@@ -201,6 +204,7 @@ class Raid extends Controller {
 													city: geoResult.city,
 													state: geoResult.state,
 													stateCode: geoResult.stateCode,
+													neighbourhood: geoResult.neighbourhood,
 													flagemoji: geoResult.flag,
 													emojistring: data.emojistring,
 													areas: data.matched.join(', '),
@@ -243,24 +247,22 @@ class Raid extends Controller {
 				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/egg${data.level}.png`
 				if (!data.team_id) data.team_id = 0
-				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
-				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
 				if (!data.move_1) data.move_1 = 0
 				if (!data.move_2) data.move_2 = 0
 				data.cp = data.cp ? data.cp : 0
-
+				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
+				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
-						if (!data.sponsor_id) data.sponsor_id = false
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
 						data.url = gymInfo ? gymInfo.url : ''
-						data.park = gymInfo ? gymInfo.park : false
-						data.park = data.sponsor_id ? true : data.park
+						data.park = gymInfo ? gymInfo.park : data.sponsor_id
+						data.park = data.sponsor_id ? data.sponsor_id : data.park
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid level${data.level} appearead, but it seems it already hatched`)
-							return null
+							resolve([])
 						}
 
 						this.insertOrUpdateQuery(
@@ -275,7 +277,7 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								this.eggWhoCares(data).then((whoCares) => {
-									if (!whoCares.length || !Array.isArray(whoCares)) return null
+									if (!whoCares.length || !Array.isArray(whoCares)) resolve([])
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 										const jobs = []
 										whoCares.forEach((cares) => {
@@ -285,6 +287,7 @@ class Raid extends Controller {
 												tthm: data.tth.minutes,
 												tths: data.tth.seconds,
 												gymname: data.gymname,
+												teamname: data.teamname,
 												description: data.description,
 												level: data.level,
 												staticmap: data.staticmap,
@@ -307,6 +310,7 @@ class Raid extends Controller {
 												city: geoResult.city,
 												state: geoResult.state,
 												stateCode: geoResult.stateCode,
+												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
 												areas: data.matched.join(', '),
 											}

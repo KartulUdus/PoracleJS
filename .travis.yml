@@ -2,9 +2,19 @@ language: node_js
 node_js:
   - "lts/*"
 
-cache:
-  directories:
-    - "node_modules"
+services:
+  - mysql
+
+before_install:
+  - mysql -u root --password="" < test/travis.sql
+
+before_script:
+  - rm -rf ./node_modules package-lock.json
+  - cp test/travisConfig.json config/default.json
+  - cp config/dts.json.example config/dts.json
+  - cp config/geofence_example.json config/geofence.json
+  - cp config/questdts.json.example config/questdts.json
+  - npm install
 
 script:
-  - npm run lint
+  - npm test && npm run lint
