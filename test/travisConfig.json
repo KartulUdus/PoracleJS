@@ -11,7 +11,7 @@
     "logLevel": "warn",
     "host": "127.0.0.1",
     "port": "3030",
-    "imgurl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/",
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
     "max_pokemon": 475
   },
 

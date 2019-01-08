@@ -12,6 +12,7 @@ before_script:
   - rm -rf ./node_modules package-lock.json
   - cp test/travisConfig.json config/default.json
   - cp config/dts.json.example config/dts.json
+  - cp config/geofence_example.json config/geofence.json
   - cp config/questdts.json.example config/questdts.json
   - npm install
 
