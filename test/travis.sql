@@ -95,6 +95,18 @@ CREATE TABLE `egg` (
   KEY `raid_distance` (`distance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+LOCK TABLES `egg` WRITE;
+/*!40000 ALTER TABLE `egg` DISABLE KEYS */;
+
+INSERT INTO `egg` (`id`, `raid_level`, `park`, `template`, `distance`, `team`)
+VALUES
+	('414388133329764352','1',1,3,0,4),
+	('414388133329764352','2',0,3,0,4),
+	('414388133329764352','4',0,3,0,3),
+	('414388133329764352','5',0,3,2000,4);
+
+/*!40000 ALTER TABLE `egg` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table gym-info
@@ -136,6 +148,15 @@ CREATE TABLE `humans` (
   KEY `humans_latitude_longitude` (`latitude`,`longitude`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+LOCK TABLES `humans` WRITE;
+/*!40000 ALTER TABLE `humans` DISABLE KEYS */;
+
+INSERT INTO `humans` (`id`, `name`, `alerts_sent`, `enabled`, `area`, `latitude`, `longitude`)
+VALUES
+	('414388133329764352','travis-test',4,1,'[\"tallinn\"]',58.3801207,26.72245);
+
+/*!40000 ALTER TABLE `humans` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table monsters
@@ -166,6 +187,27 @@ CREATE TABLE `monsters` (
   KEY `monsters_min_iv` (`min_iv`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+LOCK TABLES `monsters` WRITE;
+/*!40000 ALTER TABLE `monsters` DISABLE KEYS */;
+
+INSERT INTO `monsters` (`id`, `pokemon_id`, `distance`, `min_iv`, `max_iv`, `min_cp`, `max_cp`, `min_level`, `max_level`, `atk`, `def`, `sta`, `template`, `min_weight`, `max_weight`, `form`)
+VALUES
+	('414388133329764352',1,0,100,100,0,9000,0,40,0,0,0,3,0,9000000,0),
+	('414388133329764352',2,0,0,0,0,9000,0,40,0,0,0,3,0,9000000,0),
+	('414388133329764352',3,0,-1,100,2000,9000,0,40,0,0,0,3,0,9000000,0),
+	('414388133329764352',4,0,-1,100,0,2000,0,40,0,0,0,3,0,9000000,0),
+	('414388133329764352',5,0,-1,100,0,9000,30,40,0,0,0,3,0,9000000,0),
+	('414388133329764352',6,0,-1,100,0,9000,0,35,0,0,0,3,0,9000000,0),
+	('414388133329764352',7,0,-1,100,0,9000,0,40,10,0,0,3,0,9000000,0),
+	('414388133329764352',8,0,-1,100,0,9000,0,40,0,10,0,3,0,9000000,0),
+	('414388133329764352',9,0,-1,100,0,9000,0,40,0,0,10,3,0,9000000,0),
+	('414388133329764352',10,0,-1,100,0,9000,0,40,0,0,0,3,3000,9000000,0),
+	('414388133329764352',11,0,-1,100,0,9000,0,40,0,0,0,3,0,3200,0),
+	('414388133329764352',12,1000,-1,100,0,9000,0,40,0,0,0,3,0,9000000,0),
+	('414388133329764352',201,0,-1,100,0,9000,0,40,0,0,0,3,0,9000000,6);
+
+/*!40000 ALTER TABLE `monsters` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table pokemon
@@ -231,6 +273,18 @@ CREATE TABLE `quest` (
   KEY `distance` (`distance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+LOCK TABLES `quest` WRITE;
+/*!40000 ALTER TABLE `quest` DISABLE KEYS */;
+
+INSERT INTO `quest` (`id`, `reward`, `template`, `reward_type`, `distance`)
+VALUES
+	('414388133329764352',2,3,2,0),
+	('414388133329764352',705,3,2,5000),
+	('414388133329764352',500,3,3,0),
+	('414388133329764352',137,3,7,0);
+
+/*!40000 ALTER TABLE `quest` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table raid
@@ -251,6 +305,19 @@ CREATE TABLE `raid` (
   KEY `raid_distance` (`distance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
+LOCK TABLES `raid` WRITE;
+/*!40000 ALTER TABLE `raid` DISABLE KEYS */;
+
+INSERT INTO `raid` (`id`, `pokemon_id`, `park`, `template`, `distance`, `team`, `level`)
+VALUES
+	('414388133329764352','13',0,3,0,4,0),
+	('414388133329764352','14',1,3,0,4,0),
+	('414388133329764352','15',0,3,0,3,0),
+	('414388133329764352','17',0,3,5000,4,0),
+	('414388133329764352','721',0,3,0,4,3);
+
+/*!40000 ALTER TABLE `raid` ENABLE KEYS */;
+UNLOCK TABLES;
 
 
 # Dump of table schema_version

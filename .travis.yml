@@ -8,5 +8,13 @@ services:
 before_install:
   - mysql -u root --password="" < test/travis.sql
 
+before_script:
+  - rm -rf ./node_modules package-lock.json
+  - cp test/travisConfig.json condig/default.json
+  - cp config/dts.json.example condig/dts.json
+  - cp config/questdts.json.example condig/questdts.json
+  - npm install
+
 script:
+  - npm test
   - npm run lint

@@ -141,13 +141,13 @@ class Raid extends Controller {
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid against ${data.name} was sent but already ended`)
-							return null
+							resolve([])
 						}
 						this.pointInArea([data.latitude, data.longitude])
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								this.raidWhoCares(data).then((whoCares) => {
-									if (!whoCares.length || !Array.isArray(whoCares)) return null
+									if (!whoCares.length || !Array.isArray(whoCares)) resolve([])
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
 										const jobs = []
@@ -238,8 +238,8 @@ class Raid extends Controller {
 				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/egg${data.level}.png`
 				if (!data.team_id) data.team_id = 0
-				data.teamname = !data.team_id ? teamData[data.team_id].name : 'Harmony'
-				data.color = !data.team_id ? teamData[data.team_id].color : 7915600
+				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
+				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
@@ -250,13 +250,13 @@ class Raid extends Controller {
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid level${data.level} appearead, but it seems it already hatched`)
-							return null
+							resolve([])
 						}
 						this.pointInArea([data.latitude, data.longitude])
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								this.eggWhoCares(data).then((whoCares) => {
-									if (!whoCares.length || !Array.isArray(whoCares)) return null
+									if (!whoCares.length || !Array.isArray(whoCares)) resolve([])
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 										const jobs = []
 										whoCares.forEach((cares) => {
