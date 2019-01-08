@@ -2,9 +2,9 @@ const log = require('../logger')
 const _ = require('lodash')
 const config = require('config')
 const mysql = require('promise-mysql2')
+const cp = require('child_process')
 
 const db = mysql.createPool(config.db)
-
 const Cache = require('ttl')
 
 const discordcache = new Cache({
@@ -34,28 +34,39 @@ setInterval(() => {
 	}
 }, 30000)
 
-
-const discord = require('cluster')
-
-discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
-_.forEach(config.discord.token, (k) => {
-	discord.fork({ k: k })
-})
+const discord = {}
 
 
-// _.sample(discord.workers).sendMapAttachment('potato')
-discord.on('message', (worker, msg) => {
-	if (msg.reason === 'seppuku') {
-		log.warn('discord worker commited seppuku, cloning new')
-		discord.fork({ k: msg.key })
-	}
-	if (msg.reason === 'hungry') {
-		if (queue.length) {
-			discord.workers[worker.id].send({ reason: 'food', job: queue.shift() })
+// const discord = require('cluster')
+
+for (let i = 0; i < config.discord.token.length; i += 1) {
+	discord[i] = cp.fork(`${__dirname}/../helpers/discord.js`)
+	log.info(`Discord botto #${i + 1} forked. PID:${discord[i].pid}`)
+
+	discord[i].send({
+		reason: 'identity',
+		key: config.discord.token[i]
+	})
+
+	discord[i].on('message', (msg) => {
+		if (msg.reason === 'hungry') {
+			if (Math.random() >= 0.999) log.debug(`Discord botto #${i + 1} sent message:`, msg)
+			if (queue.length) {
+				discord[i].send({
+					reason: 'food',
+					job: queue.shift()
+				})
+			}
 		}
-	}
-})
+	})
 
+	discord[i].on('close' || 'error' || 'disconnect', () => {
+		discord[i] = cp.fork(`${__dirname}/../helpers/discord.js`)
+		log.info(`Discord botto #${i + 1} died, cloning ... PID:${discord[i].pid}`)
+		discord[i].send({ reason: 'identity', key: config.discord.token[i] })
+	})
+
+}
 
 module.exports = async (req, reply) => {
 	let data = req.body

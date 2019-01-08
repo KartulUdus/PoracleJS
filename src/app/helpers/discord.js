@@ -14,7 +14,7 @@ function startBeingHungry() {
 
 
 client.on('ready', () => {
-	log.info(`Discord botto "${client.user.tag}" ready for action!`)
+	log.info(`Discord worker "${client.user.tag}" ready for action!`)
 	client.user.setStatus('invisible')
 	let hungryInterval = startBeingHungry()
 	process.on('message', (msg) => {
@@ -54,20 +54,17 @@ client.on('warn', (warning) => {
 	log.warn(`Discord ${client.user.tag} sent general warning: ${warning}`)
 })
 
-process.on('disconnect', (exit) => {
-	process.send({ reason: 'seppuku', key: process.env.k })
-	process.exit()
-})
 client.on('error', (e) => {
-	process.send({ reason: 'seppuku', key: process.env.k })
-	log.info('Discord worker sent me an errot, commiting seppuku just in case')
-	process.exit()
+	log.info(`Discord worker sent me an error, commiting seppuku just in case ${e}`)
+	process.disconnect()
 })
 
-client.login(process.env.k)
-	.catch((err) => {
-		log.error(err.message)
-		process.send({ reason: 'seppuku', key: process.env.k })
-		process.exit()
-	})
-
+process.on('message', (msg) => {
+	if (msg.reason === 'identity') {
+		client.login(msg.key)
+			.catch((err) => {
+				log.error(`Discord worker not signed in: ${err.message}`)
+				process.disconnect()
+			})
+	}
+})

@@ -11,7 +11,7 @@
     "test": "mocha --exit",
     "pm2": "npm i -g pm2",
     "start": "node src/app/app.js",
-    "lint": "./node_modules/.bin/eslint ./src/app",
+    "lint": "./node_modules/.bin/eslint ./src/app --fix",
     "community": "node src/app/communityDay/comDay.js",
     "docs": "./node_modules/docsify-cli/bin/docsify serve docs"
   },
