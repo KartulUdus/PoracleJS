@@ -108,8 +108,6 @@ class Controller {
 									if (error) log.error(`Error saving addr of ${cacheKey}: ${error}`)
 								})
 							}
-							console.log(geocodeResult)
-							log.error(geocodeResult)
 							log.debug(`fetched address ${JSON.stringify(res)}`)
 
 							resolve(res)
