@@ -10,9 +10,9 @@ before_install:
 
 before_script:
   - rm -rf ./node_modules package-lock.json
-  - cp test/travisConfig.json condig/default.json
-  - cp config/dts.json.example condig/dts.json
-  - cp config/questdts.json.example condig/questdts.json
+  - cp test/travisConfig.json config/default.json
+  - cp config/dts.json.example config/dts.json
+  - cp config/questdts.json.example config/questdts.json
   - npm install
 
 script:
