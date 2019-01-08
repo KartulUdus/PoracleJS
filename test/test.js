@@ -26,6 +26,8 @@ const pokemon = Math.floor(Math.random() * 500)
 const randomId = Math.floor(Math.random() * 50000000000)
 const randomLat = (Math.random() * (59.46813 - 59.39226) + 59.39226).toFixed(6)
 const randomLon = (Math.random() * (24.861638 - 24.543385) + 24.543385).toFixed(6)
+const timeNow = Math.trunc((new Date().valueOf() / 1000))
+
 const timeIn20Min = Math.trunc((new Date().valueOf() / 1000) + Math.floor(Math.random() * 1200))
 const timeIn40Min = Math.trunc((new Date().valueOf() / 1000) + Math.floor(Math.random() * 2400))
 const randomIV = Math.floor(Math.random() * 15)
@@ -41,7 +43,8 @@ const view = {
 	timeIn20Min: timeIn20Min,
 	timeIn40Min: timeIn40Min,
 	randomIV: randomIV,
-	randomMove: randomMove
+	randomMove: randomMove,
+	timeNow: timeNow
 }
 
 
@@ -391,7 +394,7 @@ describe('Raid Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process a kakuna ex raid', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.raids.kakuna))
@@ -412,7 +415,7 @@ describe('Raid Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 
 	it('should process a beedrill instinct raid', (done) => {
@@ -434,7 +437,7 @@ describe('Raid Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process a pidgey level 3 raid', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.raids.pidgey))
@@ -455,7 +458,7 @@ describe('Raid Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process a pidgeotto raid by distance', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.raids.pidgeot))
@@ -476,7 +479,7 @@ describe('Raid Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 
 })
@@ -499,7 +502,7 @@ describe('Egg Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process level2 egg', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.eggs.level2))
@@ -518,7 +521,7 @@ describe('Egg Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process level4 instinct', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.eggs.level4instinct))
@@ -537,7 +540,7 @@ describe('Egg Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process level5 dostance', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.eggs.level5Tartu))
@@ -556,7 +559,7 @@ describe('Egg Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 })
 
@@ -579,7 +582,7 @@ describe('Quest Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process great-ball award', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.quests.itemGreatBallAward))
@@ -598,7 +601,7 @@ describe('Quest Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process stardust award', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.quests.stardust600))
@@ -617,7 +620,7 @@ describe('Quest Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 	it('should process awards by distance', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.quests.itemPinapBerryTartu))
@@ -636,6 +639,6 @@ describe('Quest Filters', () => {
 		}).catch((err) => {
 			done(err)
 		})
-	})
+	}).timeout(2000)
 
 })
