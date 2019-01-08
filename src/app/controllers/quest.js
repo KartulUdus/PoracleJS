@@ -95,7 +95,10 @@ class Quest extends Controller {
 				}
 
 				this.questWhoCares(data).then((whoCares) => {
-					if (whoCares) {
+					if (!whoCares[0]) {
+						resolve([])
+					}
+					else {
 						this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 							const view = {
 								questType: data.questType,
