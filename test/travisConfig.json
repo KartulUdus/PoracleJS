@@ -5,7 +5,7 @@
     "password": "dev",
     "database": "poracle",
     "port": "3306",
-    "connectionLimit": 30
+    "connectionLimit": 1
   },
   "general": {
     "logLevel": "warn",
