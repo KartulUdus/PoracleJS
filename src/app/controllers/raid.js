@@ -335,7 +335,6 @@ class Raid extends Controller {
 												this.addDiscordCache(cares.id)
 											}
 										})
-										log.error('jobs:', jobs)
 										resolve(jobs)
 									}).catch((err) => {
 										log.error(`getAddress on Raid errored with: ${err}`)
