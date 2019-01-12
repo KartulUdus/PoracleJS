@@ -72,7 +72,7 @@ const gymInfo = `CREATE TABLE \`gym-info\` (
   KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
-const humans = `CREATE TABLE \`humans\` (
+	const humans = `CREATE TABLE \`humans\` (
   \`id\` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   \`name\` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
   \`alerts_sent\` int(11) NOT NULL DEFAULT 0,
@@ -174,6 +174,39 @@ CREATE TABLE \`comsubmission\` (
   \`lucky\` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
+const activeQuest = `CREATE TABLE \`activeQuest\` (
+  \`pokestop_id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT 0,
+  \`pokestop_name\` longtext COLLATE utf8_unicode_ci,
+  \`type\` smallint(1) NOT NULL DEFAULT 0,
+  \`target\` smallint(6) NOT NULL DEFAULT 0,
+  \`rewards\` JSON,
+  \`conditions\` JSON,
+  \`pokestop_url\` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
+  \`created_timestamp\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  \`end_timestamp\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  \`latitude\` double NOT NULL,
+  \`longitude\` double NOT NULL,  
+  PRIMARY KEY ActiveQuest (\`pokestop_id\`, \`latitude\`, \`longitude\`),
+  KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
+
+const migration3 = {
+	gymInfo: `
+		ALTER TABLE \`gym-info\` 
+		ADD \`team\` smallint(1) DEFAULT 4,
+		DROP COLUMN \`description\`
+	`,
+	activeRaid: `
+	ALTER TABLE \`activeRaid\`
+		DROP COLUMN \`sponsor_id\`,
+		ADD \`cp\` smallint(6) NOT NULL DEFAULT 0,
+		ADD \`created_timestamp\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+		ADD \`raid_level\` smallint(6) NOT NULL DEFAULT 0,
+		ADD \`pokemon_id\` smallint(6) NOT NULL DEFAULT 0,
+		MODIFY COLUMN \`gym_id\` VARCHAR(50) NOT NULL DEFAULT 0,
+		ADD PRIMARY KEY ActiveRaid (\`pokemon_id\`, \`gym_id\`, \`start\`)
+	`
+}
 
 module.exports = async () => {
 	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database).then((tables) => {
@@ -190,29 +223,41 @@ module.exports = async () => {
 				queries.mysteryQuery(pokemon),
 				queries.mysteryQuery(pokestop),
 				queries.mysteryQuery(activeRaid),
+				queries.mysteryQuery(activeQuest),
 				queries.mysteryQuery(schemaVersion)
 			]).then(() => {
-				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '2'])
-				log.info('Database tables created, db_version 1 applied')
+				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '3'])
+				log.info('Database tables created, db_version 3 applied')
 			})
 		}
 		else {
 			queries.checkSchema().then((confirmedTables) => {
 				if (confirmedTables === 9) {
 					log.info('Database tables confirmed')
+					queries.selectOneQuery('schema_version', 'key', 'db_version').then((version) => {
+						if (version.val === 1) {
+							queries.dropTableQuery('quest').then((deleted) => {
+								queries.mysteryQuery(quest).then()
+								queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+								version.val = 2
+								log.info('applied Db migration 2')
+							})
+						}
+						if (version.val === 2) {
+							queries.mysteryQuery(migration3.gymInfo).then(() => {
+								queries.mysteryQuery(migration3.activeRaid).then(() => {
+									log.info('applied Db migration 3')
+									queries.mysteryQuery(activeQuest)
+									queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+									version.val = 3
+								})
+							})
+						}
+					})
 				}
 				else {
 					log.error(`didn't find Tables I like, this house has ${confirmedTables} similar tables \nPlease check database credentials for my PERSONAL database`)
 				}
-				queries.selectOneQuery('schema_version', 'key', 'db_version').then((version) => {
-					if (version.val === 1) {
-						queries.dropTableQuery('quest').then((deleted) => {
-							queries.mysteryQuery(quest).then()
-							queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
-							log.info('applied Db migration 2')
-						})
-					}
-				})
 			})
 		}
 	})

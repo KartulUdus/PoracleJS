@@ -20,6 +20,29 @@ CREATE DATABASE IF NOT EXISTS `poracle` DEFAULT CHARACTER SET utf8 COLLATE utf8_
 USE `poracle`;
 
 
+# Dump of table activeQuest
+# ------------------------------------------------------------
+
+DROP TABLE IF EXISTS `activeQuest`;
+
+CREATE TABLE `activeQuest` (
+  `pokestop_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
+  `pokestop_name` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
+  `type` smallint(1) NOT NULL DEFAULT 0,
+  `target` smallint(6) NOT NULL DEFAULT 0,
+  `rewards` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `conditions` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL,
+  `pokestop_url` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `created_timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `end_timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `latitude` double NOT NULL,
+  `longitude` double NOT NULL,
+  PRIMARY KEY (`pokestop_id`,`latitude`,`longitude`),
+  KEY `geocoded_latitude_longitude` (`latitude`,`longitude`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+
+
 # Dump of table activeRaid
 # ------------------------------------------------------------
 
@@ -29,15 +52,19 @@ CREATE TABLE `activeRaid` (
   `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `gym_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `gym_name` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
-  `start` timestamp NULL DEFAULT NULL,
+  `start` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00',
   `end` timestamp NULL DEFAULT NULL,
   `move_1` smallint(6) NOT NULL DEFAULT 0,
   `move_2` smallint(6) NOT NULL DEFAULT 0,
-  `sponsor_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
   `is_exclusive` tinyint(1) NOT NULL DEFAULT 0,
   `team` smallint(1) DEFAULT 4,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
+  `cp` smallint(6) NOT NULL DEFAULT 0,
+  `created_timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
+  `raid_level` smallint(6) NOT NULL DEFAULT 0,
+  `pokemon_id` smallint(6) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`pokemon_id`,`gym_id`,`start`),
   KEY `geocoded_id` (`id`),
   KEY `geocoded_latitude_longitude` (`latitude`,`longitude`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -118,10 +145,10 @@ CREATE TABLE `gym-info` (
   `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `park` tinyint(1) NOT NULL DEFAULT 0,
   `gym_name` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
-  `description` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
   `url` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
   `latitude` double NOT NULL,
   `longitude` double NOT NULL,
+  `team` smallint(1) DEFAULT 4,
   PRIMARY KEY (`id`),
   KEY `geocoded_park` (`park`),
   KEY `geocoded_latitude_longitude` (`latitude`,`longitude`)
@@ -336,7 +363,7 @@ LOCK TABLES `schema_version` WRITE;
 
 INSERT INTO `schema_version` (`key`, `val`)
 VALUES
-	('db_version',2);
+	('db_version',3);
 
 /*!40000 ALTER TABLE `schema_version` ENABLE KEYS */;
 UNLOCK TABLES;

@@ -14,7 +14,15 @@
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
     "max_pokemon": 475
   },
-
+  "map": {
+    "enabled": false,
+    "host": "127.0.0.1",
+    "port": "4040",
+    "startPos": "59.4372155, 24.7453688",
+    "startZoom": 13,
+    "tileServer": "http://{s}.tile.osm.org/{z}/{x}/{y}.png",
+    "spriteDir": "images"
+  },
   "locale": {
     "timeformat": "en-gb",
     "time": "LTS",
