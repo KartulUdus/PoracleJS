@@ -155,81 +155,91 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								this.raidWhoCares(data).then((whoCares) => {
-									if (!whoCares.length || !Array.isArray(whoCares)) resolve([])
+									if (!whoCares[0]) {
+										resolve([])
+										return null
+									}
+									let discordCacheBad = true // assume the worst
+									whoCares.forEach((cares) => {
+										const ch = this.getDiscordCache(cares.id)
+										if (ch <= config.discord.limitamount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+									})
+									if (discordCacheBad) {
+										resolve([])
+										return null
+									}
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
 										const jobs = []
 										whoCares.forEach((cares) => {
-											Promise.all([
-												this.getCp(data.pokemon_id, 20, 10, 10, 10),
-												this.getCp(data.pokemon_id, 20, 15, 15, 15),
-												this.getCp(data.pokemon_id, 25, 10, 10, 10),
-												this.getCp(data.pokemon_id, 25, 15, 15, 15)
-											]).then((cps) => {
-												const view = {
-													id: data.pokemon_id,
-													time: data.distime,
-													tthh: data.tth.hours,
-													tthm: data.tth.minutes,
-													tths: data.tth.seconds,
-													name: data.name,
-													mincp20: cps[0],
-													cp20: cps[1],
-													mincp25: cps[2],
-													cp25: cps[3],
-													gymname: data.gymname,
-													teamname: data.teamname,
-													description: data.description,
-													move1: data.quick_move,
-													move2: data.charge_move,
-													level: data.level,
-													ex: data.ex,
-													staticmap: data.staticmap,
-													detailsurl: data.url,
-													mapurl: data.mapurl,
-													applemap: data.applemap,
-													rocketmap: data.rocketmap,
-													imgurl: data.imgurl.toLowerCase(),
-													gif: pokemonGif(Number(data.pokemon_id)),
-													color: data.color,
-													// geocode stuff
-													lat: data.latitude.toString().substring(0, 8),
-													lon: data.longitude.toString().substring(0, 8),
-													addr: geoResult.addr,
-													streetNumber: geoResult.streetNumber,
-													streetName: geoResult.streetName,
-													zipcode: geoResult.zipcode,
-													country: geoResult.country,
-													countryCode: geoResult.countryCode,
-													city: geoResult.city,
-													state: geoResult.state,
-													stateCode: geoResult.stateCode,
-													neighbourhood: geoResult.neighbourhood,
-													flagemoji: geoResult.flag,
-													emojistring: data.emojistring,
-													areas: data.matched.join(', '),
+											const caresCache = _.cloneDeep(this.getDiscordCache(cares.id))
+											const view = {
+												id: data.pokemon_id,
+												time: data.distime,
+												tthh: data.tth.hours,
+												tthm: data.tth.minutes,
+												tths: data.tth.seconds,
+												name: data.name,
+												mincp20: this.getCp(data.pokemon_id, 20, 10, 10, 10),
+												cp20: this.getCp(data.pokemon_id, 20, 15, 15, 15),
+												mincp25: this.getCp(data.pokemon_id, 25, 10, 10, 10),
+												cp25: this.getCp(data.pokemon_id, 25, 15, 15, 15),
+												gymname: data.gymname,
+												teamname: data.teamname,
+												description: data.description,
+												move1: data.quick_move,
+												move2: data.charge_move,
+												level: data.level,
+												ex: data.ex,
+												staticmap: data.staticmap,
+												detailsurl: data.url,
+												mapurl: data.mapurl,
+												applemap: data.applemap,
+												rocketmap: data.rocketmap,
+												imgurl: data.imgurl.toLowerCase(),
+												gif: pokemonGif(Number(data.pokemon_id)),
+												color: data.color,
+												// geocode stuff
+												lat: data.latitude.toString().substring(0, 8),
+												lon: data.longitude.toString().substring(0, 8),
+												addr: geoResult.addr,
+												streetNumber: geoResult.streetNumber,
+												streetName: geoResult.streetName,
+												zipcode: geoResult.zipcode,
+												country: geoResult.country,
+												countryCode: geoResult.countryCode,
+												city: geoResult.city,
+												state: geoResult.state,
+												stateCode: geoResult.stateCode,
+												neighbourhood: geoResult.neighbourhood,
+												flagemoji: geoResult.flag,
+												emojistring: data.emojistring,
+												areas: data.matched.join(', '),
 
+											}
 
-												}
+											const template = JSON.stringify(dts.raid[`${cares.template}`])
+											let message = mustache.render(template, view)
+											log.debug(message)
+											message = JSON.parse(message)
 
-												const template = JSON.stringify(dts.raid[`${cares.template}`])
-												let message = mustache.render(template, view)
-												log.debug(message)
-												message = JSON.parse(message)
-
-												const work = {
-													message: message,
-													target: cares.id,
-													name: cares.name,
-													emoji: data.emoji
-												}
+											const work = {
+												message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
+												target: cares.id,
+												name: cares.name,
+												emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji
+											}
+											if (caresCache <= config.discord.limitamount + 1) {
 												jobs.push(work)
-											})
+												this.addDiscordCache(cares.id)
+											}
+
 										})
 										resolve(jobs)
 									}).catch((err) => {
 										log.error(`getAddress on hatched Raid errored with: ${err}`)
 									})
+
 								}).catch((err) => {
 									log.error(`raidWhoCares on hatched Raid errored with: ${err}`)
 								})
@@ -263,6 +273,7 @@ class Raid extends Controller {
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid level${data.level} appearead, but it seems it already hatched`)
 							resolve([])
+							return null
 						}
 
 						this.insertOrUpdateQuery(
@@ -277,10 +288,23 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								this.eggWhoCares(data).then((whoCares) => {
-									if (!whoCares.length || !Array.isArray(whoCares)) resolve([])
+									if (!whoCares[0]) {
+										resolve([])
+										return null
+									}
+									let discordCacheBad = true // assume the worst
+									whoCares.forEach((cares) => {
+										const ch = this.getDiscordCache(cares.id)
+										if (ch <= config.discord.limitamount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+									})
+									if (discordCacheBad) {
+										resolve([])
+										return null
+									}
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 										const jobs = []
 										whoCares.forEach((cares) => {
+											const caresCache = this.getDiscordCache(cares.id)
 											const view = {
 												time: data.hatchtime,
 												tthh: data.tth.hours,
@@ -321,19 +345,22 @@ class Raid extends Controller {
 											message = JSON.parse(message)
 
 											const work = {
-												lat: data.latitude.toString().substring(0, 8),
-												lon: data.longitude.toString().substring(0, 8),
-												message: message,
+												message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
 												target: cares.id,
 												name: cares.name,
 												emoji: []
 											}
-											jobs.push(work)
+											if (caresCache <= config.discord.limitamount + 1) {
+												jobs.push(work)
+												this.addDiscordCache(cares.id)
+											}
 										})
+										log.error('jobs:', jobs)
 										resolve(jobs)
 									}).catch((err) => {
 										log.error(`getAddress on Raid errored with: ${err}`)
 									})
+
 								}).catch((err) => {
 									log.error(`eggWhoCares on Raid errored with: ${err}`)
 								})

@@ -95,55 +95,68 @@ class Quest extends Controller {
 				}
 
 				this.questWhoCares(data).then((whoCares) => {
-					if (whoCares) {
-						this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
-							const view = {
-								questType: data.questType,
-								reward: data.rewardData.rewardstring.replace(/\n/g, ' '),
-								conditions: data.conditionstring.replace(/\n/g, ' '),
-								monsterNames: monsternames.join(', '),
-								itemNames: itemnames.join(', '),
-								stardust: data.type === 3 ? 'stardust' : '',
-								imgurl: data.imgurl.toLowerCase(),
-								name: data.pokestop_name.replace(/\n/g, ' '),
-								url: data.pokestop_url,
-								minCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 10, 10, 10) : '',
-								maxCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 15, 15, 15) : '',
-								mapurl: `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`,
-								applemap: `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`,
-								staticmap: data.staticmap,
-								// geocode stuff
-								lat: data.latitude.toString().substring(0, 8),
-								lon: data.longitude.toString().substring(0, 8),
-								addr: geoResult.addr,
-								streetNumber: geoResult.streetNumber,
-								streetName: geoResult.streetName,
-								zipcode: geoResult.zipcode,
-								country: geoResult.country,
-								countryCode: geoResult.countryCode,
-								city: geoResult.city,
-								state: geoResult.state,
-								stateCode: geoResult.stateCode,
-								neighbourhood: geoResult.neighbourhood,
-								flagemoji: geoResult.flag
-							}
-
-							whoCares.forEach((cares) => {
-								const template = JSON.stringify(this.mdts.quest[cares.template])
-								const message = mustache.render(template, view)
-								const work = {
-									lat: data.latitude.toString().substring(0, 8),
-									lon: data.longitude.toString().substring(0, 8),
-									message: JSON.parse(message),
-									target: cares.id,
-									name: cares.name,
-									emoji: []
-								}
-								jobs.push(work)
-							})
-							resolve(jobs)
-						})
+					if (!whoCares[0]) {
+						resolve([])
+						return null
 					}
+					let discordCacheBad = true // assume the worst
+					whoCares.forEach((cares) => {
+						const ch = this.getDiscordCache(cares.id)
+						if (ch <= config.discord.limitamount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+					})
+					if (discordCacheBad) {
+						resolve([])
+						return null
+					}
+					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
+						const view = {
+							questType: data.questType,
+							reward: data.rewardData.rewardstring.replace(/\n/g, ' '),
+							conditions: data.conditionstring.replace(/\n/g, ' '),
+							monsterNames: monsternames.join(', '),
+							itemNames: itemnames.join(', '),
+							stardust: data.type === 3 ? 'stardust' : '',
+							imgurl: data.imgurl.toLowerCase(),
+							name: data.pokestop_name.replace(/\n/g, ' '),
+							url: data.pokestop_url,
+							minCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 10, 10, 10) : '',
+							maxCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 15, 15, 15) : '',
+							mapurl: `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`,
+							applemap: `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`,
+							staticmap: data.staticmap,
+							// geocode stuff
+							lat: data.latitude.toString().substring(0, 8),
+							lon: data.longitude.toString().substring(0, 8),
+							addr: geoResult.addr,
+							streetNumber: geoResult.streetNumber,
+							streetName: geoResult.streetName,
+							zipcode: geoResult.zipcode,
+							country: geoResult.country,
+							countryCode: geoResult.countryCode,
+							city: geoResult.city,
+							state: geoResult.state,
+							stateCode: geoResult.stateCode,
+							neighbourhood: geoResult.neighbourhood,
+							flagemoji: geoResult.flag
+						}
+
+						whoCares.forEach((cares) => {
+							const caresCache = this.getDiscordCache(cares.id)
+							const template = JSON.stringify(this.mdts.quest[cares.template])
+							const message = mustache.render(template, view)
+							const work = {
+								message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : JSON.parse(message),
+								target: cares.id,
+								name: cares.name,
+								emoji: []
+							}
+							if (caresCache <= config.discord.limitamount + 1) {
+								jobs.push(work)
+								this.addDiscordCache(cares.id)
+							}
+						})
+						resolve(jobs)
+					})
 				})
 			})
 		})

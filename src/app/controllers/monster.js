@@ -139,6 +139,7 @@ class Monster extends Controller {
 			if (data.tth.firstDateWasLater) {
 				log.warn(`Weird, the ${data.name} already disappeared`)
 				resolve([])
+				return null
 			}
 
 			this.insertOrUpdateQuery(
@@ -153,13 +154,25 @@ class Monster extends Controller {
 				data.matched = matchedAreas
 				this.monsterWhoCares(data).then((whocares) => {
 					// if noone cares or the result is not iterable, break out of processing
-					if (!whocares.length || !Array.isArray(whocares)) resolve([])
+					if (!whocares[0]) {
+						resolve([])
+						return null
+					}
+					let discordCacheBad = true // assume the worst
+					whocares.forEach((cares) => {
+						const ch = this.getDiscordCache(cares.id)
+						if (ch <= config.discord.limitamount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+					})
+					if (discordCacheBad) {
+						resolve([])
+						return null
+					}
 					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
 						const jobs = []
 						whocares.forEach((cares) => {
 
-
+							const caresCache = this.getDiscordCache(cares.id)
 							const view = {
 								id: data.pokemon_id,
 								time: data.distime,
@@ -217,12 +230,15 @@ class Monster extends Controller {
 							const work = {
 								lat: data.latitude.toString().substring(0, 8),
 								lon: data.longitude.toString().substring(0, 8),
-								message: message,
+								message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
 								target: cares.id,
 								name: cares.name,
-								emoji: data.emoji
+								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji
 							}
-							jobs.push(work)
+							if (caresCache <= config.discord.limitamount + 1) {
+								jobs.push(work)
+								this.addDiscordCache(cares.id)
+							}
 
 						})
 						resolve(jobs)
@@ -230,6 +246,7 @@ class Monster extends Controller {
 					}).catch((err) => {
 						log.error(`getAddress errored with: ${err}`)
 					})
+
 				}).catch((err) => {
 					log.error(`monsterWhoCares errored with: ${err}`)
 				})
