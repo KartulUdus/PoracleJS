@@ -6,7 +6,9 @@ const mustache = require('mustache')
 const monsterData = require(config.locale.monstersJson)
 const typeData = require('../util/types')
 const _ = require('lodash')
-
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
 
 class Quest extends Controller {
 
@@ -65,6 +67,16 @@ class Quest extends Controller {
 					data.staticmap = ''
 				}
 			}
+			data.end = Math.trunc(moment(new Date()).tz(geoTz(data.latitude, data.longitude).toString()).endOf('day').valueOf()/1000)
+
+			this.insertOrUpdateQuery(
+				'`activeQuest`',
+				['pokestop_id', 'pokestop_name', 'type', 'target', 'rewards', 'conditions', 'pokestop_url', 'created_timestamp', 'end_timestamp', 'latitude', 'longitude'],
+				[`'${data.pokestop_id}'`, `'${data.name}'`, `${data.type}`, `${data.target}`, `'${JSON.stringify(data.rewards)}'`,  `'${JSON.stringify(data.conditions)}'`,`'${data.pokestop_url}'`,   'UTC_TIMESTAMP()', `FROM_UNIXTIME(${data.end})`, `${data.latitude}`, `${data.longitude}`]
+			).catch((err) => {
+				log.error(`Updating activeQuest table errored with: ${err}`)
+			})
+
 			Promise.all([
 				this.getQuestTypeString(data),
 				this.getRewardSting(data),

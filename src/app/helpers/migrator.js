@@ -10,7 +10,7 @@ const pokestop = `CREATE TABLE \`pokestop\` (
   \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   \`name\` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   \`url\` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
-  \`lured\` TIMESTAMP NULL DEFAULT NULL,
+  \`lured\`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   \`latitude\` double NOT NULL,
   \`longitude\` double NOT NULL,
   KEY \`pokemstop_id\` (\`id\`),
@@ -205,6 +205,10 @@ const migration3 = {
 		ADD \`pokemon_id\` smallint(6) NOT NULL DEFAULT 0,
 		MODIFY COLUMN \`gym_id\` VARCHAR(50) NOT NULL DEFAULT 0,
 		ADD PRIMARY KEY ActiveRaid (\`pokemon_id\`, \`gym_id\`, \`start\`)
+	`,
+	pokestop: `
+	ALTER TABLE \`pokestop\`
+		MODIFY COLUMN \`lured\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 	`
 }
 
@@ -246,10 +250,12 @@ module.exports = async () => {
 						if (version.val === 2) {
 							queries.mysteryQuery(migration3.gymInfo).then(() => {
 								queries.mysteryQuery(migration3.activeRaid).then(() => {
-									log.info('applied Db migration 3')
-									queries.mysteryQuery(activeQuest)
-									queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
-									version.val = 3
+									queries.mysteryQuery(migration3.pokestop).then(() => {
+										log.info('applied Db migration 3')
+										queries.mysteryQuery(activeQuest)
+										queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+										version.val = 3
+									})
 								})
 							})
 						}

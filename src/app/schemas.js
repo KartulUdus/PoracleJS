@@ -53,5 +53,18 @@ module.exports = function schema(fastify, opts, next) {
 				longitude: { type: 'number' }
 			}
 		})
+		.addSchema({
+			$id: 'pokestopMessage',
+			type: 'object',
+			required: ['pokestop_id', 'latitude', 'longitude', 'lure_expiration', 'name', 'url'],
+			properties: {
+				pokestop_id: { type: 'string' },
+				latitude: { type: 'number' },
+				longitude: { type: 'number' },
+				lure_expiration: { type: 'number' },
+				name: { type: 'string' },
+				url: { type: 'string' }
+			}
+		})
 	next()
 }

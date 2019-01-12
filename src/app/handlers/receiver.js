@@ -120,6 +120,23 @@ module.exports = async (req, reply) => {
 				reply.send({ webserver: 'happy' })
 				break
 			}
+			case 'pokestop': {
+				const p = hook.message
+				if (!p.name) p.name = ''
+				if (!p.url) p.url = ''
+				p.name = p.name.replace(/"/g, '')
+				p.name = p.name.replace(/'/g, '')
+				p.name = p.name.replace(/\n/g, '')
+				monsterController.insertOrUpdateQuery(
+					'`pokestop`',
+					['id', 'name', 'url', 'lured', 'latitude', 'longitude'],
+					[`'${g.id}'`, `'${g.name}'`, `${g.park}`, `'${g.description}'`, `'${g.url}'`, `${g.latitude}`, `${g.longitude}`]
+				)
+				log.info(`Saved gym-details for ${g.name}`)
+
+				reply.send({ webserver: 'happy' })
+				break
+			}
 			case 'quest': {
 				const q = hook.message
 				questController.handle(q).then((work) => {
