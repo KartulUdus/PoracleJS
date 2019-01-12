@@ -6,6 +6,7 @@ const config = require('config')
 const migrator = require('../helpers/migrator')
 const log = require('../logger')
 const mysql = require('promise-mysql2')
+const emojiStrip = require('emoji-strip')
 
 const db = mysql.createPool(config.db)
 const Controller = require('../controllers/controller')
@@ -49,7 +50,7 @@ client.on('message', (msg) => {
 			.then((isregistered) => {
 				if (isregistered) msg.react('👌')
 				if (!isregistered) {
-					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.author.id}'`, `'${msg.author.username}'`, '\'[]\''])
+					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.author.id}'`, `'${emojiStrip(msg.author.username)}'`, '\'[]\''])
 					msg.react('✅')
 					msg.author.send(dts.greeting)
 					log.info(`${msg.author.username} registered`)
@@ -830,7 +831,7 @@ client.on('message', (msg) => {
 				msg.react('👌')
 				return null
 			}
-			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.channel.id}'`, `'${msg.channel.name}'`, '\'[]\''])
+			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.channel.id}'`, `'${emojiStrip(msg.channel.name)}'`, '\'[]\''])
 			msg.react('✅')
 			msg.reply(`${msg.channel.name} has been registered`)
 			log.info(`${msg.author.username} registered ${msg.channel.name}`)
