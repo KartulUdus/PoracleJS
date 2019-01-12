@@ -41,11 +41,11 @@ _.forEach(config.discord.token, (k) => {
 
 
 discord.on('message', (worker, msg) => {
-	if(msg.reason === 'seppuku'){
+	if (msg.reason === 'seppuku') {
 		log.info(`Discord worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 10)}...`)
 		discord.fork({ k: msg.key })
 	}
-	else if(msg.reason === 'hungry'){
+	else if (msg.reason === 'hungry') {
 		if (Math.random() >= 0.999) log.debug(`Discord worker #${worker.id} requested food`)
 		if (queue.length) {
 			worker.send({

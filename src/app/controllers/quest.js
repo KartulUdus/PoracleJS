@@ -101,8 +101,8 @@ class Quest extends Controller {
 					}
 					let discordCacheBad = true // assume the worst
 					whoCares.forEach((cares) => {
-						let ch = this.getDiscordCache(cares.id)
-						if (ch <= config.discord.limitamount + 1) discordCacheBad = false  // but if anyone cares and has not exceeded cache, go on
+						const ch = this.getDiscordCache(cares.id)
+						if (ch <= config.discord.limitamount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
 					})
 					if (discordCacheBad) {
 						resolve([])
@@ -141,7 +141,7 @@ class Quest extends Controller {
 						}
 
 						whoCares.forEach((cares) => {
-							let caresCache = this.getDiscordCache(cares.id)
+							const caresCache = this.getDiscordCache(cares.id)
 							const template = JSON.stringify(this.mdts.quest[cares.template])
 							const message = mustache.render(template, view)
 							const work = {
@@ -150,7 +150,7 @@ class Quest extends Controller {
 								name: cares.name,
 								emoji: []
 							}
-							if(caresCache <= config.discord.limitamount + 1){
+							if (caresCache <= config.discord.limitamount + 1) {
 								jobs.push(work)
 								this.addDiscordCache(cares.id)
 							}

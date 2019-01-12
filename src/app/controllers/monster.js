@@ -155,8 +155,8 @@ class Monster extends Controller {
 					}
 					let discordCacheBad = true // assume the worst
 					whocares.forEach((cares) => {
-						let ch = this.getDiscordCache(cares.id)
-						if (ch <= config.discord.limitamount + 1) discordCacheBad = false  // but if anyone cares and has not exceeded cache, go on
+						const ch = this.getDiscordCache(cares.id)
+						if (ch <= config.discord.limitamount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
 					})
 					if (discordCacheBad) {
 						resolve([])
@@ -167,7 +167,7 @@ class Monster extends Controller {
 						const jobs = []
 						whocares.forEach((cares) => {
 
-							let caresCache = this.getDiscordCache(cares.id)
+							const caresCache = this.getDiscordCache(cares.id)
 							const view = {
 								id: data.pokemon_id,
 								time: data.distime,
@@ -230,7 +230,7 @@ class Monster extends Controller {
 								name: cares.name,
 								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji
 							}
-							if(caresCache <= config.discord.limitamount + 1){
+							if (caresCache <= config.discord.limitamount + 1) {
 								jobs.push(work)
 								this.addDiscordCache(cares.id)
 							}

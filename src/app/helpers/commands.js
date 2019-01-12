@@ -1,7 +1,5 @@
 const { Client } = require('discord.js')
 const _ = require('lodash')
-var emojiStrip = require('emoji-strip')
-
 
 const client = new Client()
 const config = require('config')

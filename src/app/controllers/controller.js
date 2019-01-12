@@ -163,12 +163,12 @@ class Controller {
 		})
 	}
 
-	 getDiscordCache(id) {
-		 let ch = _.cloneDeep(this.discordcache.get(id))
-		 if (ch === undefined) {
-			 this.discordcache.put(id, 1)
-			 ch = 1
-		 }
+	getDiscordCache(id) {
+		let ch = _.cloneDeep(this.discordcache.get(id))
+		if (ch === undefined) {
+			this.discordcache.put(id, 1)
+			ch = 1
+		}
 		return ch
 	}
 
@@ -338,19 +338,18 @@ class Controller {
 		})
 	}
 
-	async getCp(monster, level, ivAttack, ivDefense, ivStamina) {
-		return new Promise((resolve) => {
-			const cpMulti = this.cpMultipliers[level]
-			const atk = baseStats[monster].attack
-			const def = baseStats[monster].defense
-			const sta = baseStats[monster].stamina
+	getCp(monster, level, ivAttack, ivDefense, ivStamina) {
 
-			const cp = Math.max(10, Math.floor((atk + ivAttack) *
-				((def + ivDefense) ** 0.5) *
-				((sta + ivStamina) ** 0.5) *
-				((cpMulti ** 2) / 10)))
-			resolve(cp)
-		})
+		const cpMulti = this.cpMultipliers[level]
+		const atk = baseStats[monster].attack
+		const def = baseStats[monster].defense
+		const sta = baseStats[monster].stamina
+
+		const cp = Math.max(10, Math.floor((atk + ivAttack) *
+			((def + ivDefense) ** 0.5) *
+			((sta + ivStamina) ** 0.5) *
+			((cpMulti ** 2) / 10)))
+		return cp
 	}
 	async checkSchema() {
 		return new Promise((resolve) => {
