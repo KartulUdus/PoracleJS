@@ -2,7 +2,7 @@ const log = require('../logger')
 const _ = require('lodash')
 const config = require('config')
 const mysql = require('promise-mysql2')
-const cp = require('child_process')
+const discord = require('cluster')
 
 const db = mysql.createPool(config.db)
 const Cache = require('ttl')
@@ -34,39 +34,27 @@ setInterval(() => {
 	}
 }, 30000)
 
-const discord = {}
+discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
+_.forEach(config.discord.token, (k) => {
+	discord.fork({ k: k })
+})
 
 
-// const discord = require('cluster')
-
-for (let i = 0; i < config.discord.token.length; i += 1) {
-	discord[i] = cp.fork(`${__dirname}/../helpers/discord.js`)
-	log.info(`Discord botto #${i + 1} forked. PID:${discord[i].pid}`)
-
-	discord[i].send({
-		reason: 'identity',
-		key: config.discord.token[i]
-	})
-
-	discord[i].on('message', (msg) => {
-		if (msg.reason === 'hungry') {
-			if (Math.random() >= 0.999) log.debug(`Discord botto #${i + 1} sent message:`, msg)
-			if (queue.length) {
-				discord[i].send({
-					reason: 'food',
-					job: queue.shift()
-				})
-			}
+discord.on('message', (worker, msg) => {
+	if(msg.reason === 'seppuku'){
+		log.info(`Discord worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 10)}...`)
+		discord.fork({ k: msg.key })
+	}
+	else if(msg.reason === 'hungry'){
+		if (Math.random() >= 0.999) log.debug(`Discord worker #${worker.id} requested food`)
+		if (queue.length) {
+			worker.send({
+				reason: 'food',
+				job: queue.shift()
+			})
 		}
-	})
-
-	discord[i].on('close' || 'error' || 'disconnect', () => {
-		discord[i] = cp.fork(`${__dirname}/../helpers/discord.js`)
-		log.info(`Discord botto #${i + 1} died, cloning ... PID:${discord[i].pid}`)
-		discord[i].send({ reason: 'identity', key: config.discord.token[i] })
-	})
-
-}
+	}
+})
 
 module.exports = async (req, reply) => {
 	let data = req.body
@@ -78,25 +66,8 @@ module.exports = async (req, reply) => {
 					cache.put(`${hook.message.encounter_id}_${hook.message.weight}`, 'cached')
 					monsterController.handle(hook.message).then((work) => {
 						work.forEach((job) => {
-							let ch = _.cloneDeep(discordcache.get(job.target))
-							if (ch === undefined) {
-								discordcache.put(job.target, 1)
-								ch = 1
-							}
-							let finalMessage = _.cloneDeep(job.message)
-							if (ch === config.discord.limitamount + 1) {
-								discordcache.put(job.target, ch + 1)
-								finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
-								job.message = finalMessage
-								queue.push(job)
-								log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
-							}
-							if (ch <= config.discord.limitamount) {
-								job.message = finalMessage
-								discordcache.put(job.target, ch + 1)
-								queue.push(job)
-								monsterController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
-							}
+							queue.push(job)
+							monsterController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 						})
 					})
 				}
@@ -114,25 +85,8 @@ module.exports = async (req, reply) => {
 				raidController.handle(hook.message)
 					.then((work) => {
 						work.forEach((job) => {
-							let ch = _.cloneDeep(discordcache.get(job.target))
-							if (ch === undefined) {
-								discordcache.put(job.target, 1)
-								ch = 1
-							}
-							let finalMessage = _.cloneDeep(job.message)
-							if (ch === config.discord.limitamount + 1) {
-								discordcache.put(job.target, ch + 1)
-								finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
-								job.message = finalMessage
-								queue.push(job)
-								log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
-							}
-							if (ch <= config.discord.limitamount) {
-								discordcache.put(job.target, ch + 1)
-								job.message = finalMessage
-								queue.push(job)
-								raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
-							}
+							queue.push(job)
+							raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 						})
 					})
 
@@ -169,25 +123,8 @@ module.exports = async (req, reply) => {
 				const q = hook.message
 				questController.handle(q).then((work) => {
 					work.forEach((job) => {
-						let ch = _.cloneDeep(discordcache.get(job.target))
-						if (ch === undefined) {
-							discordcache.put(job.target, 1)
-							ch = 1
-						}
-						let finalMessage = _.cloneDeep(job.message)
-						if (ch === config.discord.limitamount + 1) {
-							discordcache.put(job.target, ch + 1)
-							finalMessage = `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`
-							job.message = finalMessage
-							queue.push(job)
-							log.info(`${job.name} reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds`)
-						}
-						if (ch <= config.discord.limitamount) {
-							discordcache.put(job.target, ch + 1)
-							job.message = finalMessage
-							queue.push(job)
-							raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
-						}
+						queue.push(job)
+						raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 					})
 				})
 

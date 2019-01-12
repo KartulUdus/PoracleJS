@@ -27,6 +27,7 @@
     "config": "^1.28.1",
     "discord.js": "^11.3.0",
     "emoji-flags": "^1.2.0",
+    "emoji-strip": "^1.0.1",
     "erlpack": "github:hammerandchisel/erlpack",
     "fastify": "^1.0.0-rc.1",
     "fastify-static": "^1.0.0",

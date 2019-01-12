@@ -142,6 +142,7 @@ class Monster extends Controller {
 			if (data.tth.firstDateWasLater) {
 				log.warn(`Weird, the ${data.name} already disappeared`)
 				resolve([])
+				return null
 			}
 
 			this.pointInArea([data.latitude, data.longitude]).then((matchedAreas) => {
@@ -150,85 +151,97 @@ class Monster extends Controller {
 					// if noone cares or the result is not iterable, break out of processing
 					if (!whocares[0]) {
 						resolve([])
+						return null
 					}
-					else {
-						this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
+					let discordCacheBad = true // assume the worst
+					whocares.forEach((cares) => {
+						let ch = this.getDiscordCache(cares.id)
+						if (ch <= config.discord.limitamount + 1) discordCacheBad = false  // but if anyone cares and has not exceeded cache, go on
+					})
+					if (discordCacheBad) {
+						resolve([])
+						return null
+					}
+					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 
-							const jobs = []
-							whocares.forEach((cares) => {
+						const jobs = []
+						whocares.forEach((cares) => {
 
+							let caresCache = this.getDiscordCache(cares.id)
+							const view = {
+								id: data.pokemon_id,
+								time: data.distime,
+								tthh: data.tth.hours,
+								tthm: data.tth.minutes,
+								tths: data.tth.seconds,
+								name: data.name,
+								gender: genderData[data.gender],
+								move1: data.quick_move,
+								move2: data.charge_move,
+								iv: data.iv,
+								cp: data.cp,
+								level: data.pokemon_level,
+								atk: data.individual_attack,
+								def: data.individual_defense,
+								sta: data.individual_stamina,
+								weight: data.weight,
+								staticmap: data.staticmap,
+								mapurl: data.mapurl,
+								applemap: data.applemap,
+								rocketmap: data.rocketmap,
+								form: data.formname,
+								imgurl: data.imgurl.toLowerCase(),
+								gif: pokemonGif(Number(data.pokemon_id)),
+								color: data.color,
+								ivcolor: data.ivcolor,
+								boost: data.boost,
+								boostemoji: data.boostemoji,
+								areas: data.matched.join(','),
 
-								const view = {
-									id: data.pokemon_id,
-									time: data.distime,
-									tthh: data.tth.hours,
-									tthm: data.tth.minutes,
-									tths: data.tth.seconds,
-									name: data.name,
-									gender: genderData[data.gender],
-									move1: data.quick_move,
-									move2: data.charge_move,
-									iv: data.iv,
-									cp: data.cp,
-									level: data.pokemon_level,
-									atk: data.individual_attack,
-									def: data.individual_defense,
-									sta: data.individual_stamina,
-									weight: data.weight,
-									staticmap: data.staticmap,
-									mapurl: data.mapurl,
-									applemap: data.applemap,
-									rocketmap: data.rocketmap,
-									form: data.formname,
-									imgurl: data.imgurl.toLowerCase(),
-									gif: pokemonGif(Number(data.pokemon_id)),
-									color: data.color,
-									ivcolor: data.ivcolor,
-									boost: data.boost,
-									boostemoji: data.boostemoji,
-									areas: data.matched.join(','),
+								// geocode stuff
+								lat: data.latitude.toString().substring(0, 8),
+								lon: data.longitude.toString().substring(0, 8),
+								addr: geoResult.addr,
+								streetNumber: geoResult.streetNumber,
+								streetName: geoResult.streetName,
+								zipcode: geoResult.zipcode,
+								country: geoResult.country,
+								countryCode: geoResult.countryCode,
+								city: geoResult.city,
+								state: geoResult.state,
+								stateCode: geoResult.stateCode,
+								flagemoji: geoResult.flag,
+								neighbourhood: geoResult.neighbourhood,
+								emojiString: data.emojiString
 
-									// geocode stuff
-									lat: data.latitude.toString().substring(0, 8),
-									lon: data.longitude.toString().substring(0, 8),
-									addr: geoResult.addr,
-									streetNumber: geoResult.streetNumber,
-									streetName: geoResult.streetName,
-									zipcode: geoResult.zipcode,
-									country: geoResult.country,
-									countryCode: geoResult.countryCode,
-									city: geoResult.city,
-									state: geoResult.state,
-									stateCode: geoResult.stateCode,
-									flagemoji: geoResult.flag,
-									neighbourhood: geoResult.neighbourhood,
-									emojiString: data.emojiString
+							}
+							const monsterDts = data.iv === -1 && this.mdts.monsterNoIv
+								? this.mdts.monsterNoIv[`${cares.template}`]
+								: this.mdts.monster[`${cares.template}`]
+							const template = JSON.stringify(monsterDts)
+							let message = mustache.render(template, view)
+							message = JSON.parse(message)
 
-								}
-								const monsterDts = data.iv === -1 && this.mdts.monsterNoIv
-									? this.mdts.monsterNoIv[`${cares.template}`]
-									: this.mdts.monster[`${cares.template}`]
-								const template = JSON.stringify(monsterDts)
-								let message = mustache.render(template, view)
-								message = JSON.parse(message)
-
-								const work = {
-									lat: data.latitude.toString().substring(0, 8),
-									lon: data.longitude.toString().substring(0, 8),
-									message: message,
-									target: cares.id,
-									name: cares.name,
-									emoji: data.emoji
-								}
+							const work = {
+								lat: data.latitude.toString().substring(0, 8),
+								lon: data.longitude.toString().substring(0, 8),
+								message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
+								target: cares.id,
+								name: cares.name,
+								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji
+							}
+							if(caresCache <= config.discord.limitamount + 1){
 								jobs.push(work)
+								this.addDiscordCache(cares.id)
+							}
 
-							})
-							resolve(jobs)
-
-						}).catch((err) => {
-							log.error(`getAddress errored with: ${err}`)
 						})
-					}
+						resolve(jobs)
+
+					}).catch((err) => {
+						log.error(`getAddress errored with: ${err}`)
+					})
+
 				}).catch((err) => {
 					log.error(`monsterWhoCares errored with: ${err}`)
 				})

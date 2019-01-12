@@ -1,5 +1,7 @@
 const { Client } = require('discord.js')
 const _ = require('lodash')
+var emojiStrip = require('emoji-strip')
+
 
 const client = new Client()
 const config = require('config')
@@ -49,7 +51,7 @@ client.on('message', (msg) => {
 			.then((isregistered) => {
 				if (isregistered) msg.react('👌')
 				if (!isregistered) {
-					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.author.id}'`, `'${msg.author.username}'`, '\'[]\''])
+					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.author.id}'`, `'${emojiStrip(msg.author.username)}'`, '\'[]\''])
 					msg.react('✅')
 					msg.author.send(dts.greeting)
 					log.info(`${msg.author.username} registered`)

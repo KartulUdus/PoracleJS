@@ -1,11 +1,12 @@
-const { Client } = require('discord.js')
-
-const client = new Client()
 const config = require('config')
+const { Client } = require('discord.js')
+const client = new Client()
 const log = require('../logger')
+const discord = require('cluster')
+
 
 function startBeingHungry() {
-	log.debug(`Discord worker ${process.pid} started being hungry`)
+	log.debug(`Discord worker #${discord.worker.id} started being hungry`)
 	const hungryInterval = setInterval(() => {
 		process.send({ reason: 'hungry' })
 	}, 100)
@@ -55,16 +56,19 @@ client.on('warn', (warning) => {
 })
 
 client.on('error', (e) => {
-	log.info(`Discord worker sent me an error, commiting seppuku just in case ${e}`)
-	process.disconnect()
+	log.info(`Discord worker sent me an error, commiting seppuku just in case ${e.message}`)
+	process.exit()
 })
 
-process.on('message', (msg) => {
-	if (msg.reason === 'identity') {
-		client.login(msg.key)
-			.catch((err) => {
-				log.error(`Discord worker not signed in: ${err.message}`)
-				process.disconnect()
-			})
-	}
+client.login(process.env.k)
+	.catch((err) => {
+		log.error(`Discord worker not signed in: ${err.message}`)
+		process.exit()
+	})
+
+process.on('exit', () => {
+	process.send({
+		reason: 'seppuku',
+		key: process.env.k
+	})
 })

@@ -15,6 +15,14 @@ const baseStats = require('../util/base_stats')
 const cpMultipliers = require('../util/cp-multipliers')
 const emojiFlags = require('emoji-flags')
 
+const Cache = require('ttl')
+
+const discordcache = new Cache({
+	ttl: config.discord.limitsec * 1000,
+})
+discordcache.on('put', (key, val, ttl) => { })
+discordcache.on('hit', (key, val) => { })
+
 // Init the chosen geocoder
 const geocoder = (() => {
 	switch (config.geocoding.provider.toLowerCase()) {
@@ -54,6 +62,7 @@ class Controller {
 		this.geofence = geofence
 		this.cpMultipliers = cpMultipliers
 		this.webshot = webshot
+		this.discordcache = discordcache
 	}
 
 	// Geocoding stuff below
@@ -152,6 +161,25 @@ class Controller {
 				resolve(tempPath)
 			})
 		})
+	}
+
+	 getDiscordCache(id) {
+		 let ch = _.cloneDeep(this.discordcache.get(id))
+		 if (ch === undefined) {
+			 this.discordcache.put(id, 1)
+			 ch = 1
+		 }
+		return ch
+	}
+
+	addDiscordCache(id) {
+		let ch = _.cloneDeep(this.discordcache.get(id))
+		if (ch === undefined) {
+			this.discordcache.put(id, 1)
+			ch = 1
+		}
+		this.discordcache.put(id, ch + 1)
+		return true
 	}
 
 	// DB queries
