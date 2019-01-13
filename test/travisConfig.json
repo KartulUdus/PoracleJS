@@ -27,7 +27,7 @@
   "geocoding": {
     "provider": "OSM",
     "staticProvider": "",
-    "geocodingKey":["AIzaSyD4nFUhRqGYw4f06H9zmNURafnwbdvMMh4"],
+    "geocodingKey":[""],
     "staticKey":[""],
     "width": 250,
     "height": 175,
