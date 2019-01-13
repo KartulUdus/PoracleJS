@@ -39,7 +39,7 @@
   },
 
   "discord": {
-    "token": ["MzQ3Njk5NzIwNTM5NjAyOTQ1.DoljaA.WkVG27sOXuAVCx4bHVSgN67if2Y"],
+    "token": [""],
     "channel": "testing",
     "admins": ["222742859059560458"],
     "comDayResultChannelId":"414388133329764352",
