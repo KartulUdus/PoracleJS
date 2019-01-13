@@ -10,10 +10,10 @@ It allows for high end-user configurability using discord `!commands` and privat
 #### Links
 
 - [WIKI](https://kartuludus.github.io/PoracleJS/#/) - Useful for words of wizdom!  
-- [Discord](https://discord.gg/WDMr8xX) - Place for #help and #announcments  
+- [Discord](https://discord.gg/AathPCp) - Place for #help and #announcments  
 
 ### Install
-- [Install NodeJS](https://nodejs.org/en/)
+- [Install NodeJS](https://nodejs.org/en/) version 8 or higher
 - [Create a discord bot and invite it to your server](https://kartuludus.github.io/PoracleJS/#/discordbot)
 - [Install a mysql database](https://kartuludus.github.io/PoracleJS/#/mysql)
 ```bash
