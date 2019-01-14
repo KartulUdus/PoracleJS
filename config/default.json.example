@@ -40,6 +40,7 @@
   "discord": {
     "token": ["YOUR DISCORD TOKEN"],
     "channel": "general",
+    "userRole": "roleNameHere",
     "admins": ["222742859059560458"],
     "comDayResultChannelId":"383608765972217857",
     "modRole":"sudo",

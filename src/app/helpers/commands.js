@@ -33,6 +33,52 @@ client.on('ready', () => {
 
 })
 
+if (config.discord.userRole) {
+	client.on('guildMemberUpdate', (oldMember, newMember) => {
+
+		let before = false
+		let after = false
+		oldMember.roles.forEach((role) => {
+			if (role.name === config.discord.userRole) before = true
+		})
+		newMember.roles.forEach((role) => {
+			if (role.name === config.discord.userRole) after = true
+		})
+
+		if (!before && after) {
+			query.countQuery('id', 'humans', 'id', oldMember.user.id)
+				.then((isregistered) => {
+					if (!isregistered) {
+						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${oldMember.user.id}'`, `'${emojiStrip(oldMember.user.username)}'`, '\'[]\''])
+						oldMember.user.send(dts.greeting)
+						log.info(`${oldMember.user.username} registered by assigning  @${config.discord.userRole} `)
+					}
+				})
+				.catch((err) => {
+					log.error(`Role based registration errored with: ${err}`)
+				})
+		}
+
+		if (before && !after) {
+			query.countQuery('id', 'humans', 'id', oldMember.user.id)
+				.then((isregistered) => {
+					if (isregistered) {
+						query.deleteQuery('egg', 'id', oldMember.user.id)
+						query.deleteQuery('monsters', 'id', oldMember.user.id)
+						query.deleteQuery('raid', 'id', oldMember.user.id)
+						query.deleteQuery('quest', 'id', oldMember.user.id)
+						query.deleteQuery('humans', 'id', oldMember.user.id)
+						log.info(`${oldMember.user.username} unregistered by removing @${config.discord.userRole}`)
+					}
+				})
+				.catch((err) => {
+					log.error(`Role based unregistration errored with: ${err}`)
+				})
+		}
+	})
+}
+
+
 client.on('message', (msg) => {
 
 /*
