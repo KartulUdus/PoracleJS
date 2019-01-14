@@ -41,8 +41,8 @@
   "discord": {
     "token": [""],
     "channel": "testing",
-    "admins": ["222742859059560458"],
-    "comDayResultChannelId":"414388133329764352",
+    "admins": [""],
+    "comDayResultChannelId":"",
     "modRole":"sudo",
     "prefix": "!",
     "typereact": false,
