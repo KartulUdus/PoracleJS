@@ -1,8 +1,8 @@
-# Custom Messages
+   # Custom Messages
 
 #### dts.json
 
-All alarm messages can be cusomtized via the `./config/dts.json` file.  
+All alarm messages can be customized via the `./config/dts.json` file.  
 
 A useful visualizer can be found [HERE](https://leovoel.github.io/embed-visualizer/) 
 
@@ -52,7 +52,7 @@ For monsters without IV information, you can specify a different message.
 ```
 
 
-Any of the fields can be cusomtized with the following:
+Any of the fields can be customized with the following:
 
 | Option        | Value         | 
 | --------------- |:-------------:|
