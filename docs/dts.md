@@ -96,6 +96,7 @@ Any of the fields can be customized with the following:
 |{{flagemoji}}|Country flag emoji for location|
 |{{lat}}| Latitude of the alert|
 |{{lon}}| Longitude of the alert|
+|{{areas}}| Matched geofence area names for alert|
 
 
 ###### Raid alarms
@@ -154,6 +155,7 @@ Any of the fields can be customized with the following:
 |{{flagemoji}}|Country flag emoji for location|
 |{{lat}}| Latitude of the alert|
 |{{lon}}| Longitude of the alert|
+|{{areas}}| Matched geofence area names for alert|
 
 
 ###### Egg alarms
