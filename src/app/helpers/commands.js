@@ -51,7 +51,7 @@ if (config.discord.userRole) {
 					if (!isregistered) {
 						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${oldMember.user.id}'`, `'${emojiStrip(oldMember.user.username)}'`, '\'[]\''])
 						oldMember.user.send(dts.greeting)
-						log.info(`${oldMember.user.username} registered by assigning  @${config.discord.userRole} `)
+						log.info(`${oldMember.user.username} registered by assigning @${config.discord.userRole} `)
 					}
 				})
 				.catch((err) => {
