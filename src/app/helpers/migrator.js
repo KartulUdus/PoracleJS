@@ -144,6 +144,7 @@ CREATE TABLE \`quest\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   \`reward\` int(11) NOT NULL DEFAULT 0,
   \`template\` smallint(5) DEFAULT 3,
+  \`shiny\` int(1) NOT NULL DEFAULT 0,
   \`reward_type\` int(11) NOT NULL DEFAULT 0,
   \`distance\` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY quest_tracking (\`id\`, \`reward_type\`, \`reward\`),
@@ -172,6 +173,13 @@ CREATE TABLE \`comsubmission\` (
   \`lucky\` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
+const migration3 = {
+	quest: `
+		ALTER TABLE \`quest\` 
+		ADD \`shiny\` smallint(1) NOT NULL DEFAULT 0;
+	`
+}
+
 
 module.exports = async () => {
 	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database).then((tables) => {
@@ -190,8 +198,8 @@ module.exports = async () => {
 				queries.mysteryQuery(activeRaid),
 				queries.mysteryQuery(schemaVersion)
 			]).then(() => {
-				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '2'])
-				log.info('Database tables created, db_version 1 applied')
+				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '3'])
+				log.info('Database tables created, db_version 3 applied')
 			})
 		}
 		else {
@@ -209,6 +217,11 @@ module.exports = async () => {
 							queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
 							log.info('applied Db migration 2')
 						})
+					}
+					else if (version.val === 2) {
+						queries.mysteryQuery(migration3.quest)
+						queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+						log.info('applied Db migration 3')
 					}
 				})
 			})
