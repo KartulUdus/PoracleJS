@@ -33,7 +33,7 @@ client.on('ready', () => {
 
 	query.selectAllQuery('humans', 'enabled', 1).then((humans) => {
 		humans.forEach((human) => {
-			if (!client.channels.keyArray().includes(human.id) && !client.users.keyArray().includes(human.id) && false) {
+			if (!client.channels.keyArray().includes(human.id) && !client.users.keyArray().includes(human.id)) {
 				query.deleteQuery('egg', 'id', human.id)
 				query.deleteQuery('monsters', 'id', human.id)
 				query.deleteQuery('raid', 'id', human.id)
