@@ -31,7 +31,65 @@ client.on('ready', () => {
 		}
 	})
 
+	query.selectAllQuery('humans', 'enabled', 1).then((humans) => {
+		humans.forEach((human) => {
+			if (!client.channels.keyArray().includes(human.id) && !client.users.keyArray().includes(human.id)) {
+				query.deleteQuery('egg', 'id', human.id)
+				query.deleteQuery('monsters', 'id', human.id)
+				query.deleteQuery('raid', 'id', human.id)
+				query.deleteQuery('quest', 'id', human.id)
+				query.deleteQuery('humans', 'id', human.id)
+				log.info(`unregistered ${human.name} due to 404`)
+			}
+		})
+	})
 })
+
+if (config.discord.userRole) {
+	client.on('guildMemberUpdate', (oldMember, newMember) => {
+
+		let before = false
+		let after = false
+		oldMember.roles.forEach((role) => {
+			if (role.name === config.discord.userRole) before = true
+		})
+		newMember.roles.forEach((role) => {
+			if (role.name === config.discord.userRole) after = true
+		})
+
+		if (!before && after) {
+			query.countQuery('id', 'humans', 'id', oldMember.user.id)
+				.then((isregistered) => {
+					if (!isregistered) {
+						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${oldMember.user.id}'`, `'${emojiStrip(oldMember.user.username)}'`, '\'[]\''])
+						oldMember.user.send(dts.greeting)
+						log.info(`${oldMember.user.username} registered by assigning @${config.discord.userRole} `)
+					}
+				})
+				.catch((err) => {
+					log.error(`Role based registration errored with: ${err}`)
+				})
+		}
+
+		if (before && !after) {
+			query.countQuery('id', 'humans', 'id', oldMember.user.id)
+				.then((isregistered) => {
+					if (isregistered) {
+						query.deleteQuery('egg', 'id', oldMember.user.id)
+						query.deleteQuery('monsters', 'id', oldMember.user.id)
+						query.deleteQuery('raid', 'id', oldMember.user.id)
+						query.deleteQuery('quest', 'id', oldMember.user.id)
+						query.deleteQuery('humans', 'id', oldMember.user.id)
+						log.info(`${oldMember.user.username} unregistered by removing @${config.discord.userRole}`)
+					}
+				})
+				.catch((err) => {
+					log.error(`Role based unregistration errored with: ${err}`)
+				})
+		}
+	})
+}
+
 
 client.on('message', (msg) => {
 
@@ -687,6 +745,7 @@ client.on('message', (msg) => {
 			let distance = 0
 			const questTracks = []
 			let template = 3
+			let mustShiny = 0
 			const rawArgs = msg.content.slice(`${config.discord.prefix}quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
 			let minDust = 10000000
@@ -707,6 +766,7 @@ client.on('message', (msg) => {
 				}
 				else if (element.match(/stardust\d/gi)) minDust = element.replace(/stardust/gi, '')
 				else if (element === 'stardust') minDust = 1
+				else if (element === 'shiny') mustShiny = 1
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 			})
 			_.forEach(questDts.rewardItems, (item, key) => {
@@ -724,6 +784,7 @@ client.on('message', (msg) => {
 					id: msg.author.id,
 					reward: minDust,
 					template: template,
+					mustShiny: 0,
 					reward_type: 3,
 					distance: distance
 				})
@@ -733,6 +794,7 @@ client.on('message', (msg) => {
 					id: msg.author.id,
 					reward: pid,
 					template: template,
+					mustShiny: mustShiny,
 					reward_type: 7,
 					distance: distance
 				})
@@ -742,6 +804,7 @@ client.on('message', (msg) => {
 					id: msg.author.id,
 					reward: i,
 					template: template,
+					mustShiny: 0,
 					reward_type: 2,
 					distance: distance
 				})
@@ -749,8 +812,8 @@ client.on('message', (msg) => {
 			questTracks.forEach((t) => {
 				query.insertOrUpdateQuery(
 					'quest',
-					['id', 'reward', 'template', 'reward_type', 'distance'],
-					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`]
+					['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
+					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`, `'${t.mustShiny}'`]
 				).then((p) => {
 					log.info(`${msg.author.username} Added quest tracking`)
 				})
@@ -1399,6 +1462,7 @@ client.on('message', (msg) => {
 			let distance = 0
 			const questTracks = []
 			let template = 3
+			let mustShiny = 0
 			let minDust = 10000000
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel quest`.length)
 			const args = rawArgs.toLowerCase().split(' ')
@@ -1407,6 +1471,7 @@ client.on('message', (msg) => {
 				if (pid !== undefined) monsters.push(pid)
 				else if (element.match(/stardust\d/gi)) minDust = element.replace(/stardust/gi, '')
 				else if (element === 'stardust') minDust = 1
+				else if (element === 'shiny') mustShiny = 1
 				else if (element.match(/d\d/gi)) {
 					distance = element.replace(/d/gi, '')
 					if (distance.length >= 10) distance = distance.substr(0, 9)
@@ -1436,6 +1501,7 @@ client.on('message', (msg) => {
 				questTracks.push({
 					id: msg.channel.id,
 					reward: minDust,
+					mustShiny: 0,
 					template: template,
 					reward_type: 3,
 					distance: distance
@@ -1445,6 +1511,7 @@ client.on('message', (msg) => {
 				questTracks.push({
 					id: msg.channel.id,
 					reward: pid,
+					mustShiny: mustShiny,
 					template: template,
 					reward_type: 7,
 					distance: distance
@@ -1454,6 +1521,7 @@ client.on('message', (msg) => {
 				questTracks.push({
 					id: msg.channel.id,
 					reward: i,
+					mustShiny: 0,
 					template: template,
 					reward_type: 2,
 					distance: distance
@@ -1462,8 +1530,8 @@ client.on('message', (msg) => {
 			questTracks.forEach((t) => {
 				query.insertOrUpdateQuery(
 					'quest',
-					['id', 'reward', 'template', 'reward_type', 'distance'],
-					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`]
+					['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
+					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`, `'${t.mustShiny}'`]
 				).then((p) => {
 					log.info(`${msg.channel.name} Added quest tracking`)
 				})

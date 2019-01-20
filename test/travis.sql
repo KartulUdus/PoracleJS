@@ -296,6 +296,7 @@ CREATE TABLE `quest` (
   `template` smallint(5) DEFAULT 3,
   `reward_type` int(11) NOT NULL DEFAULT 0,
   `distance` int(11) NOT NULL DEFAULT 0,
+  `shiny` smallint(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`reward_type`,`reward`),
   KEY `distance` (`distance`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
@@ -303,12 +304,13 @@ CREATE TABLE `quest` (
 LOCK TABLES `quest` WRITE;
 /*!40000 ALTER TABLE `quest` DISABLE KEYS */;
 
-INSERT INTO `quest` (`id`, `reward`, `template`, `reward_type`, `distance`)
+INSERT INTO `quest` (`id`, `reward`, `template`, `reward_type`, `distance`, `shiny`)
 VALUES
-	('414388133329764352',2,3,2,0),
-	('414388133329764352',705,3,2,5000),
-	('414388133329764352',500,3,3,0),
-	('414388133329764352',137,3,7,0);
+	('414388133329764352',2,3,2,0,0),
+	('414388133329764352',705,3,2,5000,0),
+	('414388133329764352',500,3,3,0,0),
+	('414388133329764352',25,3,7,0,1),
+	('414388133329764352',137,3,7,0,0);
 
 /*!40000 ALTER TABLE `quest` ENABLE KEYS */;
 UNLOCK TABLES;

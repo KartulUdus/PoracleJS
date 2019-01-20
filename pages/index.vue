@@ -72,6 +72,17 @@
                         </div>
                     </l-popup>
                 </l-marker>
+
+                <!-- Render array of quest markers -->
+                <l-marker v-for="q in questMarkers" :key="q.key" :lat-lng="{lat: q.lat, lng : q.lon}" :icon="q.icon">
+                    <l-popup>
+                        <div class="popupPoracle">
+                            <img id="gymImg" v-if="q.url" :src="g.url">
+                            <h3>{{q.name}}</h3>
+                            <a :href="q.mapLink">Google Maps</a> <br>
+                        </div>
+                    </l-popup>
+                </l-marker>
             </l-map>
         </no-ssr>
     </div>
@@ -108,7 +119,9 @@
 			},
             pokemonMarkers () {	return this.$store.state.markers.pokemonMarkers },
             raidMarkers () { return this.$store.state.markers.raidMarkers },
-			gymMarkers () {	return this.$store.state.markers.gymMarkers	}
+			gymMarkers () {	return this.$store.state.markers.gymMarkers	},
+            questMarkers () { return this.$store.state.markers.questMarkers }
+
 		},
         methods: {
 
@@ -135,6 +148,11 @@
 					gym.link = `static/raid/gym${gym.team}ex${gym.park}.png`
                     gym.icon = this.createRaidIcon(gym.link, `gym${gym.team}ex${gym.park}`)
 					this.$store.commit('markers/addG', gym)
+				})
+				raw_data.data.quests.forEach((quest) => {
+					quest.link = `static/quest/${quest.identifier}.png`
+					quest.icon = this.createQuestIcon(quest.link, quest.identifier)
+					this.$store.commit('markers/addQ', quest)
 				})
 			},
 			getPokemonLink(rawPokemon){
@@ -166,6 +184,22 @@
 						iconSize:     [50, 50],
 						iconAnchor:   [25, 50],
 						popupAnchor:  [0 , -45]
+					})
+					this.icons[key] = icon
+					return icon
+				}
+			},
+
+			createQuestIcon(link, key){
+				if (this.icons[key]){
+					return this.icons[key]
+				}
+				else {
+					let icon = L.icon({
+						iconUrl:      link,
+						iconSize:     [30, 30],
+						iconAnchor:   [15, 30],
+						popupAnchor:  [0 , -28]
 					})
 					this.icons[key] = icon
 					return icon

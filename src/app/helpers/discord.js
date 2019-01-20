@@ -31,6 +31,11 @@ client.on('ready', () => {
 					}
 					hungryInterval = startBeingHungry()
 				})
+					.catch((e) => {
+						log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
+						hungryInterval = startBeingHungry()
+
+					})
 			}
 			else if (client.users.keyArray().includes(msg.job.target)) {
 				client.users.get(msg.job.target).send(msg.job.message).then((message) => {
@@ -41,6 +46,11 @@ client.on('ready', () => {
 					}
 					hungryInterval = startBeingHungry()
 				})
+					.catch((e) => {
+						log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
+						hungryInterval = startBeingHungry()
+
+					})
 			}
 			else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
 

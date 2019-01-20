@@ -1032,6 +1032,32 @@
       "rewards": [{"type":7,"info":{"shiny":false,"costume_id":0,"pokemon_id":134,"form_id":0,"gender_id":0} }],
       "updated": 1541296190
     },
+    "monsterShinyPikachuAward": {
+      "pokestop_id": "845832845828345aa.16",
+      "pokestop_name": "Hello World",
+      "template": "challenge_november_buddy_candy",
+      "pokestop_url": "http://lh6.ggpht.com/gr-9IasTfoO2CCRN-eIGCp25dK16D25oNaUYHeL4l6aoAXri1eOLeLKxNx-0RKh7irltPyF4VghjFEi7Zibtxw",
+      "conditions": [ {"type":7,"info":{"raid_levels":[1,2,3,4,5]} },{"type":6}],
+      "latitude": "{{randomLat}}",
+      "longitude": "{{randomLon}}",
+      "type": 8,
+      "target": 1,
+      "rewards": [{"type":7,"info":{"shiny":true,"costume_id":0,"pokemon_id":25,"form_id":0,"gender_id":0} }],
+      "updated": 1541296190
+    },
+    "monsterNotShinyPikachuAward": {
+      "pokestop_id": "845832845828345aa.16",
+      "pokestop_name": "Hello World",
+      "template": "challenge_november_buddy_candy",
+      "pokestop_url": "http://lh6.ggpht.com/gr-9IasTfoO2CCRN-eIGCp25dK16D25oNaUYHeL4l6aoAXri1eOLeLKxNx-0RKh7irltPyF4VghjFEi7Zibtxw",
+      "conditions": [ {"type":7,"info":{"raid_levels":[1,2,3,4,5]} },{"type":6}],
+      "latitude": "{{randomLat}}",
+      "longitude": "{{randomLon}}",
+      "type": 8,
+      "target": 1,
+      "rewards": [{"type":7,"info":{"shiny":false,"costume_id":0,"pokemon_id":25,"form_id":0,"gender_id":0} }],
+      "updated": 1541296190
+    },
     "itemGreatBallAward": {
       "pokestop_id": "845832845828345aa.16",
       "pokestop_name": "Hello World",

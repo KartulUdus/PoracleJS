@@ -584,6 +584,25 @@ describe('Quest Filters', () => {
 		})
 	}).timeout(2000)
 
+	it('should process shiny pikachu award', (done) => {
+		const positivetemplate = JSON.stringify(_.cloneDeep(testData.quests.monsterShinyPikachuAward))
+		let positiveMessage = mustache.render(positivetemplate, view)
+		positiveMessage = JSON.parse(positiveMessage)
+		const negativetemplate = JSON.stringify(_.cloneDeep(testData.quests.monsterNotShinyPikachuAward))
+		let negativeMessage = mustache.render(negativetemplate, view)
+		negativeMessage = JSON.parse(negativeMessage)
+
+		Promise.all([questController.handle(positiveMessage), questController.handle(negativeMessage)]).then((work) => {
+			const affirmative = work[0][0]
+			const negative = work[1]
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_025_00.png`.toLowerCase())
+			negative.should.have.lengthOf(0)
+			done()
+		}).catch((err) => {
+			done(err)
+		})
+	}).timeout(2000)
+
 	it('should process great-ball award', (done) => {
 		const positivetemplate = JSON.stringify(_.cloneDeep(testData.quests.itemGreatBallAward))
 		let positiveMessage = mustache.render(positivetemplate, view)

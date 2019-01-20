@@ -25,7 +25,9 @@ class Quest extends Controller {
 			select humans.id, humans.name, quest.template from quest
             join humans on humans.id = quest.id
             where humans.enabled = 1 and
-            ((reward in (${data.rewardData.monsters}) and reward_type=7 ) or (reward_type = 2 and reward in (${data.rewardData.items})) or (reward_type = 3 and reward <= ${data.dustAmount})) 
+            ((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1 or reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0) 
+            or (reward_type = 2 and reward in (${data.rewardData.items})) 
+            or (reward_type = 3 and reward <= ${data.dustAmount})) 
             and
             (round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
@@ -85,6 +87,7 @@ class Quest extends Controller {
 			]).then((questData) => {
 				[data.questType, data.rewardData, data.conditionstring, data.matched] = questData
 				data.dustAmount = data.rewardData.dustAmount
+				data.isShiny = data.rewardData.isShiny
 
 				const jobs = []
 				const monsternames = []
@@ -189,7 +192,7 @@ class Quest extends Controller {
 			const items = [0]
 			let rewardString = ''
 			let dustAmount = 0
-
+			let isShiny = 0
 
 			data.rewards.forEach(async (reward) => {
 				if (reward.type === 2) {
@@ -212,13 +215,14 @@ class Quest extends Controller {
 						e.push(typeData[type].emoji)
 					})
 					e = e.join()
-					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, emoji: e })
+					if (reward.info.shiny) isShiny = 1
+					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, emoji: e, isShiny: isShiny })
 					monsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				}
 			})
 			resolve({
-				rewardstring: rewardString, monsters: monsters, items: items, dustAmount: dustAmount
+				rewardstring: rewardString, monsters: monsters, items: items, dustAmount: dustAmount, isShiny: isShiny
 			})
 		})
 	}

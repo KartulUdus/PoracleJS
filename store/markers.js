@@ -1,7 +1,8 @@
 export const state = () => ({
 	pokemonMarkers: [],
 	raidMarkers: [],
-	gymMarkers: []
+	gymMarkers: [],
+	questMarkers: []
 })
 
 Array.prototype.inArray = function(comparer) {for(var i=0; i < this.length; i++) {if(comparer(this[i]))return true}return false}
@@ -48,6 +49,26 @@ export const mutations = {
 		state.raidMarkers.map(obj => [marker].find(o => o.lat === obj.lat && o.lon === obj.lon && obj.pokemon_id === 0) || obj)
 		state.raidMarkers.pushIfNotExist(marker, function(e) {
 			return e.lat === marker.lat && e.lon === marker.lon && e.link === marker.link;
+		})
+	},
+	addQ (state, quest) {
+
+		let marker = {
+			id: quest.pokestop_id,
+			lat: quest.latitude,
+			lon: quest.longitude,
+			name: quest.pokestop_name,
+			icon: quest.icon,
+			link: quest.pokestop_url,
+			end: quest.end_timestamp,
+			mapLink: `https://www.google.com/maps/search/?api=1&query=${quest.latitude},${quest.longitude}`,
+			qlink: quest.link,
+			key: quest.identifier
+		}
+
+		state.questMarkers.map(obj => [marker].find(o => o.lat === obj.lat && o.lon === obj.lon && obj.identifier === o.identifier))
+		state.questMarkers.pushIfNotExist(marker, function(e) {
+			return e.lat === marker.lat && e.lon === marker.lon && e.qlink === marker.qlink;
 		})
 	},
 	addG (state, gym) {
@@ -104,6 +125,19 @@ export const mutations = {
 				state.raidMarkers[i].lon < bounds._southWest.lng ||
 				disTimeLocal.getTime() < new Date().getTime())
 			{state.raidMarkers.splice(i, 1)}
+		}
+		for( let i = 0; i < state.questMarkers.length-1; i++){
+			let date = new Date(state.questMarkers[i].end)
+			let disTimeLocal = new Date(date.getTime()+date.getTimezoneOffset()*60*1000)
+			let offset = date.getTimezoneOffset() / 60
+			let hours = date.getHours()
+			disTimeLocal.setHours(hours - offset)
+			if (state.questMarkers[i].lat > bounds._northEast.lat ||
+				state.questMarkers[i].lat < bounds._southWest.lat ||
+				state.questMarkers[i].lon > bounds._northEast.lng ||
+				state.questMarkers[i].lon < bounds._southWest.lng ||
+				disTimeLocal.getTime() < new Date().getTime())
+			{state.questMarkers.splice(i, 1)}
 		}
 		for( let i = 0; i < state.gymMarkers.length-1; i++){
 			if (state.gymMarkers[i].lat > bounds._northEast.lat ||

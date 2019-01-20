@@ -5,6 +5,7 @@ import types from '../src/app/util/types'
 import moves from '../src/app/util/moves'
 import baseStats from '../src/app/util/base_stats'
 import cp_multipliers from '../src/app/util/cp-multipliers'
+import questDts from '../config/questdts'
 
 import vueAwesomeCountdown from 'vue-awesome-countdown'
 import { ScaleRotate } from 'vue-burger-menu';
@@ -41,6 +42,23 @@ Vue.prototype.$getBasicMonsterData = (id) => {
 	}
 }
 
+Vue.prototype.$getBasicQuestData = (quest) => {
+	let monsterTypes = monsters[id]? monsters[id].types : []
+	let e = [];
+	monsterTypes.forEach((type) => {
+		e.push(types[type].emoji);
+	});
+	let typeString = ``
+	monsterTypes.forEach((item, index) => {
+		typeString = typeString.concat(`${item} ${e[index]} `)
+	})
+	return {
+		name: monsters[id]? monsters[id].name : '',
+		types: monsterTypes,
+		typeemoji : e,
+		typeString: typeString
+	}
+}
 
 Vue.prototype.$getRiadTargetCp = (id) => {
 

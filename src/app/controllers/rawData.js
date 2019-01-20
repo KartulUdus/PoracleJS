@@ -5,7 +5,7 @@ const config = require('config')
 const Jimp = require('jimp')
 const path = require('path')
 const Controller = require('./controller')
-
+const questIdentifierRegex = new RegExp('([,"\'”}{\]\[])', 'gi')
 
 class RawData extends Controller {
 
@@ -64,6 +64,24 @@ class RawData extends Controller {
 		})
 	}
 
+	async getLiveQuests(lat1, lat2, lon1, lon2) {
+		return new Promise((resolve) => {
+			this.db.query('SELECT * from activeQuest where latitude between ? and ? and longitude between ? and ? and end_timestamp > UTC_TIMESTAMP()', [lat1, lat2, lon1, lon2])
+				.then((result) => {
+					let encodedResult=[]
+					result[0].forEach((quest) => {
+						quest.identifier = quest.rewards.replace(/[,"':”}{\]\[]/g, '')
+						quest.rewards = JSON.parse(quest.rewards)
+						quest.conditions = JSON.parse(quest.conditions)
+						encodedResult.push(quest)
+					})
+					resolve(encodedResult)
+				})
+				.catch((err) => {
+					log.error(`getLiveQuests errored with: ${err}`)
+				})
+		})
+	}
 	async checkRaidSprites(lat1, lat2, lon1, lon2) {
 		return new Promise((resolve) => {
 			const query = `
@@ -119,6 +137,36 @@ class RawData extends Controller {
 				})
 		})
 	}
+	async checkQuestSprites(lat1, lat2, lon1, lon2) {
+		return new Promise((resolve) => {
+			const query = `
+				select rewards, latitude, longitude, end_timestamp from \`activeQuest\`  where 
+				latitude between ? and ? and
+				longitude between ? and ?
+				and end_timestamp > UTC_TIMESTAMP()`
+			this.db.query(query, [lat1, lat2, lon1, lon2])
+				.then((result) => {
+					const spritePromises = []
+					_.forEach(result[0], (sprite) => {
+						let identifier = sprite.rewards.replace(/[,"':”}{\]\[]/g, '')
+						let rewards = JSON.parse(sprite.rewards)[0]
+						rewards.identifier = identifier
+						if (!fs.existsSync(path.join(this.imgPath, `/quest/${identifier}.png`))) {
+							log.debug(`Sprite for quest ${identifier} not found, generating from ${path.join(__dirname, `../../../assets/${config.map.spriteDir}`)}`)
+							spritePromises.push(this.questImageCreator(rewards))
+						}
+					})
+					Promise.all(spritePromises)
+						.then(() => {
+							resolve()
+						})
+						.catch((err) => {
+							log.error(`checkQuestSprites DB call errored with: ${err}`)
+						})
+
+				})
+		})
+	}
 
 	async raidImageCreator(spriteObj) {
 		return new Promise((resolve) => {
@@ -154,6 +202,31 @@ class RawData extends Controller {
 				if (spriteObj.park) images[0].composite(images[1], 30, 40)
 				images[0]
 					.write(path.join(this.imgPath, `/raid/${spriteObj.identifier}.png`))
+				resolve()
+			}).catch((err) => {
+				log.error(`imageCreator errored with: ${err}`)
+			})
+		})
+	}
+
+	async questImageCreator(spriteObj) {
+		return new Promise((resolve) => {
+			// load all needed images
+				let rewardImg = ''
+				if (spriteObj.type === 7) rewardImg = path.join(this.imgPath, `pokemon_icon_${spriteObj.info.pokemon_id.toString().padStart(3, '0')}_00.png`)
+				if (spriteObj.type === 2) rewardImg = path.join(this.imgPath, `rewards/reward_${spriteObj.info.item_id}_1.png`)
+				if (spriteObj.type === 3) rewardImg = path.join(this.imgPath, `rewards/reward_stardust.png`)
+
+
+			Promise.all([
+				Jimp.read(path.join(this.imgPath, `pokestop.png`)),			// Base pokestop
+				Jimp.read(rewardImg),
+			]).then((images) => {
+				images[1].resize(40, 40)
+					.fade(0.2)
+				images[0].composite(images[1], 5, 5)
+				images[0]
+					.write(path.join(this.imgPath, `/quest/${spriteObj.identifier}.png`))
 				resolve()
 			}).catch((err) => {
 				log.error(`imageCreator errored with: ${err}`)

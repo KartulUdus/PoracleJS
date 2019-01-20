@@ -146,6 +146,7 @@ CREATE TABLE \`quest\` (
   \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   \`reward\` int(11) NOT NULL DEFAULT 0,
   \`template\` smallint(5) DEFAULT 3,
+  \`shiny\` int(1) NOT NULL DEFAULT 0,
   \`reward_type\` int(11) NOT NULL DEFAULT 0,
   \`distance\` int(11) NOT NULL DEFAULT 0,
   PRIMARY KEY quest_tracking (\`id\`, \`reward_type\`, \`reward\`),
@@ -191,6 +192,13 @@ const activeQuest = `CREATE TABLE \`activeQuest\` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const migration3 = {
+	quest: `
+		ALTER TABLE \`quest\` 
+		ADD \`shiny\` smallint(1) NOT NULL DEFAULT 0;
+	`
+}
+
+const migration4 = {
 	gymInfo: `
 		ALTER TABLE \`gym-info\` 
 		ADD \`team\` smallint(1) DEFAULT 4,
@@ -248,13 +256,18 @@ module.exports = async () => {
 							})
 						}
 						if (version.val === 2) {
-							queries.mysteryQuery(migration3.gymInfo).then(() => {
-								queries.mysteryQuery(migration3.activeRaid).then(() => {
-									queries.mysteryQuery(migration3.pokestop).then(() => {
-										log.info('applied Db migration 3')
+							queries.mysteryQuery(migration3.quest)
+							queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+							log.info('applied Db migration 3')
+						}
+						if (version.val === 3) {
+							queries.mysteryQuery(migration4.gymInfo).then(() => {
+								queries.mysteryQuery(migration4.activeRaid).then(() => {
+									queries.mysteryQuery(migration4.pokestop).then(() => {
+										log.info('applied Db migration 4')
 										queries.mysteryQuery(activeQuest)
 										queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
-										version.val = 3
+										version.val = 4
 									})
 								})
 							})
@@ -264,6 +277,7 @@ module.exports = async () => {
 				else {
 					log.error(`didn't find Tables I like, this house has ${confirmedTables} similar tables \nPlease check database credentials for my PERSONAL database`)
 				}
+
 			})
 		}
 	})

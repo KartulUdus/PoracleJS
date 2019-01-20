@@ -9,3 +9,4 @@
 - [Discord commands](commands.md)
 - [Contributing to the project](contributing.md)
 - [OCR community day bot](community.md)
+- [Webhook examples](webhookexamples.md)

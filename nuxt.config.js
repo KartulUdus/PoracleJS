@@ -6,11 +6,20 @@ module.exports = {
     plugins: [
         { src: '~/plugins/monsterData', ssr: false }
     ],
+
+    link: [
+      {
+        rel: 'icon',
+        type: 'image/x-icon',
+        href: '/static/starchy.ico',
+      },
+    ],
 	modules: ['@nuxtjs/axios', 'nuxt-leaflet', 'nuxt-svg'],
 
 	axios: {
       retry: { retries: 3 }
     },
+
 
 	css: [
 	    '@/assets/css/PoracleMap.css'
