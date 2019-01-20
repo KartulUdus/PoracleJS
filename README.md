@@ -20,7 +20,7 @@ It allows for high end-user configurability using discord `!commands` and privat
 git clone https://github.com/KartulUdus/PoracleJS.git   // Clone the repository
 cd PoracleJS                                            // Navigate to the root of the project
 npm install                                             // install dependencies
-cp config/config.json.example config/default.json       // Create a config file and fill out Database and Discord bot stuff
+cp config/default.json.example config/default.json       // Create a config file and fill out Database and Discord bot stuff
 npm start                                               // Start the application
 
 ```

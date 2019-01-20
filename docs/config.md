@@ -101,7 +101,7 @@ This config file consist of different objects for different configurations.
 
 ```json
   "discord": {
-    "token": "",
+    "token": [""],
     "channel": "general",
     "admins": ["222742859059560458"],
     "comDayResultChannelId":"514465201911758849",
