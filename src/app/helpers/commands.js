@@ -370,7 +370,7 @@ client.on('message', (msg) => {
 			else if (!monsters.length) {
 				msg.reply('404 NO MONSTERS FOUND')
 			}
-			else if (monsters.length === 1 && !forms.length) {
+			else if (monsters.length === 1 && forms.length) {
 				if (!_.has(formData, monsters[0])) {
 					msg.reply(`Sorry, ${monsters[0]} doesn't have forms`)
 					return null
@@ -1110,7 +1110,7 @@ client.on('message', (msg) => {
 			}
 			else if (monsters.length > 1 && forms.length !== 0) msg.reply('Form filters can be added to 1 monster at a time')
 			else if (monsters.length === 0) msg.reply('404 NO MONSTERS FOUND')
-			else if (monsters.length === 1 && forms.length !== 0) {
+			else if (monsters.length === 1 && forms.length) {
 				if (_.has(formData, monsters[0])) {
 					const fids = []
 					forms.forEach((form) => {
