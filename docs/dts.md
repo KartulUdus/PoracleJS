@@ -137,6 +137,7 @@ Any of the fields can be customized with the following:
 |{{stateCode}}| 2 letter state code of the alerted location|
 |{{move1}}| Monsers quick move|
 |{{move2}}| Monsters charge move|
+|{{cp}}| Raid boss cp|
 |{{cp20}}| Monsters cp with 100% perfect IV and level 20|
 |{{cp25}}| Monsters cp with 100% perfect IV and level 25|
 |{{mincp20}}| Monsters cp with 0% perfect IV and level 20|

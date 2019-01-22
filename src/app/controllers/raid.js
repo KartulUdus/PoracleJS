@@ -172,6 +172,7 @@ class Raid extends Controller {
 												tthm: data.tth.minutes,
 												tths: data.tth.seconds,
 												name: data.name,
+												cp: data.cp,
 												mincp20: this.getCp(data.pokemon_id, 20, 10, 10, 10),
 												cp20: this.getCp(data.pokemon_id, 20, 15, 15, 15),
 												mincp25: this.getCp(data.pokemon_id, 25, 10, 10, 10),
