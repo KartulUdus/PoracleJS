@@ -175,6 +175,7 @@ class Monster extends Controller {
 								tthm: data.tth.minutes,
 								tths: data.tth.seconds,
 								name: data.name,
+								now: new Date(),
 								gender: genderData[data.gender],
 								move1: data.quick_move,
 								move2: data.charge_move,

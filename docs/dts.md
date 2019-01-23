@@ -62,6 +62,7 @@ Any of the fields can be customized with the following:
 |{{tthh}}| Full hours until hidden|
 |{{tthm}}| Full minutes until hidden|
 |{{tths}}| Full seconds until hidden|
+|{{now}}| Current Timestamp|
 |{{lat}}| Latitude of the alerted location|
 |{{lon}}| Longitude of the alerted location|
 |{{addr}}| Address of the alerted location|
@@ -124,6 +125,7 @@ Any of the fields can be customized with the following:
 |{{tthh}}| Full hours until raid ends|
 |{{tthm}}| Full minutes until raid ends|
 |{{tths}}| Full seconds until raid ends|
+|{{now}}| Current Timestamp|
 |{{lat}}| Latitude of the alerted location|
 |{{lon}}| Longitude of the alerted location|
 |{{addr}}| Address of the alerted location|
@@ -187,6 +189,7 @@ Any of the fields can be customized with the following:
 |{{tthh}}| Full hours until raid ends|
 |{{tthm}}| Full minutes until raid ends|
 |{{tths}}| Full seconds until raid ends|
+|{{now}}| Current Timestamp|
 |{{addr}}| Address of the alerted location|
 |{{lat}}| Latitude of the alerted location|
 |{{lon}}| Longitude of the alerted location|
@@ -234,6 +237,7 @@ Any of the fields can be customized with the following:
 
 | Option        | Value         | 
 | --------------- |:-------------:|
+|{{now}}| Current Timestamp|
 |{{questType}}| The type of quest (for example: battle in 3 raids|
 |{{conditions}}| Extra conditions (for example: you must win these battles|
 |{{reward}}| Reward if you finish (Pokemon, item or stardust)|

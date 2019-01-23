@@ -113,6 +113,7 @@ class Quest extends Controller {
 					}
 					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 						const view = {
+							now: new Date(),
 							questType: data.questType,
 							reward: data.rewardData.rewardstring.replace(/\n/g, ' '),
 							conditions: data.conditionstring.replace(/\n/g, ' '),
