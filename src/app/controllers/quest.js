@@ -141,7 +141,9 @@ class Quest extends Controller {
 							state: geoResult.state,
 							stateCode: geoResult.stateCode,
 							neighbourhood: geoResult.neighbourhood,
-							flagemoji: geoResult.flag
+							flagemoji: geoResult.flag,
+							areas: data.matched.join(', '),
+
 						}
 
 						whoCares.forEach((cares) => {

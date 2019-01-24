@@ -249,8 +249,10 @@ Any of the fields can be customized with the following:
 |{{url}}| Link to the image of the Pokestop|
 |{{minCp}}| Minimum CP of the reward pokemon |
 |{{maxCp}}| Maximum CP of the reward pokemon|
+|{{{staticmap}}}| Static link to map|
 |{{{mapurl}}}| Link to google maps|
 |{{{applemap}}}| Link to apple maps|
+|{{areas}}| Matched geofence area names for alert|
 |{{lat}}| Latitude of the alerted location|
 |{{lon}}| Longitude of the alerted location|
 |{{streetNumber}}| Street number of the alerted location|

@@ -89,7 +89,7 @@ This config file consist of different objects for different configurations.
 ```
 | Option        | Value         | 
 | ------------- |:-------------:| 
-|Proviver| either OSM or google for geocoding|
+|provider| either OSM or google for geocoding|
 |googlekey | Your google maps API key |
 |width| Width in pixels of the static map.|
 |height| Height in pixels of the static map.|
