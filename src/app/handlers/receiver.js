@@ -3,6 +3,7 @@ const _ = require('lodash')
 const config = require('config')
 const mysql = require('promise-mysql2')
 const discord = require('cluster')
+const uuid = require('uuid/v4')
 
 const db = mysql.createPool(config.db)
 const Cache = require('ttl')
@@ -29,10 +30,10 @@ const questController = new QuestController(db)
 
 // check how long the queue is every 30s. ideally empty
 setInterval(() => {
-	if (queue.length > 30) {
-		log.warn(`Job queue is ${queue.length} items long`)
-	}
-}, 30000)
+	log.log({
+		level: 'debug', message: `Job queue is ${queue.length} items long`, queue: queue.length, event: 'queue'
+	})
+}, 120000)
 
 discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
 _.forEach(config.discord.token, (k) => {
@@ -42,11 +43,11 @@ _.forEach(config.discord.token, (k) => {
 
 discord.on('message', (worker, msg) => {
 	if (msg.reason === 'seppuku') {
-		log.info(`Discord worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 10)}...`)
+		log.log({ level: 'warn', message: `Discord worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 10)}...` })
 		discord.fork({ k: msg.key })
 	}
 	else if (msg.reason === 'hungry') {
-		if (Math.random() >= 0.999) log.debug(`Discord worker #${worker.id} requested food`)
+		if (Math.random() >= 0.999) log.log({ level: 'debug', message: `Discord worker #${worker.id} requested food`, event: 'discord:hungry' })
 		if (queue.length) {
 			worker.send({
 				reason: 'food',
@@ -58,8 +59,15 @@ discord.on('message', (worker, msg) => {
 
 module.exports = async (req, reply) => {
 	let data = req.body
+	const correlationId = uuid()
 	if (!Array.isArray(data)) data = [data]
+	log.log({
+		level: 'debug', message: `http request ${correlationId} started`, correlationId: correlationId, event: 'http:start'
+	})
+
 	data.forEach((hook) => {
+		hook.message.correlationId = correlationId
+		hook.message.messageId = uuid()
 		switch (hook.type) {
 			case 'pokemon': {
 				if (!cache.get(`${hook.message.encounter_id}_${hook.message.weight}`)) {
@@ -69,28 +77,42 @@ module.exports = async (req, reply) => {
 							queue.push(job)
 							monsterController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 						})
+						log.log({
+							level: 'debug', message: `webhook message ${hook.message.messageId} processed`, messageId: hook.message.messageId, correlationId: hook.message.correlationId, event: 'message:end'
+						})
 					})
 				}
 				else {
-					log.warn(`Monster encounter:${hook.message.encounter_id} was sent again too soon`)
+					log.log({ level: 'warn', message: `Monster encounter:${hook.message.encounter_id} was sent again too soon`, event: 'cache:duplicate' })
 				}
 
 				reply.send({ webserver: 'happy' })
+				log.log({
+					level: 'debug', message: `http request ${correlationId} replied to`, correlationId: correlationId, event: 'http:end'
+				})
 				break
 			}
 			case 'raid': {
 				if (!cache.get(`${hook.message.gym_id}_${hook.message.pokemon_id}`)) {
 					cache.put(`${hook.message.gym_id}_${hook.message.pokemon_id}`, 'cached')
-				}
-				raidController.handle(hook.message)
-					.then((work) => {
-						work.forEach((job) => {
-							queue.push(job)
-							raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
-						})
-					})
 
+					raidController.handle(hook.message)
+						.then((work) => {
+							work.forEach((job) => {
+								queue.push(job)
+								raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+							})
+						})
+						.catch((e) => {
+							log.log({ level: 'error', message: `raidController failed to handle ${correlationId} \n${e.message} `, event: 'fail:raidController' })
+						})
+				}
+				else {
+					log.log({ level: 'warn', message: `Raid at gym :${hook.message.gym_id} was sent again too soon`, event: 'cache:duplicate' })
+				}
 				reply.send({ webserver: 'happy' })
+				log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
+
 				break
 			}
 			case 'gym_details': {
@@ -117,6 +139,8 @@ module.exports = async (req, reply) => {
 				log.info(`Saved gym-details for ${g.name}`)
 
 				reply.send({ webserver: 'happy' })
+				log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
+
 				break
 			}
 			case 'quest': {
@@ -129,6 +153,8 @@ module.exports = async (req, reply) => {
 				})
 
 				reply.send({ webserver: 'happy' })
+				log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
+
 				break
 			}
 			default: {
@@ -137,11 +163,12 @@ module.exports = async (req, reply) => {
 		}
 	})
 
-
+	if (!reply.sent) log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
 	reply.send({
 		objecttype: req.body.type,
 		datatype: typeof req.body,
 		array: Array.isArray(req.body),
 		data: data
 	})
+
 }

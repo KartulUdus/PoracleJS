@@ -1,21 +1,24 @@
 const winston = require('winston')
 const config = require('config')
-require('winston-daily-rotate-file')
 
-const transport = new (winston.transports.DailyRotateFile)({
-	filename: 'logs/worker%DATE%.log',
-	datePattern: 'YYYY-MM-DD-HH',
-	zippedArchive: false,
-	maxSize: '50m',
-	maxFiles: '4d',
-	level: config.general.logLevel
+const file = new winston.transports.File({
+	filename: 'logs/worker.json',
+	format: winston.format.combine(
+		winston.format.timestamp(),
+		winston.format.json()
+	),
+	maxSize: 10000000,
+	tailable: true,
+	maxFiles: 5,
+	level: 'debug'
 })
+const console = new (winston.transports.Console)({ level: config.general.logLevel, format: winston.format.simple() })
 
 module.exports =
 
-	new (winston.Logger)({
+	winston.createLogger({
 		transports: [
-			new (winston.transports.Console)({ level: config.general.logLevel }),
-			transport
+			console,
+			file
 		],
 	})

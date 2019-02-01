@@ -14,6 +14,7 @@ const geofence = require(config.geocoding.geofence)
 const baseStats = require('../util/base_stats')
 const cpMultipliers = require('../util/cp-multipliers')
 const emojiFlags = require('emoji-flags')
+const uuid = require('uuid/v4')
 
 const Cache = require('ttl')
 
@@ -63,6 +64,8 @@ class Controller {
 		this.cpMultipliers = cpMultipliers
 		this.webshot = webshot
 		this.discordcache = discordcache
+		this.uuid = uuid()
+
 	}
 
 	// Geocoding stuff below
@@ -73,7 +76,7 @@ class Controller {
 			this.geocoder.geocode(locationString)
 				.then((result) => {
 					resolve(result)
-					log.debug(`Geolocate provided result ${JSON.stringify(result)}`)
+					log.log({ level: 'debug', message: `geolocate ${locationString}`, event: 'geo:geolocate' })
 				})
 				.catch((err) => {
 					log.error(`Geolocate failed with error: ${err}`)
@@ -88,7 +91,6 @@ class Controller {
 			addrCache.get(cacheKey, (err, addr) => {
 				if (err) log.error(err)
 				if (!addr) {
-					log.debug('making geocode requerst and caching results')
 					this.geocoder.reverse(locationObject)
 						.then((geocodeResult) => {
 							res.addr = config.locale.addressformat
@@ -117,8 +119,7 @@ class Controller {
 									if (error) log.error(`Error saving addr of ${cacheKey}: ${error}`)
 								})
 							}
-							log.debug(`fetched address ${JSON.stringify(res)}`)
-
+							log.log({ level: 'debug', message: `getAddress ${locationObject.latitude}, ${locationObject.longitude}`, event: 'geo:getAddress' })
 							resolve(res)
 						})
 						.catch((err) => {
@@ -126,6 +127,7 @@ class Controller {
 						})
 				}
 				else {
+					log.log({ level: 'debug', message: `getAddress ${locationObject.latitude}, ${locationObject.longitude}`, event: 'geo:getAddress' })
 					resolve(addr)
 				}
 			})
@@ -143,6 +145,7 @@ class Controller {
 					matchAreas.push(area)
 				}
 			})
+			log.log({ level: 'debug', message: `pointInArea ${point.latitude}, ${point.longitude}`, event: 'geo:pointInArea' })
 			resolve(matchAreas)
 		})
 	}
@@ -188,7 +191,7 @@ class Controller {
 	async updateLocation(table, lat, lon, col, value) {
 		return new Promise((resolve) => {
 			this.db.query('UPDATE ?? set latitude = ?, longitude = ? where ?? = ?', [table, lat, lon, col, value])
-				.then(log.debug(`updated location for ${table}`))
+				.then(log.log({ level: 'debug', message: 'updateLocation query', event: 'sql:updateLocation' }))
 				.catch((err) => {
 					log.error(`updateLocation errored with: ${err}`)
 				})
@@ -199,6 +202,7 @@ class Controller {
 		return new Promise((resolve) => {
 			this.db.query('SELECT * FROM ?? WHERE ?? = ?', [table, column, value])
 				.then((result) => {
+					log.log({ level: 'debug', message: 'selectOneQuery query', event: 'sql:selectOneQuery' })
 					resolve(result[0][0])
 				})
 				.catch((err) => {
@@ -212,7 +216,7 @@ class Controller {
 			const q = `DROP TABLE ${table}`
 			this.db.query(q)
 				.then((result) => {
-					log.info(`Table ${table} was dropped`)
+					log.log({ level: 'debug', message: `dropTableQuery ${table}`, event: 'sql:dropTableQuery' })
 					resolve(result[0][0])
 				})
 				.catch((err) => {
@@ -225,6 +229,7 @@ class Controller {
 		return new Promise((resolve) => {
 			this.db.query('SELECT count(??) as count FROM ?? WHERE ?? = ?', [what, from, where, value])
 				.then((result) => {
+					log.log({ level: 'debug', message: `countQuery ${from}`, event: 'sql:countQuery' })
 					resolve(result[0][0].count)
 				})
 				.catch((err) => {
@@ -236,7 +241,7 @@ class Controller {
 	async insertQuery(table, columns, values) {
 		return new Promise((resolve) => {
 			this.db.query(`INSERT INTO ?? (${columns.join(',')}) VALUES (?)`, [table, values])
-				.then(log.debug(`Inserted to ${table}`))
+				.then(log.log({ level: 'debug', message: `insertQuery ${table}`, event: 'sql:insertQuery' }))
 				.catch((err) => {
 					log.error(`inseertQuery errored with: ${err}`)
 				})
@@ -255,7 +260,7 @@ class Controller {
 		return new Promise((resolve) => {
 			this.db.query(query)
 				.then((result) => {
-					log.debug(`Inserted or maybe updated ${table}`)
+					log.log({ level: 'debug', message: `insertOrUpdateQuery ${table}`, event: 'sql:insertOrUpdateQuery' })
 					resolve(result)
 				})
 				.catch((err) => {
@@ -268,7 +273,7 @@ class Controller {
 	async updateQuery(table, field, newvalue, col, value) {
 		return new Promise((resolve) => {
 			this.db.query('UPDATE ?? SET ?? = ? where ?? = ?', [table, field, newvalue, col, value])
-				.then(log.debug(`Inserted to ${table}`))
+				.then(log.log({ level: 'debug', message: `updateQuery ${table}`, event: 'sql:updateQuery' }))
 				.catch((err) => {
 					log.error(`inseertQuery errored with: ${err}`)
 				})
@@ -280,7 +285,7 @@ class Controller {
 		return new Promise((resolve) => {
 			this.db.query(query)
 				.then((result) => {
-					log.debug('Mystery query executed')
+					log.log({ level: 'debug', message: 'mysteryQuery', event: 'sql:mysteryQuery' })
 					resolve(result[0])
 				})
 				.catch((err) => {
@@ -294,7 +299,7 @@ class Controller {
 			this.db.query('DELETE FROM ?? WHERE ?? = ?', [table, column, value])
 				.then((result) => {
 					resolve(result[0].count)
-					log.debug(`Deleted ${result.affectedRows} from ${table}`)
+					log.log({ level: 'debug', message: `deleteQuery ${table}`, event: 'sql:deleteQuery' })
 				})
 				.catch((err) => {
 					log.error(`deleteQuery errored with: ${err}`)
@@ -307,7 +312,7 @@ class Controller {
 			this.db.query('DELETE FROM ?? WHERE ?? = ? and id = ?', [table, column, value, id])
 				.then((result) => {
 					resolve(result[0].count)
-					log.debug(`Deleted ${result.affectedRows} from ${table}`)
+					log.log({ level: 'debug', message: `deleteByIdQuery ${table}`, event: 'sql:deleteByIdQuery' })
 				})
 				.catch((err) => {
 					log.error(`deleteQuery errored with: ${err}`)
@@ -320,6 +325,7 @@ class Controller {
 		return new Promise((resolve) => {
 			this.db.query('SELECT * FROM ?? WHERE ?? = ?', [table, column, value])
 				.then((result) => {
+					log.log({ level: 'debug', message: `selectAllQuery ${table}`, event: 'sql:selectAllQuery' })
 					resolve(result[0])
 				})
 				.catch((err) => {
@@ -331,7 +337,7 @@ class Controller {
 	async addOneQuery(table, addable, column, value) {
 		return new Promise((resolve) => {
 			this.db.query('update ?? set ?? = ??+1 where ?? = ?', [table, addable, addable, column, value])
-				.then(log.debug(`Added one to ${table}.${addable}`))
+				.then(log.log({ level: 'debug', message: `addOneQuery ${table}`, event: 'sql:addOneQuery' }))
 				.catch((err) => {
 					log.error(`addOneQuery errored with: ${err}`)
 				})
@@ -356,6 +362,7 @@ class Controller {
 			this.db.query(`select count(*) as c from information_schema.tables where table_schema='${config.db.database}' 
 							and table_name in('egg', 'raid', 'monsters', 'schema_version', 'gym-info', 'humans', 'quest', 'comevent', 'comsubmission')`)
 				.then((schematablesMatched) => {
+					log.log({ level: 'debug', message: 'checkSchema', event: 'sql:checkSchema' })
 					resolve(schematablesMatched[0][0].c)
 				})
 				.catch((err) => {

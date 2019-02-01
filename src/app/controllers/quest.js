@@ -36,14 +36,14 @@ class Quest extends Controller {
 			group by humans.id, humans.name, quest.template`
 
 
-			log.debug(`Query constructed for questWhoCares: \n ${query}`)
+			log.log({ level: 'debug', message: 'questWhoCares query', event: 'sql:questWhoCares' })
 			this.db.query(query)
 				.then((result) => {
 					log.info(`Quest ${data.questType} reported and ${result[0].length} humans cared`)
 					resolve(result[0])
 				})
 				.catch((err) => {
-					log.error(`questWhoCares errored with: ${err}`)
+					log.error(`questWhoCares errored with: ${err.message}`)
 				})
 		})
 	}
@@ -76,6 +76,10 @@ class Quest extends Controller {
 				[data.questType, data.rewardData, data.conditionstring, data.matched] = questData
 				data.dustAmount = data.rewardData.dustAmount
 				data.isShiny = data.rewardData.isShiny
+
+				log.log({
+					level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', meta: data
+				})
 
 				const jobs = []
 				const monsternames = []
@@ -147,6 +151,11 @@ class Quest extends Controller {
 						}
 
 						whoCares.forEach((cares) => {
+							const alarmId = this.uuid
+							log.log({
+								level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+							})
+
 							const caresCache = this.getDiscordCache(cares.id)
 							const template = JSON.stringify(this.mdts.quest[cares.template])
 							const message = mustache.render(template, view)
@@ -154,7 +163,8 @@ class Quest extends Controller {
 								message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : JSON.parse(message),
 								target: cares.id,
 								name: cares.name,
-								emoji: []
+								emoji: [],
+								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
 							}
 							if (caresCache <= config.discord.limitamount + 1) {
 								jobs.push(work)
@@ -162,8 +172,14 @@ class Quest extends Controller {
 							}
 						})
 						resolve(jobs)
+					}).catch((err) => {
+						log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
 					})
+				}).catch((err) => {
+					log.log({ level: 'error', message: `monsterWhoCares errored with: ${err.message}`, event: 'fail:questWhoCares' })
 				})
+			}).catch((err) => {
+				log.log({ level: 'error', message: `pointsInArea errored with: ${err.message}`, event: 'fail:questpointsInArea' })
 			})
 		})
 	}

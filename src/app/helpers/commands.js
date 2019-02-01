@@ -34,12 +34,13 @@ client.on('ready', () => {
 	query.selectAllQuery('humans', 'enabled', 1).then((humans) => {
 		humans.forEach((human) => {
 			if (!client.channels.keyArray().includes(human.id) && !client.users.keyArray().includes(human.id)) {
+				log.log({ level: 'debug', message: `unregistered ${human.name} due to 404`, event: 'discord:registerCheck' })
+
 				query.deleteQuery('egg', 'id', human.id)
 				query.deleteQuery('monsters', 'id', human.id)
 				query.deleteQuery('raid', 'id', human.id)
 				query.deleteQuery('quest', 'id', human.id)
 				query.deleteQuery('humans', 'id', human.id)
-				log.info(`unregistered ${human.name} due to 404`)
 			}
 		})
 	})
@@ -63,11 +64,12 @@ if (config.discord.userRole) {
 					if (!isregistered) {
 						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${oldMember.user.id}'`, `'${emojiStrip(oldMember.user.username)}'`, '\'[]\''])
 						oldMember.user.send(dts.greeting)
-						log.info(`${oldMember.user.username} registered by assigning @${config.discord.userRole} `)
+						log.log({ level: 'debug', message: `registered ${oldMember.user.name} because ${config.discord.userRole} role removed`, event: 'discord:roleCheck' })
+
 					}
 				})
 				.catch((err) => {
-					log.error(`Role based registration errored with: ${err}`)
+					log.error(`Role based registration errored with: ${err.message}`)
 				})
 		}
 
@@ -80,11 +82,11 @@ if (config.discord.userRole) {
 						query.deleteQuery('raid', 'id', oldMember.user.id)
 						query.deleteQuery('quest', 'id', oldMember.user.id)
 						query.deleteQuery('humans', 'id', oldMember.user.id)
-						log.info(`${oldMember.user.username} unregistered by removing @${config.discord.userRole}`)
+						log.log({ level: 'debug', message: `unregistered ${oldMember.user.name} because ${config.discord.userRole} role removed`, event: 'discord:roleCheck' })
 					}
 				})
 				.catch((err) => {
-					log.error(`Role based unregistration errored with: ${err}`)
+					log.error(`Role based unregistration errored with: ${err.message}`)
 				})
 		}
 	})
@@ -111,12 +113,12 @@ client.on('message', (msg) => {
 					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.author.id}'`, `'${emojiStrip(msg.author.username)}'`, '\'[]\''])
 					msg.react('✅')
 					msg.author.send(dts.greeting)
-					log.info(`${msg.author.username} registered`)
+					log.log({ level: 'debug', message: `${msg.author.tag} registered`, event: 'discord:registered' })
 
 				}
 			})
 			.catch((err) => {
-				log.error(`Commander !poracle errored with: ${err}`)
+				log.error(`Commander !poracle errored with: ${err.message}`)
 			})
 	}
 
@@ -131,7 +133,7 @@ client.on('message', (msg) => {
 					query.deleteQuery('quest', 'id', msg.author.id)
 					query.deleteQuery('humans', 'id', msg.author.id)
 					msg.react('✅')
-					log.info(`${msg.author.username} unregistered`)
+					log.log({ level: 'debug', message: `${msg.author.tag} unregistered`, event: 'discord:unregistered' })
 
 				}
 			})
@@ -148,7 +150,7 @@ client.on('message', (msg) => {
 					query.deleteQuery('raid', 'id', target.id)
 					query.deleteQuery('humans', 'id', target.id)
 					msg.react('✅')
-					log.info(`${msg.author.username} unregistered`)
+					log.log({ level: 'debug', message: `${msg.author.tag} unregistered ${target.tag}`, event: 'discord:unregistered' })
 
 				}
 			})
@@ -158,6 +160,7 @@ client.on('message', (msg) => {
 	else if (msg.content.startsWith(`${config.discord.prefix}location `)) {
 		if (msg.channel.type !== 'dm') {
 			msg.author.send('Please run commands in Direct Messages')
+			log.log({ level: 'debug', message: `${msg.author.tag} set location`, event: 'discord:location' })
 			return null
 		}
 
@@ -191,7 +194,7 @@ client.on('message', (msg) => {
 			}
 			query.updateQuery('humans', 'enabled', true, 'id', msg.author.id)
 			msg.react('✅')
-			log.debug(`${msg.author.username} enabled alarms`)
+			log.log({ level: 'debug', message: `${msg.author.tag} enabled alarms`, event: 'discord:enable' })
 		})
 	}
 
@@ -209,7 +212,7 @@ client.on('message', (msg) => {
 			}
 			query.updateQuery('humans', 'enabled', false, 'id', msg.author.id)
 			msg.react('✅')
-			log.debug(`${msg.author.username} disabled alarms`)
+			log.log({ level: 'debug', message: `${msg.author.tag} disabled alarms`, event: 'discord:disable' })
 		})
 	}
 
@@ -241,7 +244,7 @@ client.on('message', (msg) => {
 				}
 				if (addAreas.length) {
 					msg.reply(`Added areas: ${addAreas}`)
-					log.info(`${msg.author.username} added areas ${addAreas}`)
+					log.log({ level: 'debug', message: `${msg.author.tag} added area ${addAreas}`, event: 'discord:areaAdd' })
 				}
 				else msg.react('👌')
 
@@ -278,7 +281,7 @@ client.on('message', (msg) => {
 				}
 				if (removeAreas.length) {
 					msg.reply(`Removed areas: ${removeAreas}`)
-					log.info(`${msg.author.username} removed areas ${removeAreas}`)
+					log.log({ level: 'debug', message: `${msg.author.tag} removed area ${removeAreas}`, event: 'discord:areaRemove' })
 				}
 				else msg.react('👌')
 			})
@@ -358,10 +361,10 @@ client.on('message', (msg) => {
 						'monsters',
 						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
 						[`'${msg.author.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
-					).then(log.info(`${msg.author.username} started tracking ${monsterData[monster].name}`))
+					)
 				})
 				msg.react('✅')
-				log.info(`${msg.author.username} started tracking ${monsters}`)
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters}`, event: 'discord:track' })
 
 			}
 			else if (monsters.length > 1 && forms.length) {
@@ -381,12 +384,13 @@ client.on('message', (msg) => {
 					const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === form)
 					if (fid !== undefined) fids.push(fid)
 				})
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters[0]} form: ${fids}`, event: 'discord:track' })
 				fids.forEach((form) => {
 					query.insertOrUpdateQuery(
 						'monsters',
 						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
 						[`'${msg.author.id}'`, `'${monsters[0]}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
-					).then(log.info(`${msg.author.username} started tracking ${monsterData[monsters[0]].name} form ${formData[monsters[0]][form]} `))
+					)
 
 				})
 				if (fids.length > 0) {
@@ -432,7 +436,7 @@ client.on('message', (msg) => {
 			if (monsters.length) {
 				monsters.forEach((monster) => {
 					query.deleteByIdQuery('monsters', 'pokemon_id', `${monster}`, msg.author.id)
-						.then(log.info(`${msg.author.username} removed pokemon tracking ${monsterData[monster].name}`))
+						.then(log.log({ level: 'debug', message: `${msg.author.username} removed pokemon tracking ${monsterData[monster].name}`, event: 'discord:untrack' }))
 				})
 				msg.react('✅')
 			}
@@ -447,71 +451,88 @@ client.on('message', (msg) => {
 		}
 
 
-		query.countQuery('id', 'humans', 'id', msg.author.id).then((isregistered) => {
-			if (!isregistered) {
-				msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${config.discord.prefix}poracle to #${config.discord.channel}`)
-				return null
-			}
-			const rawArgs = msg.content.slice(`${config.discord.prefix}track`.length).split(' ')
-			const args = rawArgs.join('|').toLowerCase().split('|')
-			const monsters = []
-			let park = 0
-			let distance = 0
-			let team = 4
-			let template = 3
-			const levels = []
+		query.countQuery('id', 'humans', 'id', msg.author.id)
+			.then((isregistered) => {
+				if (!isregistered) {
+					msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${config.discord.prefix}poracle to #${config.discord.channel}`)
+					return null
+				}
+				const rawArgs = msg.content.slice(`${config.discord.prefix}track`.length)
+					.split(' ')
+				const args = rawArgs.join('|')
+					.toLowerCase()
+					.split('|')
+				const monsters = []
+				let park = 0
+				let distance = 0
+				let team = 4
+				let template = 3
+				const levels = []
 
-			args.forEach((element) => {
-				const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
-				if (pid !== undefined) monsters.push(pid)
-				else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
-					const Type = element.replace(/\b\w/g, l => l.toUpperCase())
-					_.filter(monsterData, (o, k) => {
-						if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
-							if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
-						} return k
+				args.forEach((element) => {
+					const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
+					if (pid !== undefined) monsters.push(pid)
+					else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
+						const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+						_.filter(monsterData, (o, k) => {
+							if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+								if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
+							}
+							return k
+						})
+					}
+				})
+				args.forEach((element) => {
+					if (element.match(/park/gi)) park = 1
+					else if (element.match(/level\d/gi)) levels.push(element.replace(/level/gi, ''))
+					else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
+					else if (element.match(/instinct/gi)) team = 3
+					else if (element.match(/valor/gi)) team = 2
+					else if (element.match(/mystic/gi)) team = 1
+					else if (element.match(/harmony/gi)) team = 0
+					else if (element.match(/d\d/gi)) {
+						distance = element.replace(/d/gi, '')
+						if (distance.length >= 10) distance = distance.substr(0, 9)
+					}
+				})
+
+				if (monsters.length !== 0 && levels.length === 0) {
+					const level = 0
+					monsters.forEach((monster) => {
+						query.insertOrUpdateQuery(
+							'raid',
+							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
+							[`'${msg.author.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
+						)
 					})
-				}
-			})
-			args.forEach((element) => {
-				if (element.match(/park/gi)) park = 1
-				else if (element.match(/level\d/gi)) levels.push(element.replace(/level/gi, ''))
-				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
-				else if (element.match(/instinct/gi)) team = 3
-				else if (element.match(/valor/gi)) team = 2
-				else if (element.match(/mystic/gi)) team = 1
-				else if (element.match(/harmony/gi)) team = 0
-				else if (element.match(/d\d/gi)) {
-					distance = element.replace(/d/gi, '')
-					if (distance.length >= 10) distance = distance.substr(0, 9)
-				}
-			})
+					log.log({
+						level: 'debug',
+						message: `${msg.author.username} started tracking ${monsters} raids`,
+						event: 'discord:raid'
+					})
 
-			if (monsters.length !== 0 && levels.length === 0) {
-				const level = 0
-				monsters.forEach((monster) => {
-					query.insertOrUpdateQuery(
-						'raid',
-						['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
-						[`'${msg.author.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
-					).then(log.info`${msg.author.username} started tracking level ${level} ${monsterData[monster].name} raids`)
-				})
-				msg.react('✅')
+					msg.react('✅')
 
-			}
-			else if (monsters.length === 0 && levels.length === 0) msg.reply('404 NO MONSTERS FOUND')
-			else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time')
-			else if (monsters.length === 0 && levels.length !== 0) {
-				levels.forEach((level) => {
-					query.insertOrUpdateQuery(
-						'raid',
-						['id', 'pokemon_id', 'distance', 'park', 'team', 'level'],
-						[`'${msg.author.id}'`, '\'721\'', `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
-					).then(log.info`${msg.author.username} started tracking level ${level} raids`)
-				})
-				msg.react('✅')
-			}
-		})
+				}
+				else if (monsters.length === 0 && levels.length === 0) msg.reply('404 NO MONSTERS FOUND')
+				else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time')
+				else if (monsters.length === 0 && levels.length !== 0) {
+					levels.forEach((level) => {
+						query.insertOrUpdateQuery(
+							'raid',
+							['id', 'pokemon_id', 'distance', 'park', 'team', 'level'],
+							[`'${msg.author.id}'`, '\'721\'', `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
+						)
+					})
+					log.log({
+						level: 'debug',
+						message: `${msg.author.username} started tracking level ${levels} raids`,
+						event: 'discord:raid'
+					})
+					msg.react('✅')
+				}
+
+			})
 	}
 
 	else if (msg.content.startsWith(`${config.discord.prefix}unraid `)) {
@@ -549,15 +570,16 @@ client.on('message', (msg) => {
 			if (monsters.length) {
 				monsters.forEach((monster) => {
 					query.deleteByIdQuery('raid', 'pokemon_id', `${monster}`, msg.author.id)
-						.then(log.info(`${msg.author.username} stopped tracking level ${monster} raids`))
 				})
+				log.log({ level: 'debug', message: `${msg.author.username} stopped tracking ${monsters} raids`, event: 'discord:unraid' })
 				msg.react('✅')
 			}
 			if (levels.length) {
 				levels.forEach((level) => {
 					query.deleteByIdQuery('raid', 'level', `${level}`, msg.author.id)
-						.then(log.info(`${msg.author.username} stopped tracking level ${level} raids`))
 				})
+				log.log({ level: 'debug', message: `${msg.author.username} stopped tracking level ${levels} raids`, event: 'discord:unraid' })
+
 				msg.react('✅')
 			}
 			if (!monsters.length && !levels.length) msg.reply('404 No raid bosses or levels found')
@@ -605,7 +627,7 @@ client.on('message', (msg) => {
 					[`'${msg.author.id}'`, `'${level}'`, `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`]
 				)
 				msg.react('✅')
-				log.info(`${msg.author.username} started tracking level${level} raid eggs`)
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking level ${level} eggs`, event: 'discord:egg' })
 			}
 			else msg.reply('404 NO LEVELS FOUND')
 		})
@@ -635,6 +657,7 @@ client.on('message', (msg) => {
 			if (level) {
 				query.deleteByIdQuery('egg', 'raid_level', `${level}`, msg.author.id)
 				msg.react('✅')
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking level ${level} eggs`, event: 'discord:unegg' })
 			}
 			else msg.reply('404 NO MONSTERS FOUND')
 		})
@@ -708,6 +731,7 @@ client.on('message', (msg) => {
 					if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
 					message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 				})
+				log.log({ level: 'debug', message: `${msg.author.username} checked trackings`, event: 'discord:tracked' })
 
 				if (message.length < 6000) {
 					msg.reply(message, { split: true })
@@ -720,7 +744,7 @@ client.on('message', (msg) => {
 						})
 						.catch((err) => {
 							msg.reply(`${msg.author.username} tracking list is long, but Hastebin is also down. ☹️ \nPlease try again later.`)
-							log.error(`Hastebin unhappy: ${err}`)
+							log.error(`Hastebin unhappy: ${err.message}`)
 
 						})
 				}
@@ -814,10 +838,9 @@ client.on('message', (msg) => {
 					'quest',
 					['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
 					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`, `'${t.mustShiny}'`]
-				).then((p) => {
-					log.info(`${msg.author.username} Added quest tracking`)
-				})
+				)
 			})
+			log.log({ level: 'debug', message: `${msg.author.username} added quest trackings`, event: 'discord:quest' })
 			msg.react('✅')
 		})
 	}
@@ -869,8 +892,9 @@ client.on('message', (msg) => {
 			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}))		
 			`
 			query.mysteryQuery(remQuery).then((t) => {
-				log.info(`${msg.author.username} removed quest tracking`)
+				log.log({ level: 'debug', message: `${msg.author.username} removed quest trackings`, event: 'discord:questRemove' })
 			})
+
 			msg.react('✅')
 		})
 	}
@@ -897,7 +921,8 @@ client.on('message', (msg) => {
 			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.channel.id}'`, `'${emojiStrip(msg.channel.name)}'`, '\'[]\''])
 			msg.react('✅')
 			msg.reply(`${msg.channel.name} has been registered`)
-			log.info(`${msg.author.username} registered ${msg.channel.name}`)
+			log.log({ level: 'debug', message: `${msg.author.username} registered ${msg.channel.name}`, event: 'discord:registeredChannel' })
+
 		})
 	}
 
@@ -915,7 +940,7 @@ client.on('message', (msg) => {
 			query.deleteQuery('raid', 'id', msg.channel.id)
 			query.deleteQuery('humans', 'id', msg.channel.id)
 			msg.react('✅')
-			log.info(`${msg.author.username} unregistered ${msg.channel.name}`)
+			log.log({ level: 'debug', message: `${msg.author.username} unregistered ${msg.channel.name}`, event: 'discord:unregisteredChannel' })
 		})
 	}
 
@@ -950,7 +975,7 @@ client.on('message', (msg) => {
 			}
 			query.updateQuery('humans', 'enabled', true, 'id', msg.channel.id)
 			msg.react('✅')
-			log.debug(`${msg.author.username} enabled alarms in ${msg.channel.name}`)
+			log.log({ level: 'debug', message: `${msg.author.username} enabled alarms in ${msg.channel.name}`, event: 'discord:startChannel' })
 		})
 	}
 
@@ -965,7 +990,7 @@ client.on('message', (msg) => {
 			}
 			query.updateQuery('humans', 'enabled', false, 'id', msg.channel.id)
 			msg.react('✅')
-			log.debug(`${msg.author.username} disabled alarms in ${msg.channel.name}`)
+			log.log({ level: 'debug', message: `${msg.author.username} enabled alarms in ${msg.channel.name}`, event: 'discord:stopChannel' })
 		})
 	}
 
@@ -993,7 +1018,7 @@ client.on('message', (msg) => {
 				if (validAreas.length) {
 					if (addAreas.length) {
 						msg.reply(`Added areas: ${addAreas}`)
-						log.info(`${msg.author.username} added areas ${addAreas} to ${msg.channel.name}`)
+						log.log({ level: 'debug', message: `${msg.author.username} added areas ${addAreas} to ${msg.channel.name}`, event: 'discord:areaAddChannel' })
 					}
 					else msg.react('👌')
 				}
@@ -1025,7 +1050,7 @@ client.on('message', (msg) => {
 				if (validAreas.length !== 0) {
 					if (removeAreas.length !== 0) {
 						msg.reply(`Removed areas: ${removeAreas}`)
-						log.info(`${msg.author.username} removed areas ${removeAreas} from ${msg.channel.name}`)
+						log.log({ level: 'debug', message: `${msg.author.username} removed areas ${removeAreas} from ${msg.channel.name}`, event: 'discord:areaRemoveChannel' })
 					}
 					else msg.react('👌')
 				}
@@ -1102,10 +1127,10 @@ client.on('message', (msg) => {
 						'monsters',
 						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
 						[`'${msg.channel.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
-					).then(log.info(`${msg.author.username} started tracking ${monsterData[monster].name} in ${msg.channel.name} `))
+					)
 				})
 				msg.react('✅')
-				log.info(`${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`)
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`, event: 'discord:trackChannel' })
 
 			}
 			else if (monsters.length > 1 && forms.length !== 0) msg.reply('Form filters can be added to 1 monster at a time')
@@ -1123,12 +1148,10 @@ client.on('message', (msg) => {
 							['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
 							[`'${msg.channel.id}'`, `'${monsters[0]}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
 						)
-							.then(log.info(`${msg.author.username} started tracking ${monsterData[monsters[0]].name} form ${formData[monsters[0]][form]} in ${msg.channel.name}`))
-
 					})
 					if (fids.length > 0) {
 						msg.react('✅')
-						log.info(`${msg.author.username} started tracking ${monsters[0]}, forms ${fids} in ${msg.channel.name}`)
+						log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters[0]}, forms ${fids} in ${msg.channel.name}`, event: 'discord:trackChannel' })
 					}
 					else {
 						msg.reply(`Sorry, I didn't find those forms for ID ${monsters[0]}`)
@@ -1234,7 +1257,7 @@ client.on('message', (msg) => {
 					)
 				})
 				msg.react('✅')
-				log.info(`${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`)
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`, event: 'discord:raidChannel' })
 
 			}
 			else if (monsters.length === 0 && levels.length === 0) msg.reply('404 NO MONSTERS FOUND')
@@ -1248,7 +1271,7 @@ client.on('message', (msg) => {
 					)
 				})
 				msg.react('✅')
-				log.info(`${msg.author.username} started tracking raid levels:${levels} raids in ${msg.channel.name} `)
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking raid levels:${levels} raids in ${msg.channel.name} `, event: 'discord:raidChannel' })
 			}
 		})
 	}
@@ -1285,12 +1308,14 @@ client.on('message', (msg) => {
 				monsters.forEach((monster) => {
 					query.deleteByIdQuery('raid', 'pokemon_id', `${monster}`, msg.channel.id)
 				})
+				log.log({ level: 'debug', message: `${msg.author.username} removed tracking raid monsters:${monsters} raids in ${msg.channel.name} `, event: 'discord:unraidChannel' })
 				msg.react('✅')
 			}
 			if (levels.length) {
 				levels.forEach((level) => {
 					query.deleteByIdQuery('raid', 'level', `${level}`, msg.channel.id)
 				})
+				log.log({ level: 'debug', message: `${msg.author.username} removed tracking raid level:${levels} raids in ${msg.channel.name} `, event: 'discord:unraidChannel' })
 				msg.react('✅')
 			}
 			if (!monsters.length && !levels.length) msg.reply('404 No raid bosses or levels found')
@@ -1335,7 +1360,7 @@ client.on('message', (msg) => {
 				)
 
 				msg.react('✅')
-				log.info(`${msg.author.username} started tracking level${level} eggs`)
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking level${level} eggs`, event: 'discord:eggChannel' })
 			}
 			else msg.reply('404 NO MONSTERS FOUND')
 		})
@@ -1360,6 +1385,8 @@ client.on('message', (msg) => {
 			if (level) {
 				query.deleteByIdQuery('egg', 'raid_level', `${level}`, msg.channel.id)
 				msg.react('✅')
+				log.log({ level: 'debug', message: `${msg.author.username} started untracked level ${level} eggs`, event: 'discord:uneggChannel' })
+
 			}
 			else {
 				msg.reply('404 Raid level not found')
@@ -1431,6 +1458,7 @@ client.on('message', (msg) => {
 					if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
 					message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 				})
+				log.log({ level: 'debug', message: `${msg.author.username} checked trackings`, event: 'discord:trackedChannel' })
 
 				if (message.length < 6000) {
 					msg.reply(message, { split: true })
@@ -1441,7 +1469,7 @@ client.on('message', (msg) => {
 						msg.reply(`${msg.channel.name} tracking list is quite long. Have a look at ${hastelink}`)
 					})
 						.catch((err) => {
-							log.error(`Hastebin unhappy: ${err}`)
+							log.error(`Hastebin unhappy: ${err.message}`)
 							msg.reply(`${msg.channel.name} tracking list is long, but Hastebin is also down. ☹️ \nPlease try again later.`)
 						})
 				}
@@ -1532,10 +1560,10 @@ client.on('message', (msg) => {
 					'quest',
 					['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
 					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`, `'${t.mustShiny}'`]
-				).then((p) => {
-					log.info(`${msg.channel.name} Added quest tracking`)
-				})
+				)
 			})
+			log.log({ level: 'debug', message: `${msg.author.username} updated quest trackings in ${msg.channel.name}`, event: 'discord:questChannel' })
+
 			msg.react('✅')
 
 		})
@@ -1586,7 +1614,7 @@ client.on('message', (msg) => {
 			((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward >= ${stardustTracking}))		
 			`
 			query.mysteryQuery(remQuery).then((t) => {
-				log.info(`${msg.channel.name} removed quest tracking`)
+				log.log({ level: 'debug', message: `${msg.author.username} removed quest trackings in ${msg.channel.name}`, event: 'discord:questRemoveChannel' })
 			})
 			msg.react('✅')
 
@@ -1608,7 +1636,7 @@ client.on('guildMemberRemove', (member) => {
 				query.deleteQuery('raid', 'id', member.id)
 				query.deleteQuery('quest', 'id', member.id)
 				query.deleteQuery('humans', 'id', member.id)
-				log.info(`${member.username} left the server and was unregistered`)
+				log.log({ level: 'debug', message: `user ${member.tag} was deleted and unregistered`, event: 'discord:registerCheck' })
 			}
 		})
 	}
@@ -1622,7 +1650,8 @@ client.on('channelDelete', (channel) => {
 			query.deleteQuery('raid', 'id', channel.id)
 			query.deleteQuery('quest', 'id', channel.id)
 			query.deleteQuery('humans', 'id', channel.id)
-			log.info(`text channel${channel.name} was deleted and unregistered`)
+			log.log({ level: 'debug', message: `text channel${channel.name} was deleted and unregistered`, event: 'discord:registerCheck' })
+
 		}
 	})
 })

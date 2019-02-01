@@ -22,13 +22,6 @@ moment.locale(config.locale.timeformat)
 
 class Monster extends Controller {
 
-/*
-*
-*
-*
-*
-* monsterWhoCares, takes data object
-*/
 	async monsterWhoCares(data) {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
@@ -61,7 +54,7 @@ class Monster extends Controller {
                group by humans.id, humans.name, monsters.template `
 
 
-			log.debug(`Query constructed for monsterhWhoCares: \n ${query}`)
+			log.log({ level: 'debug', message: 'questWhoCares query', event: 'sql:monsterWhoCares' })
 			this.db.query(query)
 				.then((result) => {
 					log.info(`${data.name} appeared and ${result[0].length} humans cared`)
@@ -147,6 +140,10 @@ class Monster extends Controller {
 
 			this.pointInArea([data.latitude, data.longitude]).then((matchedAreas) => {
 				data.matched = matchedAreas
+				log.log({
+					level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', correlationId: data.correlationId, messageId: data.messageId, meta: data
+				})
+
 				this.monsterWhoCares(data).then((whocares) => {
 					// if noone cares or the result is not iterable, break out of processing
 					if (!whocares[0]) {
@@ -166,6 +163,10 @@ class Monster extends Controller {
 
 						const jobs = []
 						whocares.forEach((cares) => {
+							const alarmId = this.uuid
+							log.log({
+								level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+							})
 
 							const caresCache = this.getDiscordCache(cares.id)
 							const view = {
@@ -174,6 +175,7 @@ class Monster extends Controller {
 								tthh: data.tth.hours,
 								tthm: data.tth.minutes,
 								tths: data.tth.seconds,
+								confirmedTime: data.expire_timestamp_verified,
 								name: data.name,
 								now: new Date(),
 								gender: genderData[data.gender],
@@ -229,7 +231,9 @@ class Monster extends Controller {
 								message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
 								target: cares.id,
 								name: cares.name,
-								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji
+								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
+								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
+
 							}
 							if (caresCache <= config.discord.limitamount + 1) {
 								jobs.push(work)
@@ -240,14 +244,13 @@ class Monster extends Controller {
 						resolve(jobs)
 
 					}).catch((err) => {
-						log.error(`getAddress errored with: ${err}`)
+						log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
 					})
-
 				}).catch((err) => {
-					log.error(`monsterWhoCares errored with: ${err}`)
+					log.log({ level: 'error', message: `monsterWhoCares errored with: ${err.message}`, event: 'fail:monsterWhoCares' })
 				})
 			}).catch((err) => {
-				log.error(`pointsInArea errored with: ${err}`)
+				log.log({ level: 'error', message: `pointsInArea errored with: ${err.message}`, event: 'fail:pointsInArea' })
 			})
 		})
 	}

@@ -62,6 +62,7 @@ Any of the fields can be customized with the following:
 |{{tthh}}| Full hours until hidden|
 |{{tthm}}| Full minutes until hidden|
 |{{tths}}| Full seconds until hidden|
+|{{confirmedTime}}| Optional true/false field, false if the timer is a guesstimate|
 |{{now}}| Current Timestamp|
 |{{lat}}| Latitude of the alerted location|
 |{{lon}}| Longitude of the alerted location|

@@ -1,17 +1,17 @@
 const fs = require('fs')
 const path = require('path')
 const config = require('config')
-const mustache = require('mustache')
 const fastify = require('fastify')()
 const log = require('./logger')
 const cp = require('child_process')
-
+const nuxtConfig = require('./statistics/nuxt.config.js')
 // Start Commander
 
 let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
 commandWorker.on('exit', () => {
 	commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
 })
+
 // Check that DTS is present && create if not
 
 if (!fs.existsSync(path.join(__dirname, '../../config/questdts.json'))) {
@@ -29,26 +29,33 @@ if (!fs.existsSync(path.join(__dirname, '../../config/dts.json'))) {
 
 // Register routes
 
-fastify.register(require('./schemas'))
+
+fastify
+	.register(require('./schemas'))
 	.register(require('./routes/staticMap'))
 	.register(require('./routes/receiver'))
 	.register(require('fastify-static'), {
-		root: path.join(__dirname, 'helpers', 'staticmap'),
-		prefix: '/images/', // optional: default '/'
-	})
-	.register(require('point-of-view'), {
-		engine: {
-			mustache: mustache
-		}
+		root: path.join(__dirname, '../../logs/'),
+		prefix: '/logs/'
 	})
 
+fastify
+	.setErrorHandler((error, request, reply) => {
+		log.warn(`Fastify unhappy with error: ${error}`)
+		reply.send({ message: error.message })
+	})
+	.register(require('fastify-vue-plugin'), {
+		config: nuxtConfig
+	})
+	.after((e) => {
+		if (e) log.error(e)
+		fastify.nuxt('/')
+	})
 
 const start = async () => {
 	try {
 		await fastify.listen(config.general.port, config.general.host)
 		log.info(`Poracle started on ${fastify.server.address().address}:${fastify.server.address().port}`)
-		log.info(`server available routes are ${fastify.printRoutes()}`)
-
 	}
 	catch (err) {
 		log.error(err)

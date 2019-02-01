@@ -13,6 +13,6 @@ const schema = {
 }
 
 module.exports = function route(fastify, opts, next) {
-	fastify.get('/', { schema }, handler)
+	fastify.get('/staticMap/', { schema }, handler)
 	next()
 }

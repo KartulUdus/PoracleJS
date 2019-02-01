@@ -45,7 +45,7 @@ class Raid extends Controller {
                raid.distance = 0 and (${areastring}))
                group by humans.id, humans.name, raid.template`
 
-			log.debug(`Query constructed for raidWhoCares: \n ${query}`)
+			log.log({ level: 'debug', message: 'eggWhoCares query', event: 'sql:eggWhoCares' })
 			this.db.query(query)
 				.then((result) => {
 					log.info(`Raid against ${data.name} appeared and ${result[0].length} humans cared`)
@@ -78,7 +78,7 @@ class Raid extends Controller {
                egg.distance = 0 and (${areastring}))
 			group by humans.id, humans.name, egg.template`
 
-			log.debug(`Query constructed for eggWhoCares: \n ${query}`)
+			log.log({ level: 'debug', message: 'eggWhoCares query', event: 'sql:eggWhoCares' })
 			this.db.query(query)
 				.then((result) => {
 					log.info(`Raid egg level ${data.level} appeared and ${result[0].length} humans cared`)
@@ -146,6 +146,10 @@ class Raid extends Controller {
 						this.pointInArea([data.latitude, data.longitude])
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
+								log.log({
+									level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', meta: data
+								})
+
 								this.raidWhoCares(data).then((whoCares) => {
 									if (!whoCares[0]) {
 										resolve([])
@@ -164,6 +168,10 @@ class Raid extends Controller {
 
 										const jobs = []
 										whoCares.forEach((cares) => {
+											const alarmId = this.uuid
+											log.log({
+												level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+											})
 											const caresCache = _.cloneDeep(this.getDiscordCache(cares.id))
 											const view = {
 												id: data.pokemon_id,
@@ -214,14 +222,14 @@ class Raid extends Controller {
 
 											const template = JSON.stringify(dts.raid[`${cares.template}`])
 											let message = mustache.render(template, view)
-											log.debug(message)
 											message = JSON.parse(message)
 
 											const work = {
 												message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
 												target: cares.id,
 												name: cares.name,
-												emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji
+												emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
+												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
 											}
 											if (caresCache <= config.discord.limitamount + 1) {
 												jobs.push(work)
@@ -231,17 +239,17 @@ class Raid extends Controller {
 										})
 										resolve(jobs)
 									}).catch((err) => {
-										log.error(`getAddress on hatched Raid errored with: ${err}`)
+										log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
 									})
 
 								}).catch((err) => {
-									log.error(`raidWhoCares on hatched Raid errored with: ${err}`)
+									log.log({ level: 'error', message: `raidWhoCares errored with: ${err.message}`, event: 'fail:monsterWhoCares' })
 								})
 							}).catch((err) => {
-								log.error(`pointInArea on hatched Raid errored with: ${err}`)
+								log.log({ level: 'error', message: `pointsInArea errored with: ${err.message}`, event: 'fail:pointsInArea' })
 							})
 					}).catch((err) => {
-						log.error(`Fetching gym_info on hatched Raid errored with: ${err}`)
+						log.log({ level: 'error', message: `get gym-info errored with: ${err.message}`, event: 'fail:pointsInArea' })
 					})
 			}
 			else {
@@ -269,6 +277,9 @@ class Raid extends Controller {
 						this.pointInArea([data.latitude, data.longitude])
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
+								log.log({
+									level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', meta: data
+								})
 								this.eggWhoCares(data).then((whoCares) => {
 									if (!whoCares[0]) {
 										resolve([])
@@ -285,6 +296,10 @@ class Raid extends Controller {
 									}
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 										const jobs = []
+										const alarmId = this.uuid
+										log.log({
+											level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+										})
 										whoCares.forEach((cares) => {
 											const caresCache = this.getDiscordCache(cares.id)
 											const view = {
@@ -324,14 +339,14 @@ class Raid extends Controller {
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`])
 											let message = mustache.render(template, view)
-											log.debug(message)
 											message = JSON.parse(message)
 
 											const work = {
 												message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
 												target: cares.id,
 												name: cares.name,
-												emoji: []
+												emoji: [],
+												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
 											}
 											if (caresCache <= config.discord.limitamount + 1) {
 												jobs.push(work)
@@ -340,17 +355,17 @@ class Raid extends Controller {
 										})
 										resolve(jobs)
 									}).catch((err) => {
-										log.error(`getAddress on Raid errored with: ${err}`)
+										log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
 									})
 
 								}).catch((err) => {
-									log.error(`eggWhoCares on Raid errored with: ${err}`)
+									log.log({ level: 'error', message: `raidWhoCares errored with: ${err.message}`, event: 'fail:monsterWhoCares' })
 								})
 							}).catch((err) => {
-								log.error(`pointInArea on Raid errored with: ${err}`)
+								log.log({ level: 'error', message: `pointsInArea errored with: ${err.message}`, event: 'fail:pointsInArea' })
 							})
 					}).catch((err) => {
-						log.error(`Fetching gym_info on Raid errored with: ${err}`)
+						log.log({ level: 'error', message: `get gym-info errored with: ${err.message}`, event: 'fail:pointsInArea' })
 					})
 			}
 
