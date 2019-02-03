@@ -1,88 +1,65 @@
 <template>
     <div class="bar-chart">
         <no-ssr>
-            <BarChart :data="something" :options="{ maintainAspectRatio: false }" />
+            <button v-on:click="timeTarget = 300000; updateAll()">5m</button>
+            <button v-on:click="timeTarget = 900000; updateAll()">15m</button>
+            <button v-on:click="timeTarget = 1800000; updateAll()">30m</button>
+            <button v-on:click="timeTarget = 3600000; updateAll()">1h</button>
+            <button v-on:click="timeTarget = 10800000; updateAll()">3h</button>
+            <button v-on:click="timeTarget = 32400000; updateAll()">9h</button>
+
+
+
+            <lineChart :chartData="this.httpChart" :options="{ maintainAspectRatio: false }" />
+            <lineChart :chartData="this.messageChart" :options="{ maintainAspectRatio: false }" />
+
+            <lineChart :chartData="this.alarmChart" :options="{ maintainAspectRatio: false }" />
+            <Doughnut :chartData="messageTypes" :options="{ legend: { display: false }, maintainAspectRatio: false }" />
         </no-ssr>
     </div>
 </template>
 
 <script>
-	import BarChart from '~/components/lineChart'
-	import axios from 'axios'
-	import moment from 'moment'
-    import _ from 'lodash'
+	import lineChart from '~/components/lineChart'
+	import Doughnut from '~/components/doughnutChart'
 
 	export default {
 
-		Data() {
 
+		data() {
 			return {
-				something: {}
+                timeTarget: 300000
 			}
 		},
 
 		components: {
-			BarChart
+			lineChart,
+			Doughnut
+		},
+		computed: {
+			httpChart () { return this.$store.state.stats.httpChart },
+			messageChart () { return this.$store.state.stats.messageChart },
+			alarmChart () {	return this.$store.state.stats.alarmChart },
+			messageTypes () { return this.$store.state.stats.messageTypes }
+
+
 		},
 
         methods: {
-            makeTimeArray (timeTarget){
-            	const firstTime = Math.trunc(new Date().valueOf() - timeTarget)
-                let timeArray = []
-                for(let i = 0; i< 10; i++){
-                	timeArray.push(new Date(firstTime + (i * timeTarget/10)))
-                }
-
-                this.chart =
-					{
-						labels: timeArray,
-						datasets: [
-							{
-								label: 'Messages last 5 minutes',
-								backgroundColor: '#41b883',
-								data: [12,123,11,1,23,1,123,124,123,11]
-							}
-						]
-					}
-					this.something = chart
-            },
-
-			timeFilter (collection, begin, end){
-				//console.log(collection, begin, end)
-				return _.filter(collection, function(item) {
-					return _.inRange(
-						new Date(item.timestamp.valueOf()),
-						begin,
-						end + 1
-					);
-				})
-            }
-        },
+			updateAll() {
+				this.$store.commit('stats/createCharts', this.timeTarget)
+			}
+		},
 		mounted: function(){
-
-			axios.get( `/logs/worker.json`).then( raw => {
-				let records = raw.data.split('\n')
-				records.pop()
-				records = records.map(JSON.parse)
-				let errors = _.filter(records, { 'level': 'error' })
-				let warnings = _.filter(records, { 'level': 'warn' })
-				let debug = _.filter(records, { 'level': 'debug' })
-				let httpE = _.filter(debug, function(req){
-					return req.event === 'http:start' || req.event === 'http:end'
-				})
-				let filteredhttpE = this.timeFilter(httpE, (new Date().valueOf() -300000), new Date().valueOf())
-				let something = this.makeTimeArray(300000)
-
-			})
-
+			this.updateAll()
+			setInterval(this.updateAll, 30000)
 		}
-
 	}
 </script>
 
 <style scoped>
     .bar-chart {
-        position: fixed;
+        position: relative;
         left: 10%;
         top: 10%;
         width: 80%;

@@ -49,6 +49,10 @@
     // geocoding backup to OSM on error is unhappy, make these separate and delete this rule please
     "consistent-return": 0,
     // because Travis-ci does not have config files, therefore this rule cannot error
-    "import/no-unresolved": 0
+    "import/no-unresolved": 0,
+    // as I some modules are bundled with nuxt, this rule bad
+    "import/no-extraneous-dependencies": 0,
+    // this rule collides with vuex store strict mode, so it will be disabled
+    "import/prefer-default-export": 0
   }
 }

@@ -9,9 +9,6 @@ module.exports = {
 	axios: {
 		retry: { retries: 3 }
 	},
-	/*	plugins: [
-		{ src: '~/plugins/chart', ssr: false }
-	], */
 	build: {
 		stats: 'errors-only'
 	},

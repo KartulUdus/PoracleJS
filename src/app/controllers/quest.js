@@ -78,7 +78,7 @@ class Quest extends Controller {
 				data.isShiny = data.rewardData.isShiny
 
 				log.log({
-					level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', meta: data
+					level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', type: 'quest', meta: data
 				})
 
 				const jobs = []

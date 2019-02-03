@@ -86,10 +86,6 @@ module.exports = async (req, reply) => {
 					log.log({ level: 'warn', message: `Monster encounter:${hook.message.encounter_id} was sent again too soon`, event: 'cache:duplicate' })
 				}
 
-				reply.send({ webserver: 'happy' })
-				log.log({
-					level: 'debug', message: `http request ${correlationId} replied to`, correlationId: correlationId, event: 'http:end'
-				})
 				break
 			}
 			case 'raid': {
@@ -110,9 +106,6 @@ module.exports = async (req, reply) => {
 				else {
 					log.log({ level: 'warn', message: `Raid at gym :${hook.message.gym_id} was sent again too soon`, event: 'cache:duplicate' })
 				}
-				reply.send({ webserver: 'happy' })
-				log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
-
 				break
 			}
 			case 'gym_details': {
@@ -137,10 +130,6 @@ module.exports = async (req, reply) => {
 					[`'${g.id}'`, `'${g.name}'`, `${g.park}`, `'${g.description}'`, `'${g.url}'`, `${g.latitude}`, `${g.longitude}`]
 				)
 				log.info(`Saved gym-details for ${g.name}`)
-
-				reply.send({ webserver: 'happy' })
-				log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
-
 				break
 			}
 			case 'quest': {
@@ -151,10 +140,6 @@ module.exports = async (req, reply) => {
 						raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 					})
 				})
-
-				reply.send({ webserver: 'happy' })
-				log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
-
 				break
 			}
 			default: {
@@ -163,12 +148,12 @@ module.exports = async (req, reply) => {
 		}
 	})
 
-	if (!reply.sent) log.log({ level: 'debug', message: `http request${correlationId} replied to`, event: 'http:end' })
-	reply.send({
-		objecttype: req.body.type,
-		datatype: typeof req.body,
-		array: Array.isArray(req.body),
-		data: data
-	})
-
+	if (!reply.sent) {
+		log.log({
+			level: 'debug',
+			message: `http request${correlationId} replied to`,
+			event: 'http:end'
+		})
+		reply.send({ webserver: 'happy' })
+	}
 }

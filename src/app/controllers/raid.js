@@ -147,7 +147,7 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								log.log({
-									level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', meta: data
+									level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'raid', meta: data
 								})
 
 								this.raidWhoCares(data).then((whoCares) => {
@@ -278,7 +278,7 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								log.log({
-									level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', meta: data
+									level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', type: 'egg', meta: data
 								})
 								this.eggWhoCares(data).then((whoCares) => {
 									if (!whoCares[0]) {

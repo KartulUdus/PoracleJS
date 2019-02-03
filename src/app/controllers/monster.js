@@ -141,7 +141,7 @@ class Monster extends Controller {
 			this.pointInArea([data.latitude, data.longitude]).then((matchedAreas) => {
 				data.matched = matchedAreas
 				log.log({
-					level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', correlationId: data.correlationId, messageId: data.messageId, meta: data
+					level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', correlationId: data.correlationId, messageId: data.messageId, type: 'pokemon', meta: data
 				})
 
 				this.monsterWhoCares(data).then((whocares) => {
