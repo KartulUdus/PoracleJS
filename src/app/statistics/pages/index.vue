@@ -1,5 +1,5 @@
 <template>
-    <div class="bar-chart">
+    <div class="line-chart">
         <no-ssr>
             <button v-on:click="timeTarget = 300000; updateAll()">5m</button>
             <button v-on:click="timeTarget = 900000; updateAll()">15m</button>
@@ -56,13 +56,3 @@
 		}
 	}
 </script>
-
-<style scoped>
-    .bar-chart {
-        position: relative;
-        left: 10%;
-        top: 10%;
-        width: 80%;
-        height: 80%;
-    }
-</style>
