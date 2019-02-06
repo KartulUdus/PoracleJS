@@ -3,6 +3,8 @@ const config = require('config')
 const log = require('../logger')
 const mustache = require('mustache')
 
+const emojiData = require('../../../config/emoji')
+
 const monsterData = require(config.locale.monstersJson)
 const typeData = require('../util/types')
 const _ = require('lodash')
@@ -115,6 +117,10 @@ class Quest extends Controller {
 						resolve([])
 						return null
 					}
+					data.rewardemoji = ''
+					if (data.type === 3) data.rewardemoji = emojiData.stardust
+					if (data.rewardData.items[1]) data.rewardemoji = emojiData.items[data.rewardData.items[1]]
+					if (data.rewardData.monsters[1]) data.rewardemoji = emojiData.pokemon[data.rewardData.monsters[1]]
 					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 						const view = {
 							now: new Date(),
@@ -124,6 +130,7 @@ class Quest extends Controller {
 							monsterNames: monsternames.join(', '),
 							itemNames: itemnames.join(', '),
 							stardust: data.type === 3 ? 'stardust' : '',
+							rewardemoji: data.rewardemoji,
 							imgurl: data.imgurl.toLowerCase(),
 							name: data.pokestop_name.replace(/\n/g, ' '),
 							url: data.pokestop_url,
@@ -219,7 +226,7 @@ class Quest extends Controller {
 					const template = this.qdts.questRewardTypes['7']
 					let e = []
 					monsterData[reward.info.pokemon_id].types.forEach((type) => {
-						e.push(typeData[type].emoji)
+						e.push(emojiData.type[type])
 					})
 					e = e.join()
 					if (reward.info.shiny) isShiny = 1

@@ -11,6 +11,8 @@ const weatherData = require('../util/weather')
 
 const types = require('../util/types')
 
+const emojiData = require('../../../config/emoji')
+
 const moveData = require(config.locale.movesJson)
 const genderData = require('../util/genders')
 const geoTz = require('geo-tz')
@@ -18,7 +20,6 @@ const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
-
 
 class Monster extends Controller {
 
@@ -116,7 +117,7 @@ class Monster extends Controller {
 			if (data.form === undefined || data.form === null) data.form = 0
 			if (!data.weather) data.weather = 0
 			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : ''
-			data.boostemoji = weatherData[data.weather].emoji ? weatherData[data.weather].emoji : ''
+			data.boostemoji = emojiData.weather[data.weather]
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.color = monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0
@@ -126,7 +127,7 @@ class Monster extends Controller {
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`
 			const e = []
 			monsterData[data.pokemon_id].types.forEach((type) => {
-				e.push(types[type].emoji)
+				e.push(emojiData.type[type])
 			})
 			data.emoji = e
 			data.emojiString = e.join('')
@@ -199,6 +200,7 @@ class Monster extends Controller {
 								ivcolor: data.ivcolor,
 								boost: data.boost,
 								boostemoji: data.boostemoji,
+								pokemoji: emojiData.pokemon[data.pokemon_id],
 								areas: data.matched.join(', '),
 
 								// geocode stuff

@@ -10,6 +10,8 @@ const monsterData = require(config.locale.monstersJson)
 const teamData = require('../util/teams')
 const types = require('../util/types')
 
+const emojiData = require('../../../config/emoji')
+
 const moveData = require(config.locale.movesJson)
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
@@ -121,7 +123,7 @@ class Raid extends Controller {
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00.png`
 				const e = []
 				monsterData[data.pokemon_id].types.forEach((type) => {
-					if (types[type]) e.push(types[type].emoji)
+					if (types[type]) e.push(emojiData.type[type])
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
@@ -216,6 +218,7 @@ class Raid extends Controller {
 												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
 												emojistring: data.emojistring,
+												pokemoji: emojiData.pokemon[data.pokemon_id],
 												areas: data.matched.join(', '),
 
 											}

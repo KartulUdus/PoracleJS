@@ -12,7 +12,7 @@ module.exports = {
 	build: {
 		stats: 'errors-only'
 	},
-	css: [ '@/stats.css' ],
+	css: ['@/stats.css'],
 	srcDir: 'src/app/statistics/',
 
 	env: {

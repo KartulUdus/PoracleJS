@@ -95,6 +95,7 @@ Any of the fields can be customized with the following:
 |{{boost}}| Monsters weather boost name|
 |{{boostemoji}}| Monsters weather boost emoji)|
 |{{gif}}| Gif image using pokemon-gif|
+|{{{pokemoji}}}| Custome Emoji of the pokemon if defined in config/emoji.json|
 |{{flagemoji}}|Country flag emoji for location|
 |{{lat}}| Latitude of the alert|
 |{{lon}}| Longitude of the alert|
@@ -157,6 +158,7 @@ Any of the fields can be customized with the following:
 |{{ex}}| If raid takes place in a potential EX gym (empty string if false)|
 |{{gif}}| Gif image using pokemon-gif|
 |{{flagemoji}}|Country flag emoji for location|
+|{{{pokemoji}}}|Custom emoji for the award pokemon as set in config/emoji.json|
 |{{lat}}| Latitude of the alert|
 |{{lon}}| Longitude of the alert|
 |{{areas}}| Matched geofence area names for alert|
@@ -247,6 +249,7 @@ Any of the fields can be customized with the following:
 |{{stardust}}| The word "stardust" if it's that tyüe of quest|
 |{{{imgurl}}}| Image of the reward. Could be Pokemon or Item or stardust|
 |{{name}}| Name of the Pokestop|
+|{{{rewardemoji}}}| emoji for the award as set in config/emoji.json|
 |{{url}}| Link to the image of the Pokestop|
 |{{minCp}}| Minimum CP of the reward pokemon |
 |{{maxCp}}| Maximum CP of the reward pokemon|

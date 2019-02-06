@@ -29,6 +29,10 @@ client.on('ready', () => {
 					})
 					if (config.discord.typereact) {
 						msg.job.emoji.forEach((emoji) => {
+							if (emoji.match(/:\d+>/gi)) {	// If the emoji is a string matching discord custom emoji, fetch it before reacting
+								emoji = emoji.match(/:\d+>/gi)[0].replace(/[:>]/g, '')
+								emoji = client.emojis.get(emoji)
+							}
 							message.react(emoji)
 						})
 					}
@@ -47,6 +51,10 @@ client.on('ready', () => {
 					})
 					if (config.discord.typereact) {
 						msg.job.emoji.forEach((emoji) => {
+							if (emoji.match(/:\d+>/gi)) {	// If the emoji is a string matching discord custom emoji, fetch it before reacting
+								emoji = emoji.match(/:\d+>/gi)[0].replace(/[:>]/g, '')
+								emoji = client.emojis.get(emoji)
+							}
 							message.react(emoji)
 						})
 					}

@@ -26,7 +26,10 @@ if (!fs.existsSync(path.join(__dirname, '../../config/dts.json'))) {
 	const emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/dts.json.example'), 'utf8')
 	fs.writeFileSync(path.join(__dirname, '../../config/dts.json'), emergQuestDtsConf)
 }
-
+if (!fs.existsSync(path.join(__dirname, '../../config/emoji.json'))) {
+	const emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/emoji.json.example'), 'utf8')
+	fs.writeFileSync(path.join(__dirname, '../../config/emoji.json'), emergQuestDtsConf)
+}
 // Register routes
 
 
