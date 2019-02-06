@@ -70,8 +70,8 @@ module.exports = async (req, reply) => {
 		hook.message.messageId = uuid()
 		switch (hook.type) {
 			case 'pokemon': {
-				if (!cache.get(`${hook.message.encounter_id}_${hook.message.weight}`)) {
-					cache.put(`${hook.message.encounter_id}_${hook.message.weight}`, 'cached')
+				if (!cache.get(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
+					cache.put(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, 'cached')
 					monsterController.handle(hook.message).then((work) => {
 						work.forEach((job) => {
 							queue.push(job)
@@ -89,8 +89,8 @@ module.exports = async (req, reply) => {
 				break
 			}
 			case 'raid': {
-				if (!cache.get(`${hook.message.gym_id}_${hook.message.pokemon_id}`)) {
-					cache.put(`${hook.message.gym_id}_${hook.message.pokemon_id}`, 'cached')
+				if (!cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
+					cache.put(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
 
 					raidController.handle(hook.message)
 						.then((work) => {
