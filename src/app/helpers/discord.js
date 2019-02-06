@@ -23,7 +23,7 @@ client.on('ready', () => {
 		if (msg.reason === 'food') {
 			clearInterval(hungryInterval)
 			if (client.channels.keyArray().includes(msg.job.target)) {
-				client.channels.get(msg.job.target).send(msg.job.message).then((message) => {
+				client.channels.get(msg.job.target).send(msg.job.message.content || '', msg.job.message).then((message) => {
 					log.log({
 						level: 'debug', message: `alarm ${msg.job.meta.alarmId} finished`, event: 'alarm:end', correlationId: msg.job.meta.correlationId, messageId: msg.job.meta.messageId, alarmId: msg.job.meta.alarmId
 					})
@@ -41,7 +41,7 @@ client.on('ready', () => {
 					})
 			}
 			else if (client.users.keyArray().includes(msg.job.target)) {
-				client.users.get(msg.job.target).send(msg.job.message).then((message) => {
+				client.users.get(msg.job.target).send(msg.job.message.content || '', msg.job.message).then((message) => {
 					log.log({
 						level: 'debug', message: `alarm ${msg.job.meta.alarmId} finished`, event: 'alarm:end', correlationId: msg.job.meta.correlationId, messageId: msg.job.meta.messageId, alarmId: msg.job.meta.alarmId
 					})
