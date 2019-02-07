@@ -10,7 +10,7 @@ module.exports = {
 		retry: { retries: 3 }
 	},
 	build: {
-		stats: 'errors-only'
+		quiet: true,
 	},
 	css: ['@/stats.css'],
 	srcDir: 'src/app/statistics/',

@@ -17,7 +17,7 @@ discordcache.on('hit', (key, val) => { })
 const queue = []
 
 const cache = new Cache({
-	ttl: 300 * 1000,
+	ttl: 61 * 60 * 1000,
 })
 
 const MonsterController = require('../controllers/monster')
