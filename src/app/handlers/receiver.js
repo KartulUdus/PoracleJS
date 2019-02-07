@@ -17,7 +17,7 @@ discordcache.on('hit', (key, val) => { })
 const queue = []
 
 const cache = new Cache({
-	ttl: 300 * 1000,
+	ttl: 60 * 60 * 1000,
 })
 
 const MonsterController = require('../controllers/monster')
@@ -104,7 +104,7 @@ module.exports = async (req, reply) => {
 						})
 				}
 				else {
-					log.log({ level: 'warn', message: `Raid at gym :${hook.message.gym_id} was sent again too soon`, event: 'cache:duplicate' })
+					log.log({ level: 'warn',message `Raid at gym:${hook.message.gym_id}_${hook.message.pokemon_id} was sent again too soon`, event: 'cache:duplicate' })
 				}
 				break
 			}
