@@ -47,7 +47,7 @@ class Raid extends Controller {
                raid.distance = 0 and (${areastring}))
                group by humans.id, humans.name, raid.template`
 
-			log.log({ level: 'debug', message: 'eggWhoCares query', event: 'sql:eggWhoCares' })
+			log.log({ level: 'debug', message: 'raidWhoCares query', event: 'sql:raidWhoCares' })
 			this.db.query(query)
 				.then((result) => {
 					log.info(`Raid against ${data.name} appeared and ${result[0].length} humans cared`)

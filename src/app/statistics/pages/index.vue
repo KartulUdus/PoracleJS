@@ -8,12 +8,18 @@
             <button v-on:click="timeTarget = 10800000; updateAll()">3h</button>
             <button v-on:click="timeTarget = 32400000; updateAll()">9h</button>
 
+            <lineChart :chartData="this.queueChart" :options="{ responsive: true , maintainAspectRatio: false }" />
+            <table>
 
+                <th><lineChart :chartData="this.httpChart" :options="{  responsive: true , maintainAspectRatio: false }" /></th>
+                <th><lineChart :chartData="this.messageChart" :options="{ responsive: true , maintainAspectRatio: false }" /></th>
+                <tr>
+                    <th><lineChart :chartData="this.httpChart" :options="{ responsive: true , maintainAspectRatio: false }" /></th>
+                    <th><lineChart :chartData="this.messageChart" :options="{ responsive: true , maintainAspectRatio: false }" /></th>
+                </tr>
+            </table>
+            <lineChart :chartData="this.queryChart" :options="{ responsive: true , maintainAspectRatio: false }" />
 
-            <lineChart :chartData="this.httpChart" :options="{ maintainAspectRatio: false }" />
-            <lineChart :chartData="this.messageChart" :options="{ maintainAspectRatio: false }" />
-
-            <lineChart :chartData="this.alarmChart" :options="{ maintainAspectRatio: false }" />
             <Doughnut :chartData="messageTypes" :options="{ legend: { display: false }, maintainAspectRatio: false }" />
         </no-ssr>
     </div>
@@ -40,6 +46,8 @@
 			httpChart () { return this.$store.state.stats.httpChart },
 			messageChart () { return this.$store.state.stats.messageChart },
 			alarmChart () {	return this.$store.state.stats.alarmChart },
+			queryChart () { return this.$store.state.stats.queryChart },
+			queueChart () { return this.$store.state.stats.queueChart },
 			messageTypes () { return this.$store.state.stats.messageTypes }
 
 
