@@ -14,6 +14,7 @@ before_script:
   - cp config/dts.json.example config/dts.json
   - cp config/geofence_example.json config/geofence.json
   - cp config/questdts.json.example config/questdts.json
+  - cp config/emoji.json.example config/emoji.json
   - npm install
 
 script:
