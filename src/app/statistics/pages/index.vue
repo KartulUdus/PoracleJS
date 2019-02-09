@@ -2,7 +2,6 @@
     <div class="line-chart">
         <no-ssr>
             <div class="topbuttons">
-
                 <p class="title"> <img class="title" src="~/assets/starchy.svg" height="50" width="66" />PoracleJS Stats</p>
                 <button class="button" v-on:click="timeTarget = 300000; updateAll()">5m</button>
                 <button class="button" v-on:click="timeTarget = 900000; updateAll()">15m</button>
@@ -10,7 +9,6 @@
                 <button class="button" v-on:click="timeTarget = 3600000; updateAll()">1h</button>
                 <button class="button" v-on:click="timeTarget = 10800000; updateAll()">3h</button>
                 <button class="button" v-on:click="timeTarget = 32400000; updateAll()">9h</button>
-
             </div>
             <tr  class="line-chart" >
                 <td><lineChart :chartData="this.queueChart" :options="{ responsive: true , maintainAspectRatio: false }" /></td>
@@ -23,7 +21,7 @@
 
             <lineChart class="line-chart" :chartData="this.queryChart" :options="{ responsive: true , maintainAspectRatio: false }" />
 
-            <Doughnut :chartData="messageTypes" :options="{ legend: { display: false }, maintainAspectRatio: false }" />
+            <Doughnut :chartData="messageTypes" :options="{ maintainAspectRatio: false }" />
         </no-ssr>
     </div>
 </template>

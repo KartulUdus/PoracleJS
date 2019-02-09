@@ -22,6 +22,10 @@ const typeData = require('../util/types')
 const formData = require('../util/forms')
 const hastebin = require('hastebin-gen')
 
+client.on('error', (e) => {
+	log.info(`Discord commando sent me an error, commiting seppuku just in case ${e.message}`)
+	process.exit()
+})
 
 client.on('ready', () => {
 	log.info(`Commander "${client.user.tag}" awaiting for orders!`)
