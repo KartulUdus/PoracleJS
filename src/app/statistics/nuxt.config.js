@@ -12,6 +12,13 @@ module.exports = {
 	build: {
 		quiet: true,
 	},
+	link: [
+		{
+			rel: '/favico.ico',
+			type: 'image/x-icon',
+			href: '~assets/starchy.ico',
+		},
+	],
 	css: ['@/stats.css'],
 	srcDir: 'src/app/statistics/',
 

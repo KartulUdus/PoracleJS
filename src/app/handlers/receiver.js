@@ -47,7 +47,6 @@ discord.on('message', (worker, msg) => {
 		discord.fork({ k: msg.key })
 	}
 	else if (msg.reason === 'hungry') {
-		if (Math.random() >= 0.999) log.log({ level: 'debug', message: `Discord worker #${worker.id} requested food`, event: 'discord:hungry' })
 		if (queue.length) {
 			worker.send({
 				reason: 'food',

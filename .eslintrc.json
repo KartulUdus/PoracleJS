@@ -53,6 +53,8 @@
     // as I some modules are bundled with nuxt, this rule bad
     "import/no-extraneous-dependencies": 0,
     // this rule collides with vuex store strict mode, so it will be disabled
-    "import/prefer-default-export": 0
+    "import/prefer-default-export": 0,
+    // something used by nuxt and needed to run statistics page
+    "no-restricted-syntax": 0
   }
 }

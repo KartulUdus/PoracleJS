@@ -1,24 +1,27 @@
 <template>
     <div class="line-chart">
         <no-ssr>
-            <button v-on:click="timeTarget = 300000; updateAll()">5m</button>
-            <button v-on:click="timeTarget = 900000; updateAll()">15m</button>
-            <button v-on:click="timeTarget = 1800000; updateAll()">30m</button>
-            <button v-on:click="timeTarget = 3600000; updateAll()">1h</button>
-            <button v-on:click="timeTarget = 10800000; updateAll()">3h</button>
-            <button v-on:click="timeTarget = 32400000; updateAll()">9h</button>
+            <div class="topbuttons">
 
-            <lineChart :chartData="this.queueChart" :options="{ responsive: true , maintainAspectRatio: false }" />
-            <table>
+                <p class="title"> <img class="title" src="~/assets/starchy.svg" height="50" width="66" />PoracleJS Stats</p>
+                <button class="button" v-on:click="timeTarget = 300000; updateAll()">5m</button>
+                <button class="button" v-on:click="timeTarget = 900000; updateAll()">15m</button>
+                <button class="button" v-on:click="timeTarget = 1800000; updateAll()">30m</button>
+                <button class="button" v-on:click="timeTarget = 3600000; updateAll()">1h</button>
+                <button class="button" v-on:click="timeTarget = 10800000; updateAll()">3h</button>
+                <button class="button" v-on:click="timeTarget = 32400000; updateAll()">9h</button>
 
-                <th><lineChart :chartData="this.httpChart" :options="{  responsive: true , maintainAspectRatio: false }" /></th>
-                <th><lineChart :chartData="this.messageChart" :options="{ responsive: true , maintainAspectRatio: false }" /></th>
-                <tr>
-                    <th><lineChart :chartData="this.httpChart" :options="{ responsive: true , maintainAspectRatio: false }" /></th>
-                    <th><lineChart :chartData="this.messageChart" :options="{ responsive: true , maintainAspectRatio: false }" /></th>
-                </tr>
-            </table>
-            <lineChart :chartData="this.queryChart" :options="{ responsive: true , maintainAspectRatio: false }" />
+            </div>
+            <tr  class="line-chart" >
+                <td><lineChart :chartData="this.queueChart" :options="{ responsive: true , maintainAspectRatio: false }" /></td>
+                <td><lineChart :chartData="this.httpChart" :options="{ responsive: true , maintainAspectRatio: false }" /></td>
+            </tr>
+            <tr  class="line-chart" >
+                <td><lineChart :chartData="this.messageChart" :options="{ responsive: true , maintainAspectRatio: false }" /></td>
+                <td><lineChart :chartData="this.alarmChart" :options="{ responsive: true , maintainAspectRatio: false }" /></td>
+            </tr>
+
+            <lineChart class="line-chart" :chartData="this.queryChart" :options="{ responsive: true , maintainAspectRatio: false }" />
 
             <Doughnut :chartData="messageTypes" :options="{ legend: { display: false }, maintainAspectRatio: false }" />
         </no-ssr>

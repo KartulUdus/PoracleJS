@@ -1,7 +1,31 @@
 .line-chart {
-    position: relative;
-    left: 10%;
-    top: 10%;
-    width: 80%;
-    height: 80%;
+    margin: 0 auto;
+    display:table;
+    width: 100%;
 }
+
+.button {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 4px 2px;
+}
+
+.topbuttons {
+    display: table;
+    margin: 0 auto;
+}
+
+.title {
+     color: #c1694f;
+     font-family: Impact, Charcoal, sans-serif;
+     text-align: center;
+     font-size: 40px;
+     margin: 0;
+ }

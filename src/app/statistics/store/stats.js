@@ -88,10 +88,8 @@ export const mutations = {
 			const CsqlSelectAllQuery = _.filter(chunkRelevant, { event: 'sql:selectAllQuery' })
 			const CsqlAddOneQuery = _.filter(chunkRelevant, { event: 'sql:addOneQuery' })
 			const CsqlCheckSchema = _.filter(chunkRelevant, { event: 'sql:checkSchema' })
-			const CsqlTotal = _.filter(chunkRelevant, chunk => {
-				return chunk.event && chunk.event.match(/sql:+/g)
-			})
-			const CjobQueue = _.filter(chunkRelevant, { event: 'queue'})
+			const CsqlTotal = _.filter(chunkRelevant, chunk => chunk.event && chunk.event.match(/sql:+/g))
+			const CjobQueue = _.filter(chunkRelevant, { event: 'queue' })
 
 			// events
 
@@ -124,8 +122,8 @@ export const mutations = {
 			sqlTotal.push(CsqlTotal.length)
 
 			// queue
-			const jqSum = 0
-			CjobQueue.forEach(x => {
+			let jqSum = 0
+			CjobQueue.forEach((x) => {
 				jqSum += x.queue
 			})
 			jobQueue.push(jqSum / CjobQueue.length)
@@ -138,7 +136,7 @@ export const mutations = {
 		const countQuest = _.filter(meta, { type: 'quest' }).length
 
 		state.messageTypes = {
-			labels: ['mosnter', 'egg', 'raid', 'quest'],
+			labels: ['monster', 'egg', 'raid', 'quest'],
 			datasets: [
 				{
 					label: `Total messages ${countMon + countEgg + countRaid + countQuest}`,
@@ -323,7 +321,6 @@ export const state = () => ({
 	alarmChart: {},
 	queryChart: {},
 	queueChart: {}
-
 
 
 })

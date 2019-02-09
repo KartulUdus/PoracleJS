@@ -47,7 +47,7 @@ fastify
 		log.warn(`Fastify unhappy with error: ${error}`)
 		reply.send({ message: error.message })
 	})
-	.register(require('fastify-vue-plugin'), {
+	.register(require('./helpers/nuxt'), {
 		config: nuxtConfig
 	})
 	.after((e) => {
