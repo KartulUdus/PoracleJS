@@ -29,3 +29,21 @@
      font-size: 40px;
      margin: 0;
  }
+
+.menuButton {
+    position: absolute;
+    rotation: 90deg;
+    z-index: 999;
+    fill: none;
+    border: 0px;
+    right: 0px;
+    top: 8px;
+    background-color: transparent;
+
+}
+.Sidebar {
+    position: fixed;
+    z-index: 999;
+    right:  0px;
+    width: 500px;
+}

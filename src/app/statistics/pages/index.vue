@@ -31,8 +31,8 @@
 	import Doughnut from '~/components/doughnutChart'
 
 	export default {
-
-
+        name: 'statistics',
+		layout: 'stats',
 		data() {
 			return {
                 timeTarget: 300000
@@ -50,7 +50,6 @@
 			queryChart () { return this.$store.state.stats.queryChart },
 			queueChart () { return this.$store.state.stats.queueChart },
 			messageTypes () { return this.$store.state.stats.messageTypes }
-
 
 		},
 
