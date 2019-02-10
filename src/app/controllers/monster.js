@@ -124,6 +124,7 @@ class Monster extends Controller {
 			data.ivcolor = this.findIvColor(data.iv)
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
+			data.gif = pokemonGif(Number(data.pokemon_id))
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form.toString().padStart(2, '0')}.png`
 			const e = []
 			monsterData[data.pokemon_id].types.forEach((type) => {
@@ -195,7 +196,7 @@ class Monster extends Controller {
 								rocketmap: data.rocketmap,
 								form: data.formname,
 								imgurl: data.imgurl.toLowerCase(),
-								gif: pokemonGif(Number(data.pokemon_id)),
+								gif: data.gif,
 								color: data.color,
 								ivcolor: data.ivcolor,
 								boost: data.boost,

@@ -16,17 +16,17 @@
 
                     <button class="dropbtn">Order By</button>
                     <div class="dropdown-content">
-                        <a v-on:click="timeTarget = 'id'">ID</a>
-                        <a v-on:click="timeTarget = 'count'">Count</a>
-                        <a v-on:click="timeTarget = 'iv'">Average IV</a>
-                        <a v-on:click="timeTarget = 'random'">Random</a>
+                        <a v-on:click="filter = 'id'; updateAll()">ID</a>
+                        <a v-on:click="filter = 'count'; updateAll()">Count</a>
+                        <a v-on:click="filter = 'iv'; updateAll()">Average IV</a>
+                        <a v-on:click="filter = 'random'; updateAll()">Random</a>
 
                     </div>
                 </div>
 
             </div>
             <div>
-                <table cellspacing="0" cellpadding="0" class="monsterTable">
+                <table class="monsterTable">
                     <div class="monster" v-for="p in pokemonData"  >
                         <img :src="p.imgUrl"/><br>
                         <nobr>Name: {{p.name}} {{p.emoji}}</nobr><br>
@@ -41,9 +41,6 @@
 </template>
 
 <script>
-	import lineChart from '~/components/lineChart'
-	import Doughnut from '~/components/doughnutChart'
-
 	export default {
 		name: 'statistics',
 		layout: 'stats',
@@ -54,18 +51,12 @@
 			}
 		},
 
-		components: {
-			lineChart,
-			Doughnut
-		},
 		computed: {
-			pokemonData () { return this.$store.state.pokemon.data },
-
+			pokemonData () { return this.$store.state.pokemon.data }
 		},
 
 		methods: {
 			updateAll() {
-				console.log(this.filter)
 				this.$store.commit('pokemon/createData', this.timeTarget, this.filter)
 			}
 		},
