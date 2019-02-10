@@ -27,6 +27,12 @@ client.on('error', (e) => {
 	process.exit()
 })
 
+process.on('exit', () => {
+	process.send({
+		reason: 'seppuku'
+	})
+})
+
 client.on('ready', () => {
 	log.info(`Commander "${client.user.tag}" awaiting for orders!`)
 	client.user.setPresence({
@@ -1662,7 +1668,7 @@ client.on('channelDelete', (channel) => {
 
 client.login(process.argv[2])
 	.catch((err) => {
-		log.error(`Discord unhappy: ${err.message}`)
+		log.error(`Discord commando unhappy: ${err.message}`)
 		process.exit()
 	})
 

@@ -8,8 +8,8 @@ const nuxtConfig = require('./statistics/nuxt.config.js')
 // Start Commander
 
 let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
-commandWorker.on('exit', () => {
-	commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
+commandWorker.on('message', (msg) => {
+	if(msg.reason === 'seppuku') commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
 })
 
 // Check that DTS is present && create if not
