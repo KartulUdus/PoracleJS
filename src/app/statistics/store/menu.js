@@ -9,7 +9,7 @@ const getters = {
 
 export const mutations = {
 
-	toggleSidebar (state) {
+	toggleSidebar(state) {
 		state.sidebarOpen = !state.sidebarOpen
 	}
 

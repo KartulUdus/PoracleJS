@@ -1,8 +1,9 @@
 const fp = require('fastify-plugin')
 const { Nuxt, Builder } = require('nuxt')
 const defaults = require('lodash.defaults')
-const config = require('config')
-const webRoot = config.general.webroot || '/'
+const mainConfig = require('config')
+
+const webRoot = mainConfig.general.webroot || '/'
 
 module.exports = fp((fastify, opts, next) => {
 	if (!opts.config || typeof opts.config !== 'object') {
