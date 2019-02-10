@@ -176,7 +176,7 @@ class Monster extends Controller {
 								tthh: data.tth.hours,
 								tthm: data.tth.minutes,
 								tths: data.tth.seconds,
-								confirmedTime: data.expire_timestamp_verified,
+								confirmedTime: data.disappear_time_verified,
 								name: data.name,
 								now: new Date(),
 								gender: genderData[data.gender],
