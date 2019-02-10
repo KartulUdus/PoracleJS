@@ -33,7 +33,7 @@ setInterval(() => {
 	log.log({
 		level: 'debug', message: `Job queue is ${queue.length} items long`, queue: queue.length, event: 'queue'
 	})
-}, 120000)
+}, 60000)
 
 discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
 _.forEach(config.discord.token, (k) => {

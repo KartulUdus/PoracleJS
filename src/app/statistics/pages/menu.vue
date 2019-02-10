@@ -1,6 +1,14 @@
 <template>
     <div class="Sidebar">
-        <img src="~/assets/starchy.svg"/>
+        <n-link to="/" no-prefetch><button class="button">Stats</button></n-link> <br>
+        <n-link to="/pokemon" no-prefetch> <button class="button">Pokémon</button></n-link> <br>
+        <button class="button">Raids</button> <br>
+        <button class="button">Quests</button> <br>
+        <button class="button">Timers</button> <br>
+        <button class="button">Heatmaps</button> <br>
+        <button class="button">Errors</button> <br>
+        <button class="button">Warnings</button> <br>
+        <button class="button">All logs</button> <br>
     </div>
 </template>
 
@@ -10,7 +18,7 @@
 		name: 'sidebar',
 		mounted () {
 			TweenMax.set(this.$el, {
-				x: this.$el.offsetWidth
+				x: -1 * this.$el.offsetWidth
 			})
 		},
 		computed: {
@@ -22,7 +30,7 @@
 			open: function (open) {
 				const dX = open ? 0 : this.$el.offsetWidth
 				TweenMax.to(this.$el, 0.6, {
-					x: dX,
+					x: -1 * dX,
 					ease: Power4.easeOut
 				})
 			}

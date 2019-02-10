@@ -1,6 +1,6 @@
 <template>
-    <button class="menuButton" @click="handleClick">
-        <img src="~/assets/starchy.svg" height="40" width="50" />
+    <button class="toggleButton" @click="handleClick">
+        <img src="~/assets/menu.svg" height="100%" width="100%" />
     </button>
 </template>
 
@@ -26,7 +26,7 @@
 		watch: {
 			open: function (open) {
 				if(open){
-					TweenMax.to(this.$el, 0.5, {css:{rotation: -90}})
+					TweenMax.to(this.$el, 0.5, {css:{rotation: 90}})
 				}
 				else {
 					TweenMax.to(this.$el, 0.5, {css:{rotation: 0}})

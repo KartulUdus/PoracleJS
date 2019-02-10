@@ -17,6 +17,20 @@
     margin: 4px 2px;
 }
 
+.menuButton {
+    background-color: #4CAF50;
+    border: none;
+    color: white;
+    width: 100%;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 4px 2px;
+}
+
 .topbuttons {
     display: table;
     margin: 0 auto;
@@ -30,20 +44,25 @@
      margin: 0;
  }
 
-.menuButton {
+.toggleButton {
     position: absolute;
     rotation: 90deg;
     z-index: 999;
     fill: none;
     border: 0px;
-    right: 0px;
+    left: 0px;
     top: 8px;
     background-color: transparent;
+    outline: none;
+
 
 }
 .Sidebar {
     position: fixed;
+    top:10%;
+    text-align: center;
     z-index: 999;
-    right:  0px;
-    width: 500px;
+    left:  -0%;
+    width: 30%;
+    background-color: transparent;
 }
