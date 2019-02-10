@@ -45,7 +45,7 @@ fastify
 fastify
 	.setErrorHandler((error, request, reply) => {
 		log.warn(`Fastify unhappy with error: ${error}`)
-		reply.send({ message: error.message , request: request.body })
+		reply.send({ message: error.message, request: request.body })
 	})
 	.register(require('./helpers/nuxt'), {
 		config: nuxtConfig

@@ -1628,7 +1628,7 @@ client.on('message', (msg) => {
 })
 
 process.on('exit', (err) => {
-	log.err(`Discord Commander died! ${err.message}`)
+	log.error(`Discord Commander died! ${err.message}`)
 })
 
 client.on('guildMemberRemove', (member) => {

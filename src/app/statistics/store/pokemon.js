@@ -17,10 +17,9 @@ export const mutations = {
 			new Date().valueOf() + 1
 		))
 		const meta = _.filter(relevant, { event: 'message:start' })
-		const monstersRaw = _.filter(meta, { type: 'pokemon' })
+		const monstersRaw = _.filter(meta, function(monster){return monster.type === 'pokemon' && monster.meta.weight > 0 })
 		monstersRaw.forEach(monster => console.log(monster.meta))
 
-		e
 	}
 
 
