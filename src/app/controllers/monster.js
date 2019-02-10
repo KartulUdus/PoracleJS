@@ -230,7 +230,7 @@ class Monster extends Controller {
 							const work = {
 								lat: data.latitude.toString().substring(0, 8),
 								lon: data.longitude.toString().substring(0, 8),
-								message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : message,
+								message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 								target: cares.id,
 								name: cares.name,
 								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,

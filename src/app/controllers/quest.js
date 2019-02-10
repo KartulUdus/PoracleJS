@@ -167,7 +167,7 @@ class Quest extends Controller {
 							const template = JSON.stringify(this.mdts.quest[cares.template])
 							const message = mustache.render(template, view)
 							const work = {
-								message: caresCache === config.discord.limitamount + 1 ? `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` : JSON.parse(message),
+								message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : JSON.parse(message),
 								target: cares.id,
 								name: cares.name,
 								emoji: [],
