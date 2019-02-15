@@ -493,7 +493,7 @@ client.on('message', (msg) => {
 					}
 				})
 				args.forEach((element) => {
-					if (element.match(/park/gi)) park = 1
+					if (element.match(/ex/gi)) park = 1
 					else if (element.match(/level\d/gi)) levels.push(element.replace(/level/gi, ''))
 					else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 					else if (element.match(/instinct/gi)) team = 3
@@ -616,7 +616,7 @@ client.on('message', (msg) => {
 			let template = 3
 
 			args.forEach((element) => {
-				if (element.match(/park/gi)) park = 1
+				if (element.match(/ex/gi)) park = 1
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 				else if (element.match(/level\d/gi)) level = element.replace(/level/gi, '')
 				else if (element.match(/instinct/gi)) team = 3
@@ -1243,7 +1243,7 @@ client.on('message', (msg) => {
 				}
 			})
 			args.forEach((element) => {
-				if (element.match(/park/gi)) park = 1
+				if (element.match(/ex/gi)) park = 1
 				else if (element.match(/instinct/gi)) team = 3
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 				else if (element.match(/valor/gi)) team = 2
@@ -1349,7 +1349,7 @@ client.on('message', (msg) => {
 			let team = 4
 			let template = 3
 			args.forEach((element) => {
-				if (element.match(/park/gi)) park = 1
+				if (element.match(/ex/gi)) park = 1
 				else if (element.match(/level\d/gi)) level = element.replace(/level/gi, '')
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 				else if (element.match(/instinct/gi)) team = 3
