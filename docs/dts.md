@@ -100,6 +100,8 @@ Any of the fields can be customized with the following:
 |{{lat}}| Latitude of the alert|
 |{{lon}}| Longitude of the alert|
 |{{areas}}| Matched geofence area names for alert|
+|{{gender}}| Monsters gender|
+
 
 
 ###### Raid alarms
