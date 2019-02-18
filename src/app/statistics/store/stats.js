@@ -150,7 +150,7 @@ export const mutations = {
 			labels: timeArray,
 			datasets: [
 				{
-					label: `Discord alert queue in last ${timeTarget / 60000} minutes`,
+					label: `Discord alert queue in last ${Math.trunc(timeTarget / 60000)} minutes`,
 					backgroundColor: '#b82b7b',
 					data: jobQueue
 				}
@@ -161,12 +161,12 @@ export const mutations = {
 			labels: timeArray,
 			datasets: [
 				{
-					label: `http requests in last ${timeTarget / 60000} minutes`,
+					label: `http requests in last ${Math.trunc(timeTarget / 60000)} minutes`,
 					backgroundColor: '#51b868',
 					data: httpInArray
 				},
 				{
-					label: `http requests finished last ${timeTarget / 60000} minutes`,
+					label: `http requests finished last ${Math.trunc(timeTarget / 60000)} minutes`,
 					backgroundColor: '#3f884b',
 					data: httpOutArray
 				}
@@ -177,12 +177,12 @@ export const mutations = {
 			labels: timeArray,
 			datasets: [
 				{
-					label: `messages started last ${timeTarget / 60000} minutes`,
+					label: `messages started last ${Math.trunc(timeTarget / 60000)} minutes`,
 					backgroundColor: '#818815',
 					data: messageInArray
 				},
 				{
-					label: `messages done last ${timeTarget / 60000} minutes`,
+					label: `messages done last ${Math.trunc(timeTarget / 60000)} minutes`,
 					backgroundColor: '#8f9335',
 					data: messageOutArray
 				}
@@ -193,12 +193,12 @@ export const mutations = {
 			labels: timeArray,
 			datasets: [
 				{
-					label: `alarm started last ${timeTarget / 60000} minutes`,
+					label: `alarm started last ${Math.trunc(timeTarget / 60000)} minutes`,
 					backgroundColor: '#3d3888',
 					data: alarmStartArray
 				},
 				{
-					label: `alarm finished  finished last ${timeTarget / 60000} minutes`,
+					label: `alarm finished  finished last ${Math.trunc(timeTarget / 60000)} minutes`,
 					backgroundColor: '#252288',
 					data: alarmFinishArray
 				}

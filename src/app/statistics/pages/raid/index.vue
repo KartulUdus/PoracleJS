@@ -9,6 +9,8 @@
                 <button class="button" v-on:click="timeTarget = 3600000; updateAll()">1h</button>
                 <button class="button" v-on:click="timeTarget = 10800000; updateAll()">3h</button>
                 <button class="button" v-on:click="timeTarget = 32400000; updateAll()">9h</button>
+                <button class="button" v-on:click="timeTarget = getMsFromMidnight(); updateAll()">Today</button>
+
                 <div class="dropdown">
 
                     <button class="dropbtn">Order By</button>
@@ -64,6 +66,7 @@
 
  <script>
      import Doughnut from '~/components/doughnutChart'
+     import moment from 'moment'
 
      export default {
          name: 'statistics',
@@ -90,7 +93,11 @@
          methods: {
              updateAll() {
                  this.$store.commit('raid/createData', { timeTarget: this.timeTarget, filter: this.filter })
-             }
+             },
+			 getMsFromMidnight() {
+				 console.log(new Date().valueOf() , moment().startOf('day').valueOf())
+				 return new Date().valueOf() - moment().startOf('day').valueOf()
+			 }
          },
          mounted: function(){
              this.updateAll()
