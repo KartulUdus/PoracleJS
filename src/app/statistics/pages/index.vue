@@ -61,7 +61,6 @@
 				this.$store.commit('stats/createCharts', this.timeTarget)
 			},
 			getMsFromMidnight() {
-				console.log(new Date().valueOf() , moment().startOf('day').valueOf())
 				return new Date().valueOf() - moment().startOf('day').valueOf()
 			}
 		},

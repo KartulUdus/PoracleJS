@@ -77,7 +77,6 @@
 				this.$store.commit('pokemon/createData', { timeTarget: this.timeTarget, filter: this.filter })
 			},
 			getMsFromMidnight() {
-				console.log(new Date().valueOf() , moment().startOf('day').valueOf())
 				return new Date().valueOf() - moment().startOf('day').valueOf()
 			}
 		},
