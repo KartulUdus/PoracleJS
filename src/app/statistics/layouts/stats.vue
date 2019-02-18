@@ -6,7 +6,9 @@
                 <SidebarToggle/>
             </no-ssr>
         </div>
-        <nuxt/>
+        <div v-on:click="toggle">
+            <nuxt/>
+        </div>
     </div>
 
 </template>
@@ -22,7 +24,12 @@
 			sidebarOpen() {
 				return this.$store.state.menu.sidebarOpen
 			}
-		}
+		},
+		methods: {
+			toggle() {
+				if (this.sidebarOpen) this.$store.commit('menu/toggleSidebar', {root: true} )
+            }
+        }
 	}
 
 

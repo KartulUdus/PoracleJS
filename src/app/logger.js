@@ -9,7 +9,7 @@ const file = new winston.transports.File({
 	),
 	maxsize: 25000000,
 	tailable: true,
-	maxFiles: 1,
+	maxFiles: 0,
 	level: 'debug'
 })
 const console = new (winston.transports.Console)({ level: config.general.logLevel, format: winston.format.simple() })
