@@ -112,11 +112,11 @@ module.exports = async (req, reply) => {
 				const g = hook.message
 				g.park = false
 				if (!g.description) g.description = ''
-				if (!g.sponsor_id) g.sponsor_id = false
+				if (!g.ex_raid_eligible) g.ex_raid_eligible = false
 				if (!g.team) g.team = 0
 				if (!g.name) g.name = ''
 				if (!g.url) g.url = ''
-				g.park = g.sponsor_id
+				g.park = g.ex_raid_eligible
 				g.name = g.name.replace(/"/g, '')
 				g.description = g.description.replace(/"/g, '')
 				g.name = g.name.replace(/'/g, '')

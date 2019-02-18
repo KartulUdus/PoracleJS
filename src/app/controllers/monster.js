@@ -20,6 +20,7 @@ const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
+const minTth = config.general.monsterMinimumTimeTillHidden || 0;
 
 class Monster extends Controller {
 
@@ -133,9 +134,9 @@ class Monster extends Controller {
 			data.emoji = e
 			data.emojiString = e.join('')
 
-			// Stop handling if it already disappeared
-			if (data.tth.firstDateWasLater) {
-				log.warn(`Weird, the ${data.name} already disappeared`)
+			// Stop handling if it already disappeared or is about to go away
+			if (data.tth.firstDateWasLater || ( (data.tth.hours * 3600) + (data.tth.minutes*60) + data.tth.seconds) < minTth) {
+				log.warn(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				resolve([])
 				return null
 			}

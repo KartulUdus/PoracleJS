@@ -138,8 +138,8 @@ class Raid extends Controller {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
 						data.url = gymInfo ? gymInfo.url : ''
-						data.park = gymInfo ? gymInfo.park : data.sponsor_id
-						data.park = data.sponsor_id ? data.sponsor_id : data.park
+						data.park = gymInfo ? gymInfo.park : data.ex_raid_eligible
+						data.park = data.ex_raid_eligible ? data.ex_raid_eligible : data.park
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid against ${data.name} was sent but already ended`)
