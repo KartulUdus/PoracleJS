@@ -1,9 +1,6 @@
 <template>
     <div>
         <no-ssr>
-            <div class="dropdown">
-
-            </div>
             <div class="topbuttons">
                 <p class="title"> <img class="title" src="~/assets/starchy.svg" height="50" width="66" />PoracleJS Pokémon Stats</p>
                 <button class="button" v-on:click="timeTarget = 300000; updateAll()">5m</button>
@@ -23,15 +20,30 @@
 
                     </div>
                 </div>
-
+            </div>
+            <div v-if="pokemonData.length">
+                <h2 class="title">IV scanned Pokémon</h2>
             </div>
             <div>
                 <table class="monsterTable">
                     <div class="monster" v-for="p in pokemonData"  >
                         <img :src="p.imgUrl"/><br>
-                        <nobr>Name: {{p.name}} {{p.emoji}}</nobr><br>
+                        <nobr>#{{p.id}}: {{p.name}} {{p.emoji}}</nobr><br>
                         <nobr>Count: {{p.count}}</nobr><br>
                         <nobr>Average IV: {{p.averageIv.toFixed(2)}}</nobr><br>
+                        <nobr>Precentage of total: {{p.precentage.toFixed(2)}}%</nobr>
+                    </div>
+                </table>
+            </div>
+            <div v-if="noIvpokemonData.length">
+                <h2 class="title">No IV scanned Pokémon</h2>
+            </div>
+            <div>
+                <table class="monsterTable">
+                    <div class="monster" v-for="p in noIvpokemonData"  >
+                        <img :src="p.imgUrl"/><br>
+                        <nobr>#{{p.id}}: {{p.name}} {{p.emoji}}</nobr><br>
+                        <nobr>Count: {{p.count}}</nobr><br>
                         <nobr>Precentage of total: {{p.precentage.toFixed(2)}}%</nobr>
                     </div>
                 </table>
@@ -52,12 +64,14 @@
 		},
 
 		computed: {
-			pokemonData () { return this.$store.state.pokemon.data }
-		},
+			pokemonData () { return this.$store.state.pokemon.ivData },
+			noIvpokemonData () { return this.$store.state.pokemon.noIvData }
+
+	    },
 
 		methods: {
 			updateAll() {
-				this.$store.commit('pokemon/createData', this.timeTarget, this.filter)
+				this.$store.commit('pokemon/createData', { timeTarget: this.timeTarget, filter: this.filter })
 			}
 		},
 		mounted: function(){

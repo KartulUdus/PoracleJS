@@ -79,6 +79,7 @@ Any of the fields can be customized with the following:
 |{{move2}}| Monsters charge move|
 |{{iv}}| Monsters Individual Value Precentage|
 |{{cp}}| Monsters CP|
+|{{gender}}| Monsters gender|
 |{{weight}}| Monsters weight|
 |{{level}}| Monsters level|
 |{{atk}}| Monsters attack|
