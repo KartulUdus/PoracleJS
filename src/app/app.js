@@ -54,6 +54,7 @@ fastify
 		if (e) log.error(e)
 		fastify.nuxt('/')
 		fastify.nuxt('/pokemon')
+		fastify.nuxt('/raid')
 
 	})
 

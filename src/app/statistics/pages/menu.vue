@@ -2,7 +2,7 @@
     <div class="Sidebar">
         <n-link to="/" no-prefetch><button class="button">Stats</button></n-link> <br>
         <n-link to="/pokemon" no-prefetch> <button class="button">Pokémon</button></n-link> <br>
-        <button class="button">Raids</button> <br>
+        <n-link to="/raid" no-prefetch> <button class="button">Raids</button></n-link> <br>
         <button class="button">Quests</button> <br>
         <button class="button">Timers</button> <br>
         <button class="button">Heatmaps</button> <br>
