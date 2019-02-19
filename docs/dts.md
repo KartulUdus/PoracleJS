@@ -149,6 +149,7 @@ Any of the fields can be customized with the following:
 |{{mincp20}}| Monsters cp with 0% perfect IV and level 25|
 |{{level}}| Raid level|
 |{{gymname}}| Name of the gym|
+|{{teamname}}| Team owner of the gym
 |{{description}}| Description of the gym|
 |{{{detailsurl}}}| Descriptive picture url|
 |{{{staticmap}}}| Static link to map|
