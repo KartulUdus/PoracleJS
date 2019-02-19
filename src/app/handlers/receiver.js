@@ -126,7 +126,7 @@ module.exports = async (req, reply) => {
 				monsterController.insertOrUpdateQuery(
 					'`gym-info`',
 					['id', 'gym_name', 'park', 'description', 'url', 'latitude', 'longitude'],
-					[`'${g.id}'`, `'${g.name}'`, `${g.park}`, `'${g.description}'`, `'${g.url}'`, `${g.latitude}`, `${g.longitude}`]
+					[[g.id, g.name, g.park, g.description, g.url, g.latitude, g.longitude]]
 				)
 				log.info(`Saved gym-details for ${g.name}`)
 				break
