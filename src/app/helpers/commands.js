@@ -72,7 +72,7 @@ if (config.discord.userRole) {
 			query.countQuery('id', 'humans', 'id', oldMember.user.id)
 				.then((isregistered) => {
 					if (!isregistered) {
-						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), []]])
+						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), '[]' ]])
 						oldMember.user.send(dts.greeting)
 						log.log({ level: 'debug', message: `registered ${oldMember.user.name} because ${config.discord.userRole} role removed`, event: 'discord:roleCheck' })
 
@@ -120,7 +120,7 @@ client.on('message', (msg) => {
 			.then((isregistered) => {
 				if (isregistered) msg.react('👌')
 				if (!isregistered) {
-					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.author.id, emojiStrip(msg.author.username), []]])
+					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.author.id, emojiStrip(msg.author.username), '[]']])
 					msg.react('✅')
 					msg.author.send(dts.greeting)
 					log.log({ level: 'debug', message: `${msg.author.tag} registered`, event: 'discord:registered' })
@@ -924,7 +924,7 @@ client.on('message', (msg) => {
 				msg.react('👌')
 				return null
 			}
-			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.channel.id, emojiStrip(msg.channel.name), []]])
+			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.channel.id, emojiStrip(msg.channel.name), '[]']])
 			msg.react('✅')
 			msg.reply(`${msg.channel.name} has been registered`)
 			log.log({ level: 'debug', message: `${msg.author.username} registered ${msg.channel.name}`, event: 'discord:registeredChannel' })
