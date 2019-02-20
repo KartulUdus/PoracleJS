@@ -103,7 +103,6 @@ Any of the fields can be customized with the following:
 |{{areas}}| Matched geofence area names for alert|
 
 
-
 ###### Raid alarms
 
 ```json
