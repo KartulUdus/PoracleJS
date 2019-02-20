@@ -39,9 +39,7 @@ export const mutations = {
 
 		const jobQueue = []
 
-		/* let httpE = _.filter(records, function(req){
-			return req.event === 'http:start' || req.event === 'http:end'
-		}) */
+
 		const timeJump = timeTarget / 10
 		let raw = await axios.get('/logs/worker.json')
 		raw = raw.data.split('\n')
@@ -151,7 +149,7 @@ export const mutations = {
 			datasets: [
 				{
 					label: `Discord alert queue in last ${Math.trunc(timeTarget / 60000)} minutes`,
-					backgroundColor: '#b82b7b',
+					borderColor: '#b82b7b',
 					data: jobQueue
 				}
 			]
@@ -162,12 +160,14 @@ export const mutations = {
 			datasets: [
 				{
 					label: `http requests in last ${Math.trunc(timeTarget / 60000)} minutes`,
-					backgroundColor: '#51b868',
+					borderColor: '#51b868',
+					fill: false,
 					data: httpInArray
 				},
 				{
 					label: `http requests finished last ${Math.trunc(timeTarget / 60000)} minutes`,
-					backgroundColor: '#3f884b',
+					borderColor: '#3f884b',
+					fill: false,
 					data: httpOutArray
 				}
 			]
@@ -178,12 +178,14 @@ export const mutations = {
 			datasets: [
 				{
 					label: `messages started last ${Math.trunc(timeTarget / 60000)} minutes`,
-					backgroundColor: '#818815',
+					borderColor: '#818815',
+					fill: false,
 					data: messageInArray
 				},
 				{
 					label: `messages done last ${Math.trunc(timeTarget / 60000)} minutes`,
-					backgroundColor: '#8f9335',
+					borderColor: '#8f9335',
+					fill: false,
 					data: messageOutArray
 				}
 			]
@@ -194,12 +196,14 @@ export const mutations = {
 			datasets: [
 				{
 					label: `alarm started last ${Math.trunc(timeTarget / 60000)} minutes`,
-					backgroundColor: '#3d3888',
+					borderColor: '#3d3888',
+					fill: false,
 					data: alarmStartArray
 				},
 				{
 					label: `alarm finished  finished last ${Math.trunc(timeTarget / 60000)} minutes`,
-					backgroundColor: '#252288',
+					borderColor: '#252288',
+					fill: false,
 					data: alarmFinishArray
 				}
 			]
@@ -210,95 +214,113 @@ export const mutations = {
 			datasets: [
 				{
 					label: 'AddOneQuery',
-					backgroundColor: '#308884',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlAddOneQuery
 				},
 				{
 					label: 'SelectAllQuery',
-					backgroundColor: '#647988',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlSelectAllQuery
 				},
 				{
 					label: 'DeleteByIdQuery',
-					backgroundColor: '#883c4c',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlDeleteByIdQuery
 				},
 				{
 					label: 'MysteryQuery',
-					backgroundColor: '#880082',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlMysteryQuery
 				},
 				{
 					label: 'DeleteQuery',
-					backgroundColor: '#88414e',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlDeleteQuery
 				},
 
 				{
 					label: 'UpdateQuery',
-					backgroundColor: '#886084',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlUpdateQuery
 				},
 
 				{
 					label: 'InsertOrUpdateQuery',
-					backgroundColor: '#886300',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlInsertOrUpdateQuery
 				},
 
 				{
 					label: 'InsertQuery',
-					backgroundColor: '#888600',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlInsertQuery
 				},
 				{
 					label: 'CountQuery',
-					backgroundColor: '#2e3b88',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlCountQuery
 				},
 				{
 					label: 'DropTableQuery',
-					backgroundColor: '#880717',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlDropTableQuery
 				},
 				{
 					label: 'SelectOneQuery',
-					backgroundColor: '#0e1f88',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlSelectOneQuery
 				},
 				{
 					label: 'UpdateLocation',
-					backgroundColor: '#7a5b88',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlUpdateLocation
 				},
 				{
 					label: 'QuestWhoCares',
-					backgroundColor: '#3c887a',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlQuestWhoCares
 				},
 				{
 					label: 'MonsterWhoCares',
-					backgroundColor: '#618824',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlMonsterWhoCares
 				},
 				{
 					label: 'RaidWhoCares',
-					backgroundColor: '#818815',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlRaidWhoCares
 				},
 				{
 					label: 'EggWhoCares',
-					backgroundColor: '#8f9335',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlEggWhoCares
 				},
 				{
 					label: 'CheckSchema',
-					backgroundColor: '#40884a',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlCheckSchema
 				},
 				{
 					label: 'Total queries',
-					backgroundColor: '#40884a',
+					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					fill: false,
 					data: sqlTotal
 				}
 			]

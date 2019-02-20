@@ -55,6 +55,7 @@ fastify
 		fastify.nuxt('/')
 		fastify.nuxt('/pokemon')
 		fastify.nuxt('/raid')
+		fastify.nuxt('/logs')
 
 	})
 

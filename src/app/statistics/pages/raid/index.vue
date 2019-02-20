@@ -33,6 +33,7 @@
                  </td>
 
              </tr>
+            <lineChart class="line-chart" :chartData="teamLine" :options="{ responsive: true , maintainAspectRatio: false }" />
 
              <div v-if="eggs.length">
                  <h2 class="title">Egg messages</h2>
@@ -66,6 +67,7 @@
 
  <script>
      import Doughnut from '~/components/doughnutChart'
+	 import lineChart from '~/components/lineChart'
      import moment from 'moment'
 
      export default {
@@ -84,11 +86,12 @@
 			 eggDoughnut () { return this.$store.state.raid.eggDoughnut },
 			 raidLvlDoughnut () { return this.$store.state.raid.raidLvlDoughnut },
 			 raidMonDoughnut () { return this.$store.state.raid.raidMonDoughnut },
-
+			 teamLine () { return this.$store.state.raid.teamChart },
 
 		 },
          components: {
-             Doughnut
+             Doughnut,
+			 lineChart
          },
          methods: {
              updateAll() {
