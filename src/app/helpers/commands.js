@@ -72,7 +72,7 @@ if (config.discord.userRole) {
 			query.countQuery('id', 'humans', 'id', oldMember.user.id)
 				.then((isregistered) => {
 					if (!isregistered) {
-						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${oldMember.user.id}'`, `'${emojiStrip(oldMember.user.username)}'`, '\'[]\''])
+						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), '[]' ]])
 						oldMember.user.send(dts.greeting)
 						log.log({ level: 'debug', message: `registered ${oldMember.user.name} because ${config.discord.userRole} role removed`, event: 'discord:roleCheck' })
 
@@ -120,7 +120,7 @@ client.on('message', (msg) => {
 			.then((isregistered) => {
 				if (isregistered) msg.react('👌')
 				if (!isregistered) {
-					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.author.id}'`, `'${emojiStrip(msg.author.username)}'`, '\'[]\''])
+					query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.author.id, emojiStrip(msg.author.username), '[]']])
 					msg.react('✅')
 					msg.author.send(dts.greeting)
 					log.log({ level: 'debug', message: `${msg.author.tag} registered`, event: 'discord:registered' })
@@ -366,13 +366,13 @@ client.on('message', (msg) => {
 			})
 			if (monsters.length && !forms.length) {
 				const form = 0
-				monsters.forEach((monster) => {
-					query.insertOrUpdateQuery(
-						'monsters',
-						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
-						[`'${msg.author.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
-					)
-				})
+				const insertData = monsters.map(pokemonId => [msg.author.id, pokemonId, template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form])
+				query.insertOrUpdateQuery(
+					'monsters',
+					['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
+					insertData
+				)
+
 				msg.react('✅')
 				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters}`, event: 'discord:track' })
 
@@ -394,15 +394,13 @@ client.on('message', (msg) => {
 					const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === form)
 					if (fid !== undefined) fids.push(fid)
 				})
+				const insertData = fids.map(form => [msg.author.id, monsters[0], template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form])
 				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters[0]} form: ${fids}`, event: 'discord:track' })
-				fids.forEach((form) => {
-					query.insertOrUpdateQuery(
-						'monsters',
-						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
-						[`'${msg.author.id}'`, `'${monsters[0]}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
-					)
-
-				})
+				query.insertOrUpdateQuery(
+					'monsters',
+					['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
+					insertData
+				)
 				if (fids.length > 0) {
 					msg.react('✅')
 				}
@@ -508,13 +506,12 @@ client.on('message', (msg) => {
 
 				if (monsters.length !== 0 && levels.length === 0) {
 					const level = 0
-					monsters.forEach((monster) => {
-						query.insertOrUpdateQuery(
-							'raid',
-							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
-							[`'${msg.author.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
-						)
-					})
+					const insertData = monsters.map(monster => [msg.author.id, monster, template, distance, park, team, level])
+					query.insertOrUpdateQuery(
+						'raid',
+						['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
+						insertData
+					)
 					log.log({
 						level: 'debug',
 						message: `${msg.author.username} started tracking ${monsters} raids`,
@@ -527,13 +524,12 @@ client.on('message', (msg) => {
 				else if (monsters.length === 0 && levels.length === 0) msg.reply('404 NO MONSTERS FOUND')
 				else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time')
 				else if (monsters.length === 0 && levels.length !== 0) {
-					levels.forEach((level) => {
-						query.insertOrUpdateQuery(
-							'raid',
-							['id', 'pokemon_id', 'distance', 'park', 'team', 'level'],
-							[`'${msg.author.id}'`, '\'721\'', `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
-						)
-					})
+					const insertData = levels.map(level => [msg.author.id, 721, template, distance, park, team, level])
+					query.insertOrUpdateQuery(
+						'raid',
+						['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
+						insertData
+					)
 					log.log({
 						level: 'debug',
 						message: `${msg.author.username} started tracking level ${levels} raids`,
@@ -611,14 +607,14 @@ client.on('message', (msg) => {
 			const args = rawArgs.join('|').toLowerCase().split('|')
 			let park = 0
 			let distance = 0
-			let level = 0
+			const levels = []
 			let team = 4
 			let template = 3
 
 			args.forEach((element) => {
 				if (element.match(/ex/gi)) park = 1
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
-				else if (element.match(/level\d/gi)) level = element.replace(/level/gi, '')
+				else if (element.match(/level\d/gi)) levels.push(element.replace(/level/gi, ''))
 				else if (element.match(/instinct/gi)) team = 3
 				else if (element.match(/valor/gi)) team = 2
 				else if (element.match(/mystic/gi)) team = 1
@@ -630,14 +626,15 @@ client.on('message', (msg) => {
 
 			})
 
-			if (level) {
+			if (levels.length) {
+				const insertData = levels.map(level => [msg.author.id, level, template, distance, park, team])
 				query.insertOrUpdateQuery(
 					'egg',
 					['id', 'raid_level', 'template', 'distance', 'park', 'team'],
-					[`'${msg.author.id}'`, `'${level}'`, `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`]
+					insertData
 				)
 				msg.react('✅')
-				log.log({ level: 'debug', message: `${msg.author.username} started tracking level ${level} eggs`, event: 'discord:egg' })
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking level (${levels.join(', ')}) eggs`, event: 'discord:egg' })
 			}
 			else msg.reply('404 NO LEVELS FOUND')
 		})
@@ -843,13 +840,12 @@ client.on('message', (msg) => {
 					distance: distance
 				})
 			})
-			questTracks.forEach((t) => {
-				query.insertOrUpdateQuery(
-					'quest',
-					['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
-					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`, `'${t.mustShiny}'`]
-				)
-			})
+			const insertData = questTracks.map(t => [t.id, t.reward, t.template, t.reward_type, t.distance, t.mustShiny])
+			query.insertOrUpdateQuery(
+				'quest',
+				['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
+				insertData
+			)
 			log.log({ level: 'debug', message: `${msg.author.username} added quest trackings`, event: 'discord:quest' })
 			msg.react('✅')
 		})
@@ -928,7 +924,7 @@ client.on('message', (msg) => {
 				msg.react('👌')
 				return null
 			}
-			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [`'${msg.channel.id}'`, `'${emojiStrip(msg.channel.name)}'`, '\'[]\''])
+			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.channel.id, emojiStrip(msg.channel.name), '[]']])
 			msg.react('✅')
 			msg.reply(`${msg.channel.name} has been registered`)
 			log.log({ level: 'debug', message: `${msg.author.username} registered ${msg.channel.name}`, event: 'discord:registeredChannel' })
@@ -1132,13 +1128,12 @@ client.on('message', (msg) => {
 			})
 			if (monsters.length && !forms.length) {
 				const form = 0
-				monsters.forEach((monster) => {
-					query.insertOrUpdateQuery(
-						'monsters',
-						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
-						[`'${msg.channel.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
-					)
-				})
+				const insertData = monsters.map(monster => [msg.channel.id, monster, template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form])
+				query.insertOrUpdateQuery(
+					'monsters',
+					['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
+					insertData
+				)
 				msg.react('✅')
 				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`, event: 'discord:trackChannel' })
 
@@ -1152,13 +1147,12 @@ client.on('message', (msg) => {
 						const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === form)
 						if (fid !== undefined) fids.push(fid)
 					})
-					fids.forEach((form) => {
-						query.insertOrUpdateQuery(
-							'monsters',
-							['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
-							[`'${msg.channel.id}'`, `'${monsters[0]}'`, `'${template}'`, `'${distance}'`, `'${iv}'`, `'${maxiv}'`, `'${cp}'`, `'${maxcp}'`, `'${level}'`, `'${maxlevel}'`, `'${atk}'`, `'${def}'`, `'${sta}'`, `'${weight}'`, `'${maxweight}'`, `'${form}'`]
-						)
-					})
+					const insertData = fids.map(form => [msg.channel.id, monsters[0], template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form])
+					query.insertOrUpdateQuery(
+						'monsters',
+						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
+						insertData
+					)
 					if (fids.length > 0) {
 						msg.react('✅')
 						log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters[0]}, forms ${fids} in ${msg.channel.name}`, event: 'discord:trackChannel' })
@@ -1259,13 +1253,12 @@ client.on('message', (msg) => {
 
 			if (monsters.length !== 0 && levels.length === 0) {
 				const level = 0
-				monsters.forEach((monster) => {
-					query.insertOrUpdateQuery(
-						'raid',
-						['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
-						[`'${msg.channel.id}'`, `'${monster}'`, `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
-					)
-				})
+				const insertData = monsters.map(monster => [msg.channel.id, monster, template, distance, park, team, level])
+				query.insertOrUpdateQuery(
+					'raid',
+					['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
+					insertData
+				)
 				msg.react('✅')
 				log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters} in ${msg.channel.name}`, event: 'discord:raidChannel' })
 
@@ -1273,13 +1266,12 @@ client.on('message', (msg) => {
 			else if (monsters.length === 0 && levels.length === 0) msg.reply('404 NO MONSTERS FOUND')
 			else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time')
 			else if (monsters.length === 0 && levels.length !== 0) {
-				levels.forEach((level) => {
-					query.insertOrUpdateQuery(
-						'raid',
-						['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
-						[`'${msg.channel.id}'`, '\'721\'', `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`, `'${level}'`]
-					)
-				})
+				const insertData = levels.map(level => [msg.channel.id, 721, template, distance, park, team, level])
+				query.insertOrUpdateQuery(
+					'raid',
+					['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
+					insertData
+				)
 				msg.react('✅')
 				log.log({ level: 'debug', message: `${msg.author.username} started tracking raid levels:${levels} raids in ${msg.channel.name} `, event: 'discord:raidChannel' })
 			}
@@ -1344,13 +1336,13 @@ client.on('message', (msg) => {
 			const rawArgs = msg.content.slice(`${config.discord.prefix}channel egg`.length).split(' ')
 			const args = rawArgs.join('|').toLowerCase().split('|')
 			let park = 0
-			let level = 0
+			const levels = []
 			let distance = 0
 			let team = 4
 			let template = 3
 			args.forEach((element) => {
 				if (element.match(/ex/gi)) park = 1
-				else if (element.match(/level\d/gi)) level = element.replace(/level/gi, '')
+				else if (element.match(/level\d/gi)) levels.push(element.replace(/level/gi, ''))
 				else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 				else if (element.match(/instinct/gi)) team = 3
 				else if (element.match(/valor/gi)) team = 2
@@ -1361,16 +1353,15 @@ client.on('message', (msg) => {
 					if (distance.length >= 10) distance = distance.substr(0, 9)
 				}
 			})
-			if (level) {
-
+			if (levels.length) {
+				const insertData = levels.map(level => [msg.channel.id, level, template, distance, park, team])
 				query.insertOrUpdateQuery(
 					'egg',
 					['id', 'raid_level', 'template', 'distance', 'park', 'team'],
-					[`'${msg.channel.id}'`, `'${level}'`, `'${template}'`, `'${distance}'`, `'${park}'`, `'${team}'`]
+					insertData
 				)
-
 				msg.react('✅')
-				log.log({ level: 'debug', message: `${msg.author.username} started tracking level${level} eggs`, event: 'discord:eggChannel' })
+				log.log({ level: 'debug', message: `${msg.author.username} started tracking level (${levels.join(',')}) eggs`, event: 'discord:eggChannel' })
 			}
 			else msg.reply('404 NO MONSTERS FOUND')
 		})
@@ -1565,13 +1556,12 @@ client.on('message', (msg) => {
 					distance: distance
 				})
 			})
-			questTracks.forEach((t) => {
-				query.insertOrUpdateQuery(
-					'quest',
-					['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
-					[`'${t.id}'`, `'${t.reward}'`, `'${t.template}'`, `'${t.reward_type}'`, `'${t.distance}'`, `'${t.mustShiny}'`]
-				)
-			})
+			const insertData = questTracks.map(t => [t.id, t.reward, t.template, t.reward_type, t.distance, t.mustShiny])
+			query.insertOrUpdateQuery(
+				'quest',
+				['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
+				insertData
+			)
 			log.log({ level: 'debug', message: `${msg.author.username} updated quest trackings in ${msg.channel.name}`, event: 'discord:questChannel' })
 
 			msg.react('✅')
