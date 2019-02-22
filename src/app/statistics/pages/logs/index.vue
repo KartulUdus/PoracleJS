@@ -13,22 +13,39 @@
                 <div class="dropdown">
 
                     <button class="dropbtn">Order By</button>
+
                     <div class="dropdown-content">
                         <a v-on:click="filter = 'new'; updateAll()">Newest</a>
                         <a v-on:click="filter = 'old'; updateAll()">Oldsest</a>
                     </div>
                 </div>
             </div>
+                <div v-for="log in rawLogs">
+                    <button class="accordion" v-on:click="toggleAccordion(log.timestamp); updateAll()">Level: {{log.level}}, Message: {{log.message}}, Timestamp: {{log.timestamp}} LogItem:</button>
+                    <div
+                            class="panel"
+                            v-if="accordionPanels[log.timestamp]"
+                    >
+                        <jsonView
+                                :value="log"
+                                :expand-depth=5
+                                copyable
+                                sort
+                                :level="log.level"
 
-            <div v-for="log in rawLogs">
-                <pre>{{ log | pretty }}</pre>
-            </div>
+                        >
+                        </jsonView>
+                    </div>
+                </div>
+            </Accordion>
         </no-ssr>
     </div>
 </template>
 
 <script>
 	import moment from 'moment'
+    import jsonView from '~/components/json'
+
 
 	export default {
 		name: 'statistics',
@@ -36,19 +53,21 @@
 		data() {
 			return {
 				timeTarget: 300000,
-                filter: 'new'
+                filter: 'old',
+                accordionPanels: {}
 			}
 		},
 
-		filters: {
-			pretty: function(value) {
-				return JSON.stringify(value, null, 2);
-			}
+		components: {
+			jsonView
 		},
 
 		computed: {
-			rawLogs () { return this.$store.state.logs.rawLogs },
+			rawLogs () { return this.$store.state.logs.rawLogs }
 	    },
+
+        watch: {
+        },
 
 		methods: {
 			updateAll() {
@@ -56,11 +75,22 @@
 			},
 			getMsFromMidnight() {
 				return new Date().valueOf() - moment().startOf('day').valueOf()
-			}
+			},
+            toggleAccordion(key) {
+
+				let field = this.accordionPanels[key]
+				if(!field) {
+					this.accordionPanels[key] = true;
+				} else {
+					this.accordionPanels[key] = false;
+                }
+
+
+            }
 		},
 		mounted: function(){
 			this.updateAll()
-			setInterval(this.updateAll, 30000)
+            setInterval(this.updateAll, 30000)
 		}
 	}
 </script>

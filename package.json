@@ -1,6 +1,6 @@
 {
   "name": "poraclejs",
-  "version": "2.9.16",
+  "version": "2.9.17",
   "description": "Webhook processing and personalised alarms",
   "main": "index.js",
   "repository": {
@@ -53,6 +53,7 @@
     "mustache": "^2.3.0",
     "node-fetch": "^2.3.0",
     "node-geocoder": "^3.21.1",
+    "node-sass": "^4.11.0",
     "nuxt": "^2.4.3",
     "nuxt-leaflet": "0.0.13",
     "nuxt-svg": "^0.1.4",
@@ -64,6 +65,7 @@
     "prettyjson": "^1.2.1",
     "promise-mysql2": "^1.0.0",
     "replace-color": "^2.0.0",
+    "sass-loader": "^7.1.0",
     "tesseractocr": "^1.1.1",
     "ttl": "^1.3.1",
     "uuid": "^3.3.2",

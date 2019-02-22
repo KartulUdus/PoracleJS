@@ -16,7 +16,7 @@ export const mutations = {
 			new Date().valueOf() + 1
 		))
 
-		if (data.filter === 'new'){
+		if (data.filter === 'old'){
 			relevant = relevant.sort((a,b) => (new Date(a.timestamp).valueOf() > new Date(b.count).valueOf()) ? 1 : ((new Date(b.count).valueOf() > new Date(a.timestamp).valueOf()) ? -1 : 0))
 		}
 

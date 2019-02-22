@@ -67,7 +67,6 @@ export const mutations = {
 			mysticArray.push(mysticCount.length)
 			valorArray.push(valorCount.length)
 			uncontestedCount.push(uncontestedCount.length)
-			console.log(uncontestedCount, instinctArray)
 		}
 
 		for ( let i = 1; i < 800; i += 1){
