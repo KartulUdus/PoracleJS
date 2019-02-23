@@ -1,6 +1,6 @@
-import JsonView from '../pages/json-viewer'
+import JsonView from '../pages/json-viewer.vue'
 
-const install = Vue => {
+const install = (Vue) => {
 	Vue.component('JsonViewer', JsonView)
 }
 

@@ -2,7 +2,7 @@
     <div>
         <no-ssr>
             <div class="topbuttons">
-                <p class="title"> <img class="title" src="~/assets/starchy.svg" height="50" width="66" />PoracleJS Pokémon Stats</p>
+                <p class="title"> <img class="title" src="~/assets/starchy.svg" height="50" width="66" />PoracleJS Logs</p>
                 <button class="button" v-on:click="timeTarget = 300000; updateAll()">5m</button>
                 <button class="button" v-on:click="timeTarget = 900000; updateAll()">15m</button>
                 <button class="button" v-on:click="timeTarget = 1800000; updateAll()">30m</button>
@@ -16,12 +16,22 @@
 
                     <div class="dropdown-content">
                         <a v-on:click="filter = 'new'; updateAll()">Newest</a>
-                        <a v-on:click="filter = 'old'; updateAll()">Oldsest</a>
+                        <a v-on:click="filter = 'old'; updateAll()">Oldest</a>
                     </div>
                 </div>
             </div>
+            <div class="topbuttons">
+                <button class="button" v-on:click="logType = 'all'; updateAll()">All</button>
+                <button class="button" v-on:click="logType = 'warn'; updateAll()">Warnings</button>
+                <button class="button" v-on:click="logType = 'err'; updateAll()">Errors</button>
+
+            </div>
                 <div v-for="log in rawLogs">
-                    <button class="accordion" v-on:click="toggleAccordion(log.timestamp); updateAll()">Level: {{log.level}}, Message: {{log.message}}, Timestamp: {{log.timestamp}} LogItem:</button>
+                    <button
+                            class="accordion"
+                            v-on:click="toggleAccordion(log.timestamp); updateAll()"
+                            v-bind:style="{backgroundColor: getLogColor(log.level)}"
+                    >Level: {{log.level}}, Message: {{log.message}}, Timestamp: {{log.timestamp}}</button>
                     <div
                             class="panel"
                             v-if="accordionPanels[log.timestamp]"
@@ -31,8 +41,6 @@
                                 :expand-depth=5
                                 copyable
                                 sort
-                                :level="log.level"
-
                         >
                         </jsonView>
                     </div>
@@ -54,7 +62,8 @@
 			return {
 				timeTarget: 300000,
                 filter: 'old',
-                accordionPanels: {}
+                accordionPanels: {},
+                logType: 'all'
 			}
 		},
 
@@ -71,7 +80,7 @@
 
 		methods: {
 			updateAll() {
-				this.$store.commit('logs/createData', { timeTarget: this.timeTarget, filter: this.filter })
+				this.$store.commit('logs/createData', { timeTarget: this.timeTarget, filter: this.filter, logType: this.logType })
 			},
 			getMsFromMidnight() {
 				return new Date().valueOf() - moment().startOf('day').valueOf()
@@ -84,9 +93,21 @@
 				} else {
 					this.accordionPanels[key] = false;
                 }
-
-
-            }
+            },
+            getLogColor(level){
+				if(level === 'warn') return '#ffb96d'
+				if(level === 'error') return '#ff7160'
+				if(level === 'info') return '#89a8ff'
+				if(level === 'debug') return '#a2ffad'
+                return '#a2ffad'
+			},
+			getLogHoverColor(level){
+				if(level === 'warn') return '#ce945e'
+				if(level === 'error') return '#cd5b4d'
+				if(level === 'info') return '#6a82c5'
+				if(level === 'debug') return '#71b279'
+				return '#7dc586'
+			}
 		},
 		mounted: function(){
 			this.updateAll()

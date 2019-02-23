@@ -45,9 +45,9 @@ fastify
 
 fastify
 	.setErrorHandler((error, request, reply) => {
-		let badMessage = _.filter(error.validation, {'message': 'should match exactly one schema in oneOf'})
-		badMessage.forEach(bad => {
-			let index = bad.dataPath.replace(/([\[\]])/gi, '')
+		const badMessage = _.filter(error.validation, { message: 'should match exactly one schema in oneOf' })
+		badMessage.forEach((bad) => {
+			const index = bad.dataPath.replace(/([[\]])/gi, '')
 			log.warn(`Fastify failed validation for message ${JSON.stringify(request.body[index])}`)
 		})
 		reply.send({ message: error.message, request: request.body })

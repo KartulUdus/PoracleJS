@@ -46,7 +46,16 @@ const schema =
 							message: 'questMessage#'
 						}
 					},
-
+					{
+						type: 'object',
+						properties: {
+							type: {
+								type: 'string',
+								enum: ['pokestop', 'Pokestop', 'POKESTOP']
+							},
+							message: 'pokestopMessage#'
+						}
+					},
 				]
 			}
 		}

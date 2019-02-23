@@ -72,7 +72,7 @@ if (config.discord.userRole) {
 			query.countQuery('id', 'humans', 'id', oldMember.user.id)
 				.then((isregistered) => {
 					if (!isregistered) {
-						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), '[]' ]])
+						query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), '[]']])
 						oldMember.user.send(dts.greeting)
 						log.log({ level: 'debug', message: `registered ${oldMember.user.name} because ${config.discord.userRole} role removed`, event: 'discord:roleCheck' })
 
