@@ -15,9 +15,14 @@ export const mutations = {
 			new Date().valueOf() - data.timeTarget,
 			new Date().valueOf() + 1
 		))
-
+		if(data.logType === 'warn'){
+			relevant = _.filter(relevant, {'level': 'warn'})
+		}
+		if(data.logType === 'err'){
+			relevant = _.filter(relevant, {'level': 'error'})
+		}
 		if (data.filter === 'new'){
-			relevant = relevant.sort((a,b) => (new Date(a.timestamp).valueOf() > new Date(b.count).valueOf()) ? 1 : ((new Date(b.count).valueOf() > new Date(a.timestamp).valueOf()) ? -1 : 0))
+			relevant = relevant.reverse()
 		}
 
 		state.rawLogs = relevant

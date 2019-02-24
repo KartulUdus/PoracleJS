@@ -100,7 +100,7 @@
     background-color: #f1f1f1;
     min-width: 160px;
     box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-    z-index: 500;
+    z-index: 800;
 }
 .dropdown-content a {
     color: black;
@@ -113,3 +113,38 @@
 .dropdown:hover .dropdown-content {display: block;}
 
 .dropdown:hover .dropbtn {background-color: #3e8e41;}
+
+pre {
+    display: block;
+    font-family: monospace;
+    white-space: pre;
+    margin: 1em 0;
+}
+
+
+
+.accordion {
+       background-color: #eee;
+       color: #444;
+       cursor: pointer;
+       padding: 18px;
+       width: 100%;
+       text-align: left;
+       border: none;
+       outline: none;
+       transition: 0.4s;
+   }
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active, .accordion:hover {
+    background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+    padding: 0 18px;
+    background-color: white;
+    display: block;
+    overflow: hidden;
+}
+
