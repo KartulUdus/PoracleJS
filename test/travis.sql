@@ -142,6 +142,7 @@ CREATE TABLE `humans` (
   `area` text COLLATE utf8mb4_unicode_ci NOT NULL,
   `latitude` double DEFAULT 0,
   `longitude` double DEFAULT 0,
+  `humanKind` varchar(10) NOT NULL DEFAULT 'discord',
   PRIMARY KEY (`id`),
   KEY `humans_name` (`name`),
   KEY `humans_alerts_sent` (`alerts_sent`),
