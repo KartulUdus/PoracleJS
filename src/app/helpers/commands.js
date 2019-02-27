@@ -904,14 +904,17 @@ client.on('message', (msg) => {
 			.then((isregistered) => {
 				if (!isregistered) msg.react('👌')
 				if (isregistered) {
-				msg.react('👌')
-				return null
-			}
-			query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.channel.id, emojiStrip(msg.channel.name), '[]']])
-					msg.react('✅')
-					log.log({ level: 'debug', message: `${msg.author.tag} unregistered`, event: 'discord:unregistered' })
-
+					msg.react('👌')
+					return null
 				}
+
+				query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[msg.channel.id, emojiStrip(msg.channel.name), '[]']])
+				msg.react('✅')
+				log.log({
+					level: 'debug',
+					message: `${msg.author.tag} unregistered`,
+					event: 'discord:unregistered'
+				})
 			})
 	}
 
