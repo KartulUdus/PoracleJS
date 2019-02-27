@@ -22,7 +22,7 @@ class Quest extends Controller {
 				areastring = areastring.concat(`or humans.area like '%${area}%' `)
 			})
 			const query = `
-			select humans.id, humans.name, quest.template from quest
+			select humans.id, humans.name, humans.humanKind, quest.template from quest
             join humans on humans.id = quest.id
             where humans.enabled = 1 and
             ((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1 or reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0) 
@@ -169,6 +169,7 @@ class Quest extends Controller {
 							const work = {
 								message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : JSON.parse(message),
 								target: cares.id,
+								kind: cares.humanKind,
 								name: cares.name,
 								emoji: [],
 								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }

@@ -33,7 +33,7 @@ class Raid extends Controller {
 				areastring = areastring.concat(`or humans.area like '%${area}%' `)
 			})
 			const query = `
-			select humans.id, humans.name, raid.template from raid 
+			select humans.id, humans.name, humans.humanKind, raid.template from raid 
             join humans on humans.id = raid.id
             where humans.enabled = 1 and
             (pokemon_id=${data.pokemon_id} or (pokemon_id=721 and raid.level=${data.level})) and 
@@ -66,7 +66,7 @@ class Raid extends Controller {
 				areastring = areastring.concat(`or humans.area like '%${area}%' `)
 			})
 			const query = `
-			select humans.id, humans.name, egg.template from egg 
+			select humans.id, humans.name, humans.humanKind, egg.template from egg 
             join humans on humans.id = egg.id
             where humans.enabled = 1 and 
             (egg.park = ${!!data.park} or egg.park = 0) and
@@ -231,6 +231,7 @@ class Raid extends Controller {
 												message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 												target: cares.id,
 												name: cares.name,
+												kind: cares.humanKind,
 												emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
 												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
 											}
@@ -348,6 +349,7 @@ class Raid extends Controller {
 												message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 												target: cares.id,
 												name: cares.name,
+												kind: cares.humanKind,
 												emoji: [],
 												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
 											}

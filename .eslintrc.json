@@ -55,6 +55,7 @@
     // this rule collides with vuex store strict mode, so it will be disabled
     "import/prefer-default-export": 0,
     // something used by nuxt and needed to run statistics page
-    "no-restricted-syntax": 0
+    "no-restricted-syntax": 0,
+    "linebreak-style": "error"
   }
 }

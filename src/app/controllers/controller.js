@@ -264,7 +264,7 @@ class Controller {
 					resolve(result)
 				})
 				.catch((err) => {
-					log.error(`insertOrUpdateQuery errored with: ${err}`)
+					log.error(`insertOrUpdateQuery ${query} errored with: ${err}`)
 				})
 		})
 	}
@@ -340,6 +340,35 @@ class Controller {
 				.then(log.log({ level: 'debug', message: `addOneQuery ${table}`, event: 'sql:addOneQuery' }))
 				.catch((err) => {
 					log.error(`addOneQuery errored with: ${err}`)
+				})
+		})
+	}
+
+	async getHumanByName(name, kind = 'discord') {
+		return new Promise((resolve) => {
+			const query = `SELECT id FROM humans WHERE name='${name}' AND humanKind='${kind}'`
+			this.db.query(query)
+				.then((result, cols) => {
+					log.log({ level: 'debug', message: `select human ${name}:${kind}=${result[0][0].id}`, event: 'sql:getHumanByName' })
+					console.log(result)
+					console.log(cols)
+					resolve(result[0][0].id)
+				})
+				.catch((err) => {
+					log.error(`getHumanByName errored with: ${err}`)
+				})
+		})
+	}
+
+	async getHuman(id, kind = 'discord') {
+		return new Promise((resolve) => {
+			this.db.query('SELECT name FROM humans WHERE id = ? AND humanKind=?', [id, kind])
+				.then((result) => {
+					log.log({ level: 'debug', message: `select human ${id}-${kind}->${result}`, event: 'sql:getHuman' })
+					resolve(result[0][0])
+				})
+				.catch((err) => {
+					log.error(`getHuman errored with: ${err}`)
 				})
 		})
 	}

@@ -32,7 +32,7 @@ class Monster extends Controller {
 				areastring = areastring.concat(`or humans.area like '%${area}%' `)
 			})
 			const query = `
-			select humans.id, humans.name, monsters.template from monsters 
+			select humans.id, humans.name, humans.humanKind, monsters.template from monsters 
             join humans on humans.id = monsters.id
             where humans.enabled = 1 and
             pokemon_id=${data.pokemon_id} and 
@@ -237,6 +237,7 @@ class Monster extends Controller {
 								message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 								target: cares.id,
 								name: cares.name,
+								kind: cares.humanKind,
 								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
 								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
 

@@ -180,6 +180,16 @@ const migration3 = {
 	`
 }
 
+const migration4 = {
+	humans: `
+		ALTER TABLE \`humans\` 
+		ADD \`humanKind\` varchar(10) NOT NULL DEFAULT 'discord';
+	`,
+	eggs: 'ALTER TABLE `egg` CHANGE id id varchar(191)  COLLATE utf8_unicode_ci NOT NULL;',
+	raids: 'ALTER TABLE `raid` CHANGE id id varchar(191)  COLLATE utf8_unicode_ci NOT NULL;',
+	monsters: 'ALTER TABLE `monsters` CHANGE id id varchar(191)  COLLATE utf8_unicode_ci NOT NULL;',
+	quest: 'ALTER TABLE `quest` CHANGE id id varchar(191)  COLLATE utf8_unicode_ci NOT NULL;',
+}
 
 module.exports = async () => {
 	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database).then((tables) => {
@@ -222,6 +232,11 @@ module.exports = async () => {
 						queries.mysteryQuery(migration3.quest)
 						queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
 						log.info('applied Db migration 3')
+					}
+					else if (version.val === 3) {
+						queries.mysteryQuery(migration4.humans)
+						queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+						log.info('applied Db migration 4')
 					}
 				})
 			})

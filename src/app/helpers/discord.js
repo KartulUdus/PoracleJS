@@ -1,9 +1,13 @@
 const config = require('config')
-const { Client } = require('discord.js')
+const { Client, WebhookClient } = require('discord.js')
 
 const client = new Client()
 const log = require('../logger')
 const discord = require('cluster')
+const axios = require('axios')
+const util = require('util')
+
+const webhookCache = {}
 
 
 function startBeingHungry() {
@@ -22,51 +26,127 @@ client.on('ready', () => {
 	process.on('message', (msg) => {
 		if (msg.reason === 'food') {
 			clearInterval(hungryInterval)
-			if (client.channels.keyArray().includes(msg.job.target)) {
-				client.channels.get(msg.job.target).send(msg.job.message.content || '', msg.job.message).then((message) => {
-					log.log({
-						level: 'debug', message: `alarm ${msg.job.meta.alarmId} finished`, event: 'alarm:end', correlationId: msg.job.meta.correlationId, messageId: msg.job.meta.messageId, alarmId: msg.job.meta.alarmId
-					})
-					if (config.discord.typereact) {
-						msg.job.emoji.forEach((emoji) => {
-							if (emoji.match(/:\d+>/gi)) {	// If the emoji is a string matching discord custom emoji, fetch it before reacting
-								emoji = emoji.match(/:\d+>/gi)[0].replace(/[:>]/g, '')
-								emoji = client.emojis.get(emoji)
+			if (msg.job.kind === 'webhook') {
+				// Lets see if we find the webhook info in the cache
+				if (!(msg.job.target in webhookCache)) {
+					// Fetch the webhook info and save for later
+					axios.get(msg.job.target)
+						.then((response) => {
+							webhookCache[msg.job.target] = {
+								webhookToken: response.data.token,
+								webhookId: response.data.id
 							}
-							message.react(emoji)
+							const hook = new WebhookClient(webhookCache[msg.job.target].webhookId, webhookCache[msg.job.target].webhookToken)
+
+							hook.send(msg.job.content || '', {
+								embeds: [msg.job.message.embed]
+							})
+								.then(() => {
+									log.log({
+										level: 'debug',
+										message: `alarm ${msg.job.meta.alarmId} finished`,
+										event: 'alarm:end',
+										correlationId: msg.job.meta.correlationId,
+										messageId: msg.job.meta.messageId,
+										alarmId: msg.job.meta.alarmId
+									})
+									hungryInterval = startBeingHungry()
+								})
+								.catch((e) => {
+									log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
+									hungryInterval = startBeingHungry()
+
+								})
 						})
-					}
-					hungryInterval = startBeingHungry()
-				})
+						.catch((err) => {
+							log.warn(`Couldn't get info about this webhook ${err}`)
+						})
+				}
+				else {
+					const hook = new WebhookClient(webhookCache[msg.job.target].webhookId, webhookCache[msg.job.target].webhookToken)
+
+					hook.send(msg.job.content || '', {
+						embeds: [msg.job.message.embed]
+					})
+						.then(() => {
+							log.log({
+								level: 'debug',
+								message: `alarm ${msg.job.meta.alarmId} finished`,
+								event: 'alarm:end',
+								correlationId: msg.job.meta.correlationId,
+								messageId: msg.job.meta.messageId,
+								alarmId: msg.job.meta.alarmId
+							})
+							hungryInterval = startBeingHungry()
+						})
+						.catch((e) => {
+							log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
+							hungryInterval = startBeingHungry()
+
+						})
+				}
+			}
+			else if (client.channels.keyArray()
+				.includes(msg.job.target)) {
+				client.channels.get(msg.job.target)
+					.send(msg.job.message.content || '', msg.job.message)
+					.then((message) => {
+						log.log({
+							level: 'debug',
+							message: `alarm ${msg.job.meta.alarmId} finished`,
+							event: 'alarm:end',
+							correlationId: msg.job.meta.correlationId,
+							messageId: msg.job.meta.messageId,
+							alarmId: msg.job.meta.alarmId
+						})
+						if (config.discord.typereact) {
+							msg.job.emoji.forEach((emoji) => {
+								if (emoji.match(/:\d+>/gi)) {	// If the emoji is a string matching discord custom emoji, fetch it before reacting
+									emoji = emoji.match(/:\d+>/gi)[0].replace(/[:>]/g, '')
+									emoji = client.emojis.get(emoji)
+								}
+								message.react(emoji)
+							})
+						}
+						hungryInterval = startBeingHungry()
+					})
 					.catch((e) => {
 						log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
 						hungryInterval = startBeingHungry()
 
 					})
 			}
-			else if (client.users.keyArray().includes(msg.job.target)) {
-				client.users.get(msg.job.target).send(msg.job.message.content || '', msg.job.message).then((message) => {
-					log.log({
-						level: 'debug', message: `alarm ${msg.job.meta.alarmId} finished`, event: 'alarm:end', correlationId: msg.job.meta.correlationId, messageId: msg.job.meta.messageId, alarmId: msg.job.meta.alarmId
-					})
-					if (config.discord.typereact) {
-						msg.job.emoji.forEach((emoji) => {
-							if (emoji.match(/:\d+>/gi)) {	// If the emoji is a string matching discord custom emoji, fetch it before reacting
-								emoji = emoji.match(/:\d+>/gi)[0].replace(/[:>]/g, '')
-								emoji = client.emojis.get(emoji)
-							}
-							message.react(emoji)
+			else if (client.users.keyArray()
+				.includes(msg.job.target)) {
+				client.users.get(msg.job.target)
+					.send(msg.job.message.content || '', msg.job.message)
+					.then((message) => {
+						log.log({
+							level: 'debug',
+							message: `alarm ${msg.job.meta.alarmId} finished`,
+							event: 'alarm:end',
+							correlationId: msg.job.meta.correlationId,
+							messageId: msg.job.meta.messageId,
+							alarmId: msg.job.meta.alarmId
 						})
-					}
-					hungryInterval = startBeingHungry()
-				})
+						if (config.discord.typereact) {
+							msg.job.emoji.forEach((emoji) => {
+								if (emoji.match(/:\d+>/gi)) {	// If the emoji is a string matching discord custom emoji, fetch it before reacting
+									emoji = emoji.match(/:\d+>/gi)[0].replace(/[:>]/g, '')
+									emoji = client.emojis.get(emoji)
+								}
+								message.react(emoji)
+							})
+						}
+						hungryInterval = startBeingHungry()
+					})
 					.catch((e) => {
 						log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
 						hungryInterval = startBeingHungry()
 
 					})
 			}
-			else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
+			else log.warn(util.format('Tried to send message but error ocurred: %O', msg))
 		}
 	})
 })
