@@ -66,7 +66,10 @@ client.on('ready', () => {
 
 					})
 			}
-			else log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
+			else {
+				log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
+				hungryInterval = startBeingHungry()
+			}
 		}
 	})
 })
