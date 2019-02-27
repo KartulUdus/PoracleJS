@@ -28,7 +28,7 @@ const monsterController = new MonsterController(db)
 const raidController = new RaidController(db)
 const questController = new QuestController(db)
 
-// check how long the queue is every 30s. ideally empty
+// check how long the queue is every minute. ideally empty
 setInterval(() => {
 	log.log({
 		level: 'debug', message: `Job queue is ${queue.length} items long`, queue: queue.length, event: 'queue'
@@ -126,7 +126,7 @@ module.exports = async (req, reply) => {
 				monsterController.insertOrUpdateQuery(
 					'`gym-info`',
 					['id', 'gym_name', 'park', 'description', 'url', 'latitude', 'longitude'],
-					[`'${g.id}'`, `'${g.name}'`, `${g.park}`, `'${g.description}'`, `'${g.url}'`, `${g.latitude}`, `${g.longitude}`]
+					[[g.id, g.name, g.park, g.description, g.url, g.latitude, g.longitude]]
 				)
 				log.info(`Saved gym-details for ${g.name}`)
 				break
@@ -141,9 +141,7 @@ module.exports = async (req, reply) => {
 				})
 				break
 			}
-			default: {
-				log.warn(`Received a weird ${hook.type} webhook, complaining!!`)
-			}
+			default:
 		}
 	})
 

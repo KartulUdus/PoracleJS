@@ -14,13 +14,14 @@ const types = require('../util/types')
 const emojiData = require('../../../config/emoji')
 
 const moveData = require(config.locale.movesJson)
+const formData = require('../util/forms')
 const genderData = require('../util/genders')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
-const minTth = config.general.monsterMinimumTimeTillHidden || 0;
+const minTth = config.general.monsterMinimumTimeTillHidden || 0
 
 class Monster extends Controller {
 
@@ -116,6 +117,7 @@ class Monster extends Controller {
 			data.quick_move = data.weight && moveData[data.move_1] ? moveData[data.move_1].name : ''
 			data.charge_move = data.weight && moveData[data.move_2] ? moveData[data.move_2].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0
+			if (data.form) data.formname =  formData[data.pokemon_id] ? formData[data.pokemon_id][data.form] : ''
 			if (!data.weather) data.weather = 0
 			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : ''
 			data.boostemoji = emojiData.weather[data.weather]
@@ -135,7 +137,7 @@ class Monster extends Controller {
 			data.emojiString = e.join('')
 
 			// Stop handling if it already disappeared or is about to go away
-			if (data.tth.firstDateWasLater || ( (data.tth.hours * 3600) + (data.tth.minutes*60) + data.tth.seconds) < minTth) {
+			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				log.warn(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				resolve([])
 				return null

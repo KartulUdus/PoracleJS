@@ -5,11 +5,13 @@ const file = new winston.transports.File({
 	filename: 'logs/worker.json',
 	format: winston.format.combine(
 		winston.format.timestamp(),
-		winston.format.json()
+		winston.format.json(),
+		winston.format.errors({ stack: true })
 	),
 	maxsize: 25000000,
 	tailable: true,
-	maxFiles: 0,
+	handleExceptions: true,
+	maxFiles: 1,
 	level: 'debug'
 })
 const console = new (winston.transports.Console)({ level: config.general.logLevel, format: winston.format.simple() })

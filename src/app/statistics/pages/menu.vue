@@ -6,9 +6,7 @@
         <button class="button">Quests</button> <br>
         <button class="button">Timers</button> <br>
         <button class="button">Heatmaps</button> <br>
-        <button class="button">Errors</button> <br>
-        <button class="button">Warnings</button> <br>
-        <button class="button">All logs</button> <br>
+        <n-link to="/logs" no-prefetch> <button class="button">Logs</button></n-link> <br>
     </div>
 </template>
 

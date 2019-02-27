@@ -26,6 +26,16 @@ export const mutations = {
 		let raidMonCountArray = []
 		let raidMonColorArray = []
 
+		const firstTime = Math.trunc(new Date().valueOf() - data.timeTarget)
+		const timeJump = data.timeTarget / 10
+		const preFirstTime = Math.trunc(firstTime - (timeJump))
+		const timeArray = []
+
+		const instinctArray = []
+		const mysticArray = []
+		const valorArray = []
+		const uncontestedArray = []
+
 		raw = raw.data.split('\n')
 		raw.pop()
 		raw = raw.map(JSON.parse)
@@ -38,6 +48,26 @@ export const mutations = {
 		const meta = _.filter(relevant, { event: 'message:start' })
 		const raidRaw = _.filter(meta, function(raid){ return raid.type === 'raid' && raid.meta.pokemon_id > 0 })
 		const eggRaw = _.filter(meta, function(raid){ return raid.type === 'egg' && raid.meta.pokemon_id === 0 })
+		const allRaidRaw = _.filter(meta, function(raid){ return raid.type === 'raid' || raid.type === 'egg' })
+
+		for (let n = 0; n < 10; n += 1) {
+			timeArray.push(new Date(firstTime + ((n + 1) * timeJump)).toLocaleTimeString())
+			const chunkRelevant = _.filter(allRaidRaw, item => _.inRange(
+				new Date(item.timestamp).valueOf(),
+				new Date(Math.trunc(preFirstTime + ((n + 1) * timeJump))).valueOf(),
+				new Date(Math.trunc(firstTime + ((n + 1) * timeJump))).valueOf(),
+			))
+
+			const instinctCount = _.filter(chunkRelevant, function(raid){ return raid.meta.team_id === 3 })
+			const mysticCount = _.filter(chunkRelevant, function(raid){ return raid.meta.team_id === 1 })
+			const valorCount = _.filter(chunkRelevant, function(raid){ return raid.meta.team_id === 2 })
+			const uncontestedCount = _.filter(chunkRelevant, function(raid){ return raid.meta.team_id === 0 })
+
+		    instinctArray.push(instinctCount.length)
+			mysticArray.push(mysticCount.length)
+			valorArray.push(valorCount.length)
+			uncontestedCount.push(uncontestedCount.length)
+		}
 
 		for ( let i = 1; i < 800; i += 1){
 			let results = _.filter(raidRaw, (raid) => { return raid.meta.pokemon_id === i})
@@ -110,7 +140,7 @@ export const mutations = {
 			options: {
 				title: {
 					display: true,
-					text: 'TEST'
+					text: 'Raids by pokemon'
 				}
 			},
 			labels: raidMonArray,
@@ -122,6 +152,35 @@ export const mutations = {
 				}
 			]
 		}
+		state.teamChart = {
+			labels: timeArray,
+			datasets: [
+				{
+					label: `Mystic`,
+					borderColor: '#0000b8',
+					fill: false,
+					data: mysticArray
+				},
+				{
+					label: `Valor`,
+					borderColor: '#880000',
+					fill: false,
+					data: valorArray
+				},
+				{
+					label: `Instinct`,
+					borderColor: '#c2b942',
+					fill: false,
+					data: instinctArray
+				},
+				{
+					label: `Uncontested`,
+					borderColor: '#828282',
+					fill: false,
+					data: uncontestedArray
+				}
+			]
+		}
 	}
 
 }
@@ -130,6 +189,7 @@ export const state = () => ({
 	eggDoughnut: {},
 	raidLvlDoughnut: {},
 	raidMonDoughnut: {},
+	teamChart: {},
 	eggData: [],
 	raidData: []
 })

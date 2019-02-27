@@ -9,6 +9,8 @@
                 <button class="button" v-on:click="timeTarget = 3600000; updateAll()">1h</button>
                 <button class="button" v-on:click="timeTarget = 10800000; updateAll()">3h</button>
                 <button class="button" v-on:click="timeTarget = 32400000; updateAll()">9h</button>
+                <button class="button" v-on:click="timeTarget = getMsFromMidnight(); updateAll()">Today</button>
+
                 <div class="dropdown">
 
                     <button class="dropbtn">Order By</button>
@@ -31,6 +33,7 @@
                  </td>
 
              </tr>
+            <lineChart class="line-chart" :chartData="teamLine" :options="{ responsive: true , maintainAspectRatio: false }" />
 
              <div v-if="eggs.length">
                  <h2 class="title">Egg messages</h2>
@@ -64,6 +67,8 @@
 
  <script>
      import Doughnut from '~/components/doughnutChart'
+	 import lineChart from '~/components/lineChart'
+     import moment from 'moment'
 
      export default {
          name: 'statistics',
@@ -81,16 +86,20 @@
 			 eggDoughnut () { return this.$store.state.raid.eggDoughnut },
 			 raidLvlDoughnut () { return this.$store.state.raid.raidLvlDoughnut },
 			 raidMonDoughnut () { return this.$store.state.raid.raidMonDoughnut },
-
+			 teamLine () { return this.$store.state.raid.teamChart },
 
 		 },
          components: {
-             Doughnut
+             Doughnut,
+			 lineChart
          },
          methods: {
              updateAll() {
                  this.$store.commit('raid/createData', { timeTarget: this.timeTarget, filter: this.filter })
-             }
+             },
+			 getMsFromMidnight() {
+				 return new Date().valueOf() - moment().startOf('day').valueOf()
+			 }
          },
          mounted: function(){
              this.updateAll()

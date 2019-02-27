@@ -252,10 +252,10 @@ class Controller {
 	async insertOrUpdateQuery(table, columns, values) {
 
 		const cols = columns.join(', ')
-		const placeholders = values.join(', ')
+		const multiValues = values.map(x => x.map(y => (typeof y === 'boolean' ? y : `'${y}'`)).join()).join('), \n(')
 		const duplicate = columns.map(x => `\`${x}\`=VALUES(\`${x}\`)`).join(', ')
 		const query = `INSERT INTO ${table} (${cols})
-                      VALUES (${placeholders})
+                      VALUES (${multiValues})
                       ON DUPLICATE KEY UPDATE ${duplicate}`
 		return new Promise((resolve) => {
 			this.db.query(query)
