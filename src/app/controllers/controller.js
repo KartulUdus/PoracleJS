@@ -350,8 +350,6 @@ class Controller {
 			this.db.query(query)
 				.then((result, cols) => {
 					log.log({ level: 'debug', message: `select human ${name}:${kind}=${result[0][0].id}`, event: 'sql:getHumanByName' })
-					console.log(result)
-					console.log(cols)
 					resolve(result[0][0].id)
 				})
 				.catch((err) => {
