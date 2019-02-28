@@ -1,0 +1,9 @@
+version: '2.0'
+services:
+  poracle:
+    image: kartuludus/poracle:master
+    container_name: poracle
+    restart: unless-stopped
+    tty: true
+    volumes:
+      - ./config:/PoracleJS/config
