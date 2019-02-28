@@ -7,3 +7,21 @@ services:
     tty: true
     volumes:
       - ./config:/PoracleJS/config
+#     - /etc/localtime:/etc/localtime:ro
+    depends_on:
+      - poracle-db
+  poracle-db:
+    image: mysql
+    command: --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+    container_name: poracle-db
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: YourStrongRootPassw0rd!
+      MYSQL_DATABASE: poracledb
+      MYSQL_USER: poracleuser
+      MYSQL_PASSWORD: YourStrongPassw0rd!
+    ports:
+      - 3306:3306
+    volumes:
+      - data:/var/lib/mysql
+#     - /etc/localtime:/etc/localtime:ro
