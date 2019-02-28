@@ -25,3 +25,6 @@ services:
     volumes:
       - data:/var/lib/mysql
 #     - /etc/localtime:/etc/localtime:ro
+volumes:
+  data:
+    driver: local
