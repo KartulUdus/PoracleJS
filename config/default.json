@@ -1,0 +1,61 @@
+{
+  "db": {
+    "host": "127.0.0.1",
+    "user": "poracleuser",
+    "password": "YourStrongPassw0rd!",
+    "database": "poracledb",
+    "port": "3406",
+    "connectionLimit": 30
+  },
+
+  "general": {
+    "logLevel": "info",
+    "host": "127.0.0.1",
+    "port": "3030",
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
+    "webroot": "/",
+    "max_pokemon": 500,
+    "monsterMinimumTimeTillHidden": 60
+  },
+
+  "locale": {
+    "timeformat": "en-gb",
+    "time": "LTS",
+    "addressformat": "%S %n",
+    "commandMonstersJson": "../util/monsters",
+    "monstersJson": "../util/monsters",
+    "movesJson": "../util/moves"
+  },
+
+  "geocoding": {
+    "provider": "OSM",
+    "staticProvider": "OSM",
+    "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
+    "staticKey":["Your MapQuest or Google Key"],
+    "width": 250,
+    "height": 175,
+    "zoom": 15,
+    "type": "roadmap",
+    "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+    "geofence": "../../../config/geofence.json"
+  },
+
+  "discord": {
+    "token": ["YOUR DISCORD TOKEN"],
+    "channel": "general",
+    "userRole": "roleNameHere",
+    "admins": ["222742859059560458"],
+    "prefix": "!",
+    "typereact": false,
+    "limitsec": 30,
+    "limitamount": 20,
+    "iv_colors": [
+        "#9D9D9D",
+        "#FFFFFF",
+        "#1EFF00",
+        "#0070DD",
+        "#A335EE",
+        "#FF8000"
+    ]
+  }
+}
