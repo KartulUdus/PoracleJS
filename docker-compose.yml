@@ -7,7 +7,6 @@ services:
     tty: true
     volumes:
       - ./config:/PoracleJS/config
-#     - /etc/localtime:/etc/localtime:ro
     depends_on:
       - poracle-db
   poracle-db:
@@ -21,10 +20,9 @@ services:
       MYSQL_USER: poracleuser
       MYSQL_PASSWORD: YourStrongPassw0rd!
     ports:
-      - 3306:3306
+      - 3406:3406
     volumes:
       - data:/var/lib/mysql
-#     - /etc/localtime:/etc/localtime:ro
 volumes:
   data:
     driver: local

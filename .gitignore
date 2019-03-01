@@ -1,5 +1,5 @@
 logs/*.json
-config/*.json
+config/*
 !config/geofence_example.json
 src/app/communityDay/images/*
 node_modules

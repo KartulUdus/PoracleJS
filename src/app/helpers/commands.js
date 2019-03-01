@@ -12,7 +12,7 @@ const db = mysql.createPool(config.db)
 const Controller = require('../controllers/controller')
 
 const query = new Controller(db)
-const geofence = require(config.geocoding.geofence)
+const geofence = require('../../../config/geofence.json')
 const dts = require('../../../config/dts')
 const questDts = require('../../../config/questdts')
 

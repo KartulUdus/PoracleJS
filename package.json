@@ -1,6 +1,6 @@
 {
   "name": "poraclejs",
-  "version": "2.9.20",
+  "version": "2.10.20",
   "description": "Webhook processing and personalised alarms",
   "main": "index.js",
   "repository": {
@@ -32,6 +32,7 @@
     "chart.js": "^2.7.3",
     "config": "^1.28.1",
     "discord.js": "^11.3.0",
+    "dotenv": "^6.2.0",
     "emoji-flags": "^1.2.0",
     "emoji-strip": "^1.0.1",
     "fastify": "^1.0.0-rc.1",

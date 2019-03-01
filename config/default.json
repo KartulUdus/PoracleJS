@@ -1,10 +1,10 @@
 {
   "db": {
     "host": "127.0.0.1",
-    "user": "poracle",
-    "password": "potato",
-    "database": "poracle",
-    "port": "3306",
+    "user": "poracleuser",
+    "password": "YourStrongPassw0rd!",
+    "database": "poracledb",
+    "port": "3406",
     "connectionLimit": 30
   },
 
@@ -15,7 +15,7 @@
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
     "webroot": "/",
     "max_pokemon": 500,
-    "monsterMinimumTimeTillHidden": 0
+    "monsterMinimumTimeTillHidden": 60
   },
 
   "locale": {
@@ -45,8 +45,6 @@
     "channel": "general",
     "userRole": "roleNameHere",
     "admins": ["222742859059560458"],
-    "comDayResultChannelId":"383608765972217857",
-    "modRole":"sudo",
     "prefix": "!",
     "typereact": false,
     "limitsec": 30,

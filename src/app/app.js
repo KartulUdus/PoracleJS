@@ -1,4 +1,4 @@
-const fs = require('fs')
+require('dotenv').config()
 const _ = require('lodash')
 const path = require('path')
 const config = require('config')
@@ -12,27 +12,6 @@ let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.tok
 commandWorker.on('message', (msg) => {
 	if (msg.reason === 'seppuku') commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
 })
-
-// Check that DTS is present && create if not
-
-if (!fs.existsSync(path.join(__dirname, '../../config/questdts.json'))) {
-	const emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/questdts.json.example'), 'utf8')
-	fs.writeFileSync(path.join(__dirname, '../../config/questdts.json'), emergQuestDtsConf)
-}
-if (!fs.existsSync(path.join('src/app/helpers/', config.geocoding.geofence))) {
-	const emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/geofence_example.json'), 'utf8')
-	fs.writeFileSync(path.join('src/app/helpers/', config.geocoding.geofence), emergQuestDtsConf)
-}
-if (!fs.existsSync(path.join(__dirname, '../../config/dts.json'))) {
-	const emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/dts.json.example'), 'utf8')
-	fs.writeFileSync(path.join(__dirname, '../../config/dts.json'), emergQuestDtsConf)
-}
-if (!fs.existsSync(path.join(__dirname, '../../config/emoji.json'))) {
-	const emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/emoji.json.example'), 'utf8')
-	fs.writeFileSync(path.join(__dirname, '../../config/emoji.json'), emergQuestDtsConf)
-}
-// Register routes
-
 
 fastify
 	.register(require('./schemas'))

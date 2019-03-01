@@ -10,7 +10,7 @@ const questDts = require('../../../config/questdts')
 const messageDts = require('../../../config/dts')
 
 const ivColorData = config.discord.iv_colors
-const geofence = require(config.geocoding.geofence)
+const geofence = require('../../../config/geofence.json')
 const baseStats = require('../util/base_stats')
 const cpMultipliers = require('../util/cp-multipliers')
 const emojiFlags = require('emoji-flags')

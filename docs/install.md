@@ -17,8 +17,8 @@
 2. Create a [discord bot](discordbot.md), add it to your server and take note of your token for later
 
 
-3. Make a config file by copying the [examples](https://github.com/KartulUdus/PoracleJS/tree/master/config).
-    * Copy `config/default.json.example` to `config/default.json` and [fill the necessary details](config.md)
+3. Edit the config file (.env) and fill out Database and Discord bot
+    
     
 4. Install package requirements:
     ```
