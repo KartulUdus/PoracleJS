@@ -3,7 +3,6 @@ const _ = require('lodash')
 
 const client = new Client()
 const config = require('config')
-const migrator = require('../helpers/migrator')
 const log = require('../logger')
 const mysql = require('promise-mysql2')
 const emojiStrip = require('emoji-strip')
@@ -1661,6 +1660,4 @@ client.login(process.argv[2])
 		log.error(`Discord commando unhappy: ${err.message}`)
 		process.exit()
 	})
-
-migrator()
 

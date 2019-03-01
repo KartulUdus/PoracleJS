@@ -20,7 +20,7 @@ It allows for high end-user configurability using discord `!commands` and privat
 git clone https://github.com/KartulUdus/PoracleJS.git   // Clone the repository
 cd PoracleJS                                            // Navigate to the root of the project
 npm install                                             // install dependencies
-vim .env                                                // Edit the config file (.env) and fill out Database and Discord bot
+cp .env.example .env && vim .env                        // Edit the config file (.env) and fill out Database and Discord bot
 npm start                                               // Start the application
 
 ```

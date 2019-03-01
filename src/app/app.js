@@ -1,4 +1,6 @@
 require('dotenv').config()
+require('./helpers/configCreator')()
+require('./helpers/migrator')()
 const _ = require('lodash')
 const path = require('path')
 const config = require('config')
@@ -6,6 +8,7 @@ const fastify = require('fastify')()
 const log = require('./logger')
 const cp = require('child_process')
 const nuxtConfig = require('./statistics/nuxt.config.js')
+
 // Start Commander
 
 let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])

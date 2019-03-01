@@ -209,6 +209,7 @@ module.exports = async () => {
 				}
 				else {
 					log.error(`didn't find Tables I like, this house has ${confirmedTables} similar tables \nPlease check database credentials for my PERSONAL database`)
+					process.exit()
 				}
 				queries.selectOneQuery('schema_version', 'key', 'db_version').then((version) => {
 					if (version.val === 1) {
@@ -227,4 +228,8 @@ module.exports = async () => {
 			})
 		}
 	})
+		.catch((unhappy) => {
+			log.error(`Database migration unhappy: ${unhappy.message}`)
+			process.exit()
+		})
 }

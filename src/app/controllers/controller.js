@@ -226,14 +226,14 @@ class Controller {
 	}
 
 	async countQuery(what, from, where, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('SELECT count(??) as count FROM ?? WHERE ?? = ?', [what, from, where, value])
 				.then((result) => {
 					log.log({ level: 'debug', message: `countQuery ${from}`, event: 'sql:countQuery' })
 					resolve(result[0][0].count)
 				})
 				.catch((err) => {
-					log.error(`countQuery errored with: ${err}`)
+					reject(err)
 				})
 		})
 	}

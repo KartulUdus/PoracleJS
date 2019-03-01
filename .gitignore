@@ -1,5 +1,8 @@
 logs/*.json
-config/*
+config/*.json
+!config/examples/*
+!config/default.json
+!config/custom-environment-variables.json
 .env
 src/app/communityDay/images/*
 node_modules

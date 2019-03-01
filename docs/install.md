@@ -17,7 +17,7 @@
 2. Create a [discord bot](discordbot.md), add it to your server and take note of your token for later
 
 
-3. Edit the config file (.env) and fill out Database and Discord bot
+3. Edit the config file (`cp .env.example .env && vim .env`) and fill out Database and Discord bot
     
     
 4. Install package requirements:
