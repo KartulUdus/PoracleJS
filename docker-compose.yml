@@ -1,7 +1,7 @@
 version: '2.0'
 services:
   poracle:
-    image: kartuludus/poracle:master
+    image: kartuludus/poracle:develop
     container_name: poracle
     restart: unless-stopped
     tty: true
