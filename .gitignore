@@ -1,11 +1,9 @@
 logs/*.json
-config/*
 !config/geofence_example.json
 src/app/communityDay/images/*
 node_modules
 build
 npm-debug.log
-.env
 .DS_Store
 .idea/*
 .nuxt/*
