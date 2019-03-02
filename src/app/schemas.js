@@ -66,5 +66,16 @@ module.exports = function schema(fastify, opts, next) {
 				longitude: { type: 'number' }
 			}
 		})
+		.addSchema({
+			$id: 'gymMessage',
+			type: 'object',
+			properties: {
+				gym_id: { type: 'string' },
+				url: { type: 'string' },
+				name: { type: 'string' },
+				latitude: { type: 'number' },
+				longitude: { type: 'number' }
+			}
+		})
 	next()
 }

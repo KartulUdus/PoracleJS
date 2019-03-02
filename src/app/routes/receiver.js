@@ -56,6 +56,16 @@ const schema =
 							message: 'pokestopMessage#'
 						}
 					},
+					{
+						type: 'object',
+						properties: {
+							type: {
+								type: 'string',
+								enum: ['gym', 'Gym', 'GYM']
+							},
+							message: 'gymMessage#'
+						}
+					},
 				]
 			}
 		}
