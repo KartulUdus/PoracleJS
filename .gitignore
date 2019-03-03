@@ -6,6 +6,7 @@ config/*.json
 .env
 src/app/communityDay/images/*
 node_modules
+package-lock.json
 build
 npm-debug.log
 .DS_Store

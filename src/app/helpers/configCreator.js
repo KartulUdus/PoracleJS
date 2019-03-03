@@ -1,9 +1,10 @@
 const fs = require('fs')
 const log = require('../logger')
 const path = require('path')
+const config = require('config')
 
 module.exports = () => {
-	if (!process.env.DISCORD_TOKEN) {
+	if (!config.discord.token) {
 		log.error(`DISCORD_TOKEN variable missing, please update/create ${path.join(__dirname, '../../../.env')} \nSee example in ${path.join(__dirname, '../../../.env.example')}`)
 		process.exit()
 	}

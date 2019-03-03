@@ -1,12 +1,14 @@
-version: '2.0'
+version: '3.1'
 services:
   poracle:
     image: kartuludus/poracle:develop
     container_name: poracle
     restart: unless-stopped
     tty: true
+    env_file:
+      - .env
     volumes:
-      - ./config:/PoracleJS/config
+      - ./config/:/PoracleJS/config/
     depends_on:
       - poracle-db
   poracle-db:
@@ -20,7 +22,7 @@ services:
       MYSQL_USER: poracleuser
       MYSQL_PASSWORD: YourStrongPassw0rd!
     ports:
-      - 3406:3406
+      - 3306:3306
     volumes:
       - data:/var/lib/mysql
 volumes:
