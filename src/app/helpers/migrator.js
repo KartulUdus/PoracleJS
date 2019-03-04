@@ -1,6 +1,6 @@
 const Controller = require('../controllers/controller')
 const config = require('config')
-const mysql = require('promise-mysql2')
+const mysql = require('mysql2/promise')
 
 const db = mysql.createPool(config.db, { multipleStatements: true })
 const queries = new Controller(db)

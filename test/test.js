@@ -1,5 +1,5 @@
 const config = require('config')
-const mysql = require('promise-mysql2')
+const mysql = require('mysql2/promise')
 const MonsterController = require('../src/app/controllers/monster')
 const RaidController = require('../src/app/controllers/raid')
 const QuestController = require('../src/app/controllers/quest')

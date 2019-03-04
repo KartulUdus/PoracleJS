@@ -4,7 +4,7 @@ const _ = require('lodash')
 const client = new Client()
 const config = require('config')
 const log = require('../logger')
-const mysql = require('promise-mysql2')
+const mysql = require('mysql2/promise')
 const emojiStrip = require('emoji-strip')
 
 const db = mysql.createPool(config.db)

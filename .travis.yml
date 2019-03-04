@@ -10,7 +10,11 @@ before_install:
 
 before_script:
   - rm -rf ./node_modules package-lock.json
-  - cp test/travisConfig.json config/default.json
+  - cp test/travisConfig.json config/local.json
+  - cp config/examples/dts.json.example config/dts.json
+  - cp config/examples/geofence.json.example config/geofence.json
+  - cp config/examples/questdts.json.example config/questdts.json
+  - cp config/examples/emoji.json.example config/emoji.json
   - npm install
 
 script:

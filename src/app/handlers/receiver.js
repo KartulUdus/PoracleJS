@@ -1,7 +1,7 @@
 const log = require('../logger')
 const _ = require('lodash')
 const config = require('config')
-const mysql = require('promise-mysql2')
+const mysql = require('mysql2/promise')
 const discord = require('cluster')
 const uuid = require('uuid/v4')
 
