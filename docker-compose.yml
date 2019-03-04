@@ -12,8 +12,9 @@ services:
       DB_USER: poracleuser
       DB_PASSWORD: YourStrongPassw0rd!
       DB_DATABASE: poracledb
-    expose:
-      - 3030
+      HOST: 0.0.0.0
+    ports:
+      - 3030:3030
     volumes:
       - ./config/:/PoracleJS/config/
     depends_on:
