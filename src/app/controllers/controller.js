@@ -145,7 +145,7 @@ class Controller {
 					matchAreas.push(area)
 				}
 			})
-			log.log({ level: 'debug', message: `pointInArea ${point.latitude}, ${point.longitude}`, event: 'geo:pointInArea' })
+			log.log({ level: 'debug', message: `pointInArea ${point[0]}, ${point[1]}`, event: 'geo:pointInArea' })
 			resolve(matchAreas)
 		})
 	}
