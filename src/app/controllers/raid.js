@@ -131,8 +131,8 @@ class Raid extends Controller {
 				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 
-				data.quick_move = data.move_1 ? moveData[data.move_1].name : ''
-				data.charge_move = data.move_2 ? moveData[data.move_2].name : ''
+				data.quick_move = moveData[data.move_1] ? moveData[data.move_1].name : ''
+				data.charge_move = moveData[data.move_2] ? moveData[data.move_2].name : ''
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name

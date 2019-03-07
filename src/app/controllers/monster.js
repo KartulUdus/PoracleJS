@@ -57,7 +57,7 @@ class Monster extends Controller {
                group by humans.id, humans.name, monsters.template `
 
 
-			log.log({ level: 'debug', message: 'questWhoCares query', event: 'sql:monsterWhoCares' })
+			log.log({ level: 'debug', message: 'monsterWhoCares query', event: 'sql:monsterWhoCares' })
 			this.db.query(query)
 				.then((result) => {
 					log.info(`${data.name} appeared and ${result[0].length} humans cared`)
