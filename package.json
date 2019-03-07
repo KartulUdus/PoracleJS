@@ -1,17 +1,16 @@
 {
   "name": "poraclejs",
-  "version": "2.11.25",
+  "version": "2.11.26",
   "description": "Webhook processing and personalised alarms",
-  "main": "index.js",
+  "main": "src/app/app.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/KartulUdus/PoracleJS.git"
   },
   "scripts": {
     "test": "mocha --exit",
-    "start": "node src/app/app.js",
+    "start": "node .",
     "lint": "./node_modules/.bin/eslint ./src/app --fix",
-    "community": "node src/app/communityDay/comDay.js",
     "docs": "./node_modules/docsify-cli/bin/docsify serve docs"
   },
   "keywords": [

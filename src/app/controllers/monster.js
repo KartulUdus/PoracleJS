@@ -188,7 +188,7 @@ class Monster extends Controller {
 								move2: data.charge_move,
 								iv: data.iv,
 								cp: data.cp,
-								level: data.pokemon_level,
+								level: Math.round(data.pokemon_level),
 								atk: data.individual_attack,
 								def: data.individual_defense,
 								sta: data.individual_stamina,
