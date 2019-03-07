@@ -1,7 +1,7 @@
 const { Client } = require('discord.js')
 const _ = require('lodash')
 
-const client = new Client()
+const client = new Client({ autoReconnect: true })
 const config = require('config')
 const log = require('../logger')
 const mysql = require('mysql2/promise')
