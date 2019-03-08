@@ -1,5 +1,7 @@
 const { Client } = require('discord.js')
 const _ = require('lodash')
+const fs = require('fs')
+const path = require('path')
 
 const client = new Client({ autoReconnect: true })
 const config = require('config')
@@ -749,7 +751,10 @@ client.on('message', (msg) => {
 							msg.reply(`${msg.author.username} tracking list is quite long. Have a look at ${hastelink}`)
 						})
 						.catch((err) => {
-							msg.reply(`${msg.author.username} tracking list is long, but Hastebin is also down. ☹️ \nPlease try again later.`)
+							let filepath = path.join(__dirname, `../../../.cache/${human.name}.txt`)
+							fs.writeFileSync(filepath, message)
+							msg.reply(`${msg.author.username} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] })
+								.then(() => {fs.unlinkSync(filepath)})
 							log.error(`Hastebin unhappy: ${err.message}`)
 
 						})
@@ -1470,7 +1475,10 @@ client.on('message', (msg) => {
 					})
 						.catch((err) => {
 							log.error(`Hastebin unhappy: ${err.message}`)
-							msg.reply(`${msg.channel.name} tracking list is long, but Hastebin is also down. ☹️ \nPlease try again later.`)
+							let filepath = path.join(__dirname, `../../../.cache/${human.name}.txt`)
+							fs.writeFileSync(filepath, message)
+							msg.reply(`${msg.channel.name} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] })
+								.then(() => {fs.unlinkSync(filepath)})
 						})
 				}
 			})
