@@ -6,20 +6,27 @@ const pokemonGif = require('pokemon-gif')
 const _ = require('lodash')
 const mustache = require('mustache')
 
-const monsterData = require(config.locale.monstersJson)
+let monsterDataPath = `${__dirname}/../util/monsters.json`
+let moveDataPath = `${__dirname}/../util/moves.json`
+if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCase())) {
+	monsterDataPath = `${__dirname}/../../../util/locale/monsters${config.locale.language.toLowerCase()}.json`
+	moveDataPath = `${__dirname}/../../../util/locale/moves${config.locale.language.toLowerCase()}.json`
+}
+
+const emojiData = require('../../config/emoji')
+
+const monsterData = require(monsterDataPath)
 const teamData = require('../util/teams')
 const types = require('../util/types')
 
-const emojiData = require('../../../config/emoji')
-
-const moveData = require(config.locale.movesJson)
+const moveData = require(moveDataPath)
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
 
-const dts = require('../../../config/dts')
+const dts = require('../../config/dts')
 
 class Raid extends Controller {
 

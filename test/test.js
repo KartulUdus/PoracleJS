@@ -1,8 +1,8 @@
 const config = require('config')
 const mysql = require('mysql2/promise')
-const MonsterController = require('../src/app/controllers/monster')
-const RaidController = require('../src/app/controllers/raid')
-const QuestController = require('../src/app/controllers/quest')
+const MonsterController = require('../src/controllers/monster')
+const RaidController = require('../src/controllers/raid')
+const QuestController = require('../src/controllers/quest')
 
 const db = mysql.createPool(config.db, { multipleStatements: true })
 

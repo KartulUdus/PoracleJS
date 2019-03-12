@@ -2,12 +2,17 @@ const Controller = require('./controller')
 const config = require('config')
 const log = require('../logger')
 const mustache = require('mustache')
-
-const emojiData = require('../../../config/emoji')
-
-const monsterData = require(config.locale.monstersJson)
-const typeData = require('../util/types')
 const _ = require('lodash')
+
+const emojiData = require('../../config/emoji')
+
+let monsterDataPath = `${__dirname}/../util/monsters.json`
+if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCase())) {
+	monsterDataPath = `${__dirname}/../../../util/locale/monsters${config.locale.language.toLowerCase()}.json`
+}
+
+const monsterData = require(monsterDataPath)
+const typeData = require('../util/types')
 
 
 class Quest extends Controller {

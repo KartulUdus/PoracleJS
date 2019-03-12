@@ -6,14 +6,20 @@ const _ = require('lodash')
 const mustache = require('mustache')
 const pokemonGif = require('pokemon-gif')
 
-const monsterData = require(config.locale.monstersJson)
-const weatherData = require('../util/weather')
+let monsterDataPath = `${__dirname}/../util/monsters.json`
+let moveDataPath = `${__dirname}/../util/moves.json`
+if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCase())) {
+	monsterDataPath = `${__dirname}/../../../util/locale/monsters${config.locale.language.toLowerCase()}.json`
+	moveDataPath = `${__dirname}/../../../util/locale/moves${config.locale.language.toLowerCase()}.json`
+}
 
 const types = require('../util/types')
+const emojiData = require('../../config/emoji')
 
-const emojiData = require('../../../config/emoji')
+const monsterData = require(monsterDataPath)
+const weatherData = require('../util/weather')
 
-const moveData = require(config.locale.movesJson)
+const moveData = require(moveDataPath)
 const formData = require('../util/forms')
 const genderData = require('../util/genders')
 const geoTz = require('geo-tz')

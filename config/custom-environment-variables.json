@@ -30,9 +30,7 @@
     "timeformat": "TIME_FORMAT",
     "time": "TIME_STRING",
     "addressformat": "ADDR_FORMAT",
-    "commandMonstersJson": "COMMAND_MONSTERS",
-    "monstersJson": "DTS_MONSTERS",
-    "movesJson": "DTS_MOVES"
+    "language": "LANGUAGE"
   },
 
   "geocoding": {

@@ -20,7 +20,7 @@ module.exports = {
 		},
 	],
 	css: ['@/stats.css'],
-	srcDir: 'src/app/statistics/',
+	srcDir: 'src/statistics/',
 
 	env: {
 		baseUrl: `http://${config.general.host}:${config.general.port}/`

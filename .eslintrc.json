@@ -12,8 +12,6 @@
     "eol-last": [ "off" ],
     // sometimes having a long single line makes sense, this also seems buggy and inconsistent, so we ignore it
     "max-len": [ "off" ],
-    // webstorm repeatedly tries to add it for us. it's easier not to fight it, even if it's not required.
-    "strict": [ "off" ],
     // when setting the property of an object, you can specify the name even if it's unnecessary (ie: { foo: foo })
     "object-shorthand": [ "off" ],
     // semicolons at line ends make code less readable and are generally useless
@@ -27,12 +25,8 @@
     "brace-style": [ "error", "stroustrup" ],
     // if discord breaks because dangling commas, don't
     "comma-dangle": ["error", "only-multiline"],
-    // it's possible that implicit coercion is not what you intended. webstorm warns about it, so should we
-    "no-implicit-coercion": [ "warn" ],
     // if you wish to call all your errors err, go ahead
     "no-shadow": ["error", { "allow": ["err"] }],
-    // if you're using 'this' somewhere that isn't a class you're probably doing something wrong
-    "no-invalid-this": [ "error" ],
     // if you're not modifying the variable used in a loop condition, you've probably done something wrong...
     "no-unmodified-loop-condition": [ "warn" ],
     // don't use .call or .apply when you don't need to

@@ -8,20 +8,13 @@ const fastify = require('fastify')()
 const log = require('./logger')
 const cp = require('child_process')
 const nuxtConfig = require('./statistics/nuxt.config.js')
+cp.fork(`${__dirname}/helpers/commando.js`)
 
-// Start Commander
-
-let commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
-commandWorker.on('message', (msg) => {
-	if (msg.reason === 'seppuku') commandWorker = cp.fork(`${__dirname}/helpers/commands`, [config.discord.token[0]])
-})
 
 fastify
-	.register(require('./schemas'))
-	.register(require('./routes/staticMap'))
-	.register(require('./routes/receiver'))
+	.post('/', {}, require('./handlers/receiver'))
 	.register(require('fastify-static'), {
-		root: path.join(__dirname, '../../logs/'),
+		root: path.join(__dirname, '../logs/'),
 		prefix: '/logs/'
 	})
 
@@ -55,7 +48,6 @@ const start = async () => {
 		log.error(err)
 	}
 }
-
 
 start()
 

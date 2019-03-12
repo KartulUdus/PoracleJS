@@ -6,11 +6,11 @@ const webshot = require('webshot')
 const path = require('path')
 const NodeGeocoder = require('node-geocoder')
 const pcache = require('persistent-cache')
-const questDts = require('../../../config/questdts')
-const messageDts = require('../../../config/dts')
+const questDts = require('../../config/questdts')
+const messageDts = require('../../config/dts')
 
 const ivColorData = config.discord.iv_colors
-const geofence = require('../../../config/geofence.json')
+const geofence = require('../../config/geofence.json')
 const baseStats = require('../util/base_stats')
 const cpMultipliers = require('../util/cp-multipliers')
 const emojiFlags = require('emoji-flags')
@@ -199,14 +199,14 @@ class Controller {
 	}
 
 	async selectOneQuery(table, column, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('SELECT * FROM ?? WHERE ?? = ?', [table, column, value])
 				.then((result) => {
 					log.log({ level: 'debug', message: 'selectOneQuery query', event: 'sql:selectOneQuery' })
 					resolve(result[0][0])
 				})
 				.catch((err) => {
-					log.error(`selectOneQuery errored with: ${err}`)
+					reject(err)
 				})
 		})
 	}
@@ -257,7 +257,7 @@ class Controller {
 		const query = `INSERT INTO ${table} (${cols})
                       VALUES (${multiValues})
                       ON DUPLICATE KEY UPDATE ${duplicate}`
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query(query)
 				.then((result) => {
 					log.log({ level: 'debug', message: `insertOrUpdateQuery ${table}`, event: 'sql:insertOrUpdateQuery' })
@@ -265,17 +265,19 @@ class Controller {
 				})
 				.catch((err) => {
 					log.error(`insertOrUpdateQuery errored with: ${err}`)
+					reject(err)
 				})
 		})
 	}
 
 
 	async updateQuery(table, field, newvalue, col, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('UPDATE ?? SET ?? = ? where ?? = ?', [table, field, newvalue, col, value])
 				.then(log.log({ level: 'debug', message: `updateQuery ${table}`, event: 'sql:updateQuery' }))
 				.catch((err) => {
 					log.error(`inseertQuery errored with: ${err}`)
+					reject(err)
 				})
 		})
 	}
@@ -295,20 +297,21 @@ class Controller {
 	}
 
 	async deleteQuery(table, column, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('DELETE FROM ?? WHERE ?? = ?', [table, column, value])
 				.then((result) => {
 					resolve(result[0].count)
 					log.log({ level: 'debug', message: `deleteQuery ${table}`, event: 'sql:deleteQuery' })
 				})
 				.catch((err) => {
-					log.error(`deleteQuery errored with: ${err}`)
+					log.error(`deleteQuery errored with: ${err.message}`)
+					reject(err)
 				})
 		})
 	}
 
 	async deleteByIdQuery(table, column, value, id) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('DELETE FROM ?? WHERE ?? = ? and id = ?', [table, column, value, id])
 				.then((result) => {
 					resolve(result[0].count)
@@ -316,6 +319,7 @@ class Controller {
 				})
 				.catch((err) => {
 					log.error(`deleteQuery errored with: ${err}`)
+					reject(err)
 				})
 		})
 	}

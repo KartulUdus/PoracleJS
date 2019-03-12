@@ -4,7 +4,6 @@ config/*.json
 !config/default.json
 !config/custom-environment-variables.json
 .env
-src/app/communityDay/images/*
 node_modules
 package-lock.json
 build
