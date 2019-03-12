@@ -20,7 +20,7 @@ if (cluster.isMaster) {
 		let worker = cluster.fork()
 		let newID = worker.id
 		let oldID = deadWorker.id
-		log.warn(`Discord commando #${oldID} died, long live Commando #${newID}`)
+		log.warn(`Discord commando #${oldID} died, long live commando #${newID}`)
 	})
 }else {
 	const client = new Client({ autoReconnect: true })
