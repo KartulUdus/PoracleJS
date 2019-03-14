@@ -6,13 +6,13 @@ const file = new winston.transports.File({
 	format: winston.format.combine(
 		winston.format.timestamp(),
 		winston.format.json(),
-		winston.format.errors({ stack: true })
+		winston.format.errors({ stack: true }),
 	),
 	maxsize: 25000000,
 	tailable: true,
 	handleExceptions: true,
 	maxFiles: 1,
-	level: 'debug'
+	level: 'debug',
 })
 const console = new (winston.transports.Console)({ level: config.general.logLevel, format: winston.format.simple() })
 
@@ -21,6 +21,6 @@ module.exports =
 	winston.createLogger({
 		transports: [
 			console,
-			file
+			file,
 		],
 	})

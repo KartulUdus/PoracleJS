@@ -8,5 +8,5 @@ export default {
 	props: ['data', 'options'],
 	mounted() {
 		this.renderChart(this.chartData, this.options)
-	}
+	},
 }

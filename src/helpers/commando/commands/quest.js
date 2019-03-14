@@ -7,10 +7,11 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 }
 const monsterData = require(monsterDataPath)
 const questDts = require('../../../../config/questdts')
+
 const typeData = require(`${__dirname}/../../../util/types`)
 
 
-exports.run = (client, msg, args) => {
+exports.run = (client, msg) => {
 	let target = { id: msg.author.id, name: msg.author.tag }
 	if (!_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') {
 		return msg.author.send('Please run commands in Direct Messages').catch((O_o) => {
@@ -33,9 +34,9 @@ exports.run = (client, msg, args) => {
 			}
 			if (isregistered) {
 				let monsters = []
-				let items = []
+				const items = []
 				let distance = 0
-				let questTracks = []
+				const questTracks = []
 				let template = 3
 				let mustShiny = 0
 				let remove = false
@@ -72,7 +73,7 @@ exports.run = (client, msg, args) => {
 					const re = new RegExp(` ${item}`, 'gi')
 					if (rawArgs.match(re)) items.push(key)
 				})
-				if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
+				if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1) // eslint-disable-line no-return-assign
 				if (rawArgs.match(/all items/gi)) {
 					_.forEach(questDts.rewardItems, (item, key) => {
 						items.push(key)
@@ -82,30 +83,30 @@ exports.run = (client, msg, args) => {
 					questTracks.push({
 						id: target.id,
 						reward: minDust,
-						template: template,
+						template,
 						mustShiny: 0,
 						reward_type: 3,
-						distance: distance
+						distance,
 					})
 				}
 				monsters.forEach((pid) => {
 					questTracks.push({
 						id: target.id,
 						reward: pid,
-						template: template,
-						mustShiny: mustShiny,
+						template,
+						mustShiny,
 						reward_type: 7,
-						distance: distance
+						distance,
 					})
 				})
 				items.forEach((i) => {
 					questTracks.push({
 						id: target.id,
 						reward: i,
-						template: template,
+						template,
 						mustShiny: 0,
 						reward_type: 2,
-						distance: distance
+						distance,
 					})
 				})
 				if (!remove) {
@@ -113,13 +114,14 @@ exports.run = (client, msg, args) => {
 					client.query.insertOrUpdateQuery(
 						'quest',
 						['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
-						insertData
+						insertData,
 					).catch((O_o) => {})
 					client.log.log({ level: 'debug', message: `${msg.author.username} added quest trackings to ${target.name}`, event: 'discord:quest' })
 					msg.react('✅').catch((O_o) => {
 						client.log.error(O_o.message)
 					})
-				} else {
+				}
+				else {
 					const remQuery = `
 						delete from quest WHERE id=${msg.author.id} and 
 						((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}))		

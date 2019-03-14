@@ -15,16 +15,17 @@ const log = require('../logger')
 
 if (cluster.isMaster) {
 	cluster.fork()
-	cluster.on('exit', function(deadWorker, code, signal) {
+	cluster.on('exit', (deadWorker, code, signal) => {
 		// Restart the worker
-		let worker = cluster.fork()
-		let newID = worker.id
-		let oldID = deadWorker.id
+		const worker = cluster.fork()
+		const newID = worker.id
+		const oldID = deadWorker.id
 		log.warn(`Discord commando #${oldID} died, long live commando #${newID}`)
 	})
-}else {
+}
+else {
 	const client = new Client({ autoReconnect: true })
-// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
+	// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
 	client.config = config
 	client.query = query
 	client.dts = dts

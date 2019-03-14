@@ -2,12 +2,12 @@ const config = require('config')
 
 module.exports = {
 	loading: {
-		color: 'orange'
+		color: 'orange',
 	},
 	modules: ['@nuxtjs/axios', 'nuxt-leaflet', 'nuxt-svg'],
 
 	axios: {
-		retry: { retries: 3 }
+		retry: { retries: 3 },
 	},
 	build: {
 		quiet: true,
@@ -23,6 +23,6 @@ module.exports = {
 	srcDir: 'src/statistics/',
 
 	env: {
-		baseUrl: `http://${config.general.host}:${config.general.port}/`
-	}
+		baseUrl: `http://${config.general.host}:${config.general.port}/`,
+	},
 }

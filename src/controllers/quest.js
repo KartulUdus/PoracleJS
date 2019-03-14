@@ -78,14 +78,14 @@ class Quest extends Controller {
 				this.getQuestTypeString(data),
 				this.getRewardSting(data),
 				this.getConditionString(data),
-				this.pointInArea([data.latitude, data.longitude])
+				this.pointInArea([data.latitude, data.longitude]),
 			]).then((questData) => {
 				[data.questType, data.rewardData, data.conditionstring, data.matched] = questData
 				data.dustAmount = data.rewardData.dustAmount
 				data.isShiny = data.rewardData.isShiny
 
 				log.log({
-					level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', type: 'quest', meta: data
+					level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', type: 'quest', meta: data,
 				})
 
 				const jobs = []
@@ -165,7 +165,7 @@ class Quest extends Controller {
 						whoCares.forEach((cares) => {
 							const alarmId = this.uuid
 							log.log({
-								level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+								level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId,
 							})
 
 							const caresCache = this.getDiscordCache(cares.id)
@@ -176,7 +176,7 @@ class Quest extends Controller {
 								target: cares.id,
 								name: cares.name,
 								emoji: [],
-								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
+								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
 							}
 							if (caresCache <= config.discord.limitamount + 1) {
 								jobs.push(work)
@@ -235,13 +235,13 @@ class Quest extends Controller {
 					})
 					e = e.join()
 					if (reward.info.shiny) isShiny = 1
-					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, emoji: e, isShiny: isShiny })
+					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, emoji: e, isShiny })
 					monsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				}
 			})
 			resolve({
-				rewardstring: rewardString, monsters: monsters, items: items, dustAmount: dustAmount, isShiny: isShiny
+				rewardstring: rewardString, monsters, items, dustAmount, isShiny,
 			})
 		})
 	}
@@ -310,7 +310,7 @@ class Quest extends Controller {
 					case 11: {
 						const template = this.qdts.questConditions['11']
 						const item = condition.info ? this.qdts.rewardItems[condition.info.item_id] : ''
-						const cond = mustache.render(template, { item: item })
+						const cond = mustache.render(template, { item })
 						conditionString = conditionString.concat(cond)
 						break
 					}

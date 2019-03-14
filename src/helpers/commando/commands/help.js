@@ -22,7 +22,7 @@ exports.run = (client, msg) => {
 				})
 			}
 			if (isregistered) {
-				let message = client.dts.greeting
+				const message = client.dts.greeting
 				message.embed.title = ''
 				message.embed.description = ''
 				msg.reply(message).catch((O_o) => {

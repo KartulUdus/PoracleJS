@@ -4,6 +4,7 @@ config/*.json
 !config/default.json
 !config/custom-environment-variables.json
 .env
+src/helpers/commando/commands/filterBackups/*
 node_modules
 package-lock.json
 build

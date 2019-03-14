@@ -4,7 +4,7 @@ module.exports = (client) => {
 	client.user.setPresence({
 		game: {
 			name: 'PoracleJS',
-		}
+		},
 	})
 
 	client.query.selectAllQuery('humans', 'enabled', 1).then((humans) => {

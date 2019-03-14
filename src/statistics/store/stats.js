@@ -49,7 +49,7 @@ export const mutations = {
 		const relevant = _.filter(raw, item => _.inRange(
 			new Date(item.timestamp.valueOf()),
 			new Date().valueOf() - timeTarget,
-			new Date().valueOf() + 1
+			new Date().valueOf() + 1,
 		))
 		const preFirstTime = Math.trunc(firstTime - (timeJump))
 		for (let i = 0; i < 10; i += 1) {
@@ -139,9 +139,9 @@ export const mutations = {
 				{
 					label: `Total messages ${countMon + countEgg + countRaid + countQuest}`,
 					backgroundColor: ['#51b868', '#b86053', '#3446b8', '#b62bb8'],
-					data: [countMon, countEgg, countRaid, countQuest]
-				}
-			]
+					data: [countMon, countEgg, countRaid, countQuest],
+				},
+			],
 		}
 
 		state.queueChart = {
@@ -150,9 +150,9 @@ export const mutations = {
 				{
 					label: `Discord alert queue in last ${Math.trunc(timeTarget / 60000)} minutes`,
 					borderColor: '#b82b7b',
-					data: jobQueue
-				}
-			]
+					data: jobQueue,
+				},
+			],
 		}
 
 		state.httpChart = {
@@ -162,15 +162,15 @@ export const mutations = {
 					label: `http requests in last ${Math.trunc(timeTarget / 60000)} minutes`,
 					borderColor: '#51b868',
 					fill: false,
-					data: httpInArray
+					data: httpInArray,
 				},
 				{
 					label: `http requests finished last ${Math.trunc(timeTarget / 60000)} minutes`,
 					borderColor: '#3f884b',
 					fill: false,
-					data: httpOutArray
-				}
-			]
+					data: httpOutArray,
+				},
+			],
 		}
 
 		state.messageChart = {
@@ -180,15 +180,15 @@ export const mutations = {
 					label: `messages started last ${Math.trunc(timeTarget / 60000)} minutes`,
 					borderColor: '#818815',
 					fill: false,
-					data: messageInArray
+					data: messageInArray,
 				},
 				{
 					label: `messages done last ${Math.trunc(timeTarget / 60000)} minutes`,
 					borderColor: '#8f9335',
 					fill: false,
-					data: messageOutArray
-				}
-			]
+					data: messageOutArray,
+				},
+			],
 		}
 
 		state.alarmChart = {
@@ -198,15 +198,15 @@ export const mutations = {
 					label: `alarm started last ${Math.trunc(timeTarget / 60000)} minutes`,
 					borderColor: '#3d3888',
 					fill: false,
-					data: alarmStartArray
+					data: alarmStartArray,
 				},
 				{
 					label: `alarm finished  finished last ${Math.trunc(timeTarget / 60000)} minutes`,
 					borderColor: '#252288',
 					fill: false,
-					data: alarmFinishArray
-				}
-			]
+					data: alarmFinishArray,
+				},
+			],
 		}
 
 		state.queryChart = {
@@ -214,118 +214,118 @@ export const mutations = {
 			datasets: [
 				{
 					label: 'AddOneQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlAddOneQuery
+					data: sqlAddOneQuery,
 				},
 				{
 					label: 'SelectAllQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlSelectAllQuery
+					data: sqlSelectAllQuery,
 				},
 				{
 					label: 'DeleteByIdQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlDeleteByIdQuery
+					data: sqlDeleteByIdQuery,
 				},
 				{
 					label: 'MysteryQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlMysteryQuery
+					data: sqlMysteryQuery,
 				},
 				{
 					label: 'DeleteQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlDeleteQuery
+					data: sqlDeleteQuery,
 				},
 
 				{
 					label: 'UpdateQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlUpdateQuery
+					data: sqlUpdateQuery,
 				},
 
 				{
 					label: 'InsertOrUpdateQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlInsertOrUpdateQuery
+					data: sqlInsertOrUpdateQuery,
 				},
 
 				{
 					label: 'InsertQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlInsertQuery
+					data: sqlInsertQuery,
 				},
 				{
 					label: 'CountQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlCountQuery
+					data: sqlCountQuery,
 				},
 				{
 					label: 'DropTableQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlDropTableQuery
+					data: sqlDropTableQuery,
 				},
 				{
 					label: 'SelectOneQuery',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlSelectOneQuery
+					data: sqlSelectOneQuery,
 				},
 				{
 					label: 'UpdateLocation',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlUpdateLocation
+					data: sqlUpdateLocation,
 				},
 				{
 					label: 'QuestWhoCares',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlQuestWhoCares
+					data: sqlQuestWhoCares,
 				},
 				{
 					label: 'MonsterWhoCares',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlMonsterWhoCares
+					data: sqlMonsterWhoCares,
 				},
 				{
 					label: 'RaidWhoCares',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlRaidWhoCares
+					data: sqlRaidWhoCares,
 				},
 				{
 					label: 'EggWhoCares',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlEggWhoCares
+					data: sqlEggWhoCares,
 				},
 				{
 					label: 'CheckSchema',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlCheckSchema
+					data: sqlCheckSchema,
 				},
 				{
 					label: 'Total queries',
-					borderColor: `#${Math.floor(Math.random()*16777215).toString(16)}`,
+					borderColor: `#${Math.floor(Math.random() * 16777215).toString(16)}`,
 					fill: false,
-					data: sqlTotal
-				}
-			]
+					data: sqlTotal,
+				},
+			],
 		}
-	}
+	},
 
 
 }
@@ -342,7 +342,7 @@ export const state = () => ({
 	messageChart: {},
 	alarmChart: {},
 	queryChart: {},
-	queueChart: {}
+	queueChart: {},
 
 
 })

@@ -1,5 +1,6 @@
 const _ = require('lodash')
 const config = require('config')
+
 let monsterDataPath = `${__dirname}/../../../util/monsters.json`
 if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCase())) {
 	monsterDataPath = `${__dirname}/../../../util/locale/monsters${config.locale.language.toLowerCase()}.json`
@@ -70,7 +71,7 @@ exports.run = (client, msg, args) => {
 							} return k
 						})
 					}
-					else if (element.match(/everything/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
+					else if (element.match(/everything/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1) // eslint-disable-line no-return-assign
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
 						if (distance.length >= 10) distance = distance.substr(0, 9)
@@ -83,7 +84,7 @@ exports.run = (client, msg, args) => {
 					client.query.insertOrUpdateQuery(
 						'monsters',
 						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
-						insertData
+						insertData,
 					).catch((O_o) => {})
 
 					msg.react('✅').catch((O_o) => {
@@ -119,7 +120,7 @@ exports.run = (client, msg, args) => {
 					client.query.insertOrUpdateQuery(
 						'monsters',
 						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
-						insertData
+						insertData,
 					).catch((O_o) => {})
 					if (fids.length > 0) {
 						msg.react('✅').catch((O_o) => {

@@ -8,6 +8,7 @@ const fastify = require('fastify')()
 const log = require('./logger')
 const cp = require('child_process')
 const nuxtConfig = require('./statistics/nuxt.config.js')
+
 cp.fork(`${__dirname}/helpers/commando.js`)
 
 
@@ -15,7 +16,7 @@ fastify
 	.post('/', {}, require('./handlers/receiver'))
 	.register(require('fastify-static'), {
 		root: path.join(__dirname, '../logs/'),
-		prefix: '/logs/'
+		prefix: '/logs/',
 	})
 
 fastify
@@ -28,7 +29,7 @@ fastify
 		reply.send({ message: error.message, request: request.body })
 	})
 	.register(require('./helpers/nuxt'), {
-		config: nuxtConfig
+		config: nuxtConfig,
 	})
 	.after((e) => {
 		if (e) log.error(e)

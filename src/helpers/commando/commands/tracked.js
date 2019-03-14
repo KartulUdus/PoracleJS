@@ -13,8 +13,7 @@ const teamData = require(`${__dirname}/../../../util/teams`)
 const questDts = require('../../../../config/questdts')
 
 
-
-exports.run = (client, msg, args) => {
+exports.run = (client, msg) => {
 	let target = { id: msg.author.id, name: msg.author.tag }
 	if (!_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') {
 		return msg.author.send('Please run commands in Direct Messages').catch((O_o) => {
@@ -104,14 +103,14 @@ exports.run = (client, msg, args) => {
 						const hastebinMessage = hastebin(message)
 						hastebinMessage
 							.then((hastelink) => {
-								msg.reply(`${msg.author.username} tracking list is quite long. Have a look at ${hastelink}`).catch((O_o) => {
+								msg.reply(`${target.name} tracking list is quite long. Have a look at ${hastelink}`).catch((O_o) => {
 									client.log.error(O_o.message)
 								})
 							})
 							.catch((err) => {
 								const filepath = path.join(__dirname, `../../../../.cache/${human.name}.txt`)
 								fs.writeFileSync(filepath, message)
-								msg.reply(`${msg.author.username} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] }).catch((O_o) => {
+								msg.reply(`${target.name} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] }).catch((O_o) => {
 									client.log.error(O_o.message)
 								})
 									.then(() => {

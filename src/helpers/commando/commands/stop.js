@@ -1,6 +1,6 @@
 const _ = require('lodash')
 
-exports.run = (client, msg, args) => {
+exports.run = (client, msg) => {
 	let target = { id: msg.author.id, name: msg.author.tag }
 	if (!_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') {
 		return msg.author.send('Please run commands in Direct Messages').catch((O_o) => {

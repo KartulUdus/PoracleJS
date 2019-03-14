@@ -177,7 +177,7 @@ const migration3 = {
 	quest: `
 		ALTER TABLE \`quest\` 
 		ADD \`shiny\` smallint(1) NOT NULL DEFAULT 0;
-	`
+	`,
 }
 
 
@@ -196,7 +196,7 @@ module.exports = async () => {
 				queries.mysteryQuery(pokemon),
 				queries.mysteryQuery(pokestop),
 				queries.mysteryQuery(activeRaid),
-				queries.mysteryQuery(schemaVersion)
+				queries.mysteryQuery(schemaVersion),
 			]).then(() => {
 				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '3'])
 				log.info('Database tables created, db_version 3 applied')

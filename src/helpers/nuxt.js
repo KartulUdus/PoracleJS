@@ -51,13 +51,13 @@ module.exports = fp((fastify, opts, next) => {
 					if (request[key]) rq[key] = request[key]
 				}
 				return nuxt.render(rq, reply.res)
-			}
+			},
 		}, options)
 		fastify.route(opt)
 	}).after(() => {
 		fastify.nuxt(`${webRoot}_nuxt/*`)
 		fastify.nuxt(`${webRoot}__webpack_hmr/*`, {
-			method: ['DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT', 'OPTIONS']
+			method: ['DELETE', 'GET', 'HEAD', 'PATCH', 'POST', 'PUT', 'OPTIONS'],
 		})
 	})
 	next()

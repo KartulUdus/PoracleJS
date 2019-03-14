@@ -13,23 +13,23 @@ export const mutations = {
 		let relevant = _.filter(raw, item => _.inRange(
 			new Date(item.timestamp.valueOf()),
 			new Date().valueOf() - data.timeTarget,
-			new Date().valueOf() + 1
+			new Date().valueOf() + 1,
 		))
-		if(data.logType === 'warn'){
-			relevant = _.filter(relevant, {'level': 'warn'})
+		if (data.logType === 'warn') {
+			relevant = _.filter(relevant, { level: 'warn' })
 		}
-		if(data.logType === 'err'){
-			relevant = _.filter(relevant, {'level': 'error'})
+		if (data.logType === 'err') {
+			relevant = _.filter(relevant, { level: 'error' })
 		}
-		if (data.filter === 'new'){
+		if (data.filter === 'new') {
 			relevant = relevant.reverse()
 		}
 
 		state.rawLogs = relevant
-	}
+	},
 
 }
 
 export const state = () => ({
-	rawLogs: []
+	rawLogs: [],
 })

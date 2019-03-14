@@ -33,6 +33,14 @@
     // this rule collides with vuex store strict mode, so it will be disabled
     "import/prefer-default-export": 0,
     // something used by nuxt and needed to run statistics page
-    "no-restricted-syntax": 0
+    "no-restricted-syntax": 0,
+    // reassigning and returning variables bad; however, \everything\ operator still requires it
+    "no-param-reassign": 0,
+    // dynamically imported discord commands don't have a return value after exports.run = () => ...
+    "consistent-return": 0,
+    // This is needed for both transation files and command modulules
+    "import/no-dynamic-require": 0
+
+
   }
 }

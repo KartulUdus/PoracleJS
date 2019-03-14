@@ -152,7 +152,7 @@ class Monster extends Controller {
 			this.pointInArea([data.latitude, data.longitude]).then((matchedAreas) => {
 				data.matched = matchedAreas
 				log.log({
-					level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', correlationId: data.correlationId, messageId: data.messageId, type: 'pokemon', meta: data
+					level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', correlationId: data.correlationId, messageId: data.messageId, type: 'pokemon', meta: data,
 				})
 
 				this.monsterWhoCares(data).then((whocares) => {
@@ -176,7 +176,7 @@ class Monster extends Controller {
 						whocares.forEach((cares) => {
 							const alarmId = this.uuid
 							log.log({
-								level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+								level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId,
 							})
 
 							const caresCache = this.getDiscordCache(cares.id)
@@ -227,7 +227,7 @@ class Monster extends Controller {
 								stateCode: geoResult.stateCode,
 								flagemoji: geoResult.flag,
 								neighbourhood: geoResult.neighbourhood,
-								emojiString: data.emojiString
+								emojiString: data.emojiString,
 
 							}
 							const monsterDts = data.iv === -1 && this.mdts.monsterNoIv
@@ -244,7 +244,7 @@ class Monster extends Controller {
 								target: cares.id,
 								name: cares.name,
 								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
-								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
+								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
 
 							}
 							if (caresCache <= config.discord.limitamount + 1) {

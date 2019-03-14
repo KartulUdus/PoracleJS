@@ -8,6 +8,7 @@ const NodeGeocoder = require('node-geocoder')
 const pcache = require('persistent-cache')
 const questDts = require('../../config/questdts')
 const messageDts = require('../../config/dts')
+const child = require('child_process')
 
 const ivColorData = config.discord.iv_colors
 const geofence = require('../../config/geofence.json')
@@ -65,6 +66,7 @@ class Controller {
 		this.webshot = webshot
 		this.discordcache = discordcache
 		this.uuid = uuid()
+		this.cp = child
 
 	}
 
@@ -284,14 +286,14 @@ class Controller {
 
 
 	async mysteryQuery(query) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query(query)
 				.then((result) => {
 					log.log({ level: 'debug', message: 'mysteryQuery', event: 'sql:mysteryQuery' })
 					resolve(result[0])
 				})
 				.catch((err) => {
-					log.error(`mysteryQuery errored with: ${err}`)
+					reject(log.error(`mysteryQuery errored with: ${err}`))
 				})
 		})
 	}
@@ -326,24 +328,39 @@ class Controller {
 
 
 	async selectAllQuery(table, column, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('SELECT * FROM ?? WHERE ?? = ?', [table, column, value])
 				.then((result) => {
 					log.log({ level: 'debug', message: `selectAllQuery ${table}`, event: 'sql:selectAllQuery' })
 					resolve(result[0])
 				})
 				.catch((err) => {
-					log.error(`selectAllQuery errored with: ${err}`)
+					reject(log.error(`selectAllQuery errored with: ${err}`))
 				})
 		})
 	}
 
 	async addOneQuery(table, addable, column, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('update ?? set ?? = ??+1 where ?? = ?', [table, addable, addable, column, value])
 				.then(log.log({ level: 'debug', message: `addOneQuery ${table}`, event: 'sql:addOneQuery' }))
 				.catch((err) => {
-					log.error(`addOneQuery errored with: ${err}`)
+					reject(log.error(`addOneQuery errored with: ${err}`))
+				})
+		})
+	}
+
+	async getColumns(table) {
+		return new Promise((resolve, reject) => {
+			this.db.query(`select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = ? and TABLE_SCHEMA = '${config.db.database}'`, [table])
+				.then((result) => {
+					const colArray = []
+					result[0].forEach(col => colArray.push(col.COLUMN_NAME))
+					resolve(colArray)
+					log.log({ level: 'debug', message: `getColumns ${table}`, event: 'sql:getColumns' })
+				})
+				.catch((err) => {
+					reject(log.error(`getColumns errored with: ${err}`))
 				})
 		})
 	}
@@ -361,6 +378,7 @@ class Controller {
 			((cpMulti ** 2) / 10)))
 		return cp
 	}
+
 	async checkSchema() {
 		return new Promise((resolve) => {
 			this.db.query(`select count(*) as c from information_schema.tables where table_schema='${config.db.database}' 
@@ -372,6 +390,18 @@ class Controller {
 				.catch((err) => {
 					log.error(`schema checker errored with: ${err}`)
 				})
+		})
+	}
+
+	execPromise(command) {
+		return new Promise((resolve, reject) => {
+			this.cp.exec(command, (error, stdout) => {
+				if (error) {
+					reject(error)
+					return
+				}
+				resolve(stdout.trim())
+			})
 		})
 	}
 

@@ -31,13 +31,13 @@ const questController = new QuestController(db)
 // check how long the queue is every minute. ideally empty
 setInterval(() => {
 	log.log({
-		level: 'debug', message: `Job queue is ${queue.length} items long`, queue: queue.length, event: 'queue'
+		level: 'debug', message: `Job queue is ${queue.length} items long`, queue: queue.length, event: 'queue',
 	})
 }, 60000)
 
 discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
 _.forEach(config.discord.token, (k) => {
-	discord.fork({ k: k })
+	discord.fork({ k })
 })
 
 
@@ -50,7 +50,7 @@ discord.on('message', (worker, msg) => {
 		if (queue.length) {
 			worker.send({
 				reason: 'food',
-				job: queue.shift()
+				job: queue.shift(),
 			})
 		}
 	}
@@ -61,7 +61,7 @@ module.exports = async (req, reply) => {
 	const correlationId = uuid()
 	if (!Array.isArray(data)) data = [data]
 	log.log({
-		level: 'debug', message: `http request ${correlationId} started`, correlationId: correlationId, event: 'http:start'
+		level: 'debug', message: `http request ${correlationId} started`, correlationId, event: 'http:start',
 	})
 
 	data.forEach((hook) => {
@@ -77,7 +77,7 @@ module.exports = async (req, reply) => {
 							monsterController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 						})
 						log.log({
-							level: 'debug', message: `webhook message ${hook.message.messageId} processed`, messageId: hook.message.messageId, correlationId: hook.message.correlationId, event: 'message:end'
+							level: 'debug', message: `webhook message ${hook.message.messageId} processed`, messageId: hook.message.messageId, correlationId: hook.message.correlationId, event: 'message:end',
 						})
 					})
 				}
@@ -126,7 +126,7 @@ module.exports = async (req, reply) => {
 				monsterController.insertOrUpdateQuery(
 					'`gym-info`',
 					['id', 'gym_name', 'park', 'description', 'url', 'latitude', 'longitude'],
-					[[g.id, g.name, g.park, g.description, g.url, g.latitude, g.longitude]]
+					[[g.id, g.name, g.park, g.description, g.url, g.latitude, g.longitude]],
 				)
 				log.info(`Saved gym-details for ${g.name}`)
 				break
@@ -149,7 +149,7 @@ module.exports = async (req, reply) => {
 		log.log({
 			level: 'debug',
 			message: `http request${correlationId} replied to`,
-			event: 'http:end'
+			event: 'http:end',
 		})
 		reply.send({ webserver: 'happy' })
 	}

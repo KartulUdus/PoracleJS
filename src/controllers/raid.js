@@ -156,7 +156,7 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								log.log({
-									level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'raid', meta: data
+									level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'raid', meta: data,
 								})
 
 								this.raidWhoCares(data).then((whoCares) => {
@@ -179,7 +179,7 @@ class Raid extends Controller {
 										whoCares.forEach((cares) => {
 											const alarmId = this.uuid
 											log.log({
-												level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+												level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId,
 											})
 											const caresCache = _.cloneDeep(this.getDiscordCache(cares.id))
 											const view = {
@@ -239,7 +239,7 @@ class Raid extends Controller {
 												target: cares.id,
 												name: cares.name,
 												emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
-												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
+												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
 											}
 											if (caresCache <= config.discord.limitamount + 1) {
 												jobs.push(work)
@@ -288,7 +288,7 @@ class Raid extends Controller {
 							.then((matchedAreas) => {
 								data.matched = matchedAreas
 								log.log({
-									level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', type: 'egg', meta: data
+									level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', type: 'egg', meta: data,
 								})
 								this.eggWhoCares(data).then((whoCares) => {
 									if (!whoCares[0]) {
@@ -308,7 +308,7 @@ class Raid extends Controller {
 										const jobs = []
 										const alarmId = this.uuid
 										log.log({
-											level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId
+											level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId,
 										})
 										whoCares.forEach((cares) => {
 											const caresCache = this.getDiscordCache(cares.id)
@@ -356,7 +356,7 @@ class Raid extends Controller {
 												target: cares.id,
 												name: cares.name,
 												emoji: [],
-												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId: alarmId }
+												meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
 											}
 											if (caresCache <= config.discord.limitamount + 1) {
 												jobs.push(work)

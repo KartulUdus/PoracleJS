@@ -73,12 +73,12 @@ exports.run = (client, msg, args) => {
 						client.query.insertOrUpdateQuery(
 							'raid',
 							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
-							insertData
+							insertData,
 						).catch((O_o) => {})
 						client.log.log({
 							level: 'debug',
 							message: `${msg.author.username} started tracking ${monsters} raids in ${target.name}`,
-							event: 'discord:raid'
+							event: 'discord:raid',
 						})
 
 						msg.react('✅').catch((O_o) => {
@@ -93,12 +93,12 @@ exports.run = (client, msg, args) => {
 						client.query.insertOrUpdateQuery(
 							'raid',
 							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
-							insertData
+							insertData,
 						).catch((O_o) => {})
 						client.log.log({
 							level: 'debug',
 							message: `${msg.author.username} started tracking level ${levels} raids in ${target.name}`,
-							event: 'discord:raid'
+							event: 'discord:raid',
 						})
 						msg.react('✅').catch((O_o) => {
 							client.log.error(O_o.message)

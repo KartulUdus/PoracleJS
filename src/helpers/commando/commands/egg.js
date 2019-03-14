@@ -50,7 +50,7 @@ exports.run = (client, msg, args) => {
 						client.query.insertOrUpdateQuery(
 							'egg',
 							['id', 'raid_level', 'template', 'distance', 'park', 'team'],
-							insertData
+							insertData,
 						).catch((O_o) => {})
 						msg.react('✅').catch((O_o) => {
 							client.log.error(O_o.message)

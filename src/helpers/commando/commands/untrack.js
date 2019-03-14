@@ -43,7 +43,7 @@ exports.run = (client, msg, args) => {
 						})
 					}
 					if (element.match(/everything/gi)) {
-						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1)
+						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1) // eslint-disable-line no-return-assign
 					}
 				})
 
