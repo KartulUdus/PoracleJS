@@ -5,7 +5,8 @@
     "password": "YourStrongPassw0rd!",
     "database": "poracledb",
     "port": "3306",
-    "connectionLimit": 30
+    "connectionLimit": 30,
+    "connectTimeout": 60000
   },
 
   "general": {

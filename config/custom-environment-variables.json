@@ -8,6 +8,10 @@
     "connectionLimit": {
       "__name": "DB_CONNECTION_LIMIT",
       "__format": "json"
+    },
+    "connectTimeout": {
+      "__name": "DB_CONNECTION_TIMEOUT",
+      "__format": "json"
     }
   },
 
