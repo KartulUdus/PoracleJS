@@ -24,5 +24,11 @@ module.exports = () => {
 		const emergQuestDtsConf = fs.readFileSync(path.join(__dirname, '../../config/examples/geofence.json.example'), 'utf8')
 		fs.writeFileSync(path.join(__dirname, '../../config/geofence.json'), emergQuestDtsConf)
 	}
+	if (!fs.existsSync(path.join(__dirname, '../../config/local.json'))) {
+		fs.writeFileSync(path.join(__dirname, '../../config/local.json'), '{}')
+	}
+	if (!fs.existsSync(path.join(__dirname, '../../.env'))) {
+		fs.writeFileSync(path.join(__dirname, '../../.env'), '')
+	}
 
 }

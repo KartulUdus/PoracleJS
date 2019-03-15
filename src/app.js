@@ -1,6 +1,6 @@
 require('dotenv').config()
 require('./helpers/configCreator')()
-require('./helpers/migrator')()
+const migrator = require('./helpers/migrator')
 const _ = require('lodash')
 const path = require('path')
 const config = require('config')
@@ -9,7 +9,6 @@ const log = require('./logger')
 const cp = require('child_process')
 const nuxtConfig = require('./statistics/nuxt.config.js')
 
-cp.fork(`${__dirname}/helpers/commando.js`)
 
 
 fastify
@@ -42,11 +41,14 @@ fastify
 
 const start = async () => {
 	try {
+		await migrator()
+		cp.fork(`${__dirname}/helpers/commando.js`)
 		await fastify.listen(config.general.port, config.general.host)
 		log.info(`Poracle started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 	}
 	catch (err) {
 		log.error(err)
+		process.exit()
 	}
 }
 

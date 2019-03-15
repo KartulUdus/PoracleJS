@@ -181,55 +181,86 @@ const migration3 = {
 }
 
 
-module.exports = async () => {
-	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database).then((tables) => {
-		if (!tables) {
-			Promise.all([
-				queries.mysteryQuery(humans),
-				queries.mysteryQuery(gymInfo),
-				queries.mysteryQuery(monsters),
-				queries.mysteryQuery(raid),
-				queries.mysteryQuery(quest),
-				queries.mysteryQuery(comevent),
-				queries.mysteryQuery(comentry),
-				queries.mysteryQuery(egg),
-				queries.mysteryQuery(pokemon),
-				queries.mysteryQuery(pokestop),
-				queries.mysteryQuery(activeRaid),
-				queries.mysteryQuery(schemaVersion),
-			]).then(() => {
-				queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '3'])
-				log.info('Database tables created, db_version 3 applied')
-			})
-		}
-		else {
-			queries.checkSchema().then((confirmedTables) => {
-				if (confirmedTables === 9) {
-					log.info('Database tables confirmed')
-				}
-				else {
-					log.error(`didn't find Tables I like, this house has ${confirmedTables} similar tables \nPlease check database credentials for my PERSONAL database`)
-					process.exit()
-				}
-				queries.selectOneQuery('schema_version', 'key', 'db_version').then((version) => {
-					if (version.val === 1) {
-						queries.dropTableQuery('quest').then((deleted) => {
-							queries.mysteryQuery(quest).then()
-							queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
-							log.info('applied Db migration 2')
-						})
-					}
-					else if (version.val === 2) {
-						queries.mysteryQuery(migration3.quest)
-						queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
-						log.info('applied Db migration 3')
-					}
-				})
-			})
-		}
-	})
-		.catch((unhappy) => {
-			log.error(`Database migration unhappy: ${unhappy.message}`)
-			process.exit()
+module.exports = async () => new Promise((resolve, reject) => {
+	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database)
+		.then((tables) => {
+			if (!tables) {
+				Promise.all([
+					queries.mysteryQuery(humans),
+					queries.mysteryQuery(gymInfo),
+					queries.mysteryQuery(monsters),
+					queries.mysteryQuery(raid),
+					queries.mysteryQuery(quest),
+					queries.mysteryQuery(comevent),
+					queries.mysteryQuery(comentry),
+					queries.mysteryQuery(egg),
+					queries.mysteryQuery(pokemon),
+					queries.mysteryQuery(pokestop),
+					queries.mysteryQuery(activeRaid),
+					queries.mysteryQuery(schemaVersion),
+				])
+					.then(() => {
+						queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '3'])
+							.then(() => {
+								log.info('Database tables created, db_version 3 applied')
+								resolve(true)
+							})
+							.catch((unhappy) => {
+								reject(log.error(`migration unhappy with ${unhappy.message}`))
+							})
+					})
+					.catch((unhappy) => {
+						reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+					})
+			}
+			else {
+				queries.checkSchema()
+					.then((confirmedTables) => {
+						if (confirmedTables === 9) {
+							log.info('Database tables confirmed')
+							resolve(true)
+						}
+						else {
+							reject(log.error(`didn't find Tables I like, this house has ${confirmedTables} similar tables \nPlease check database credentials for my PERSONAL database`))
+						}
+						queries.selectOneQuery('schema_version', 'key', 'db_version')
+							.then((version) => {
+								if (version.val === 1) {
+									queries.dropTableQuery('quest')
+										.then(() => {
+											queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+												.catch((unhappy) => {
+													reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+												})
+											log.info('applied Db migration 2')
+										})
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+										})
+								}
+								else if (version.val === 2) {
+									queries.mysteryQuery(migration3.quest)
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+										})
+									queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+										})
+									log.info('applied Db migration 3')
+									resolve(true)
+								}
+							})
+							.catch((unhappy) => {
+								reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+							})
+					})
+					.catch((unhappy) => {
+						reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+					})
+			}
 		})
-}
+		.catch((unhappy) => {
+			reject(log.error(`Database migration unhappy: ${unhappy.message}`))
+		})
+})
