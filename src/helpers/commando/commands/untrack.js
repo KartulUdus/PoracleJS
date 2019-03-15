@@ -49,7 +49,7 @@ exports.run = (client, msg, args) => {
 
 				if (monsters.length) {
 					monsters.forEach((monster) => {
-						client.query.deleteByIdQuery('monsters', 'pokemon_id', `${monster}`, msg.author.id)
+						client.query.deleteByIdQuery('monsters', 'pokemon_id', `${monster}`, target.id)
 							.then(client.log.log({ level: 'debug', message: `${msg.author.username} removed pokemon tracking ${monsterData[monster].name}`, event: 'discord:untrack' }))
 							.catch((O_o) => {})
 					})
