@@ -4,7 +4,7 @@ config/*.json
 !config/default.json
 !config/custom-environment-variables.json
 .env
-src/app/communityDay/images/*
+src/helpers/commando/commands/filterBackups/*.sql
 node_modules
 package-lock.json
 build

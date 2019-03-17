@@ -317,11 +317,11 @@
         },
         {
           "name": "Raid tracking commands",
-          "value": "`!raid snorlax lapras d500 instinct`: Any arguments are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!unraid lapras vileplume`: will remove tracking for lapras and vileplume raids"
+          "value": "`!raid snorlax lapras d500 instinct`: Any arguments are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!raid remove lapras vileplume`: will remove tracking for lapras and vileplume raids"
         },
         {
           "name": "Raid egg tracking commands",
-          "value": "`!egg level3 d500 instinct`: Any arguments are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!unegg level3`: will remove tracking for level 3 raid eggs"
+          "value": "`!egg level3 d500 instinct`: Any arguments are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`!egg remove level3`: will remove tracking for level 3 raid eggs"
         },
         {
           "name": "Quest tracking commands",

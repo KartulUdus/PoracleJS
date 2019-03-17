@@ -6,8 +6,11 @@ All alarm messages can be customized via the `./config/dts.json` file.
 
 A useful visualizer can be found [HERE](https://leovoel.github.io/embed-visualizer/) 
 
-These are separated by the type of alarm.
+These are separated by the type of alarm [monster, monsterNoIv, raid, egg, quest].
 
+Each of these categories has 5 default templates (by versbosity of alarm) with default alarm being "3" for each type.  
+
+Sometimes it's necessary to use three curly braces on each side. This avoids url encoding for fields that need an url.  
 
 ###### Monster alarms
 
@@ -62,7 +65,7 @@ Any of the fields can be customized with the following:
 |{{tthh}}| Full hours until hidden|
 |{{tthm}}| Full minutes until hidden|
 |{{tths}}| Full seconds until hidden|
-|{{confirmedTime}}| Optional true/false field, false if the timer is a guesstimate|
+|{{#confirmedTime}}True{{/confirmedTime}}| prints "True" if disappear timestamp is verifyed (based on RDM webhooks)|
 |{{now}}| Current Timestamp|
 |{{lat}}| Latitude of the alerted location|
 |{{lon}}| Longitude of the alerted location|
@@ -75,6 +78,7 @@ Any of the fields can be customized with the following:
 |{{city}}| City name of the alerted location|
 |{{state}}| State name of the alerted location|
 |{{stateCode}}| 2 letter state code of the alerted location|
+|{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{move1}}| Monsers quick move|
 |{{move2}}| Monsters charge move|
 |{{iv}}| Monsters Individual Value Precentage|
@@ -87,7 +91,6 @@ Any of the fields can be customized with the following:
 |{{sta}}| Monsters stamina|
 |{{weight}}| Monsters weight in kilograms|
 |{{{staticmap}}}| Static link to map|
-|{{{rocketmap}}}| Link to Rocketmap with alerted location|
 |{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
 |{{form}}| Monsters form|
@@ -96,7 +99,7 @@ Any of the fields can be customized with the following:
 |{{boost}}| Monsters weather boost name|
 |{{boostemoji}}| Monsters weather boost emoji)|
 |{{gif}}| Gif image using pokemon-gif|
-|{{{pokemoji}}}| Custome Emoji of the pokemon if defined in config/emoji.json|
+|{{{pokemoji}}}| Custom Emoji of the pokemon if defined in config/emoji.json|
 |{{flagemoji}}|Country flag emoji for location|
 |{{lat}}| Latitude of the alert|
 |{{lon}}| Longitude of the alert|
@@ -140,7 +143,8 @@ Any of the fields can be customized with the following:
 |{{city}}| City name of the alerted location|
 |{{state}}| State name of the alerted location|
 |{{stateCode}}| 2 letter state code of the alerted location|
-|{{move1}}| Monsers quick move|
+|{{neighbourhood}}| Neighbourhood of the alerted location|
+|{{move1}}| Monsters quick move|
 |{{move2}}| Monsters charge move|
 |{{cp}}| Raid boss cp|
 |{{cp20}}| Monsters cp with 100% perfect IV and level 20|
@@ -153,11 +157,11 @@ Any of the fields can be customized with the following:
 |{{description}}| Description of the gym|
 |{{{detailsurl}}}| Descriptive picture url|
 |{{{staticmap}}}| Static link to map|
-|{{{rocketmap}}}| Link to Rocketmap with alerted location|
 |{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ex}}| If raid takes place in a potential EX gym (empty string if false)|
+|{{#ex}}True{{/ex}}{{^ex}}False{{/ex}}| Prints True if ex eligible, False if not|
 |{{gif}}| Gif image using pokemon-gif|
 |{{flagemoji}}|Country flag emoji for location|
 |{{{pokemoji}}}|Custom emoji for the award pokemon as set in config/emoji.json|
@@ -206,6 +210,7 @@ Any of the fields can be customized with the following:
 |{{city}}| City name of the alerted location|
 |{{state}}| State name of the alerted location|
 |{{stateCode}}| 2 letter state code of the alerted location|
+|{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{gymname}}| Name of the gym|
 |{{description}}| Description of the gym|
 |{{level}}| Raid level|
@@ -216,6 +221,7 @@ Any of the fields can be customized with the following:
 |{{{imgurl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ex}}| If raid takes place in a potential EX gym (empty string if false|
+|{{#ex}}True{{/ex}}{{^ex}}False{{/ex}}| Prints True if ex eligible, False if not|
 |{{flagemoji}}|Country flag emoji for location|
 
 
@@ -266,6 +272,7 @@ Any of the fields can be customized with the following:
 |{{zipcode}}| Zip code of the alerted location|
 |{{country}}| Country of the alerted location|
 |{{countryCode}}| 2 letter country code of the alerted location|
+|{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{city}}| City name of the alerted location|
 |{{state}}| State name of the alerted location|
 |{{stateCode}}| 2 letter state code of the alerted location|
@@ -301,4 +308,6 @@ Any of the fields can be customized with the following:
   }
 ```
 
-This is the message that is sent to newly added users via DM. There are no dynamic variables in this message.
+This is the message that is sent to newly added users via DM. There are no dynamic variables in this message.  
+
+the "fields" without title and description are sent to users upon `!help` command

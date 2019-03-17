@@ -12,10 +12,6 @@ It includes packages to run the [wiki](https://kartuludus.github.io/PoracleJS/#/
 Linting rules will be checked automatically by travis; however, should you wish to save some time, you can run the check locally by running:  
 `npm run lint` (please note,  Windows users may have to run `node_modules\.bin\eslint app\src` manually)
 
-If you make any changes to the wiki, you can make sure that it still looks nice by running:
-`npm run docs` (please note,  Windows users may have to run `node_modules\docsify-cli\bin\docsify serve docs` manually)
-
-
 ### Submitting a helpful pull request
 
 * **Description** - Describe in detail the changes you made. If you add or remove specific libraries, frameworks, etc, please list the specific frameworks. Any movements between files.

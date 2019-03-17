@@ -5,14 +5,15 @@
     "password": "YourStrongPassw0rd!",
     "database": "poracledb",
     "port": "3306",
-    "connectionLimit": 30
+    "connectionLimit": 30,
+    "connectTimeout": 60000
   },
 
   "general": {
     "logLevel": "info",
     "host": "127.0.0.1",
     "port": "3030",
-    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
+    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/util/images/",
     "webroot": "/",
     "max_pokemon": 500,
     "monsterMinimumTimeTillHidden": 60
@@ -22,9 +23,7 @@
     "timeformat": "en-gb",
     "time": "LTS",
     "addressformat": "%S %n",
-    "commandMonstersJson": "../util/monsters",
-    "monstersJson": "../util/monsters",
-    "movesJson": "../util/moves"
+    "language": "en"
   },
 
   "geocoding": {
@@ -37,7 +36,7 @@
     "zoom": 15,
     "type": "roadmap",
     "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    "geofence": "../../../config/geofence.json"
+    "geofence": "../../config/geofence.json"
   },
 
   "discord": {

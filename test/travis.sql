@@ -20,63 +20,6 @@ CREATE DATABASE IF NOT EXISTS `poracle` DEFAULT CHARACTER SET utf8 COLLATE utf8_
 USE `poracle`;
 
 
-# Dump of table activeRaid
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `activeRaid`;
-
-CREATE TABLE `activeRaid` (
-  `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `gym_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `gym_name` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
-  `start` timestamp NULL DEFAULT NULL,
-  `end` timestamp NULL DEFAULT NULL,
-  `move_1` smallint(6) NOT NULL DEFAULT 0,
-  `move_2` smallint(6) NOT NULL DEFAULT 0,
-  `sponsor_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL DEFAULT '0',
-  `is_exclusive` tinyint(1) NOT NULL DEFAULT 0,
-  `team` smallint(1) DEFAULT 4,
-  `latitude` double NOT NULL,
-  `longitude` double NOT NULL,
-  KEY `geocoded_id` (`id`),
-  KEY `geocoded_latitude_longitude` (`latitude`,`longitude`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-
-# Dump of table comevent
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `comevent`;
-
-CREATE TABLE `comevent` (
-  `creator_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `creator_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `channel_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `end_timestamp` timestamp NULL DEFAULT NULL,
-  `create_timestamp` timestamp NULL DEFAULT NULL,
-  `monster_id` longtext COLLATE utf8_unicode_ci DEFAULT NULL,
-  `finished` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-
-# Dump of table comsubmission
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `comsubmission`;
-
-CREATE TABLE `comsubmission` (
-  `discord_id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  `discord_name` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `submit_timestamp` timestamp NULL DEFAULT NULL,
-  `monster_id` int(11) DEFAULT NULL,
-  `seen` int(11) DEFAULT NULL,
-  `caught` int(11) DEFAULT NULL,
-  `lucky` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
 
 # Dump of table egg
 # ------------------------------------------------------------
@@ -84,7 +27,7 @@ CREATE TABLE `comsubmission` (
 DROP TABLE IF EXISTS `egg`;
 
 CREATE TABLE `egg` (
-  `id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `id` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   `raid_level` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `park` tinyint(1) NOT NULL,
   `template` smallint(5) DEFAULT 3,
@@ -165,7 +108,7 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `monsters`;
 
 CREATE TABLE `monsters` (
-  `id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `id` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   `pokemon_id` smallint(6) NOT NULL,
   `distance` int(11) NOT NULL,
   `min_iv` smallint(3) NOT NULL,
@@ -181,6 +124,10 @@ CREATE TABLE `monsters` (
   `min_weight` double NOT NULL,
   `max_weight` double NOT NULL,
   `form` smallint(3) NOT NULL DEFAULT 0,
+  `maxAtk` smallint(2) NOT NULL DEFAULT 16,
+  `maxDef` smallint(2) NOT NULL DEFAULT 16,
+  `maxSta` smallint(2) NOT NULL DEFAULT 16,
+  `gender` smallint(2) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`pokemon_id`,`min_iv`,`max_iv`,`min_cp`,`max_cp`,`min_level`,`max_level`,`atk`,`def`,`sta`,`min_weight`,`max_weight`,`form`),
   KEY `monsters_pokemon_id` (`pokemon_id`),
   KEY `monsters_distance` (`distance`),
@@ -190,72 +137,24 @@ CREATE TABLE `monsters` (
 LOCK TABLES `monsters` WRITE;
 /*!40000 ALTER TABLE `monsters` DISABLE KEYS */;
 
-INSERT INTO `monsters` (`id`, `pokemon_id`, `distance`, `min_iv`, `max_iv`, `min_cp`, `max_cp`, `min_level`, `max_level`, `atk`, `def`, `sta`, `template`, `min_weight`, `max_weight`, `form`)
+INSERT INTO `monsters` (`id`, `pokemon_id`, `distance`, `min_iv`, `max_iv`, `min_cp`, `max_cp`, `min_level`, `max_level`, `atk`, `def`, `sta`, `template`, `min_weight`, `max_weight`, `form`, `maxAtk`, `maxDef`, `maxSta`, `gender`)
 VALUES
-	('414388133329764352',1,0,100,100,0,9000,0,40,0,0,0,3,0,9000000,0),
-	('414388133329764352',2,0,0,0,0,9000,0,40,0,0,0,3,0,9000000,0),
-	('414388133329764352',3,0,-1,100,2000,9000,0,40,0,0,0,3,0,9000000,0),
-	('414388133329764352',4,0,-1,100,0,2000,0,40,0,0,0,3,0,9000000,0),
-	('414388133329764352',5,0,-1,100,0,9000,30,40,0,0,0,3,0,9000000,0),
-	('414388133329764352',6,0,-1,100,0,9000,0,35,0,0,0,3,0,9000000,0),
-	('414388133329764352',7,0,-1,100,0,9000,0,40,10,0,0,3,0,9000000,0),
-	('414388133329764352',8,0,-1,100,0,9000,0,40,0,10,0,3,0,9000000,0),
-	('414388133329764352',9,0,-1,100,0,9000,0,40,0,0,10,3,0,9000000,0),
-	('414388133329764352',10,0,-1,100,0,9000,0,40,0,0,0,3,3000,9000000,0),
-	('414388133329764352',11,0,-1,100,0,9000,0,40,0,0,0,3,0,3200,0),
-	('414388133329764352',12,1000,-1,100,0,9000,0,40,0,0,0,3,0,9000000,0),
-	('414388133329764352',201,0,-1,100,0,9000,0,40,0,0,0,3,0,9000000,6);
+	('414388133329764352',1,0,100,100,0,9000,0,40,0,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',2,0,0,0,0,9000,0,40,0,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',3,0,-1,100,2000,9000,0,40,0,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',4,0,-1,100,0,2000,0,40,0,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',5,0,-1,100,0,9000,30,40,0,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',6,0,-1,100,0,9000,0,35,0,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',7,0,-1,100,0,9000,0,40,10,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',8,0,-1,100,0,9000,0,40,0,10,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',9,0,-1,100,0,9000,0,40,0,0,10,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',10,0,-1,100,0,9000,0,40,0,0,0,3,3000,9000000,0,16,16,16,0),
+	('414388133329764352',11,0,-1,100,0,9000,0,40,0,0,0,3,0,3200,0,16,16,16,0),
+	('414388133329764352',12,1000,-1,100,0,9000,0,40,0,0,0,3,0,9000000,0,16,16,16,0),
+	('414388133329764352',201,0,-1,100,0,9000,0,40,0,0,0,3,0,9000000,6,16,16,16,0);
 
 /*!40000 ALTER TABLE `monsters` ENABLE KEYS */;
 UNLOCK TABLES;
-
-
-# Dump of table pokemon
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pokemon`;
-
-CREATE TABLE `pokemon` (
-  `encounter_id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `pokemon_id` smallint(6) NOT NULL,
-  `atk` smallint(2) NOT NULL DEFAULT 0,
-  `def` smallint(2) NOT NULL DEFAULT 0,
-  `sta` smallint(2) NOT NULL DEFAULT 0,
-  `level` smallint(2) NOT NULL DEFAULT 0,
-  `gender` smallint(2) NOT NULL DEFAULT 0,
-  `form` smallint(6) NOT NULL DEFAULT 0,
-  `weight` double NOT NULL DEFAULT 0,
-  `weather` smallint(6) NOT NULL DEFAULT 0,
-  `cp` smallint(6) NOT NULL DEFAULT 0,
-  `move_1` smallint(6) NOT NULL DEFAULT 0,
-  `move_2` smallint(6) NOT NULL DEFAULT 0,
-  `latitude` double NOT NULL,
-  `longitude` double NOT NULL,
-  `disappear_time` timestamp NULL DEFAULT NULL,
-  `created_timestamp` timestamp NOT NULL DEFAULT current_timestamp(),
-  PRIMARY KEY (`encounter_id`),
-  KEY `geocoded_id` (`encounter_id`),
-  KEY `geocoded_latitude_longitude` (`latitude`,`longitude`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
-
-
-# Dump of table pokestop
-# ------------------------------------------------------------
-
-DROP TABLE IF EXISTS `pokestop`;
-
-CREATE TABLE `pokestop` (
-  `id` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `name` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
-  `url` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
-  `lured` timestamp NULL DEFAULT NULL,
-  `latitude` double NOT NULL,
-  `longitude` double NOT NULL,
-  KEY `pokemstop_id` (`id`),
-  KEY `pokestop_latitude_longitude` (`latitude`,`longitude`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
 
 
 # Dump of table quest
@@ -264,7 +163,7 @@ CREATE TABLE `pokestop` (
 DROP TABLE IF EXISTS `quest`;
 
 CREATE TABLE `quest` (
-  `id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `id` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   `reward` int(11) NOT NULL DEFAULT 0,
   `template` smallint(5) DEFAULT 3,
   `reward_type` int(11) NOT NULL DEFAULT 0,
@@ -295,13 +194,14 @@ UNLOCK TABLES;
 DROP TABLE IF EXISTS `raid`;
 
 CREATE TABLE `raid` (
-  `id` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `id` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   `pokemon_id` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   `park` tinyint(1) NOT NULL,
   `template` smallint(5) DEFAULT 3,
   `distance` int(11) NOT NULL,
   `team` smallint(1) DEFAULT 4,
   `level` smallint(1) NOT NULL DEFAULT 0,
+  `form` smallint(3) NOT NULL DEFAULT 0,
   PRIMARY KEY (`id`,`pokemon_id`,`park`,`level`),
   KEY `raid_pokemon_id` (`pokemon_id`),
   KEY `raid_distance` (`distance`)
@@ -310,13 +210,13 @@ CREATE TABLE `raid` (
 LOCK TABLES `raid` WRITE;
 /*!40000 ALTER TABLE `raid` DISABLE KEYS */;
 
-INSERT INTO `raid` (`id`, `pokemon_id`, `park`, `template`, `distance`, `team`, `level`)
+INSERT INTO `raid` (`id`, `pokemon_id`, `park`, `template`, `distance`, `team`, `level`, `form`)
 VALUES
-	('414388133329764352','13',0,3,0,4,0),
-	('414388133329764352','14',1,3,0,4,0),
-	('414388133329764352','15',0,3,0,3,0),
-	('414388133329764352','17',0,3,5000,4,0),
-	('414388133329764352','721',0,3,0,4,3);
+	('414388133329764352','13',0,3,0,4,0,0),
+	('414388133329764352','14',1,3,0,4,0,0),
+	('414388133329764352','15',0,3,0,3,0,0),
+	('414388133329764352','17',0,3,5000,4,0,0),
+	('414388133329764352','721',0,3,0,4,3,0);
 
 /*!40000 ALTER TABLE `raid` ENABLE KEYS */;
 UNLOCK TABLES;
@@ -338,7 +238,7 @@ LOCK TABLES `schema_version` WRITE;
 
 INSERT INTO `schema_version` (`key`, `val`)
 VALUES
-	('db_version',3);
+	('db_version',4);
 
 /*!40000 ALTER TABLE `schema_version` ENABLE KEYS */;
 UNLOCK TABLES;

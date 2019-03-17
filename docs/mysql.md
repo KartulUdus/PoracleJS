@@ -13,14 +13,13 @@ docker run --name poracle-mariadb --publish 3306:3306 -e MYSQL_PASSWORD=poracleP
 ```
 This will launch the latest MariaDB container that you can access with  
 ```json
-  "db": {
-    "host": "127.0.0.1",
-    "user": "poracle",
-    "password": "poraclePassword",
-    "database": "poracle",
-    "port": "3306",
-    "connectionLimit": 100
-  },
+DB_HOST=127.0.0.1
+DB_USER=poracle
+DB_PASSWORD=poraclePassword
+DB_DATABASE=poracle
+DB_PORT=3306
+DB_CONNECTION_LIMIT=20
+DB_CONNECTION_TIMEOUT=60
 ``` 
 in your config.  
 
