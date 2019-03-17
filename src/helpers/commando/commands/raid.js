@@ -45,8 +45,8 @@ exports.run = (client, msg, args) => {
 				let template = 3
 				let remove = false
 				let levels = []
-				let form = 0
-				let forms = []
+				const form = 0
+				const forms = []
 
 				args.forEach((element) => {
 					const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
@@ -105,13 +105,15 @@ exports.run = (client, msg, args) => {
 							})
 						}
 						const fids = []
-						forms.forEach((form) => {
-							const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === form)
+						forms.forEach((f) => {
+							const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === f)
 							if (fid) fids.push(fid)
 						})
-						if(!fids.length) return msg.reply(`Didn't find these forms for ${monsters[0]}`).catch((O_o) => {
-							client.log.error(O_o.message)
-						})
+						if (!fids.length) {
+							return msg.reply(`Didn't find these forms for ${monsters[0]}`).catch((O_o) => {
+								client.log.error(O_o.message)
+							})
+						}
 						const insertData = fids.map(f => [target.id, monsters[0], template, distance, park, team, level, f])
 						client.query.insertOrUpdateQuery(
 							'raid',

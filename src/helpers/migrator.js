@@ -117,7 +117,7 @@ const migration4 = {
 		raid: `ALTER TABLE \`raid\`
 			MODIFY COLUMN \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL;`,
 		quest: `		ALTER TABLE \`quest\`
-			MODIFY COLUMN \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL;`
+			MODIFY COLUMN \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL;`,
 	},
 	monsters: `
 		ALTER TABLE \`monsters\`
@@ -129,7 +129,7 @@ const migration4 = {
 	raid: `
 		ALTER TABLE \`raid\`
 			ADD \`form\` smallint(3) NOT NULL DEFAULT 0;
-	`
+	`,
 }
 
 
@@ -144,7 +144,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 					queries.mysteryQuery(raid),
 					queries.mysteryQuery(quest),
 					queries.mysteryQuery(egg),
-					queries.mysteryQuery(schemaVersion)
+					queries.mysteryQuery(schemaVersion),
 				])
 					.then(() => {
 						queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '4'])
@@ -210,7 +210,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 										queries.dropTableQuery('comevent'),
 										queries.dropTableQuery('comsubmission'),
 										queries.dropTableQuery('pokemon'),
-										queries.dropTableQuery('pokestop')
+										queries.dropTableQuery('pokestop'),
 									])
 										.then(() => {
 											queries.addOneQuery('schema_version', 'val', 'key', 'db_version')

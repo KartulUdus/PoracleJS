@@ -128,6 +128,9 @@ exports.run = (client, msg) => {
 					})
 				}
 				else {
+					// in case no items or pokemon are in the command, add a dummy 0 to not break sql
+					items.push(0)
+					monsters.push(0)
 					const remQuery = `
 						delete from quest WHERE id=${target.id} and 
 						((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}))		
