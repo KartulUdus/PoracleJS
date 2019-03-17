@@ -51,7 +51,7 @@ exports.run = (client, msg, args) => {
 
 					if (_.includes(backups, args[0])) {
 						Promise.all([
-							client.query.deleteQuery('monster', 'id', target.id).catch((O_o) => {}),
+							client.query.deleteQuery('monsters', 'id', target.id).catch((O_o) => {}),
 							client.query.deleteQuery('raid', 'id', target.id).catch((O_o) => {}),
 							client.query.deleteQuery('egg', 'id', target.id).catch((O_o) => {}),
 							client.query.deleteQuery('quest', 'id', target.id).catch((O_o) => {}),
