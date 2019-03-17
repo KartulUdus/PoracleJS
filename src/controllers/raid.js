@@ -136,6 +136,7 @@ class Raid extends Controller {
 				data.emoji = e
 				data.emojiString = e.join('')
 				if (!data.team_id) data.team_id = 0
+				if (!data.form) data.form = 0
 				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 
