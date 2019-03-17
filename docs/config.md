@@ -3,20 +3,21 @@
 
 #### default.json
 
-Before first running PoracleJS, you need to create a `config/default.json`.  
-This config file consist of different objects for different configurations.
+Before first running PoracleJS, you need to create a `.env` file.  
+There is an example you can copy over to begin with `cp .env.example .env`.  
+
+Altenatively, you can use a json config by copying from defaults `cp config/default.json config/local.json`
 
 
 ###### Database settings
 ```json
-  "db": {
-    "host": "",
-    "user": "",
-    "password": "",
-    "database": "",
-    "port": "",
-    "connectionLimit": 30
-  }
+DB_HOST=
+DB_USER=
+DB_PASSWORD=
+DB_DATABASE=
+DB_PORT=
+DB_CONNECTION_LIMIT=
+DB_CONNECTION_TIMEOUT=
 ```
 
 | Option        | Value         | 
@@ -33,13 +34,12 @@ This config file consist of different objects for different configurations.
 ###### General settings
 
 ```json
-  "general": {
-    "logLevel": "debug",
-    "host": "127.0.0.1",
-    "port": "3031",
-    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/",
-    "max_pokemon": 490
-  }
+LOG_LEVEL=
+HOST=
+PORT=
+IMGURL=
+MAX_POKEMON=
+MIN_TTH=
   ```
   
   | Option        | Value         | 
@@ -49,76 +49,76 @@ This config file consist of different objects for different configurations.
   |port | Webserver port. | 
   |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/images) |
   | max_pokemon | Biggest released pokemon_id. Needed for tracking batch tracking of mainimum/maximum IV.|
+  | monsterMinimumTimeTillHidden | Minimum amount of seconds for an alert to trigger|
 
 ##### Locale settings
   ```json
-    "locale": {
-      "timeformat": "en-gb",
-      "time": "LTS",
-      "addressformat": "%S %n",
-      "commandMonstersJson": "../util/monsters",
-      "monstersJson": "./util/monsters",
-      "movesJson": "./util/moves"
-    }
+TIME_FORMAT=             # default: en-gb
+TIME_STRING=             # default: LTS
+ADDR_FORMAT=             # default: %S %n
+LANGUAGE=                # one of ['en', 'de', 'fr', 'ja', 'ko', 'ru']
   ```
   | Option        | Value         | 
   | ------------- |:-------------:| 
   | timeformat    | sets 24 or 12h AM/PM time. use `"en-us"` for 12h time.|
   | time | Time string format for disappear time. `LTS` for hours minutes and seconds `LT` for just hours and minutes.|
   | addressformat | Format for the geocoded address. Can be any combination of : <br/>%P - country <br/>%p - country code <br/>%n - street number <br/>%S - street name <br/>%z - zip code <br/>%T - State  <br/>%t - state code|
-  | commandMonstersJson | Monster locale file for discord commands. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
-  | monstersJson    | Monster locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
-  | movesJson    | Moves locale file for incoming alarms. [Reference](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/locale).|
-  | colorsJson   | Colors for IV brackets |
-
+  | language | Translates pokemon for alerts and commands. options are one of one of ['en', 'de', 'fr', 'ja', 'ko', 'ru'].|
 
 
 ##### Geocoding Settings Maps settings
 
 ```json
-  "geocoding": {
-    "provider": "OSM",
-    "googleKey":["YOUR GOOGLE KEY"],
-    "width": 250,
-    "height": 175,
-    "zoom": 15,
-    "type": "roadmap",
-    "geofence": "../../../config/geofence.example.json"
-  },
+GEO_PROVIDER=
+GEO_KEY=
+
+## Provider of {{{staticMap}}} dts static map urls. (google | osm | mapbox). Please note 'osm' provider is a key from 'mapquest'
+STATIC_PROVIDER=
+STATIC_KEY=
+
+## Static map dimensions
+MAP_WIDTH=
+MAP_HEIGHT=
+MAP_ZOOM=
+MAP_TYPE=
+
 
 ```
 | Option        | Value         | 
 | ------------- |:-------------:| 
 |provider| either OSM or google for geocoding|
+|staticProvider|provider for static maps (google , osm , mapbox)|
+|geocodingKey| your google geocoding key, doesn't matter if you use 'osm' as provider|
+|staticKey| Your Mapquest MapBox or Google api key|
 |googlekey | Your google maps API key |
 |width| Width in pixels of the static map.|
 |height| Height in pixels of the static map.|
 |zoom | Zoom level of the static map.|
 |type| Style of static map. Can be one of: <br/>roadmap <br/>satellite <br/>hybid <br/>dark |
-|geofence | Path to a geoJSON file with your geofences |
+
+
 
 ##### Discord settings
 
 ```json
-  "discord": {
-    "token": [""],
-    "channel": "general",
-    "admins": ["222742859059560458"],
-    "comDayResultChannelId":"514465201911758849",
-    "modRole":"",
-    "prefix": "!",
-    "typereact": true,
-    "limitsec": 300,
-    "limitamount": 30,
-    "iv_colors": [
-        "#9D9D9D",
-        "#FFFFFF",
-        "#1EFF00",
-        "#0070DD",
-        "#A335EE",
-        "#FF8000"
-    ]
-  }
+## Discord token array. Has to be in [ "square.brackets.and.quotes" ]
+DISCORD_TOKEN=["NTM2Mj11111111111111111111.222222222222222xVTr1s"]
+## List of discord user id's that can register channels and run admin commands.
+ADMINS=["222742859059560458", "353901047493951488"]
+## Channel name to register with the `!poracle` command
+REGISTER_CHANNEL=
+## Role name that automatically registers or unregisters the user to !poracle, default 'general'
+REGISTER_ROLE=
+
+## prefix to start !commands with
+PREFIX=
+## If bot should react to messages with the monster type (true | false)
+TYPE_REACT=
+## Limit of messages any channel or user can receive within an amount of seconds
+LIMIT_SEC=
+LIMIT_MESSAGES=
+## Custom color codes for {{ivColor}} example: ["#9D9D9D","#FFFFFF","#1EFF00","#0070DD","#A335EE","#FF8000"]
+IV_COLORS=
 ```
 
 | Option        | Value         | 
@@ -126,7 +126,7 @@ This config file consist of different objects for different configurations.
 |token | Your [discord token](discordbot.md)|
 |channel | The text channel where registering `!poracle` is possible. |
 |admins| List of admin ID's that can register channel tracking and unregister users.|
-|comDayResultChannelId| channel where community bot results will be posted|
+|userRole| role name to automatically register for !poracle|
 |modRole| Role required to start community day events via `!createevent channelname pokemonname hours`|
 |prefix| Prefix to all discord `!commands`|
 |typereact| `true` or `false`. If true, bot will react to alarms with the type of that alarmed monster.|
