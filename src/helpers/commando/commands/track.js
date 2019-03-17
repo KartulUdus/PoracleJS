@@ -74,8 +74,8 @@ exports.run = (client, msg, args) => {
 					else if (element.match(/atk\d/gi)) atk = element.replace(/atk/gi, '')
 					else if (element.match(/def\d/gi)) def = element.replace(/def/gi, '')
 					else if (element.match(/sta\d/gi)) sta = element.replace(/sta/gi, '')
-					else if (element.match(/male/gi)) gender = 1
 					else if (element.match(/female/gi)) gender = 2
+					else if (element.match(/male/gi)) gender = 1
 					else if (element.match(/genderless/gi)) gender = 3
 					else if (element.match(/weight\d/gi)) 	weight = element.replace(/weight/gi, '')
 					else if (element.match(/form\w/gi)) forms.push(element.replace(/form/gi, ''))
