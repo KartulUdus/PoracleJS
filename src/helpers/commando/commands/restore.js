@@ -10,9 +10,15 @@ exports.run = (client, msg, args) => {
 		})
 	}
 	if (_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name }
+	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex), name: `Webhook-${_.random(99999)}` }
 
 	client.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
+			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
+				return msg.reply(`${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}webhook add <YourWebhook>`).catch((O_o) => {
+					client.log.error(O_o.message)
+				})
+			}
 			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') {
 				return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {
 					client.log.error(O_o.message)
@@ -68,6 +74,6 @@ exports.run = (client, msg, args) => {
 			}
 		})
 		.catch((err) => {
-			client.log.error(`commando !COMMAND errored with: ${err.message} (command was "${msg.content}")`)
+			client.log.error(`commando !restore errored with: ${err.message} (command was "${msg.content}")`)
 		})
 }

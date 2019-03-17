@@ -180,6 +180,25 @@ const migration3 = {
 	`,
 }
 
+const migration4 = {
+	id: `
+		ALTER TABLE humans
+			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
+		ALTER TABLE monsters
+			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
+		ALTER TABLE egg
+			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
+		ALTER TABLE raid
+			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
+		ALTER TABLE quest
+			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
+	`,
+	monsters: `
+		ALTER TABLE monsters
+			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
+	`
+}
+
 
 module.exports = async () => new Promise((resolve, reject) => {
 	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database)

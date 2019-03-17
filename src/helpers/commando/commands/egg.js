@@ -8,9 +8,15 @@ exports.run = (client, msg, args) => {
 		})
 	}
 	if (_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name }
+	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex), name: `Webhook-${_.random(99999)}` }
 
 	client.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
+			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
+				return msg.reply(`${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}webhook add <YourWebhook>`).catch((O_o) => {
+					client.log.error(O_o.message)
+				})
+			}
 			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') {
 				return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {
 					client.log.error(O_o.message)
@@ -24,7 +30,7 @@ exports.run = (client, msg, args) => {
 			if (isregistered) {
 				let park = 0
 				let distance = 0
-				const levels = []
+				let levels = []
 				let team = 4
 				let template = 3
 				let remove = false
@@ -38,6 +44,7 @@ exports.run = (client, msg, args) => {
 					else if (element.match(/mystic/gi)) team = 1
 					else if (element.match(/harmony/gi)) team = 0
 					else if (element.match(/remove/gi)) remove = true
+					else if (element.match(/everything/gi)) levels = [1, 2, 3, 4, 5]
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
 						if (distance.length >= 10) distance = distance.substr(0, 9)

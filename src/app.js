@@ -10,7 +10,6 @@ const cp = require('child_process')
 const nuxtConfig = require('./statistics/nuxt.config.js')
 
 
-
 fastify
 	.post('/', {}, require('./handlers/receiver'))
 	.register(require('fastify-static'), {

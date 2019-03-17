@@ -30,6 +30,7 @@ else {
 	client.query = query
 	client.dts = dts
 	client.log = log
+	client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
 	fs.readdir(`${__dirname}/commando/events/`, (err, files) => {
 		if (err) return log.error(err)

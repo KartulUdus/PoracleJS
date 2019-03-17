@@ -14,7 +14,14 @@ const file = new winston.transports.File({
 	maxFiles: 1,
 	level: 'debug',
 })
-const console = new (winston.transports.Console)({ level: config.general.logLevel, format: winston.format.simple() })
+const console = new (winston.transports.Console)({
+	level: config.general.logLevel,
+	format: winston.format.combine(
+		winston.format.simple(),
+		winston.format.errors({ stack: true }),
+	),
+	handleExceptions: true,
+})
 
 module.exports =
 

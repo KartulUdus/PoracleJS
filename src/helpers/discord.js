@@ -1,10 +1,30 @@
 const config = require('config')
-const { Client } = require('discord.js')
+const { Client, WebhookClient } = require('discord.js')
 
 const client = new Client()
 const log = require('../logger')
 const discord = require('cluster')
+const axios = require('axios')
 
+const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
+
+const webhookCache = {}
+
+function cacheWebhook(webhook) {
+	axios.get(webhook)
+		.then((response) => {
+			if (!response.data.token || !response.data.id) return false
+			webhookCache[webhook] = {
+				webhookToken: response.data.token,
+				webhookId: response.data.id,
+			}
+			return true
+		})
+		.catch((err) => {
+			log.log({ level: 'debug', message: `failed fetching data for webhook ${webhook} ${err.message}`, event: 'discord:webhookCheck' })
+			return false
+		})
+}
 
 function startBeingHungry() {
 	log.log({ level: 'debug', message: `Discord worker #${discord.worker.id} started being hungry`, event: 'discord:workRequest' })
@@ -65,6 +85,33 @@ client.on('ready', () => {
 						hungryInterval = startBeingHungry()
 
 					})
+			}
+			else if (msg.job.target.match(hookRegex)) {
+				if (msg.job.target in webhookCache || cacheWebhook(msg.job.target)) {
+					const hook = new WebhookClient(webhookCache[msg.job.target].webhookId, webhookCache[msg.job.target].webhookToken)
+					hook.send(msg.job.content || '', {
+						embeds: [msg.job.message.embed],
+					})
+						.then(() => {
+							log.log({
+								level: 'debug',
+								message: `alarm ${msg.job.meta.alarmId} finished`,
+								event: 'alarm:end',
+								correlationId: msg.job.meta.correlationId,
+								messageId: msg.job.meta.messageId,
+								alarmId: msg.job.meta.alarmId,
+							})
+							hungryInterval = startBeingHungry()
+						})
+						.catch((e) => {
+							log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
+							hungryInterval = startBeingHungry()
+
+						})
+				}
+				else {
+					hungryInterval = startBeingHungry()
+				}
 			}
 			else {
 				log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
