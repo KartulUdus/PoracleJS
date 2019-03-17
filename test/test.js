@@ -52,7 +52,7 @@ describe('Db connection, geolocating, webserver', () => {
 
 	it('Database connection should be happy and have needed tables', (done) => {
 		monsterController.checkSchema().then((count) => {
-		    chai.assert.equal(count, 9)
+		    chai.assert.equal(count, 7)
 			done()
 		}).catch((err) => {
 			done(err)
