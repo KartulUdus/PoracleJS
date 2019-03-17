@@ -6,57 +6,6 @@ const db = mysql.createPool(config.db, { multipleStatements: true })
 const queries = new Controller(db)
 const log = require('../logger')
 
-const pokestop = `CREATE TABLE \`pokestop\` (
-  \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  \`name\` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
-  \`url\` varchar(191) COLLATE utf8_unicode_ci DEFAULT NULL,
-  \`lured\` TIMESTAMP NULL DEFAULT NULL,
-  \`latitude\` double NOT NULL,
-  \`longitude\` double NOT NULL,
-  KEY \`pokemstop_id\` (\`id\`),
-  KEY \`pokestop_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
-
-const activeRaid = `CREATE TABLE \`activeRaid\` (
-  \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  \`gym_id\` varchar(50) NOT NULL DEFAULT 0,
-  \`gym_name\` longtext COLLATE utf8_unicode_ci,
-  \`start\` TIMESTAMP NULL DEFAULT NULL,
-  \`end\` TIMESTAMP NULL DEFAULT NULL,
-  \`move_1\` smallint(6) NOT NULL DEFAULT 0,
-  \`move_2\` smallint(6) NOT NULL DEFAULT 0,
-  \`sponsor_id\` varchar(50) NOT NULL DEFAULT 0,
-  \`is_exclusive\` tinyint(1) NOT NULL DEFAULT 0,
-  \`team\` smallint(1) DEFAULT 4,
-  \`latitude\` double NOT NULL,
-  \`longitude\` double NOT NULL,
-  KEY \`geocoded_id\` (\`id\`),
-  KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
-
-const pokemon = `CREATE TABLE \`pokemon\` (
-  \`encounter_id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  \`pokemon_id\` smallint(6) NOT NULL,
-  \`atk\` smallint(2) NOT NULL DEFAULT 0,
-  \`def\` smallint(2) NOT NULL DEFAULT 0,
-  \`sta\` smallint(2) NOT NULL DEFAULT 0,
-  \`level\` smallint(2) NOT NULL DEFAULT 0,
-  \`gender\` smallint(2) NOT NULL DEFAULT 0,
-  \`form\` smallint(6) NOT NULL DEFAULT 0,
-  \`weight\` double NOT NULL DEFAULT 0,
-  \`weather\` smallint(6) NOT NULL DEFAULT 0,
-  \`cp\` smallint(6) NOT NULL DEFAULT 0,
-  \`move_1\` smallint(6) NOT NULL DEFAULT 0,
-  \`move_2\` smallint(6) NOT NULL DEFAULT 0,
-  \`latitude\` double NOT NULL,
-  \`longitude\` double NOT NULL,
-  \`disappear_time\` TIMESTAMP NULL DEFAULT NULL,
-  \`created_timestamp\` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (\`encounter_id\`),
-  KEY \`geocoded_id\` (\`encounter_id\`),
-  KEY \`geocoded_latitude_longitude\` (\`latitude\`,\`longitude\`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
-
 const gymInfo = `CREATE TABLE \`gym-info\` (
   \`id\` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   \`park\` tinyint(1) NOT NULL DEFAULT 0,
@@ -151,27 +100,6 @@ CREATE TABLE \`quest\` (
   KEY \`distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
-const comevent = `
-CREATE TABLE \`comevent\` (
-  \`creator_id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  \`creator_name\` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  \`channel_id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  \`end_timestamp\` TIMESTAMP NULL DEFAULT NULL,
-  \`create_timestamp\` TIMESTAMP NULL DEFAULT NULL,
-  \`monster_id\` longtext COLLATE utf8_unicode_ci,
-  \`finished\` tinyint(1) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
-
-const comentry = `
-CREATE TABLE \`comsubmission\` (
-  \`discord_id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
-  \`discord_name\` varchar(50) COLLATE utf8mb4_unicode_ci NOT NULL,
-  \`submit_timestamp\` TIMESTAMP NULL DEFAULT NULL,
-  \`monster_id\` int(11) DEFAULT NULL,
-  \`seen\` int(11) DEFAULT NULL,
-  \`caught\` int(11) DEFAULT NULL,
-  \`lucky\` int(11) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const migration3 = {
 	quest: `
@@ -181,21 +109,26 @@ const migration3 = {
 }
 
 const migration4 = {
-	id: `
-		ALTER TABLE humans
-			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
-		ALTER TABLE monsters
-			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
-		ALTER TABLE egg
-			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
-		ALTER TABLE raid
-			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
-		ALTER TABLE quest
-			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
-	`,
+	id: {
+		monsters: `ALTER TABLE \`monsters\`
+			MODIFY COLUMN \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL;`,
+		egg: `ALTER TABLE \`egg\`
+			MODIFY COLUMN \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL;`,
+		raid: `ALTER TABLE \`raid\`
+			MODIFY COLUMN \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL;`,
+		quest: `		ALTER TABLE \`quest\`
+			MODIFY COLUMN \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL;`
+	},
 	monsters: `
-		ALTER TABLE monsters
-			MODIFY COLUMN id varchar(191) COLLATE utf8_unicode_ci NOT NULL;
+		ALTER TABLE \`monsters\`
+			ADD \`maxAtk\` smallint(2) NOT NULL DEFAULT 16,
+			ADD \`maxDef\` smallint(2) NOT NULL DEFAULT 16,
+			ADD \`maxSta\` smallint(2) NOT NULL DEFAULT 16,
+			ADD \`gender\` smallint(2) NOT NULL DEFAULT 0
+	`,
+	raid: `
+		ALTER TABLE \`raid\`
+			ADD \`form\` smallint(3) NOT NULL DEFAULT 0;
 	`
 }
 
@@ -210,18 +143,13 @@ module.exports = async () => new Promise((resolve, reject) => {
 					queries.mysteryQuery(monsters),
 					queries.mysteryQuery(raid),
 					queries.mysteryQuery(quest),
-					queries.mysteryQuery(comevent),
-					queries.mysteryQuery(comentry),
 					queries.mysteryQuery(egg),
-					queries.mysteryQuery(pokemon),
-					queries.mysteryQuery(pokestop),
-					queries.mysteryQuery(activeRaid),
-					queries.mysteryQuery(schemaVersion),
+					queries.mysteryQuery(schemaVersion)
 				])
 					.then(() => {
-						queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '3'])
+						queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '4'])
 							.then(() => {
-								log.info('Database tables created, db_version 3 applied')
+								log.info('Database tables created, db_version 4 applied')
 								resolve(true)
 							})
 							.catch((unhappy) => {
@@ -235,9 +163,8 @@ module.exports = async () => new Promise((resolve, reject) => {
 			else {
 				queries.checkSchema()
 					.then((confirmedTables) => {
-						if (confirmedTables === 9) {
+						if (confirmedTables === 7) {
 							log.info('Database tables confirmed')
-							resolve(true)
 						}
 						else {
 							reject(log.error(`didn't find Tables I like, this house has ${confirmedTables} similar tables \nPlease check database credentials for my PERSONAL database`))
@@ -248,6 +175,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 									queries.dropTableQuery('quest')
 										.then(() => {
 											queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+												.then(() => resolve(true))
 												.catch((unhappy) => {
 													reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
 												})
@@ -263,12 +191,44 @@ module.exports = async () => new Promise((resolve, reject) => {
 											reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
 										})
 									queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+										.then(() => resolve(true))
 										.catch((unhappy) => {
 											reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
 										})
 									log.info('applied Db migration 3')
 									resolve(true)
 								}
+								else if (version.val === 3) {
+									Promise.all([
+										queries.mysteryQuery(migration4.id.monsters),
+										queries.mysteryQuery(migration4.id.egg),
+										queries.mysteryQuery(migration4.id.raid),
+										queries.mysteryQuery(migration4.id.quest),
+										queries.mysteryQuery(migration4.monsters),
+										queries.mysteryQuery(migration4.raid),
+										queries.dropTableQuery('activeRaid'),
+										queries.dropTableQuery('comevent'),
+										queries.dropTableQuery('comsubmission'),
+										queries.dropTableQuery('pokemon'),
+										queries.dropTableQuery('pokestop')
+									])
+										.then(() => {
+											queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+												.then(() => resolve(true))
+												.catch((unhappy) => {
+													reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
+												})
+											log.info('applied Db migration 4')
+										})
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to create migration 4: ${unhappy.message}`))
+										})
+								}
+								else if (version.val === 4) {
+									log.info('Database schema-version 4 confirmed')
+									resolve(true)
+								}
+
 							})
 							.catch((unhappy) => {
 								reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))

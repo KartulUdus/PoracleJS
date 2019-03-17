@@ -45,6 +45,10 @@ exports.run = (client, msg, args) => {
 				let atk = 0
 				let def = 0
 				let sta = 0
+				let maxAtk = 16
+				let maxDef = 16
+				let maxSta = 16
+				let gender = 0
 				let weight = 0
 				let maxweight = 9000000
 				let template = 3
@@ -61,12 +65,18 @@ exports.run = (client, msg, args) => {
 					else if (element.match(/maxcp\d/gi)) maxcp = element.replace(/maxcp/gi, '')
 					else if (element.match(/maxiv\d/gi)) maxiv = element.replace(/maxiv/gi, '')
 					else if (element.match(/maxweight\d/gi)) maxweight = element.replace(/maxweight/gi, '')
+					else if (element.match(/maxatk\d/gi)) maxAtk = element.replace(/maxatk/gi, '')
+					else if (element.match(/maxdef\d/gi)) maxDef = element.replace(/maxdef/gi, '')
+					else if (element.match(/maxsta\d/gi)) maxSta = element.replace(/maxsta/gi, '')
 					else if (element.match(/cp\d/gi)) cp = element.replace(/cp/gi, '')
 					else if (element.match(/level\d/gi)) level = element.replace(/level/gi, '')
 					else if (element.match(/iv\d/gi)) iv = element.replace(/iv/gi, '')
 					else if (element.match(/atk\d/gi)) atk = element.replace(/atk/gi, '')
 					else if (element.match(/def\d/gi)) def = element.replace(/def/gi, '')
 					else if (element.match(/sta\d/gi)) sta = element.replace(/sta/gi, '')
+					else if (element.match(/male/gi)) gender = 1
+					else if (element.match(/female/gi)) gender = 2
+					else if (element.match(/genderless/gi)) gender = 3
 					else if (element.match(/weight\d/gi)) 	weight = element.replace(/weight/gi, '')
 					else if (element.match(/form\w/gi)) forms.push(element.replace(/form/gi, ''))
 					else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
@@ -86,10 +96,10 @@ exports.run = (client, msg, args) => {
 				})
 				if (monsters.length && !forms.length) {
 					const form = 0
-					const insertData = monsters.map(pokemonId => [target.id, pokemonId, template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form])
+					const insertData = monsters.map(pokemonId => [target.id, pokemonId, template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender])
 					client.query.insertOrUpdateQuery(
 						'monsters',
-						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
+						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender'],
 						insertData,
 					).catch((O_o) => {})
 
@@ -121,11 +131,11 @@ exports.run = (client, msg, args) => {
 						const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === form)
 						if (fid) fids.push(fid)
 					})
-					const insertData = fids.map(form => [target.id, monsters[0], template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form])
+					const insertData = fids.map(form => [target.id, monsters[0], template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender])
 					client.log.log({ level: 'debug', message: `${msg.author.username} started tracking ${monsters[0]} form: ${fids} in ${target.name}`, event: 'discord:track' })
 					client.query.insertOrUpdateQuery(
 						'monsters',
-						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form'],
+						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender'],
 						insertData,
 					).catch((O_o) => {})
 					if (fids.length > 0) {

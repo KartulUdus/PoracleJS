@@ -382,7 +382,7 @@ class Controller {
 	async checkSchema() {
 		return new Promise((resolve, reject) => {
 			this.db.query(`select count(*) as c from information_schema.tables where table_schema='${config.db.database}' 
-							and table_name in('egg', 'raid', 'monsters', 'schema_version', 'gym-info', 'humans', 'quest', 'comevent', 'comsubmission')`)
+							and table_name in('egg', 'raid', 'monsters', 'schema_version', 'gym-info', 'humans', 'quest')`)
 				.then((schematablesMatched) => {
 					log.log({ level: 'debug', message: 'checkSchema', event: 'sql:checkSchema' })
 					resolve(schematablesMatched[0][0].c)

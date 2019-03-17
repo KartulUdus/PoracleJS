@@ -129,7 +129,7 @@ exports.run = (client, msg) => {
 				}
 				else {
 					const remQuery = `
-						delete from quest WHERE id=${msg.author.id} and 
+						delete from quest WHERE id=${target.id} and 
 						((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}))		
 						`
 					client.query.mysteryQuery(remQuery).then(() => {

@@ -46,12 +46,16 @@ class Monster extends Controller {
             max_iv>=${data.iv} and
             min_cp<=${data.cp} and
             max_cp>=${data.cp} and
+            (gender = ${data.gender} or gender = 0) and
             (form = ${data.form} or form = 0) and
             min_level<=${data.pokemon_level} and
             max_level>=${data.pokemon_level} and
             atk<=${data.individual_attack} and
             def<=${data.individual_defense} and
             sta<=${data.individual_stamina} and
+			maxAtk>=${data.individual_attack} and
+            maxDef>=${data.individual_defense} and
+            maxSta>=${data.individual_stamina} and
             min_weight<=${data.weight} * 1000 and
             max_weight>=${data.weight} * 1000 and
             (round( 6371000 * acos( cos( radians(${data.latitude}) ) 

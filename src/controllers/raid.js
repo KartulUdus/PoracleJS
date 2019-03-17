@@ -46,6 +46,7 @@ class Raid extends Controller {
             (pokemon_id=${data.pokemon_id} or (pokemon_id=721 and raid.level=${data.level})) and 
             (raid.team = ${data.team_id} or raid.team = 4) and 
             (raid.park = ${!!data.park} or raid.park = 0) and
+			(raid.form = ${data.form} or raid.form = 0) and
             (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
               * cos( radians( humans.latitude ) ) 
               * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 

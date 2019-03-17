@@ -7,6 +7,7 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 }
 const monsterData = require(monsterDataPath)
 const typeData = require(`${__dirname}/../../../util/types`)
+const formData = require(`${__dirname}/../../../util/forms`)
 
 
 exports.run = (client, msg, args) => {
@@ -44,6 +45,8 @@ exports.run = (client, msg, args) => {
 				let template = 3
 				let remove = false
 				let levels = []
+				let form = 0
+				let forms = []
 
 				args.forEach((element) => {
 					const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
@@ -67,6 +70,7 @@ exports.run = (client, msg, args) => {
 					else if (element.match(/mystic/gi)) team = 1
 					else if (element.match(/harmony/gi)) team = 0
 					else if (element.match(/remove/gi)) remove = true
+					else if (element.match(/form\w/gi)) forms.push(element.replace(/form/gi, ''))
 					else if (element.match(/everything/gi)) levels = [1, 2, 3, 4, 5]
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
@@ -74,12 +78,44 @@ exports.run = (client, msg, args) => {
 					}
 				})
 				if (!remove) {
-					if (monsters.length !== 0 && levels.length === 0) {
+					if (monsters.length !== 0 && levels.length === 0 && forms.length === 0) {
 						const level = 0
-						const insertData = monsters.map(monster => [target.id, monster, template, distance, park, team, level])
+						const insertData = monsters.map(monster => [target.id, monster, template, distance, park, team, level, form])
 						client.query.insertOrUpdateQuery(
 							'raid',
-							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
+							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level', 'form'],
+							insertData,
+						).catch((O_o) => {})
+						client.log.log({
+							level: 'debug',
+							message: `${msg.author.username} started tracking ${monsters} raids in ${target.name}`,
+							event: 'discord:raid',
+						})
+
+						msg.react('✅').catch((O_o) => {
+							client.log.error(O_o.message)
+						})
+
+					}
+					else if (monsters.length === 1 && levels.length === 0 && forms.length !== 0) {
+						const level = 0
+						if (!_.has(formData, monsters[0])) {
+							return msg.reply(`Sorry, ${monsters[0]} doesn't have forms`).catch((O_o) => {
+								client.log.error(O_o.message)
+							})
+						}
+						const fids = []
+						forms.forEach((form) => {
+							const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === form)
+							if (fid) fids.push(fid)
+						})
+						if(!fids.length) return msg.reply(`Didn't find these forms for ${monsters[0]}`).catch((O_o) => {
+							client.log.error(O_o.message)
+						})
+						const insertData = fids.map(f => [target.id, monsters[0], template, distance, park, team, level, f])
+						client.query.insertOrUpdateQuery(
+							'raid',
+							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level', 'form'],
 							insertData,
 						).catch((O_o) => {})
 						client.log.log({
@@ -96,10 +132,10 @@ exports.run = (client, msg, args) => {
 					else if (monsters.length === 0 && levels.length === 0) msg.reply('404 NO MONSTERS FOUND')
 					else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time')
 					else if (monsters.length === 0 && levels.length !== 0) {
-						const insertData = levels.map(level => [target.id, 721, template, distance, park, team, level])
+						const insertData = levels.map(level => [target.id, 721, template, distance, park, team, level, form])
 						client.query.insertOrUpdateQuery(
 							'raid',
-							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level'],
+							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level', 'form'],
 							insertData,
 						).catch((O_o) => {})
 						client.log.log({
