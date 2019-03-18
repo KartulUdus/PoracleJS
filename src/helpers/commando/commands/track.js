@@ -45,9 +45,9 @@ exports.run = (client, msg, args) => {
 				let atk = 0
 				let def = 0
 				let sta = 0
-				let maxAtk = 16
-				let maxDef = 16
-				let maxSta = 16
+				let maxAtk = 15
+				let maxDef = 15
+				let maxSta = 15
 				let gender = 0
 				let weight = 0
 				let maxweight = 9000000

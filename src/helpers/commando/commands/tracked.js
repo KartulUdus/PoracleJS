@@ -10,6 +10,7 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 }
 const monsterData = require(monsterDataPath)
 const teamData = require(`${__dirname}/../../../util/teams`)
+const genderData = require(`${__dirname}/../../../util/genders`)
 const questDts = require('../../../../config/questdts')
 
 
@@ -67,7 +68,7 @@ exports.run = (client, msg) => {
 						const monsterName = monsterData[monster.pokemon_id].name
 						let miniv = monster.min_iv
 						if (miniv === -1) miniv = 0
-						message = message.concat(`\n**${monsterName}** distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} minimum stats: ATK:${monster.atk} DEF:${monster.def} STA:${monster.sta}`)
+						message = message.concat(`\n**${monsterName}** distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.maxAtk}/${monster.maxDef}/${monster.maxSta}, gender:${genderData[monster.gender]}`)
 					})
 					if (raids.length || eggs.length) {
 						message = message.concat('\n\nYou\'re tracking the following raids:\n')
