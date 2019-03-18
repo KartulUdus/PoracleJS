@@ -10,6 +10,7 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 }
 const monsterData = require(monsterDataPath)
 const teamData = require(`${__dirname}/../../../util/teams`)
+const formData = require(`${__dirname}/../../../util/forms`)
 const genderData = require(`${__dirname}/../../../util/genders`)
 const questDts = require('../../../../config/questdts')
 
@@ -67,8 +68,10 @@ exports.run = (client, msg) => {
 					monsters.forEach((monster) => {
 						const monsterName = monsterData[monster.pokemon_id].name
 						let miniv = monster.min_iv
+						let formName = formData[monster.pokemon_id] ? formData[monster.pokemon_id][monster.form] : 'none'
+						if (formName === undefined) formName = 'none'
 						if (miniv === -1) miniv = 0
-						message = message.concat(`\n**${monsterName}** distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.maxAtk}/${monster.maxDef}/${monster.maxSta}, gender:${genderData[monster.gender]}`)
+						message = message.concat(`\n**${monsterName}** form: ${formName} distance: ${monster.distance}m iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.maxAtk}/${monster.maxDef}/${monster.maxSta}, gender:${genderData[monster.gender]}`)
 					})
 					if (raids.length || eggs.length) {
 						message = message.concat('\n\nYou\'re tracking the following raids:\n')
@@ -77,11 +80,14 @@ exports.run = (client, msg) => {
 					raids.forEach((raid) => {
 						const monsterName = monsterData[raid.pokemon_id].name
 						const raidTeam = teamData[raid.team].name
+						let formName = formData[raid.pokemon_id] ? formData[raid.pokemon_id][raid.form] : 'none'
+						if (formName === undefined) formName = 'none'
+
 						if (parseInt(raid.pokemon_id, 10) === 721) {
 							message = message.concat(`\n**level:${raid.level} raids** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
 						}
 						else {
-							message = message.concat(`\n**${monsterName}** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
+							message = message.concat(`\n**${monsterName}** form: ${formName}, distance: ${raid.distance}m controlled by ${raidTeam}, must be in park: ${raid.park}`)
 						}
 					})
 					eggs.forEach((egg) => {
