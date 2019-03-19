@@ -127,16 +127,16 @@ class Raid extends Controller {
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
+				if (!data.form) data.form = 0
+				if (!data.team_id) data.team_id = 0
 				data.name = monsterData[data.pokemon_id] ? monsterData[data.pokemon_id].name : 'errormon'
-				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_00.png`
+				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form.toString()}.png`
 				const e = []
 				monsterData[data.pokemon_id].types.forEach((type) => {
 					if (types[type]) e.push(emojiData.type[type])
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
-				if (!data.team_id) data.team_id = 0
-				if (!data.form) data.form = 0
 				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 
