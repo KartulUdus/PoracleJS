@@ -3,12 +3,13 @@ const config = require('config')
 const log = require('../logger')
 const mustache = require('mustache')
 const _ = require('lodash')
+const path = require('path')
 
 const emojiData = require('../../config/emoji')
 
-let monsterDataPath = `${__dirname}/../util/monsters.json`
+let monsterDataPath = path.join(__dirname, '../util/monsters.json')
 if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCase())) {
-	monsterDataPath = `${__dirname}/../../../util/locale/monsters${config.locale.language.toLowerCase()}.json`
+	monsterDataPath = path.join(__dirname, `../util/locale/monsters${config.locale.language.toLowerCase()}.json`)
 }
 
 const monsterData = require(monsterDataPath)

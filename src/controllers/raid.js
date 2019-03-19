@@ -2,15 +2,16 @@ const Controller = require('./controller')
 const config = require('config')
 const log = require('../logger')
 const pokemonGif = require('pokemon-gif')
+const path = require('path')
 
 const _ = require('lodash')
 const mustache = require('mustache')
 
-let monsterDataPath = `${__dirname}/../util/monsters.json`
-let moveDataPath = `${__dirname}/../util/moves.json`
+let monsterDataPath = path.join(__dirname, '../util/monsters.json')
+let moveDataPath = path.join(__dirname, '../util/moves.json')
 if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCase())) {
-	monsterDataPath = `${__dirname}/../../../util/locale/monsters${config.locale.language.toLowerCase()}.json`
-	moveDataPath = `${__dirname}/../../../util/locale/moves${config.locale.language.toLowerCase()}.json`
+	monsterDataPath = path.join(__dirname, `../util/locale/monsters${config.locale.language.toLowerCase()}.json`)
+	moveDataPath = path.join(__dirname, `../util/locale/moves${config.locale.language.toLowerCase()}.json`)
 }
 
 const emojiData = require('../../config/emoji')
