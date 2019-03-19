@@ -130,7 +130,7 @@ class Raid extends Controller {
 				if (!data.form) data.form = 0
 				if (!data.team_id) data.team_id = 0
 				data.name = monsterData[data.pokemon_id] ? monsterData[data.pokemon_id].name : 'errormon'
-				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form.toString()}.png`
+				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form? data.form.toString() : '00'}.png`
 				const e = []
 				monsterData[data.pokemon_id].types.forEach((type) => {
 					if (types[type]) e.push(emojiData.type[type])
