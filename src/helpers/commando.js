@@ -48,8 +48,9 @@ else {
 		files.forEach((file) => {
 			if (!file.endsWith('.js')) return
 			const props = require(`${__dirname}/commando/commands/${file}`) // eslint-disable-line global-require
-			const commandName = file.split('.')[0]
-			enabledCommands.push(`${config.discord.prefix}${file.split('.')[0]}`)
+			let commandName = file.split('.')[0]
+			if(config.commands[commandName]) commandName = config.commands[commandName]
+			enabledCommands.push(`${config.discord.prefix}${commandName}`)
 			client.commands.set(commandName, props)
 		})
 		log.log({ level: 'debug', message: `Loading discord commands: (${enabledCommands.join(' ')})`, event: 'discord:commandsAdded' })

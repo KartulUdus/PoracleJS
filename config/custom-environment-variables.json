@@ -92,5 +92,25 @@
       "__name": "IV_COLORS",
       "__format": "json"
     }
+  },
+  "commands": {
+    "poracle": "CMDPORACLE",
+    "area": "CMDAREA",
+    "backup": "CMDBACKUP",
+    "channel": "CMDCHANNEL",
+    "egg": "CMDEGG",
+    "help": "CMDHELP",
+    "location": "CMDLODCATION",
+    "quest": "CMDQUEST",
+    "raid": "CMDRAID",
+    "restore": "CMDRESTORE",
+    "start": "CMDSTART",
+    "stop": "CMDSTOP",
+    "track": "CMDTRACK",
+    "tracked": "CMDTRACKED",
+    "unregister": "CMDUNREGISTER",
+    "untrack": "CMDUNTRACK",
+    "version": "CMDVERSION",
+    "webhook": "CMDWEBHOOK"
   }
 }

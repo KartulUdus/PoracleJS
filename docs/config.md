@@ -152,4 +152,35 @@ The tiers of IV colors are as follows:
 
 
 
+**Commands**
+
+Any command name can be renamed in the config file.
+
+Use the below environment variables, or create a `config/local.json` and see possible options from defaults `config/default.json`
+
+```json
+CMDPORACLE=
+CMDAREA=
+CMDBACKUP=
+CMDCHANNEL=
+CMDEGG=
+CMDHELP=
+CMDLODCATION=
+CMDQUEST=
+CMDRAID=
+CMDRESTORE=
+CMDSTART=
+CMDSTOP=
+CMDTRACK=
+CMDTRACKED=
+CMDUNREGISTER=
+CMDUNTRACK=
+CMDVERSION=
+CMDWEBHOOK=
+```
+
+This does **NOT** rename command properties such as `remove`, `everything` or any of the genders.
+
+
+
 When you are done with your config, you can make sure that it's a [valid JSON format here](https://jsonlint.com/)

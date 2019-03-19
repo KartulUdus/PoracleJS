@@ -56,5 +56,26 @@
         "#A335EE",
         "#FF8000"
     ]
+  },
+
+  "commands": {
+    "poracle": "",
+    "area": "",
+    "backup": "",
+    "channel": "",
+    "egg": "",
+    "help": "",
+    "location": "",
+    "quest": "",
+    "raid": "",
+    "restore": "",
+    "start": "",
+    "stop": "",
+    "track": "",
+    "tracked": "",
+    "unregister": "",
+    "untrack": "",
+    "version": "",
+    "webhook": ""
   }
 }
