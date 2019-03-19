@@ -138,7 +138,7 @@ class Monster extends Controller {
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 			data.gif = pokemonGif(Number(data.pokemon_id))
-			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form? data.form.toString() : '00'}.png`
+			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			const e = []
 			monsterData[data.pokemon_id].types.forEach((type) => {
 				e.push(emojiData.type[type])

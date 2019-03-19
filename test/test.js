@@ -342,7 +342,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🔮')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_201_06.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_201_6.png`.toLowerCase())
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
