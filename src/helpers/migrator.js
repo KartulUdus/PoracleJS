@@ -34,7 +34,7 @@ const humans = `CREATE TABLE \`humans\` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;`
 
 const monsters = `CREATE TABLE \`monsters\` (
-  \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   \`pokemon_id\` smallint(6) NOT NULL,
   \`distance\` int(11) NOT NULL,
   \`min_iv\` smallint(3) NOT NULL,
@@ -50,6 +50,10 @@ const monsters = `CREATE TABLE \`monsters\` (
   \`min_weight\` double NOT NULL,
   \`max_weight\` double NOT NULL,
   \`form\` smallint(3) DEFAULT 0,
+  \`maxAtk\` smallint(2) NOT NULL DEFAULT 15,
+  \`maxDef\` smallint(2) NOT NULL DEFAULT 15,
+  \`maxSta\` smallint(2) NOT NULL DEFAULT 15,
+  \`gender\` smallint(2) NOT NULL DEFAULT 0,
   PRIMARY KEY monsters_tracking (\`id\`, \`pokemon_id\`, \`min_iv\`, \`max_iv\`, \`min_cp\`, \`max_cp\`, \`min_level\`, \`max_level\`, \`atk\`, \`def\`, \`sta\`, \`min_weight\`, \`max_weight\`, \`form\`),
   KEY \`monsters_pokemon_id\` (\`pokemon_id\`),
   KEY \`monsters_distance\` (\`distance\`),
@@ -58,20 +62,21 @@ const monsters = `CREATE TABLE \`monsters\` (
 
 const raid = `
 CREATE TABLE \`raid\` (
-  \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   \`pokemon_id\` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   \`park\` tinyint(1) NOT NULL,
- \`template\` smallint(5) DEFAULT 3,
+  \`template\` smallint(5) DEFAULT 3,
   \`distance\` int(11) NOT NULL,
   \`team\` smallint(1) DEFAULT 4,
   \`level\` smallint(1) DEFAULT 0,
+  \`form\` smallint(3) NOT NULL DEFAULT 0;
   PRIMARY KEY raid_tracking (\`id\`, \`pokemon_id\`, \`park\`, \`level\`),
   KEY \`raid_pokemon_id\` (\`pokemon_id\`),
   KEY \`raid_distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const egg = `CREATE TABLE \`egg\` (
-  \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   \`raid_level\` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
   \`park\` tinyint(1) NOT NULL,
  \`template\` smallint(5) DEFAULT 3,
@@ -90,7 +95,7 @@ const schemaVersion = `CREATE TABLE \`schema_version\` (
 
 const quest = `
 CREATE TABLE \`quest\` (
-  \`id\` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  \`id\` varchar(191) COLLATE utf8_unicode_ci NOT NULL,
   \`reward\` int(11) NOT NULL DEFAULT 0,
   \`template\` smallint(5) DEFAULT 3,
   \`shiny\` int(1) NOT NULL DEFAULT 0,
@@ -121,9 +126,9 @@ const migration4 = {
 	},
 	monsters: `
 		ALTER TABLE \`monsters\`
-			ADD \`maxAtk\` smallint(2) NOT NULL DEFAULT 16,
-			ADD \`maxDef\` smallint(2) NOT NULL DEFAULT 16,
-			ADD \`maxSta\` smallint(2) NOT NULL DEFAULT 16,
+			ADD \`maxAtk\` smallint(2) NOT NULL DEFAULT 15,
+			ADD \`maxDef\` smallint(2) NOT NULL DEFAULT 15,
+			ADD \`maxSta\` smallint(2) NOT NULL DEFAULT 15,
 			ADD \`gender\` smallint(2) NOT NULL DEFAULT 0
 	`,
 	raid: `
