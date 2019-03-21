@@ -69,7 +69,7 @@ CREATE TABLE \`raid\` (
   \`distance\` int(11) NOT NULL,
   \`team\` smallint(1) DEFAULT 4,
   \`level\` smallint(1) DEFAULT 0,
-  \`form\` smallint(3) NOT NULL DEFAULT 0;
+  \`form\` smallint(3) NOT NULL DEFAULT 0,
   PRIMARY KEY raid_tracking (\`id\`, \`pokemon_id\`, \`park\`, \`level\`),
   KEY \`raid_pokemon_id\` (\`pokemon_id\`),
   KEY \`raid_distance\` (\`distance\`)
