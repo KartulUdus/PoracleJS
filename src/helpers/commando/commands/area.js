@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const geofence = require('../../../../config/geofence.json')
 
-const confAreas = geofence.map(area => area.name.toLowerCase())
+const confAreas = geofence.map(area => area.name.toLowerCase()).sort()
 
 
 exports.run = (client, msg, args) => {
