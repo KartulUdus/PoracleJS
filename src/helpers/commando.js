@@ -49,7 +49,7 @@ else {
 			if (!file.endsWith('.js')) return
 			const props = require(`${__dirname}/commando/commands/${file}`) // eslint-disable-line global-require
 			let commandName = file.split('.')[0]
-			if(config.commands[commandName]) commandName = config.commands[commandName]
+			if (config.commands[commandName]) commandName = config.commands[commandName]
 			enabledCommands.push(`${config.discord.prefix}${commandName}`)
 			client.commands.set(commandName, props)
 		})

@@ -7,8 +7,7 @@ exports.run = (client, msg) => {
 		_.forEach(msg.mentions.users.array(), user => targets.push({ id: user.id, name: user.tag }))
 		_.forEach(msg.mentions.channels.array(), channel => targets.push({ id: channel.id, name: channel.name }))
 	}
-	if (!targets) targets.push({ id: msg.author.id, name: msg.author.tag })
-
+	if (!targets.length) targets.push({ id: msg.author.id, name: msg.author.tag })
 	targets.forEach((target) => {
 		client.query.countQuery('id', 'humans', 'id', target.id)
 			.then((isregistered) => {
