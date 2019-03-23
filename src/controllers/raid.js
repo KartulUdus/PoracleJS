@@ -187,6 +187,7 @@ class Raid extends Controller {
 											const caresCache = _.cloneDeep(this.getDiscordCache(cares.id))
 											const view = {
 												id: data.pokemon_id,
+												gymId: data.gym_id,
 												time: data.distime,
 												tthh: data.tth.hours,
 												tthm: data.tth.minutes,
@@ -316,6 +317,7 @@ class Raid extends Controller {
 										whoCares.forEach((cares) => {
 											const caresCache = this.getDiscordCache(cares.id)
 											const view = {
+												gymId: data.gym_id,
 												time: data.hatchtime,
 												tthh: data.tth.hours,
 												tthm: data.tth.minutes,
