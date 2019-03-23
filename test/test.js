@@ -1,8 +1,8 @@
 const config = require('config')
 const mysql = require('mysql2/promise')
-const MonsterController = require('../src/app/controllers/monster')
-const RaidController = require('../src/app/controllers/raid')
-const QuestController = require('../src/app/controllers/quest')
+const MonsterController = require('../src/controllers/monster')
+const RaidController = require('../src/controllers/raid')
+const QuestController = require('../src/controllers/quest')
 
 const db = mysql.createPool(config.db, { multipleStatements: true })
 
@@ -52,7 +52,7 @@ describe('Db connection, geolocating, webserver', () => {
 
 	it('Database connection should be happy and have needed tables', (done) => {
 		monsterController.checkSchema().then((count) => {
-		    chai.assert.equal(count, 9)
+		    chai.assert.equal(count, 7)
 			done()
 		}).catch((err) => {
 			done(err)
@@ -342,7 +342,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🔮')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_201_06.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_201_6.png`.toLowerCase())
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {

@@ -6,48 +6,26 @@
     "indent": [ "error", "tab", { "SwitchCase": 1 } ],
     // if you want to put a blank line at the beginning or end of a block, knock yourself out
     "padded-blocks": [ "off" ],
-    // i like tabs. besides, we set indent to require them
+    // I like tabs. besides, we set indent to require them
     "no-tabs": [ "off" ],
     // seriously, who cares if there's a blank line at the end of the file or not?
     "eol-last": [ "off" ],
     // sometimes having a long single line makes sense, this also seems buggy and inconsistent, so we ignore it
     "max-len": [ "off" ],
-    // webstorm repeatedly tries to add it for us. it's easier not to fight it, even if it's not required.
-    "strict": [ "off" ],
-    // when setting the property of an object, you can specify the name even if it's unnecessary (ie: { foo: foo })
-    "object-shorthand": [ "off" ],
     // semicolons at line ends make code less readable and are generally useless
     "semi": [ "error", "never" ],
-    // unused vars are an error, except for function arguments.
     // particularly with callbacks we may not use all the args, but we still like knowing they're available
     "no-unused-vars": [ "error", { "vars": "all", "args": "none", "ignoreRestSiblings": true } ],
-    // you don't have to use operator assignment if you don't want to
-    "operator-assignment": [ "warn" ],
     // we don't want else to be on the same line as the closing } of an if statement
     "brace-style": [ "error", "stroustrup" ],
-    // if discord breaks because dangling commas, don't
-    "comma-dangle": ["error", "only-multiline"],
-    // it's possible that implicit coercion is not what you intended. webstorm warns about it, so should we
-    "no-implicit-coercion": [ "warn" ],
     // if you wish to call all your errors err, go ahead
     "no-shadow": ["error", { "allow": ["err"] }],
-    // if you're using 'this' somewhere that isn't a class you're probably doing something wrong
-    "no-invalid-this": [ "error" ],
-    // if you're not modifying the variable used in a loop condition, you've probably done something wrong...
-    "no-unmodified-loop-condition": [ "warn" ],
     // don't use .call or .apply when you don't need to
     "no-useless-call": [ "warn" ],
     // forgetting to return after calling a callback is an easy mistake to make, so we'll warn you if you are
     "callback-return": [ "warn" ],
-    // as we want to have dynamic translation files, dynamic require is needed
-    "import/no-dynamic-require": 0,
-    // reassigning and returning variables bad; however, \everything\ operator still requires it
-    "no-param-reassign": 0,
-    "no-return-assign": 0,
     // to keep the cache continuous, the cache object has a dandling _ and needs it
     "no-underscore-dangle": 0,
-    // geocoding backup to OSM on error is unhappy, make these separate and delete this rule please
-    "consistent-return": 0,
     // because Travis-ci does not have config files, therefore this rule cannot error
     "import/no-unresolved": 0,
     // as I some modules are bundled with nuxt, this rule bad
@@ -55,6 +33,14 @@
     // this rule collides with vuex store strict mode, so it will be disabled
     "import/prefer-default-export": 0,
     // something used by nuxt and needed to run statistics page
-    "no-restricted-syntax": 0
+    "no-restricted-syntax": 0,
+    // reassigning and returning variables bad; however, \everything\ operator still requires it
+    "no-param-reassign": 0,
+    // dynamically imported discord commands don't have a return value after exports.run = () => ...
+    "consistent-return": 0,
+    // This is needed for both transation files and command modulules
+    "import/no-dynamic-require": 0
+
+
   }
 }

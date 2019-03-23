@@ -8,6 +8,10 @@
     "connectionLimit": {
       "__name": "DB_CONNECTION_LIMIT",
       "__format": "json"
+    },
+    "connectTimeout": {
+      "__name": "DB_CONNECTION_TIMEOUT",
+      "__format": "json"
     }
   },
 
@@ -30,9 +34,7 @@
     "timeformat": "TIME_FORMAT",
     "time": "TIME_STRING",
     "addressformat": "ADDR_FORMAT",
-    "commandMonstersJson": "COMMAND_MONSTERS",
-    "monstersJson": "DTS_MONSTERS",
-    "movesJson": "DTS_MOVES"
+    "language": "LANGUAGE"
   },
 
   "geocoding": {
@@ -90,5 +92,25 @@
       "__name": "IV_COLORS",
       "__format": "json"
     }
+  },
+  "commands": {
+    "poracle": "CMDPORACLE",
+    "area": "CMDAREA",
+    "backup": "CMDBACKUP",
+    "channel": "CMDCHANNEL",
+    "egg": "CMDEGG",
+    "help": "CMDHELP",
+    "location": "CMDLODCATION",
+    "quest": "CMDQUEST",
+    "raid": "CMDRAID",
+    "restore": "CMDRESTORE",
+    "start": "CMDSTART",
+    "stop": "CMDSTOP",
+    "track": "CMDTRACK",
+    "tracked": "CMDTRACKED",
+    "unregister": "CMDUNREGISTER",
+    "untrack": "CMDUNTRACK",
+    "version": "CMDVERSION",
+    "webhook": "CMDWEBHOOK"
   }
 }
