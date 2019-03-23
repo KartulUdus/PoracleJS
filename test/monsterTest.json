@@ -775,6 +775,7 @@
       "latitude": "{{randomLat}}",
       "longitude": "{{randomLon}}",
       "sponsor_id": "ex gym",
+      "ex_raid_eligible": "ex gym",
       "gym_name": "Some Amazing gym"
     },
     "kakuna2":{
@@ -912,6 +913,7 @@
       "latitude": "{{randomLat}}",
       "longitude": "{{randomLon}}",
       "sponsor_id": "lgadlfkjsd",
+      "ex_raid_eligible": "ex gym",
       "gym_name": "Some Amazing gym"
     },
     "level2":{
