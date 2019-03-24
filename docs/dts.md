@@ -153,6 +153,7 @@ Any of the fields can be customized with the following:
 |{{mincp20}}| Monsters cp with 0% perfect IV and level 25|
 |{{level}}| Raid level|
 |{{gymname}}| Name of the gym|
+|{{gymId}}| Fort ID of the gym|
 |{{teamname}}| Team owner of the gym
 |{{description}}| Description of the gym|
 |{{{detailsurl}}}| Descriptive picture url|
@@ -212,6 +213,7 @@ Any of the fields can be customized with the following:
 |{{stateCode}}| 2 letter state code of the alerted location|
 |{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{gymname}}| Name of the gym|
+|{{gymId}}| Fort ID of the gym|
 |{{description}}| Description of the gym|
 |{{level}}| Raid level|
 |{{{detailsurl}}}| Descriptive picture url|
