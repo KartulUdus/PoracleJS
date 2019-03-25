@@ -74,14 +74,14 @@ class Controller {
 
 
 	async geolocate(locationString) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.geocoder.geocode(locationString)
 				.then((result) => {
 					resolve(result)
 					log.log({ level: 'debug', message: `geolocate ${locationString}`, event: 'geo:geolocate' })
 				})
 				.catch((err) => {
-					log.error(`Geolocate failed with error: ${err}`)
+					reject(log.error(`Geolocate failed with error: ${err}`))
 				})
 		})
 	}
@@ -121,7 +121,7 @@ class Controller {
 									if (error) log.error(`Error saving addr of ${cacheKey}: ${error}`)
 								})
 							}
-							log.log({ level: 'debug', message: `getAddress ${locationObject.latitude}, ${locationObject.longitude}`, event: 'geo:getAddress' })
+							log.log({ level: 'debug', message: `getAddress ${locationObject.lat}, ${locationObject.lon}`, event: 'geo:getAddress' })
 							resolve(res)
 						})
 						.catch((err) => {
@@ -129,7 +129,7 @@ class Controller {
 						})
 				}
 				else {
-					log.log({ level: 'debug', message: `getAddress ${locationObject.latitude}, ${locationObject.longitude}`, event: 'geo:getAddress' })
+					log.log({ level: 'debug', message: `getAddress ${locationObject.lat}, ${locationObject.lon}`, event: 'geo:getAddress' })
 					resolve(addr)
 				}
 			})
@@ -191,11 +191,11 @@ class Controller {
 
 
 	async updateLocation(table, lat, lon, col, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('UPDATE ?? set latitude = ?, longitude = ? where ?? = ?', [table, lat, lon, col, value])
 				.then(log.log({ level: 'debug', message: 'updateLocation query', event: 'sql:updateLocation' }))
 				.catch((err) => {
-					log.error(`updateLocation errored with: ${err}`)
+					reject(log.error(`updateLocation errored with: ${err}`))
 				})
 		})
 	}
@@ -336,6 +336,19 @@ class Controller {
 				})
 				.catch((err) => {
 					reject(log.error(`selectAllQuery errored with: ${err}`))
+				})
+		})
+	}
+
+	async selectAllInQuery(table, column, values) {
+		return new Promise((resolve, reject) => {
+			this.db.query('SELECT * FROM ?? WHERE ?? IN (?)', [table, column, values])
+				.then((result) => {
+					log.log({ level: 'debug', message: `selectAllInQuery ${table}`, event: 'sql:selectAllInQuery' })
+					resolve(result[0])
+				})
+				.catch((err) => {
+					reject(log.error(`selectAllInQuery errored with: ${err}`))
 				})
 		})
 	}

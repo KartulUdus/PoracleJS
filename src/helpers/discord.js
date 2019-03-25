@@ -30,7 +30,7 @@ function startBeingHungry() {
 	log.log({ level: 'debug', message: `Discord worker #${discord.worker.id} started being hungry`, event: 'discord:workRequest' })
 	const hungryInterval = setInterval(() => {
 		process.send({ reason: 'hungry' })
-	}, 100)
+	}, 300)
 	return hungryInterval
 }
 
@@ -114,7 +114,7 @@ client.on('ready', () => {
 				}
 			}
 			else {
-				log.warn(`Tried to send message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
+				log.warn(`Tried to send discord message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
 				hungryInterval = startBeingHungry()
 			}
 		}

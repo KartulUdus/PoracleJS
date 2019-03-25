@@ -17,6 +17,10 @@
 
   "general": {
     "logLevel": "LOG_LEVEL",
+    "logSize": {
+      "__name": "LOG_SIZE",
+      "__format": "json"
+    },
     "host": "HOST",
     "port": "PORT",
     "imgurl": "IMGURL",
@@ -65,6 +69,10 @@
   },
 
   "discord": {
+    "enabled": {
+      "__name": "DISCORD_ENABLED",
+      "__format": "json"
+    },
     "token": {
       "__name": "DISCORD_TOKEN",
       "__format": "json"
@@ -111,6 +119,31 @@
     "unregister": "CMDUNREGISTER",
     "untrack": "CMDUNTRACK",
     "version": "CMDVERSION",
-    "webhook": "CMDWEBHOOK"
+    "webhook": "CMDWEBHOOK",
+    "adminid": "CMDADMINID"
+  },
+  "telegram": {
+    "enabled": {
+      "__name": "TLG_ENABLED",
+      "__format": "json"
+    },
+    "images": {
+      "__name": "TLG_IMAGES",
+      "__format": "json"
+    },
+    "location":{
+      "__name": "TLG_LOCATION",
+      "__format": "json"
+    },
+    "stickerurl": "TLG_STICKER",
+    "token": {
+      "__name": "TLG_TOKEN",
+      "__format": "json"
+    },
+    "admins": {
+      "__name": "TLG_ADMINS",
+      "__format": "json"
+    },
+    "channel": "TLG_CHANNEL"
   }
 }

@@ -1,7 +1,7 @@
 # Config file
 
 
-#### default.json
+#### Config files
 
 Before first running PoracleJS, you need to create a `.env` file.  
 There is an example you can copy over to begin with `cp .env.example .env`.  
@@ -35,6 +35,7 @@ DB_CONNECTION_TIMEOUT=
 
 ```json
 LOG_LEVEL=
+LOG_SIZE=
 HOST=
 PORT=
 IMGURL=
@@ -45,6 +46,7 @@ MIN_TTH=
   | Option        | Value         | 
   | ------------- |:-------------:| 
   |logLevel | Logging level, can be `debug`, `info` or `error`.|
+  |logSize | Maximum size of log file in Mb, default 25.|
   |host |   Webserver host. |
   |port | Webserver port. | 
   |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/images) |
@@ -97,10 +99,22 @@ MAP_TYPE=
 |type| Style of static map. Can be one of: <br/>roadmap <br/>satellite <br/>hybid <br/>dark |
 
 
+##### Telegram settings
+
+```js
+TLG_TOKEN=["400000002:AAhdsjl_alkrhjfsqlkjEQ"] 
+TLG_ADMINS=["201234515"]  # Array of admin id's who can manage channels 
+TLG_CHANNEL=          # Channel name to register in
+TLG_IMAGES=           # if telegram should send image, default=true
+TLG_LOCATION=         # if telegram should send map, default=true
+
+```
 
 ##### Discord settings
 
 ```json
+## If discord is enabled, default true
+# DISCORD_ENABLED=
 ## Discord token array. Has to be in [ "square.brackets.and.quotes" ]
 DISCORD_TOKEN=["NTM2Mj11111111111111111111.222222222222222xVTr1s"]
 ## List of discord user id's that can register channels and run admin commands.
