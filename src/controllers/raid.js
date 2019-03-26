@@ -270,7 +270,7 @@ class Raid extends Controller {
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
-				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/egg${data.level}.png`
+				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/util/images/egg${data.level}.png`
 				if (!data.team_id) data.team_id = 0
 				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? teamData[data.team_id].color : 7915600
