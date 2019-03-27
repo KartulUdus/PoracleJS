@@ -39,15 +39,15 @@ setInterval(() => {
 }, 60000)
 if (config.discord.enabled) {
 	discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
-	_.forEach(config.discord.token, (k) => {
-		discord.fork({ k })
+	_.forEach(config.discord.token, (discoK) => {
+		discord.fork({ discoK })
 	})
 
 
 	discord.on('message', (worker, msg) => {
 		if (msg.reason === 'seppuku') {
 			log.log({ level: 'warn', message: `Discord worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 10)}...` })
-			discord.fork({ k: msg.key })
+			discord.fork({ discoK: msg.key })
 		}
 		else if (msg.reason === 'hungry') {
 			if (discordQueue.length) {
@@ -82,14 +82,14 @@ if (config.telegram.enabled) {
 	})
 
 	extraTelegram.setupMaster({ exec: `${__dirname}/../helpers/telegramExtra.js` })
-	_.forEach(tlgk, (k) => {
-		extraTelegram.fork({ k })
+	_.forEach(tlgk, (teleK) => {
+		extraTelegram.fork({ teleK })
 	})
 
 	extraTelegram.on('message', (worker, msg) => {
 		if (msg.reason === 'sudoku') {
 			log.log({ level: 'warn', message: `Telegram worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 5)}...` })
-			extraTelegram.fork({ k: msg.key })
+			extraTelegram.fork({ teleK: msg.key })
 		}
 		else if (msg.reason === 'hungaria') {
 			if (telegramQueue.length) {

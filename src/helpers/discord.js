@@ -135,7 +135,7 @@ client.on('error', (e) => {
 	process.exit()
 })
 
-client.login(process.env.k)
+client.login(process.env.discoK)
 	.catch((err) => {
 		log.error(`Discord worker not signed in: ${err.message}`)
 		process.exit()
@@ -144,6 +144,6 @@ client.login(process.env.k)
 process.on('exit', () => {
 	process.send({
 		reason: 'seppuku',
-		key: process.env.k,
+		key: process.env.discoK,
 	})
 })

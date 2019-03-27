@@ -14,7 +14,7 @@ function startBeingHungry() {
 	return hungryInterval
 }
 
-const client = new Telegraf(process.env.k, { channelMode: true })
+const client = new Telegraf(process.env.teleK, { channelMode: true })
 client
 	.use(commandParts())
 	.use(telegramController())
@@ -63,7 +63,7 @@ process.on('message', (msg) => {
 process.on('exit', () => {
 	process.send({
 		reason: 'sudoku',
-		key: process.env.k,
+		key: process.env.teleK,
 	})
 })
 
