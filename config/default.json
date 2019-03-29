@@ -81,7 +81,7 @@
     "adminid": ""
   },
   "telegram": {
-    "enabled": true,
+    "enabled": false,
     "images": true,
     "location": true,
     "stickerurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/develop/src/util/images/telegram/",
