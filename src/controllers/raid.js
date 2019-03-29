@@ -204,6 +204,8 @@ class Raid extends Controller {
 												description: data.description,
 												move1: data.quick_move,
 												move2: data.charge_move,
+												move1emoji: moveData[data.quick_move]['type'] ? types[moveData[data.quick_move]['type']]['emoji'] : '',
+												move2emoji: moveData[data.charge_move]['type'] ? types[moveData[data.charge_move]['type']]['emoji'] : '',
 												level: data.level,
 												ex: data.ex,
 												staticmap: data.staticmap,

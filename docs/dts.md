@@ -81,6 +81,8 @@ Any of the fields can be customized with the following:
 |{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{move1}}| Monsers quick move|
 |{{move2}}| Monsters charge move|
+|{{move1emoji}}| Monsers quick move type emoji|
+|{{move2emoji}}| Monsters charge move type emoji|
 |{{iv}}| Monsters Individual Value Precentage|
 |{{cp}}| Monsters CP|
 |{{gender}}| Monsters gender|
@@ -146,6 +148,8 @@ Any of the fields can be customized with the following:
 |{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{move1}}| Monsters quick move|
 |{{move2}}| Monsters charge move|
+|{{move1emoji}}| Monsters quick move type emoji|
+|{{move2emoji}}| Monsters charge move type emoji|
 |{{cp}}| Raid boss cp|
 |{{cp20}}| Monsters cp with 100% perfect IV and level 20|
 |{{cp25}}| Monsters cp with 100% perfect IV and level 25|
