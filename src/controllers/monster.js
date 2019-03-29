@@ -130,6 +130,8 @@ class Monster extends Controller {
 			if (data.form === undefined || data.form === null) data.form = 0
 			if (data.form) data.formname = formData[data.pokemon_id] ? formData[data.pokemon_id][data.form] : ''
 			if (!data.weather) data.weather = 0
+			data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type ? types[moveData[data.move_1].type].emoji : ''
+			data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type ? types[moveData[data.move_2].type].emoji : ''
 			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : ''
 			data.boostemoji = emojiData.weather[data.weather]
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
@@ -198,8 +200,8 @@ class Monster extends Controller {
 								gender: genderData[data.gender],
 								move1: data.quick_move,
 								move2: data.charge_move,
-								move1emoji: moveData[data.move_1]['type'] ? types[moveData[data.move_1]['type']]['emoji'] : '',
-								move2emoji: moveData[data.move_1]['type'] ? types[moveData[data.move_2]['type']]['emoji'] : '',
+								move1emoji: data.move1emoji,
+								move2emoji: data.move2emoji,
 								level: Math.round(data.pokemon_level),
 								atk: data.individual_attack,
 								def: data.individual_defense,

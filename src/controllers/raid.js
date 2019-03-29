@@ -144,6 +144,8 @@ class Raid extends Controller {
 
 				data.quick_move = moveData[data.move_1] ? moveData[data.move_1].name : ''
 				data.charge_move = moveData[data.move_2] ? moveData[data.move_2].name : ''
+				data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type ? types[moveData[data.move_1].type].emoji : ''
+				data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type ? types[moveData[data.move_2].type].emoji : ''
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
@@ -204,8 +206,8 @@ class Raid extends Controller {
 												description: data.description,
 												move1: data.quick_move,
 												move2: data.charge_move,
-												move1emoji: data.move_1 in moveData ? moveData[data.move_1]['type'] ? types[moveData[data.move_1]['type']]['emoji'] : '' : '',
-												move2emoji: data.move_2 in moveData ? moveData[data.move_2]['type'] ? types[moveData[data.move_2]['type']]['emoji'] : '' : '',
+												move1emoji: data.move1emoji,
+												move2emoji: data.move2emoji,
 												level: data.level,
 												ex: data.ex,
 												staticmap: data.staticmap,
