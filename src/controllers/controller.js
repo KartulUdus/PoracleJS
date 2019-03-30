@@ -1,3 +1,5 @@
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["getGeocoder"] }] */
+
 const log = require('../logger')
 const config = require('config')
 const inside = require('point-in-polygon')
@@ -25,25 +27,6 @@ const discordcache = new Cache({
 discordcache.on('put', (key, val, ttl) => { })
 discordcache.on('hit', (key, val) => { })
 
-// Init the chosen geocoder
-const geocoder = (() => {
-	switch (config.geocoding.provider.toLowerCase()) {
-		case 'osm': {
-			return NodeGeocoder({
-				provider: 'openstreetmap',
-				formatterPattern: config.locale.addressformat,
-			})
-		}
-		case 'google': {
-			return NodeGeocoder({
-				provider: 'google',
-				httpAdapter: 'https',
-				apiKey: _.sample(config.geocoding.geocodingkey),
-			})
-		}
-		default:
-	}
-})()
 // setup geocoding cache
 
 const addrCache = pcache({
@@ -60,7 +43,6 @@ class Controller {
 		this.qdts = questDts
 		this.mdts = messageDts
 		this.ivColorData = ivColorData
-		this.geocoder = geocoder
 		this.geofence = geofence
 		this.cpMultipliers = cpMultipliers
 		this.webshot = webshot
@@ -73,9 +55,28 @@ class Controller {
 	// Geocoding stuff below
 
 
+	getGeocoder() {
+		switch (config.geocoding.provider.toLowerCase()) {
+			case 'google': {
+				return NodeGeocoder({
+					provider: 'google',
+					httpAdapter: 'https',
+					apiKey: _.sample(config.geocoding.geocodingKey),
+				})
+			}
+			default:
+			{
+				return NodeGeocoder({
+					provider: 'openstreetmap',
+					formatterPattern: config.locale.addressformat,
+				})
+			}
+		}
+	}
+
 	async geolocate(locationString) {
 		return new Promise((resolve, reject) => {
-			this.geocoder.geocode(locationString)
+			this.getGeocoder().geocode(locationString)
 				.then((result) => {
 					resolve(result)
 					log.log({ level: 'debug', message: `geolocate ${locationString}`, event: 'geo:geolocate' })
@@ -93,7 +94,7 @@ class Controller {
 			addrCache.get(cacheKey, (err, addr) => {
 				if (err) log.error(err)
 				if (!addr) {
-					this.geocoder.reverse(locationObject)
+					this.getGeocoder().reverse(locationObject)
 						.then((geocodeResult) => {
 							res.addr = config.locale.addressformat
 								.replace(/%n/, geocodeResult[0].streetNumber || '')
