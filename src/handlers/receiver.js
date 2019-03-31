@@ -4,7 +4,6 @@ const config = require('config')
 const mysql = require('mysql2/promise')
 const discord = require('cluster')
 const telegram = require('cluster')
-const extraTelegram = require('cluster')
 const uuid = require('uuid/v4')
 
 const db = mysql.createPool(config.db)
@@ -80,27 +79,6 @@ if (config.telegram.enabled) {
 			}
 		}
 	})
-
-	extraTelegram.setupMaster({ exec: `${__dirname}/../helpers/telegramExtra.js` })
-	_.forEach(tlgk, (teleK) => {
-		extraTelegram.fork({ teleK })
-	})
-
-	extraTelegram.on('message', (worker, msg) => {
-		if (msg.reason === 'sudoku') {
-			log.log({ level: 'warn', message: `Telegram worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 5)}...` })
-			extraTelegram.fork({ teleK: msg.key })
-		}
-		else if (msg.reason === 'hungaria') {
-			if (telegramQueue.length) {
-				worker.send({
-					reason: 'food',
-					job: telegramQueue.shift(),
-				})
-			}
-		}
-	})
-
 }
 
 

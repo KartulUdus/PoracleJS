@@ -4,6 +4,7 @@ const commandParts = require('./telegram/middleware/commandParser')
 const telegramController = require('./telegram/middleware/controller')
 const fs = require('fs')
 const config = require('config')
+const _ = require('lodash')
 
 const log = require('../logger')
 
@@ -11,15 +12,16 @@ function startBeingHungry() {
 	log.log({ level: 'debug', message: `telegram worker #${cluster.worker.id} started being hungry`, event: 'telegram:workRequest' })
 	const hungryInterval = setInterval(() => {
 		process.send({ reason: 'hungary' })
-	}, 300)
+	}, 100)
 	return hungryInterval
 }
 
 const enabledCommands = []
-const client = new Telegraf(config.telegram.token[0], { channelMode: true })
-client
-	.use(commandParts())
-	.use(telegramController())
+const clients = []
+config.telegram.token.forEach((key) => {
+	clients.push(new Telegraf(key, { channelMode: true }))
+})
+const commandWorker = clients[0]
 
 fs.readdir(`${__dirname}/telegram/commands/`, (err, files) => {
 	if (err) return log.error(err)
@@ -30,14 +32,22 @@ fs.readdir(`${__dirname}/telegram/commands/`, (err, files) => {
 		let commandName = file.split('.')[0]
 		if (config.commands[commandName]) commandName = config.commands[commandName]
 		enabledCommands.push(commandName)
-		client.command(commandName, props)
+		commandWorker.command(commandName, props)
 	})
 	log.log({ level: 'debug', message: `Loading Telegram commands: (${enabledCommands.join(' ')})`, event: 'telegram:commandsAdded' })
-	client.launch()
+
+	clients.forEach((client) => {
+		client
+			.use(commandParts())
+			.use(telegramController())
+			.launch()
+	})
+
 })
 
 let hungryInterval = startBeingHungry()
 process.on('message', (msg) => {
+	const client = _.sample(clients)
 	if (msg.reason === 'food') {
 		clearInterval(hungryInterval)
 		let message = ''
@@ -56,21 +66,27 @@ process.on('message', (msg) => {
 				})
 			}
 		}
-
+		const msgPromises = []
 		if (config.telegram.images) {
-			client.telegram.sendSticker(msg.job.target, msg.job.sticker, { disable_notification: true }).catch((err) => {
-				log.error(`Failed sending Telegram sticker to ${msg.job.name}. Error: ${err.message}`)
-			})
+			msgPromises.push(client.telegram.sendSticker(msg.job.target, msg.job.sticker, { disable_notification: true }))
 		}
-		client.telegram.sendMessage(msg.job.target, message, { parse_mode: 'Markdown', disable_web_page_preview: true }).then(() => {
-			if (config.telegram.location) {
-				client.telegram.sendLocation(msg.job.target, msg.job.lat, msg.job.lon, { disable_notification: true }).catch((err) => {
-					log.error(`Failed sending Telegram Location to ${msg.job.name}. Error: ${err.message}`)
-				})
-			}
+		Promise.all([
+			msgPromises,
+		]).then(() => {
+			client.telegram.sendMessage(msg.job.target, message, { parse_mode: 'Markdown', disable_web_page_preview: true }).then(() => {
+				if (config.telegram.location) {
+					client.telegram.sendLocation(msg.job.target, msg.job.lat, msg.job.lon, { disable_notification: true }).catch((err) => {
+						log.error(`Failed sending Telegram Location to ${msg.job.name}. Error: ${err.message}`)
+					})
+				}
+			}).catch((err) => {
+				log.error(`Failed sending Telegram message to ${msg.job.name}. Error: ${err.message}`)
+			})
 		}).catch((err) => {
-			log.error(`Failed sending Telegram message to ${msg.job.name}. Error: ${err.message}`)
+			log.error(`Failed sending Telegram sticker to ${msg.job.name}. Error: ${err.message}`)
 		})
+
+
 		hungryInterval = startBeingHungry()
 	}
 
