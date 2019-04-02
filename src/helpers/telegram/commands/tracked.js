@@ -20,7 +20,7 @@ module.exports = (ctx) => {
 	const user = ctx.update.message.from
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 
-	let target = { id: user.id.toString(), name: user.username }
+	let target = { id: user.id.toString(), name: user.first_name }
 	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
 		return ctx.telegram.sendMessage(user.id, 'Please run commands in Direct Messages').catch((O_o) => {
 			controller.log.error(O_o.message)
@@ -104,7 +104,7 @@ module.exports = (ctx) => {
 						if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
 						message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 					})
-					controller.log.log({ level: 'debug', message: `${user.username} checked trackings`, event: 'telegram:tracked' })
+					controller.log.log({ level: 'debug', message: `${user.first_name} checked trackings`, event: 'telegram:tracked' })
 
 					if (message.length < 6000) {
 						ctx.reply(message)

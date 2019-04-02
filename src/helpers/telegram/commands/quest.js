@@ -16,7 +16,7 @@ module.exports = (ctx) => {
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 	const args = command.splitArgs
 
-	let target = { id: user.id.toString(), name: user.username }
+	let target = { id: user.id.toString(), name: user.first_name }
 	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
 		return ctx.telegram.sendMessage(user.id, 'Please run commands in Direct Messages').catch((O_o) => {
 			controller.log.error(O_o.message)
@@ -119,7 +119,7 @@ module.exports = (ctx) => {
 						['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],
 						insertData,
 					).catch((O_o) => {})
-					controller.log.log({ level: 'debug', message: `${user.username} added quest trackings to ${target.name}`, event: 'discord:quest' })
+					controller.log.log({ level: 'debug', message: `${user.first_name} added quest trackings to ${target.name}`, event: 'discord:quest' })
 					ctx.reply('✅').catch((O_o) => {
 						controller.log.error(O_o.message)
 					})
@@ -133,7 +133,7 @@ module.exports = (ctx) => {
 						((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}))		
 						`
 					controller.query.mysteryQuery(remQuery).then(() => {
-						controller.log.log({ level: 'debug', message: `${user.username} removed quest trackings for ${target.name}`, event: 'discord:questRemove' })
+						controller.log.log({ level: 'debug', message: `${user.first_name} removed quest trackings for ${target.name}`, event: 'discord:questRemove' })
 					}).catch((O_o) => {})
 
 					ctx.reply('✅').catch((O_o) => {

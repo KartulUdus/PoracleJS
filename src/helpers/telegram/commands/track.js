@@ -16,7 +16,7 @@ module.exports = (ctx) => {
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 	const args = command.splitArgs
 
-	let target = { id: user.id.toString(), name: user.username }
+	let target = { id: user.id.toString(), name: user.first_name }
 	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
 		return ctx.telegram.sendMessage(user.id, 'Please run commands in Direct Messages').catch((O_o) => {
 			controller.log.error(O_o.message)
@@ -109,7 +109,7 @@ module.exports = (ctx) => {
 					ctx.reply('✅').catch((O_o) => {
 						controller.log.error(O_o.message)
 					})
-					controller.log.log({ level: 'debug', message: `${user.username} started tracking ${monsters} in ${target.name}`, event: 'discord:track' })
+					controller.log.log({ level: 'debug', message: `${user.first_name} started tracking ${monsters} in ${target.name}`, event: 'discord:track' })
 
 				}
 				else if (monsters.length > 1 && forms.length) {
@@ -135,7 +135,7 @@ module.exports = (ctx) => {
 						if (fid) fids.push(fid)
 					})
 					const insertData = fids.map(form => [target.id, monsters[0], template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender])
-					controller.log.log({ level: 'debug', message: `${user.username} started tracking ${monsters[0]} form: ${fids} in ${target.name}`, event: 'discord:track' })
+					controller.log.log({ level: 'debug', message: `${user.first_name} started tracking ${monsters[0]} form: ${fids} in ${target.name}`, event: 'discord:track' })
 					controller.query.insertOrUpdateQuery(
 						'monsters',
 						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender'],

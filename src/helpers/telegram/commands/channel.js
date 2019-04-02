@@ -26,7 +26,7 @@ module.exports = (ctx) => {
 							ctx.reply(`${target.name} has been registered`).catch((O_o) => {
 								controller.log.error(O_o.message)
 							})
-							controller.log.log({ level: 'debug', message: `${user.username} registered ${target.name}`, event: 'telegram:registeredChannel' })
+							controller.log.log({ level: 'debug', message: `${user.first_name} registered ${target.name}`, event: 'telegram:registeredChannel' })
 						}
 					})
 					.catch((err) => {
@@ -52,7 +52,7 @@ module.exports = (ctx) => {
 							ctx.reply('✅').catch((O_o) => {
 								controller.log.error(O_o.message)
 							})
-							controller.log.log({ level: 'debug', message: `${user.username} unregistered ${target.name}`, event: 'telegram:unregisteredChannel' })
+							controller.log.log({ level: 'debug', message: `${user.first_name} unregistered ${target.name}`, event: 'telegram:unregisteredChannel' })
 						}
 					})
 					.catch((err) => {

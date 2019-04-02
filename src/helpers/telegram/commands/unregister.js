@@ -28,7 +28,7 @@ module.exports = async (ctx) => {
 			if (target.id.length < 15) targets.push({ id: target.id, name: target.name })
 		})
 	}
-	if (!targets.length) targets.push({ id: user.id, name: user.username })
+	if (!targets.length) targets.push({ id: user.id, name: user.first_name })
 	targets.forEach((target) => {
 		controller.query.countQuery('id', 'humans', 'id', target.id)
 			.then((isregistered) => {
@@ -41,7 +41,7 @@ module.exports = async (ctx) => {
 					controller.query.deleteQuery('raid', 'id', target.id).catch((O_o) => {})
 					controller.query.deleteQuery('quest', 'id', target.id).catch((O_o) => {})
 					controller.query.deleteQuery('humans', 'id', target.id).catch((O_o) => {})
-					controller.log.log({ level: 'debug', message: `${user.username} unregistered ${target.name}`, event: 'discord:unregistered' })
+					controller.log.log({ level: 'debug', message: `${user.first_name} unregistered ${target.name}`, event: 'discord:unregistered' })
 
 				}
 				else {

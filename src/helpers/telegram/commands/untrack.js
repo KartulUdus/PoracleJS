@@ -15,7 +15,7 @@ module.exports = (ctx) => {
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 	const args = command.splitArgs
 
-	let target = { id: user.id.toString(), name: user.username }
+	let target = { id: user.id.toString(), name: user.first_name }
 	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
 		return ctx.telegram.sendMessage(user.id, 'Please run commands in Direct Messages').catch((O_o) => {
 			controller.log.error(O_o.message)
@@ -56,7 +56,7 @@ module.exports = (ctx) => {
 				if (monsters.length) {
 					monsters.forEach((monster) => {
 						controller.query.deleteByIdQuery('monsters', 'pokemon_id', `${monster}`, target.id)
-							.then(controller.log.log({ level: 'debug', message: `${user.username} removed pokemon tracking ${monsterData[monster].name}`, event: 'discord:untrack' }))
+							.then(controller.log.log({ level: 'debug', message: `${user.first_name} removed pokemon tracking ${monsterData[monster].name}`, event: 'discord:untrack' }))
 							.catch((O_o) => {})
 					})
 

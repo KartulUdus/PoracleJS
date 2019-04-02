@@ -7,7 +7,7 @@ module.exports = (ctx) => {
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 	const args = command.splitArgs
 
-	let target = { id: user.id.toString(), name: user.username }
+	let target = { id: user.id.toString(), name: user.first_name }
 	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
 		return ctx.telegram.sendMessage(user.id, 'Please run commands in Direct Messages').catch((O_o) => {
 			controller.log.error(O_o.message)
@@ -62,7 +62,7 @@ module.exports = (ctx) => {
 						ctx.reply('✅').catch((O_o) => {
 							controller.log.error(O_o.message)
 						})
-						controller.log.log({ level: 'debug', message: `${user.username} started tracking level (${levels.join(', ')}) eggs in ${target.name}`, event: 'discord:egg' })
+						controller.log.log({ level: 'debug', message: `${user.first_name} started tracking level (${levels.join(', ')}) eggs in ${target.name}`, event: 'discord:egg' })
 					}
 					else {
 						ctx.reply('404 NO LEVELS FOUND').catch((O_o) => {
@@ -77,7 +77,7 @@ module.exports = (ctx) => {
 					ctx.reply('✅').catch((O_o) => {
 						controller.log.error(O_o.message)
 					})
-					controller.log.log({ level: 'debug', message: `${user.username} removed tracking for level ${levels.join(', ')} eggs in ${target.name}`, event: 'discord:unegg' })
+					controller.log.log({ level: 'debug', message: `${user.first_name} removed tracking for level ${levels.join(', ')} eggs in ${target.name}`, event: 'discord:unegg' })
 				}
 				else {
 					ctx.reply('404 NO MONSTERS FOUND').catch((O_o) => {

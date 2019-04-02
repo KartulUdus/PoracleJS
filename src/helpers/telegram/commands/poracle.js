@@ -18,7 +18,7 @@ module.exports = (ctx) => {
 					})
 			}
 			if (!isregistered) {
-				controller.query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[user.id, emojiStrip(user.username.toLowerCase()), '[]']]).catch((O_o) => {})
+				controller.query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[user.id, emojiStrip(user.first_name.toLowerCase()), '[]']]).catch((O_o) => {})
 				ctx.reply('✅').catch((O_o) => {
 					controller.log.error(O_o.message)
 				})
@@ -34,7 +34,7 @@ module.exports = (ctx) => {
 						ctx.reply('I tried to send a `/help` message to you, but was not allowed to. Please send `/start` to me in DM first')
 					}
 				})
-				controller.log.log({ level: 'debug', message: `${user.username} registered`, event: 'telegram:registered' })
+				controller.log.log({ level: 'debug', message: `${user.first_name} registered`, event: 'telegram:registered' })
 			}
 		})
 		.catch((err) => {

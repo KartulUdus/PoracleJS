@@ -10,7 +10,7 @@ module.exports = (ctx) => {
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 	const args = command.splitArgs
 
-	let target = { id: user.id.toString(), name: user.username }
+	let target = { id: user.id.toString(), name: user.first_name }
 	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
 		return ctx.telegram.sendMessage(user.id, 'Please run commands in Direct Messages').catch((O_o) => {
 			controller.log.error(O_o.message)
@@ -47,7 +47,7 @@ module.exports = (ctx) => {
 								ctx.reply(`Added areas: ${addAreas}`).catch((O_o) => {
 									controller.log.error(O_o.message)
 								})
-								controller.log.log({ level: 'debug', message: `${user.username} added area ${addAreas} for ${target.name}`, event: 'discord:areaAdd' })
+								controller.log.log({ level: 'debug', message: `${user.first_name} added area ${addAreas} for ${target.name}`, event: 'discord:areaAdd' })
 							}
 							else {
 								ctx.reply('👌').catch((O_o) => {
@@ -76,7 +76,7 @@ module.exports = (ctx) => {
 							}
 							if (removeAreas.length) {
 								ctx.reply(`Removed areas: ${removeAreas}`)
-								controller.log.log({ level: 'debug', message: `${user.username} removed area ${removeAreas} for ${target.name}`, event: 'discord:areaRemove' })
+								controller.log.log({ level: 'debug', message: `${user.first_name} removed area ${removeAreas} for ${target.name}`, event: 'discord:areaRemove' })
 							}
 							else {
 								ctx.reply('👌').catch((O_o) => {
@@ -93,7 +93,7 @@ module.exports = (ctx) => {
 						ctx.reply(`Current configured areas are ${confAreas}`).catch((O_o) => {
 							controller.log.error(O_o.message)
 						})
-						controller.log.log({ level: 'debug', message: `${user.username} checked areas for ${target.name}`, event: 'discord:areaList' })
+						controller.log.log({ level: 'debug', message: `${user.first_name} checked areas for ${target.name}`, event: 'discord:areaList' })
 						break
 					}
 					default:
