@@ -85,7 +85,7 @@ Any of the fields can be customized with the following:
 |{{move2emoji}}| Monsters charge move type emoji|
 |{{iv}}| Monsters Individual Value Precentage|
 |{{cp}}| Monsters CP|
-|{{genderName}}| Monsters gender|
+|{{gendername}}| Monsters gender|
 |{{weight}}| Monsters weight|
 |{{level}}| Monsters level|
 |{{atk}}| Monsters attack|
@@ -95,7 +95,7 @@ Any of the fields can be customized with the following:
 |{{{staticmap}}}| Static link to map|
 |{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
-|{{formName}}| Monsters form|
+|{{formname}}| Monsters form|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ivcolor}}| Color to be used for embed (Color of monsters perfection based on config.discord.iv_colors)|
 |{{boost}}| Monsters weather boost name|
