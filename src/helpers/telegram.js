@@ -25,6 +25,11 @@ const commandWorker = clients[0]
 
 fs.readdir(`${__dirname}/telegram/commands/`, (err, files) => {
 	if (err) return log.error(err)
+	clients.forEach((client) => {
+		client
+			.use(commandParts())
+			.use(telegramController())
+	})
 	files.forEach((file) => {
 
 		if (!file.endsWith('.js')) return
@@ -37,10 +42,7 @@ fs.readdir(`${__dirname}/telegram/commands/`, (err, files) => {
 	log.log({ level: 'debug', message: `Loading Telegram commands: (${enabledCommands.join(' ')})`, event: 'telegram:commandsAdded' })
 
 	clients.forEach((client) => {
-		client
-			.use(commandParts())
-			.use(telegramController())
-			.launch()
+		client.launch()
 	})
 
 })

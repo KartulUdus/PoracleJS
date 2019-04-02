@@ -30,6 +30,9 @@ module.exports = (ctx) => {
 
 				ctx.telegram.sendMessage(user.id, message, { parse_mode: 'Markdown' }).catch((O_o) => {
 					controller.log.error(O_o.message)
+					if (O_o.status === 403) {
+						ctx.reply('I tried to send a `/help` message to you, but was not allowed to. Please send `/start` to me in DM first')
+					}
 				})
 				controller.log.log({ level: 'debug', message: `${user.username} registered`, event: 'telegram:registered' })
 			}
