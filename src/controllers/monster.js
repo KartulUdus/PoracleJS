@@ -197,7 +197,7 @@ class Monster extends Controller {
 								confirmedTime: data.disappear_time_verified,
 								name: data.name,
 								now: new Date(),
-								gender: genderData[data.gender],
+								gendername: genderData[data.gender],
 								move1: data.quick_move,
 								move2: data.charge_move,
 								move1emoji: data.move1emoji,
@@ -206,14 +206,7 @@ class Monster extends Controller {
 								atk: data.individual_attack,
 								def: data.individual_defense,
 								sta: data.individual_stamina,
-								staticmap: data.staticmap,
-								form: data.formname,
 								imgurl: data.imgurl.toLowerCase(),
-								gif: data.gif,
-								color: data.color,
-								ivcolor: data.ivcolor,
-								boost: data.boost,
-								boostemoji: data.boostemoji,
 								pokemoji: emojiData.pokemon[data.pokemon_id],
 								areas: data.matched.join(', '),
 
@@ -231,8 +224,6 @@ class Monster extends Controller {
 								stateCode: geoResult.stateCode,
 								flagemoji: geoResult.flag,
 								neighbourhood: geoResult.neighbourhood,
-								emojiString: data.emojiString,
-
 							})
 							const monsterDts = data.iv === -1 && this.mdts.monsterNoIv
 								? this.mdts.monsterNoIv[`${cares.template}`]

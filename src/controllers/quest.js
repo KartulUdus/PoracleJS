@@ -149,7 +149,6 @@ class Quest extends Controller {
 							maxCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 15, 15, 15) : '',
 							mapurl: `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`,
 							applemap: `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`,
-							staticmap: data.staticmap,
 							// geocode stuff
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
