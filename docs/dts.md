@@ -85,7 +85,7 @@ Any of the fields can be customized with the following:
 |{{move2emoji}}| Monsters charge move type emoji|
 |{{iv}}| Monsters Individual Value Precentage|
 |{{cp}}| Monsters CP|
-|{{gender}}| Monsters gender|
+|{{genderName}}| Monsters gender|
 |{{weight}}| Monsters weight|
 |{{level}}| Monsters level|
 |{{atk}}| Monsters attack|
