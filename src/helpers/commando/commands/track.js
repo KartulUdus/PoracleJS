@@ -87,7 +87,7 @@ exports.run = (client, msg, args) => {
 						})
 					}
 					else if (element.match(/everything/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1) // eslint-disable-line no-return-assign
-					else if (element.match(/d\d/gi)) {
+					else if (element.match(/d\d/gi) && element.length < 50) {
 						distance = element.replace(/d/gi, '')
 						if (distance.length >= 10) distance = distance.substr(0, 9)
 					}

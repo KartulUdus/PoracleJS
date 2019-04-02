@@ -10,20 +10,29 @@ const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%
 
 const webhookCache = {}
 
-function cacheWebhook(webhook) {
-	axios.get(webhook)
-		.then((response) => {
-			if (!response.data.token || !response.data.id) return false
-			webhookCache[webhook] = {
-				webhookToken: response.data.token,
-				webhookId: response.data.id,
-			}
-			return true
-		})
-		.catch((err) => {
-			log.log({ level: 'debug', message: `failed fetching data for webhook ${webhook} ${err.message}`, event: 'discord:webhookCheck' })
-			return false
-		})
+function getCachedWebhook(webhook) {
+	return new Promise((resolve, reject) => {
+		if (webhook in webhookCache) {
+			resolve(webhookCache[webhook])
+		}
+		else {
+			axios.get(webhook)
+				.then((response) => {
+					if (!response.data.token || !response.data.id) reject(new Error())
+					webhookCache[webhook] = {
+						webhookToken: response.data.token,
+						webhookId: response.data.id,
+					}
+					resolve(webhookCache[webhook])
+				})
+				.catch((err) => {
+					log.log({ level: 'error', message: `failed fetching data for webhook ${webhook} ${err.message}`, event: 'discord:webhookCheck' })
+					reject(err.message)
+				})
+		}
+
+	})
+
 }
 
 function startBeingHungry() {
@@ -87,31 +96,33 @@ client.on('ready', () => {
 					})
 			}
 			else if (msg.job.target.match(hookRegex)) {
-				if (msg.job.target in webhookCache || cacheWebhook(msg.job.target)) {
-					const hook = new WebhookClient(webhookCache[msg.job.target].webhookId, webhookCache[msg.job.target].webhookToken)
-					hook.send(msg.job.content || '', {
-						embeds: [msg.job.message.embed],
-					})
-						.then(() => {
-							log.log({
-								level: 'debug',
-								message: `alarm ${msg.job.meta.alarmId} finished`,
-								event: 'alarm:end',
-								correlationId: msg.job.meta.correlationId,
-								messageId: msg.job.meta.messageId,
-								alarmId: msg.job.meta.alarmId,
+				getCachedWebhook(msg.job.target)
+					.then((hookRoot) => {
+						const hook = new WebhookClient(hookRoot.webhookId, hookRoot.webhookToken)
+						hook.send(msg.job.content || '', {
+							embeds: [msg.job.message.embed],
+						})
+							.then(() => {
+								log.log({
+									level: 'debug',
+									message: `alarm ${msg.job.meta.alarmId} finished`,
+									event: 'alarm:end',
+									correlationId: msg.job.meta.correlationId,
+									messageId: msg.job.meta.messageId,
+									alarmId: msg.job.meta.alarmId,
+								})
+								hungryInterval = startBeingHungry()
 							})
-							hungryInterval = startBeingHungry()
-						})
-						.catch((e) => {
-							log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
-							hungryInterval = startBeingHungry()
+							.catch((e) => {
+								log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
+								hungryInterval = startBeingHungry()
 
-						})
-				}
-				else {
-					hungryInterval = startBeingHungry()
-				}
+							})
+					})
+					.catch((e) => {
+						log.warn(`discord target ${msg.job.name} message was not successful ${e.message}`)
+						hungryInterval = startBeingHungry()
+					})
 			}
 			else {
 				log.warn(`Tried to send discord message to ${msg.job.name} ID ${msg.job.target}, but error ocurred`)
