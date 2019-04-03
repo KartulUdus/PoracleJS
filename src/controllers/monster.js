@@ -132,6 +132,8 @@ class Monster extends Controller {
 			if (!data.weather) data.weather = 0
 			data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type ? types[moveData[data.move_1].type].emoji : ''
 			data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type ? types[moveData[data.move_2].type].emoji : ''
+			data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type && emojiData.type && emojiData.type[moveData[data.move_1].type] ? emojiData.type[moveData[data.move_1].type] : data.move1emoji
+			data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type && emojiData.type && emojiData.type[moveData[data.move_2].type] ? emojiData.type[moveData[data.move_2].type] : data.move2emoji
 			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : ''
 			data.boostemoji = emojiData.weather[data.weather]
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
@@ -197,7 +199,7 @@ class Monster extends Controller {
 								confirmedTime: data.disappear_time_verified,
 								name: data.name,
 								now: new Date(),
-								gendername: genderData[data.gender],
+								gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
 								move1: data.quick_move,
 								move2: data.charge_move,
 								move1emoji: data.move1emoji,
