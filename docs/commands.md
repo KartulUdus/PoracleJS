@@ -120,7 +120,7 @@ Available filters:
 | --------- |:------------------------------:| -----------:|
 ||`!raid snorlax`| No filters, snorlax raids within your tracked area|
 |d|`!raid snorlax d1000`| Tracks snorlax raids within a kilometer|
-|park|`!raid park level5 d1000`| Tracks all level 5 raids in an ex eligible gym within a kilometer, can only be used with no monsters in the command|
+|ex|`!raid ex level5 d1000`| Tracks all level 5 raids in an ex eligible gym within a kilometer, can only be used with no monsters in the command|
 |level|`!raid level5 d1000`| Tracks all level 5 raids within a kilometer, can only be used with no monsters in the command|
 |instinct|`!raid zapdos instinct`| Tracks zapdos raids where controlling team is Instinct|
 |mystic|`!raid articuno mystic`| Tracks articuno raids where controlling team is mystic|
@@ -143,7 +143,7 @@ Available filters:
 | --------- |:------------------------------:| -----------:|
 ||`!egg level5`| No filters, level 5 eggs within your tracked area|
 |d|`!egg level4 d1000`| Tracks level 4 eggs within a kilometer|
-|park|`!egg level4 park d1000`| Tracks level 4 eggs in an ex eligible gym within a kilometer|
+|ex|`!egg level4 ex d1000`| Tracks level 4 eggs in an ex eligible gym within a kilometer|
 |instinct|`!egg level3  instinct`| Tracks level 3 eggs where controlling team is Instinct|
 |mystic|`!egg level2 mystic`| Tracks level 2 eggs where controlling team is mystic|
 |valor|`!egg level1 valor`| Tracks level 1 eggs controlling team is valor|
