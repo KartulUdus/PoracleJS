@@ -1,5 +1,5 @@
 const config = require('config')
-const { Client, WebhookClient } = require('discord.js')
+const { Client } = require('discord.js')
 
 const client = new Client()
 const log = require('../logger')
