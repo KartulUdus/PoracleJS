@@ -132,6 +132,7 @@ class Raid extends Controller {
 				if (!data.team_id) data.team_id = 0
 				data.name = monsterData[data.pokemon_id] ? monsterData[data.pokemon_id].name : 'errormon'
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+				data.sticker = `${config.telegram.stickerurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 				const e = []
 				monsterData[data.pokemon_id].types.forEach((type) => {
 					if (types[type]) e.push(emojiData.type[type])
@@ -143,6 +144,10 @@ class Raid extends Controller {
 
 				data.quick_move = moveData[data.move_1] ? moveData[data.move_1].name : ''
 				data.charge_move = moveData[data.move_2] ? moveData[data.move_2].name : ''
+				data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type ? types[moveData[data.move_1].type].emoji : ''
+				data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type ? types[moveData[data.move_2].type].emoji : ''
+				data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type && emojiData.type && emojiData.type[moveData[data.move_1].type] ? emojiData.type[moveData[data.move_1].type] : data.move1emoji
+				data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type && emojiData.type && emojiData.type[moveData[data.move_2].type] ? emojiData.type[moveData[data.move_2].type] : data.move2emoji
 				this.selectOneQuery('gym-info', 'id', data.gym_id)
 					.then((gymInfo) => {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
@@ -185,7 +190,7 @@ class Raid extends Controller {
 												level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId,
 											})
 											const caresCache = _.cloneDeep(this.getDiscordCache(cares.id))
-											const view = {
+											const view = _.extend(data, {
 												id: data.pokemon_id,
 												time: data.distime,
 												tthh: data.tth.hours,
@@ -193,23 +198,17 @@ class Raid extends Controller {
 												tths: data.tth.seconds,
 												name: data.name,
 												now: new Date(),
-												cp: data.cp,
 												mincp20: this.getCp(data.pokemon_id, 20, 10, 10, 10),
 												cp20: this.getCp(data.pokemon_id, 20, 15, 15, 15),
 												mincp25: this.getCp(data.pokemon_id, 25, 10, 10, 10),
 												cp25: this.getCp(data.pokemon_id, 25, 15, 15, 15),
-												gymname: data.gymname,
-												teamname: data.teamname,
-												description: data.description,
 												move1: data.quick_move,
 												move2: data.charge_move,
-												level: data.level,
-												ex: data.ex,
+												move1emoji: data.move1emoji,
+												move2emoji: data.move2emoji,
 												staticmap: data.staticmap,
 												detailsurl: data.url,
 												mapurl: data.mapurl,
-												applemap: data.applemap,
-												rocketmap: data.rocketmap,
 												imgurl: data.imgurl.toLowerCase(),
 												gif: pokemonGif(Number(data.pokemon_id)),
 												color: data.color,
@@ -231,13 +230,16 @@ class Raid extends Controller {
 												pokemoji: emojiData.pokemon[data.pokemon_id],
 												areas: data.matched.join(', '),
 
-											}
+											})
 
 											const template = JSON.stringify(dts.raid[`${cares.template}`])
 											let message = mustache.render(template, view)
 											message = JSON.parse(message)
 
 											const work = {
+												lat: data.latitude.toString().substring(0, 8),
+												lon: data.longitude.toString().substring(0, 8),
+												sticker: data.sticker.toLowerCase(),
 												message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 												target: cares.id,
 												name: cares.name,
@@ -270,7 +272,8 @@ class Raid extends Controller {
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
-				data.imgurl = `https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/app/util/images/egg${data.level}.png`
+				data.imgurl = `${config.general.imgurl}egg${data.level}.png`
+				data.sticker = `${config.telegram.stickerurl}egg${data.level}.webp`
 				if (!data.team_id) data.team_id = 0
 				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? teamData[data.team_id].color : 7915600
@@ -315,7 +318,7 @@ class Raid extends Controller {
 										})
 										whoCares.forEach((cares) => {
 											const caresCache = this.getDiscordCache(cares.id)
-											const view = {
+											const view = _.extend(data, {
 												time: data.hatchtime,
 												tthh: data.tth.hours,
 												tthm: data.tth.minutes,
@@ -348,13 +351,16 @@ class Raid extends Controller {
 												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
 												areas: data.matched.join(', '),
-											}
+											})
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`])
 											let message = mustache.render(template, view)
 											message = JSON.parse(message)
 
 											const work = {
+												lat: data.latitude.toString().substring(0, 8),
+												lon: data.longitude.toString().substring(0, 8),
+												sticker: data.sticker.toLowerCase(),
 												message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 												target: cares.id,
 												name: cares.name,

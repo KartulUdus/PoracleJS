@@ -130,6 +130,10 @@ class Monster extends Controller {
 			if (data.form === undefined || data.form === null) data.form = 0
 			if (data.form) data.formname = formData[data.pokemon_id] ? formData[data.pokemon_id][data.form] : ''
 			if (!data.weather) data.weather = 0
+			data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type ? types[moveData[data.move_1].type].emoji : ''
+			data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type ? types[moveData[data.move_2].type].emoji : ''
+			data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type && emojiData.type && emojiData.type[moveData[data.move_1].type] ? emojiData.type[moveData[data.move_1].type] : data.move1emoji
+			data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type && emojiData.type && emojiData.type[moveData[data.move_2].type] ? emojiData.type[moveData[data.move_2].type] : data.move2emoji
 			data.boost = weatherData[data.weather].name ? weatherData[data.weather].name : ''
 			data.boostemoji = emojiData.weather[data.weather]
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
@@ -140,6 +144,7 @@ class Monster extends Controller {
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 			data.gif = pokemonGif(Number(data.pokemon_id))
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+			data.sticker = `${config.telegram.stickerurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			const e = []
 			monsterData[data.pokemon_id].types.forEach((type) => {
 				e.push(emojiData.type[type])
@@ -185,7 +190,7 @@ class Monster extends Controller {
 							})
 
 							const caresCache = this.getDiscordCache(cares.id)
-							const view = {
+							const view = _.extend(data, {
 								id: data.pokemon_id,
 								time: data.distime,
 								tthh: data.tth.hours,
@@ -194,27 +199,16 @@ class Monster extends Controller {
 								confirmedTime: data.disappear_time_verified,
 								name: data.name,
 								now: new Date(),
-								gender: genderData[data.gender],
+								gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
 								move1: data.quick_move,
 								move2: data.charge_move,
-								iv: data.iv,
-								cp: data.cp,
+								move1emoji: data.move1emoji,
+								move2emoji: data.move2emoji,
 								level: Math.round(data.pokemon_level),
 								atk: data.individual_attack,
 								def: data.individual_defense,
 								sta: data.individual_stamina,
-								weight: data.weight,
-								staticmap: data.staticmap,
-								mapurl: data.mapurl,
-								applemap: data.applemap,
-								rocketmap: data.rocketmap,
-								form: data.formname,
 								imgurl: data.imgurl.toLowerCase(),
-								gif: data.gif,
-								color: data.color,
-								ivcolor: data.ivcolor,
-								boost: data.boost,
-								boostemoji: data.boostemoji,
 								pokemoji: emojiData.pokemon[data.pokemon_id],
 								areas: data.matched.join(', '),
 
@@ -232,9 +226,7 @@ class Monster extends Controller {
 								stateCode: geoResult.stateCode,
 								flagemoji: geoResult.flag,
 								neighbourhood: geoResult.neighbourhood,
-								emojiString: data.emojiString,
-
-							}
+							})
 							const monsterDts = data.iv === -1 && this.mdts.monsterNoIv
 								? this.mdts.monsterNoIv[`${cares.template}`]
 								: this.mdts.monster[`${cares.template}`]
@@ -245,6 +237,7 @@ class Monster extends Controller {
 							const work = {
 								lat: data.latitude.toString().substring(0, 8),
 								lon: data.longitude.toString().substring(0, 8),
+								sticker: data.sticker.toLowerCase(),
 								message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 								target: cares.id,
 								name: cares.name,

@@ -1,3 +1,5 @@
+/* eslint class-methods-use-this: ["error", { "exceptMethods": ["getGeocoder"] }] */
+
 const log = require('../logger')
 const config = require('config')
 const inside = require('point-in-polygon')
@@ -25,25 +27,6 @@ const discordcache = new Cache({
 discordcache.on('put', (key, val, ttl) => { })
 discordcache.on('hit', (key, val) => { })
 
-// Init the chosen geocoder
-const geocoder = (() => {
-	switch (config.geocoding.provider.toLowerCase()) {
-		case 'osm': {
-			return NodeGeocoder({
-				provider: 'openstreetmap',
-				formatterPattern: config.locale.addressformat,
-			})
-		}
-		case 'google': {
-			return NodeGeocoder({
-				provider: 'google',
-				httpAdapter: 'https',
-				apiKey: _.sample(config.geocoding.geocodingkey),
-			})
-		}
-		default:
-	}
-})()
 // setup geocoding cache
 
 const addrCache = pcache({
@@ -60,7 +43,6 @@ class Controller {
 		this.qdts = questDts
 		this.mdts = messageDts
 		this.ivColorData = ivColorData
-		this.geocoder = geocoder
 		this.geofence = geofence
 		this.cpMultipliers = cpMultipliers
 		this.webshot = webshot
@@ -73,15 +55,34 @@ class Controller {
 	// Geocoding stuff below
 
 
+	getGeocoder() {
+		switch (config.geocoding.provider.toLowerCase()) {
+			case 'google': {
+				return NodeGeocoder({
+					provider: 'google',
+					httpAdapter: 'https',
+					apiKey: _.sample(config.geocoding.geocodingKey),
+				})
+			}
+			default:
+			{
+				return NodeGeocoder({
+					provider: 'openstreetmap',
+					formatterPattern: config.locale.addressformat,
+				})
+			}
+		}
+	}
+
 	async geolocate(locationString) {
-		return new Promise((resolve) => {
-			this.geocoder.geocode(locationString)
+		return new Promise((resolve, reject) => {
+			this.getGeocoder().geocode(locationString)
 				.then((result) => {
 					resolve(result)
 					log.log({ level: 'debug', message: `geolocate ${locationString}`, event: 'geo:geolocate' })
 				})
 				.catch((err) => {
-					log.error(`Geolocate failed with error: ${err}`)
+					reject(log.error(`Geolocate failed with error: ${err}`))
 				})
 		})
 	}
@@ -93,7 +94,7 @@ class Controller {
 			addrCache.get(cacheKey, (err, addr) => {
 				if (err) log.error(err)
 				if (!addr) {
-					this.geocoder.reverse(locationObject)
+					this.getGeocoder().reverse(locationObject)
 						.then((geocodeResult) => {
 							res.addr = config.locale.addressformat
 								.replace(/%n/, geocodeResult[0].streetNumber || '')
@@ -121,7 +122,7 @@ class Controller {
 									if (error) log.error(`Error saving addr of ${cacheKey}: ${error}`)
 								})
 							}
-							log.log({ level: 'debug', message: `getAddress ${locationObject.latitude}, ${locationObject.longitude}`, event: 'geo:getAddress' })
+							log.log({ level: 'debug', message: `getAddress ${locationObject.lat}, ${locationObject.lon}`, event: 'geo:getAddress' })
 							resolve(res)
 						})
 						.catch((err) => {
@@ -129,7 +130,7 @@ class Controller {
 						})
 				}
 				else {
-					log.log({ level: 'debug', message: `getAddress ${locationObject.latitude}, ${locationObject.longitude}`, event: 'geo:getAddress' })
+					log.log({ level: 'debug', message: `getAddress ${locationObject.lat}, ${locationObject.lon}`, event: 'geo:getAddress' })
 					resolve(addr)
 				}
 			})
@@ -191,11 +192,11 @@ class Controller {
 
 
 	async updateLocation(table, lat, lon, col, value) {
-		return new Promise((resolve) => {
+		return new Promise((resolve, reject) => {
 			this.db.query('UPDATE ?? set latitude = ?, longitude = ? where ?? = ?', [table, lat, lon, col, value])
 				.then(log.log({ level: 'debug', message: 'updateLocation query', event: 'sql:updateLocation' }))
 				.catch((err) => {
-					log.error(`updateLocation errored with: ${err}`)
+					reject(log.error(`updateLocation errored with: ${err}`))
 				})
 		})
 	}
@@ -336,6 +337,19 @@ class Controller {
 				})
 				.catch((err) => {
 					reject(log.error(`selectAllQuery errored with: ${err}`))
+				})
+		})
+	}
+
+	async selectAllInQuery(table, column, values) {
+		return new Promise((resolve, reject) => {
+			this.db.query('SELECT * FROM ?? WHERE ?? IN (?)', [table, column, values])
+				.then((result) => {
+					log.log({ level: 'debug', message: `selectAllInQuery ${table}`, event: 'sql:selectAllInQuery' })
+					resolve(result[0])
+				})
+				.catch((err) => {
+					reject(log.error(`selectAllInQuery errored with: ${err}`))
 				})
 		})
 	}

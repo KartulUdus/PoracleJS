@@ -1,6 +1,12 @@
-# Discord Commands
+# Commands
 
-You may notice, PoracleJS will react to valid commands with either: 
+Depending if you're using Discord or Telegram, your command prefix will be `PREFIX` (config.discord.prefix)
+, but **always** `/` for Telegram.  
+
+
+
+PoracleJS will react or reply to valid commands with either: 
+
 
 * ✅ - Command successful
 * 👌 - Already done
@@ -114,7 +120,7 @@ Available filters:
 | --------- |:------------------------------:| -----------:|
 ||`!raid snorlax`| No filters, snorlax raids within your tracked area|
 |d|`!raid snorlax d1000`| Tracks snorlax raids within a kilometer|
-|park|`!raid park level5 d1000`| Tracks all level 5 raids in an ex eligible gym within a kilometer, can only be used with no monsters in the command|
+|ex|`!raid ex level5 d1000`| Tracks all level 5 raids in an ex eligible gym within a kilometer, can only be used with no monsters in the command|
 |level|`!raid level5 d1000`| Tracks all level 5 raids within a kilometer, can only be used with no monsters in the command|
 |instinct|`!raid zapdos instinct`| Tracks zapdos raids where controlling team is Instinct|
 |mystic|`!raid articuno mystic`| Tracks articuno raids where controlling team is mystic|
@@ -137,7 +143,7 @@ Available filters:
 | --------- |:------------------------------:| -----------:|
 ||`!egg level5`| No filters, level 5 eggs within your tracked area|
 |d|`!egg level4 d1000`| Tracks level 4 eggs within a kilometer|
-|park|`!egg level4 park d1000`| Tracks level 4 eggs in an ex eligible gym within a kilometer|
+|ex|`!egg level4 ex d1000`| Tracks level 4 eggs in an ex eligible gym within a kilometer|
 |instinct|`!egg level3  instinct`| Tracks level 3 eggs where controlling team is Instinct|
 |mystic|`!egg level2 mystic`| Tracks level 2 eggs where controlling team is mystic|
 |valor|`!egg level1 valor`| Tracks level 1 eggs controlling team is valor|
@@ -191,15 +197,15 @@ example:
 
 `!channel remove` Command to remove current text channel and all of its trackings.
 
-###### !webhook add
+###### !webhook add (Discord only)
 
 `!webhook add https://discordapp.com/api/webhooks/533935953597076/J5t8S43hi5fbg-eBVuJDhD2RX_FMSUl` Command to add webhook to receive alarms.  
 
-###### !webhook remove
+###### !webhook remove (Discord only)
 
 `!webhook remove https://discordapp.com/api/webhooks/533935953597076/J5t8S43hi5fbg-eBVuJDhD2RX_FMSUl` Command to remove webhook and all of its trackings.  
 
-###### !webhook list
+###### !webhook list (Discord only)
 
 `!webhook list` show currently registered webhooks
 
@@ -210,3 +216,7 @@ example:
 ###### !backup 
 
 `!backup potato` Creates a backup of your current DM or Channel filters and creates a backup called `potato` for anyone to use
+
+###### !adminid
+
+`!adminid @mod1 @mod2` Shows your user.id that can be used as configured admin. On Discord, this command can target extra users, on Telegram it returns just your id

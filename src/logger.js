@@ -8,7 +8,7 @@ const file = new winston.transports.File({
 		winston.format.json(),
 		winston.format.errors({ stack: true }),
 	),
-	maxsize: 25000000,
+	maxsize: config.general.logSize * 1000000,
 	tailable: true,
 	handleExceptions: true,
 	maxFiles: 1,

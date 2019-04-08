@@ -9,7 +9,7 @@ exports.run = (client, msg, args) => {
 		})
 	}
 	if (_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name }
-	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex), name: `Webhook-${_.random(99999)}` }
+	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
 
 	client.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
@@ -30,11 +30,11 @@ exports.run = (client, msg, args) => {
 			}
 			if (isregistered) {
 				client.query.geolocate(search).then((location) => {
-					client.query.updateLocation('humans', location[0].latitude, location[0].longitude, 'id', target.id)
+					client.query.updateLocation('humans', location[0].latitude, location[0].longitude, 'id', target.id).catch((O_o) => {})
 					const maplink = `https://www.google.com/maps/search/?api=1&query=${location[0].latitude},${location[0].longitude}`
 					msg.reply(`:wave:, I set ${target.name}s location to : \n${maplink}`)
 					msg.react('✅')
-				})
+				}).catch((O_o) => {})
 			}
 		})
 		.catch((err) => {

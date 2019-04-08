@@ -11,10 +11,10 @@
 
   "general": {
     "logLevel": "info",
+    "logSize": 25,
     "host": "127.0.0.1",
     "port": "3030",
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/util/images/",
-    "webroot": "/",
     "max_pokemon": 500,
     "monsterMinimumTimeTillHidden": 60
   },
@@ -40,6 +40,7 @@
   },
 
   "discord": {
+    "enabled": true,
     "token": [],
     "channel": "general",
     "userRole": "roleNameHere",
@@ -76,6 +77,16 @@
     "unregister": "",
     "untrack": "",
     "version": "",
-    "webhook": ""
+    "webhook": "",
+    "adminid": ""
+  },
+  "telegram": {
+    "enabled": false,
+    "images": true,
+    "location": true,
+    "stickerurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/develop/src/util/images/telegram/",
+    "token": [""],
+    "admins": [""],
+    "channel": "PoracleJsTest"
   }
 }

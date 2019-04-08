@@ -14,7 +14,13 @@
    git clone https://github.com/KartulUdus/PoracleJS.git
    ```
 
-2. Create a [discord bot](discordbot.md), add it to your server and take note of your token for later
+2.  
+    a. Create a [discord bot](discordbot.md), add it to your server and take note of your token for later.  
+    
+    or  
+   
+    b. Create a [Telegram bot](telegrambot.md), create a group and add the bot to it and note your token for later.
+
 
 
 3. Edit the config file (`cp .env.example .env && vim .env`) and fill out Database and Discord bot
@@ -31,5 +37,5 @@
     ```
 
 7. That's it, now proceed to  
-[Enter some discord commands](commands.md).
+[Enter some commands](commands.md).
         

@@ -101,11 +101,16 @@ class Quest extends Controller {
 				data.imgurl = data.rewardData.monsters[1] ?
 					`${config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
 					: 'saflkansd'
+				data.sticker = data.rewardData.monsters[1] ?
+					`${config.telegram.stickerurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
+					: 'saflkansd'
 				if (data.rewardData.items[1]) {
 					data.imgurl = `${config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
+					data.sticker = `${config.telegram.stickerurl}rewards/reward_${data.rewardData.items[1]}_1.webp`
 				}
 				if (data.dustAmount) {
 					data.imgurl = `${config.general.imgurl}rewards/reward_stardust.png`
+					data.sticker = `${config.telegram.stickerurl}rewards/reward_stardust.webp`
 					data.dustAmount = data.rewards[0].info.amount
 				}
 
@@ -128,7 +133,7 @@ class Quest extends Controller {
 					if (data.rewardData.items[1]) data.rewardemoji = emojiData.items[data.rewardData.items[1]]
 					if (data.rewardData.monsters[1]) data.rewardemoji = emojiData.pokemon[data.rewardData.monsters[1]]
 					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
-						const view = {
+						const view = _.extend(data, {
 							now: new Date(),
 							questType: data.questType,
 							reward: data.rewardData.rewardstring.replace(/\n/g, ' '),
@@ -144,7 +149,6 @@ class Quest extends Controller {
 							maxCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 15, 15, 15) : '',
 							mapurl: `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`,
 							applemap: `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`,
-							staticmap: data.staticmap,
 							// geocode stuff
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
@@ -161,7 +165,7 @@ class Quest extends Controller {
 							flagemoji: geoResult.flag,
 							areas: data.matched.join(', '),
 
-						}
+						})
 
 						whoCares.forEach((cares) => {
 							const alarmId = this.uuid
@@ -173,6 +177,9 @@ class Quest extends Controller {
 							const template = JSON.stringify(this.mdts.quest[cares.template])
 							const message = mustache.render(template, view)
 							const work = {
+								lat: data.latitude.toString().substring(0, 8),
+								lon: data.longitude.toString().substring(0, 8),
+								sticker: data.sticker.toLowerCase(),
 								message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : JSON.parse(message),
 								target: cares.id,
 								name: cares.name,

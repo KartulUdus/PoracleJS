@@ -81,9 +81,11 @@ Any of the fields can be customized with the following:
 |{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{move1}}| Monsers quick move|
 |{{move2}}| Monsters charge move|
+|{{move1emoji}}| Monsers quick move type emoji|
+|{{move2emoji}}| Monsters charge move type emoji|
 |{{iv}}| Monsters Individual Value Precentage|
 |{{cp}}| Monsters CP|
-|{{gender}}| Monsters gender|
+|{{gendername}}| Monsters gender|
 |{{weight}}| Monsters weight|
 |{{level}}| Monsters level|
 |{{atk}}| Monsters attack|
@@ -93,7 +95,7 @@ Any of the fields can be customized with the following:
 |{{{staticmap}}}| Static link to map|
 |{{{mapurl}}}|Link to google maps search of the location|
 |{{{imgurl}}}| Link to monsters picture|
-|{{form}}| Monsters form|
+|{{formname}}| Monsters form|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ivcolor}}| Color to be used for embed (Color of monsters perfection based on config.discord.iv_colors)|
 |{{boost}}| Monsters weather boost name|
@@ -146,6 +148,8 @@ Any of the fields can be customized with the following:
 |{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{move1}}| Monsters quick move|
 |{{move2}}| Monsters charge move|
+|{{move1emoji}}| Monsters quick move type emoji|
+|{{move2emoji}}| Monsters charge move type emoji|
 |{{cp}}| Raid boss cp|
 |{{cp20}}| Monsters cp with 100% perfect IV and level 20|
 |{{cp25}}| Monsters cp with 100% perfect IV and level 25|

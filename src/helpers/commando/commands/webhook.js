@@ -3,7 +3,7 @@ const _ = require('lodash')
 exports.run = (client, msg, args) => {
 
 	if (_.includes(client.config.discord.admins, msg.author.id)) {
-		const target = { id: msg.content.match(client.hookRegex), name: `Webhook-${_.random(99999)}` }
+		const target = { id: msg.content.match(client.hookRegex) ? msg.content.match(client.hookRegex)[0] : '', name: `Webhook-${_.random(99999)}` }
 		switch (args[0]) {
 			case 'add': {
 				if (msg.content.match(client.hookRegex)) {

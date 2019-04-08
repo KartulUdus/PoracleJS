@@ -4,8 +4,8 @@ const path = require('path')
 const config = require('config')
 
 module.exports = () => {
-	if (!config.discord.token) {
-		log.error(`DISCORD_TOKEN variable missing, please update/create ${path.join(__dirname, '../../.env')} \nSee example in ${path.join(__dirname, '../../.env.example')}`)
+	if ((config.discord.enabled && !config.discord.token.length) || (config.telegram.enabled && !config.telegram.token.length)) {
+		log.error(`DISCORD_TOKEN or TLG_TOKEN variable missing or not enabled, please update/create ${path.join(__dirname, '../../.env')} \nSee example in ${path.join(__dirname, '../../.env.example')}`)
 		process.exit()
 	}
 	if (!fs.existsSync(path.join(__dirname, '../../config/questdts.json'))) {

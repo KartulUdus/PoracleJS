@@ -41,7 +41,7 @@ fastify
 const start = async () => {
 	try {
 		await migrator()
-		cp.fork(`${__dirname}/helpers/commando.js`)
+		if (config.discord.enabled) cp.fork(`${__dirname}/helpers/discordCommando.js`)
 		await fastify.listen(config.general.port, config.general.host)
 		log.info(`Poracle started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 	}

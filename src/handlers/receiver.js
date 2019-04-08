@@ -3,6 +3,7 @@ const _ = require('lodash')
 const config = require('config')
 const mysql = require('mysql2/promise')
 const discord = require('cluster')
+const telegram = require('cluster')
 const uuid = require('uuid/v4')
 
 const db = mysql.createPool(config.db)
@@ -14,7 +15,8 @@ const discordcache = new Cache({
 discordcache.on('put', (key, val, ttl) => { })
 discordcache.on('hit', (key, val) => { })
 
-const queue = []
+const discordQueue = []
+const telegramQueue = []
 
 const cache = new Cache({
 	ttl: 61 * 60 * 1000,
@@ -28,33 +30,57 @@ const monsterController = new MonsterController(db)
 const raidController = new RaidController(db)
 const questController = new QuestController(db)
 
-// check how long the queue is every minute. ideally empty
+// check how long the Queue is every minute. ideally empty
 setInterval(() => {
 	log.log({
-		level: 'debug', message: `Job queue is ${queue.length} items long`, queue: queue.length, event: 'queue',
+		level: 'debug', message: `Job queue is ${discordQueue.length + telegramQueue.length} items long (D${discordQueue.length}T${telegramQueue.length})`, Queue: telegramQueue.length + discordQueue.length, event: 'queue',
 	})
 }, 60000)
+if (config.discord.enabled) {
+	discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
+	_.forEach(config.discord.token, (discoK) => {
+		discord.fork({ discoK })
+	})
 
-discord.setupMaster({ exec: `${__dirname}/../helpers/discord.js` })
-_.forEach(config.discord.token, (k) => {
-	discord.fork({ k })
-})
 
-
-discord.on('message', (worker, msg) => {
-	if (msg.reason === 'seppuku') {
-		log.log({ level: 'warn', message: `Discord worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 10)}...` })
-		discord.fork({ k: msg.key })
-	}
-	else if (msg.reason === 'hungry') {
-		if (queue.length) {
-			worker.send({
-				reason: 'food',
-				job: queue.shift(),
-			})
+	discord.on('message', (worker, msg) => {
+		if (msg.reason === 'seppuku') {
+			log.log({ level: 'warn', message: `Discord worker #${worker.id} died, cloning new with key:${msg.key.substr(0, 10)}...` })
+			discord.fork({ discoK: msg.key })
 		}
-	}
-})
+		else if (msg.reason === 'hungry') {
+			if (discordQueue.length) {
+				worker.send({
+					reason: 'food',
+					job: discordQueue.shift(),
+				})
+			}
+		}
+	})
+}
+
+if (config.telegram.enabled) {
+	const tlgk = config.telegram.token
+	tlgk.shift()
+	telegram.setupMaster({ exec: `${__dirname}/../helpers/telegram.js` })
+	telegram.fork()
+
+	telegram.on('exit', () => {
+		telegram.fork()
+	})
+
+	telegram.on('message', (worker, msg) => {
+		if (msg.reason === 'hungary') {
+			if (telegramQueue.length) {
+				worker.send({
+					reason: 'food',
+					job: telegramQueue.shift(),
+				})
+			}
+		}
+	})
+}
+
 
 module.exports = async (req, reply) => {
 	let data = req.body
@@ -73,7 +99,8 @@ module.exports = async (req, reply) => {
 					cache.put(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, 'cached')
 					monsterController.handle(hook.message).then((work) => {
 						work.forEach((job) => {
-							queue.push(job)
+							if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
+							if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
 							monsterController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 						})
 						log.log({
@@ -94,7 +121,8 @@ module.exports = async (req, reply) => {
 					raidController.handle(hook.message)
 						.then((work) => {
 							work.forEach((job) => {
-								queue.push(job)
+								if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
+								if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
 								raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 							})
 						})
@@ -135,7 +163,8 @@ module.exports = async (req, reply) => {
 				const q = hook.message
 				questController.handle(q).then((work) => {
 					work.forEach((job) => {
-						queue.push(job)
+						if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
+						if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
 						raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 					})
 				})
