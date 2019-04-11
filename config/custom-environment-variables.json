@@ -38,7 +38,7 @@
     "timeformat": "TIME_FORMAT",
     "time": "TIME_STRING",
     "addressformat": "ADDR_FORMAT",
-    "language": "LANGUAGE"
+    "language": "PORACLE_LANGUAGE"
   },
 
   "geocoding": {

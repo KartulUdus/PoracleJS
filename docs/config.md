@@ -58,7 +58,7 @@ MIN_TTH=
 TIME_FORMAT=             # default: en-gb
 TIME_STRING=             # default: LTS
 ADDR_FORMAT=             # default: %S %n
-LANGUAGE=                # one of ['en', 'de', 'fr', 'ja', 'ko', 'ru']
+PORACLE_LANGUAGE=                # one of ['en', 'de', 'fr', 'ja', 'ko', 'ru']
   ```
   | Option        | Value         | 
   | ------------- |:-------------:| 
