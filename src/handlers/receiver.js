@@ -83,6 +83,17 @@ if (config.telegram.enabled) {
 
 
 module.exports = async (req, reply) => {
+	if (config.general.ipWhitelist.length && !_.includes(config.general.ipWhitelist, req.raw.ip)) {
+		log.warn(`Rejecting request from ${req.raw.ip} as it is not in the whitelist`)
+		reply.send({ webserver: 'happy' })
+		return
+
+	}
+	if (config.general.ipBlacklist.length && _.includes(config.general.ipBlacklist, req.raw.ip)) {
+		log.warn(`Rejecting request from ${req.raw.ip} as it is in the Blacklist`)
+		reply.send({ webserver: 'happy' })
+		return
+	}
 	let data = req.body
 	const correlationId = uuid()
 	if (!Array.isArray(data)) data = [data]
