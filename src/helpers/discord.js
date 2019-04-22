@@ -69,7 +69,7 @@ client.on('ready', () => {
 					})
 			}
 			else if (msg.job.target.match(hookRegex)) {
-				msg.job.message.embeds = [msg.job.message.embed]
+				if (msg.job.message.embed) msg.job.message.embeds = [msg.job.message.embed]
 				axios({
 					method: 'post',
 					url: msg.job.target,
