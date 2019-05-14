@@ -116,6 +116,12 @@ exports.run = (client, msg) => {
 					})
 				})
 				if (!remove) {
+					if (!questTracks.length) {
+						msg.reply('404, No valid quest tracks found').catch((O_o) => {
+							client.log.error(O_o.message)
+						})
+						return
+					}
 					const insertData = questTracks.map(t => [t.id, t.reward, t.template, t.reward_type, t.distance, t.mustShiny])
 					client.query.insertOrUpdateQuery(
 						'quest',

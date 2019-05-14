@@ -41,6 +41,8 @@ PORT=
 IMGURL=
 MAX_POKEMON=
 MIN_TTH=
+IP_WHITELIST=
+IP_BLACKLIST=
   ```
   
   | Option        | Value         | 
@@ -52,13 +54,15 @@ MIN_TTH=
   |imgurl | Source of monster icons. Trailing slash is important. [see originals](https://github.com/KartulUdus/PoracleJS/tree/master/src/app/util/images) |
   | max_pokemon | Biggest released pokemon_id. Needed for tracking batch tracking of mainimum/maximum IV.|
   | monsterMinimumTimeTillHidden | Minimum amount of seconds for an alert to trigger|
+  | ipWhitelist | List of allowed IP's to send POST webhooks. defaults to everything []|
+  | ipBlacklist | List of blocked IP's to send POST webhooks. defaults to nothing []|
 
 ##### Locale settings
   ```json
 TIME_FORMAT=             # default: en-gb
 TIME_STRING=             # default: LTS
 ADDR_FORMAT=             # default: %S %n
-LANGUAGE=                # one of ['en', 'de', 'fr', 'ja', 'ko', 'ru']
+PORACLE_LANGUAGE=                # one of ['en', 'de', 'fr', 'ja', 'ko', 'ru']
   ```
   | Option        | Value         | 
   | ------------- |:-------------:| 

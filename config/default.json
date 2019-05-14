@@ -16,7 +16,9 @@
     "port": "3030",
     "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/util/images/",
     "max_pokemon": 500,
-    "monsterMinimumTimeTillHidden": 60
+    "monsterMinimumTimeTillHidden": 60,
+    "ipWhitelist": [],
+    "ipBlacklist": []
   },
 
   "locale": {

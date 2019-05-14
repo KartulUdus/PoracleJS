@@ -130,6 +130,7 @@ class Raid extends Controller {
 				data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 				if (!data.form) data.form = 0
 				if (!data.team_id) data.team_id = 0
+				if (data.name) data.gym_name = data.name
 				data.name = monsterData[data.pokemon_id] ? monsterData[data.pokemon_id].name : 'errormon'
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 				data.sticker = `${config.telegram.stickerurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
@@ -275,6 +276,7 @@ class Raid extends Controller {
 				data.imgurl = `${config.general.imgurl}egg${data.level}.png`
 				data.sticker = `${config.telegram.stickerurl}egg${data.level}.webp`
 				if (!data.team_id) data.team_id = 0
+				if (data.name) data.gym_name = data.name
 				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 				this.selectOneQuery('gym-info', 'id', data.gym_id)

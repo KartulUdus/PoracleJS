@@ -31,14 +31,23 @@
     "monsterMinimumTimeTillHidden": {
       "__name": "MIN_TTH",
       "__format": "json"
+    },
+    "ipWhitelist": {
+      "__name": "IP_WHITELIST",
+      "__format": "json"
+    },
+    "ipBlacklist": {
+      "__name": "IP_BLACKLIST",
+      "__format": "json"
     }
+
   },
 
   "locale": {
     "timeformat": "TIME_FORMAT",
     "time": "TIME_STRING",
     "addressformat": "ADDR_FORMAT",
-    "language": "LANGUAGE"
+    "language": "PORACLE_LANGUAGE"
   },
 
   "geocoding": {
