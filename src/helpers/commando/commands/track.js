@@ -17,8 +17,11 @@ exports.run = (client, msg, args) => {
 		})
 	}
 	if (_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name }
-	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
-	client.query.countQuery('id', 'humans', 'id', target.id)
+
+	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
+		target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
+		msg.content = msg.content.replace(client.hookRegex, '')
+	} 	client.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
 			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
 				return msg.reply(`${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}webhook add <YourWebhook>`).catch((O_o) => {

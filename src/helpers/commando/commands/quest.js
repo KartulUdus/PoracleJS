@@ -19,8 +19,11 @@ exports.run = (client, msg) => {
 		})
 	}
 	if (_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name }
-	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
 
+	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
+		target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
+		msg.content = msg.content.replace(client.hookRegex, '')
+	}
 	client.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
 			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
