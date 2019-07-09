@@ -17,11 +17,14 @@ exports.run = (client, msg, args) => {
 		})
 	}
 	if (_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name }
-	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
-	client.query.countQuery('id', 'humans', 'id', target.id)
+
+	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
+		target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
+		msg.content = msg.content.replace(client.hookRegex, '')
+	} 	client.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
 			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
-				return msg.reply(`${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}webhook add <YourWebhook>`).catch((O_o) => {
+				return msg.reply(`${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'}  add <YourWebhook>`).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 			}
@@ -29,7 +32,7 @@ exports.run = (client, msg, args) => {
 				return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {})
 			}
 			if (!isregistered && msg.channel.type === 'dm') {
-				return msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}poracle to #${client.config.discord.channel}`).catch((O_o) => {})
+				return msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}${client.config.commands.poracle ? client.config.commands.poracle : 'poracle'} to #${client.config.discord.channel}`).catch((O_o) => {})
 			}
 			if (isregistered) {
 
@@ -81,7 +84,7 @@ exports.run = (client, msg, args) => {
 					else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
 						const Type = element.replace(/\b\w/g, l => l.toUpperCase())
 						_.filter(monsterData, (o, k) => {
-							if (_.includes(o.types, Type) && k < config.general.max_pokemon) {
+							if (_.includes(o.types, Type) && k < client.config.general.max_pokemon) {
 								if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
 							} return k
 						})

@@ -34,9 +34,9 @@ class Monster extends Controller {
 
 	async monsterWhoCares(data) {
 		return new Promise((resolve) => {
-			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
+			let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%${area}%' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 			})
 			const query = `
 			select humans.id, humans.name, monsters.template from monsters 
@@ -210,7 +210,7 @@ class Monster extends Controller {
 								sta: data.individual_stamina,
 								imgurl: data.imgurl.toLowerCase(),
 								pokemoji: emojiData.pokemon[data.pokemon_id],
-								areas: data.matched.join(', '),
+								areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
 
 								// geocode stuff
 								lat: data.latitude.toString().substring(0, 8),
