@@ -25,7 +25,7 @@ class Quest extends Controller {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%${area}%' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
 			})
 			const query = `
 			select humans.id, humans.name, quest.template from quest
@@ -163,7 +163,7 @@ class Quest extends Controller {
 							stateCode: geoResult.stateCode,
 							neighbourhood: geoResult.neighbourhood,
 							flagemoji: geoResult.flag,
-							areas: data.matched.join(', '),
+							areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
 
 						})
 

@@ -38,7 +38,7 @@ class Raid extends Controller {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%${area}%' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
 			})
 			const query = `
 			select humans.id, humans.name, raid.template from raid 
@@ -72,7 +72,7 @@ class Raid extends Controller {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%${area}%' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
 			})
 			const query = `
 			select humans.id, humans.name, egg.template from egg 
@@ -229,7 +229,7 @@ class Raid extends Controller {
 												flagemoji: geoResult.flag,
 												emojistring: data.emojistring,
 												pokemoji: emojiData.pokemon[data.pokemon_id],
-												areas: data.matched.join(', '),
+												areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
 
 											})
 
@@ -352,7 +352,7 @@ class Raid extends Controller {
 												stateCode: geoResult.stateCode,
 												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
-												areas: data.matched.join(', '),
+												areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
 											})
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`])

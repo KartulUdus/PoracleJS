@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const geofence = require('../../../../config/geofence.json')
 
-const confAreas = geofence.map(area => area.name.toLowerCase()).sort()
+const confAreas = geofence.map(area => area.name.toLowerCase().replace(' ', '_')).sort()
 
 
 exports.run = (client, msg, args) => {
@@ -38,10 +38,10 @@ exports.run = (client, msg, args) => {
 				switch (args[0]) {
 					case 'add': {
 						client.query.selectOneQuery('humans', 'id', target.id).then((human) => {
-							const oldArea = JSON.parse(human.area.split())
+							const oldArea = JSON.parse(human.area.split()).map(area => area.replace(' ', '_'))
 							const validAreas = confAreas.filter(x => args.includes(x))
 							const addAreas = validAreas.filter(x => !oldArea.includes(x))
-							const newAreas = oldArea.concat(addAreas)
+							const newAreas = oldArea.concat(addAreas).map(area => area.replace('_', ' '))
 							if (addAreas.length) client.query.updateQuery('humans', 'area', JSON.stringify(newAreas), 'id', target.id)
 							if (!validAreas.length) {
 								return msg.reply(`no valid areas there, please use one of ${confAreas}`).catch((O_o) => {
