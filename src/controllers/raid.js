@@ -21,6 +21,7 @@ const teamData = require('../util/teams')
 const types = require('../util/types')
 
 const moveData = require(moveDataPath)
+const formData = require('../util/forms')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
@@ -38,7 +39,7 @@ class Raid extends Controller {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%${area}%' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
 			})
 			const query = `
 			select humans.id, humans.name, raid.template from raid 
@@ -72,7 +73,7 @@ class Raid extends Controller {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%${area}%' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
 			})
 			const query = `
 			select humans.id, humans.name, egg.template from egg 
@@ -129,6 +130,7 @@ class Raid extends Controller {
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 				if (!data.form) data.form = 0
+				if (data.form) data.formname = formData[data.pokemon_id] ? formData[data.pokemon_id][data.form] : ''
 				if (!data.team_id) data.team_id = 0
 				if (data.name) data.gym_name = data.name
 				data.name = monsterData[data.pokemon_id] ? monsterData[data.pokemon_id].name : 'errormon'
@@ -229,7 +231,7 @@ class Raid extends Controller {
 												flagemoji: geoResult.flag,
 												emojistring: data.emojistring,
 												pokemoji: emojiData.pokemon[data.pokemon_id],
-												areas: data.matched.join(', '),
+												areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
 
 											})
 
@@ -352,7 +354,7 @@ class Raid extends Controller {
 												stateCode: geoResult.stateCode,
 												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
-												areas: data.matched.join(', '),
+												areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
 											})
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`])

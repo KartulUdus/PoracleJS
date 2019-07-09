@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const geofence = require('../../../../config/geofence.json')
 
-const confAreas = geofence.map(area => area.name.toLowerCase()).sort()
+const confAreas = geofence.map(area => area.name.toLowerCase().replace(' ', '_')).sort()
 
 
 exports.run = (client, msg, args) => {
@@ -12,22 +12,25 @@ exports.run = (client, msg, args) => {
 		})
 	}
 	if (_.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name }
-	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
 
+	if (_.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
+		target = { id: msg.content.match(client.hookRegex)[0], name: `Webhook-${_.random(99999)}` }
+		msg.content = msg.content.replace(client.hookRegex, '')
+	}
 	client.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
 			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.content.match(client.hookRegex)) {
-				return msg.reply(`${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}webhook add <YourWebhook>`).catch((O_o) => {
+				return msg.reply(`${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'}  add <YourWebhook>`).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 			}
 			if (!isregistered && _.includes(client.config.discord.admins, msg.author.id) && msg.channel.type === 'text') {
-				return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {
+				return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}${client.config.discord.prefix}${client.config.commands.channel ? client.config.commands.channel : 'channel'} add`).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 			}
 			if (!isregistered && msg.channel.type === 'dm') {
-				return msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}poracle to #${client.config.discord.channel}`).catch((O_o) => {
+				return msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}${client.config.commands.poracle ? client.config.commands.poracle : 'poracle'} to #${client.config.discord.channel}`).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 			}
@@ -35,10 +38,10 @@ exports.run = (client, msg, args) => {
 				switch (args[0]) {
 					case 'add': {
 						client.query.selectOneQuery('humans', 'id', target.id).then((human) => {
-							const oldArea = JSON.parse(human.area.split())
+							const oldArea = JSON.parse(human.area.split()).map(area => area.replace(' ', '_'))
 							const validAreas = confAreas.filter(x => args.includes(x))
 							const addAreas = validAreas.filter(x => !oldArea.includes(x))
-							const newAreas = oldArea.concat(addAreas)
+							const newAreas = oldArea.concat(addAreas).map(area => area.replace('_', ' '))
 							if (addAreas.length) client.query.updateQuery('humans', 'area', JSON.stringify(newAreas), 'id', target.id)
 							if (!validAreas.length) {
 								return msg.reply(`no valid areas there, please use one of ${confAreas}`).catch((O_o) => {
