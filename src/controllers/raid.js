@@ -39,20 +39,20 @@ class Raid extends Controller {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 			})
 			const query = `
-			select humans.id, humans.name, raid.template from raid 
+			select humans.id, humans.name, raid.template from raid
             join humans on humans.id = raid.id
             where humans.enabled = 1 and
-            (pokemon_id=${data.pokemon_id} or (pokemon_id=721 and raid.level=${data.level})) and 
-            (raid.team = ${data.team_id} or raid.team = 4) and 
+            (pokemon_id=${data.pokemon_id} or (pokemon_id=721 and raid.level=${data.level})) and
+            (raid.team = ${data.team_id} or raid.team = 4) and
             (raid.park = ${!!data.park} or raid.park = 0) and
 			(raid.form = ${data.form} or raid.form = 0) and
-            (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
-              * cos( radians( humans.latitude ) ) 
-              * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
-              + sin( radians(${data.latitude}) ) 
+            (round( 6371000 * acos( cos( radians(${data.latitude}) )
+              * cos( radians( humans.latitude ) )
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) )
+              + sin( radians(${data.latitude}) )
               * sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
                raid.distance = 0 and (${areastring}))
                group by humans.id, humans.name, raid.template`
@@ -71,21 +71,21 @@ class Raid extends Controller {
 
 	async eggWhoCares(data) {
 		return new Promise((resolve) => {
-			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
+			let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 			})
 			const query = `
-			select humans.id, humans.name, egg.template from egg 
+			select humans.id, humans.name, egg.template from egg
             join humans on humans.id = egg.id
-            where humans.enabled = 1 and 
+            where humans.enabled = 1 and
             (egg.park = ${!!data.park} or egg.park = 0) and
-            raid_level = ${data.level} and 
-            (egg.team = ${data.team_id} or egg.team = 4) and 
-            (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
-              * cos( radians( humans.latitude ) ) 
-              * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
-              + sin( radians(${data.latitude}) ) 
+            raid_level = ${data.level} and
+            (egg.team = ${data.team_id} or egg.team = 4) and
+            (round( 6371000 * acos( cos( radians(${data.latitude}) )
+              * cos( radians( humans.latitude ) )
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) )
+              + sin( radians(${data.latitude}) )
               * sin( radians( humans.latitude ) ) ) < egg.distance and egg.distance != 0) or
                egg.distance = 0 and (${areastring}))
 			group by humans.id, humans.name, egg.template`

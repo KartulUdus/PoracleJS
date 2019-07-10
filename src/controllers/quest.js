@@ -23,17 +23,17 @@ class Quest extends Controller {
 */
 	async questWhoCares(data) {
 		return new Promise((resolve) => {
-			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
+			let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 			data.matched.forEach((area) => {
-				areastring = areastring.concat(`or humans.area like '%"${area}%"' `)
+				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 			})
 			const query = `
 			select humans.id, humans.name, quest.template from quest
             join humans on humans.id = quest.id
             where humans.enabled = 1 and
-            ((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1 or reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0) 
-            or (reward_type = 2 and reward in (${data.rewardData.items})) 
-            or (reward_type = 3 and reward <= ${data.dustAmount})) 
+            ((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1 or reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0)
+            or (reward_type = 2 and reward in (${data.rewardData.items}))
+            or (reward_type = 3 and reward <= ${data.dustAmount}))
             and
             (round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
