@@ -37,7 +37,7 @@ class Raid extends Controller {
 */
 	async raidWhoCares(data) {
 		return new Promise((resolve) => {
-			let areastring = `humans.area like '%${data.matched[0] || 'doesntexist'}%' `
+			let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 			data.matched.forEach((area) => {
 				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 			})
@@ -56,7 +56,6 @@ class Raid extends Controller {
               * sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
                raid.distance = 0 and (${areastring}))
                group by humans.id, humans.name, raid.template`
-
 			log.log({ level: 'debug', message: 'raidWhoCares query', event: 'sql:raidWhoCares' })
 			this.db.query(query)
 				.then((result) => {
