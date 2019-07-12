@@ -231,7 +231,7 @@ class Raid extends Controller {
 												flagemoji: geoResult.flag,
 												emojistring: data.emojistring,
 												pokemoji: emojiData.pokemon[data.pokemon_id],
-												areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
+												areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 
 											})
 
@@ -354,7 +354,7 @@ class Raid extends Controller {
 												stateCode: geoResult.stateCode,
 												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
-												areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
+												areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 											})
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`])

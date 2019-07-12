@@ -39,10 +39,10 @@ class Monster extends Controller {
 				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 			})
 			const query = `
-			select humans.id, humans.name, monsters.template from monsters 
+			select humans.id, humans.name, monsters.template from monsters
             join humans on humans.id = monsters.id
             where humans.enabled = 1 and
-            pokemon_id=${data.pokemon_id} and 
+            pokemon_id=${data.pokemon_id} and
             min_iv<=${data.iv} and
             max_iv>=${data.iv} and
             min_cp<=${data.cp} and
@@ -59,10 +59,10 @@ class Monster extends Controller {
             maxSta>=${data.individual_stamina} and
             min_weight<=${data.weight} * 1000 and
             max_weight>=${data.weight} * 1000 and
-            (round( 6371000 * acos( cos( radians(${data.latitude}) ) 
-              * cos( radians( humans.latitude ) ) 
-              * cos( radians( humans.longitude ) - radians(${data.longitude}) ) 
-              + sin( radians(${data.latitude}) ) 
+            (round( 6371000 * acos( cos( radians(${data.latitude}) )
+              * cos( radians( humans.latitude ) )
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) )
+              + sin( radians(${data.latitude}) )
               * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
                monsters.distance = 0 and (${areastring}))
                group by humans.id, humans.name, monsters.template `
@@ -210,7 +210,7 @@ class Monster extends Controller {
 								sta: data.individual_stamina,
 								imgurl: data.imgurl.toLowerCase(),
 								pokemoji: emojiData.pokemon[data.pokemon_id],
-								areas: data.matched.map(area => area.replace("'", '').replace(' ', '-')).join(', '),
+								areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 
 								// geocode stuff
 								lat: data.latitude.toString().substring(0, 8),
