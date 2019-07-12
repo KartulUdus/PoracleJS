@@ -67,7 +67,7 @@ exports.run = (client, msg, args) => {
 					}
 					case 'remove': {
 						client.query.selectOneQuery('humans', 'id', target.id).then((human) => {
-							const oldArea = JSON.parse(human.area.split())
+							const oldArea = JSON.parse(human.area.split()).map(area => area.replace(/ /gi, '_'))
 							const validAreas = oldArea.filter(x => args.includes(x))
 							const removeAreas = validAreas.filter(x => oldArea.includes(x))
 							const newAreas = oldArea.filter(x => !removeAreas.includes(x))
