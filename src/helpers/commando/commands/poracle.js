@@ -1,4 +1,5 @@
 const emojiStrip = require('emoji-strip')
+const mustache = require('mustache')
 
 exports.run = (client, msg) => {
 	if (msg.channel.name !== client.config.discord.channel) {
@@ -17,7 +18,10 @@ exports.run = (client, msg) => {
 				msg.react('✅').catch((O_o) => {
 					client.log.error(O_o.message)
 				})
-				msg.author.send(client.dts.greeting).catch((O_o) => {
+				const view = { prefix: client.config.discord.prefix }
+				const template = JSON.stringify(client.dts.greeting)
+				const greeting = JSON.parse(mustache.render(template, view))
+				msg.author.send(greeting).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 				client.log.log({ level: 'debug', message: `${msg.author.tag} registered`, event: 'discord:registered' })

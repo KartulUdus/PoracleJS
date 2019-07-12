@@ -1,4 +1,5 @@
 const emojiStrip = require('emoji-strip')
+const mustache = require('mustache')
 
 module.exports = (client, oldMember, newMember) => {
 
@@ -16,7 +17,10 @@ module.exports = (client, oldMember, newMember) => {
 			.then((isregistered) => {
 				if (!isregistered) {
 					client.query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), '[]']])
-					oldMember.user.send(client.dts.greeting)
+					const view = { prefix: client.config.discord.prefix }
+					const template = JSON.stringify(client.dts.greeting)
+					const greeting = JSON.parse(mustache.render(template, view))
+					oldMember.user.send(greeting)
 					client.log.log({ level: 'debug', message: `registered ${oldMember.user.name} because ${client.config.discord.userRole} role removed`, event: 'discord:roleCheck' })
 
 				}

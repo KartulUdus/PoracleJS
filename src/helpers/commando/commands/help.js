@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const mustache = require('mustache')
 
 exports.run = (client, msg) => {
 	let target = { id: msg.author.id, name: msg.author.tag }
@@ -25,7 +26,10 @@ exports.run = (client, msg) => {
 				const message = client.dts.greeting
 				message.embed.title = ''
 				message.embed.description = ''
-				msg.reply(message).catch((O_o) => {
+				const view = { prefix: client.config.discord.prefix }
+				const template = JSON.stringify(message)
+				const greeting = JSON.parse(mustache.render(template, view))
+				msg.reply(greeting).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 			}
