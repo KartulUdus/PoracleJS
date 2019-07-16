@@ -1007,6 +1007,12 @@
 		"defense": 182,
 		"stamina": 214
 	},
+	"150_133": {
+		"name": "Armored Mewtwo",
+		"attack": 182,
+		"defense": 278,
+		"stamina": 214
+	},
 	"151": {
 		"name": "Mew",
 		"attack": 210,
@@ -4260,7 +4266,7 @@
 		"stamina": 200
 	},
 	"669": {
-		"name": "Flabébé",
+		"name": "Flabï¿½bï¿½",
 		"attack": 108,
 		"defense": 120,
 		"stamina": 127

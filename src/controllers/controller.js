@@ -379,12 +379,12 @@ class Controller {
 		})
 	}
 
-	getCp(monster, level, ivAttack, ivDefense, ivStamina) {
-
+	getCp(monster, form, level, ivAttack, ivDefense, ivStamina) {
+		let key = (form && (monster + '_' + form) in baseStats) ? (monster + '_' + form) : monster;
 		const cpMulti = this.cpMultipliers[level]
-		const atk = baseStats[monster].attack
-		const def = baseStats[monster].defense
-		const sta = baseStats[monster].stamina
+		const atk = baseStats[key].attack
+		const def = baseStats[key].defense
+		const sta = baseStats[key].stamina
 
 		const cp = Math.max(10, Math.floor((atk + ivAttack) *
 			((def + ivDefense) ** 0.5) *
