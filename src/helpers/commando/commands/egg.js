@@ -39,7 +39,7 @@ exports.run = (client, msg, args) => {
 				let remove = false
 
 				args.forEach((element) => {
-					if (element.match(/ex/gi)) park = 1
+					if (element.toLowerCase() === 'ex') park = 1
 					else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 					else if (element.match(/level\d/gi)) levels.push(element.replace(/level/gi, ''))
 					else if (element.match(/instinct/gi)) team = 3
