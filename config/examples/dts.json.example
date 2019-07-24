@@ -354,7 +354,7 @@
         }
       }
     }
-  }
+  },
   "greeting": {
     "embed": {
       "title": "Welcome",
