@@ -1,0 +1,169 @@
+const Controller = require('./controller')
+const config = require('config')
+const log = require('../logger')
+
+const _ = require('lodash')
+const mustache = require('mustache')
+
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
+
+moment.locale(config.locale.timeformat)
+
+const dts = require('../../config/dts')
+
+class Incident extends Controller {
+
+/*
+* incidentWhoCares, takes data object
+*/
+	async incidentWhoCares(data) {
+		return new Promise((resolve) => {
+			let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
+			data.matched.forEach((area) => {
+				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
+			})
+			const query = `
+			select humans.id, humans.name, incident.template from incident
+            join humans on humans.id = incident.id
+            where humans.enabled = 1 and
+            (round( 6371000 * acos( cos( radians(${data.latitude}) )
+              * cos( radians( humans.latitude ) )
+              * cos( radians( humans.longitude ) - radians(${data.longitude}) )
+              + sin( radians(${data.latitude}) )
+              * sin( radians( humans.latitude ) ) ) < incident.distance and incident.distance != 0) or
+			  incident.distance = 0 and (${areastring}))
+               group by humans.id, humans.name, incident.template`
+			log.log({ level: 'debug', message: 'incidentWhoCares query', event: 'sql:incidentWhoCares' })
+			this.db.query(query)
+				.then((result) => {
+					log.info(`Incident on ${data.name} appeared and ${result[0].length} humans cared`)
+					resolve(result[0])
+				})
+				.catch((err) => {
+					log.error(`incidentWhoCares errored with: ${err}`)
+				})
+		})
+	}
+
+	async handle(data) {
+		return new Promise((resolve) => {
+			switch (config.geocoding.staticProvider.toLowerCase()) {
+				case 'google': {
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
+					break
+				}
+				case 'osm': {
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${config.geocoding.zoom}&key=${_.sample(config.geocoding.staticKey)}`
+					break
+				}
+				case 'mapbox': {
+					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${config.geocoding.zoom},0,0/${config.geocoding.width}x${config.geocoding.height}?access_token=${_.sample(config.geocoding.staticKey)}`
+					break
+				}
+				default: {
+					data.staticmap = ''
+				}
+			}
+            if(data.name) data.gym_name = data.name;
+
+			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.tth = moment.preciseDiff(Date.now(), data.incident_expiration * 1000, true)
+			data.distime = moment(data.incident_expiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
+			
+			this.pointInArea([data.latitude, data.longitude])
+				.then((matchedAreas) => {
+					data.matched = matchedAreas
+					log.log({
+						level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'incident', meta: data,
+					})
+
+					this.incidentWhoCares(data).then((whoCares) => {
+						if (!whoCares[0]) {
+							resolve([])
+							return null
+						}
+						let discordCacheBad = true // assume the worst
+						whoCares.forEach((cares) => {
+							const ch = this.getDiscordCache(cares.id)
+							if (ch <= config.discord.limitamount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+						})
+						if (discordCacheBad) {
+							resolve([])
+							return null
+						}
+						this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
+							const jobs = []
+							
+							whoCares.forEach((cares) => {
+								const alarmId = this.uuid
+								log.log({
+									level: 'debug', message: `alarm ${alarmId} processing`, event: 'alarm:start', correlationId: data.correlationId, messageId: data.messageId, alarmId,
+								})
+								const caresCache = _.cloneDeep(this.getDiscordCache(cares.id))
+								const view = _.extend(data, {
+									id: data.pokestop_id,
+									time: data.distime,
+									tthh: data.tth.hours,
+									tthm: data.tth.minutes,
+									tths: data.tth.seconds,
+									name: data.name,
+									now: new Date(),
+									staticmap: data.staticmap,
+									imgurl: data.url,
+									mapurl: data.mapurl,
+									// geocode stuff
+									lat: data.latitude.toString().substring(0, 8),
+									lon: data.longitude.toString().substring(0, 8),
+									addr: geoResult.addr,
+									streetNumber: geoResult.streetNumber,
+									streetName: geoResult.streetName,
+									zipcode: geoResult.zipcode,
+									country: geoResult.country,
+									countryCode: geoResult.countryCode,
+									city: geoResult.city,
+									state: geoResult.state,
+									stateCode: geoResult.stateCode,
+									neighbourhood: geoResult.neighbourhood,
+									flagemoji: geoResult.flag,
+									areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', ')
+								})
+
+								const template = JSON.stringify(dts.incident[`${cares.template}`])
+								let message = mustache.render(template, view)
+								message = JSON.parse(message)
+
+								const work = {
+									lat: data.latitude.toString().substring(0, 8),
+									lon: data.longitude.toString().substring(0, 8),
+									message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
+									target: cares.id,
+									name: cares.name,
+									emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
+									meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
+								}
+								if (caresCache <= config.discord.limitamount + 1) {
+									jobs.push(work)
+									this.addDiscordCache(cares.id)
+								}
+
+							})
+							resolve(jobs)
+						}).catch((err) => {
+							log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
+						})
+
+					}).catch((err) => {
+						log.log({ level: 'error', message: `incidentWhoCares errored with: ${err.message}`, event: 'fail:incidentWhoCares' })
+					})
+				}).catch((err) => {
+					log.log({ level: 'error', message: `pointsInArea errored with: ${err.message}`, event: 'fail:pointsInArea' })
+				})
+		})
+	}
+
+}
+
+module.exports = Incident
