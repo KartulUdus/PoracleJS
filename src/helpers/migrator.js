@@ -248,7 +248,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 										})
 								}
 								else if (version.val === 4) {
-								    Promise.all([
+									Promise.all([
 										queries.mysteryQuery(migration5.incident)
 									])
 									.then(() => {

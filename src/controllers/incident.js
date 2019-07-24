@@ -7,9 +7,11 @@ const mustache = require('mustache')
 
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
+const minTth = config.general.monsterMinimumTimeTillHidden || 0
 
 const dts = require('../../config/dts')
 
