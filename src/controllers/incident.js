@@ -70,9 +70,18 @@ class Incident extends Controller {
 
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			data.tth = moment.preciseDiff(Date.now(), data.incident_expiration * 1000, true)
-			data.distime = moment(data.incident_expiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 			
+			let incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp;
+			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
+			data.distime = moment(incidentExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
+			
+			// Stop handling if it already disappeared or is about to go away
+			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
+				log.warn(`${data.name} Incident already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				resolve([])
+				return null
+			}
+
 			this.pointInArea([data.latitude, data.longitude])
 				.then((matchedAreas) => {
 					data.matched = matchedAreas
