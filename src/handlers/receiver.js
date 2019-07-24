@@ -84,6 +84,32 @@ if (config.telegram.enabled) {
 }
 
 
+function handlePokestopMessage(hook, correlationId) {
+	if (!cache.get(`${hook.message.pokestop_id}_${hook.message.last_modified}`)) {
+		cache.put(`${hook.message.pokestop_id}_${hook.message.last_modified}`, 'cached')
+
+		//Get a feeler for RDM/MAD differences
+		let incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp;
+
+		//TODO probably check if after NOW()
+		if(incidentExpiration && incidentExpiration > 0) {
+			incidentController.handle(hook.message)
+				.then((work) => {
+					work.forEach((job) => {
+						if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
+						if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
+						incidentController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+					})
+				})
+				.catch((e) => {
+					log.log({ level: 'error', message: `incidentController failed to handle ${correlationId} \n${e.message} `, event: 'fail:incidentController' })
+				})
+		}
+	} else {
+		log.log({ level: 'warn', message: `Pokestop message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
+	}
+}
+
 module.exports = async (req, reply) => {
 	if (config.general.ipWhitelist.length && !_.includes(config.general.ipWhitelist, req.raw.ip)) {
 		log.warn(`Rejecting request from ${req.raw.ip} as it is not in the whitelist`)
@@ -184,11 +210,11 @@ module.exports = async (req, reply) => {
 				break
 			}
 			case 'pokestop': {
-				handlePokestopMessage(hook);
+				handlePokestopMessage(hook, correlationId);
 				break;
 			}
 			case 'invasion': {
-				handlePokestopMessage(hook);
+				handlePokestopMessage(hook, correlationId);
 				break;
 			}
 			default:
@@ -202,31 +228,5 @@ module.exports = async (req, reply) => {
 			event: 'http:end',
 		})
 		reply.send({ webserver: 'happy' })
-	}
-}
-
-function handlePokestopMessage(hook) {
-	if (!cache.get(`${hook.message.pokestop_id}_${hook.message.last_modified}`)) {
-		cache.put(`${hook.message.pokestop_id}_${hook.message.last_modified}`, 'cached')
-
-		//Get a feeler for RDM/MAD differences
-		let incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp;
-
-		//TODO probably check if after NOW()
-		if(incidentExpiration && incidentExpiration > 0) {
-			incidentController.handle(hook.message)
-				.then((work) => {
-					work.forEach((job) => {
-						if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
-						if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
-						incidentController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
-					})
-				})
-				.catch((e) => {
-					log.log({ level: 'error', message: `incidentController failed to handle ${correlationId} \n${e.message} `, event: 'fail:incidentController' })
-				})
-		}
-	} else {
-		log.log({ level: 'warn', message: `Pokestop message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
 	}
 }

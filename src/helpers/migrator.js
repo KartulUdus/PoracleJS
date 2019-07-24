@@ -251,23 +251,22 @@ module.exports = async () => new Promise((resolve, reject) => {
 								    Promise.all([
 										queries.mysteryQuery(migration5.incident)
 									])
-                                    .then(() => {
-                                        queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
-                                            .then(() => resolve(true))
-                                            .catch((unhappy) => {
-                                                reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
-                                            })
-                                        log.info('applied Db migration 5')
-                                    })
-                                    .catch((unhappy) => {
-                                        reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
-                                    })
+									.then(() => {
+										queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+											.then(() => resolve(true))
+											.catch((unhappy) => {
+												reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
+											})
+										log.info('applied Db migration 5')
+									})
+									.catch((unhappy) => {
+										reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
+									})
 								}
 								else if (version.val === 5) {
 									log.info('Database schema-version 5 confirmed')
 									resolve(true)
 								}
-
 							})
 							.catch((unhappy) => {
 								reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))

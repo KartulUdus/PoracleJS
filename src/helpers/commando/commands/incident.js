@@ -1,5 +1,4 @@
 const _ = require('lodash')
-const config = require('config')
 
 exports.run = (client, msg, args) => {
 	let target = { id: msg.author.id, name: msg.author.tag }
@@ -37,7 +36,7 @@ exports.run = (client, msg, args) => {
 				let remove = false
 
 				args.forEach((element) => {
-					if(element == 'remove') {
+					if(element === 'remove') {
 						remove = true
 					}
 					else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
@@ -65,7 +64,7 @@ exports.run = (client, msg, args) => {
 					})
 				}
 				else {
-					lient.query.deleteByIdQuery('incident', target.id).catch((O_o) => {})
+					client.query.deleteByIdQuery('incident', target.id).catch((O_o) => {})
 					client.log.log({ level: 'debug', message: `${msg.author.username} stopped tracking incidents in ${target.name}`, event: 'discord:unincident' })
 
 					msg.react('✅').catch((O_o) => {
