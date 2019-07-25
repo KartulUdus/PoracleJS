@@ -85,14 +85,12 @@ if (config.telegram.enabled) {
 
 
 function handlePokestopMessage(hook, correlationId) {
-	if (!cache.get(`${hook.message.pokestop_id}_${hook.message.last_modified}`)) {
-		cache.put(`${hook.message.pokestop_id}_${hook.message.last_modified}`, 'cached')
+	//Get a feeler for RDM/MAD differences
+	let incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp;
 
-		//Get a feeler for RDM/MAD differences
-		let incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp;
-
-		//TODO probably check if after NOW()
-		if(incidentExpiration && incidentExpiration > 0) {
+	if (incidentExpiration && !cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+		cache.put(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
+		if(incidentExpiration > 0) {
 			incidentController.handle(hook.message)
 				.then((work) => {
 					work.forEach((job) => {
@@ -106,7 +104,7 @@ function handlePokestopMessage(hook, correlationId) {
 				})
 		}
 	} else {
-		log.log({ level: 'warn', message: `Pokestop message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
+		log.log({ level: 'warn', message: `Pokestop Incident message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
 	}
 }
 
