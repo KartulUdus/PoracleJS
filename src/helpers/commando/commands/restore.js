@@ -59,7 +59,7 @@ exports.run = (client, msg, args) => {
 							client.query.deleteQuery('egg', 'id', target.id).catch((O_o) => {}),
 							client.query.deleteQuery('quest', 'id', target.id).catch((O_o) => {}),
 						]).then((x) => {
-							const query = fs.readFileSync(path.join(__dirname, `/filterBackups/${args[0]}.sql`), 'utf8').replace('{{ target }}', target.id)
+							const query = fs.readFileSync(path.join(__dirname, `/filterBackups/${args[0]}.sql`), 'utf8').replace(/{{ target }}/gi, target.id)
 							client.query.mysteryQuery(query).catch((O_o) => {})
 							msg.react('✅').catch((O_o) => {
 								client.log.error(O_o.message)
