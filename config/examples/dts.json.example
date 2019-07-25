@@ -324,7 +324,7 @@
     },
     "3": {
       "embed": {
-        "title": "Team Rocket incident has started! at {{ame}}",
+        "title": "Team Rocket incident has started! at {{name}}",
         "description": "[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
         "author": {
           "name": "end: {{time}} in {{tthm}}m {{tths}}s",
