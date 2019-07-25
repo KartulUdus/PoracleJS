@@ -68,8 +68,7 @@ class Incident extends Controller {
 					data.staticmap = ''
 				}
 			}
-            if(data.name) data.gym_name = data.name;
-
+            
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			
