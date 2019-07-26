@@ -36,10 +36,8 @@ exports.run = (client, msg, args) => {
 				let remove = false
 
 				args.forEach((element) => {
-					if(element === 'remove') {
-						remove = true
-					}
-					else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
+					if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
+					else if (element.match(/remove/gi)) remove = true
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
 						if (distance.length >= 10) distance = distance.substr(0, 9)
@@ -64,7 +62,7 @@ exports.run = (client, msg, args) => {
 					})
 				}
 				else {
-					client.query.deleteByIdQuery('incident', target.id).catch((O_o) => {})
+					client.query.deleteQuery('incident', 'id', target.id).catch((O_o) => {})
 					client.log.log({ level: 'debug', message: `${msg.author.username} stopped tracking incidents in ${target.name}`, event: 'discord:unincident' })
 
 					msg.react('✅').catch((O_o) => {

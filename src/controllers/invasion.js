@@ -18,9 +18,9 @@ const dts = require('../../config/dts')
 class Incident extends Controller {
 
 /*
-* incidentWhoCares, takes data object
+* invasionWhoCares, takes data object
 */
-	async incidentWhoCares(data) {
+	async invasionWhoCares(data) {
 		return new Promise((resolve) => {
 			let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 			data.matched.forEach((area) => {
@@ -37,14 +37,14 @@ class Incident extends Controller {
               * sin( radians( humans.latitude ) ) ) < incident.distance and incident.distance != 0) or
 			  incident.distance = 0 and (${areastring}))
                group by humans.id, humans.name, incident.template`
-			log.log({ level: 'debug', message: 'incidentWhoCares query', event: 'sql:incidentWhoCares' })
+			log.log({ level: 'debug', message: 'invasionWhoCares query', event: 'sql:invasionWhoCares' })
 			this.db.query(query)
 				.then((result) => {
-					log.info(`Incident on ${data.name} appeared and ${result[0].length} humans cared`)
+					log.info(`Invasion on ${data.name} appeared and ${result[0].length} humans cared`)
 					resolve(result[0])
 				})
 				.catch((err) => {
-					log.error(`incidentWhoCares errored with: ${err}`)
+					log.error(`invasionWhoCares errored with: ${err}`)
 				})
 		})
 	}
@@ -78,7 +78,7 @@ class Incident extends Controller {
 			
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				log.warn(`${data.name} Incident already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				log.warn(`${data.name} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				resolve([])
 				return null
 			}
@@ -87,10 +87,10 @@ class Incident extends Controller {
 				.then((matchedAreas) => {
 					data.matched = matchedAreas
 					log.log({
-						level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'incident', meta: data,
+						level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'invasion', meta: data,
 					})
 
-					this.incidentWhoCares(data).then((whoCares) => {
+					this.invasionWhoCares(data).then((whoCares) => {
 						if (!whoCares[0]) {
 							resolve([])
 							return null
@@ -166,7 +166,7 @@ class Incident extends Controller {
 						})
 
 					}).catch((err) => {
-						log.log({ level: 'error', message: `incidentWhoCares errored with: ${err.message}`, event: 'fail:incidentWhoCares' })
+						log.log({ level: 'error', message: `invasionWhoCares errored with: ${err.message}`, event: 'fail:invasionWhoCares' })
 					})
 				}).catch((err) => {
 					log.log({ level: 'error', message: `pointsInArea errored with: ${err.message}`, event: 'fail:pointsInArea' })

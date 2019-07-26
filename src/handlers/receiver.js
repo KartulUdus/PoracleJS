@@ -24,13 +24,13 @@ const cache = new Cache({
 
 const MonsterController = require('../controllers/monster')
 const RaidController = require('../controllers/raid')
-const IncidentController = require('../controllers/incident')
+const InvasionController = require('../controllers/invasion')
 const QuestController = require('../controllers/quest')
 
 const monsterController = new MonsterController(db)
 const raidController = new RaidController(db)
 const questController = new QuestController(db)
-const incidentController = new IncidentController(db)
+const invasionController = new InvasionController(db)
 
 // check how long the Queue is every minute. ideally empty
 setInterval(() => {
@@ -88,24 +88,28 @@ function handlePokestopMessage(hook, correlationId) {
 	//Get a feeler for RDM/MAD differences
 	let incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp;
 
-	if (incidentExpiration && !cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
-		cache.put(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
-		if(incidentExpiration > 0) {
-			incidentController.handle(hook.message)
-				.then((work) => {
-					work.forEach((job) => {
-						if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
-						if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
-						incidentController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+	if (incidentExpiration) { 
+		if(!cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+			cache.put(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
+			if(incidentExpiration > 0) {
+				invasionController.handle(hook.message)
+					.then((work) => {
+						work.forEach((job) => {
+							if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
+							if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
+							invasionController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+						})
 					})
-				})
-				.catch((e) => {
-					log.log({ level: 'error', message: `incidentController failed to handle ${correlationId} \n${e.message} `, event: 'fail:incidentController' })
-				})
+					.catch((e) => {
+						log.log({ level: 'error', message: `invasionController failed to handle ${correlationId} \n${e.message} `, event: 'fail:invasionController' })
+					})
+			}
+		} else {
+			log.log({ level: 'warn', message: `Pokestop Invasion message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
 		}
-	} else {
-		log.log({ level: 'warn', message: `Pokestop Incident message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
 	}
+
+	//LURE handling goes here
 }
 
 module.exports = async (req, reply) => {
