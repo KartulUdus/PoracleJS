@@ -1838,5 +1838,277 @@
     "duration": 1300,
     "energy": 20,
     "dps": 3.8
+  },
+  "292": {
+    "name": "Weather Ball Fire",
+    "type": "Fire",
+    "damage": 60,
+    "duration": 1600,
+    "energy": 20,
+    "dps": 37.5
+  },
+  "293": {
+    "name": "Weather Ball Ice",
+    "type": "Ice",
+    "damage": 60,
+    "duration": 1600,
+    "energy": 20,
+    "dps": 37.5
+  },
+  "294": {
+    "name": "Weather Ball Rock",
+    "type": "Rock",
+    "damage": 60,
+    "duration": 1600,
+    "energy": 20,
+    "dps": 37.5
+  },
+  "295": {
+    "name": "Weather Ball Water",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "296": {
+    "name": "Frenzy Plant",
+    "type": "Grass",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "297": {
+    "name": "Smack Down",
+    "type": "Rock",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "298": {
+    "name": "Blast Burn",
+    "type": "Fire",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "299": {
+    "name": "Hydro Cannon",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "300": {
+    "name": "Last Resort",
+    "type": "Normal",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "301": {
+    "name": "Meteor Mash",
+    "type": "Steel",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "302": {
+    "name": "Skull Bash",
+    "type": "Normal",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "303": {
+    "name": "Acid Spray",
+    "type": "Poison",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "304": {
+    "name": "Earth Power",
+    "type": "Ground",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "305": {
+    "name": "Crabhammer",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "306": {
+    "name": "Lunge",
+    "type": "Bug",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "307": {
+    "name": "Crush Claw",
+    "type": "Normal",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "308": {
+    "name": "Octazooka",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "309": {
+    "name": "Mirror Shot",
+    "type": "Steel",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "310": {
+    "name": "Superpower",
+    "type": "Fighting",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "311": {
+    "name": "Fell Stinger",
+    "type": "Bug",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "312": {
+    "name": "Leaf Tornado",
+    "type": "Grass",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "313": {
+    "name": "Leech Life",
+    "type": "Bug",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "314": {
+    "name": "Drain Punch",
+    "type": "Fighting",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "315": {
+    "name": "Shadow Bone",
+    "type": "Ghost",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "316": {
+    "name": "Muddy Water",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "317": {
+    "name": "Blaze Kick",
+    "type": "Fire",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "318": {
+    "name": "Razor Shell",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "319": {
+    "name": "Power Up Punch",
+    "type": "Fighting",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "320": {
+    "name": "Charm",
+    "type": "Fairy",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "321": {
+    "name": "Giga Impact",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "322": {
+    "name": "Frustration",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "323": {
+    "name": "Return",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "324": {
+    "name": "Synchronoise",
+    "type": "Psychic",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "325": {
+    "name": "Lock-On",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
   }
 }
