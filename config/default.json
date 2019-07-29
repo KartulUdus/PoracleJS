@@ -62,13 +62,15 @@
   },
 
   "commands": {
-    "poracle": "",
+    "adminid": "",
     "area": "",
     "backup": "",
     "channel": "",
     "egg": "",
     "help": "",
+    "invasion": "",
     "location": "",
+    "poracle": "",
     "quest": "",
     "raid": "",
     "restore": "",
@@ -79,8 +81,7 @@
     "unregister": "",
     "untrack": "",
     "version": "",
-    "webhook": "",
-    "adminid": ""
+    "webhook": ""
   },
   "telegram": {
     "enabled": false,
