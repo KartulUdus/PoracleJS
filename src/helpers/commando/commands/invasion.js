@@ -53,8 +53,8 @@ exports.run = (client, msg, args) => {
 					).catch((O_o) => {})
 					client.log.log({
 						level: 'debug',
-						message: `${msg.author.username} started tracking incidents in ${target.name}`,
-						event: 'discord:incident',
+						message: `${msg.author.username} started tracking invasions in ${target.name}`,
+						event: 'discord:invasion',
 					})
 
 					msg.react('✅').catch((O_o) => {
@@ -63,7 +63,7 @@ exports.run = (client, msg, args) => {
 				}
 				else {
 					client.query.deleteQuery('incident', 'id', target.id).catch((O_o) => {})
-					client.log.log({ level: 'debug', message: `${msg.author.username} stopped tracking incidents in ${target.name}`, event: 'discord:unincident' })
+					client.log.log({ level: 'debug', message: `${msg.author.username} stopped tracking invasions in ${target.name}`, event: 'discord:uninvasion' })
 
 					msg.react('✅').catch((O_o) => {
 						client.log.error(O_o.message)
@@ -72,7 +72,7 @@ exports.run = (client, msg, args) => {
 			}
 		})
 		.catch((err) => {
-			client.log.error(`commando !incident errored with: ${err.message} (command was "${msg.content}")`)
+			client.log.error(`commando !invasion errored with: ${err.message} (command was "${msg.content}")`)
 		})
 
 }
