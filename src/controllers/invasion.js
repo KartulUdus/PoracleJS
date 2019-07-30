@@ -14,6 +14,8 @@ moment.locale(config.locale.timeformat)
 const minTth = config.general.monsterMinimumTimeTillHidden || 0
 
 const dts = require('../../config/dts')
+const gruntTypes = require("../util/grunt_types")
+const types = require('../util/types')
 
 class Incident extends Controller {
 
@@ -107,6 +109,24 @@ class Incident extends Controller {
 						this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 							const jobs = []
 							
+							if(data.incident_grunt_type) {
+								if(data.incident_grunt_type in gruntTypes) {
+									let gruntType = gruntTypes[data.incident_grunt_type];
+									data.gruntName = gruntType.grunt;
+									data.gender = gruntType.gender;
+									if(gruntType.type in types) {
+										data.gruntTypeEmoji = types[gruntType.type].emoji;
+										data.gruntTypeColor = types[gruntType.type].color;
+									}
+									data.gruntType = gruntType.type;
+								}
+							} else {
+								data.gruntTypeEmoji = '';
+								data.gender = '';
+								data.gruntName = '';
+								data.gruntType = 'Random';
+							}
+
 							whoCares.forEach((cares) => {
 								const alarmId = this.uuid
 								log.log({

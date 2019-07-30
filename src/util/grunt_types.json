@@ -1,0 +1,205 @@
+{
+    "0": {
+       "type": "Random",
+       "grunt": "Random",
+       "gender": "⚲"
+    },
+    "1": {
+      "type": "",
+      "grunt": "Blanche",
+      "gender": "♀"
+    },
+    "2": {
+      "type": "",
+      "grunt": "Candela",
+      "gender": "♀"
+    },
+    "3": {
+      "type": "",
+      "grunt": "Spark"
+    },
+    "4": {
+      "type": "",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "5": {
+      "type": "",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "6": {
+      "type": "Bug",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "7": {
+      "type": "Bug",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "8": {
+      "type": "Ghost",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "9": {
+      "type": "Ghost",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "10": {
+      "type": "Dark",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "11": {
+      "type": "Dark",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "12": {
+      "type": "Dragon",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "13": {
+      "type": "Dragon",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "14": {
+      "type": "Fairy",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "15": {
+      "type": "Fairy",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "16": {
+      "type": "Fighting",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "17": {
+      "type": "Fighting",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "18": {
+      "type": "Fire",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "19": {
+      "type": "Fire",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "20": {
+      "type": "Flying",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "21": {
+      "type": "Flying",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "22": {
+      "type": "Grass",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "23": {
+      "type": "Grass",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "24": {
+      "type": "Ground",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "25": {
+      "type": "Ground",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "26": {
+      "type": "Ice",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "27": {
+      "type": "Ice",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "28": {
+      "type": "Metal",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "29": {
+      "type": "Metal",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "30": {
+      "type": "Normal",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "31": {
+      "type": "Normal",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "32": {
+      "type": "Poison",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "33": {
+      "type": "Poison",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "34": {
+      "type": "Psychic",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "35": {
+      "type": "Psychic",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "36": {
+      "type": "Rock",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "37": {
+      "type": "Rock",
+      "grunt": "Male Grunt", 
+      "gender": "♂"
+    },
+    "38": {
+      "type": "Water",
+      "grunt": "Female Grunt",
+      "gender": "♀"
+    },
+    "39": {
+      "type": "Water",
+      "grunt": "Male Grunt",
+      "gender": "♂"
+    },
+    "40": {
+      "type": "",
+      "grunt": "Player Team Leader"
+    }
+  }
