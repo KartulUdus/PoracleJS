@@ -97,7 +97,12 @@ class Incident extends Controller {
 						level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'invasion', meta: data,
 					})
 
-					data.gruntTypeId = data.incident_grunt_type ? data.incident_grunt_type : data.grunt_type ? data.grunt_type : 0;
+					data.gruntTypeId = 0;
+					if(data.incident_grunt_type) {
+						data.gruntTypeId = data.incident_grunt_type;
+					} else if(data.grunt_type) {
+						data.gruntTypeId = data.grunt_type;
+					}
 					data.gruntTypeEmoji = '❓';								
 					data.gruntTypeColor = "12595240";
 					if(data.gruntTypeId) {

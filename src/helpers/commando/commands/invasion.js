@@ -63,7 +63,7 @@ exports.run = (client, msg, args) => {
 				} );
 
 				if (!remove) {
-					const insertData = types.length == 0 ? [ [target.id, template, distance, gender, ''] ] : []
+					const insertData = types.length === 0 ? [ [target.id, template, distance, gender, ''] ] : []
 					types.forEach( (t) => { 
 						insertData.push( [target.id, template, distance, gender, t] );
 					});
