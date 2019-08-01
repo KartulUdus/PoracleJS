@@ -14,8 +14,11 @@ moment.locale(config.locale.timeformat)
 const minTth = config.general.monsterMinimumTimeTillHidden || 0
 
 const dts = require('../../config/dts')
+const emojiData = require('../../config/emoji')
+
 const gruntTypes = require("../util/grunt_types")
 const types = require('../util/types')
+const genderData = require('../util/genders')
 
 class Incident extends Controller {
 
@@ -31,7 +34,9 @@ class Incident extends Controller {
 			const query = `
 			select humans.id, humans.name, incident.template from incident
             join humans on humans.id = incident.id
-            where humans.enabled = 1 and
+			where humans.enabled = 1 and
+			(incident.gruntType='' or incident.gruntType='${data.gruntType}') and
+			(incident.gender = ${data.gender} or incident.gender = 0) and
             (round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
               * cos( radians( humans.longitude ) - radians(${data.longitude}) )
@@ -92,6 +97,32 @@ class Incident extends Controller {
 						level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'invasion', meta: data,
 					})
 
+					data.gruntTypeId = data.incident_grunt_type ? data.incident_grunt_type : data.grunt_type ? data.grunt_type : 0;
+					data.gruntTypeEmoji = '❓';								
+					data.gruntTypeColor = "12595240";
+					if(data.gruntTypeId) {
+						if(data.gruntTypeId in gruntTypes) {
+							let gruntType = gruntTypes[data.gruntTypeId];
+							data.gruntName = gruntType.grunt;
+							data.gender = gruntType.gender;
+							if(gruntType.type in emojiData.type) {
+								data.gruntTypeEmoji = emojiData.type[gruntType.type].emoji;
+							}
+							if(gruntType.type in types) {
+								data.gruntTypeColor = types[gruntType.type].color;
+							}
+							data.gruntType = gruntType.type;
+						} else {
+							data.gender = 0;
+							data.gruntName = 'Grunt';
+							data.gruntType = 'Mixed';
+						}
+					} else {
+						data.gender = 0;
+						data.gruntName = '';
+						data.gruntTypeColor = '12595240';
+					}
+
 					this.invasionWhoCares(data).then((whoCares) => {
 						if (!whoCares[0]) {
 							resolve([])
@@ -109,23 +140,6 @@ class Incident extends Controller {
 						this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 							const jobs = []
 							
-							if(data.incident_grunt_type) {
-								if(data.incident_grunt_type in gruntTypes) {
-									let gruntType = gruntTypes[data.incident_grunt_type];
-									data.gruntName = gruntType.grunt;
-									data.gender = gruntType.gender;
-									if(gruntType.type in types) {
-										data.gruntTypeEmoji = types[gruntType.type].emoji;
-										data.gruntTypeColor = types[gruntType.type].color;
-									}
-									data.gruntType = gruntType.type;
-								}
-							} else {
-								data.gruntTypeEmoji = '';
-								data.gender = '';
-								data.gruntName = '';
-								data.gruntType = 'Random';
-							}
 
 							whoCares.forEach((cares) => {
 								const alarmId = this.uuid
@@ -140,6 +154,7 @@ class Incident extends Controller {
 									tthm: data.tth.minutes,
 									tths: data.tth.seconds,
 									name: data.name,
+									gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
 									now: new Date(),
 									staticmap: data.staticmap,
 									imgurl: data.url,
