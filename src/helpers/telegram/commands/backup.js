@@ -50,21 +50,23 @@ module.exports = (ctx) => {
 				}
 
 				if (args[0]) {
-					const backupTables = ['monsters', 'raid', 'egg', 'quest']
+					const backupTables = ['monsters', 'raid', 'egg', 'quest', 'incident']
 					Promise.all([
 						controller.query.getColumns('monsters'),
 						controller.query.getColumns('raid'),
 						controller.query.getColumns('egg'),
 						controller.query.getColumns('quest'),
+						controller.query.getColumns('incident'),
 						controller.query.selectAllQuery('monsters', 'id', target.id),
 						controller.query.selectAllQuery('raid', 'id', target.id),
 						controller.query.selectAllQuery('egg', 'id', target.id),
 						controller.query.selectAllQuery('quest', 'id', target.id),
+						controller.query.selectAllQuery('incident', 'id', target.id),
 					]).then((data) => {
 						let query = ''
 						let i
 						let	u
-						for (i = 0, u = 4; i < 4; i += 1, u += 1) {
+						for (i = 0, u = 5; i < 5; i += 1, u += 1) {
 							data[u] = data[u].map(obj => Object.values(obj))
 							if (data[u].length) {
 								const cols = data[i].join(', ')

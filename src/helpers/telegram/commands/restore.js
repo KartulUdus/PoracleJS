@@ -55,6 +55,7 @@ module.exports = (ctx) => {
 							controller.query.deleteQuery('raid', 'id', target.id).catch((O_o) => {}),
 							controller.query.deleteQuery('egg', 'id', target.id).catch((O_o) => {}),
 							controller.query.deleteQuery('quest', 'id', target.id).catch((O_o) => {}),
+							controller.query.deleteQuery('incident', 'id', target.id).catch((O_o) => {}),
 						]).then((x) => {
 							const query = fs.readFileSync(path.join(__dirname, '../../commando/commands', `/filterBackups/${args[0]}.sql`), 'utf8').replace('{{ target }}', target.id)
 							controller.query.mysteryQuery(query).catch((O_o) => {})

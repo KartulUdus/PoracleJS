@@ -43,21 +43,23 @@ exports.run = (client, msg, args) => {
 				}
 
 				if (args[0]) {
-					const backupTables = ['monsters', 'raid', 'egg', 'quest']
+					const backupTables = ['monsters', 'raid', 'egg', 'quest', 'incident']
 					Promise.all([
 						client.query.getColumns('monsters'),
 						client.query.getColumns('raid'),
 						client.query.getColumns('egg'),
 						client.query.getColumns('quest'),
+						client.query.getColumns('incident'),
 						client.query.selectAllQuery('monsters', 'id', target.id),
 						client.query.selectAllQuery('raid', 'id', target.id),
 						client.query.selectAllQuery('egg', 'id', target.id),
 						client.query.selectAllQuery('quest', 'id', target.id),
+						client.query.selectAllQuery('incident', 'id', target.id),
 					]).then((data) => {
 						let query = ''
 						let i
 						let	u
-						for (i = 0, u = 4; i < 4; i += 1, u += 1) {
+						for (i = 0, u = 5; i < 5; i += 1, u += 1) {
 							data[u] = data[u].map(obj => Object.values(obj))
 							if (data[u].length) {
 								const cols = data[i].join(', ')
