@@ -46,6 +46,7 @@ exports.run = (client, msg, args) => {
 								client.query.deleteQuery('monsters', 'id', target.id)
 								client.query.deleteQuery('raid', 'id', target.id)
 								client.query.deleteQuery('quest', 'id', target.id)
+								client.query.deleteQuery('incident', 'id', msg.channel.id)
 								client.query.deleteQuery('humans', 'id', target.id)
 								msg.react('✅').catch((O_o) => {
 									client.log.error(O_o.message)

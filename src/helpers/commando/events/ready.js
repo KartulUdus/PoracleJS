@@ -19,6 +19,7 @@ module.exports = (client) => {
 				client.query.deleteQuery('monsters', 'id', human.id)
 				client.query.deleteQuery('raid', 'id', human.id)
 				client.query.deleteQuery('quest', 'id', human.id)
+				client.query.deleteQuery('incident', 'id', msg.channel.id)
 				client.query.deleteQuery('humans', 'id', human.id)
 			}
 		})

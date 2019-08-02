@@ -19,6 +19,7 @@ exports.run = (client, msg) => {
 					client.query.deleteQuery('monsters', 'id', target.id).catch((O_o) => {})
 					client.query.deleteQuery('raid', 'id', target.id).catch((O_o) => {})
 					client.query.deleteQuery('quest', 'id', target.id).catch((O_o) => {})
+					client.query.deleteQuery('incident', 'id', target.id).catch((O_o) => {})
 					client.query.deleteQuery('humans', 'id', target.id).catch((O_o) => {})
 					client.log.log({ level: 'debug', message: `${msg.author.tag} unregistered ${target.name}`, event: 'discord:unregistered' })
 
