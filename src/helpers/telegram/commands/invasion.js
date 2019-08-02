@@ -1,4 +1,5 @@
 const _ = require('lodash')
+const typeData = require('../../../util/types')
 
 module.exports = (ctx) => {
 	const { controller, command } = ctx.state
@@ -29,6 +30,9 @@ module.exports = (ctx) => {
 				let distance = 0
 				let template = 3
 				let remove = false
+				let gender = 0
+				let rawTypes = []
+				let types = []
 
 				args.forEach((element) => {
 					if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
@@ -36,14 +40,31 @@ module.exports = (ctx) => {
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
 						if (distance.length >= 10) distance = distance.substr(0, 9)
-					}
+					} else if (element.match(/female/gi)) gender = 2
+					else if (element.match(/male/gi)) gender = 1
+					else rawTypes.push(element)
 				})
+
+				rawTypes.forEach((t) => {
+					if(t.toLowerCase() === 'mixed') {
+						types.push('Mixed');
+					} else {
+						for(let tt in typeData) {
+							if(tt.toLowerCase() === t.toLowerCase()) {
+								types.push(tt);
+							}
+						}
+					}
+				} );
+
 				if (!remove) {
-					
-					const insertData = [ [target.id, template, distance] ]
+					const insertData = types.length === 0 ? [ [target.id, template, distance, gender, ''] ] : []
+					types.forEach( (t) => { 
+						insertData.push( [target.id, template, distance, gender, t] );
+					});
 					controller.query.insertOrUpdateQuery(
 						'incident',
-						['id', 'template', 'distance'],
+						['id', 'template', 'distance', 'gender', 'gruntType'],
 						insertData,
 					).catch((O_o) => {})
 					controller.log.log({
