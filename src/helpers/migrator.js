@@ -111,7 +111,7 @@ CREATE TABLE IF NOT EXISTS \`incident\` (
   \`template\` SMALLINT(5) NULL DEFAULT 3,
   \`distance\` INT(11) NOT NULL,
   \`gender\` TINYINT(1) NOT NULL DEFAULT 0,
-  \`gruntType\` VARCHAR(25) NULL,
+  \`gruntType\` VARCHAR(25) NOT NULL DEFAULT '',
   PRIMARY KEY (\`id\`),
   INDEX \`incident_distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
@@ -153,7 +153,7 @@ const migration5 = {
             \`template\` SMALLINT(5) NULL DEFAULT 3,
 			\`distance\` INT(11) NOT NULL,
 			\`gender\` TINYINT(1) NOT NULL DEFAULT 0,
-  			\`gruntType\` VARCHAR(25) NULL,
+  			\`gruntType\` VARCHAR(25) NOT NULL DEFAULT '',
             PRIMARY KEY (\`id\`,\`gender\`,\`gruntType\`),
             INDEX \`incident_distance\` (\`distance\`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
