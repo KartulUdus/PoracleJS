@@ -1,6 +1,7 @@
 const Controller = require('./controller')
 const config = require('config')
 const log = require('../logger')
+const path = require('path')
 
 const _ = require('lodash')
 const mustache = require('mustache')
@@ -13,10 +14,16 @@ require('moment-precise-range-plugin')
 moment.locale(config.locale.timeformat)
 const minTth = config.general.monsterMinimumTimeTillHidden || 0
 
+let gruntTypeDataPath = path.join(__dirname, '../util/grunt_types.json')
+//Check if the config language is one of the array object (array for future translation possibilities)
+if (_.includes(['de'], config.locale.language.toLowerCase())) {
+	gruntTypeDataPath = path.join(__dirname, `../util/locale/grunt_types${config.locale.language.toLowerCase()}.json`)
+}
+
 const dts = require('../../config/dts')
 const emojiData = require('../../config/emoji')
 
-const gruntTypes = require('../util/grunt_types')
+const gruntTypes = require(gruntTypeDataPath)
 const types = require('../util/types')
 const genderData = require('../util/genders')
 
