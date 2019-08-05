@@ -115,15 +115,17 @@ module.exports = (ctx) => {
 					invasions.forEach((invasion) => {
 						let genderText = ''
 						let typeText = ''
-						if(invasion.gender == 1) {
-							genderText = 'Gender: male, ';
-						} else if(invasion.gender == 2) {
-							genderText = 'Gender: female, ';
+						if (invasion.gender === 1) {
+							genderText = 'Gender: male, '
 						}
-						if(!invasion.gruntType || invasion.gruntType === '') {
-							typeText = 'Any';
-						} else {
-							typeText = invasion.gruntType;
+						else if (invasion.gender === 2) {
+							genderText = 'Gender: female, '
+						}
+						if (!invasion.gruntType || invasion.gruntType === '') {
+							typeText = 'Any'
+						}
+						else {
+							typeText = invasion.gruntType
 						}
 						message = message.concat(`\nInvasion: ${genderText}Grunt type: ${typeText}`)
 					})

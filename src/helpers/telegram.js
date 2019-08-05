@@ -53,16 +53,16 @@ process.on('message', (msg) => {
 	if (msg.reason === 'food') {
 		clearInterval(hungryInterval)
 		let message = ''
-		const discordMessage = msg.job.message
-		if (discordMessage.content) message = message.concat(`${discordMessage.content}\n`)
-		if (discordMessage.embed) {
-			if (discordMessage.embed.author) {
-				if (discordMessage.embed.author.name) message = message.concat(`\n${discordMessage.embed.author.name}\n`)
+		const telegramMessage = msg.job.message
+		if (telegramMessage.content) message = message.concat(`${telegramMessage.content}\n`)
+		if (telegramMessage.embed) {
+			if (telegramMessage.embed.author) {
+				if (telegramMessage.embed.author.name) message = message.concat(`\n${telegramMessage.embed.author.name}\n`)
 			}
-			if (discordMessage.embed.title) message = message.concat(`${discordMessage.embed.title}\n`)
-			if (discordMessage.embed.description) message = message.concat(`${discordMessage.embed.description}\n`)
-			if (discordMessage.embed.fields) {
-				discordMessage.embed.fields.forEach((field) => {
+			if (telegramMessage.embed.title) message = message.concat(`${telegramMessage.embed.title}\n`)
+			if (telegramMessage.embed.description) message = message.concat(`${telegramMessage.embed.description}\n`)
+			if (telegramMessage.embed.fields) {
+				telegramMessage.embed.fields.forEach((field) => {
 					message = message.concat(`\n${field.name}\n\n${field.value}\n`)
 					return message
 				})

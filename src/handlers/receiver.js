@@ -85,13 +85,13 @@ if (config.telegram.enabled) {
 
 
 function handlePokestopMessage(hook, correlationId) {
-	//Get a feeler for RDM/MAD differences
-	let incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp;
+	// Get a feeler for RDM/MAD differences
+	const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 
-	if (incidentExpiration) { 
-		if(!cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+	if (incidentExpiration) {
+		if (!cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
 			cache.put(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
-			if(incidentExpiration > 0) {
+			if (incidentExpiration > 0) {
 				invasionController.handle(hook.message)
 					.then((work) => {
 						work.forEach((job) => {
@@ -104,12 +104,13 @@ function handlePokestopMessage(hook, correlationId) {
 						log.log({ level: 'error', message: `invasionController failed to handle ${correlationId} \n${e.message} `, event: 'fail:invasionController' })
 					})
 			}
-		} else {
+		}
+		else {
 			log.log({ level: 'warn', message: `Pokestop Invasion message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
 		}
 	}
 
-	//LURE handling goes here
+	// LURE handling goes here
 }
 
 module.exports = async (req, reply) => {
@@ -212,12 +213,12 @@ module.exports = async (req, reply) => {
 				break
 			}
 			case 'pokestop': {
-				handlePokestopMessage(hook, correlationId);
-				break;
+				handlePokestopMessage(hook, correlationId)
+				break
 			}
 			case 'invasion': {
-				handlePokestopMessage(hook, correlationId);
-				break;
+				handlePokestopMessage(hook, correlationId)
+				break
 			}
 			default:
 		}

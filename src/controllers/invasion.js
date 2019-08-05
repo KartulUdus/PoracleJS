@@ -16,7 +16,7 @@ const minTth = config.general.monsterMinimumTimeTillHidden || 0
 const dts = require('../../config/dts')
 const emojiData = require('../../config/emoji')
 
-const gruntTypes = require("../util/grunt_types")
+const gruntTypes = require('../util/grunt_types')
 const types = require('../util/types')
 const genderData = require('../util/genders')
 
@@ -75,14 +75,14 @@ class Incident extends Controller {
 					data.staticmap = ''
 				}
 			}
-            
+
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			
-			let incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp;
+
+			const incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp
 			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
 			data.distime = moment(incidentExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
-			
+
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				log.warn(`${data.name} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -97,35 +97,38 @@ class Incident extends Controller {
 						level: 'debug', message: `webhook message ${data.messageId} processing`, event: 'message:start', type: 'invasion', meta: data,
 					})
 
-					data.gruntTypeId = 0;
-					if(data.incident_grunt_type) {
-						data.gruntTypeId = data.incident_grunt_type;
-					} else if(data.grunt_type) {
-						data.gruntTypeId = data.grunt_type;
+					data.gruntTypeId = 0
+					if (data.incident_grunt_type) {
+						data.gruntTypeId = data.incident_grunt_type
 					}
-					data.gruntTypeEmoji = '❓';								
-					data.gruntTypeColor = "12595240";
-					if(data.gruntTypeId) {
-						if(data.gruntTypeId in gruntTypes) {
-							let gruntType = gruntTypes[data.gruntTypeId];
-							data.gruntName = gruntType.grunt;
-							data.gender = gruntType.gender;
-							if(gruntType.type in emojiData.type) {
-								data.gruntTypeEmoji = emojiData.type[gruntType.type].emoji;
+					else if (data.grunt_type) {
+						data.gruntTypeId = data.grunt_type
+					}
+					data.gruntTypeEmoji = '❓'
+					data.gruntTypeColor = '12595240'
+					if (data.gruntTypeId) {
+						if (data.gruntTypeId in gruntTypes) {
+							const gruntType = gruntTypes[data.gruntTypeId]
+							data.gruntName = gruntType.grunt
+							data.gender = gruntType.gender
+							if (gruntType.type in emojiData.type) {
+								data.gruntTypeEmoji = emojiData.type[gruntType.type].emoji
 							}
-							if(gruntType.type in types) {
-								data.gruntTypeColor = types[gruntType.type].color;
+							if (gruntType.type in types) {
+								data.gruntTypeColor = types[gruntType.type].color
 							}
-							data.gruntType = gruntType.type;
-						} else {
-							data.gender = 0;
-							data.gruntName = 'Grunt';
-							data.gruntType = 'Mixed';
+							data.gruntType = gruntType.type
 						}
-					} else {
-						data.gender = 0;
-						data.gruntName = '';
-						data.gruntTypeColor = '12595240';
+						else {
+							data.gender = 0
+							data.gruntName = 'Grunt'
+							data.gruntType = 'Mixed'
+						}
+					}
+					else {
+						data.gender = 0
+						data.gruntName = ''
+						data.gruntTypeColor = '12595240'
 					}
 
 					this.invasionWhoCares(data).then((whoCares) => {
@@ -144,7 +147,7 @@ class Incident extends Controller {
 						}
 						this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
 							const jobs = []
-							
+
 
 							whoCares.forEach((cares) => {
 								const alarmId = this.uuid
@@ -178,7 +181,7 @@ class Incident extends Controller {
 									stateCode: geoResult.stateCode,
 									neighbourhood: geoResult.neighbourhood,
 									flagemoji: geoResult.flag,
-									areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', ')
+									areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 								})
 
 								const template = JSON.stringify(dts.incident[`${cares.template}`])

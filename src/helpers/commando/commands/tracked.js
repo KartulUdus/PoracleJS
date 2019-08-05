@@ -62,7 +62,7 @@ exports.run = (client, msg) => {
 					const invasions = data[5]
 					const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 					let locationText = 'Y'
-					if(human.latitude !== 0 && human.longitude !== 0) {
+					if (human.latitude !== 0 && human.longitude !== 0) {
 						locationText = `Your location is currently set to ${maplink} \nand y`
 					}
 					msg.reply(`👋\n${locationText}ou are currently set to receive alarms in ${human.area}`).catch((O_o) => {
@@ -125,15 +125,17 @@ exports.run = (client, msg) => {
 					invasions.forEach((invasion) => {
 						let genderText = ''
 						let typeText = ''
-						if(invasion.gender == 1) {
-							genderText = 'Gender: male, ';
-						} else if(invasion.gender == 2) {
-							genderText = 'Gender: female, ';
+						if (invasion.gender === 1) {
+							genderText = 'Gender: male, '
 						}
-						if(!invasion.gruntType || invasion.gruntType === '') {
-							typeText = 'Any';
-						} else {
-							typeText = invasion.gruntType;
+						else if (invasion.gender === 2) {
+							genderText = 'Gender: female, '
+						}
+						if (!invasion.gruntType || invasion.gruntType === '') {
+							typeText = 'Any'
+						}
+						else {
+							typeText = invasion.gruntType
 						}
 						message = message.concat(`\nInvasion: ${genderText}Grunt type: ${typeText}`)
 					})

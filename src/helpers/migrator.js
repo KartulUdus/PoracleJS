@@ -148,7 +148,7 @@ const migration4 = {
 }
 
 const migration5 = {
-    incident: `CREATE TABLE IF NOT EXISTS \`incident\` (
+	incident: `CREATE TABLE IF NOT EXISTS \`incident\` (
             \`id\` VARCHAR(191) NOT NULL COLLATE utf8_unicode_ci,
             \`template\` SMALLINT(5) NULL DEFAULT 3,
 			\`distance\` INT(11) NOT NULL,
@@ -156,7 +156,7 @@ const migration5 = {
   			\`gruntType\` VARCHAR(25) NOT NULL DEFAULT '',
             PRIMARY KEY (\`id\`,\`gender\`,\`gruntType\`),
             INDEX \`incident_distance\` (\`distance\`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`,
 }
 
 module.exports = async () => new Promise((resolve, reject) => {
@@ -253,19 +253,19 @@ module.exports = async () => new Promise((resolve, reject) => {
 								}
 								else if (version.val === 4) {
 									Promise.all([
-										queries.mysteryQuery(migration5.incident)
+										queries.mysteryQuery(migration5.incident),
 									])
-									.then(() => {
-										queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
-											.then(() => resolve(true))
-											.catch((unhappy) => {
-												reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
-											})
-										log.info('applied Db migration 5')
-									})
-									.catch((unhappy) => {
-										reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
-									})
+										.then(() => {
+											queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+												.then(() => resolve(true))
+												.catch((unhappy) => {
+													reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
+												})
+											log.info('applied Db migration 5')
+										})
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
+										})
 								}
 								else if (version.val === 5) {
 									log.info('Database schema-version 5 confirmed')
