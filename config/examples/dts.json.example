@@ -302,6 +302,59 @@
       }
     }
   },
+  "incident": {
+    "1": {
+      "embed": {
+        "author": {
+          "name": "R {{flagemoji}} {{lat}}, {{lon}} until: {{time}}, {{tthm}}m {{tths}}s",
+          "url": "{{{mapurl}}}",
+          "icon_url": "{{{imgurl}}}"
+        }
+      }
+    },
+    "2": {
+      "embed": {
+        "title": "{{name}}: incident, \n {{countryCode}} {{flagemoji}} {{addr}} {{lat}}, {{lon}} )",
+        "description": "[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "author": {
+          "name": "end: {{time}} in {{tthm}}m {{tths}}s",
+          "icon_url": "{{{imgurl}}}"
+        }
+      }
+    },
+    "3": {
+      "embed": {
+        "title": "Team Rocket incident has started! at {{name}}",
+        "description": "[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "author": {
+          "name": "end: {{time}} in {{tthm}}m {{tths}}s",
+          "icon_url": "{{{imgurl}}}"
+        }
+      }
+    },
+    "4": {
+      "embed": {
+        "title": "Team Rocket Incident at {{name}} {{flagemoji}} {{addr}}",
+        "description": "[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "image": {
+          "url": "{{{imgurl}}}"
+        },
+        "author": {
+          "name": "{{name}} end: {{time}}, {{tthm}}m {{tths}}s",
+          "icon_url": "{{{imgurl}}}"
+        }
+      }
+    },
+    "5": {
+      "embed": {
+        "title": "Team rocket incident at {{name}} {{flagemoji}} {{addr}} \n {{areas}}",
+        "description": "End time : {{time}}, you have {{tthm}}m {{tths}}s left \nCoords: {{lat}}, {{lon}} \n[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgurl}}}"
+        }
+      }
+    }
+  },
   "greeting": {
     "embed": {
       "title": "Welcome",
@@ -326,6 +379,10 @@
         {
           "name": "Quest tracking commands",
           "value": "`{{prefix}}quest porygon pikachu poke ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokeballs as rewards \n `{{prefix}}remove quest all items` Removes tracking for all item based quests. Can also use `all pokemon` or `stardust`"
+        },
+        {
+          "name": "Invasion tracking commands",
+          "value": "`{{prefix}}invasion template3 d500 dragon mixed`: Any arguments are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove` Removes tracking for all Team Rocket Incidents."
         }
       ]
     }

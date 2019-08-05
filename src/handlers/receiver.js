@@ -24,11 +24,13 @@ const cache = new Cache({
 
 const MonsterController = require('../controllers/monster')
 const RaidController = require('../controllers/raid')
+const InvasionController = require('../controllers/invasion')
 const QuestController = require('../controllers/quest')
 
 const monsterController = new MonsterController(db)
 const raidController = new RaidController(db)
 const questController = new QuestController(db)
+const invasionController = new InvasionController(db)
 
 // check how long the Queue is every minute. ideally empty
 setInterval(() => {
@@ -81,6 +83,35 @@ if (config.telegram.enabled) {
 	})
 }
 
+
+function handlePokestopMessage(hook, correlationId) {
+	// Get a feeler for RDM/MAD differences
+	const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
+
+	if (incidentExpiration) {
+		if (!cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+			cache.put(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
+			if (incidentExpiration > 0) {
+				invasionController.handle(hook.message)
+					.then((work) => {
+						work.forEach((job) => {
+							if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
+							if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
+							invasionController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+						})
+					})
+					.catch((e) => {
+						log.log({ level: 'error', message: `invasionController failed to handle ${correlationId} \n${e.message} `, event: 'fail:invasionController' })
+					})
+			}
+		}
+		else {
+			log.log({ level: 'warn', message: `Pokestop Invasion message :${hook.message.pokestop_id} was sent again too soon`, event: 'cache:duplicate' })
+		}
+	}
+
+	// LURE handling goes here
+}
 
 module.exports = async (req, reply) => {
 	if (config.general.ipWhitelist.length && !_.includes(config.general.ipWhitelist, req.raw.ip)) {
@@ -176,9 +207,17 @@ module.exports = async (req, reply) => {
 					work.forEach((job) => {
 						if (job.target.toString().length > 15 && config.discord.enabled) discordQueue.push(job)
 						if (job.target.toString().length < 15 && config.telegram.enabled) telegramQueue.push(job)
-						raidController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
+						questController.addOneQuery('humans', 'alerts_sent', 'id', job.target)
 					})
 				})
+				break
+			}
+			case 'pokestop': {
+				handlePokestopMessage(hook, correlationId)
+				break
+			}
+			case 'invasion': {
+				handlePokestopMessage(hook, correlationId)
 				break
 			}
 			default:

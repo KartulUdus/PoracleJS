@@ -52,14 +52,20 @@ exports.run = (client, msg) => {
 					client.query.selectAllQuery('egg', 'id', target.id),
 					client.query.selectOneQuery('humans', 'id', target.id),
 					client.query.selectAllQuery('quest', 'id', target.id),
+					client.query.selectAllQuery('incident', 'id', target.id),
 				]).then((data) => {
 					const monsters = data[0]
 					const raids = data[1]
 					const eggs = data[2]
 					const human = data[3]
 					const quests = data[4]
+					const invasions = data[5]
 					const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
-					msg.reply(`👋\nYour location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`).catch((O_o) => {
+					let locationText = 'Y'
+					if (human.latitude !== 0 && human.longitude !== 0) {
+						locationText = `Your location is currently set to ${maplink} \nand y`
+					}
+					msg.reply(`👋\n${locationText}ou are currently set to receive alarms in ${human.area}`).catch((O_o) => {
 						client.log.error(O_o.message)
 					})
 					let message = ''
@@ -110,6 +116,30 @@ exports.run = (client, msg) => {
 						if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
 						message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 					})
+
+					if (invasions.length) {
+						message = message.concat('\n\nYou\'re tracking the following invasions:\n')
+					}
+					else message = message.concat('\n\nYou\'re not tracking any invasions')
+
+					invasions.forEach((invasion) => {
+						let genderText = ''
+						let typeText = ''
+						if (invasion.gender === 1) {
+							genderText = 'Gender: male, '
+						}
+						else if (invasion.gender === 2) {
+							genderText = 'Gender: female, '
+						}
+						if (!invasion.gruntType || invasion.gruntType === '') {
+							typeText = 'Any'
+						}
+						else {
+							typeText = invasion.gruntType
+						}
+						message = message.concat(`\nInvasion: ${genderText}Grunt type: ${typeText}`)
+					})
+
 					client.log.log({ level: 'debug', message: `${msg.author.username} checked trackings`, event: 'discord:tracked' })
 
 					if (message.length < 6000) {
