@@ -112,7 +112,7 @@ CREATE TABLE IF NOT EXISTS \`incident\` (
   \`distance\` INT(11) NOT NULL,
   \`gender\` TINYINT(1) NOT NULL DEFAULT 0,
   \`gruntType\` VARCHAR(25) NOT NULL DEFAULT '',
-  PRIMARY KEY (\`id\`),
+  PRIMARY KEY (\`id\`,\`gender\`,\`gruntType\`),
   INDEX \`incident_distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
@@ -157,6 +157,11 @@ const migration5 = {
             PRIMARY KEY (\`id\`,\`gender\`,\`gruntType\`),
             INDEX \`incident_distance\` (\`distance\`)
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`,
+}
+
+const migration6 = {
+	incidentDropPk: 'ALTER TABLE incident DROP PRIMARY KEY',
+	incidentFixPk: 'ALTER TABLE incident ADD PRIMARY KEY(id,gender,gruntType)'
 }
 
 module.exports = async () => new Promise((resolve, reject) => {
@@ -268,6 +273,26 @@ module.exports = async () => new Promise((resolve, reject) => {
 										})
 								}
 								else if (version.val === 5) {
+									queries.mysteryQuery(migration6.incidentDropPk)
+										.then(() => {
+											queries.mysteryQuery(migration6.incidentFixPk)
+												.then(() => {
+													queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+														.then(() => resolve(true))
+														.catch((unhappy) => {
+															reject(log.error(`Database migration unhappy to create migration 6: ${unhappy.message}`))
+														})
+													log.info('applied Db migration 5')
+												})
+												.catch((unhappy) => {
+													reject(log.error(`Database migration unhappy to create migration 6: ${unhappy.message}`))
+												})
+										})
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to drop incident PK: ${unhappy.message}`))
+										})
+								}
+								else if (version.val === 6) {
 									log.info('Database schema-version 5 confirmed')
 									resolve(true)
 								}

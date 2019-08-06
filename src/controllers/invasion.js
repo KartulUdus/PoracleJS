@@ -119,7 +119,7 @@ class Incident extends Controller {
 							data.gruntName = gruntType.grunt
 							data.gender = gruntType.gender
 							if (gruntType.type in emojiData.type) {
-								data.gruntTypeEmoji = emojiData.type[gruntType.type].emoji
+								data.gruntTypeEmoji = emojiData.type[gruntType.type]
 							}
 							if (gruntType.type in types) {
 								data.gruntTypeColor = types[gruntType.type].color
