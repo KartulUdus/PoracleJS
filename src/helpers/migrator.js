@@ -282,7 +282,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 														.catch((unhappy) => {
 															reject(log.error(`Database migration unhappy to create migration 6: ${unhappy.message}`))
 														})
-													log.info('applied Db migration 5')
+													log.info('applied Db migration 6')
 												})
 												.catch((unhappy) => {
 													reject(log.error(`Database migration unhappy to create migration 6: ${unhappy.message}`))
@@ -293,7 +293,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 										})
 								}
 								else if (version.val === 6) {
-									log.info('Database schema-version 5 confirmed')
+									log.info('Database schema-version 6 confirmed')
 									resolve(true)
 								}
 							})
