@@ -7,6 +7,7 @@ module.exports = (client) => {
 		},
 	})
 
+/*
 	client.query.selectAllQuery('humans', 'enabled', 1).then((humans) => {
 		humans.forEach((human) => {
 			if (!client.channels.keyArray().includes(human.id) &&
@@ -24,4 +25,5 @@ module.exports = (client) => {
 			}
 		})
 	})
+*/
 }
