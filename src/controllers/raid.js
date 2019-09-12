@@ -154,7 +154,7 @@ class Raid extends Controller {
 					.then((gymInfo) => {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
-						data.url = gymInfo ? gymInfo.url : ''
+						data.url = gymInfo ? gymInfo.url : data.url
 						data.park = gymInfo ? gymInfo.park : data.ex_raid_eligible
 						data.park = data.ex_raid_eligible ? data.ex_raid_eligible : data.park
 						data.ex = data.park ? 'EX' : ''
@@ -284,7 +284,7 @@ class Raid extends Controller {
 					.then((gymInfo) => {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
-						data.url = gymInfo ? gymInfo.url : ''
+						data.url = gymInfo ? gymInfo.url : data.url
 						data.park = gymInfo ? gymInfo.park : data.ex_raid_eligible
 						data.park = data.ex_raid_eligible ? data.ex_raid_eligible : data.park
 						data.ex = data.park ? 'EX' : ''
