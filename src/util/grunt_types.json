@@ -18,7 +18,7 @@
     "type": "Mixed",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "true",
+    "second_reward": true,
     "encounters":{
         "first": ["001","004","007"],
         "second":["002","005","008"],
@@ -29,7 +29,7 @@
     "type": "Mixed",
     "grunt": "Female Grunt",
     "gender": 2,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["143"],
         "second":["143","062","282"],
@@ -45,7 +45,7 @@
     "type": "Bug",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["123"],
         "second":["123","212"],
@@ -76,7 +76,7 @@
     "type": "Dragon",
     "grunt": "Female Grunt",
     "gender": 2,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["147"],
         "second":["147","148"],
@@ -102,7 +102,7 @@
     "type": "Fighting",
     "grunt": "Female Grunt",
     "gender": 2,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["107"],
         "second":["107"],
@@ -118,7 +118,7 @@
     "type": "Fire",
     "grunt": "Female Grunt",
     "gender": 2,
-    "second_reward": "true",
+    "second_reward": true,
     "encounters":{
         "first": ["004","058","228"],
         "second":["005","229"],
@@ -134,7 +134,7 @@
     "type": "Flying",
     "grunt": "Female Grunt",
     "gender": 2,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["041","042"],
         "second":["042","123","169"],
@@ -155,7 +155,7 @@
     "type": "Grass",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "true",
+    "second_reward": true,
     "encounters":{
         "first": ["001","043","387"],
         "second":["001","002","044"],
@@ -171,7 +171,7 @@
     "type": "Ground",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["019","104","246"],
         "second":["020","104","105"],
@@ -207,7 +207,7 @@
     "type": "Normal",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "true",
+    "second_reward": true,
     "encounters":{
         "first": ["019","041"],
         "second":["019","020"],
@@ -218,7 +218,7 @@
     "type": "Poison",
     "grunt": "Female Grunt",
     "gender": 2,
-    "second_reward": "true",
+    "second_reward": true,
     "encounters":{
         "first": ["041","048","088"],
         "second":["042","088","089"],
@@ -239,7 +239,7 @@
     "type": "Psychic",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "true",
+    "second_reward": true,
     "encounters":{
         "first": ["063","096","280"],
         "second":["096","097","280"],
@@ -255,7 +255,7 @@
     "type": "Rock",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["246"],
         "second":["246","247"],
@@ -266,7 +266,7 @@
     "type": "Water",
     "grunt": "Female Grunt",
     "gender": 2,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["054","060"],
         "second":["055","061"],
@@ -277,7 +277,7 @@
     "type": "Water",
     "grunt": "Male Grunt",
     "gender": 1,
-    "second_reward": "false",
+    "second_reward": false,
     "encounters":{
         "first": ["129"],
         "second":["129"],
