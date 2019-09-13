@@ -20,10 +20,17 @@ if (_.includes(['de', 'fr'], config.locale.language.toLowerCase())) {
 	gruntTypeDataPath = path.join(__dirname, `../util/locale/grunt_types${config.locale.language.toLowerCase()}.json`)
 }
 
+let monsterDataPath = path.join(__dirname, '../util/monsters.json')
+if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCase())) {
+	monsterDataPath = path.join(__dirname, `../util/locale/monsters${config.locale.language.toLowerCase()}.json`)
+}
+
 const dts = require('../../config/dts')
 const emojiData = require('../../config/emoji')
 
 const gruntTypes = require(gruntTypeDataPath)
+
+const monsterData = require(monsterDataPath)
 const types = require('../util/types')
 const genderData = require('../util/genders')
 
@@ -38,6 +45,8 @@ class Incident extends Controller {
 			data.matched.forEach((area) => {
 				areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 			})
+			if (!data.gender) data.gender = '-1'
+
 			const query = `
 			select humans.id, humans.name, incident.template from incident
             join humans on humans.id = incident.id
@@ -125,17 +134,55 @@ class Incident extends Controller {
 								data.gruntTypeColor = types[gruntType.type].color
 							}
 							data.gruntType = gruntType.type
+
+							let gruntRewards = ''
+							if (gruntType.encounters) {
+								if (gruntType.second_reward) {
+									// one out of two rewards
+									gruntRewards = '85%: '
+									let first = true
+									gruntType.encounters.first.forEach((fr) => {
+										if (!first) gruntRewards += ', '
+										else first = false
+
+										const firstReward = parseInt(fr, 10)
+										gruntRewards += monsterData[`${firstReward}`].name
+									})
+									gruntRewards += '\\n15%: '
+									first = true
+									gruntType.encounters.second.forEach((sr) => {
+										if (!first) gruntRewards += ', '
+										else first = false
+
+										const secondReward = parseInt(sr, 10)
+										gruntRewards += monsterData[`${secondReward}`].name
+									})
+								} else {
+									// Single Reward 100% of encounter (might vary based on actual fight).
+									let first = true
+									gruntType.encounters.first.forEach((firstReward) => {
+										if (!first) gruntRewards += ', '
+										else first = false
+
+										gruntRewards += monsterData[firstReward].name
+									})
+								}
+
+								data.gruntRewards = gruntRewards
+							}
 						}
 						else {
 							data.gender = 0
 							data.gruntName = 'Grunt'
 							data.gruntType = 'Mixed'
+							data.gruntRewards = ''
 						}
 					}
 					else {
 						data.gender = 0
 						data.gruntName = ''
 						data.gruntTypeColor = '12595240'
+						data.gruntRewards = ''
 					}
 
 					this.invasionWhoCares(data).then((whoCares) => {
@@ -212,14 +259,14 @@ class Incident extends Controller {
 							})
 							resolve(jobs)
 						}).catch((err) => {
-							log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
+							log.log({ level: 'error', message: `invasion getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
 						})
 
 					}).catch((err) => {
 						log.log({ level: 'error', message: `invasionWhoCares errored with: ${err.message}`, event: 'fail:invasionWhoCares' })
 					})
 				}).catch((err) => {
-					log.log({ level: 'error', message: `pointsInArea errored with: ${err.message}`, event: 'fail:pointsInArea' })
+					log.log({ level: 'error', message: `pointsInArea of invasion errored with: ${err.message}`, event: 'fail:invasionPointsInArea' })
 				})
 		})
 	}
