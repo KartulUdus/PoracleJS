@@ -160,11 +160,12 @@ class Incident extends Controller {
 								} else {
 									// Single Reward 100% of encounter (might vary based on actual fight).
 									let first = true
-									gruntType.encounters.first.forEach((firstReward) => {
+									gruntType.encounters.first.forEach((fr) => {
 										if (!first) gruntRewards += ', '
 										else first = false
 
-										gruntRewards += monsterData[firstReward].name
+										const firstReward = parseInt(fr, 10)
+										gruntRewards += monsterData[`${firstReward}`].name
 									})
 								}
 
