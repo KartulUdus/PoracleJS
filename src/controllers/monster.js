@@ -208,7 +208,7 @@ class Monster extends Controller {
 								atk: data.individual_attack,
 								def: data.individual_defense,
 								sta: data.individual_stamina,
-								imgurl: data.imgurl.toLowerCase(),
+								imgurl: data.imgurl,
 								pokemoji: emojiData.pokemon[data.pokemon_id],
 								areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 

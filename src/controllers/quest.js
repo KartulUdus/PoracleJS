@@ -142,7 +142,7 @@ class Quest extends Controller {
 							itemNames: itemnames.join(', '),
 							stardust: data.type === 3 ? 'stardust' : '',
 							rewardemoji: data.rewardemoji,
-							imgurl: data.imgurl.toLowerCase(),
+							imgurl: data.imgurl,
 							name: data.pokestop_name.replace(/\n/g, ' '),
 							url: data.pokestop_url,
 							minCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 10, 10, 10) : '',

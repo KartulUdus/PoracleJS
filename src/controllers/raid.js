@@ -211,7 +211,7 @@ class Raid extends Controller {
 												staticmap: data.staticmap,
 												detailsurl: data.url,
 												mapurl: data.mapurl,
-												imgurl: data.imgurl.toLowerCase(),
+												imgurl: data.imgurl,
 												gif: pokemonGif(Number(data.pokemon_id)),
 												color: data.color,
 												// geocode stuff
@@ -336,7 +336,7 @@ class Raid extends Controller {
 												mapurl: data.mapurl,
 												applemap: data.applemap,
 												rocketmap: data.rocketmap,
-												imgurl: data.imgurl.toLowerCase(),
+												imgurl: data.imgurl,
 												color: data.color,
 												ex: data.ex,
 												// geocode stuff
