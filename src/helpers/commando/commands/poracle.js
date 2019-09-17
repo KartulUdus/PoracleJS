@@ -18,9 +18,10 @@ exports.run = (client, msg) => {
 				msg.react('✅').catch((O_o) => {
 					client.log.error(O_o.message)
 				})
-				const message = { ...client.dts.greeting }
-				delete message.embed.welcomeTitle
-				delete message.embed.welcomeDescription
+				const greetingEmbed = { ...client.dts.greeting.embed }
+				const emptyTitle = { embed: { ...greetingEmbed, title: '', description: '' } }
+				const welcomeEmbed = greetingEmbed.welcomeTitle ? { embed: { ...greetingEmbed, title: greetingEmbed.welcomeTitle || '', description: greetingEmbed.welcomeDescription || '' } } : emptyTitle
+				const message = { ...client.dts.greeting, ...welcomeEmbed }
 				const view = { prefix: client.config.discord.prefix }
 				const template = JSON.stringify(message)
 				const greeting = JSON.parse(mustache.render(template, view))

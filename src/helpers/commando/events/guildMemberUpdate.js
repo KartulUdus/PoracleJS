@@ -17,7 +17,7 @@ module.exports = (client, oldMember, newMember) => {
 			.then((isregistered) => {
 				if (!isregistered) {
 					client.query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), '[]']])
-					const greetingEmbed = client.dts.greeting.embed
+					const greetingEmbed = { ...client.dts.greeting.embed }
 					const emptyTitle = { embed: { ...greetingEmbed, title: '', description: '' } }
 					const welcomeEmbed = greetingEmbed.welcomeTitle ? { embed: { ...greetingEmbed, title: greetingEmbed.welcomeTitle || '', description: greetingEmbed.welcomeDescription || '' } } : emptyTitle
 					const message = { ...client.dts.greeting, ...welcomeEmbed }
@@ -26,7 +26,6 @@ module.exports = (client, oldMember, newMember) => {
 					const greeting = JSON.parse(mustache.render(template, view))
 					oldMember.user.send(message.content, greeting)
 					client.log.log({ level: 'debug', message: `registered ${oldMember.user.name} because ${client.config.discord.userRole} role removed`, event: 'discord:roleCheck' })
-
 				}
 			})
 			.catch((err) => {

@@ -24,8 +24,6 @@ exports.run = (client, msg) => {
 			}
 			if (isregistered) {
 				const message = { ...client.dts.greeting }
-				delete message.embed.welcomeTitle
-				delete message.embed.welcomeDescription
 				const view = { prefix: client.config.discord.prefix }
 				const template = JSON.stringify(message)
 				const greeting = JSON.parse(mustache.render(template, view))
