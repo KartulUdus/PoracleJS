@@ -25,13 +25,17 @@
     "22": "Add {{amount}} Friend(s)",
     "23": "Trade {{amount}} Pokemon",
     "24": "Send {{amount}} Gift(s)",
-    "25": "Evolve {{amount}} Pokemon"
+    "25": "Evolve {{amount}} Pokemon",
+    "27": "Complete {{amount}} Battles",
+    "28": "Take {{amount}} snapshots",
+    "29": "Defeat {{amount}} Team Rocket Grunt",
+    "30": "Purify {{amount}} Pokemon"
   },
   "questRewardTypes": {
     "0": "",
     "1": "{{amount}} XP",
     "2": "{{amount}} {{item}}s",
-    "3": "{{amount}}  Stardust",
+    "3": "{{amount}} Stardust",
     "4": "{{amount}} {{type}} Candy",
     "5": "Avatar clothing",
     "6": "Quest",
@@ -59,7 +63,12 @@
     "17": "Player Level",
     "18": "Win Battle Status",
     "19": "New Friend",
-    "20": "Days In a Row"
+    "20": "Days In a Row",
+    "21": "Unique Pokemon",
+    "22": "Team leader",
+    "23": "Another player",
+    "24": "Location",
+    "25": "Distance"
   },
 
   "throwType": {
@@ -117,5 +126,4 @@
     "1404": "Star Piece",
     "1405": "Friend Gift Box"
   }
-
 }

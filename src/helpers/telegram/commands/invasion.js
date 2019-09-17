@@ -1,7 +1,7 @@
 const _ = require('lodash')
+const typeData = require('../../../util/types')
 
 module.exports = (ctx) => {
-
 	const { controller, command } = ctx.state
 	const user = ctx.update.message.from
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
@@ -27,67 +27,69 @@ module.exports = (ctx) => {
 				})
 			}
 			if (isregistered) {
-
-				let park = 0
 				let distance = 0
-				let levels = []
-				let team = 4
 				let template = 3
 				let remove = false
+				let gender = 0
+				const rawTypes = []
+				const types = []
 
 				args.forEach((element) => {
-					if (element.toLowerCase() === 'ex') park = 1
-					else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
-					else if (element.match(/level\d/gi)) levels.push(element.replace(/level/gi, ''))
-					else if (element.match(/instinct/gi)) team = 3
-					else if (element.match(/valor/gi)) team = 2
-					else if (element.match(/mystic/gi)) team = 1
-					else if (element.match(/harmony/gi)) team = 0
+					if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
 					else if (element.match(/remove/gi)) remove = true
-					else if (element.match(/everything/gi)) levels = [1, 2, 3, 4, 5]
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
 						if (distance.length >= 10) distance = distance.substr(0, 9)
 					}
-
+					else if (element.match(/female/gi)) gender = 2
+					else if (element.match(/male/gi)) gender = 1
+					else rawTypes.push(element)
 				})
-				if (!remove) {
-					if (levels.length) {
-						const insertData = levels.map(level => [target.id, level, template, distance, park, team])
-						controller.query.insertOrUpdateQuery(
-							'egg',
-							['id', 'raid_level', 'template', 'distance', 'park', 'team'],
-							insertData,
-						).catch((O_o) => {})
-						ctx.reply('✅').catch((O_o) => {
-							controller.log.error(O_o.message)
-						})
-						controller.log.log({ level: 'debug', message: `${user.first_name} started tracking level (${levels.join(', ')}) eggs in ${target.name}`, event: 'discord:egg' })
+
+				rawTypes.forEach((t) => {
+					if (t.toLowerCase() === 'mixed') {
+						types.push('Mixed')
 					}
 					else {
-						ctx.reply('404 NO LEVELS FOUND').catch((O_o) => {
-							controller.log.error(O_o.message)
-						})
+						for (const tt in typeData) {
+							if (tt.toLowerCase() === t.toLowerCase()) {
+								types.push(tt)
+							}
+						}
 					}
-				}
-				else if (levels.length) {
-					levels.forEach((level) => {
-						controller.query.deleteByIdQuery('egg', 'raid_level', `${level}`, target.id).catch((O_o) => {})
+				})
+
+				if (!remove) {
+					const insertData = types.length === 0 ? [[target.id, template, distance, gender, '']] : []
+					types.forEach((t) => {
+						insertData.push([target.id, template, distance, gender, t])
 					})
+					controller.query.insertOrUpdateQuery(
+						'incident',
+						['id', 'template', 'distance', 'gender', 'gruntType'],
+						insertData,
+					).catch((O_o) => {})
+					controller.log.log({
+						level: 'debug',
+						message: `${user.first_name} started tracking invasions in ${target.name}`,
+						event: 'telegram:invasion',
+					})
+
 					ctx.reply('✅').catch((O_o) => {
 						controller.log.error(O_o.message)
 					})
-					controller.log.log({ level: 'debug', message: `${user.first_name} removed tracking for level ${levels.join(', ')} eggs in ${target.name}`, event: 'discord:unegg' })
 				}
 				else {
-					ctx.reply('404 NO MONSTERS FOUND').catch((O_o) => {
+					controller.query.deleteQuery('incident', 'id', target.id).catch((O_o) => {})
+					controller.log.log({ level: 'debug', message: `${user.first_name} stopped tracking invasions in ${target.name}`, event: 'telegram:uninvasion' })
+
+					ctx.reply('✅').catch((O_o) => {
 						controller.log.error(O_o.message)
 					})
 				}
-
 			}
 		})
 		.catch((err) => {
-			controller.log.error(`Telegram commando /egg errored with: ${err.message} (command was "${command.text}")`)
+			controller.log.error(`Telegram commando /invasion errored with: ${err.message} (command was "${command.text}")`)
 		})
 }

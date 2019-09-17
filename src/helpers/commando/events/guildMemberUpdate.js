@@ -38,6 +38,7 @@ module.exports = (client, oldMember, newMember) => {
 					client.query.deleteQuery('monsters', 'id', oldMember.user.id)
 					client.query.deleteQuery('raid', 'id', oldMember.user.id)
 					client.query.deleteQuery('quest', 'id', oldMember.user.id)
+					client.query.deleteQuery('incident', 'id', oldMember.user.id)
 					client.query.deleteQuery('humans', 'id', oldMember.user.id)
 					client.log.log({ level: 'debug', message: `unregistered ${oldMember.user.name} because ${client.config.discord.userRole} role removed`, event: 'discord:roleCheck' })
 				}

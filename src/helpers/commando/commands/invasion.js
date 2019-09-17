@@ -1,6 +1,5 @@
 const _ = require('lodash')
-const fs = require('fs')
-const path = require('path')
+const typeData = require('../../../util/types')
 
 exports.run = (client, msg, args) => {
 	let target = { id: msg.author.id, name: msg.author.tag }
@@ -33,51 +32,71 @@ exports.run = (client, msg, args) => {
 				})
 			}
 			if (isregistered) {
-				const backups = []
-				if (args[0]) {
-					fs.readdirSync(path.join(__dirname, '/filterBackups')).forEach((file) => {
-						if (file !== '.gitkeep') backups.push(file.replace('.sql', ''))
-					})
+				let distance = 0
+				let template = 3
+				let remove = false
+				let gender = 0
+				const rawTypes = []
+				const types = []
 
-					if (args[0] === 'list') {
-						if (backups) {
-							return msg.reply(`available backups are: ${backups.join(', ')}`).catch((O_o) => {
-								client.log.error(O_o.message)
-							})
-						}
-
-						return msg.reply('No backups have been made yet :(').catch((O_o) => {
-							client.log.error(O_o.message)
-						})
-
+				args.forEach((element) => {
+					if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
+					else if (element.match(/remove/gi)) remove = true
+					else if (element.match(/d\d/gi)) {
+						distance = element.replace(/d/gi, '')
+						if (distance.length >= 10) distance = distance.substr(0, 9)
 					}
+					else if (element.match(/female/gi)) gender = 2
+					else if (element.match(/male/gi)) gender = 1
+					else rawTypes.push(element)
+				})
 
-					if (_.includes(backups, args[0])) {
-						Promise.all([
-							client.query.deleteQuery('monsters', 'id', target.id).catch((O_o) => {}),
-							client.query.deleteQuery('raid', 'id', target.id).catch((O_o) => {}),
-							client.query.deleteQuery('egg', 'id', target.id).catch((O_o) => {}),
-							client.query.deleteQuery('quest', 'id', target.id).catch((O_o) => {}),
-							client.query.deleteQuery('incident', 'id', target.id).catch((O_o) => {}),
-						]).then((x) => {
-							const query = fs.readFileSync(path.join(__dirname, `/filterBackups/${args[0]}.sql`), 'utf8').replace(/{{ target }}/gi, target.id)
-							client.query.mysteryQuery(query).catch((O_o) => {})
-							msg.react('✅').catch((O_o) => {
-								client.log.error(O_o.message)
-							})
-						})
+				rawTypes.forEach((t) => {
+					if (t.toLowerCase() === 'mixed') {
+						types.push('Mixed')
 					}
 					else {
-						msg.reply(`${args[0]} backup doesn't exist, use one of: ${backups.join(', ')}`).catch((O_o) => {
-							client.log.error(O_o.message)
-						})
+						for (const tt in typeData) {
+							if (tt.toLowerCase() === t.toLowerCase()) {
+								types.push(tt)
+							}
+						}
 					}
+				})
 
+				if (!remove) {
+					const insertData = types.length === 0 ? [[target.id, template, distance, gender, '']] : []
+					types.forEach((t) => {
+						insertData.push([target.id, template, distance, gender, t])
+					})
 
+					client.query.insertOrUpdateQuery(
+						'incident',
+						['id', 'template', 'distance', 'gender', 'gruntType'],
+						insertData,
+					).catch((O_o) => {})
+					client.log.log({
+						level: 'debug',
+						message: `${msg.author.username} started tracking invasions in ${target.name}`,
+						event: 'discord:invasion',
+					})
+
+					msg.react('✅').catch((O_o) => {
+						client.log.error(O_o.message)
+					})
+				}
+				else {
+					client.query.deleteQuery('incident', 'id', target.id).catch((O_o) => {})
+					client.log.log({ level: 'debug', message: `${msg.author.username} stopped tracking invasions in ${target.name}`, event: 'discord:uninvasion' })
+
+					msg.react('✅').catch((O_o) => {
+						client.log.error(O_o.message)
+					})
 				}
 			}
 		})
 		.catch((err) => {
-			client.log.error(`commando !restore errored with: ${err.message} (command was "${msg.content}")`)
+			client.log.error(`commando !invasion errored with: ${err.message} (command was "${msg.content}")`)
 		})
+
 }

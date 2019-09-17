@@ -105,6 +105,16 @@ CREATE TABLE \`quest\` (
   KEY \`distance\` (\`distance\`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
+const incident = `
+CREATE TABLE IF NOT EXISTS \`incident\` (
+  \`id\` VARCHAR(191) NOT NULL COLLATE utf8_unicode_ci,
+  \`template\` SMALLINT(5) NULL DEFAULT 3,
+  \`distance\` INT(11) NOT NULL,
+  \`gender\` TINYINT(1) NOT NULL DEFAULT 0,
+  \`gruntType\` VARCHAR(25) NOT NULL DEFAULT '',
+  PRIMARY KEY (\`id\`,\`gender\`,\`gruntType\`),
+  INDEX \`incident_distance\` (\`distance\`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`
 
 const migration3 = {
 	quest: `
@@ -137,6 +147,22 @@ const migration4 = {
 	`,
 }
 
+const migration5 = {
+	incident: `CREATE TABLE IF NOT EXISTS \`incident\` (
+            \`id\` VARCHAR(191) NOT NULL COLLATE utf8_unicode_ci,
+            \`template\` SMALLINT(5) NULL DEFAULT 3,
+			\`distance\` INT(11) NOT NULL,
+			\`gender\` TINYINT(1) NOT NULL DEFAULT 0,
+  			\`gruntType\` VARCHAR(25) NOT NULL DEFAULT '',
+            PRIMARY KEY (\`id\`,\`gender\`,\`gruntType\`),
+            INDEX \`incident_distance\` (\`distance\`)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;`,
+}
+
+const migration6 = {
+	incidentDropPk: 'ALTER TABLE incident DROP PRIMARY KEY',
+	incidentFixPk: 'ALTER TABLE incident ADD PRIMARY KEY(id,gender,gruntType)'
+}
 
 module.exports = async () => new Promise((resolve, reject) => {
 	queries.countQuery('TABLE_NAME', 'information_schema.tables', 'table_schema', config.db.database)
@@ -149,6 +175,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 					queries.mysteryQuery(raid),
 					queries.mysteryQuery(quest),
 					queries.mysteryQuery(egg),
+					queries.mysteryQuery(incident),
 					queries.mysteryQuery(schemaVersion),
 				])
 					.then(() => {
@@ -230,10 +257,45 @@ module.exports = async () => new Promise((resolve, reject) => {
 										})
 								}
 								else if (version.val === 4) {
-									log.info('Database schema-version 4 confirmed')
+									Promise.all([
+										queries.mysteryQuery(migration5.incident),
+									])
+										.then(() => {
+											queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+												.then(() => resolve(true))
+												.catch((unhappy) => {
+													reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
+												})
+											log.info('applied Db migration 5')
+										})
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to create migration 5: ${unhappy.message}`))
+										})
+								}
+								else if (version.val === 5) {
+									queries.mysteryQuery(migration6.incidentDropPk)
+										.then(() => {
+											queries.mysteryQuery(migration6.incidentFixPk)
+												.then(() => {
+													queries.addOneQuery('schema_version', 'val', 'key', 'db_version')
+														.then(() => resolve(true))
+														.catch((unhappy) => {
+															reject(log.error(`Database migration unhappy to create migration 6: ${unhappy.message}`))
+														})
+													log.info('applied Db migration 5')
+												})
+												.catch((unhappy) => {
+													reject(log.error(`Database migration unhappy to create migration 6: ${unhappy.message}`))
+												})
+										})
+										.catch((unhappy) => {
+											reject(log.error(`Database migration unhappy to drop incident PK: ${unhappy.message}`))
+										})
+								}
+								else if (version.val === 6) {
+									log.info('Database schema-version 5 confirmed')
 									resolve(true)
 								}
-
 							})
 							.catch((unhappy) => {
 								reject(log.error(`Database migration unhappy to create tables: ${unhappy.message}`))
