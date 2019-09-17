@@ -23,13 +23,13 @@ exports.run = (client, msg) => {
 				})
 			}
 			if (isregistered) {
-				const message = client.dts.greeting
-				message.embed.title = ''
-				message.embed.description = ''
+				const message = { ...client.dts.greeting }
+				delete message.embed.welcomeTitle
+				delete message.embed.welcomeDescription
 				const view = { prefix: client.config.discord.prefix }
 				const template = JSON.stringify(message)
 				const greeting = JSON.parse(mustache.render(template, view))
-				msg.reply(greeting).catch((O_o) => {
+				msg.reply(message.content, greeting).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 			}

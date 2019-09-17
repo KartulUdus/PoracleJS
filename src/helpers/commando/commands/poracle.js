@@ -18,10 +18,13 @@ exports.run = (client, msg) => {
 				msg.react('✅').catch((O_o) => {
 					client.log.error(O_o.message)
 				})
+				const message = { ...client.dts.greeting }
+				delete message.embed.welcomeTitle
+				delete message.embed.welcomeDescription
 				const view = { prefix: client.config.discord.prefix }
-				const template = JSON.stringify(client.dts.greeting)
+				const template = JSON.stringify(message)
 				const greeting = JSON.parse(mustache.render(template, view))
-				msg.author.send(greeting).catch((O_o) => {
+				msg.author.send(message.content, greeting).catch((O_o) => {
 					client.log.error(O_o.message)
 				})
 				client.log.log({ level: 'debug', message: `${msg.author.tag} registered`, event: 'discord:registered' })
