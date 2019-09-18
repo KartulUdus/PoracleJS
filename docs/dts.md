@@ -282,6 +282,59 @@ Any of the fields can be customized with the following:
 |{{stateCode}}| 2 letter state code of the alerted location|
 |{{flagemoji}}|Country flag emoji for location|
 
+###### Invasion alarms
+
+```json
+"incidents": {
+  "3": {
+      "embed": {
+        "title": "Team Rocket  incident has started! at {{name}}",
+        "description": "Name: {{gruntName}} {{genderName}}\nType: {{gruntType}} {{gruntTypeEmoji}}\nPossible Rewards: {{gruntRewards}}\n[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "color": "{{gruntTypeColor}}",
+        "author": {
+          "name": "end: {{time}} in {{tthm}}m {{tths}}s",
+          "icon_url": "{{{imgurl}}}"
+        }
+      }
+    },
+}
+```
+
+
+| Option        | Value         | 
+| --------------- |:-------------:|
+|{{time}}| Invasion end time|
+|{{tthh}}| Full hours until invasion ends|
+|{{tthm}}| Full minutes until invasion ends|
+|{{tths}}| Full seconds until invasion ends|
+|{{now}}| Current Timestamp|
+|{{gruntName}}| The name of the grunt (grunt female or grunt male)|
+|{{gruntType}}| The type of invasion (for example: Rock, Mixed|
+|{{gruntTypeEmoji}}| The emoji of type of invasion|
+|{{gruntRewards}}| If known, a list of possible rewards. Splits into 2 lines if there's a 85/15 split chance of reward.|
+|{{gruntTypeColor}}| The color code matching the grunt invasion type|
+|{{genderName}}| The gender name or gender emoji of the grunt|
+|{{gruntTypeId}}| The id of the invasion type|
+|{{gender}}| The id of the grunt gender|
+|{{name}}| Name of the Pokestop|
+|{{{imgurl}}}| alias for Link to the image of the Pokestop|
+|{{url}}| Link to the image of the Pokestop|
+|{{{staticmap}}}| Static link to map|
+|{{{mapurl}}}| Link to google maps|
+|{{{applemap}}}| Link to apple maps|
+|{{areas}}| Matched geofence area names for alert|
+|{{lat}}| Latitude of the alerted location|
+|{{lon}}| Longitude of the alerted location|
+|{{streetNumber}}| Street number of the alerted location|
+|{{streetName}}| Street name of the alerted location|
+|{{zipcode}}| Zip code of the alerted location|
+|{{country}}| Country of the alerted location|
+|{{countryCode}}| 2 letter country code of the alerted location|
+|{{neighbourhood}}| Neighbourhood of the alerted location|
+|{{city}}| City name of the alerted location|
+|{{state}}| State name of the alerted location|
+|{{stateCode}}| 2 letter state code of the alerted location|
+|{{flagemoji}}|Country flag emoji for location|
 
 ###### Greeting Message
 
