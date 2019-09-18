@@ -173,7 +173,19 @@ Available filters:
 `!quest remove all pokemon pinap berry stardust`  
 Removes quest tracking for all pokemon, pinap berries and strdust.
 
+##### !invasion
 
+`!invasion fire mixed d1000` Tracks all invasions of mixed AND fire types on pokestops within 1 km
+`!invasion rock female` Tracks all rock invasions where the grunt is a female
+
+Available filters
+| Filter    | Example                        | More words  |
+| --------- |:------------------------------:| -----------:|
+|all types|`!invasion `| tracks any invasions within your area|
+|(typeName or mixed)|`!quest mixed fire water rock ground`| tracks invasions of specific type within your area. Any of the 18 types are possible + the mixed type that is invasions where the typing is unknown/random|
+|d|`!invasion d50`| Tracks invasions within 50m of set location|
+|female or male|`!invasion female`| Tracks only female or male invasions|
+|remove|`!invasion remove`| Removes all alerts|
 
 ##### Admin commands
 
