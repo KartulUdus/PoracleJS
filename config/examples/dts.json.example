@@ -378,7 +378,7 @@
         },
         {
           "name": "Quest tracking commands",
-          "value": "`{{prefix}}quest porygon pikachu poke ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokeballs as rewards \n `{{prefix}}remove quest all items` Removes tracking for all item based quests. Can also use `all pokemon` or `stardust`"
+          "value": "`{{prefix}}quest porygon pikachu poke ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokeballs as rewards \n `{{prefix}}quest remove all items` Removes tracking for all item based quests. Can also use `all pokemon` or `stardust`"
         },
         {
           "name": "Invasion tracking commands",
