@@ -179,6 +179,7 @@ Removes quest tracking for all pokemon, pinap berries and strdust.
 `!invasion rock female` Tracks all rock invasions where the grunt is a female
 
 Available filters:  
+
 | Filter    | Example                        | More words  |
 | --------- |:------------------------------:| -----------:|
 |all types|`!invasion `| tracks any invasions within your area|
