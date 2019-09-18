@@ -8,6 +8,7 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 const monsterData = require(monsterDataPath)
 const questDts = require(`${__dirname}/../../../../config/questdts`)
 const typeData = require(`${__dirname}/../../../util/types`)
+const genData = require(`${__dirname}/../../../util/gens`)
 
 module.exports = (ctx) => {
 
@@ -44,6 +45,7 @@ module.exports = (ctx) => {
 				let template = 3
 				let mustShiny = 0
 				let remove = false
+				let gen = 0
 				const rawArgs = command.args
 				let minDust = 10000000
 				let stardustTracking = 9999999
@@ -58,6 +60,10 @@ module.exports = (ctx) => {
 								if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
 							} return k
 						})
+					}
+					else if (element.match(/gen[1-7]/gi)) {
+						gen = element.match(/gen\d/gi)[0].replace(/gen/gi, '')
+						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1).filter(k => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
 					}
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')

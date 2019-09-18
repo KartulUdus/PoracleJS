@@ -8,6 +8,7 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 const monsterData = require(monsterDataPath)
 const typeData = require(`${__dirname}/../../../util/types`)
 const formData = require(`${__dirname}/../../../util/forms`)
+const genData = require(`${__dirname}/../../../util/gens`)
 
 exports.run = (client, msg, args) => {
 	let target = { id: msg.author.id, name: msg.author.tag }
@@ -55,6 +56,7 @@ exports.run = (client, msg, args) => {
 				let maxweight = 9000000
 				let template = 3
 				const forms = []
+				let gen = 0
 
 				args.forEach((element) => {
 					const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
@@ -88,6 +90,10 @@ exports.run = (client, msg, args) => {
 								if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
 							} return k
 						})
+					}
+					else if (element.match(/gen[1-7]/gi)) {
+						gen = element.match(/gen\d/gi)[0].replace(/gen/gi, '')
+						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1).filter(k => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
 					}
 					else if (element.match(/everything/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1) // eslint-disable-line no-return-assign
 					else if (element.match(/d\d/gi) && element.length < 50) {
