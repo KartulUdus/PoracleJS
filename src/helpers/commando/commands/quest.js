@@ -9,6 +9,7 @@ const monsterData = require(monsterDataPath)
 const questDts = require('../../../../config/questdts')
 
 const typeData = require(`${__dirname}/../../../util/types`)
+const genData = require(`${__dirname}/../../../util/gens`)
 
 
 exports.run = (client, msg) => {
@@ -49,6 +50,7 @@ exports.run = (client, msg) => {
 				let template = 3
 				let mustShiny = 0
 				let remove = false
+				let gen = 0
 				const rawArgs = msg.content.slice(`${config.discord.prefix}quest`.length)
 				const args = rawArgs.toLowerCase().split(' ')
 				let minDust = 10000000
@@ -64,6 +66,10 @@ exports.run = (client, msg) => {
 								if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
 							} return k
 						})
+					}
+					else if (element.match(/gen[1-7]/gi)) {
+						gen = element.match(/gen\d/gi)[0].replace(/gen/gi, '')
+						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1).filter(k => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
 					}
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')

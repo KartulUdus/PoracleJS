@@ -8,6 +8,7 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 const monsterData = require(monsterDataPath)
 const typeData = require(`${__dirname}/../../../util/types`)
 const formData = require(`${__dirname}/../../../util/forms`)
+const genData = require(`${__dirname}/../../../util/gens`)
 
 module.exports = (ctx) => {
 
@@ -37,13 +38,14 @@ module.exports = (ctx) => {
 			}
 			if (isregistered) {
 
-				const monsters = []
+				let monsters = []
 				let park = 0
 				let distance = 0
 				let team = 4
 				let template = 3
 				let remove = false
 				let levels = []
+				let gen = 0
 				const form = 0
 				const forms = []
 
@@ -74,6 +76,10 @@ module.exports = (ctx) => {
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
 						if (distance.length >= 10) distance = distance.substr(0, 9)
+					}
+					else if (element.match(/gen[1-7]/gi)) {
+						gen = element.match(/gen\d/gi)[0].replace(/gen/gi, '')
+						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1).filter(k => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
 					}
 				})
 				if (!remove) {

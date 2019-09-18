@@ -56,7 +56,7 @@ exports.run = (client, msg, args) => {
 				let maxweight = 9000000
 				let template = 3
 				const forms = []
-				let gen = 1
+				let gen = 0
 
 				args.forEach((element) => {
 					const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
@@ -91,8 +91,8 @@ exports.run = (client, msg, args) => {
 							} return k
 						})
 					}
-					else if (element.match(/gen\d/gi)) {
-						gen = element.replace(/gen/gi, '')
+					else if (element.match(/gen[1-7]/gi)) {
+						gen = element.match(/gen\d/gi)[0].replace(/gen/gi, '')
 						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1).filter(k => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
 					}
 					else if (element.match(/everything/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1) // eslint-disable-line no-return-assign

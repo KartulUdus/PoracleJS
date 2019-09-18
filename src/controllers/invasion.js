@@ -15,7 +15,7 @@ moment.locale(config.locale.timeformat)
 const minTth = config.general.monsterMinimumTimeTillHidden || 0
 
 let gruntTypeDataPath = path.join(__dirname, '../util/grunt_types.json')
-//Check if the config language is one of the array object (array for future translation possibilities)
+// Check if the config language is one of the array object (array for future translation possibilities)
 if (_.includes(['de', 'fr'], config.locale.language.toLowerCase())) {
 	gruntTypeDataPath = path.join(__dirname, `../util/locale/grunt_types${config.locale.language.toLowerCase()}.json`)
 }
@@ -157,7 +157,8 @@ class Incident extends Controller {
 										const secondReward = parseInt(sr, 10)
 										gruntRewards += monsterData[`${secondReward}`].name
 									})
-								} else {
+								}
+								else {
 									// Single Reward 100% of encounter (might vary based on actual fight).
 									let first = true
 									gruntType.encounters.first.forEach((fr) => {

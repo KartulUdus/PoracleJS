@@ -161,7 +161,7 @@ const migration5 = {
 
 const migration6 = {
 	incidentDropPk: 'ALTER TABLE incident DROP PRIMARY KEY',
-	incidentFixPk: 'ALTER TABLE incident ADD PRIMARY KEY(id,gender,gruntType)'
+	incidentFixPk: 'ALTER TABLE incident ADD PRIMARY KEY(id,gender,gruntType)',
 }
 
 module.exports = async () => new Promise((resolve, reject) => {
