@@ -43,9 +43,11 @@ exports.run = (client, msg) => {
 						}
 					})
 					gitMsgs.forEach((gitMsg) => {
+						let message = `[${gitMsg[0].slice(7).substring(0, 6)}](https://github.com/KartulUdus/PoracleJS/commit/${gitMsg[0].slice(7)}) - ${gitMsg.slice(3).filter(line => line !== '').join('\n')}`
+						if (message.length > 1024) message = message.substring(0, 1023)
 						fields.push({
 							name: `${gitMsg[1].split(' ')[1]} - ${new Date(gitMsg[2].slice(8)).toLocaleDateString()}`,
-							value: `[${gitMsg[0].slice(7).substring(0, 6)}](https://github.com/KartulUdus/PoracleJS/commit/${gitMsg[0].slice(7)}) - ${gitMsg.slice(3).filter(line => line !== '').join('\n')}`,
+							value: message,
 						})
 					})
 					msg.reply(
