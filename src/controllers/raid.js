@@ -1,6 +1,4 @@
-const Controller = require('./controller')
 const config = require('config')
-const log = require('../logger')
 const pokemonGif = require('pokemon-gif')
 const path = require('path')
 
@@ -24,6 +22,8 @@ const moveData = require(moveDataPath)
 const formData = require('../util/forms')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+const log = require('../logger')
+const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
@@ -31,7 +31,6 @@ moment.locale(config.locale.timeformat)
 const dts = require('../../config/dts')
 
 class Raid extends Controller {
-
 /*
 * raidWhoCares, takes data object
 */
@@ -123,7 +122,6 @@ class Raid extends Controller {
 
 			// If there's a pokemon_id in the raid hook, we assume it's hatched
 			if (data.pokemon_id) {
-
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
@@ -133,7 +131,7 @@ class Raid extends Controller {
 				if (!data.team_id) data.team_id = 0
 				if (data.name) data.gym_name = data.name
 				data.name = monsterData[data.pokemon_id] ? monsterData[data.pokemon_id].name : 'errormon'
-				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+				data.imgUrl = `${config.general.imgUrl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 				data.sticker = `${config.telegram.stickerurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 				const e = []
 				monsterData[data.pokemon_id].types.forEach((type) => {
@@ -184,7 +182,6 @@ class Raid extends Controller {
 										return null
 									}
 									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
-
 										const jobs = []
 										whoCares.forEach((cares) => {
 											const alarmId = this.uuid
@@ -200,10 +197,10 @@ class Raid extends Controller {
 												tths: data.tth.seconds,
 												name: data.name,
 												now: new Date(),
-												mincp20: this.getCp(data.pokemon_id, 20, 10, 10, 10),
-												cp20: this.getCp(data.pokemon_id, 20, 15, 15, 15),
-												mincp25: this.getCp(data.pokemon_id, 25, 10, 10, 10),
-												cp25: this.getCp(data.pokemon_id, 25, 15, 15, 15),
+												mincp20: this.getCp(data.pokemon_id, data.form, 20, 10, 10, 10),
+												cp20: this.getCp(data.pokemon_id, data.form, 20, 15, 15, 15),
+												mincp25: this.getCp(data.pokemon_id, data.form, 25, 10, 10, 10),
+												cp25: this.getCp(data.pokemon_id, data.form, 25, 15, 15, 15),
 												move1: data.quick_move,
 												move2: data.charge_move,
 												move1emoji: data.move1emoji,
@@ -211,7 +208,7 @@ class Raid extends Controller {
 												staticmap: data.staticmap,
 												detailsurl: data.url,
 												mapurl: data.mapurl,
-												imgurl: data.imgurl.toLowerCase(),
+												imgUrl: data.imgUrl.toLowerCase(),
 												gif: pokemonGif(Number(data.pokemon_id)),
 												color: data.color,
 												// geocode stuff
@@ -252,13 +249,11 @@ class Raid extends Controller {
 												jobs.push(work)
 												this.addDiscordCache(cares.id)
 											}
-
 										})
 										resolve(jobs)
 									}).catch((err) => {
 										log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
 									})
-
 								}).catch((err) => {
 									log.log({ level: 'error', message: `raidWhoCares errored with: ${err.message}`, event: 'fail:monsterWhoCares' })
 								})
@@ -268,13 +263,12 @@ class Raid extends Controller {
 					}).catch((err) => {
 						log.log({ level: 'error', message: `get gym-info errored with: ${err.message}`, event: 'fail:pointsInArea' })
 					})
-			}
-			else {
+			} else {
 				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
-				data.imgurl = `${config.general.imgurl}egg${data.level}.png`
+				data.imgUrl = `${config.general.imgUrl}egg${data.level}.png`
 				data.sticker = `${config.telegram.stickerurl}egg${data.level}.webp`
 				if (!data.team_id) data.team_id = 0
 				if (data.name) data.gym_name = data.name
@@ -336,7 +330,7 @@ class Raid extends Controller {
 												mapurl: data.mapurl,
 												applemap: data.applemap,
 												rocketmap: data.rocketmap,
-												imgurl: data.imgurl.toLowerCase(),
+												imgUrl: data.imgUrl.toLowerCase(),
 												color: data.color,
 												ex: data.ex,
 												// geocode stuff
@@ -379,7 +373,6 @@ class Raid extends Controller {
 									}).catch((err) => {
 										log.log({ level: 'error', message: `getAddress errored with: ${err.message}`, event: 'fail:getAddress' })
 									})
-
 								}).catch((err) => {
 									log.log({ level: 'error', message: `raidWhoCares errored with: ${err.message}`, event: 'fail:monsterWhoCares' })
 								})
@@ -390,11 +383,8 @@ class Raid extends Controller {
 						log.log({ level: 'error', message: `get gym-info errored with: ${err.message}`, event: 'fail:pointsInArea' })
 					})
 			}
-
 		})
-
 	}
-
 }
 
 module.exports = Raid

@@ -1,94 +1,66 @@
 {
-  "db": {
-    "host": "127.0.0.1",
-    "user": "poracleuser",
-    "password": "YourStrongPassw0rd!",
-    "database": "poracledb",
-    "port": "3306",
-    "connectionLimit": 30,
-    "connectTimeout": 60000
-  },
+    "server": {
+        "host": "127.0.0.1",
+        "port": "4201",
+        "ipWhitelist": [],
+        "ipBlacklist": []
+    },
+    "general": {
+        "alertMinimumTime" : 120,
+        "imgurl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/"
+    },
+    "logger": {
+        "level": "info",
+        "logSize": 25
+    },
+    "database": {
+        "client": "sqlite",
+        "conn": {
+            "host": "127.0.0.1",
+            "port": 3306,
+            "database": "poracle",
+            "user": "poracleuser",
+            "password": "poraclepassword"
+        }
+    },
+    "locale": {
+        "timeformat": "en-gb",
+        "time": "LTS",
+        "addressFormat": "{{ streetName}} {{ streetNumber }}:",
+        "language": "en"
+    },
+    "discord": {
+        "enabled": true,
+        "unknownResponse": false,
+        "invite": "",
+        "token": [],
+        "channels": ["general"],
+        "userRole": "roleNameHere",
+        "admins": ["222742859059560458"],
+        "prefix": "!",
+        "typereact": false,
+        "limitSec": 30,
+        "limitAmount": 20,
+        "ivColors": [
+            "#9D9D9D",
+            "#FFFFFF",
+            "#1EFF00",
+            "#0070DD",
+            "#A335EE",
+            "#FF8000"
+        ]
+      },
 
-  "general": {
-    "logLevel": "info",
-    "logSize": 25,
-    "host": "127.0.0.1",
-    "port": "3030",
-    "imgurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/master/src/util/images/",
-    "max_pokemon": 500,
-    "monsterMinimumTimeTillHidden": 60,
-    "ipWhitelist": [],
-    "ipBlacklist": []
-  },
-
-  "locale": {
-    "timeformat": "en-gb",
-    "time": "LTS",
-    "addressformat": "%S %n",
-    "language": "en"
-  },
-
-  "geocoding": {
-    "provider": "OSM",
-    "staticProvider": "OSM",
-    "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
-    "staticKey":["Your MapQuest or Google Key"],
-    "width": 250,
-    "height": 175,
-    "zoom": 15,
-    "type": "roadmap",
-    "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-    "geofence": "../../config/geofence.json"
-  },
-
-  "discord": {
-    "enabled": true,
-    "token": [],
-    "channel": "general",
-    "userRole": "roleNameHere",
-    "admins": ["222742859059560458"],
-    "prefix": "!",
-    "typereact": false,
-    "limitsec": 30,
-    "limitamount": 20,
-    "iv_colors": [
-        "#9D9D9D",
-        "#FFFFFF",
-        "#1EFF00",
-        "#0070DD",
-        "#A335EE",
-        "#FF8000"
-    ]
-  },
-
-  "commands": {
-    "poracle": "",
-    "area": "",
-    "backup": "",
-    "channel": "",
-    "egg": "",
-    "help": "",
-    "location": "",
-    "quest": "",
-    "raid": "",
-    "restore": "",
-    "start": "",
-    "stop": "",
-    "track": "",
-    "tracked": "",
-    "unregister": "",
-    "untrack": "",
-    "version": "",
-    "webhook": "",
-    "adminid": ""
-  },
-  "telegram": {
-    "enabled": false,
-    "images": true,
-    "location": true,
-    "stickerurl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/develop/src/util/images/telegram/",
-    "token": [""],
-    "admins": [""],
-    "channel": "PoracleJsTest"
-  }
+      "geocoding": {
+        "provider": "OSM",
+        "staticProvider": "OSM",
+        "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
+        "staticKey":["Your MapQuest or Google Key"],
+        "width": 250,
+        "height": 175,
+        "zoom": 15,
+        "type": "roadmap",
+        "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      },
+      "commands": {}
 }

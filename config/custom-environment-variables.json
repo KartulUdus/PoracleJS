@@ -1,158 +1,77 @@
 {
-  "db": {
-    "host": "DB_HOST",
-    "user": "DB_USER",
-    "password": "DB_PASSWORD",
-    "database": "DB_DATABASE",
-    "port": "DB_PORT",
-    "connectionLimit": {
-      "__name": "DB_CONNECTION_LIMIT",
-      "__format": "json"
+    "server": {
+        "host": "SERVICE_SERVER_HOST",
+        "port": {
+            "__name": "SERVICE_SERVER_PORT",
+            "__format": "json"
+          },
+        "ipWhitelist": {
+            "__name": "SERVICE_IP_WHITELIST",
+            "__format": "json"
+          },
+        "ipBlacklist": {
+            "__name": "SERVICE_IP_BLACKLIST",
+            "__format": "json"
+          }
     },
-    "connectTimeout": {
-      "__name": "DB_CONNECTION_TIMEOUT",
-      "__format": "json"
+    "logger": {
+        "level": "SERVICE_LOGGER_LEVEL",
+        "logSize": {
+            "__name": "SERVICE_LOGGER_SIZE",
+            "__format": "json"
+          }
+    },
+
+    "database": {
+      "client": "DB_TYPE",
+      "conn": {
+        "host": "DB_HOST",
+        "user": "DB_USER",
+        "password": "DB_PASSWORD",
+        "database": "DB_DATABASE",
+        "port": "DB_PORT",
+        "connectionLimit": {
+          "__name": "DB_CONNECTION_LIMIT",
+          "__format": "json"
+        },
+        "connectTimeout": {
+          "__name": "DB_CONNECTION_TIMEOUT",
+          "__format": "json"
+        }
+      }
+    },
+    "discord": {
+      "enabled": {
+        "__name": "DISCORD_ENABLED",
+        "__format": "json"
+      },
+      "token": {
+        "__name": "DISCORD_TOKEN",
+        "__format": "json"
+      },
+      "channel": "REGISTER_CHANNEL",
+      "userRole": "REGISTER_ROLE",
+      "admins": {
+        "__name": "ADMINS",
+        "__format": "json"
+      },
+      "prefix": "PREFIX",
+      "typereact": {
+        "__name": "TYPE_REACT",
+        "__format": "json"
+      },
+      "limitsec": {
+        "__name": "LIMIT_SEC",
+        "__format": "json"
+      },
+      "limitamount": {
+        "__name": "LIMIT_MESSAGES",
+        "__format": "json"
+      },
+      "iv_colors": {
+        "__name": "IV_COLORS",
+        "__format": "json"
+      }
     }
-  },
 
-  "general": {
-    "logLevel": "LOG_LEVEL",
-    "logSize": {
-      "__name": "LOG_SIZE",
-      "__format": "json"
-    },
-    "host": "HOST",
-    "port": "PORT",
-    "imgurl": "IMGURL",
-    "max_pokemon": {
-      "__name": "MAX_POKEMON",
-      "__format": "json"
-    },
-    "monsterMinimumTimeTillHidden": {
-      "__name": "MIN_TTH",
-      "__format": "json"
-    },
-    "ipWhitelist": {
-      "__name": "IP_WHITELIST",
-      "__format": "json"
-    },
-    "ipBlacklist": {
-      "__name": "IP_BLACKLIST",
-      "__format": "json"
-    }
-
-  },
-
-  "locale": {
-    "timeformat": "TIME_FORMAT",
-    "time": "TIME_STRING",
-    "addressformat": "ADDR_FORMAT",
-    "language": "PORACLE_LANGUAGE"
-  },
-
-  "geocoding": {
-    "provider": "GEO_PROVIDER",
-    "staticProvider": "STATIC_PROVIDER",
-    "geocodingKey":{
-      "__name": "GEO_KEY",
-      "__format": "json"
-    },
-    "staticKey":{
-      "__name": "STATIC_KEY",
-      "__format": "json"
-    },
-    "width": {
-      "__name": "MAP_WIDTH",
-      "__format": "json"
-    },
-    "height": {
-      "__name": "MAP_HEIGHT",
-      "__format": "json"
-    },
-    "zoom": {
-      "__name": "MAP_ZOOM",
-      "__format": "json"
-    },
-    "type": "MAP_TYPE",
-    "tileserver": "TILESERVER"
-  },
-
-  "discord": {
-    "enabled": {
-      "__name": "DISCORD_ENABLED",
-      "__format": "json"
-    },
-    "token": {
-      "__name": "DISCORD_TOKEN",
-      "__format": "json"
-    },
-    "channel": "REGISTER_CHANNEL",
-    "userRole": "REGISTER_ROLE",
-    "admins": {
-      "__name": "ADMINS",
-      "__format": "json"
-    },
-    "prefix": "PREFIX",
-    "typereact": {
-      "__name": "TYPE_REACT",
-      "__format": "json"
-    },
-    "limitsec": {
-      "__name": "LIMIT_SEC",
-      "__format": "json"
-    },
-    "limitamount": {
-      "__name": "LIMIT_MESSAGES",
-      "__format": "json"
-    },
-    "iv_colors": {
-      "__name": "IV_COLORS",
-      "__format": "json"
-    }
-  },
-  "commands": {
-    "poracle": "CMDPORACLE",
-    "area": "CMDAREA",
-    "backup": "CMDBACKUP",
-    "channel": "CMDCHANNEL",
-    "egg": "CMDEGG",
-    "help": "CMDHELP",
-    "location": "CMDLODCATION",
-    "quest": "CMDQUEST",
-    "raid": "CMDRAID",
-    "restore": "CMDRESTORE",
-    "start": "CMDSTART",
-    "stop": "CMDSTOP",
-    "track": "CMDTRACK",
-    "tracked": "CMDTRACKED",
-    "unregister": "CMDUNREGISTER",
-    "untrack": "CMDUNTRACK",
-    "version": "CMDVERSION",
-    "webhook": "CMDWEBHOOK",
-    "adminid": "CMDADMINID"
-  },
-  "telegram": {
-    "enabled": {
-      "__name": "TLG_ENABLED",
-      "__format": "json"
-    },
-    "images": {
-      "__name": "TLG_IMAGES",
-      "__format": "json"
-    },
-    "location":{
-      "__name": "TLG_LOCATION",
-      "__format": "json"
-    },
-    "stickerurl": "TLG_STICKER",
-    "token": {
-      "__name": "TLG_TOKEN",
-      "__format": "json"
-    },
-    "admins": {
-      "__name": "TLG_ADMINS",
-      "__format": "json"
-    },
-    "channel": "TLG_CHANNEL"
-  }
 }

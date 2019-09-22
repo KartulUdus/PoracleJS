@@ -1,9 +1,9 @@
-const Controller = require('./controller')
 const config = require('config')
-const log = require('../logger')
 const mustache = require('mustache')
 const _ = require('lodash')
 const path = require('path')
+const log = require('../logger')
+const Controller = require('./controller')
 
 const emojiData = require('../../config/emoji')
 
@@ -17,7 +17,6 @@ const typeData = require('../util/types')
 
 
 class Quest extends Controller {
-
 /*
 * monsterWhoCares, takes data object
 */
@@ -98,18 +97,18 @@ class Quest extends Controller {
 				data.rewardData.items.forEach((i) => {
 					if (i) itemnames.push(this.qdts.rewardItems[i])
 				})
-				data.imgurl = data.rewardData.monsters[1] ?
-					`${config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
+				data.imgUrl = data.rewardData.monsters[1]
+					? `${config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
 					: 'saflkansd'
-				data.sticker = data.rewardData.monsters[1] ?
-					`${config.telegram.stickerurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
+				data.sticker = data.rewardData.monsters[1]
+					? `${config.telegram.stickerurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
 					: 'saflkansd'
 				if (data.rewardData.items[1]) {
-					data.imgurl = `${config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
+					data.imgUrl = `${config.general.imgUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
 					data.sticker = `${config.telegram.stickerurl}rewards/reward_${data.rewardData.items[1]}_1.webp`
 				}
 				if (data.dustAmount) {
-					data.imgurl = `${config.general.imgurl}rewards/reward_stardust.png`
+					data.imgUrl = `${config.general.imgUrl}rewards/reward_stardust.png`
 					data.sticker = `${config.telegram.stickerurl}rewards/reward_stardust.webp`
 					data.dustAmount = data.rewards[0].info.amount
 				}
@@ -142,7 +141,7 @@ class Quest extends Controller {
 							itemNames: itemnames.join(', '),
 							stardust: data.type === 3 ? 'stardust' : '',
 							rewardemoji: data.rewardemoji,
-							imgurl: data.imgurl.toLowerCase(),
+							imgUrl: data.imgUrl.toLowerCase(),
 							name: data.pokestop_name.replace(/\n/g, ' '),
 							url: data.pokestop_url,
 							minCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 10, 10, 10) : '',
@@ -214,7 +213,6 @@ class Quest extends Controller {
 
 	async getRewardSting(data) {
 		return new Promise((resolve) => {
-
 			const monsters = [0]
 			const items = [0]
 			let rewardString = ''
@@ -227,15 +225,12 @@ class Quest extends Controller {
 					const rew = mustache.render(template, { amount: reward.info.amount, item: this.qdts.rewardItems[reward.info.item_id] })
 					items.push(reward.info.item_id)
 					rewardString = rewardString.concat(rew)
-				}
-				else if (reward.type === 3) {
+				} else if (reward.type === 3) {
 					const template = this.qdts.questRewardTypes['3']
 					const rew = mustache.render(template, { amount: reward.info.amount })
 					dustAmount = reward.info.amount
 					rewardString = rewardString.concat(rew)
-
-				}
-				else if (reward.type === 7) {
+				} else if (reward.type === 7) {
 					const template = this.qdts.questRewardTypes['7']
 					let e = []
 					monsterData[reward.info.pokemon_id].types.forEach((type) => {
@@ -339,7 +334,6 @@ class Quest extends Controller {
 			resolve(conditionString)
 		})
 	}
-
 }
 
 module.exports = Quest
