@@ -35,7 +35,7 @@ exports.up = async function (knex) {
 		table.integer('max_def').notNullable()
 		table.integer('max_sta').notNullable()
 		table.integer('gender').notNullable()
-		table.unique(['id', 'pokemon_id', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'max_atk', 'max_def', 'max_sta', 'gender'], 'monsters_tracking')
+		table.unique(['id', 'pokemon_id', 'min_iv', 'max_iv', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'max_atk', 'max_def', 'max_sta', 'gender'], 'monsters_tracking')
 	})
 
 	await knex.schema.createTable('raid', (table) => {
