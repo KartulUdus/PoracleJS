@@ -43,13 +43,13 @@ exports.run = async (client, msg, args) => {
 		const argTypes = args.filter(arg => typeArray.includes(arg))
 
 		if (formNames.length) {
-			monsters = Object.values(client.monsters).filter(mon => (args.includes(mon.name.toLowerCase())
-			|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) || args.includes('everything'))
-			&& formNames.includes(mon.form.name.toLowerCase()))
+			monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
+			|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
+			|| args.includes('everything'))	&& formNames.includes(mon.form.name.toLowerCase()))
 		} else {
-			monsters = Object.values(client.monsters).filter(mon => (args.includes(mon.name.toLowerCase())
-			|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) || args.includes('everything'))
-			&& !mon.form.id)
+			monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
+			|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && !mon.form.id
+			|| args.includes('everything'))	&& !mon.form.id)
 		}
 
 
