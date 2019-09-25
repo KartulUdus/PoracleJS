@@ -70,16 +70,15 @@ exports.run = async (client, msg, initialArgs) => {
 			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(/gen/gi, '')] : 0
 
 			if (formNames.length) {
-				monsters = Object.values(client.monsters).filter(mon => (args.includes(mon.name.toLowerCase()) && formNames.includes(mon.form.name.toLowerCase())
+				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
 				|| args.includes('everything'))	&& formNames.includes(mon.form.name.toLowerCase()) )
 			} else {
-				monsters = Object.values(client.monsters).filter(mon => (args.includes(mon.name.toLowerCase()) && !mon.form.id
+				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && !mon.form.id
 				|| args.includes('everything'))	&& !mon.form.id)
 			}
 			if (gen) monsters = monsters.filter(mon => mon.id >= gen.min && mon.id <= gen.max)
-
 			// Parse command elements to stuff
 			args.forEach((element) => {
 				if (element.match(/maxlevel\d{1,2}/gi)) maxlevel = element.match(/maxlevel\d{1,2}/gi)[0].replace(/maxlevel/gi, '')
@@ -128,7 +127,7 @@ exports.run = async (client, msg, initialArgs) => {
 				gender,
 				clean,
 			}))
-			
+
 			if(!insert.length) continue
 
 			const result = await client.query.insertOrUpdateQuery('monsters', insert)
