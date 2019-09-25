@@ -141,8 +141,7 @@ class Controller {
 
 	async selectOneQuery(table, conditions) {
 		try {
-			const result = this.db.select('*').from(table).where(conditions).first()
-			return this.returnByDatabaseType(result)
+			return await this.db.select('*').from(table).where(conditions).first()
 		} catch (err) {
 			throw { source: 'slectOneQuery', error: err }
 		}
