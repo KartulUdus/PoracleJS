@@ -141,7 +141,8 @@ class Controller {
 
 	async selectOneQuery(table, conditions) {
 		try {
-			return this.db.select('*').from(table).where(conditions).first()
+			const result = this.db.select('*').from(table).where(conditions).first()
+			return this.returnByDatabaseType(result)
 		} catch (err) {
 			throw { source: 'slectOneQuery', error: err }
 		}
@@ -186,15 +187,17 @@ class Controller {
 			switch (this.config.database.client) {
 				case 'pg': {
 					const firstData = values[0] ? values[0] : values
-					const query = `${this.db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT (${table}_tracking) DO UPDATE SET ${
+					const query = `${this.db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT ${table}_tracking DO UPDATE SET ${
 						Object.keys(firstData).map(field => `${field}=EXCLUDED.${field}`).join(', ')}`
-					return await this.db.raw(query)
+					const result = await this.db.raw(query)
+					return result.rowCount ? [0] : []
 				}
 				case 'mysql': {
 					const firstData = values[0] ? values[0] : values
 					const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
 						Object.keys(firstData).map(field => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
-					return await this.db.raw(query)
+					const result = await this.db.raw(query)
+					return result
 				}
 				default: {
 					const constraints = {
@@ -208,7 +211,8 @@ class Controller {
 					const insertValues = values.map(o => `(${Object.values(o).join(', ')})`).join()
 					const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
 						Object.keys(firstData).map(field => `${field}=EXCLUDED.${field}`).join(', ')}`
-					return this.db.raw(query)
+					const result = await this.db.raw(query)
+					return this.returnByDatabaseType(result)
 				}
 			}
 		} catch (err) {
@@ -225,6 +229,21 @@ class Controller {
 			throw { source: 'deleteQuery', error: err }
 		}
 	}
+
+	returnByDatabaseType (data) {
+		switch (this.config.database.client) {
+			case 'pg': {
+				return data.rows
+			}
+			case 'mysql': {
+				return data[0]
+			}
+			default:{
+				return data
+			}
+		}
+	}
+	
 
 	findIvColor(iv) {
 		// it must be perfect if none of the ifs kick in

@@ -18,7 +18,7 @@ class Monster extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping from monsters
 		join humans on humans.id = monsters.id
-		where humans.enabled = 1 and
+		where humans.enabled = true and
 		pokemon_id=${data.pokemon_id} and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
@@ -40,13 +40,13 @@ class Monster extends Controller {
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			(round( 6371000 * acos( cos( radians(${data.latitude}) )
+			( 6371000 * acos( cos( radians(${data.latitude}) )
 			  * cos( radians( humans.latitude ) )
 			  * cos( radians( humans.longitude ) - radians(${data.longitude}) )
 			  + sin( radians(${data.latitude}) )
 			  * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
-			   monsters.distance = 0 and (${areastring}))
-			   group by humans.id, humans.name, monsters.template 
+			   monsters.distance = 0 and (${areastring})
+			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
 			`)
 		} else {
 			query = query.concat(`
@@ -60,7 +60,7 @@ class Monster extends Controller {
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
 			result = result.filter(result => result.distance = 0 || result.distance > 0 && result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
-		return result
+		return this.returnByDatabaseType(result)		
 	}
 
 
@@ -134,7 +134,6 @@ class Monster extends Controller {
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
 			const whoCares = await this.monsterWhoCares(data)
-
 			if (!whoCares[0]) return []
 
 			let discordCacheBad = true // assume the worst

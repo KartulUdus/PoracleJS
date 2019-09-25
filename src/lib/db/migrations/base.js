@@ -1,3 +1,6 @@
+const log = require('../../logger')
+
+
 exports.up = async function (knex) {
 	await knex.schema.createTable('humans', (table) => {
 		table.string('id').primary().notNullable()
@@ -90,6 +93,8 @@ exports.up = async function (knex) {
 		table.integer('grunt_type').notNullable()
 		table.unique(['id', 'gender', 'grunt_type'], 'invasion_tracking')
 	})
+
+	log.info('Base migration applied')
 
 }
 

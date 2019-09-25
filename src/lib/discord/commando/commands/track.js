@@ -95,9 +95,9 @@ exports.run = async (client, msg, args) => {
 			else if (element === 'genderless') gender = 3
 		})
 		const insert = monsters.map(mon => ({
-			id: `"${target.id}"`,
+			id: target.id,
 			pokemon_id: mon.id,
-			ping: `"${pings}"`,
+			ping: pings.lenght? pings: '""',
 			distance,
 			min_iv: iv,
 			max_iv: maxiv,
