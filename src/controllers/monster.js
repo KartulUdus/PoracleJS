@@ -89,6 +89,12 @@ class Monster extends Controller {
 			}
 			if (data.form === undefined || data.form === null) data.form = 0
 			const monster = this.monsterData[`${data.pokemon_id}_${data.form}`] ? this.monsterData[`${data.pokemon_id}_${data.form}`] : this.monsterData[`${data.pokemon_id}_0`]
+
+			if (!monster) {
+				log.warn('Couldn\'t find monster in:', data)
+				return
+			}
+
 			data.name = monster.name
 			data.formname = monster.form.name
 			data.iv = data.weight ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
