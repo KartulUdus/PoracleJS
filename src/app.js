@@ -54,10 +54,11 @@ for (const key in config.discord.token){
 }
 
 fs.watch('./config/', async (event, fileName) => {
+	if (!fileName.endsWith('.json')) return
+
 	discordWorkers = []
 	discordCommando = null
 
-	
 	const newFile = await readFileAsync(`./config/${fileName}`, 'utf8')
 	try {
 		JSON.parse(newFile)({
@@ -73,7 +74,7 @@ fs.watch('./config/', async (event, fileName) => {
 		fastify.dts = dts
 		fastify.geofence = geofence
 	} catch (err) {
-		log.warn('new config file unhappy', err)
+		log.warn('new config file unhappy: ', err)
 	}
 })
 
@@ -87,7 +88,7 @@ async function run() {
 	setInterval(() => {
 		if (!fastify.discordQueue.length) {
 			return
-		} 
+		}
 		let target = !fastify.discordQueue.slice(-1).shift()[0]
 		// see if target has dedicated worker
 		let worker = discordWorkers.find(worker => worker.users.includes(target.id))
@@ -95,8 +96,8 @@ async function run() {
 			worker = discordWorkers.reduce((prev, curr) => prev.users.length < curr.users.length ? prev : curr)
 			worker.addUser(target.id)
  		}
-		if (!worker.busy) worker.work(fastify.discordQueue.shift())		
-		
+		if (!worker.busy) worker.work(fastify.discordQueue.shift())
+
 	}, 10)
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
