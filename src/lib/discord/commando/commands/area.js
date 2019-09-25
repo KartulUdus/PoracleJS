@@ -1,4 +1,4 @@
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, [args]) => {
 	let target = { id: msg.author.id, name: msg.author.username, webhook: false }
 
 	try {

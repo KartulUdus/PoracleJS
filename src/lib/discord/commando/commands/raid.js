@@ -1,10 +1,4 @@
-exports.run = async (client, msg, initialArgs) => {
-	let command
-	if (initialArgs.includes('|')) {
-		command = initialArgs.join(' ').split('|').map(com => com.split(' ').filter(arg => arg))
-	} else {
-		command = [initialArgs]
-	}
+exports.run = async (client, msg, command) => {
 
 	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }

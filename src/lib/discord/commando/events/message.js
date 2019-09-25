@@ -7,10 +7,17 @@ module.exports = (client, msg) => {
 
 	let args = msg.content.slice(client.config.discord.prefix.length).trim().split(/ +/g)
 	args = args.map(arg => arg.toLowerCase())
-
 	const command = args.shift().toLowerCase()
+
+	let initialArgs
+	if (args.includes('|')) {
+		initialArgs = args.join(' ').split('|').map(com => com.split(' ').filter(a => a))
+	} else {
+		initialArgs = [args]
+	}
+
 	const cmd = client.commands.get(command)
 	if (!cmd) return
 
-	cmd.run(client, msg, args)
+	cmd.run(client, msg, initialArgs)
 }

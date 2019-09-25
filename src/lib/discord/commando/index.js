@@ -8,6 +8,7 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence)
 	const fs = require('fs')
 	const mustache = require('handlebars')
 	const emojiStrip = require('emoji-strip')
+	const hastebin = require('hastebin-gen')
 
 	const client = new Client()
 	// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
@@ -20,6 +21,7 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence)
 	client.monsters = monsterData
 	client.utilData = utilData
 	client.mustache = mustache
+	client.hastebin = hastebin
 	client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
 	fs.readdir(`${__dirname}/events/`, (err, files) => {

@@ -147,6 +147,14 @@ class Controller {
 		}
 	}
 
+	async selectAllQuery(table, conditions) {
+		try {
+			return await this.db.select('*').from(table).where(conditions)
+		} catch (err) {
+			throw { source: 'slectOneQuery', error: err }
+		}
+	}
+
 	async updateQuery(table, values, conditions) {
 		try {
 			return this.db(table).update(values).where(conditions)
