@@ -49,7 +49,7 @@ let discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, 
 
 let discordWorkers = []
 
-for (const key in config.discord.token){
+for (const key in config.discord.token) {
 	discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
 }
 
@@ -65,7 +65,7 @@ fs.watch('./config/', async (event, fileName) => {
 			config, knex, dts, geofence,
 		} = Config())
 
-		for (const key in config.discord.token){
+		for (const key in config.discord.token) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
 		}
 		discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence)
@@ -79,25 +79,21 @@ fs.watch('./config/', async (event, fileName) => {
 })
 
 
-
 async function sleep(n) { return new Promise(resolve => setTimeout(resolve, n)) }
 
 async function run() {
-
-
 	setInterval(() => {
 		if (!fastify.discordQueue.length) {
 			return
 		}
-		let target = !fastify.discordQueue.slice(-1).shift()[0]
+		const target = !fastify.discordQueue.slice(-1).shift()[0]
 		// see if target has dedicated worker
 		let worker = discordWorkers.find(worker => worker.users.includes(target.id))
-		if (!worker){
-			worker = discordWorkers.reduce((prev, curr) => prev.users.length < curr.users.length ? prev : curr)
+		if (!worker) {
+			worker = discordWorkers.reduce((prev, curr) => (prev.users.length < curr.users.length ? prev : curr))
 			worker.addUser(target.id)
  		}
 		if (!worker.busy) worker.work(fastify.discordQueue.shift())
-
 	}, 10)
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)

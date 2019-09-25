@@ -14,7 +14,7 @@ exports.run = async (client, msg, initialArgs) => {
 			return await msg.author.send('Please run commands in Direct Messages')
 		}
 		let webhookName
-		let webhookArray = command.find(args => args.find(arg => arg.match(/name\S+/gi)))
+		const webhookArray = command.find(args => args.find(arg => arg.match(/name\S+/gi)))
 		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(/name\S+/gi))
 		if (webhookName) webhookName = webhookName.replace('name', '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
@@ -40,7 +40,7 @@ exports.run = async (client, msg, initialArgs) => {
 		if (target.webhook) target.id = isRegistered.id
 
 		let reaction = '👌'
-		for (args of command){			
+		for (args of command) {
 			// Set defaults
 			let monsters
 			let distance = 0
@@ -66,13 +66,13 @@ exports.run = async (client, msg, initialArgs) => {
 			// Check for monsters or forms
 			const formNames = args.filter(arg => arg.match(/form\S/gi)).map(arg => arg.replace('form', ''))
 			const argTypes = args.filter(arg => typeArray.includes(arg))
-			const genCommand = args.filter(arg => arg.match(/gen[1-7]/gi)) 
+			const genCommand = args.filter(arg => arg.match(/gen[1-7]/gi))
 			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(/gen/gi, '')] : 0
 
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-				|| args.includes('everything'))	&& formNames.includes(mon.form.name.toLowerCase()) )
+				|| args.includes('everything'))	&& formNames.includes(mon.form.name.toLowerCase()))
 			} else {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && !mon.form.id
@@ -106,7 +106,7 @@ exports.run = async (client, msg, initialArgs) => {
 			const insert = monsters.map(mon => ({
 				id: target.id,
 				pokemon_id: mon.id,
-				ping: pings.lenght? pings: '""',
+				ping: pings.lenght ? pings : '""',
 				distance,
 				min_iv: iv,
 				max_iv: maxiv,
@@ -128,7 +128,7 @@ exports.run = async (client, msg, initialArgs) => {
 				clean,
 			}))
 
-			if(!insert.length) continue
+			if (!insert.length) continue
 
 			const result = await client.query.insertOrUpdateQuery('monsters', insert)
 			reaction = result.length ? '✅' : reaction

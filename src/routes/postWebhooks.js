@@ -17,7 +17,7 @@ module.exports = async (fastify, options, next) => {
 					fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, hook)
 
 					const result = await fastify.monsterController.handle(hook.message)
-					result.forEach(job => {
+					result.forEach((job) => {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 						if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
@@ -25,7 +25,6 @@ module.exports = async (fastify, options, next) => {
 					break
 				}
 				case 'raid': {
-
 					break
 				}
 			}

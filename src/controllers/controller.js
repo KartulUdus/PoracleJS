@@ -78,8 +78,8 @@ class Controller {
 	getDiscordCache(id) {
 		let ch = this.discordCache.get(id)
 		if (ch === undefined) {
-			this.discordCache.set(id, {count: 1})
-			ch = {count: 1}
+			this.discordCache.set(id, { count: 1 })
+			ch = { count: 1 }
 		}
 		return ch
 	}
@@ -87,11 +87,11 @@ class Controller {
 	addDiscordCache(id) {
 		let ch = this.discordCache.get(id)
 		if (ch === undefined) {
-			this.discordCache.set(id, {count: 1})
-			ch = {count: 1}
+			this.discordCache.set(id, { count: 1 })
+			ch = { count: 1 }
 		}
 		const ttl = this.discordCache.getTtl(id)
-		this.discordCache.set(id, {count: ch.count + 1}, ttl)
+		this.discordCache.set(id, { count: ch.count + 1 }, ttl)
 		return true
 	}
 
@@ -230,7 +230,7 @@ class Controller {
 		}
 	}
 
-	returnByDatabaseType (data) {
+	returnByDatabaseType(data) {
 		switch (this.config.database.client) {
 			case 'pg': {
 				return data.rows
@@ -238,12 +238,12 @@ class Controller {
 			case 'mysql': {
 				return data[0]
 			}
-			default:{
+			default: {
 				return data
 			}
 		}
 	}
-	
+
 
 	findIvColor(iv) {
 		// it must be perfect if none of the ifs kick in

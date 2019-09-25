@@ -15,8 +15,8 @@ exports.run = async (client, msg, args) => {
 			msg.content = msg.content.replace(client.hookRegex, '')
 		}
 
-		for( var i = 0; i < args.length; i++){ 
-			if ( args[i].match(/name\S+/gi)) arr.splice(i, 1)
+		for (let i = 0; i < args.length; i++) {
+			if (args[i].match(/name\S+/gi)) arr.splice(i, 1)
 		}
 		const search = args.join(' ')
 
@@ -35,47 +35,43 @@ exports.run = async (client, msg, args) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-		
+
 		switch (args[0]) {
 			case 'add': {
-
-				const human = await client.query.selectOneQuery('humans', {id: target.id})
+				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map(area => area.replace(/ /gi, '_'))
 				const validAreas = confAreas.filter(x => args.includes(x))
 				const addAreas = validAreas.filter(x => !oldArea.includes(x))
 				const newAreas = [...oldArea, ...addAreas].filter(area => validAreas.includes(area))
 				if (!validAreas.length) {
 					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
-				} else {
-					await client.query.updateQuery('humans', {area: JSON.stringify(newAreas)}, {id: target.id})
-				} 
+				}
+				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
+
 
 				if (addAreas.length) {
 					await msg.reply(`Added areas: ${addAreas}`)
-				}
-				else {
+				} else {
 					await msg.react('👌')
 				}
 
 				break
 			}
 			case 'remove': {
-
-				const human = await client.query.selectOneQuery('humans', {id: target.id})
+				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map(area => area.replace(/ /gi, '_'))
 				const validAreas = confAreas.filter(x => args.includes(x))
 				const removeAreas = validAreas.filter(x => oldArea.includes(x))
 				const newAreas = [...oldArea].filter(area => validAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
 					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
-				} else {
-					await client.query.updateQuery('humans', {area: JSON.stringify(newAreas)}, {id: target.id})
-				} 
+				}
+				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
+
 
 				if (removeAreas.length) {
 					await msg.reply(`Removed areas: ${removeAreas}`)
-				}
-				else {
+				} else {
 					await msg.react('👌')
 				}
 
@@ -87,7 +83,6 @@ exports.run = async (client, msg, args) => {
 			}
 			default:
 		}
-
 	} catch (err) {
 		client.log.error(`location command ${msg.content} unhappy:`, err)
 	}

@@ -48,5 +48,4 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence)
 		log.log({ level: 'debug', message: `Loading discord commands: (${enabledCommands.join(' ')})`, event: 'discord:commandsAdded' })
 	})
 	await client.login(client.config.discord.token[0])
-
 }

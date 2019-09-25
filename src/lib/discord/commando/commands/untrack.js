@@ -33,7 +33,7 @@ exports.run = async (client, msg, args) => {
 		const argTypes = args.filter(arg => typeArray.includes(arg))
 
 		let monsters = []
-		monsters = Object.values(client.monsters).filter(mon => (args.includes(mon.name.toLowerCase())
+		monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 		|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) || args.includes('everything'))
 		&& !mon.form.id)
 

@@ -60,7 +60,7 @@ class Monster extends Controller {
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
 			result = result.filter(result => result.distance = 0 || result.distance > 0 && result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
-		return this.returnByDatabaseType(result)		
+		return this.returnByDatabaseType(result)
 	}
 
 
@@ -141,18 +141,19 @@ class Monster extends Controller {
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
-				const {count} = this.getDiscordCache(cares.id)
+				const { count } = this.getDiscordCache(cares.id)
 				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
 			})
 
 			if (discordCacheBad) return []
-			let geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
 			const jobs = []
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
 
-				const view = { ...data,
+				const view = {
+					...data,
 					...geoResult,
 					id: data.pokemon_id,
 					time: data.distime,
@@ -176,17 +177,17 @@ class Monster extends Controller {
 					areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				const monsterDts = data.iv === -1 ? 
-				this.dts.find(template => (template.type === 'monsterNoIv' && template.id === cares.template) || (template.type === 'monsterNoIv' && template.default) ) :
-				this.dts.find(template => (template.type === 'monster' && template.id === cares.template) || (template.type === 'monster' && template.default) )
-			
+				const monsterDts = data.iv === -1
+					? this.dts.find(template => (template.type === 'monsterNoIv' && template.id === cares.template) || (template.type === 'monsterNoIv' && template.default))
+					: this.dts.find(template => (template.type === 'monster' && template.id === cares.template) || (template.type === 'monster' && template.default))
+
 				const template = JSON.stringify(monsterDts.template)
 				const mustache = this.mustache.compile(template)
 				const message = JSON.parse(mustache(view))
 
-				if(cares.ping){
-					if(!message.content) message.content = cares.ping
-					if(message.content) message.content = message.content + cares.ping
+				if (cares.ping) {
+					if (!message.content) message.content = cares.ping
+					if (message.content) message.content += cares.ping
 				}
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
@@ -202,15 +203,11 @@ class Monster extends Controller {
 					// meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
 				}
 				if (caresCache <= this.config.discord.limitAmount + 1) {
-					
 					jobs.push(work)
 					this.addDiscordCache(cares.id)
 				}
-
-
 			}
 			return jobs
-
 		} catch (e) {
 			this.log.error('Can\'t seem to handle:', e)
 		}

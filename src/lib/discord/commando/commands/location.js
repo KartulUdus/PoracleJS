@@ -15,8 +15,8 @@ exports.run = async (client, msg, args) => {
 			msg.content = msg.content.replace(client.hookRegex, '')
 		}
 
-		for( var i = 0; i < args.length; i++){ 
-			if ( args[i].match(/name\S+/gi)) arr.splice(i, 1)
+		for (let i = 0; i < args.length; i++) {
+			if (args[i].match(/name\S+/gi)) arr.splice(i, 1)
 		}
 		const search = args.join(' ')
 
@@ -35,14 +35,13 @@ exports.run = async (client, msg, args) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-		
+
 		const location = await client.query.geolocate(search)
-		
-		await client.query.updateQuery('humans', {latitude: location[0].latitude, longitude: location[0].longitude }, {id: target.id})
+
+		await client.query.updateQuery('humans', { latitude: location[0].latitude, longitude: location[0].longitude }, { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${location[0].latitude},${location[0].longitude}`
 		await msg.reply(`:wave:, I set ${target.name}s location to : \n${maplink}`)
 		await msg.react('✅')
-
 	} catch (err) {
 		client.log.error(`location command ${msg.content} unhappy:`, err)
 	}

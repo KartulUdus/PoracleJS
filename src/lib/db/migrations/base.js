@@ -95,7 +95,6 @@ exports.up = async function (knex) {
 	})
 
 	log.info('Base migration applied')
-
 }
 
 exports.down = async function (knex) {

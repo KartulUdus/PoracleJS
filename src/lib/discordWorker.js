@@ -17,8 +17,8 @@ class Worker {
 
 	async sleep(n) { return new Promise(resolve => setTimeout(resolve, n)) }
 
-	addUser(id) { 
-		this.users.push(id) 
+	addUser(id) {
+		this.users.push(id)
 	}
 
 	async setLitseners() {
@@ -86,7 +86,6 @@ class Worker {
 			log.error(`Failed to send Discord alert to ${data.name}`, err, data)
 		}
 		return true
-		
 	}
 
 	async channelAlert(data) {
@@ -103,7 +102,6 @@ class Worker {
 			log.error(`Failed to send Discord alert to ${data.name}`, err, data)
 		}
 		return true
-		
 	}
 
 	async webhookAlert(data) {
@@ -118,9 +116,8 @@ class Worker {
 		} catch (err) {
 			log.error(`Webhook ${data.name} failed with, ${err.message}`)
 		}
-		return true 
+		return true
 	}
-
 }
 
 module.exports = Worker
