@@ -134,6 +134,9 @@ class Monster extends Controller {
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
 			const whoCares = await this.monsterWhoCares(data)
+
+			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared.`)
+
 			if (!whoCares[0]) return []
 
 			let discordCacheBad = true // assume the worst
