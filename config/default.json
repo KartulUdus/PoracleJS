@@ -7,7 +7,8 @@
     },
     "general": {
         "alertMinimumTime" : 120,
-        "imgurl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/"
+        "imgurl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
+        "locale": "en"
     },
     "logger": {
         "level": "info",

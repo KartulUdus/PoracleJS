@@ -1,7 +1,7 @@
 const importFresh = require('import-fresh')
 const path = require('path')
 const Knex = require('knex')
-
+const Translator = require('../util/translate')
 let config
 let knex
 let dts
@@ -46,7 +46,8 @@ module.exports = () => {
 		directory: path.join(__dirname, './db/migrations'),
 		tableName: 'migrations',
 	})
+	translator = new Translator(config.general.locale)
 	return {
-		config, knex, dts, geofence,
+		config, knex, dts, geofence, translator
 	}
 }

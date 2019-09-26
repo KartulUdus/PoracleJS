@@ -1,4 +1,4 @@
-module.exports = async (knex, config, log, monsterData, utilData, dts, geofence) => {
+module.exports = async (knex, config, log, monsterData, utilData, dts, geofence, translator) => {
 	const Controller = require('../../../controllers/controller')
 	const query = new Controller(knex, config)
 
@@ -22,6 +22,7 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence)
 	client.utilData = utilData
 	client.mustache = mustache
 	client.hastebin = hastebin
+	client.translator = translator
 	client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
 	fs.readdir(`${__dirname}/events/`, (err, files) => {

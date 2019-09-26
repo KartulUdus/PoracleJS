@@ -1,6 +1,12 @@
 logs/*.json
 config/*.json
+config/locale/*.json
+
+!config/locale/fr.json
+!config/locale/de.json
+
 !config/default.json
+
 !config/custom-environment-variables.json
 npm-debug.log
 .DS_Store

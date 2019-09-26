@@ -11,7 +11,7 @@ const cp = require('child_process')
 const Config = require('./lib/configFetcher')
 
 let {
-	config, knex, dts, geofence,
+	config, knex, dts, geofence, translator
 } = Config()
 
 const readDir = util.promisify(fs.readdir)
@@ -43,9 +43,10 @@ fastify.decorate('cache', cache)
 fastify.decorate('monsterController', monsterController)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
+fastify.decorate('translator', translator)
 fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
-let discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence)
+let discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator)
 
 let discordWorkers = []
 
@@ -55,24 +56,23 @@ for (const key in config.discord.token) {
 
 fs.watch('./config/', async (event, fileName) => {
 	if (!fileName.endsWith('.json')) return
-
+	console.log('ope ing new config')
 	discordWorkers = []
 	discordCommando = null
 
 	const newFile = await readFileAsync(`./config/${fileName}`, 'utf8')
 	try {
-		JSON.parse(newFile)({
-			config, knex, dts, geofence,
-		} = Config())
-
+		JSON.parse(newFile)
+		let { config, knex, dts, geofence, translator } = Config()
 		for (const key in config.discord.token) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
 		}
-		discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence)
+		discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator)
 		fastify.config = config
 		fastify.knex = knex
 		fastify.dts = dts
 		fastify.geofence = geofence
+		fastify.translator = translator
 	} catch (err) {
 		log.warn('new config file unhappy: ', err)
 	}
