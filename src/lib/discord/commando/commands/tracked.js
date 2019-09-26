@@ -122,21 +122,21 @@ exports.run = async (client, msg, [args]) => {
 
 
 		if (message.length < 6000) {
-			msg.reply(message, { split: true })
+			return await msg.reply(message, { split: true })
 		}
-		else {
-			try {
-				const hastelink = await client.hastebin(message)
-				await msg.reply(`${target.name} tracking list is quite long. Have a look at ${hastelink}`)
-			} catch (e) {
-				const filepath = path.join(__dirname, `./${human.name}.txt`)
-				fs.writeFileSync(filepath, message)
-				await msg.reply(`${target.name} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] })
-				fs.unlinkSync(filepath)
-				client.log.warn('Hastebin seems down, got error: ', e)
-			}
 
+		try {
+			const hastelink = await client.hastebin(message)
+			return await msg.reply(`${target.name} tracking list is quite long. Have a look at ${hastelink}`)
+		} catch (e) {
+			const filepath = path.join(__dirname, `./${human.name}.txt`)
+			fs.writeFileSync(filepath, message)
+			await msg.reply(`${target.name} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] })
+			fs.unlinkSync(filepath)
+			client.log.warn('Hastebin seems down, got error: ', e)
 		}
+
+		
 		
 	} catch (err) {
 		client.log.error(`${msg.content} command unhappy: `, err)
