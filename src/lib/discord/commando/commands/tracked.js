@@ -129,7 +129,7 @@ exports.run = async (client, msg, [args]) => {
 			const hastelink = await client.hastebin(message)
 			return await msg.reply(`${target.name} tracking list is quite long. Have a look at ${hastelink}`)
 		} catch (e) {
-			const filepath = path.join(__dirname, `./${human.name}.txt`)
+			const filepath = path.join(__dirname, `./${target.name}.txt`)
 			fs.writeFileSync(filepath, message)
 			await msg.reply(`${target.name} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] })
 			fs.unlinkSync(filepath)
