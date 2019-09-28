@@ -2,6 +2,8 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence,
 	const Controller = require('../../../controllers/controller')
 	const query = new Controller(knex, config)
 
+	const re = require('../../../util/regex')(translator)
+
 	const { Client } = require('discord.js')
 	const path = require('path')
 	const Enmap = require('enmap')
@@ -17,6 +19,7 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence,
 	client.emojiStrip = emojiStrip
 	client.log = log
 	client.dts = dts
+	client.re = re
 	client.geofence = geofence
 	client.monsters = monsterData
 	client.utilData = utilData

@@ -1,11 +1,12 @@
 exports.run = async (client, msg, command) => {
 
 	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
-	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+		let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+
 
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.author.send('Please run commands in Direct Messages')
+			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
 		const webhookArray = command.find(args => args.find(arg => arg.match(/name\S+/gi)))
@@ -22,10 +23,10 @@ exports.run = async (client, msg, command) => {
 			: await client.query.countQuery('humans', { id: target.id })
 
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
-			return await msg.reply(`Webhook ${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'}  add <Your-Webhook-url>`)
+			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'} ${client.translator.translate('add')} <Your-Webhook-url>`)
 		}
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {})
+			return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}channel add`).catch((O_o) => {})
 		}
 		if (!isRegistered && msg.channel.type === 'dm') {
 			return await msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}${client.config.commands.poracle ? client.config.commands.poracle : 'poracle'} to #${client.config.discord.channel}`)
@@ -44,40 +45,39 @@ exports.run = async (client, msg, command) => {
 			let team = 4
 			let template = 1
 			const levels = []
-			let pings = ''
+			let pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
 			
-			const formNames = args.filter(arg => arg.match(/form\S/gi)).map(arg => arg.replace('form', ''))
+			const formNames = args.filter(arg => arg.match(client.re.formRe).map(arg => arg.replace(client.translator.translate('form'), '')))
 			const argTypes = args.filter(arg => typeArray.includes(arg))
 			
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-				|| args.includes('everything'))	&& formNames.includes(mon.form.name.toLowerCase()))
+				|| args.includes('template'))	&& formNames.includes(mon.form.name.toLowerCase()))
 			} else {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && !mon.form.id
-				|| args.includes('everything'))	&& !mon.form.id)
+				|| args.includes('template'))	&& !mon.form.id)
 			}
 
-			const genCommand = args.filter(arg => arg.match(/gen[1-7]/gi))
-			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(/gen/gi, '')] : 0
+			const genCommand = args.filter(arg => arg.match(client.re.genRe))
+			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
 
 			if (gen) monsters = monsters.filter(mon => mon.id >= gen.min && mon.id <= gen.max)
 
 			
 			
-			if (!monsters.length && levels.length) return await msg.reply('404 NO MONSTERS FOUND')
+			if (!monsters.length && levels.length) return await msg.reply(client.translator.translate('404 NO MONSTERS FOUND'))
 			
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
-				else if (element.match(/level\d{1}/gi)) levels.push(element.match(/level\d{1}/gi)[0].replace(/level/gi, ''))
-				else if (element.match(/template\d{1,4}/gi)) template = element.match(/template\d{1,4}/gi)[0].replace(/template/gi, '')
-				else if (element.match(/d\d{1,8}/gi)) distance = element.match(/d\d{1,8}/gi)[0].replace(/d/gi, '')
-				else if (element.endsWith('ping')) 	pings = pings.concat(element.slice(0, element.length - 'ping'.length))
-				else if (element === 'instinct') team = 3
-				else if (element === 'valor') team = 2
-				else if (element === 'mystic') team = 1
-				else if (element === 'harmony') team = 0
+				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(/level/gi, ''))
+				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(/template/gi, '')
+				else if (element.match(client.re.dre)) distance = element.match(client.re.dre)[0].replace(/d/gi, '')
+				else if (element === client.translator.translate('instinct')) team = 3
+				else if (element === client.translator.translate('valor')) team = 2
+				else if (element === client.translator.translate('mystic')) team = 1
+				else if (element === client.translator.translate('harmony')) team = 0
 			})
 			
 			if (!remove) {

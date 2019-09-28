@@ -2,19 +2,19 @@ exports.run = async (client, msg, command) => {
 
 	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-
+		
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.author.send('Please run commands in Direct Messages')
+			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = command.find(args => args.find(arg => arg.match(/name\S+/gi)))
-		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(/name\S+/gi))
-		if (webhookName) webhookName = webhookName.replace('name', '')
+		const webhookArray = command.find(args => args.find(arg => arg.match(client.re.nameRe)))
+		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(client.re.nameRe))
+		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
-			target = { name: webhookName.replace(/name/gi, ''), webhook: true }
+			target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
 			msg.content = msg.content.replace(client.hookRegex, '')
 		}
 
@@ -24,10 +24,10 @@ exports.run = async (client, msg, command) => {
 			: await client.query.countQuery('humans', { id: target.id })
 
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
-			return await msg.reply(`Webhook ${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'}  add <Your-Webhook-url>`)
+			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'} ${client.translator.translate('add')} <Your-Webhook-url>`)
 		}
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {})
+			return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.channel ? client.config.commands.channel : 'channel'} ${client.translator.translate('add')}`)
 		}
 		if (!isRegistered && msg.channel.type === 'dm') {
 			return msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}${client.config.commands.poracle ? client.config.commands.poracle : 'poracle'} to #${client.config.discord.channel}`)
@@ -56,43 +56,44 @@ exports.run = async (client, msg, command) => {
 			let maxweight = 9000000
 			let template = 1
 			let clean = false
-			let pings = ''
+			let pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
 
 			// Check for monsters or forms
-			const formNames = args.filter(arg => arg.match(/form\S/gi)).map(arg => arg.replace('form', ''))
+			const formArgs = args.filter(arg => arg.match(client.re.formRe))
+			const formNames = formArgs ? formArgs.map(arg => arg.replace(client.translator.translate('form'), '')) : []
+			
 			const argTypes = args.filter(arg => typeArray.includes(arg))
-			const genCommand = args.filter(arg => arg.match(/gen[1-7]/gi))
-			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(/gen/gi, '')] : 0
+			const genCommand = args.filter(arg => arg.match(client.re.genRe))
+			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
 
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-				|| args.includes('everything'))	&& formNames.includes(mon.form.name.toLowerCase()))
+				|| args.includes('template'))	&& formNames.includes(mon.form.name.toLowerCase()))
 			} else {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && !mon.form.id
-				|| args.includes('everything'))	&& !mon.form.id)
+				|| args.includes('template'))	&& !mon.form.id)
 			}
 			if (gen) monsters = monsters.filter(mon => mon.id >= gen.min && mon.id <= gen.max)
 			// Parse command elements to stuff
 			args.forEach((element) => {
-				if (element.match(/maxlevel\d{1,2}/gi)) maxlevel = element.match(/maxlevel\d{1,2}/gi)[0].replace(/maxlevel/gi, '')
-				else if (element.match(/template\d{1,4}/gi)) template = element.match(/template\d{1,4}/gi)[0].replace(/template/gi, '')
-				else if (element.match(/maxcp\d{1,5}/gi)) maxcp = element.match(/maxcp\d{1,5}/gi)[0].replace(/maxcp/gi, '')
-				else if (element.match(/maxiv\d{1,3}/gi)) maxiv = element.match(/maxiv\d{1,3}/gi)[0].replace(/maxiv/gi, '')
-				else if (element.match(/maxweight\d{1,6}/gi)) maxweight = element.match(/maxweight\d{1,6}/gi)[0].replace(/maxweight/gi, '')
-				else if (element.match(/maxatk\d{1,2}/gi)) maxAtk = element.match(/maxatk\d{1,2}/gi)[0].replace(/maxatk/gi, '')
-				else if (element.match(/maxdef\d{1,2}/gi)) maxDef = element.match(/maxdef\d{1,2}/gi)[0].replace(/maxdef/gi, '')
-				else if (element.match(/maxsta\d{1,2}/gi)) maxSta = element.match(/maxsta\d{1,2}/gi)[0].replace(/maxsta/gi, '')
-				else if (element.match(/cp\d{1,5}/gi)) cp = element.match(/cp\d{1,5}/gi)[0].replace(/cp/gi, '')
-				else if (element.match(/level\d{1,2}/gi)) level = element.match(/level\d{1,2}/gi)[0].replace(/level/gi, '')
-				else if (element.match(/iv\d{1,3}/gi)) iv = element.match(/iv\d{1,3}/gi)[0].replace(/iv/gi, '')
-				else if (element.match(/atk\d{1,2}/gi)) atk = element.match(/atk\d{1,2}/gi)[0].replace(/atk/gi, '')
-				else if (element.match(/def\d{1,2}/gi)) def = element.match(/def\d{1,2}/gi)[0].replace(/def/gi, '')
-				else if (element.match(/sta\d{1,2}/gi)) sta = element.match(/sta\d{1,2}/gi)[0].replace(/sta/gi, '')
-				else if (element.match(/weight\d{1,2}/gi)) weight = element.match(/weight\d{1,2}/gi)[0].replace(/weight/gi, '')
-				else if (element.match(/d\d{1,8}/gi)) distance = element.match(/d\d{1,8}/gi)[0].replace(/d/gi, '')
-				else if (element.endsWith('ping')) 	pings = pings.concat(element.slice(0, element.length - 'ping'.length))
+				if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[0].replace(client.translator.translate('maxlevel'), '')
+				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
+				else if (element.match(client.re.maxcpRe)) maxcp = element.match(client.re.maxcpRe)[0].replace(client.translator.translate('maxcp'), '')
+				else if (element.match(client.re.maxivRe)) maxiv = element.match(client.re.maxivRe)[0].replace(client.translator.translate('maxiv'), '')
+				else if (element.match(client.re.maxweightRe)) maxweight = element.match(client.re.maxweightRe)[0].replace(client.translator.translate('maxweight'), '')
+				else if (element.match(client.re.maxatkRe)) maxAtk = element.match(client.re.maxatkRe)[0].replace(client.translator.translate('maxatk'), '')
+				else if (element.match(client.re.maxdefRe)) maxDef = element.match(client.re.maxdefRe)[0].replace(client.translator.translate('maxdef'), '')
+				else if (element.match(client.re.maxstaRe)) maxSta = element.match(client.re.maxstaRe)[0].replace(client.translator.translate('maxsta'), '')
+				else if (element.match(client.re.cpRe)) cp = element.match(client.re.cpRe)[0].replace(client.translator.translate('cp'), '')
+				else if (element.match(client.re.levelRe)) level = element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), '')
+				else if (element.match(client.re.ivRe)) iv = element.match(client.re.ivRe)[0].replace(client.translator.translate('iv'), '')
+				else if (element.match(client.re.atkRe)) atk = element.match(client.re.atkRe)[0].replace(client.translator.translate('atk'), '')
+				else if (element.match(client.re.defRe)) def = element.match(client.re.defRe)[0].replace(client.translator.translate('def'), '')
+				else if (element.match(client.re.staRe)) sta = element.match(client.re.staRe)[0].replace(client.translator.translate('sta'), '')
+				else if (element.match(client.re.weightRe)) weight = element.match(client.re.weightRe)[0].replace(client.translator.translate('weight'), '')
+				else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
 				else if (element === 'female') gender = 2
 				else if (element === 'clean') clean = true
 				else if (element === 'male') gender = 1
@@ -101,7 +102,7 @@ exports.run = async (client, msg, command) => {
 			const insert = monsters.map(mon => ({
 				id: target.id,
 				pokemon_id: mon.id,
-				ping: pings.lenght ? pings : '""',
+				ping: pings.lenght ? pings : '',
 				distance,
 				min_iv: iv,
 				max_iv: maxiv,
@@ -124,7 +125,7 @@ exports.run = async (client, msg, command) => {
 			}))
 
 			if (!insert.length) continue
-
+			console.log(insert)
 			const result = await client.query.insertOrUpdateQuery('monsters', insert)
 			reaction = result.length ? '✅' : reaction
 		}

@@ -1,10 +1,11 @@
 exports.run = async (client, msg, [args]) => {
-	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+		let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+
 
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.author.send('Please run commands in Direct Messages')
+			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName = args.find(arg => arg.match(/name\S+/gi))
 		if (webhookName) webhookName = webhookName.replace('name', '')
@@ -37,10 +38,10 @@ exports.run = async (client, msg, [args]) => {
 			if (target.webhook && isRegistered) target.id = isRegistered.id
 
 			if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
-				return await msg.reply(`Webhook ${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'} add <Your-Webhook-url> nameYourWebhookName`)
+				return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'} add <Your-Webhook-url> nameYourWebhookName`)
 			}
 			if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-				return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {})
+				return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.channel ? client.config.commands.channel : 'channel'} ${client.translator.translate('add')}`)
 			}
 			if (isRegistered) {
 				await client.query.deleteQuery('humans', { id: target.id })

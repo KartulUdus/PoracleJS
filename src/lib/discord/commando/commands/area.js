@@ -5,16 +5,17 @@ exports.run = async (client, msg, [args]) => {
 		// Check target
 		const confAreas = client.geofence.map(area => area.name.toLowerCase().replace(/ /gi, '_')).sort()
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.author.send('Please run commands in Direct Messages')
+			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
-		let webhookName = args.find(arg => arg.match(/name\S+/gi))
-		if (webhookName) webhookName = webhookName.replace('name', '')
+		let webhookName
+		const webhookArray = command.find(args => args.find(arg => arg.match(client.re.nameRe)))
+		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(client.re.nameRe))
+		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
-			target = { name: webhookName.replace(/name/gi, ''), webhook: true }
+			target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
 			msg.content = msg.content.replace(client.hookRegex, '')
 		}
-
 		for (let i = 0; i < args.length; i++) {
 			if (args[i].match(/name\S+/gi)) arr.splice(i, 1)
 		}
@@ -25,10 +26,10 @@ exports.run = async (client, msg, [args]) => {
 			: await client.query.countQuery('humans', { id: target.id })
 
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
-			return await msg.reply(`Webhook ${target.name} does not seem to be registered. add it with ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'}  add <Your-Webhook-url>`)
+			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'} ${client.translator.translate('add')} <Your-Webhook-url>`)
 		}
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return msg.reply(`${msg.channel.name} does not seem to be registered. add it with ${client.config.discord.prefix}channel add`).catch((O_o) => {})
+			return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.channel ? client.config.commands.channel : 'channel'} ${client.translator.translate('add')}`)
 		}
 		if (!isRegistered && msg.channel.type === 'dm') {
 			return msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}${client.config.commands.poracle ? client.config.commands.poracle : 'poracle'} to #${client.config.discord.channel}`)

@@ -56,7 +56,6 @@ for (const key in config.discord.token) {
 
 fs.watch('./config/', async (event, fileName) => {
 	if (!fileName.endsWith('.json')) return
-	console.log('ope ing new config')
 	discordWorkers = []
 	discordCommando = null
 
