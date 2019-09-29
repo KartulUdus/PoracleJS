@@ -89,7 +89,7 @@ class Worker {
 	}
 
 	async channelAlert(data) {
-		const channel = this.clientchannels.get(data.target)
+		const channel = this.client.channels.get(data.target)
 		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 		if (!channel) return log.warning(`channel ${data.name} not found`)
 		try {

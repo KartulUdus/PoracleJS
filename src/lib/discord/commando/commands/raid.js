@@ -46,8 +46,7 @@ exports.run = async (client, msg, command) => {
 			let template = 1
 			const levels = []
 			let pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
-			
-			const formNames = args.filter(arg => arg.match(client.re.formRe).map(arg => arg.replace(client.translator.translate('form'), '')))
+			let formNames = args.filter(arg => arg.match(client.re.formRe)).map(arg => arg.replace(client.translator.translate('form'), ''))
 			const argTypes = args.filter(arg => typeArray.includes(arg))
 			
 			if (formNames.length) {

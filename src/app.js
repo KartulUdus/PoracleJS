@@ -9,7 +9,7 @@ const readFileAsync = promisify(fs.readFile)
 const cp = require('child_process')
 
 const Config = require('./lib/configFetcher')
-
+const mustache = require('./lib/handlebars')()
 let {
 	config, knex, dts, geofence, translator
 } = Config()
@@ -32,15 +32,18 @@ const utilData = require('./util/util')
 
 
 const MonsterController = require('./controllers/monster')
+const RaidController = require('./controllers/raid')
 
 
-const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache)
+const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
+const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
 
 fastify.decorate('logger', log)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
 fastify.decorate('monsterController', monsterController)
+fastify.decorate('raidController', raidController)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)

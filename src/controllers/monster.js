@@ -1,5 +1,3 @@
-const path = require('path')
-const mustache = require('handlebars')
 const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
@@ -60,7 +58,15 @@ class Monster extends Controller {
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
 			result = result.filter(result => result.distance = 0 || result.distance > 0 && result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
-		return this.returnByDatabaseType(result)
+		result = this.returnByDatabaseType(result)
+		let alertIds = []
+		result = result.filter(alert => {
+			if(!alertIds.includes(alert.id)){
+				alertIds.push(alert.id)
+				return alert
+			}
+		})
+		return result
 	}
 
 
@@ -95,7 +101,7 @@ class Monster extends Controller {
 				return
 			}
 
-			data.name = monster.name
+			data.name = this.translator.translate(monster.name)
 			data.formname = monster.form.name
 			data.iv = data.weight ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
 			data.individual_attack = data.weight ? data.individual_attack : 0
@@ -106,8 +112,8 @@ class Monster extends Controller {
 			data.move_1 = data.weight ? data.move_1 : 0
 			data.move_2 = data.weight ? data.move_2 : 0
 			data.weight = data.weight ? data.weight.toFixed(1) : 0
-			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.utilData.moves[data.move_1].name : ''
-			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.utilData.moves[data.move_2].name : ''
+			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
+			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 			if (!data.weather) data.weather = 0
 			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.utilData.types[this.utilData.moves[data.move_1].type].emoji : ''
 			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.utilData.types[this.utilData.moves[data.move_2].type].emoji : ''
@@ -162,6 +168,7 @@ class Monster extends Controller {
 					...data,
 					...geoResult,
 					id: data.pokemon_id,
+					baseStats: monster.baseStats,
 					time: data.distime,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
@@ -215,7 +222,7 @@ class Monster extends Controller {
 			}
 			return jobs
 		} catch (e) {
-			this.log.error('Can\'t seem to handle:', e)
+			this.log.error('Can\'t seem to handle monster: ', e, data)
 		}
 	}
 }

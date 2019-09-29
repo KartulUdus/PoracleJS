@@ -20,7 +20,7 @@ const log = require('../lib/logger')
 // setup geocoding cache
 
 class Controller {
-	constructor(db, config, dts, geofence, monsterData, discordCache) {
+	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache) {
 		this.db = db
 		this.config = config
 		this.log = log
@@ -29,7 +29,8 @@ class Controller {
 		this.monsterData = monsterData
 		this.discordCache = discordCache
 		this.utilData = require(path.join(__dirname, '../util/util'))
-		this.mustache = require('handlebars')
+		this.translator = translator
+		this.mustache = mustache
 	}
 
 	getDistance(start, end) {
