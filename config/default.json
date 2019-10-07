@@ -58,7 +58,8 @@
         "#0070DD",
         "#A335EE",
         "#FF8000"
-    ]
+    ],
+    "delete_expired_mons": false
   },
 
   "commands": {

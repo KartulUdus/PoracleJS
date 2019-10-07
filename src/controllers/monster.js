@@ -145,6 +145,15 @@ class Monster extends Controller {
 			data.gif = pokemonGif(Number(data.pokemon_id))
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.sticker = `${config.telegram.stickerurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
+
+			let ttl = 0
+			if (config.discord.delete_expired_mons) {
+				ttl = (data.disappear_time * 1000) - Date.now()
+				if (ttl < 0) {
+					ttl = 2000
+				}
+			}
+
 			const e = []
 			monsterData[data.pokemon_id].types.forEach((type) => {
 				e.push(emojiData.type[type])
@@ -243,7 +252,7 @@ class Monster extends Controller {
 								name: cares.name,
 								emoji: caresCache === config.discord.limitamount + 1 ? [] : data.emoji,
 								meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
-
+								ttl,
 							}
 							if (caresCache <= config.discord.limitamount + 1) {
 								jobs.push(work)

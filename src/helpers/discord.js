@@ -38,6 +38,9 @@ client.on('ready', () => {
 							message.react(emoji)
 						})
 					}
+					if (msg.job.ttl > 0) {
+						message.delete(msg.job.ttl)
+					}
 					hungryInterval = startBeingHungry()
 				})
 					.catch((e) => {
