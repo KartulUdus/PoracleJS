@@ -255,13 +255,19 @@ class Controller {
 	async insertOrUpdateQuery(table, columns, values) {
 
 		const cols = columns.join(', ')
-		const multiValues = values.map(x => x.map(y => (typeof y === 'boolean' ? y : `'${y}'`)).join()).join('), \n(')
+		const multiValues = values.map(x => x.map(y => '?').join()).join('), \n(')
+		const params = []
+		values.forEach((x) => {
+			x.forEach((y) => {
+				params.push(y)
+			})
+		})
 		const duplicate = columns.map(x => `\`${x}\`=VALUES(\`${x}\`)`).join(', ')
 		const query = `INSERT INTO ${table} (${cols})
                       VALUES (${multiValues})
                       ON DUPLICATE KEY UPDATE ${duplicate}`
 		return new Promise((resolve, reject) => {
-			this.db.query(query)
+			this.db.query(query, params)
 				.then((result) => {
 					log.log({ level: 'debug', message: `insertOrUpdateQuery ${table}`, event: 'sql:insertOrUpdateQuery' })
 					resolve(result)
