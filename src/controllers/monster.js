@@ -129,6 +129,7 @@ class Monster extends Controller {
 			data.charge_move = data.weight && moveData[data.move_2] ? moveData[data.move_2].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0
 			if (data.form) data.formname = formData[data.pokemon_id] ? formData[data.pokemon_id][data.form] : ''
+			if (data.boosted_weather) data.weather=data.boosted_weather
 			if (!data.weather) data.weather = 0
 			data.move1emoji = moveData[data.move_1] && moveData[data.move_1].type ? types[moveData[data.move_1].type].emoji : ''
 			data.move2emoji = moveData[data.move_2] && moveData[data.move_2].type ? types[moveData[data.move_2].type].emoji : ''
