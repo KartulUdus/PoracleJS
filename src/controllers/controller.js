@@ -1,25 +1,24 @@
 /* eslint class-methods-use-this: ["error", { "exceptMethods": ["getGeocoder"] }] */
 
-const log = require('../logger')
 const config = require('config')
 const inside = require('point-in-polygon')
 const _ = require('lodash')
-const webshot = require('webshot')
-const path = require('path')
 const NodeGeocoder = require('node-geocoder')
-const pcache = require('../helpers/persistent-cache')
-const questDts = require('../../config/questdts')
-const messageDts = require('../../config/dts')
 const child = require('child_process')
 
 const ivColorData = config.discord.iv_colors
+const emojiFlags = require('emoji-flags')
+const uuid = require('uuid/v4')
+const Cache = require('ttl')
 const geofence = require('../../config/geofence.json')
 const baseStats = require('../util/base_stats')
 const cpMultipliers = require('../util/cp-multipliers')
-const emojiFlags = require('emoji-flags')
-const uuid = require('uuid/v4')
+const questDts = require('../../config/questdts')
+const messageDts = require('../../config/dts')
 
-const Cache = require('ttl')
+const pcache = require('../helpers/persistent-cache')
+
+const log = require('../logger')
 
 const discordcache = new Cache({
 	ttl: config.discord.limitsec * 1000,
@@ -45,7 +44,6 @@ class Controller {
 		this.ivColorData = ivColorData
 		this.geofence = geofence
 		this.cpMultipliers = cpMultipliers
-		this.webshot = webshot
 		this.discordcache = discordcache
 		this.uuid = uuid()
 		this.cp = child
@@ -140,32 +138,16 @@ class Controller {
 
 	async pointInArea(point) {
 		return new Promise((resolve) => {
-			const confAreas = this.geofence.map(area => area.name.toLowerCase())
+			const confAreas = this.geofence.map((area) => area.name.toLowerCase())
 			const matchAreas = []
 			confAreas.forEach((area) => {
-				const areaObj = _.find(this.geofence, p => p.name.toLowerCase() === area)
+				const areaObj = _.find(this.geofence, (p) => p.name.toLowerCase() === area)
 				if (inside(point, areaObj.path)) {
 					matchAreas.push(area)
 				}
 			})
 			log.log({ level: 'debug', message: `pointInArea ${point[0]}, ${point[1]}`, event: 'geo:pointInArea' })
 			resolve(matchAreas)
-		})
-	}
-
-	async getOSMStatic(lat, lon) {
-		return new Promise((resolve) => {
-			const link = `http://${config.general.host}:${config.general.port}/?lat=${lat}&lon=${lon}`
-			const options = {
-				screenSize: { width: config.geocoding.width, height: config.geocoding.height },
-				shotSize: { width: config.geocoding.width, height: config.geocoding.height },
-				timeout: 10000,
-				takeShotOnCallback: true,
-			}
-			const tempPath = path.join(__dirname, '..', 'helpers', 'staticmap', `${lat}-${lon}.png`)
-			this.webshot(link, tempPath, options, (err) => {
-				resolve(tempPath)
-			})
 		})
 	}
 
@@ -244,7 +226,10 @@ class Controller {
 	async insertQuery(table, columns, values) {
 		return new Promise((resolve) => {
 			this.db.query(`INSERT INTO ?? (${columns.join(',')}) VALUES (?)`, [table, values])
-				.then(log.log({ level: 'debug', message: `insertQuery ${table}`, event: 'sql:insertQuery' }))
+				.then(() => {
+					log.log({ level: 'debug', message: `insertQuery ${table}`, event: 'sql:insertQuery' })
+					resolve()
+				})
 				.catch((err) => {
 					log.error(`inseertQuery errored with: ${err}`)
 				})
@@ -255,8 +240,8 @@ class Controller {
 	async insertOrUpdateQuery(table, columns, values) {
 
 		const cols = columns.join(', ')
-		const multiValues = values.map(x => x.map(y => (typeof y === 'boolean' ? y : `'${y}'`)).join()).join('), \n(')
-		const duplicate = columns.map(x => `\`${x}\`=VALUES(\`${x}\`)`).join(', ')
+		const multiValues = values.map((x) => x.map((y) => (typeof y === 'boolean' ? y : `'${y}'`)).join()).join('), \n(')
+		const duplicate = columns.map((x) => `\`${x}\`=VALUES(\`${x}\`)`).join(', ')
 		const query = `INSERT INTO ${table} (${cols})
                       VALUES (${multiValues})
                       ON DUPLICATE KEY UPDATE ${duplicate}`
@@ -369,7 +354,7 @@ class Controller {
 			this.db.query(`select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS where TABLE_NAME = ? and TABLE_SCHEMA = '${config.db.database}'`, [table])
 				.then((result) => {
 					const colArray = []
-					result[0].forEach(col => colArray.push(col.COLUMN_NAME))
+					result[0].forEach((col) => colArray.push(col.COLUMN_NAME))
 					resolve(colArray)
 					log.log({ level: 'debug', message: `getColumns ${table}`, event: 'sql:getColumns' })
 				})
@@ -386,17 +371,17 @@ class Controller {
 		const def = baseStats[monster].defense
 		const sta = baseStats[monster].stamina
 
-		const cp = Math.max(10, Math.floor((atk + ivAttack) *
-			((def + ivDefense) ** 0.5) *
-			((sta + ivStamina) ** 0.5) *
-			((cpMulti ** 2) / 10)))
+		const cp = Math.max(10, Math.floor((atk + ivAttack)
+			* ((def + ivDefense) ** 0.5)
+			* ((sta + ivStamina) ** 0.5)
+			* ((cpMulti ** 2) / 10)))
 		return cp
 	}
 
 	async checkSchema() {
 		return new Promise((resolve, reject) => {
 			this.db.query(`select count(*) as c from information_schema.tables where table_schema='${config.db.database}' 
-							and table_name in('egg', 'raid', 'monsters', 'schema_version', 'gym-info', 'humans', 'quest')`)
+							and table_name in('egg', 'raid', 'monsters', 'schema_version', 'gym-info', 'humans', 'quest', 'incident')`)
 				.then((schematablesMatched) => {
 					log.log({ level: 'debug', message: 'checkSchema', event: 'sql:checkSchema' })
 					resolve(schematablesMatched[0][0].c)

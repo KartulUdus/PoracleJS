@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const geofence = require('../../../../config/geofence.json')
 
-const confAreas = geofence.map(area => area.name.toLowerCase().replace(/ /gi, '_')).sort()
+const confAreas = geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
 
 
 exports.run = (client, msg, args) => {
@@ -38,10 +38,10 @@ exports.run = (client, msg, args) => {
 				switch (args[0]) {
 					case 'add': {
 						client.query.selectOneQuery('humans', 'id', target.id).then((human) => {
-							const oldArea = JSON.parse(human.area.split()).map(area => area.replace(/ /gi, '_'))
-							const validAreas = confAreas.filter(x => args.includes(x))
-							const addAreas = validAreas.filter(x => !oldArea.includes(x))
-							const newAreas = oldArea.concat(addAreas).map(area => area.replace(/_/gi, ' '))
+							const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
+							const validAreas = confAreas.filter((x) => args.includes(x))
+							const addAreas = validAreas.filter((x) => !oldArea.includes(x))
+							const newAreas = oldArea.concat(addAreas).map((area) => area.replace(/_/gi, ' '))
 							if (addAreas.length) client.query.updateQuery('humans', 'area', JSON.stringify(newAreas), 'id', target.id)
 							if (!validAreas.length) {
 								return msg.reply(`no valid areas there, please use one of ${confAreas}`).catch((O_o) => {
@@ -67,10 +67,10 @@ exports.run = (client, msg, args) => {
 					}
 					case 'remove': {
 						client.query.selectOneQuery('humans', 'id', target.id).then((human) => {
-							const oldArea = JSON.parse(human.area.split()).map(area => area.replace(/ /gi, '_'))
-							const validAreas = oldArea.filter(x => args.includes(x))
-							const removeAreas = validAreas.filter(x => oldArea.includes(x))
-							const newAreas = oldArea.filter(x => !removeAreas.includes(x))
+							const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
+							const validAreas = oldArea.filter((x) => args.includes(x))
+							const removeAreas = validAreas.filter((x) => oldArea.includes(x))
+							const newAreas = oldArea.filter((x) => !removeAreas.includes(x))
 							if (removeAreas.length) {
 								client.query.updateQuery('humans', 'area', JSON.stringify(newAreas), 'id', target.id).catch((O_o) => {})
 							}

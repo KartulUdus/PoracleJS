@@ -1,7 +1,7 @@
 const _ = require('lodash')
 const geofence = require('../../../../config/geofence.json')
 
-const confAreas = geofence.map(area => area.name.toLowerCase()).sort()
+const confAreas = geofence.map((area) => area.name.toLowerCase()).sort()
 
 module.exports = (ctx) => {
 
@@ -34,8 +34,8 @@ module.exports = (ctx) => {
 					case 'add': {
 						controller.query.selectOneQuery('humans', 'id', target.id).then((human) => {
 							const oldArea = JSON.parse(human.area.split())
-							const validAreas = confAreas.filter(x => args.includes(x))
-							const addAreas = validAreas.filter(x => !oldArea.includes(x))
+							const validAreas = confAreas.filter((x) => args.includes(x))
+							const addAreas = validAreas.filter((x) => !oldArea.includes(x))
 							const newAreas = oldArea.concat(addAreas)
 							if (addAreas.length) controller.query.updateQuery('humans', 'area', JSON.stringify(newAreas), 'id', target.id)
 							if (!validAreas.length) {
@@ -63,9 +63,9 @@ module.exports = (ctx) => {
 					case 'remove': {
 						controller.query.selectOneQuery('humans', 'id', target.id).then((human) => {
 							const oldArea = JSON.parse(human.area.split())
-							const validAreas = oldArea.filter(x => args.includes(x))
-							const removeAreas = validAreas.filter(x => oldArea.includes(x))
-							const newAreas = oldArea.filter(x => !removeAreas.includes(x))
+							const validAreas = oldArea.filter((x) => args.includes(x))
+							const removeAreas = validAreas.filter((x) => oldArea.includes(x))
+							const newAreas = oldArea.filter((x) => !removeAreas.includes(x))
 							if (removeAreas.length) {
 								controller.query.updateQuery('humans', 'area', JSON.stringify(newAreas), 'id', target.id).catch((O_o) => {})
 							}

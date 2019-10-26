@@ -32,7 +32,7 @@ module.exports = (ctx) => {
 
 				Promise.all([controller.query.execPromise('git status'), controller.query.execPromise('git --no-pager log -3')]).then((output) => {
 					let changes = output[0]
-					changes = _.filter(changes.split('\n'), line => line.match(/modified/gi) || line.match(/renamed/gi) || line.match(/On branch/gi))
+					changes = _.filter(changes.split('\n'), (line) => line.match(/modified/gi) || line.match(/renamed/gi) || line.match(/On branch/gi))
 					const gitLogs = output[1].split('\n')
 					const commitLines = []
 					const gitMsgs = []
@@ -49,7 +49,7 @@ module.exports = (ctx) => {
 					gitMsgs.forEach((gitMsg) => {
 						fields.push({
 							name: `${gitMsg[1].split(' ')[1]} - ${new Date(gitMsg[2].slice(8)).toLocaleDateString()}`,
-							value: `https://github.com/KartulUdus/PoracleJS/commit/${gitMsg[0].slice(7)} \n${gitMsg.slice(3).filter(line => line !== '').join('\n')}`,
+							value: `https://github.com/KartulUdus/PoracleJS/commit/${gitMsg[0].slice(7)} \n${gitMsg.slice(3).filter((line) => line !== '').join('\n')}`,
 						})
 					})
 					let message = `${ctx.botInfo.username} is running on V${version}`

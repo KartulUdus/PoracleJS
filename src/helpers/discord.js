@@ -2,9 +2,9 @@ const config = require('config')
 const { Client } = require('discord.js')
 
 const client = new Client()
-const log = require('../logger')
 const discord = require('cluster')
 const axios = require('axios')
+const log = require('../logger')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 

@@ -1,6 +1,6 @@
-const Controller = require('../controllers/controller')
 const config = require('config')
 const mysql = require('mysql2/promise')
+const Controller = require('../controllers/controller')
 
 const db = mysql.createPool(config.db, { multipleStatements: true })
 const queries = new Controller(db)
@@ -179,9 +179,9 @@ module.exports = async () => new Promise((resolve, reject) => {
 					queries.mysteryQuery(schemaVersion),
 				])
 					.then(() => {
-						queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '4'])
+						queries.insertQuery('schema_version', ['`key`', '`val`'], ['db_version', '6'])
 							.then(() => {
-								log.info('Database tables created, db_version 4 applied')
+								log.info('Database tables created, db_version 6 applied')
 								resolve(true)
 							})
 							.catch((unhappy) => {
@@ -195,7 +195,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 			else {
 				queries.checkSchema()
 					.then((confirmedTables) => {
-						if (confirmedTables === 7) {
+						if (confirmedTables === 8) {
 							log.info('Database tables confirmed')
 						}
 						else {
@@ -293,7 +293,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 										})
 								}
 								else if (version.val === 6) {
-									log.info('Database schema-version 5 confirmed')
+									log.info('Database schema-version 6 confirmed')
 									resolve(true)
 								}
 							})

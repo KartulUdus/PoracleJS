@@ -1,10 +1,10 @@
 const cluster = require('cluster')
 const Telegraf = require('telegraf')
-const commandParts = require('./telegram/middleware/commandParser')
-const telegramController = require('./telegram/middleware/controller')
 const fs = require('fs')
 const config = require('config')
 const _ = require('lodash')
+const telegramController = require('./telegram/middleware/controller')
+const commandParts = require('./telegram/middleware/commandParser')
 
 const log = require('../logger')
 
@@ -93,4 +93,3 @@ process.on('message', (msg) => {
 	}
 
 })
-

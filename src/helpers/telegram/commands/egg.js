@@ -53,7 +53,7 @@ module.exports = (ctx) => {
 				})
 				if (!remove) {
 					if (levels.length) {
-						const insertData = levels.map(level => [target.id, level, template, distance, park, team])
+						const insertData = levels.map((level) => [target.id, level, template, distance, park, team])
 						controller.query.insertOrUpdateQuery(
 							'egg',
 							['id', 'raid_level', 'template', 'distance', 'park', 'team'],

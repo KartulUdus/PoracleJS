@@ -14,7 +14,7 @@ module.exports = () => mount('text', (ctx, next) => {
 		args: parts[3],
 		get splitArgs() {
 			const args = parts[3].split(/\s+/)
-			return args.map(arg => arg.toLowerCase())
+			return args.map((arg) => arg.toLowerCase())
 		},
 	}
 	ctx.state.command = command

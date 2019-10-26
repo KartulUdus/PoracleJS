@@ -54,10 +54,10 @@ exports.run = (client, msg, args) => {
 				const forms = []
 
 				args.forEach((element) => {
-					const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
+					const pid = _.findKey(monsterData, (mon) => mon.name.toLowerCase() === element)
 					if (pid !== undefined) monsters.push(pid)
-					else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
-						const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					else if (_.has(typeData, element.replace(/\b\w/g, (l) => l.toUpperCase()))) {
+						const Type = element.replace(/\b\w/g, (l) => l.toUpperCase())
 						_.filter(monsterData, (o, k) => {
 							if (_.includes(o.types, Type) && k < client.config.general.max_pokemon) {
 								if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
@@ -83,13 +83,13 @@ exports.run = (client, msg, args) => {
 					}
 					else if (element.match(/gen[1-7]/gi)) {
 						gen = element.match(/gen\d/gi)[0].replace(/gen/gi, '')
-						monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1).filter(k => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
+						monsters = [...Array(config.general.max_pokemon).keys()].map((x) => x += 1).filter((k) => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
 					}
 				})
 				if (!remove) {
 					if (monsters.length !== 0 && levels.length === 0 && forms.length === 0) {
 						const level = 0
-						const insertData = monsters.map(monster => [target.id, monster, template, distance, park, team, level, form])
+						const insertData = monsters.map((monster) => [target.id, monster, template, distance, park, team, level, form])
 						client.query.insertOrUpdateQuery(
 							'raid',
 							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level', 'form'],
@@ -115,7 +115,7 @@ exports.run = (client, msg, args) => {
 						}
 						const fids = []
 						forms.forEach((f) => {
-							const fid = _.findKey(formData[monsters[0]], monforms => monforms.toLowerCase() === f)
+							const fid = _.findKey(formData[monsters[0]], (monforms) => monforms.toLowerCase() === f)
 							if (fid) fids.push(fid)
 						})
 						if (!fids.length) {
@@ -123,7 +123,7 @@ exports.run = (client, msg, args) => {
 								client.log.error(O_o.message)
 							})
 						}
-						const insertData = fids.map(f => [target.id, monsters[0], template, distance, park, team, level, f])
+						const insertData = fids.map((f) => [target.id, monsters[0], template, distance, park, team, level, f])
 						client.query.insertOrUpdateQuery(
 							'raid',
 							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level', 'form'],
@@ -143,7 +143,7 @@ exports.run = (client, msg, args) => {
 					else if (monsters.length === 0 && levels.length === 0) msg.reply('404 NO MONSTERS FOUND')
 					else if (monsters.length !== 0 && levels.length !== 0) msg.reply('400 Can\'t track raids by name and level at the same time')
 					else if (monsters.length === 0 && levels.length !== 0) {
-						const insertData = levels.map(level => [target.id, 721, template, distance, park, team, level, form])
+						const insertData = levels.map((level) => [target.id, 721, template, distance, park, team, level, form])
 						client.query.insertOrUpdateQuery(
 							'raid',
 							['id', 'pokemon_id', 'template', 'distance', 'park', 'team', 'level', 'form'],

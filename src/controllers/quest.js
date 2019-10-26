@@ -1,9 +1,9 @@
-const Controller = require('./controller')
 const config = require('config')
-const log = require('../logger')
 const mustache = require('mustache')
 const _ = require('lodash')
 const path = require('path')
+const log = require('../logger')
+const Controller = require('./controller')
 
 const emojiData = require('../../config/emoji')
 
@@ -18,7 +18,7 @@ const typeData = require('../util/types')
 
 class Quest extends Controller {
 
-/*
+	/*
 * monsterWhoCares, takes data object
 */
 	async questWhoCares(data) {
@@ -98,11 +98,11 @@ class Quest extends Controller {
 				data.rewardData.items.forEach((i) => {
 					if (i) itemnames.push(this.qdts.rewardItems[i])
 				})
-				data.imgurl = data.rewardData.monsters[1] ?
-					`${config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
+				data.imgurl = data.rewardData.monsters[1]
+					? `${config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
 					: 'saflkansd'
-				data.sticker = data.rewardData.monsters[1] ?
-					`${config.telegram.stickerurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
+				data.sticker = data.rewardData.monsters[1]
+					? `${config.telegram.stickerurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
 					: 'saflkansd'
 				if (data.rewardData.items[1]) {
 					data.imgurl = `${config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
@@ -163,7 +163,7 @@ class Quest extends Controller {
 							stateCode: geoResult.stateCode,
 							neighbourhood: geoResult.neighbourhood,
 							flagemoji: geoResult.flag,
-							areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+							areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 
 						})
 
@@ -263,7 +263,7 @@ class Quest extends Controller {
 					case 1: {
 						let typestring = ''
 						condition.info.pokemon_type_ids.forEach((typeId) => {
-							const typename = _.findKey(typeData, o => o.id === typeId)
+							const typename = _.findKey(typeData, (o) => o.id === typeId)
 							const template = this.qdts.questMonsterTypeString
 							const monsterType = mustache.render(template, { name: typename, emoji: typeData[typename].emoji })
 							typestring = typestring.concat(monsterType)
