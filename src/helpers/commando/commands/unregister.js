@@ -4,8 +4,8 @@ exports.run = (client, msg) => {
 
 	const targets = []
 	if (_.includes(client.config.discord.admins, msg.author.id)) {
-		_.forEach(msg.mentions.users.array(), user => targets.push({ id: user.id, name: user.tag }))
-		_.forEach(msg.mentions.channels.array(), channel => targets.push({ id: channel.id, name: channel.name }))
+		_.forEach(msg.mentions.users.array(), (user) => targets.push({ id: user.id, name: user.tag }))
+		_.forEach(msg.mentions.channels.array(), (channel) => targets.push({ id: channel.id, name: channel.name }))
 	}
 	if (!targets.length) targets.push({ id: msg.author.id, name: msg.author.tag })
 	targets.forEach((target) => {

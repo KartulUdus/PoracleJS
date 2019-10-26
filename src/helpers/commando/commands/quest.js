@@ -9,6 +9,7 @@ const monsterData = require(monsterDataPath)
 const questDts = require('../../../../config/questdts')
 
 const typeData = require(`${__dirname}/../../../util/types`)
+const genData = require(`${__dirname}/../../../util/gens`)
 
 
 exports.run = (client, msg) => {
@@ -49,21 +50,26 @@ exports.run = (client, msg) => {
 				let template = 3
 				let mustShiny = 0
 				let remove = false
+				let gen = 0
 				const rawArgs = msg.content.slice(`${config.discord.prefix}quest`.length)
 				const args = rawArgs.toLowerCase().split(' ')
 				let minDust = 10000000
 				let stardustTracking = 9999999
 
 				args.forEach((element) => {
-					const pid = _.findKey(monsterData, mon => mon.name.toLowerCase() === element)
+					const pid = _.findKey(monsterData, (mon) => mon.name.toLowerCase() === element)
 					if (pid !== undefined) monsters.push(pid)
-					else if (_.has(typeData, element.replace(/\b\w/g, l => l.toUpperCase()))) {
-						const Type = element.replace(/\b\w/g, l => l.toUpperCase())
+					else if (_.has(typeData, element.replace(/\b\w/g, (l) => l.toUpperCase()))) {
+						const Type = element.replace(/\b\w/g, (l) => l.toUpperCase())
 						_.filter(monsterData, (o, k) => {
 							if (_.includes(o.types, Type) && k < client.config.general.max_pokemon) {
 								if (!_.includes(monsters, parseInt(k, 10))) monsters.push(parseInt(k, 10))
 							} return k
 						})
+					}
+					else if (element.match(/gen[1-7]/gi)) {
+						gen = element.match(/gen\d/gi)[0].replace(/gen/gi, '')
+						monsters = [...Array(config.general.max_pokemon).keys()].map((x) => x += 1).filter((k) => k >= genData[gen].min && k <= genData[gen].max) // eslint-disable-line no-return-assign
 					}
 					else if (element.match(/d\d/gi)) {
 						distance = element.replace(/d/gi, '')
@@ -82,7 +88,7 @@ exports.run = (client, msg) => {
 					const re = new RegExp(` ${item}`, 'gi')
 					if (rawArgs.match(re)) items.push(key)
 				})
-				if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map(x => x += 1) // eslint-disable-line no-return-assign
+				if (rawArgs.match(/all pokemon/gi)) monsters = [...Array(config.general.max_pokemon).keys()].map((x) => x += 1) // eslint-disable-line no-return-assign
 				if (rawArgs.match(/all items/gi)) {
 					_.forEach(questDts.rewardItems, (item, key) => {
 						items.push(key)
@@ -125,7 +131,7 @@ exports.run = (client, msg) => {
 						})
 						return
 					}
-					const insertData = questTracks.map(t => [t.id, t.reward, t.template, t.reward_type, t.distance, t.mustShiny])
+					const insertData = questTracks.map((t) => [t.id, t.reward, t.template, t.reward_type, t.distance, t.mustShiny])
 					client.query.insertOrUpdateQuery(
 						'quest',
 						['id', 'reward', 'template', 'reward_type', 'distance', 'shiny'],

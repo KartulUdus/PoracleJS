@@ -1,7 +1,7 @@
 const fs = require('fs')
-const log = require('../logger')
 const path = require('path')
 const config = require('config')
+const log = require('../logger')
 
 module.exports = () => {
 	if ((config.discord.enabled && !config.discord.token.length) || (config.telegram.enabled && !config.telegram.token.length)) {

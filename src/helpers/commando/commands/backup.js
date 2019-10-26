@@ -60,11 +60,11 @@ exports.run = (client, msg, args) => {
 						let i
 						let	u
 						for (i = 0, u = 5; i < 5; i += 1, u += 1) {
-							data[u] = data[u].map(obj => Object.values(obj))
+							data[u] = data[u].map((obj) => Object.values(obj))
 							if (data[u].length) {
 								const cols = data[i].join(', ')
-								const multiValues = Object.values(data[u]).map(x => x.map(y => (typeof y === 'boolean' ? y : `'${y}'`)).join()).join('), (')
-								const duplicate = data[i].map(x => `\`${x}\`=VALUES(\`${x}\`)`).join(', ')
+								const multiValues = Object.values(data[u]).map((x) => x.map((y) => (typeof y === 'boolean' ? y : `'${y}'`)).join()).join('), (')
+								const duplicate = data[i].map((x) => `\`${x}\`=VALUES(\`${x}\`)`).join(', ')
 								const queryChunk = `INSERT INTO ${backupTables[i]} (${cols})
 											  VALUES (${multiValues})
 											  ON DUPLICATE KEY UPDATE ${duplicate}; `

@@ -1,11 +1,13 @@
-const Controller = require('./controller')
-const log = require('../logger')
 const config = require('config')
 const path = require('path')
-
 const _ = require('lodash')
 const mustache = require('mustache')
 const pokemonGif = require('pokemon-gif')
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
+const Controller = require('./controller')
+const log = require('../logger')
+
 
 let monsterDataPath = path.join(__dirname, '../util/monsters.json')
 let moveDataPath = path.join(__dirname, '../util/moves.json')
@@ -23,8 +25,7 @@ const weatherData = require('../util/weather')
 const moveData = require(moveDataPath)
 const formData = require('../util/forms')
 const genderData = require('../util/genders')
-const geoTz = require('geo-tz')
-const moment = require('moment-timezone')
+
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
@@ -114,17 +115,22 @@ class Monster extends Controller {
 					data.staticmap = ''
 				}
 			}
+			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
+								|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+								|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+
+
 			data.name = monsterData[data.pokemon_id].name ? monsterData[data.pokemon_id].name : 'errormon'
 			data.formname = ''
-			data.iv = data.weight ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
-			data.individual_attack = data.weight ? data.individual_attack : 0
-			data.individual_defense = data.weight ? data.individual_defense : 0
-			data.individual_stamina = data.weight ? data.individual_stamina : 0
-			data.cp = data.weight ? data.cp : 0
-			data.pokemon_level = data.weight ? data.pokemon_level : 0
-			data.move_1 = data.weight ? data.move_1 : 0
-			data.move_2 = data.weight ? data.move_2 : 0
-			data.weight = data.weight ? data.weight.toFixed(1) : 0
+			data.iv = encountered ? ((+data.individual_attack + +data.individual_defense + +data.individual_stamina) / 0.45).toFixed(2) : -1
+			data.individual_attack = encountered ? +data.individual_attack : 0
+			data.individual_defense = encountered ? +data.individual_defense : 0
+			data.individual_stamina = encountered ? +data.individual_stamina : 0
+			data.cp = encountered ? +data.cp : 0
+			data.pokemon_level = encountered ? data.pokemon_level : 0
+			data.move_1 = encountered ? data.move_1 : 0
+			data.move_2 = encountered ? data.move_2 : 0
+			data.weight = encountered ? data.weight.toFixed(2) : 0
 			data.quick_move = data.weight && moveData[data.move_1] ? moveData[data.move_1].name : ''
 			data.charge_move = data.weight && moveData[data.move_2] ? moveData[data.move_2].name : ''
 			if (data.form === undefined || data.form === null) data.form = 0
@@ -210,7 +216,7 @@ class Monster extends Controller {
 								sta: data.individual_stamina,
 								imgurl: data.imgurl.toLowerCase(),
 								pokemoji: emojiData.pokemon[data.pokemon_id],
-								areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+								areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 
 								// geocode stuff
 								lat: data.latitude.toString().substring(0, 8),

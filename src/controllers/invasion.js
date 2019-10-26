@@ -1,6 +1,4 @@
-const Controller = require('./controller')
 const config = require('config')
-const log = require('../logger')
 const path = require('path')
 
 const _ = require('lodash')
@@ -8,6 +6,8 @@ const mustache = require('mustache')
 
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+const log = require('../logger')
+const Controller = require('./controller')
 
 require('moment-precise-range-plugin')
 
@@ -15,7 +15,7 @@ moment.locale(config.locale.timeformat)
 const minTth = config.general.monsterMinimumTimeTillHidden || 0
 
 let gruntTypeDataPath = path.join(__dirname, '../util/grunt_types.json')
-//Check if the config language is one of the array object (array for future translation possibilities)
+// Check if the config language is one of the array object (array for future translation possibilities)
 if (_.includes(['de', 'fr'], config.locale.language.toLowerCase())) {
 	gruntTypeDataPath = path.join(__dirname, `../util/locale/grunt_types${config.locale.language.toLowerCase()}.json`)
 }
@@ -36,7 +36,7 @@ const genderData = require('../util/genders')
 
 class Incident extends Controller {
 
-/*
+	/*
 * invasionWhoCares, takes data object
 */
 	async invasionWhoCares(data) {
@@ -157,7 +157,8 @@ class Incident extends Controller {
 										const secondReward = parseInt(sr, 10)
 										gruntRewards += monsterData[`${secondReward}`].name
 									})
-								} else {
+								}
+								else {
 									// Single Reward 100% of encounter (might vary based on actual fight).
 									let first = true
 									gruntType.encounters.first.forEach((fr) => {
@@ -236,7 +237,7 @@ class Incident extends Controller {
 									stateCode: geoResult.stateCode,
 									neighbourhood: geoResult.neighbourhood,
 									flagemoji: geoResult.flag,
-									areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+									areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 								})
 
 								const template = JSON.stringify(dts.incident[`${cares.template}`])

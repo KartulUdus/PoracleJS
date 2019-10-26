@@ -102,7 +102,8 @@ available filters:
 |male       |`!track rattata male`            | Tracks male rattata |
 |female     |`!track pikachu female`          | Tracks female pikachu |
 |genderless |`!track unown genderless`        | Tracks genderless unowns |
-|everything |`!track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monster filters⚠️ |
+|everything |`!track everything iv90 level20` | Tracks eveything with a minimum IV of 90% level 20 and higher. <br/> ⚠️This will overwrite all other monsters in the command⚠️ |
+|gen |`!track gen6 iv60 level15` | Tracks gen 6 pokemon with a minimum IV of 60% level 15 and higher. <br/> ⚠️This will overwrite all other monsters in the command⚠️ |
 
 ###### !untrack
 
@@ -127,6 +128,8 @@ Available filters:
 |valor|`!raid moltres valor`| Tracks moltres raids where controlling team is valor|
 |form|`!raid exeggutor formalola`| Tracks Exeggutor raids i your area if form is Alolan| 
 |harmony|`!raid venusaur harmony`| Tracks venusaur raids in uncontested gyms|
+|everything|`!raid everything`| Tracks Raids from level 1 - 5|
+|gen|`!raid gen5`| Tracks raids against gen5 pokemon|
 
 ###### !raid remove
 
@@ -148,6 +151,7 @@ Available filters:
 |mystic|`!egg level2 mystic`| Tracks level 2 eggs where controlling team is mystic|
 |valor|`!egg level1 valor`| Tracks level 1 eggs controlling team is valor|
 |harmony|`!egg level5 harmony`| Tracks level 5 eggs in uncontested gyms|
+|everything|`!egg everything`| Tracks Raids from level 1 - 5|
 
 ###### !egg remove
 
@@ -163,6 +167,7 @@ Available filters:
 | Filter    | Example                        | More words  |
 | --------- |:------------------------------:| -----------:|
 |all pokemon|`!quest all pokemon`| tracks quests for all pokemon rewards within your area|
+|gen|`!quest gen5`| tracks quests for all gen5 pokemon rewards within your area|
 |all items|`!quest all items`| tracks quests for all item rewards within your area|
 |d|`!quest snorlax d50`| Tracks Snorlax awarding quests within 50m of set location|
 |stardust|`!quest stardust d1000`| Tracks quests within 1km that awards stardust|

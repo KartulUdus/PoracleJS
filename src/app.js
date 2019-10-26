@@ -1,13 +1,12 @@
 require('dotenv').config()
 require('./helpers/configCreator')()
-const migrator = require('./helpers/migrator')
 const _ = require('lodash')
 const path = require('path')
 const config = require('config')
 const fastify = require('fastify')()
-const log = require('./logger')
 const cp = require('child_process')
-const nuxtConfig = require('./statistics/nuxt.config.js')
+const log = require('./logger')
+const migrator = require('./helpers/migrator')
 
 
 fastify
@@ -26,17 +25,6 @@ fastify
 		})
 		reply.send({ message: error.message, request: request.body })
 	})
-	.register(require('./helpers/nuxt'), {
-		config: nuxtConfig,
-	})
-	.after((e) => {
-		if (e) log.error(e)
-		fastify.nuxt('/')
-		fastify.nuxt('/pokemon')
-		fastify.nuxt('/raid')
-		fastify.nuxt('/logs')
-
-	})
 
 const start = async () => {
 	try {
@@ -52,4 +40,3 @@ const start = async () => {
 }
 
 start()
-

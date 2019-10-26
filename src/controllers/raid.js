@@ -1,6 +1,4 @@
-const Controller = require('./controller')
 const config = require('config')
-const log = require('../logger')
 const pokemonGif = require('pokemon-gif')
 const path = require('path')
 
@@ -13,7 +11,8 @@ if (_.includes(['de', 'fr', 'ja', 'ko', 'ru'], config.locale.language.toLowerCas
 	monsterDataPath = path.join(__dirname, `../util/locale/monsters${config.locale.language.toLowerCase()}.json`)
 	moveDataPath = path.join(__dirname, `../util/locale/moves${config.locale.language.toLowerCase()}.json`)
 }
-
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
 const emojiData = require('../../config/emoji')
 
 const monsterData = require(monsterDataPath)
@@ -22,8 +21,9 @@ const types = require('../util/types')
 
 const moveData = require(moveDataPath)
 const formData = require('../util/forms')
-const geoTz = require('geo-tz')
-const moment = require('moment-timezone')
+
+const log = require('../logger')
+const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
 moment.locale(config.locale.timeformat)
@@ -32,7 +32,7 @@ const dts = require('../../config/dts')
 
 class Raid extends Controller {
 
-/*
+	/*
 * raidWhoCares, takes data object
 */
 	async raidWhoCares(data) {
@@ -155,8 +155,7 @@ class Raid extends Controller {
 						data.gymname = gymInfo ? gymInfo.gym_name : data.gym_name
 						data.description = gymInfo ? gymInfo.description : ''
 						data.url = gymInfo ? gymInfo.url : data.url
-						data.park = gymInfo ? gymInfo.park : data.ex_raid_eligible
-						data.park = data.ex_raid_eligible ? data.ex_raid_eligible : data.park
+						data.park = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 						data.ex = data.park ? 'EX' : ''
 						if (data.tth.firstDateWasLater) {
 							log.warn(`Raid against ${data.name} was sent but already ended`)
@@ -230,7 +229,7 @@ class Raid extends Controller {
 												flagemoji: geoResult.flag,
 												emojistring: data.emojistring,
 												pokemoji: emojiData.pokemon[data.pokemon_id],
-												areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+												areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 
 											})
 
@@ -353,7 +352,7 @@ class Raid extends Controller {
 												stateCode: geoResult.stateCode,
 												neighbourhood: geoResult.neighbourhood,
 												flagemoji: geoResult.flag,
-												areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+												areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 											})
 
 											const template = JSON.stringify(dts.egg[`${cares.template}`])

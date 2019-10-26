@@ -24,11 +24,9 @@ const console = new (winston.transports.Console)({
 	handleExceptions: true,
 })
 
-module.exports =
-
-	winston.createLogger({
-		transports: [
-			console,
-			file,
-		],
-	})
+module.exports =	winston.createLogger({
+	transports: [
+		console,
+		file,
+	],
+})
