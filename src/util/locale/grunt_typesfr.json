@@ -1,8 +1,8 @@
 {
   "0": {
-     "type": "Aléatoire",
-     "grunt": "Aléatoire",
-     "gender": 0
+    "type": "Aléatoire",
+    "grunt": "Aléatoire",
+    "gender": 0
   },
   "1": {
     "type": "",
@@ -22,12 +22,24 @@
   "4": {
     "type": "Starter gen 1",
     "grunt": "Sbire Homme", 
-    "gender": 1
+    "gender": 1,
+    "second_reward": true,
+    "encounters":{
+       "first": ["1","4","7"],
+       "second":["2","5","8"],
+       "third":["3","6","9"]
+    }
   },
   "5": {
     "type": "Ronflex",
     "grunt": "Sbire Femme",
-    "gender": 2
+    "gender": 2,
+    "second_reward": false,
+    "encounters":{
+        "first": ["143"],
+        "second":["143","62","282"],
+        "third":["143","149","130"]
+    }
   },
   "6": {
     "type": "Insecte",
@@ -37,7 +49,12 @@
   "7": {
     "type": "Insecte",
     "grunt": "Sbire Homme", 
-    "gender": 1
+    "gender": 1,
+    "encounters":{
+        "first": ["123"],
+        "second":["123","212"],
+        "third":["123","212"]
+    }
   },
   "8": {
     "type": "Spectre",
@@ -62,7 +79,13 @@
   "12": {
     "type": "Dragon",
     "grunt": "Sbire Femme",
-    "gender": 2
+    "gender": 2,
+    "second_reward": false,
+    "encounters":{
+        "first": ["147"],
+        "second":["147","148"],
+        "third":["148","149","130"]
+    }
   },
   "13": {
     "type": "Dragon",
@@ -82,7 +105,13 @@
   "16": {
     "type": "Combat",
     "grunt": "Sbire Femme",
-    "gender": 2
+    "gender": 2,
+    "second_reward": false,
+    "encounters":{
+        "first": ["107"],
+        "second":["107"],
+        "third":["107"]
+    }
   },
   "17": {
     "type": "Combat",
@@ -92,7 +121,13 @@
   "18": {
     "type": "Feu",
     "grunt": "Sbire Femme",
-    "gender": 2
+    "gender": 2,
+    "second_reward": true,
+    "encounters":{
+        "first": ["4","58","228"],
+        "second":["5","229"],
+        "third":["6","59","229"]
+    }
   },
   "19": {
     "type": "Feu",
@@ -102,7 +137,13 @@
   "20": {
     "type": "Vol",
     "grunt": "Sbire Femme",
-    "gender": 2
+    "gender": 2,
+    "second_reward": false,
+    "encounters":{
+        "first": ["41","42"],
+        "second":["42","123","169"],
+        "third":["130","149","169"]
+    }
   },
   "21": {
     "type": "Vol",
@@ -117,7 +158,13 @@
   "23": {
     "type": "Plante",
     "grunt": "Sbire Homme", 
-    "gender": 1
+    "gender": 1,
+    "second_reward": true,
+    "encounters":{
+        "first": ["1","43","387"],
+        "second":["1","2","44"],
+        "third":["2","3","388"]
+    }
   },
   "24": {
     "type": "Sol",
@@ -127,7 +174,13 @@
   "25": {
     "type": "Sol",
     "grunt": "Sbire Homme", 
-    "gender": 1
+    "gender": 1,
+    "second_reward": false,
+    "encounters":{
+        "first": ["19","104","246"],
+        "second":["20","104","105"],
+        "third":["20","105"]
+    }
   },
   "26": {
     "type": "Glace",
@@ -157,12 +210,24 @@
   "31": {
     "type": "Normal",
     "grunt": "Sbire Homme", 
-    "gender": 1
+    "gender": 1,
+    "second_reward": true,
+    "encounters":{
+        "first": ["19","41"],
+        "second":["19","20"],
+        "third":["20","143"]
+    }
   },
   "32": {
     "type": "Poison",
     "grunt": "Sbire Femme",
-    "gender": 2
+    "gender": 2,
+    "second_reward": true,
+    "encounters":{
+        "first": ["41","48","88"],
+        "second":["42","88","89"],
+        "third":["42","49","89"]
+    }
   },
   "33": {
     "type": "Poison",
@@ -177,7 +242,13 @@
   "35": {
     "type": "Psy",
     "grunt": "Sbire Homme", 
-    "gender": 1
+    "gender": 1,
+    "second_reward": true,
+    "encounters":{
+        "first": ["63","96","280"],
+        "second":["96","97","280"],
+        "third":["64","97","281"]
+    }
   },
   "36": {
     "type": "Roche",
@@ -187,17 +258,35 @@
   "37": {
     "type": "Roche",
     "grunt": "Sbire Homme", 
-    "gender": 1
+    "gender": 1,
+    "second_reward": false,
+    "encounters":{
+        "first": ["246"],
+        "second":["246","247"],
+        "third":["247","248"]
+   }
   },
   "38": {
     "type": "Eau",
     "grunt": "Sbire Femme",
-    "gender": 2
+    "gender": 2,
+    "second_reward": false,
+    "encounters":{
+        "first": ["54","60"],
+        "second":["55","61"],
+        "third":["56","61","186"]
+    }
   },
   "39": {
     "type": "Magikarp",
     "grunt": "Sbire Homme",
-    "gender": 1
+    "gender": 1,
+    "second_reward": false,
+    "encounters":{
+        "first": ["129"],
+        "second":["129"],
+        "third":["129"]
+    }
   },
   "40": {
     "type": "",
