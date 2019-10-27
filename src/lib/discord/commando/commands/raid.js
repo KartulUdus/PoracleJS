@@ -12,10 +12,7 @@ exports.run = async (client, msg, command) => {
 		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(/name\S+/gi))
 		if (webhookName) webhookName = webhookName.replace('name', '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
-		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
-			target = { name: webhookName.replace(/name/gi, ''), webhook: true }
-			msg.content = msg.content.replace(client.hookRegex, '')
-		}
+		if (client.config.discord.admins.includes(msg.author.id) && webhookName) target = { name: webhookName.replace(/name/gi, ''), webhook: true }
 
 		const isRegistered = target.webhook
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })

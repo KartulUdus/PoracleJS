@@ -15,6 +15,7 @@
         "no-mixed-operators": [ "off" ],
         "no-return-assign": ["off"],
         "no-await-in-loop": [ "off" ],
+        "no-plusplus": [ "off" ],
         "no-bitwise": ["error", { "allow": ["~"] }]
     }
 }

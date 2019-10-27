@@ -4,17 +4,19 @@ module.exports = (client, oldMember, newMember) => {
 	let before = false
 	let after = false
 	oldMember.roles.forEach((role) => {
-		if (role.name === client.config.discord.userRole) before = true
+		if (client.config.discord.userRole.includes(role.name)) before = true
 	})
 	newMember.roles.forEach((role) => {
-		if (role.name === client.config.discord.userRole) after = true
+		if (client.config.discord.userRole.includes(role.name)) after = true
 	})
 
 	if (!before && after) {
 		client.query.countQuery('id', 'humans', 'id', oldMember.user.id)
 			.then((isregistered) => {
 				if (!isregistered) {
-					client.query.insertOrUpdateQuery('humans', ['id', 'name', 'area'], [[oldMember.user.id, emojiStrip(oldMember.user.username), '[]']])
+					client.query.insertOrUpdateQuery('humans', {
+						id: oldMember.user.id, type: 'discord:user', name: client.emojiStrip(oldMember.user.username), area: '[]',
+					})
 					const view = { prefix: client.config.discord.prefix }
 					const template = JSON.stringify(client.dts.greeting)
 					const greeting = JSON.parse(mustache.render(template, view))

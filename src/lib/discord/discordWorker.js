@@ -69,7 +69,6 @@ class Worker {
 	}
 
 	async userAlert(data) {
-		 
 		const user = this.client.users.get(data.job.target)
 		if (!user) return this.log.warning(`user ${data.name} not found`)
 		try {
@@ -78,11 +77,10 @@ class Worker {
 		} catch (err) {
 			throw this.log.error(`Failed to send Discord alert to ${data.name}, ${err.message}`)
 		}
-		
 	}
 
-	async webhookAlert(data) {
-		 
+	static async webhookAlert(firstData) {
+		const data = firstData
 		if (!data.target.match(hookRegex)) return this.log.warn(`Webhook, ${data.name} does not look like a link, exiting`)
 		if (data.message.embed) data.message.embeds = [data.message.embed]
 		try {
@@ -94,12 +92,10 @@ class Worker {
 		} catch (err) {
 			this.log.error(`Webhook ${data.name} failed with, ${err.message}`)
 		}
-		return
-		
 	}
 
-	async channelAlert(data) {
-
+	static async channelAlert(data) {
+		this.log.info(data)
 	}
 }
 

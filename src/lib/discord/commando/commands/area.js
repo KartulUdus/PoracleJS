@@ -9,16 +9,13 @@ exports.run = async (client, msg, command) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = command.find((args) => args.find((arg) => arg.match(client.re.nameRe)))
+		const webhookArray = command.find((argss) => argss.find((arg) => arg.match(client.re.nameRe)))
 		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
-		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
-			target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
-			msg.content = msg.content.replace(client.hookRegex, '')
-		}
+		if (client.config.discord.admins.includes(msg.author.id) && webhookName) target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
 		for (let i = 0; i < args.length; i++) {
-			if (args[i].match(/name\S+/gi)) arr.splice(i, 1)
+			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
 		}
 
 		const isRegistered = target.webhook

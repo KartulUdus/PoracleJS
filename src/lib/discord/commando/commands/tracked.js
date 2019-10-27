@@ -15,10 +15,8 @@ exports.run = async (client, msg, [args]) => {
 		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
-		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
-			target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
-			msg.content = msg.content.replace(client.hookRegex, '')
-		}
+		if (client.config.discord.admins.includes(msg.author.id) && webhookName) target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
+
 		const isRegistered = target.webhook
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await client.query.countQuery('humans', { id: target.id })
@@ -41,13 +39,12 @@ exports.run = async (client, msg, [args]) => {
 		const quests = await client.query.selectAllQuery('quest', { id: target.id })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
-		let locationText = 'Y'
+		let locationText = ''
 		if (human.latitude !== 0 && human.longitude !== 0) {
 			locationText = `Your location is currently set to ${maplink} \nand y`
 		}
-		msg.reply(`👋\n${locationText}ou are currently set to receive alarms in ${human.area}`).catch((O_o) => {
-			client.log.error(O_o.message)
-		})
+		await msg.reply(`👋\n${locationText} You are currently set to receive alarms in ${human.area}`)
+
 		let message = ''
 		if (monsters.length) {
 			message = message.concat('\n\nYou\'re  tracking the following monsters:\n')

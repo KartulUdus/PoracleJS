@@ -5,7 +5,6 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence,
 	const re = require('../../../util/regex')(translator)
 
 	const { Client } = require('discord.js')
-	const path = require('path')
 	const Enmap = require('enmap')
 	const fs = require('fs')
 	const mustache = require('handlebars')

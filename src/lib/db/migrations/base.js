@@ -1,10 +1,9 @@
 const log = require('../../logger')
 
-
-exports.up = async function (knex) {
+exports.up = async function migrationUp(knex) {
 	await knex.schema.createTable('humans', (table) => {
 		table.string('id').primary().notNullable()
-		table.string('type').notNullable
+		table.string('type').notNullable()
 		table.string('name').notNullable()
 		table.boolean('enabled').notNullable().defaultTo(true)
 		table.text('area').notNullable().defaultTo('[]')
@@ -97,6 +96,6 @@ exports.up = async function (knex) {
 	log.info('Base migration applied')
 }
 
-exports.down = async function (knex) {
-
+exports.down = async function migrationDown(knex) {
+	log.info(knex)
 }

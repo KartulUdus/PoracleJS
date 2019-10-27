@@ -55,7 +55,7 @@ class Monster extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((result) => result.distance === 0 || +result.distance > 0 && +result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => res.distance=== 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		const alertIds = []

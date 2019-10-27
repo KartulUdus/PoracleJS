@@ -1,7 +1,6 @@
 exports.run = async (client, msg, command) => {
 	const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-	const [args] = command
 
 	try {
 		// Check target
@@ -13,10 +12,7 @@ exports.run = async (client, msg, command) => {
 		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
-		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
-			target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
-			msg.content = msg.content.replace(client.hookRegex, '')
-		}
+		if (client.config.discord.admins.includes(msg.author.id) && webhookName) target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
 		const isRegistered = target.webhook
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await client.query.countQuery('humans', { id: target.id })
@@ -37,7 +33,6 @@ exports.run = async (client, msg, command) => {
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 			let monsters = []
 			let fullMonsters = []
-			const rawArgs = args.join(' ')
 			let items = []
 			let distance = 0
 			const questTracks = []

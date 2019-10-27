@@ -15,7 +15,7 @@ class Worker {
 		this.bounceWorker()
 	}
 
-	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
+	static sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 	addUser(id) {
 		this.users.push(id)
@@ -45,8 +45,8 @@ class Worker {
 			await this.client.user.setStatus('invisible')
 		} catch (err) {
 			log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
-			await this.sleep(2000)
-			return await this.bounceWorker()
+			this.sleep(2000)
+			return this.bounceWorker()
 		}
 	}
 
@@ -104,7 +104,8 @@ class Worker {
 		return true
 	}
 
-	async webhookAlert(data) {
+	static async webhookAlert(firstData) {
+		const data = firstData
 		if (!data.target.match(hookRegex)) return log.warn(`Webhook, ${data.name} does not look like a link, exiting`)
 		if (data.message.embed) data.message.embeds = [data.message.embed]
 		try {
