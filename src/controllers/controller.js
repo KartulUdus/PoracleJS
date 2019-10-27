@@ -215,8 +215,12 @@ class Controller {
 						egg: 'egg.id, egg.team, egg.exclusive, egg.level',
 						quest: 'quest.id, quest.reward_type, quest.reward',
 					}
+
+					for (const val of values){
+						if (val.ping === '') val.ping = '\'\''
+					}
 					const firstData = values[0] ? values[0] : values
-					const insertValues = values.map(o => `(${Object.values(o).join(', ')})`).join()
+					const insertValues = values.map(o => `(${Object.values(o).join()})`).join()
 					const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
 						Object.keys(firstData).map(field => `${field}=EXCLUDED.${field}`).join(', ')}`
 					const result = await this.db.raw(query)
@@ -225,7 +229,6 @@ class Controller {
 			}
 		} catch (err) {
 			throw err
-			// throw { source: 'insertOrUpdateQuery', error: err }
 		}
 	}
 

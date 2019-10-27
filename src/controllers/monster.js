@@ -59,9 +59,9 @@ class Monster extends Controller {
 			result = result.filter(result => result.distance = 0 || result.distance > 0 && result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
-		let alertIds = []
-		result = result.filter(alert => {
-			if(!alertIds.includes(alert.id)){
+		const alertIds = []
+		result = result.filter((alert) => {
+			if (!alertIds.includes(alert.id)) {
 				alertIds.push(alert.id)
 				return alert
 			}
@@ -101,17 +101,21 @@ class Monster extends Controller {
 				return
 			}
 
+			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
+			|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+			|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+
 			data.name = this.translator.translate(monster.name)
 			data.formname = monster.form.name
-			data.iv = data.weight ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
-			data.individual_attack = data.weight ? data.individual_attack : 0
-			data.individual_defense = data.weight ? data.individual_defense : 0
-			data.individual_stamina = data.weight ? data.individual_stamina : 0
-			data.cp = data.weight ? data.cp : 0
-			data.pokemon_level = data.weight ? data.pokemon_level : 0
-			data.move_1 = data.weight ? data.move_1 : 0
-			data.move_2 = data.weight ? data.move_2 : 0
-			data.weight = data.weight ? data.weight.toFixed(1) : 0
+			data.iv = encountered ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
+			data.individual_attack = encountered ? data.individual_attack : 0
+			data.individual_defense = encountered ? data.individual_defense : 0
+			data.individual_stamina = encountered ? data.individual_stamina : 0
+			data.cp = encountered ? data.cp : 0
+			data.pokemon_level = encountered ? data.pokemon_level : 0
+			data.move_1 = encountered ? data.move_1 : 0
+			data.move_2 = encountered ? data.move_2 : 0
+			data.weight = encountered ? data.weight.toFixed(1) : 0
 			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
 			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 			if (!data.weather) data.weather = 0

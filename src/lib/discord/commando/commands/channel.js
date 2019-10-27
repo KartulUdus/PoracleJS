@@ -1,5 +1,5 @@
 exports.run = async (client, msg, [args]) => {
-		let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 
 	try {

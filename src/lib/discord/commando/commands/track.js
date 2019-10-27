@@ -1,8 +1,7 @@
 exports.run = async (client, msg, command) => {
-
 	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-		
+
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
@@ -35,7 +34,7 @@ exports.run = async (client, msg, command) => {
 		if (target.webhook) target.id = isRegistered.id
 
 		let reaction = '👌'
-		for (args of command) {
+		for (const args of command) {
 			// Set defaults
 			let monsters
 			let distance = 0
@@ -56,12 +55,11 @@ exports.run = async (client, msg, command) => {
 			let maxweight = 9000000
 			let template = 1
 			let clean = false
-			let pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
+			const pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
 
 			// Check for monsters or forms
 			const formArgs = args.filter(arg => arg.match(client.re.formRe))
 			const formNames = formArgs ? formArgs.map(arg => arg.replace(client.translator.translate('form'), '')) : []
-			
 			const argTypes = args.filter(arg => typeArray.includes(arg))
 			const genCommand = args.filter(arg => arg.match(client.re.genRe))
 			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
@@ -69,11 +67,11 @@ exports.run = async (client, msg, command) => {
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-				|| args.includes('template'))	&& formNames.includes(mon.form.name.toLowerCase()))
+				|| args.includes(client.translator.translate('everything')))	&& formNames.includes(mon.form.name.toLowerCase()))
 			} else {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && !mon.form.id
-				|| args.includes('template'))	&& !mon.form.id)
+				|| args.includes(client.translator.translate('everything')))	&& !mon.form.id)
 			}
 			if (gen) monsters = monsters.filter(mon => mon.id >= gen.min && mon.id <= gen.max)
 			// Parse command elements to stuff
@@ -102,7 +100,7 @@ exports.run = async (client, msg, command) => {
 			const insert = monsters.map(mon => ({
 				id: target.id,
 				pokemon_id: mon.id,
-				ping: pings.lenght ? pings : '',
+				ping: pings,
 				distance,
 				min_iv: iv,
 				max_iv: maxiv,
@@ -123,11 +121,9 @@ exports.run = async (client, msg, command) => {
 				gender,
 				clean,
 			}))
-
 			if (!insert.length) continue
-			console.log(insert)
 			const result = await client.query.insertOrUpdateQuery('monsters', insert)
-			reaction = result.length ? '✅' : reaction
+			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
 		msg.react(reaction)
 	} catch (err) {

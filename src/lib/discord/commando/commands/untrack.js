@@ -1,6 +1,6 @@
 exports.run = async (client, msg, [args]) => {
 	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
-		let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 
 	try {

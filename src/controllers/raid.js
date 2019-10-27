@@ -1,13 +1,11 @@
-const Controller = require('./controller')
 const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+const Controller = require('./controller')
 const log = require('../lib/logger')
 
 class Raid extends Controller {
-
 	async raidWhoCares(data) {
-
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
@@ -42,12 +40,12 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter(result => result.distance = 0 || result.distance > 0 && result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter(res => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
-		let alertIds = []
-		result = result.filter(alert => {
-			if(!alertIds.includes(alert.id)){
+		const alertIds = []
+		result = result.filter((alert) => {
+			if (!alertIds.includes(alert.id)) {
 				alertIds.push(alert.id)
 				return alert
 			}
@@ -55,7 +53,7 @@ class Raid extends Controller {
 		return result
 	}
 
-	async eggWhoCares (data) {
+	async eggWhoCares(data) {
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
@@ -89,22 +87,21 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter(result => result.distance = 0 || result.distance > 0 && result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter(res => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
-		let alertIds = []
-		result = result.filter(alert => {
-			if(!alertIds.includes(alert.id)){
+		const alertIds = []
+		result = result.filter((alert) => {
+			if (!alertIds.includes(alert.id)) {
 				alertIds.push(alert.id)
 				return alert
 			}
 		})
 		return result
-
 	}
 
-	async handle (obj) {
-		let data = obj
+	async handle(obj) {
+		const data = obj
 		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
@@ -125,7 +122,7 @@ class Raid extends Controller {
 					data.staticmap = ''
 				}
 			}
-	
+
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
 				const monster = this.monsterData[`${data.pokemon_id}_${data.form}`] ? this.monsterData[`${data.pokemon_id}_${data.form}`] : this.monsterData[`${data.pokemon_id}_0`]
@@ -150,41 +147,41 @@ class Raid extends Controller {
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
-	
+
 				data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
-	
-				data.quick_move = this.utilData.moves[data.move_1] ?  this.translator.translate(this.utilData.moves[data.move_1].name) : ''
-				data.charge_move =  this.utilData.moves[data.move_2] ?  this.translator.translate(this.utilData.moves[data.move_2].name) : ''
+
+				data.quick_move = this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
+				data.charge_move = this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? this.utilData.types[this.utilData.moves[data.move_1].type].emoji : ''
 				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? this.utilData.types[this.utilData.moves[data.move_2].type].emoji : ''
-				data.ex = data.ex_raid_eligible || data.is_ex_raid_eligible ? true : false
+				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 					log.warn(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 					return []
 				}
-	
+
 				data.matched = await this.pointInArea([data.latitude, data.longitude])
 				const whoCares = await this.raidWhoCares(data)
 
 				this.log.info(`Raid against ${data.name} appeared and ${whoCares.length} humans cared.`)
 
 				if (!whoCares[0]) return []
-	
+
 				let discordCacheBad = true // assume the worst
 				whoCares.forEach((cares) => {
 					const { count } = this.getDiscordCache(cares.id)
 					if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
 				})
-	
+
 				if (discordCacheBad) return []
 				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-	
+
 				const jobs = []
-	
+
 				for (const cares of whoCares) {
 					const caresCache = this.getDiscordCache(cares.id).count
-	
+
 					const view = {
 						...data,
 						...geoResult,
@@ -205,9 +202,9 @@ class Raid extends Controller {
 						// pokemoji: emojiData.pokemon[data.pokemon_id],
 						areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
-	
-					const raidDts =  this.dts.find(template => (template.type === 'raid' && template.id === cares.template) || (template.type === 'raid' && template.default))
-	
+
+					const raidDts = this.dts.find(template => (template.type === 'raid' && template.id === cares.template) || (template.type === 'raid' && template.default))
+
 					const template = JSON.stringify(raidDts.template)
 					const mustache = this.mustache.compile(template)
 					const message = JSON.parse(mustache(view))
@@ -233,101 +230,96 @@ class Raid extends Controller {
 						this.addDiscordCache(cares.id)
 					}
 				}
-				return jobs	
-			} else {
-	
-				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
-				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
-				data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
-				data.sticker = `${config.telegram.stickerurl}egg${data.level}.webp`
-				if (!data.team_id) data.team_id = 0
-				if (data.name) data.gymName = data.name
-				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
-				data.color = data.team_id ? teamData[data.team_id].color : 7915600
-	
-				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-					log.warn(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
-					return []
-				}
-	
-				data.matched = await this.pointInArea([data.latitude, data.longitude])
-				const whoCares = await this.eggWhoCares(data)
+				return jobs
+			}
+			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
+			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+			data.sticker = `${this.config.telegram.stickerurl}egg${data.level}.webp`
+			if (!data.team_id) data.team_id = 0
+			if (data.name) data.gymName = data.name
+			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
+			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
 
-				this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
-
-				if (!whoCares[0]) return []
-
-				let discordCacheBad = true // assume the worst
-				whoCares.forEach((cares) => {
-					const { count } = this.getDiscordCache(cares.id)
-					if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
-				})
-	
-				if (discordCacheBad) return []
-				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-	
-				const jobs = []
-
-				for (const cares of whoCares) {
-					const caresCache = this.getDiscordCache(cares.id).count
-	
-					const view = {
-						...data,
-						...geoResult,
-						id: data.pokemon_id,
-						time: data.distime,
-						tthh: data.tth.hours,
-						tthm: data.tth.minutes,
-						tths: data.tth.seconds,
-						confirmedTime: data.disappear_time_verified,
-						now: new Date(),
-						// gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
-						move1: data.quick_move,
-						move2: data.charge_move,
-						move1emoji: data.move1emoji,
-						move2emoji: data.move2emoji,
-						imgUrl: data.imgUrl,
-						// pokemoji: emojiData.pokemon[data.pokemon_id],
-						areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
-					}
-	
-					const eggDts =  this.dts.find(template => (template.type === 'egg' && template.id === cares.template) || (template.type === 'egg' && template.default))
-	
-					const template = JSON.stringify(eggDts.template)
-					const mustache = this.mustache.compile(template)
-					const message = JSON.parse(mustache(view))
-	
-					if (cares.ping) {
-						if (!message.content) message.content = cares.ping
-						if (message.content) message.content += cares.ping
-					}
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						// sticker: data.sticker.toLowerCase(),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitsec} seconds` } : message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-						// meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
-					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
-						jobs.push(work)
-						this.addDiscordCache(cares.id)
-					}
-				}	
+			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
+				log.warn(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				return []
 			}
 
+			data.matched = await this.pointInArea([data.latitude, data.longitude])
+			const whoCares = await this.eggWhoCares(data)
+
+			this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
+
+			if (!whoCares[0]) return []
+
+			let discordCacheBad = true // assume the worst
+			whoCares.forEach((cares) => {
+				const { count } = this.getDiscordCache(cares.id)
+				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+			})
+
+			if (discordCacheBad) return []
+			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+
+			const jobs = []
+
+			for (const cares of whoCares) {
+				const caresCache = this.getDiscordCache(cares.id).count
+
+				const view = {
+					...data,
+					...geoResult,
+					id: data.pokemon_id,
+					time: data.distime,
+					tthh: data.tth.hours,
+					tthm: data.tth.minutes,
+					tths: data.tth.seconds,
+					confirmedTime: data.disappear_time_verified,
+					now: new Date(),
+					// gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
+					move1: data.quick_move,
+					move2: data.charge_move,
+					move1emoji: data.move1emoji,
+					move2emoji: data.move2emoji,
+					imgUrl: data.imgUrl,
+					// pokemoji: emojiData.pokemon[data.pokemon_id],
+					areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+				}
+
+				const eggDts = this.dts.find(template => (template.type === 'egg' && template.id === cares.template) || (template.type === 'egg' && template.default))
+
+				const template = JSON.stringify(eggDts.template)
+				const mustache = this.mustache.compile(template)
+				const message = JSON.parse(mustache(view))
+
+				if (cares.ping) {
+					if (!message.content) message.content = cares.ping
+					if (message.content) message.content += cares.ping
+				}
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					// sticker: data.sticker.toLowerCase(),
+					message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitsec} seconds` } : message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: data.tth,
+					clean: cares.clean,
+					emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+					// meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
+				}
+				if (caresCache <= this.config.discord.limitAmount + 1) {
+					jobs.push(work)
+					this.addDiscordCache(cares.id)
+				}
+			}
 		} catch (e) {
 			this.log.error('Can\'t seem to handle raid: ', e, data)
-
 		}
-
 	}
 }
 

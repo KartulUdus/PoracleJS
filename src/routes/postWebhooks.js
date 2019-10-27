@@ -11,8 +11,8 @@ module.exports = async (fastify, options, next) => {
 				case 'pokemon': {
 					if (fastify.cache.get(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
 						fastify.logger.warn(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
-						continue
- 					}
+						break
+					}
 
 					fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, hook)
 
@@ -27,21 +27,23 @@ module.exports = async (fastify, options, next) => {
 				case 'raid': {
 					if (fastify.cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
 						fastify.logger.warn(`Raid ${hook.message.encounter_id} was sent again too soon, ignoring`)
-						continue
-					 }
-					 
-					 fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, hook)
+						break
+					}
 
-					 const result = await fastify.raidController.handle(hook.message)
-					 result.forEach((job) => {
+					fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, hook)
+
+					const result = await fastify.raidController.handle(hook.message)
+					result.forEach((job) => {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 						if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
 					break
 				}
+				case 'invasion':
 				case 'pokestop': {
 					break
 				}
+				default:
 			}
 		}
 

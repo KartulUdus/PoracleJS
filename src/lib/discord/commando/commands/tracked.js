@@ -2,8 +2,7 @@ const fs = require('fs')
 const path = require('path')
 
 exports.run = async (client, msg, [args]) => {
-		let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-		
+	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 
 	try {
@@ -35,12 +34,12 @@ exports.run = async (client, msg, [args]) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-		const monsters = await client.query.selectAllQuery('monsters', {id: target.id})
-		const raids = await client.query.selectAllQuery('raid', {id: target.id})
-		const eggs = await client.query.selectAllQuery('egg', {id: target.id})
-		const human = await client.query.selectAllQuery('humans', {id: target.id})
-		const quests = await client.query.selectAllQuery('quest', {id: target.id})
-		const invasions = await client.query.selectAllQuery('invasion', {id: target.id})
+		const monsters = await client.query.selectAllQuery('monsters', { id: target.id })
+		const raids = await client.query.selectAllQuery('raid', { id: target.id })
+		const eggs = await client.query.selectAllQuery('egg', { id: target.id })
+		const human = await client.query.selectAllQuery('humans', { id: target.id })
+		const quests = await client.query.selectAllQuery('quest', { id: target.id })
+		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		let locationText = 'Y'
 		if (human.latitude !== 0 && human.longitude !== 0) {
@@ -52,8 +51,7 @@ exports.run = async (client, msg, [args]) => {
 		let message = ''
 		if (monsters.length) {
 			message = message.concat('\n\nYou\'re  tracking the following monsters:\n')
-		}
-		else message = message.concat('\n\nYou\'re not tracking any monsters')
+		} else message = message.concat('\n\nYou\'re not tracking any monsters')
 
 		monsters.forEach((monster) => {
 			const mon = Object.values(client.monsters).find(m => m.id === monster.pokemon_id && m.form.id === monster.form)
@@ -66,19 +64,17 @@ exports.run = async (client, msg, [args]) => {
 		})
 		if (raids.length || eggs.length) {
 			message = message.concat('\n\nYou\'re tracking the following raids:\n')
-		}
-		else message = message.concat('\n\nYou\'re not tracking any raids')
+		} else message = message.concat('\n\nYou\'re not tracking any raids')
 		raids.forEach((raid) => {
 			const mon = Object.values(client.monsters).find(m => m.id === raid.pokemon_id && m.form.id === raid.form)
 
 			const monsterName = mon.name
 			const raidTeam = client.utilData.teams[raid.team].name
-			let formName = mon.form.name
+			const formName = mon.form.name
 
 			if (+raid.pokemon_id === 9000) {
 				message = message.concat(`\n**level:${raid.level} raids** distance: ${raid.distance}m controlled by ${raidTeam} , must be in park: ${raid.park}`)
-			}
-			else {
+			} else {
 				message = message.concat(`\n**${monsterName}** form: ${formName}, distance: ${raid.distance}m controlled by ${raidTeam}, must be in park: ${raid.park}`)
 			}
 		})
@@ -89,8 +85,7 @@ exports.run = async (client, msg, [args]) => {
 
 		if (quests.length) {
 			message = message.concat('\n\nYou\'re tracking the following quests:\n')
-		}
-		else message = message.concat('\n\nYou\'re not tracking any quests')
+		} else message = message.concat('\n\nYou\'re not tracking any quests')
 
 		quests.forEach((quest) => {
 			let rewardThing = ''
@@ -102,22 +97,19 @@ exports.run = async (client, msg, [args]) => {
 
 		if (invasions.length) {
 			message = message.concat('\n\nYou\'re tracking the following invasions:\n')
-		}
-		else message = message.concat('\n\nYou\'re not tracking any invasions')
+		} else message = message.concat('\n\nYou\'re not tracking any invasions')
 
 		invasions.forEach((invasion) => {
 			let genderText = ''
 			let typeText = ''
 			if (invasion.gender === 1) {
 				genderText = 'Gender: male, '
-			}
-			else if (invasion.gender === 2) {
+			} else if (invasion.gender === 2) {
 				genderText = 'Gender: female, '
 			}
 			if (!invasion.gruntType || invasion.gruntType === '') {
 				typeText = 'Any'
-			}
-			else {
+			} else {
 				typeText = invasion.gruntType
 			}
 			message = message.concat(`\nInvasion: ${genderText}Grunt type: ${typeText}`)
@@ -138,9 +130,6 @@ exports.run = async (client, msg, [args]) => {
 			fs.unlinkSync(filepath)
 			client.log.warn('Hastebin seems down, got error: ', e)
 		}
-
-		
-		
 	} catch (err) {
 		client.log.error(`${msg.content} command unhappy: `, err)
 	}

@@ -10,8 +10,9 @@ const cp = require('child_process')
 
 const Config = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
-let {
-	config, knex, dts, geofence, translator
+
+const {
+	config, knex, dts, geofence, translator,
 } = Config()
 
 const readDir = util.promisify(fs.readdir)
@@ -65,7 +66,9 @@ fs.watch('./config/', async (event, fileName) => {
 	const newFile = await readFileAsync(`./config/${fileName}`, 'utf8')
 	try {
 		JSON.parse(newFile)
-		let { config, knex, dts, geofence, translator } = Config()
+		const {
+			config, knex, dts, geofence, translator,
+		} = Config()
 		for (const key in config.discord.token) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
 		}

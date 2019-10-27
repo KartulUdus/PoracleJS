@@ -1,7 +1,6 @@
 exports.run = async (client, msg, command) => {
-
 	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
-		let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 
 	try {
@@ -26,7 +25,7 @@ exports.run = async (client, msg, command) => {
 			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'} ${client.translator.translate('add')} <Your-Webhook-url>`)
 		}
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}channel add`).catch((O_o) => {})
+			return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}channel add`)
 		}
 		if (!isRegistered && msg.channel.type === 'dm') {
 			return await msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}${client.config.commands.poracle ? client.config.commands.poracle : 'poracle'} to #${client.config.discord.channel}`)
@@ -34,21 +33,19 @@ exports.run = async (client, msg, command) => {
 		if (target.webhook) target.id = isRegistered.id
 
 		let reaction = '👌'
-		for (args of command) {
-
-			
+		for (const args of command) {
 			const remove = args.find(arg => arg === 'remove')
-			
+
 			let monsters = []
 			let exclusive = 0
 			let distance = 0
 			let team = 4
 			let template = 1
 			const levels = []
-			let pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
-			let formNames = args.filter(arg => arg.match(client.re.formRe)).map(arg => arg.replace(client.translator.translate('form'), ''))
+			const pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
+			const formNames = args.filter(arg => arg.match(client.re.formRe)).map(arg => arg.replace(client.translator.translate('form'), ''))
 			const argTypes = args.filter(arg => typeArray.includes(arg))
-			
+
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
@@ -64,10 +61,9 @@ exports.run = async (client, msg, command) => {
 
 			if (gen) monsters = monsters.filter(mon => mon.id >= gen.min && mon.id <= gen.max)
 
-			
-			
+
 			if (!monsters.length && levels.length) return await msg.reply(client.translator.translate('404 NO MONSTERS FOUND'))
-			
+
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
 				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(/level/gi, ''))
@@ -78,26 +74,26 @@ exports.run = async (client, msg, command) => {
 				else if (element === client.translator.translate('mystic')) team = 1
 				else if (element === client.translator.translate('harmony')) team = 0
 			})
-			
+
 			if (!remove) {
 				const insert = monsters.map(mon => ({
 					id: target.id,
 					pokemon_id: mon.id,
 					ping: pings.lenght ? pings : '""',
-					exclusive : !!exclusive,
+					exclusive: !!exclusive,
 					template,
 					distance,
 					team,
 					level: 9000,
 					form: mon.form.id,
 				}))
-				
+
 				levels.forEach((level) => {
 					insert.push({
 						id: target.id,
 						pokemon_id: 9000,
 						ping: pings.lenght ? pings : '""',
-						exclusive : !!exclusive,
+						exclusive: !!exclusive,
 						template,
 						distance,
 						team,
@@ -107,7 +103,7 @@ exports.run = async (client, msg, command) => {
 				})
 
 				const result = await client.query.insertOrUpdateQuery('raid', insert)
-				result.length ? reaction = '✅' : reaction
+				if (result.length) reaction = '✅'
 			} else {
 				const monsterIds = monsters.map(mon => mon.id)
 				let result = 0
@@ -119,9 +115,8 @@ exports.run = async (client, msg, command) => {
 					const lvlResult = await client.query.deleteWhereInQuery('raid', target.id, levels, 'level')
 					result += lvlResult
 				}
-				result ? reaction = '✅' : reaction
+				if (result.length) reaction = '✅'
 			}
-			
 		}
 		await msg.react(reaction)
 	} catch (err) {
