@@ -7,12 +7,12 @@ exports.run = async (client, msg, [args]) => {
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
-		let webhookName = args.find(arg => arg.match(/name\S+/gi))
+		let webhookName = args.find((arg) => arg.match(/name\S+/gi))
 		if (webhookName) webhookName = webhookName.replace('name', '')
 		const webhookLink = msg.content.match(client.hookRegex) ? msg.content.match(client.hookRegex)[0] : false
 
 
-		if (args.find(arg => arg === 'add')) {
+		if (args.find((arg) => arg === 'add')) {
 			if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name and an url')
 			if (client.config.discord.admins.includes(msg.author.id) && webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
 			if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
@@ -27,7 +27,7 @@ exports.run = async (client, msg, [args]) => {
 				area: '[]',
 			})
 			await msg.react('✅')
-		} else if (args.find(arg => arg === 'remove')) {
+		} else if (args.find((arg) => arg === 'remove')) {
 			if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
 				target = { name: webhookName.replace(/name/gi, ''), webhook: true }
 			}

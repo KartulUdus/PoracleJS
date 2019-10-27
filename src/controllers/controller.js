@@ -127,11 +127,11 @@ class Controller {
 
 	async pointInArea(point) {
 		if (!this.geofence.length) return []
-		const confAreas = this.geofence.map(area => area.name.toLowerCase())
+		const confAreas = this.geofence.map((area) => area.name.toLowerCase())
 		const matchAreas = []
 
 		for (const area of confAreas) {
-			const areaObj = this.geofence.find(p => p.name.toLowerCase() === area)
+			const areaObj = this.geofence.find((p) => p.name.toLowerCase() === area)
 			if (inside(point, areaObj.path)) matchAreas.push(area)
 		}
 		return matchAreas
@@ -182,6 +182,14 @@ class Controller {
 		}
 	}
 
+	async misteryQuery(sql) {
+		try {
+			return this.returnByDatabaseType(await this.db.raw(sql))
+		} catch (err) {
+			throw { source: 'misteryQuery', error: err }
+		}
+	}
+
 	async deleteWhereInQuery(table, id, values, valuesColumn) {
 		try {
 			return this.db.whereIn(valuesColumn, values).where({ id }).from(table).del()
@@ -196,14 +204,14 @@ class Controller {
 				case 'pg': {
 					const firstData = values[0] ? values[0] : values
 					const query = `${this.db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT ${table}_tracking DO UPDATE SET ${
-						Object.keys(firstData).map(field => `${field}=EXCLUDED.${field}`).join(', ')}`
+						Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
 					const result = await this.db.raw(query)
 					return result.rowCount ? [0] : []
 				}
 				case 'mysql': {
 					const firstData = values[0] ? values[0] : values
 					const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
-						Object.keys(firstData).map(field => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
+						Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
 					const result = await this.db.raw(query)
 					return result
 				}
@@ -216,13 +224,13 @@ class Controller {
 						quest: 'quest.id, quest.reward_type, quest.reward',
 					}
 
-					for (const val of values){
+					for (const val of values) {
 						if (val.ping === '') val.ping = '\'\''
 					}
 					const firstData = values[0] ? values[0] : values
-					const insertValues = values.map(o => `(${Object.values(o).join()})`).join()
+					const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
 					const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
-						Object.keys(firstData).map(field => `${field}=EXCLUDED.${field}`).join(', ')}`
+						Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
 					const result = await this.db.raw(query)
 					return this.returnByDatabaseType(result)
 				}

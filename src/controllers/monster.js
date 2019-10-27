@@ -52,11 +52,10 @@ class Monster extends Controller {
 				group by humans.id, humans.name, monsters.template 
 			`)
 		}
-
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter(result => result.distance = 0 || result.distance > 0 && result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((result) => result.distance === 0 || +result.distance > 0 && +result.distance > this.getDistance({ lat: result.latitude, lon: result.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		const alertIds = []
@@ -191,12 +190,12 @@ class Monster extends Controller {
 					sta: data.individual_stamina,
 					imgUrl: data.imgUrl,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
-					areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
 				const monsterDts = data.iv === -1
-					? this.dts.find(template => (template.type === 'monsterNoIv' && template.id === cares.template) || (template.type === 'monsterNoIv' && template.default))
-					: this.dts.find(template => (template.type === 'monster' && template.id === cares.template) || (template.type === 'monster' && template.default))
+					? this.dts.find((template) => (template.type === 'monsterNoIv' && template.id === cares.template) || (template.type === 'monsterNoIv' && template.default))
+					: this.dts.find((template) => (template.type === 'monster' && template.id === cares.template) || (template.type === 'monster' && template.default))
 
 				const template = JSON.stringify(monsterDts.template)
 				const mustache = this.mustache.compile(template)

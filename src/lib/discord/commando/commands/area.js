@@ -1,15 +1,16 @@
-exports.run = async (client, msg, [args]) => {
+exports.run = async (client, msg, command) => {
 	let target = { id: msg.author.id, name: msg.author.username, webhook: false }
+	const [args] = command
 
 	try {
 		// Check target
-		const confAreas = client.geofence.map(area => area.name.toLowerCase().replace(/ /gi, '_')).sort()
+		const confAreas = client.geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = command.find(args => args.find(arg => arg.match(client.re.nameRe)))
-		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(client.re.nameRe))
+		const webhookArray = command.find((args) => args.find((arg) => arg.match(client.re.nameRe)))
+		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
@@ -19,7 +20,6 @@ exports.run = async (client, msg, [args]) => {
 		for (let i = 0; i < args.length; i++) {
 			if (args[i].match(/name\S+/gi)) arr.splice(i, 1)
 		}
-		const search = args.join(' ')
 
 		const isRegistered = target.webhook
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
@@ -40,10 +40,10 @@ exports.run = async (client, msg, [args]) => {
 		switch (args[0]) {
 			case 'add': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
-				const oldArea = JSON.parse(human.area.split()).map(area => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter(x => args.includes(x))
-				const addAreas = validAreas.filter(x => !oldArea.includes(x))
-				const newAreas = [...oldArea, ...addAreas].filter(area => validAreas.includes(area))
+				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
+				const validAreas = confAreas.filter((x) => args.includes(x))
+				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
+				const newAreas = [...oldArea, ...addAreas].filter((area) => validAreas.includes(area))
 				if (!validAreas.length) {
 					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
 				}
@@ -60,10 +60,10 @@ exports.run = async (client, msg, [args]) => {
 			}
 			case 'remove': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
-				const oldArea = JSON.parse(human.area.split()).map(area => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter(x => args.includes(x))
-				const removeAreas = validAreas.filter(x => oldArea.includes(x))
-				const newAreas = [...oldArea].filter(area => validAreas.includes(area) && !removeAreas.includes(area))
+				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
+				const validAreas = confAreas.filter((x) => args.includes(x))
+				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
+				const newAreas = [...oldArea].filter((area) => validAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
 					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
 				}
@@ -85,6 +85,6 @@ exports.run = async (client, msg, [args]) => {
 			default:
 		}
 	} catch (err) {
-		client.log.error(`location command ${msg.content} unhappy:`, err)
+		client.log.error(`area command ${msg.content} unhappy:`, err)
 	}
 }

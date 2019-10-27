@@ -7,6 +7,7 @@ let config
 let knex
 let dts
 let geofence
+let translator
 
 function getKnex(conf) {
 	switch (conf.database.client) {

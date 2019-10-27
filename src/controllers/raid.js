@@ -40,7 +40,7 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter(res => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		const alertIds = []
@@ -87,7 +87,7 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter(res => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		const alertIds = []
@@ -200,10 +200,10 @@ class Raid extends Controller {
 						move2emoji: data.move2emoji,
 						imgUrl: data.imgUrl,
 						// pokemoji: emojiData.pokemon[data.pokemon_id],
-						areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
-					const raidDts = this.dts.find(template => (template.type === 'raid' && template.id === cares.template) || (template.type === 'raid' && template.default))
+					const raidDts = this.dts.find((template) => (template.type === 'raid' && template.id === cares.template) || (template.type === 'raid' && template.default))
 
 					const template = JSON.stringify(raidDts.template)
 					const mustache = this.mustache.compile(template)
@@ -286,10 +286,10 @@ class Raid extends Controller {
 					move2emoji: data.move2emoji,
 					imgUrl: data.imgUrl,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
-					areas: data.matched.map(area => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				const eggDts = this.dts.find(template => (template.type === 'egg' && template.id === cares.template) || (template.type === 'egg' && template.default))
+				const eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template) || (template.type === 'egg' && template.default))
 
 				const template = JSON.stringify(eggDts.template)
 				const mustache = this.mustache.compile(template)

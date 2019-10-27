@@ -1,4 +1,4 @@
-exports.run = async (client, msg, [args]) => {
+exports.run = async (client, msg, command) => {
 	// const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
@@ -8,8 +8,8 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = command.find(args => args.find(arg => arg.match(client.re.nameRe)))
-		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(client.re.nameRe))
+		const webhookArray = command.find((args) => args.find((arg) => arg.match(client.re.nameRe)))
+		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {

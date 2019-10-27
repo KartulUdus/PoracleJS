@@ -45,7 +45,6 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence,
 			if (!file.endsWith('.js')) return
 			const props = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 			const commandName = file.split('.')[0]
-			// if (config.commands[commandName]) commandName = config.commands[commandName]
 			enabledCommands.push(`${config.discord.prefix}${commandName}`)
 			client.commands.set(commandName, props)
 		})

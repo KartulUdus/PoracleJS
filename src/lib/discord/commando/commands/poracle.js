@@ -11,7 +11,7 @@ exports.run = async (client, msg) => {
 			id: msg.author.id, type: 'discord:user', name: client.emojiStrip(msg.author.username), area: '[]',
 		})
 		await msg.react('✅')
-		const greetingDts = client.dts.find(template => template.type === 'greeting')
+		const greetingDts = client.dts.find((template) => template.type === 'greeting')
 		const view = { prefix: client.config.discord.prefix }
 		const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
 		await msg.author.send(JSON.parse(greeting(view)))

@@ -32,7 +32,7 @@ class Translator {
 			})
 			return matched ? match : bit
 		}
-		return Object.keys(this.data).find(key => this.data[key] === word) ? Object.keys(this.data).find(key => this.data[key] === word) : bit
+		return Object.keys(this.data).find((key) => this.data[key] === word) ? Object.keys(this.data).find((key) => this.data[key] === word) : bit
 	}
 }
 

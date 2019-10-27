@@ -6,7 +6,6 @@ const util = require('util')
 const { promisify } = require('util')
 
 const readFileAsync = promisify(fs.readFile)
-const cp = require('child_process')
 
 const Config = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
@@ -84,7 +83,7 @@ fs.watch('./config/', async (event, fileName) => {
 })
 
 
-async function sleep(n) { return new Promise(resolve => setTimeout(resolve, n)) }
+async function sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 async function run() {
 	setInterval(() => {
@@ -93,7 +92,7 @@ async function run() {
 		}
 		const target = !fastify.discordQueue.slice(-1).shift()[0]
 		// see if target has dedicated worker
-		let worker = discordWorkers.find(worker => worker.users.includes(target.id))
+		let worker = discordWorkers.find((worker) => worker.users.includes(target.id))
 		if (!worker) {
 			worker = discordWorkers.reduce((prev, curr) => (prev.users.length < curr.users.length ? prev : curr))
 			worker.addUser(target.id)
@@ -102,9 +101,9 @@ async function run() {
 	}, 10)
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
-	const routes = routeFiles.map(fileName => `${__dirname}/routes/${fileName}`)
+	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
 
-	routes.forEach(route => fastify.register(require(route)))
+	routes.forEach((route) => fastify.register(require(route)))
 	await fastify.listen(config.server.port, config.server.host)
 	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 }

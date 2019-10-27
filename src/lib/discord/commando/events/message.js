@@ -6,12 +6,12 @@ module.exports = (client, msg) => {
 	if (msg.content.indexOf(client.config.discord.prefix) !== 0) return
 
 	let args = msg.content.slice(client.config.discord.prefix.length).trim().split(/ +/g)
-	args = args.map(arg => client.translator.reverse(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
-	const command = args.shift().toLowerCase()
+	args = args.map((arg) => client.translator.reverse(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
+	const command = client.translator.reverse(args.shift().toLowerCase())
 
 	let initialArgs
 	if (args.includes('|')) {
-		initialArgs = args.join(' ').split('|').map(com => com.split(' ').filter(a => a))
+		initialArgs = args.join(' ').split('|').map((com) => com.split(' ').filter((a) => a))
 	} else {
 		initialArgs = [args]
 	}

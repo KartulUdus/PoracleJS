@@ -15,7 +15,7 @@ class Worker {
 		this.bounceWorker()
 	}
 
-	async sleep(n) { return new Promise(resolve => setTimeout(resolve, n)) }
+	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 	addUser(id) {
 		this.users.push(id)

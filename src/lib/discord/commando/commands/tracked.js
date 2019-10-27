@@ -11,8 +11,8 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = args.find(arg => arg.match(client.re.nameRe))
-		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(client.re.nameRe))
+		const webhookArray = args.find((arg) => arg.match(client.re.nameRe))
+		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
@@ -54,7 +54,7 @@ exports.run = async (client, msg, [args]) => {
 		} else message = message.concat('\n\nYou\'re not tracking any monsters')
 
 		monsters.forEach((monster) => {
-			const mon = Object.values(client.monsters).find(m => m.id === monster.pokemon_id && m.form.id === monster.form)
+			const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
 			const monsterName = mon.name
 			let miniv = monster.min_iv
 			let formName = mon.form.name
@@ -66,7 +66,7 @@ exports.run = async (client, msg, [args]) => {
 			message = message.concat('\n\nYou\'re tracking the following raids:\n')
 		} else message = message.concat('\n\nYou\'re not tracking any raids')
 		raids.forEach((raid) => {
-			const mon = Object.values(client.monsters).find(m => m.id === raid.pokemon_id && m.form.id === raid.form)
+			const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 
 			const monsterName = mon.name
 			const raidTeam = client.utilData.teams[raid.team].name
@@ -89,9 +89,9 @@ exports.run = async (client, msg, [args]) => {
 
 		quests.forEach((quest) => {
 			let rewardThing = ''
-			if (quest.reward_type === 7) rewardThing = Object.values(client.monsters).find(m => m.id === quest.reward).name
+			if (quest.reward_type === 7) rewardThing = Object.values(client.monsters).find((m) => m.id === quest.reward).name
 			if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
-			// Todo if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
+			if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
 			message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 		})
 

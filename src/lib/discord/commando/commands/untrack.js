@@ -1,5 +1,6 @@
-exports.run = async (client, msg, [args]) => {
-	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
+exports.run = async (client, msg, command) => {
+	const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
+	const [args] = command
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 
@@ -9,8 +10,8 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = command.find(args => args.find(arg => arg.match(client.re.nameRe)))
-		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(client.re.nameRe))
+		const webhookArray = command.find((args) => args.find((arg) => arg.match(client.re.nameRe)))
+		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
@@ -32,17 +33,17 @@ exports.run = async (client, msg, [args]) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-		const argTypes = args.filter(arg => typeArray.includes(arg))
+		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
 		let monsters = []
-		monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
-		|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) || args.includes('template'))
+		monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+		|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) || args.includes(client.translator.translate('everything')))
 		&& !mon.form.id)
 
-		const monsterIds = monsters.map(mon => mon.id)
+		const monsterIds = monsters.map((mon) => mon.id)
 		const result = await client.query.deleteWhereInQuery('monsters', target.id, monsterIds, 'pokemon_id')
 
-		result.length ? await msg.react('✅') : await msg.react('👌')
+		result.length || client.config.database.client === 'sqlite' ? await msg.react('✅') : await msg.react('👌')
 	} catch (err) {
 		client.log.error('untrack command unhappy:', err)
 	}

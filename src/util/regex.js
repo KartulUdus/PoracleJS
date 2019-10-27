@@ -1,4 +1,4 @@
-module.exports = translator => ({
+module.exports = (translator) => ({
 	nameRe: new RegExp(`${translator.translate('name')}\\S+`, 'gi'),
 	formRe: new RegExp(`${translator.translate('form')}\\S+`, 'gi'),
 	genRe: new RegExp(`${translator.translate('gen')}[1-7]+`, 'gi'),
@@ -18,5 +18,6 @@ module.exports = translator => ({
 	staRe: new RegExp(`${translator.translate('sta')}\\d{1,2}`, 'gi'),
 	weightRe: new RegExp(`${translator.translate('weight')}\\d{1,8}`, 'gi'),
 	dRe: new RegExp(`${translator.translate('d')}\\d{1,8}`, 'gi'),
+	stardustRe: new RegExp(`${translator.translate('stardust')}\\d{1,8}`, 'gi'),
 
 })

@@ -1,5 +1,5 @@
 exports.run = async (client, msg, command) => {
-	const typeArray = Object.keys(client.utilData.types).map(o => o.toLowerCase())
+	const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 	try {
@@ -8,8 +8,8 @@ exports.run = async (client, msg, command) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = command.find(args => args.find(arg => arg.match(client.re.nameRe)))
-		if (webhookArray) webhookName = webhookArray.find(arg => arg.match(client.re.nameRe))
+		const webhookArray = command.find((args) => args.find((arg) => arg.match(client.re.nameRe)))
+		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
@@ -55,25 +55,25 @@ exports.run = async (client, msg, command) => {
 			let maxweight = 9000000
 			let template = 1
 			let clean = false
-			const pings = [...msg.mentions.users.array().map(u => `<@!${u.id}>`), ...msg.mentions.roles.array().map(r => `<@&${r.id}>`)].join('')
+			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 
 			// Check for monsters or forms
-			const formArgs = args.filter(arg => arg.match(client.re.formRe))
-			const formNames = formArgs ? formArgs.map(arg => arg.replace(client.translator.translate('form'), '')) : []
-			const argTypes = args.filter(arg => typeArray.includes(arg))
-			const genCommand = args.filter(arg => arg.match(client.re.genRe))
+			const formArgs = args.filter((arg) => arg.match(client.re.formRe))
+			const formNames = formArgs ? formArgs.map((arg) => arg.replace(client.translator.translate('form'), '')) : []
+			const argTypes = args.filter((arg) => typeArray.includes(arg))
+			const genCommand = args.filter((arg) => arg.match(client.re.genRe))
 			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
 
 			if (formNames.length) {
-				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
-				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
+				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
 				|| args.includes(client.translator.translate('everything')))	&& formNames.includes(mon.form.name.toLowerCase()))
 			} else {
-				monsters = Object.values(client.monsters).filter(mon => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
-				|| mon.types.map(t => t.name.toLowerCase()).find(t => argTypes.includes(t)) && !mon.form.id
-				|| args.includes(client.translator.translate('everything')))	&& !mon.form.id)
+				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
+				|| args.includes(client.translator.translate('everything'))) && !mon.form.id)
 			}
-			if (gen) monsters = monsters.filter(mon => mon.id >= gen.min && mon.id <= gen.max)
+			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			// Parse command elements to stuff
 			args.forEach((element) => {
 				if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[0].replace(client.translator.translate('maxlevel'), '')
@@ -92,12 +92,12 @@ exports.run = async (client, msg, command) => {
 				else if (element.match(client.re.staRe)) sta = element.match(client.re.staRe)[0].replace(client.translator.translate('sta'), '')
 				else if (element.match(client.re.weightRe)) weight = element.match(client.re.weightRe)[0].replace(client.translator.translate('weight'), '')
 				else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
-				else if (element === 'female') gender = 2
-				else if (element === 'clean') clean = true
-				else if (element === 'male') gender = 1
-				else if (element === 'genderless') gender = 3
+				else if (element === client.translator.translate('female')) gender = 2
+				else if (element === client.translator.translate('clean')) clean = true
+				else if (element === client.translator.translate('male')) gender = 1
+				else if (element === client.translator.translate('genderless')) gender = 3
 			})
-			const insert = monsters.map(mon => ({
+			const insert = monsters.map((mon) => ({
 				id: target.id,
 				pokemon_id: mon.id,
 				ping: pings,
