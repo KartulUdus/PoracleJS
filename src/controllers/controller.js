@@ -1,4 +1,4 @@
-/* eslint class-methods-use-this: ["error", { "exceptMethods": ["getGeocoder"] }] */
+/* eslint no-extend-native: ["error", { "exceptions": ["Number"] }] */
 
 const inside = require('point-in-polygon')
 const path = require('path')
@@ -33,9 +33,28 @@ class Controller {
 		this.mustache = mustache
 	}
 
-	getDistance(start, end) {
+	static getGeocoder() {
+		switch (this.config.geocoding.provider.toLowerCase()) {
+			case 'google': {
+				return NodeGeocoder({
+					provider: 'google',
+					httpAdapter: 'https',
+					apiKey: this.config.geocoding.geocodingKey[Math.floor(Math.random() * this.config.geocoding.geocodingKey.length)],
+				})
+			}
+			default:
+			{
+				return NodeGeocoder({
+					provider: 'openstreetmap',
+					formatterPattern: this.config.locale.addressformat,
+				})
+			}
+		}
+	}
+
+	static getDistance(start, end) {
 		if (typeof (Number.prototype.toRad) === 'undefined') {
-			Number.prototype.toRad = function () {
+			Number.prototype.toRad = function toRad() {
 				return this * Math.PI / 180
 			}
 		}
@@ -55,25 +74,6 @@ class Controller {
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 		const d = earthRadius * c
 		return Math.ceil(d)
-	}
-
-	getGeocoder() {
-		switch (this.config.geocoding.provider.toLowerCase()) {
-			case 'google': {
-				return NodeGeocoder({
-					provider: 'google',
-					httpAdapter: 'https',
-					apiKey: this.config.geocoding.geocodingKey[Math.floor(Math.random() * this.config.geocoding.geocodingKey.length)],
-				})
-			}
-			default:
-			{
-				return NodeGeocoder({
-					provider: 'openstreetmap',
-					formatterPattern: this.config.locale.addressformat,
-				})
-			}
-		}
 	}
 
 	getDiscordCache(id) {
@@ -101,18 +101,18 @@ class Controller {
 			const geocoder = this.getGeocoder()
 			return await geocoder.geocode(locationString)
 		} catch (err) {
-			throw { source: 'geolocate', err }
+			throw new Error({ source: 'geolocate', err })
 		}
 	}
 
 	async getAddress(locationObject) {
 		const cacheKey = `${String(+locationObject.lat.toFixed(3))}-${String(+locationObject.lon.toFixed(3))}`
-		let result = geoCache.getKey(cacheKey)
-		if (result) return result
+		const cachedResult = geoCache.getKey(cacheKey)
+		if (cachedResult) return cachedResult
 
 		try {
-			const geocoder = this.getGeocoder()
-			result = (await geocoder.reverse(locationObject))[0]
+			const geocoder = (this.getGeocoder())
+			const [result] = await geocoder.reverse(locationObject)
 			const flag = emojiFlags[`${result.countryCode}`]
 			const addressDts = this.mustache.compile(this.config.locale.addressFormat)
 			result.addr = addressDts(result)
@@ -121,7 +121,7 @@ class Controller {
 			geoCache.save(true)
 			return result
 		} catch (err) {
-			throw { source: 'getAddress', error: err }
+			throw new Error({ source: 'getAddress', error: err })
 		}
 	}
 
@@ -144,7 +144,7 @@ class Controller {
 		try {
 			return await this.db.select('*').from(table).where(conditions).first()
 		} catch (err) {
-			throw { source: 'slectOneQuery', error: err }
+			throw new Error({ source: 'slectOneQuery', error: err })
 		}
 	}
 
@@ -152,7 +152,7 @@ class Controller {
 		try {
 			return await this.db.select('*').from(table).where(conditions)
 		} catch (err) {
-			throw { source: 'slectOneQuery', error: err }
+			throw new Error({ source: 'slectOneQuery', error: err })
 		}
 	}
 
@@ -160,7 +160,7 @@ class Controller {
 		try {
 			return this.db(table).update(values).where(conditions)
 		} catch (err) {
-			throw { source: 'updateQuery', error: err }
+			throw new Error({ source: 'updateQuery', error: err })
 		}
 	}
 
@@ -170,7 +170,7 @@ class Controller {
 				.first()
 			return +(Object.values(result)[0])
 		} catch (err) {
-			throw { source: 'countQuery', error: err }
+			throw new Error({ source: 'countQuery', error: err })
 		}
 	}
 
@@ -178,7 +178,7 @@ class Controller {
 		try {
 			return await this.db.insert(values).into(table)
 		} catch (err) {
-			throw { source: 'insertQuery', error: err }
+			throw new Error({ source: 'insertQuery', error: err })
 		}
 	}
 
@@ -186,7 +186,7 @@ class Controller {
 		try {
 			return this.returnByDatabaseType(await this.db.raw(sql))
 		} catch (err) {
-			throw { source: 'misteryQuery', error: err }
+			throw new Error({ source: 'misteryQuery', error: err })
 		}
 	}
 
@@ -194,49 +194,43 @@ class Controller {
 		try {
 			return this.db.whereIn(valuesColumn, values).where({ id }).from(table).del()
 		} catch (err) {
-			throw { source: 'deleteWhereInQuery unhappy', error: err }
+			throw new Error({ source: 'deleteWhereInQuery unhappy', error: err })
 		}
 	}
 
 	async insertOrUpdateQuery(table, values) {
-		try {
-			switch (this.config.database.client) {
-				case 'pg': {
-					const firstData = values[0] ? values[0] : values
-					const query = `${this.db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT ${table}_tracking DO UPDATE SET ${
-						Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
-					const result = await this.db.raw(query)
-					return result.rowCount ? [0] : []
-				}
-				case 'mysql': {
-					const firstData = values[0] ? values[0] : values
-					const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
-						Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
-					const result = await this.db.raw(query)
-					return result
-				}
-				default: {
-					const constraints = {
-						humans: 'id',
-						monsters: 'monsters.id, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.min_weight, monsters.max_weight, monsters.form, monsters.max_atk, monsters.max_def, monsters.max_sta, monsters.gender',
-						raid: 'raid.id, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
-						egg: 'egg.id, egg.team, egg.exclusive, egg.level',
-						quest: 'quest.id, quest.reward_type, quest.reward',
-					}
-
-					for (const val of values) {
-						if (val.ping === '') val.ping = '\'\''
-					}
-					const firstData = values[0] ? values[0] : values
-					const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
-					const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
-						Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
-					const result = await this.db.raw(query)
-					return this.returnByDatabaseType(result)
-				}
+		switch (this.config.database.client) {
+			case 'pg': {
+				const firstData = values[0] ? values[0] : values
+				const query = `${this.db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT ${table}_tracking DO UPDATE SET ${
+					Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
+				return this.returnByDatabaseType(await this.db.raw(query))
 			}
-		} catch (err) {
-			throw err
+			case 'mysql': {
+				const firstData = values[0] ? values[0] : values
+				const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
+					Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
+				return this.returnByDatabaseType(await this.db.raw(query))
+			}
+			default: {
+				const constraints = {
+					humans: 'id',
+					monsters: 'monsters.id, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.min_weight, monsters.max_weight, monsters.form, monsters.max_atk, monsters.max_def, monsters.max_sta, monsters.gender',
+					raid: 'raid.id, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
+					egg: 'egg.id, egg.team, egg.exclusive, egg.level',
+					quest: 'quest.id, quest.reward_type, quest.reward',
+				}
+
+				for (const val of values) {
+					if (val.ping === '') val.ping = '\'\''
+				}
+				const firstData = values[0] ? values[0] : values
+				const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
+				const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
+					Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
+				const result = await this.db.raw(query)
+				return this.returnByDatabaseType(result)
+			}
 		}
 	}
 
@@ -245,7 +239,7 @@ class Controller {
 		try {
 			return await this.db(table).where(values).del()
 		} catch (err) {
-			throw { source: 'deleteQuery', error: err }
+			throw new Error({ source: 'deleteQuery', error: err })
 		}
 	}
 

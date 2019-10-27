@@ -1,4 +1,4 @@
-module.exports = async (knex, config, log, monsterData, utilData, dts, geofence, translator) => {
+module.exports = (knex, config, log, monsterData, utilData, dts, geofence, translator) => {
 	const Controller = require('../../../controllers/controller')
 	const query = new Controller(knex, config)
 
@@ -51,5 +51,5 @@ module.exports = async (knex, config, log, monsterData, utilData, dts, geofence,
 
 		log.log({ level: 'debug', message: `Loading discord commands: (${enabledCommands.join(' ')})`, event: 'discord:commandsAdded' })
 	})
-	await client.login(client.config.discord.token[0])
+	client.login(client.config.discord.token[0])
 }

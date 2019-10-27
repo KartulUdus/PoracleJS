@@ -1,13 +1,13 @@
-const pokemonGif = require('pokemon-gif')
-const geoTz = require('geo-tz')
-const moment = require('moment-timezone')
+// const pokemonGif = require('pokemon-gif')
+// const geoTz = require('geo-tz')
+// const moment = require('moment-timezone')
 const Controller = require('./controller')
-const log = require('../lib/logger')
+// const log = require('../lib/logger')
 
 class Raid extends Controller {
 	async handle(obj) {
 		const data = obj
-		const minTth = this.config.general.alertMinimumTime || 0
+		// const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
