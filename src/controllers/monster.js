@@ -24,7 +24,7 @@ const weatherData = require('../util/weather')
 
 const moveData = require(moveDataPath)
 const formData = require('../util/forms')
-const genderData = require('../util/genders')F
+const genderData = require('../util/genders')
 
 require('moment-precise-range-plugin')
 
