@@ -195,7 +195,7 @@ module.exports = async () => new Promise((resolve, reject) => {
 			else {
 				queries.checkSchema()
 					.then((confirmedTables) => {
-						if (confirmedTables === 8) {
+						if (confirmedTables > 6) {
 							log.info('Database tables confirmed')
 						}
 						else {
