@@ -31,13 +31,14 @@ exports.run = async (client, msg, command) => {
 
 		let reaction = '👌'
 		for (const args of command) {
-			const remove = args.find((arg) => arg === 'remove')
+			const remove = !!args.find((arg) => arg === 'remove')
 
 			let monsters = []
 			let exclusive = 0
 			let distance = 0
 			let team = 4
 			let template = 1
+			let clean = false
 			const levels = []
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 			const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => arg.replace(client.translator.translate('form'), ''))
@@ -63,13 +64,14 @@ exports.run = async (client, msg, command) => {
 
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
-				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(/level/gi, ''))
-				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(/template/gi, '')
-				else if (element.match(client.re.dre)) distance = element.match(client.re.dre)[0].replace(/d/gi, '')
-				else if (element === client.translator.translate('instinct')) team = 3
-				else if (element === client.translator.translate('valor')) team = 2
-				else if (element === client.translator.translate('mystic')) team = 1
-				else if (element === client.translator.translate('harmony')) team = 0
+				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
+				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
+				else if (element.match(client.re.dre)) distance = element.match(client.re.dre)[0].replace(client.translator.translate('d'), '')
+				else if (element === 'instinct') team = 3
+				else if (element === 'valor') team = 2
+				else if (element === 'mystic') team = 1
+				else if (element === 'harmony') team = 0
+				else if (element === 'clean') clean = true
 			})
 
 			if (!remove) {
@@ -81,6 +83,7 @@ exports.run = async (client, msg, command) => {
 					template,
 					distance,
 					team,
+					clean,
 					level: 9000,
 					form: mon.form.id,
 				}))
@@ -94,13 +97,14 @@ exports.run = async (client, msg, command) => {
 						template,
 						distance,
 						team,
+						clean,
 						level,
 						form: 9000,
 					})
 				})
 
 				const result = await client.query.insertOrUpdateQuery('raid', insert)
-				if (result.length) reaction = '✅'
+				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			} else {
 				const monsterIds = monsters.map((mon) => mon.id)
 				let result = 0

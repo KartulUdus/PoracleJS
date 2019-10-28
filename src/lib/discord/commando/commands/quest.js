@@ -61,12 +61,12 @@ exports.run = async (client, msg, command) => {
 					minDust = +element.match(client.re.stardustRe)[0].replace(client.translator.translate('stardust'), '')
 					stardustTracking = -1
 				} else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
-				else if (element === client.translator.translate('stardust')) {
+				else if (element === 'stardust') {
 					minDust = 0
 					stardustTracking = -1
-				} else if (element === client.translator.translate('shiny')) mustShiny = 1
-				else if (element === client.translator.translate('remove')) remove = true
-				else if (element === client.translator.translate('clean')) clean = true
+				} else if (element === 'shiny') mustShiny = 1
+				else if (element === 'remove') remove = true
+				else if (element === 'clean') clean = true
 			})
 
 			if (+minDust < 10000000) {

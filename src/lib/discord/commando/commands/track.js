@@ -88,10 +88,10 @@ exports.run = async (client, msg, command) => {
 				else if (element.match(client.re.staRe)) sta = element.match(client.re.staRe)[0].replace(client.translator.translate('sta'), '')
 				else if (element.match(client.re.weightRe)) weight = element.match(client.re.weightRe)[0].replace(client.translator.translate('weight'), '')
 				else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
-				else if (element === client.translator.translate('female')) gender = 2
-				else if (element === client.translator.translate('clean')) clean = true
-				else if (element === client.translator.translate('male')) gender = 1
-				else if (element === client.translator.translate('genderless')) gender = 3
+				else if (element === 'female') gender = 2
+				else if (element === 'clean') clean = true
+				else if (element === 'male') gender = 1
+				else if (element === 'genderless') gender = 3
 			})
 			const insert = monsters.map((mon) => ({
 				id: target.id,
