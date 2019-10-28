@@ -3,25 +3,19 @@
 const inside = require('point-in-polygon')
 const path = require('path')
 const NodeGeocoder = require('node-geocoder')
+const cp = require('child_process')
 
 const pcache = require('flat-cache')
-
 const geoCache = pcache.load('.geoCache', path.resolve(`${__dirname}../../../`))
-
-
-// const ivColorData = config.discord.iv_colors
-// const baseStats = require('../util/base_stats')
-// const cpMultipliers = require('../util/cp-multipliers')
 const emojiFlags = require('emoji-flags')
 
 const log = require('../lib/logger')
 
 
-// setup geocoding cache
-
 class Controller {
 	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache) {
 		this.db = db
+		this.cp = cp
 		this.config = config
 		this.log = log
 		this.dts = dts
@@ -270,6 +264,18 @@ class Controller {
 		else if (iv < 100) colorIdx = 4 // purple epic
 
 		return parseInt(this.config.discord.ivColors[colorIdx].replace(/^#/, ''), 16)
+	}
+
+	execPromise(command) {
+		return new Promise((resolve, reject) => {
+			this.cp.exec(command, (error, stdout) => {
+				if (error) {
+					reject(error)
+					return
+				}
+				resolve(stdout.trim())
+			})
+		})
 	}
 }
 
