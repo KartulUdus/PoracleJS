@@ -24,7 +24,7 @@ const weatherData = require('../util/weather')
 
 const moveData = require(moveDataPath)
 const formData = require('../util/forms')
-const genderData = require('../util/genders')
+const genderData = require('../util/genders')F
 
 require('moment-precise-range-plugin')
 
@@ -148,7 +148,7 @@ class Monster extends Controller {
 			data.ivcolor = this.findIvColor(data.iv)
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
-			data.gif = pokemonGif(Number(data.pokemon_id))
+			data.gif = monsterData[data.pokemon_id] ? pokemonGif(Number(data.pokemon_id)) : pokemonGif(129)
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.sticker = `${config.telegram.stickerurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			const e = []
