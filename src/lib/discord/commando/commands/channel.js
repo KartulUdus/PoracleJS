@@ -7,8 +7,8 @@ exports.run = async (client, msg, [args]) => {
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
-		let webhookName = args.find((arg) => arg.match(/name\S+/gi))
-		if (webhookName) webhookName = webhookName.replace('name', '')
+		let webhookName = args.find((arg) => arg.match(client.re.nameRe))
+		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		const webhookLink = msg.content.match(client.hookRegex) ? msg.content.match(client.hookRegex)[0] : false
 
 
