@@ -190,7 +190,7 @@ class Monster extends Controller {
 						resolve([])
 						return null
 					}
-					this.getAddress({ lat: data.latitude, lon: data.longitude }).toString().substring(0, 8).then((geoResult) => {
+					this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
 
 						const jobs = []
 						whocares.forEach((cares) => {
