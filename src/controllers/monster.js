@@ -120,7 +120,7 @@ class Monster extends Controller {
 								|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 
-			data.name = monsterData[data.pokemon_id].name ? monsterData[data.pokemon_id].name : 'errormon'
+			data.name = monsterData[data.pokemon_id] && monsterData[data.pokemon_id].name ? monsterData[data.pokemon_id].name : 'errormon'
 			data.formname = ''
 			data.iv = encountered ? ((+data.individual_attack + +data.individual_defense + +data.individual_stamina) / 0.45).toFixed(2) : -1
 			data.individual_attack = encountered ? +data.individual_attack : 0
@@ -144,17 +144,21 @@ class Monster extends Controller {
 			data.boostemoji = emojiData.weather[data.weather]
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
-			data.color = monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0
+			data.color = monsterData[data.pokemon_id] && monsterData[data.pokemon_id].types[0] ? types[monsterData[data.pokemon_id].types[0]].color : 0
 			data.ivcolor = this.findIvColor(data.iv)
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
-			data.gif = pokemonGif(Number(data.pokemon_id))
+			data.gif = monsterData[data.pokemon_id] ? pokemonGif(Number(data.pokemon_id)) : pokemonGif(129)
 			data.imgurl = `${config.general.imgurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.sticker = `${config.telegram.stickerurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			const e = []
-			monsterData[data.pokemon_id].types.forEach((type) => {
-				e.push(emojiData.type[type])
-			})
+			if (monsterData[data.pokemon_id]) {
+				monsterData[data.pokemon_id].types.forEach((type) => {
+					e.push(emojiData.type[type])
+				})
+			} else {
+				log.warning(`Was unable to pull monster, the data I have is:`, data)
+			}
 			data.emoji = e
 			data.emojiString = e.join('')
 
@@ -186,7 +190,7 @@ class Monster extends Controller {
 						resolve([])
 						return null
 					}
-					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
+					this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
 
 						const jobs = []
 						whocares.forEach((cares) => {

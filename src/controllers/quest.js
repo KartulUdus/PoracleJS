@@ -132,7 +132,7 @@ class Quest extends Controller {
 					if (data.type === 3) data.rewardemoji = emojiData.stardust
 					if (data.rewardData.items[1]) data.rewardemoji = emojiData.items[data.rewardData.items[1]]
 					if (data.rewardData.monsters[1]) data.rewardemoji = emojiData.pokemon[data.rewardData.monsters[1]]
-					this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
+					this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
 						const view = _.extend(data, {
 							now: new Date(),
 							questType: data.questType,

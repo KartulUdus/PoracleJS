@@ -1,6 +1,6 @@
 {
   "name": "poraclejs",
-  "version": "3.12.23",
+  "version": "3.12.25",
   "description": "Webhook processing and personalised alarms",
   "main": "src/app.js",
   "repository": {

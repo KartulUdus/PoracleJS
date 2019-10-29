@@ -182,7 +182,7 @@ class Raid extends Controller {
 										resolve([])
 										return null
 									}
-									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
+									this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
 
 										const jobs = []
 										whoCares.forEach((cares) => {
@@ -312,7 +312,7 @@ class Raid extends Controller {
 										resolve([])
 										return null
 									}
-									this.getAddress({ lat: data.latitude, lon: data.longitude }).then((geoResult) => {
+									this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
 										const jobs = []
 										const alarmId = this.uuid
 										log.log({
