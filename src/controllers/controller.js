@@ -6,6 +6,7 @@ const NodeGeocoder = require('node-geocoder')
 const cp = require('child_process')
 
 const pcache = require('flat-cache')
+
 const geoCache = pcache.load('.geoCache', path.resolve(`${__dirname}../../../`))
 const emojiFlags = require('emoji-flags')
 
@@ -27,7 +28,7 @@ class Controller {
 		this.mustache = mustache
 	}
 
-	static getGeocoder() {
+	getGeocoder() {
 		switch (this.config.geocoding.provider.toLowerCase()) {
 			case 'google': {
 				return NodeGeocoder({
@@ -105,9 +106,9 @@ class Controller {
 		if (cachedResult) return cachedResult
 
 		try {
-			const geocoder = (this.getGeocoder())
+			const geocoder = this.getGeocoder()
 			const [result] = await geocoder.reverse(locationObject)
-			const flag = emojiFlags[`${result.countryCode}`]
+			const flag = emojiFlags[result.countryCode]
 			const addressDts = this.mustache.compile(this.config.locale.addressFormat)
 			result.addr = addressDts(result)
 			result.flag = flag ? flag.emoji : ''

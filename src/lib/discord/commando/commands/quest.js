@@ -28,6 +28,7 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
+		let validTracks = 0
 		let reaction = '👌'
 		for (const args of command) {
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
@@ -50,11 +51,16 @@ exports.run = async (client, msg, command) => {
 
 			fullMonsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
-			|| args.includes(client.translator.translate('all pokemon'))) && !mon.form.id)
+			|| args.includes('all pokemon')) && !mon.form.id)
 			if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			monsters = fullMonsters.map((mon) => mon.id)
 			items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes(client.translator.translate('all items')))
-
+			if (args.includes('everything')) {
+				monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
+				items = Object.keys(client.utilData.items)
+				minDust = 0
+				stardustTracking = -1
+			}
 			args.forEach((element) => {
 				if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
 				else if (element.match(client.re.stardustRe)) {
@@ -108,13 +114,17 @@ exports.run = async (client, msg, command) => {
 				})
 			})
 
-			if (!remove) {
-				if (!questTracks.length) return msg.reply('404, No valid quest tracks found')
+			if (!questTracks.length) {
+				break
+			} else {
+				validTracks += 1
+			}
 
+			if (!remove) {
 				const result = await client.query.insertOrUpdateQuery('quest', questTracks)
 				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 				client.log.info(`${msg.author.username} added quest trackings to ${target.name}`)
-				return
+				break
 			}
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql
 			items.push(0)
@@ -126,7 +136,8 @@ exports.run = async (client, msg, command) => {
 			const result = await client.query.misteryQuery(remQuery)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
-		return msg.react(reaction)
+		if (!validTracks) return await msg.reply(client.translator.translate('404 No valid quests found'))
+		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('Quest command unhappy:', err)
 	}

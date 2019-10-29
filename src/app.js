@@ -33,10 +33,12 @@ const utilData = require('./util/util')
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
+const QuestController = require('./controllers/quest')
 
 
 const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
 const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
+const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
 
 fastify.decorate('logger', log)
 fastify.decorate('config', config)
@@ -44,6 +46,7 @@ fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
 fastify.decorate('monsterController', monsterController)
 fastify.decorate('raidController', raidController)
+fastify.decorate('questController', questController)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)

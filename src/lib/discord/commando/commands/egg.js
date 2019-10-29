@@ -28,22 +28,19 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
+		let validTracks = 0
 		let reaction = '👌'
 		for (const args of command) {
 			const remove = !!args.find((arg) => arg === 'remove')
 
-			let monsters = []
 			let exclusive = 0
 			let distance = 0
 			let team = 4
 			let template = 1
 			let clean = false
-			const levels = []
+			let levels = []
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
-			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 
-
-			if (!monsters.length && levels.length) return await msg.reply(client.translator.translate('404 NO MONSTERS FOUND'))
 
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
@@ -58,6 +55,12 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'clean') clean = true
 			})
 
+			if(!levels.length){
+				break
+			} else {
+				validTracks += 1
+			}
+
 			if (!remove) {
 				const insert = levels.map((lvl) => ({
 					id: target.id,
@@ -68,12 +71,11 @@ exports.run = async (client, msg, command) => {
 					team,
 					clean,
 					level: lvl,
-					form: mon.form.id,
 				}))
 
 				const result = await client.query.insertOrUpdateQuery('egg', insert)
 				client.log.info(`${target.name} started tracking level ${levels.join(', ')} eggs`)
-				reaction = result.length  || client.config.database.client === 'sqlite'? '✅' : reaction
+				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			} else {
 				let result = 0
 				if (levels.length) {
@@ -81,9 +83,10 @@ exports.run = async (client, msg, command) => {
 					client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} eggs`)
 					result += lvlResult
 				}
-				reaction = result.length  || client.config.database.client === 'sqlite'? '✅' : reaction
+				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			}
 		}
+		if (!validTracks) return await msg.reply(client.translator.translate('404 No raid egg levels found'))
 		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('raid command unhappy:', err)

@@ -30,6 +30,8 @@ exports.run = async (client, msg, command) => {
 		if (target.webhook) target.id = isRegistered.id
 
 		let reaction = '👌'
+		let validTracks = 0
+
 		for (const args of command) {
 			const remove = !!args.find((arg) => arg === 'remove')
 
@@ -60,8 +62,11 @@ exports.run = async (client, msg, command) => {
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 
 
-			if (!monsters.length && levels.length) return await msg.reply(client.translator.translate('404 NO MONSTERS FOUND'))
-
+			if (!monsters.length && levels.length) {
+				break
+			} else {
+				validTracks += 1
+			}
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
 				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
@@ -119,6 +124,7 @@ exports.run = async (client, msg, command) => {
 				if (result.length) reaction = '✅'
 			}
 		}
+		if (validTracks) return await msg.reply(client.translator.translate('404 no valid tracks found'))
 		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('raid command unhappy:', err)

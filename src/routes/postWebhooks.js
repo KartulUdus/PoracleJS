@@ -26,11 +26,11 @@ module.exports = async (fastify, options, next) => {
 				}
 				case 'raid': {
 					if (fastify.cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
-						fastify.logger.warn(`Raid ${hook.message.encounter_id} was sent again too soon, ignoring`)
+						fastify.logger.info(`Raid ${hook.message.encounter_id} was sent again too soon, ignoring`)
 						break
 					}
 
-					fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, hook)
+					fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, hook)
 
 					const result = await fastify.raidController.handle(hook.message)
 					result.forEach((job) => {
@@ -41,6 +41,21 @@ module.exports = async (fastify, options, next) => {
 				}
 				case 'invasion':
 				case 'pokestop': {
+					break
+				}
+				case 'quest': {
+					if (await fastify.cache.get(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
+						fastify.logger.info(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
+						break
+					}
+					fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
+					const q = hook.message
+
+					const result = await fastify.questController.handle(q)
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
 					break
 				}
 				default:

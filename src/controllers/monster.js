@@ -132,7 +132,6 @@ class Monster extends Controller {
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.gif = pokemonGif(Number(data.pokemon_id))
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-			// data.sticker = `${this.config.telegram.stickerurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			const e = []
 			monster.types.forEach((type) => {
 				e.push(this.utilData.types[type.name].emoji)
@@ -198,7 +197,7 @@ class Monster extends Controller {
 					: this.dts.find((template) => (template.type === 'monster' && template.id === cares.template) || (template.type === 'monster' && template.default))
 
 				const template = JSON.stringify(monsterDts.template)
-				const mustache = this.mustache.compile(template)
+				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 
 				if (cares.ping) {

@@ -29,6 +29,7 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
+		let validTracks = 0
 		let reaction = '👌'
 		for (const args of command) {
 			const remove = !!args.find((arg) => arg === 'remove')
@@ -50,7 +51,11 @@ exports.run = async (client, msg, command) => {
 					types.push('mixed')
 				} else if (element === 'mixed') types.push(element)
 			})
-
+			if (!types.length) {
+				break
+			} else {
+				validTracks += 1
+			}
 			if (!remove) {
 				const insertData = types.map((o) => ({
 					id: target.id,
@@ -69,6 +74,7 @@ exports.run = async (client, msg, command) => {
 				client.log.info(`${target.name} deleted ${types.join(', ')} ivasions`)
 			}
 		}
+		if (!validTracks) return await msg.reply(client.translator.translate('404 No valid invasion types found'))
 		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('invasion command unhappy:', err)

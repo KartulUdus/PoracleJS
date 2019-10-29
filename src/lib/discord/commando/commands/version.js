@@ -1,12 +1,11 @@
 const path = require('path')
+
 const { version } = require(`${path.join(__dirname, '/../../../../../')}package.json`)
 
 exports.run = async (client, msg) => {
-
 	if (!client.config.discord.admins.includes(msg.author.id)) return
 	try {
-
-		Promise.all([client.query.execPromise('git status'), client.query.execPromise('git --no-pager log -3')]).then( async (output) => {
+		Promise.all([client.query.execPromise('git status'), client.query.execPromise('git --no-pager log -3')]).then(async (output) => {
 			let changes = output[0]
 			changes = changes.split('\n').filter((line) => line.match(/modified/gi) || line.match(/renamed/gi) || line.match(/On branch/gi))
 			const gitLogs = output[1].split('\n')
@@ -43,7 +42,6 @@ exports.run = async (client, msg) => {
 				},
 			)
 		})
-	
 	} catch (err) {
 		client.log.error(`Channel command "${msg.content}" unhappy:`, err)
 	}

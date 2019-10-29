@@ -40,7 +40,7 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		const alertIds = []
@@ -87,7 +87,7 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance = 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		const alertIds = []
@@ -140,7 +140,6 @@ class Raid extends Controller {
 				if (data.name) data.gymName = data.name ? data.name : ''
 				data.name = this.translator.translate(monster.name)
 				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-				// data.sticker = `${this.config.telegram.stickerurl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 				const e = []
 				monster.types.forEach((type) => {
 					e.push(this.utilData.types[type.name].emoji)
@@ -206,7 +205,7 @@ class Raid extends Controller {
 					const raidDts = this.dts.find((template) => (template.type === 'raid' && template.id === cares.template) || (template.type === 'raid' && template.default))
 
 					const template = JSON.stringify(raidDts.template)
-					const mustache = this.mustache.compile(template)
+					const mustache = this.mustache.compile(this.translator.translate(template))
 					const message = JSON.parse(mustache(view))
 					if (cares.ping) {
 						if (!message.content) message.content = cares.ping
@@ -237,7 +236,6 @@ class Raid extends Controller {
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
-			data.sticker = `${this.config.telegram.stickerurl}egg${data.level}.webp`
 			if (!data.team_id) data.team_id = 0
 			if (data.name) data.gymName = data.name
 			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
@@ -292,7 +290,7 @@ class Raid extends Controller {
 				const eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template) || (template.type === 'egg' && template.default))
 
 				const template = JSON.stringify(eggDts.template)
-				const mustache = this.mustache.compile(template)
+				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 
 				if (cares.ping) {

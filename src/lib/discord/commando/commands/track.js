@@ -30,6 +30,7 @@ exports.run = async (client, msg, command) => {
 		if (target.webhook) target.id = isRegistered.id
 
 		let reaction = '👌'
+		let validTracks = 0
 		for (const args of command) {
 			// Set defaults
 			let monsters
@@ -117,11 +118,16 @@ exports.run = async (client, msg, command) => {
 				gender,
 				clean,
 			}))
-			if (!insert.length) return
+			if (!insert.length) {
+				break
+			} else {
+				validTracks += 1
+			}
 			const result = await client.query.insertOrUpdateQuery('monsters', insert)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
-		msg.react(reaction)
+		if (!validTracks) return await msg.reply(client.translator.translate('404 No monsters found'))
+		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('Track command unhappy:', err)
 	}
