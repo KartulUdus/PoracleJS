@@ -43,6 +43,7 @@ class Raid extends Controller {
 			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
+		// remove any duplicates
 		const alertIds = []
 		result = result.filter((alert) => {
 			if (!alertIds.includes(alert.id)) {
@@ -90,6 +91,7 @@ class Raid extends Controller {
 			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
+		// remove any duplicates
 		const alertIds = []
 		result = result.filter((alert) => {
 			if (!alertIds.includes(alert.id)) {
@@ -205,7 +207,7 @@ class Raid extends Controller {
 					const raidDts = this.dts.find((template) => (template.type === 'raid' && template.id === cares.template) || (template.type === 'raid' && template.default))
 
 					const template = JSON.stringify(raidDts.template)
-					const mustache = this.mustache.compile(this.translator.translate(template))
+					const mustache = this.mustache.compile(template)
 					const message = JSON.parse(mustache(view))
 					if (cares.ping) {
 						if (!message.content) message.content = cares.ping
@@ -290,7 +292,7 @@ class Raid extends Controller {
 				const eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template) || (template.type === 'egg' && template.default))
 
 				const template = JSON.stringify(eggDts.template)
-				const mustache = this.mustache.compile(this.translator.translate(template))
+				const mustache = this.mustache.compile(template)
 				const message = JSON.parse(mustache(view))
 
 				if (cares.ping) {

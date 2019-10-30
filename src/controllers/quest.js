@@ -41,6 +41,7 @@ class Quest extends Controller {
 			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
+		// remove any duplicates
 		const alertIds = []
 		result = result.filter((alert) => {
 			if (!alertIds.includes(alert.id)) {
@@ -95,12 +96,12 @@ class Quest extends Controller {
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
-			data.monsterNames = Object.values(this.monsterData).filter(mon => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map(m => this.translator.translate(m.name)).join(', ')
-			data.itemNames = Object.keys(this.utilData.items).filter(item => data.rewardData.items.includes(this.utilData.items[item])).map(i => this.translator.translate(this.utilData.items[i])).join(', ')
+			data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => this.translator.translate(m.name)).join(', ')
+			data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => this.translator.translate(this.utilData.items[i])).join(', ')
 
 			data.imgurl = data.rewardData.monsters[1]
-			? `${this.config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
-			: 'saflkansd'
+				? `${this.config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
+				: 'saflkansd'
 
 			if (data.rewardData.items[1]) {
 				data.imgurl = `${this.config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
@@ -133,7 +134,7 @@ class Quest extends Controller {
 					...data,
 					...geoResult,
 					...data.rewardData,
-					
+
 					id: data.pokemon_id,
 					lat: +data.latitude.toFixed(4),
 					lon: +data.longitude.toFixed(4),
@@ -177,11 +178,9 @@ class Quest extends Controller {
 					jobs.push(work)
 					this.addDiscordCache(cares.id)
 				}
-
 			}
 
 			return jobs
-
 		} catch (e) {
 			this.log.error('Can\'t seem to handle quest: ', e, data)
 		}
@@ -232,7 +231,7 @@ class Quest extends Controller {
 				}
 			})
 			resolve({
-				rewardString: rewardString, monsters, items, dustAmount, isShiny,
+				rewardString, monsters, items, dustAmount, isShiny,
 			})
 		})
 	}
@@ -288,7 +287,7 @@ class Quest extends Controller {
 					case 8: {
 						const template = this.translator.translate(this.utilData.questConditions[8])
 						const mustache = this.mustache.compile(this.translator.translate(template))
-						const cond = mustache({ throw_type: this.translator.translate(this.utilData.throwType[condition.info.throw_type_id])})
+						const cond = mustache({ throw_type: this.translator.translate(this.utilData.throwType[condition.info.throw_type_id]) })
 						conditionString = conditionString.concat(cond)
 						break
 					}
@@ -311,7 +310,7 @@ class Quest extends Controller {
 						break
 					}
 					case 14: {
-						const template = this.translator.translate(this.utilData.questConditions[14])						
+						const template = this.translator.translate(this.utilData.questConditions[14])
 						const mustache = this.mustache.compile(this.translator.translate(template))
 						const cond = mustache({ throw_type: this.translator.translate(this.utilData.throwType[condition.info.throw_type_id]), amount: data.target })
 						conditionString = conditionString.concat(cond)

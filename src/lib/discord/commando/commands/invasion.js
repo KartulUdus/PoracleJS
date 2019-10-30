@@ -1,5 +1,5 @@
 exports.run = async (client, msg, command) => {
-	const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
+	const typeArray = Object.values(client.utilData.grunTypes).map((grunt) => grunt.type.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 
@@ -37,20 +37,17 @@ exports.run = async (client, msg, command) => {
 			let template = 1
 			let gender = 0
 			let clean = false
-			let types = args.filter((arg) => typeArray.includes(arg))
+			const types = args.filter((arg) => typeArray.includes(arg))
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 
-			args.forEach((element) => {
+			for (const element of args) {
 				if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
-				else if (element.match(client.re.dre)) distance = element.match(client.re.dre)[0].replace(client.translator.translate('d'), '')
+				else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
 				else if (element === 'female') gender = 2
 				else if (element === 'male') gender = 1
 				else if (element === 'clean') clean = true
-				else if (element === 'everything') {
-					types = typeArray
-					types.push('mixed')
-				} else if (element === 'mixed') types.push(element)
-			})
+				else if (typeArray.includes(element) || element === 'everything') types.push(element)
+			}
 			if (!types.length) {
 				break
 			} else {
@@ -66,7 +63,7 @@ exports.run = async (client, msg, command) => {
 					clean,
 					grunt_type: o,
 				}))
-				const result = await client.query.insertOrUpdateQuery(insertData)
+				const result = await client.query.insertOrUpdateQuery('invasion', insertData)
 				client.log.info(`${target.name} started tracking ${types.join(', ')} invasions`)
 				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			} else {
@@ -74,6 +71,7 @@ exports.run = async (client, msg, command) => {
 				client.log.info(`${target.name} deleted ${types.join(', ')} ivasions`)
 			}
 		}
+
 		if (!validTracks) return await msg.reply(client.translator.translate('404 No valid invasion types found'))
 		await msg.react(reaction)
 	} catch (err) {

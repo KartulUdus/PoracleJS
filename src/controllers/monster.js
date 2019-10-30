@@ -58,6 +58,7 @@ class Monster extends Controller {
 			result = result.filter((res) => res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
+		// remove any duplicates
 		const alertIds = []
 		result = result.filter((alert) => {
 			if (!alertIds.includes(alert.id)) {

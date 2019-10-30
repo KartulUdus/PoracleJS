@@ -41,6 +41,21 @@ module.exports = async (fastify, options, next) => {
 				}
 				case 'invasion':
 				case 'pokestop': {
+					const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
+					if (!incidentExpiration) break
+					if (await fastify.cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+						fastify.logger.info(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
+						break
+					}
+					fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
+
+					const result = await fastify.pokestopController.handle(hook.message)
+
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+
 					break
 				}
 				case 'quest': {

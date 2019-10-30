@@ -214,11 +214,15 @@ class Controller {
 					raid: 'raid.id, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
 					egg: 'egg.id, egg.team, egg.exclusive, egg.level',
 					quest: 'quest.id, quest.reward_type, quest.reward',
+					invasion: 'invasion.id, invasion.gender, invasion.grunt_type',
 				}
 
 				for (const val of values) {
-					if (val.ping === '') val.ping = '\'\''
+					for (const v of Object.keys(val)) {
+						if (typeof val[v] === 'string') val[v] = `'${val[v]}'`
+					}
 				}
+
 				const firstData = values[0] ? values[0] : values
 				const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
 				const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${

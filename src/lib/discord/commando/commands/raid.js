@@ -71,7 +71,7 @@ exports.run = async (client, msg, command) => {
 				if (element === 'ex') exclusive = 1
 				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
 				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
-				else if (element.match(client.re.dre)) distance = element.match(client.re.dre)[0].replace(client.translator.translate('d'), '')
+				else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
 				else if (element === 'instinct') team = 3
 				else if (element === 'valor') team = 2
 				else if (element === 'mystic') team = 1
