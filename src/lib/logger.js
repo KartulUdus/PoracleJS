@@ -43,6 +43,19 @@ const dataStoreLog = new winston.transports.File({
 	level: 'debug',
 })
 
+const eventLog = new winston.transports.File({
+	filename: path.join(__dirname, '../../logs/events.json'),
+	format: winston.format.combine(
+		winston.format.timestamp(),
+		winston.format.json(),
+	),
+	maxsize: config.logger.logSize * 1000000,
+	tailable: true,
+	handleExceptions: true,
+	maxFiles: 1,
+	level: 'debug',
+})
+
 const consoleLog = new (winston.transports.Console)({
 	level: config.logger.level,
 	format: winston.format.combine(
@@ -69,4 +82,8 @@ module.exports.webhooks = winston.createLogger({
 	],
 })
 
-
+module.exports.events = winston.createLogger({
+	transports: [
+		eventLog,
+	],
+})
