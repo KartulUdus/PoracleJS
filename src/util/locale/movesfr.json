@@ -1,7 +1,7 @@
 {
   "0": {
     "name": "Éclair",
-    "type": "",
+    "type": "Electrik",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -9,7 +9,7 @@
   },
   "1": {
     "name": "Éclair",
-    "type": "",
+    "type": "Electrik",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -41,7 +41,7 @@
   },
   "5": {
     "name": "Fouet Lianes",
-    "type": "",
+    "type": "Grass",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -49,7 +49,7 @@
   },
   "6": {
     "name": "Charge",
-    "type": "",
+    "type": "Normal",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -57,7 +57,7 @@
   },
   "7": {
     "name": "Tranch’Herbe",
-    "type": "",
+    "type": "Grass",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -65,7 +65,7 @@
   },
   "8": {
     "name": "Bélier",
-    "type": "",
+    "type": "Normal",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -137,7 +137,7 @@
   },
   "17": {
     "name": "Purédpois",
-    "type": "",
+    "type": "Poison",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -163,7 +163,7 @@
     "name": "Force Poigne",
     "type": "Normal",
     "damage": 35,
-    "duration": 1900,
+2    "duration": 1900,
     "energy": 33,
     "dps": 18.42
   },
@@ -185,7 +185,7 @@
   },
   "23": {
     "name": "Cru-Aile",
-    "type": "",
+    "type": "flighting",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -233,7 +233,7 @@
   },
   "29": {
     "name": "Coupe Psycho",
-    "type": "",
+    "type": "Psychic",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -353,7 +353,7 @@
   },
   "44": {
     "name": "Direct Toxik",
-    "type": "",
+    "type": "Poison",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -441,7 +441,7 @@
   },
   "55": {
     "name": "Poing-Karaté",
-    "type": "",
+    "type": "Fighting",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -489,7 +489,7 @@
   },
   "61": {
     "name": "Jet-Pierres",
-    "type": "",
+    "type": "Rock",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -545,7 +545,7 @@
   },
   "68": {
     "name": "Griffe Ombre",
-    "type": "",
+    "type": "Ghost",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -609,7 +609,7 @@
   },
   "76": {
     "name": "Étincelle",
-    "type": "",
+    "type": "Electrik",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -649,7 +649,7 @@
   },
   "81": {
     "name": "Dracosouffle",
-    "type": "",
+    "type": "Dragon",
     "damage": 0,
     "duration": 0,
     "energy": 0,
@@ -1024,7 +1024,7 @@
     "dps": 32.35
   },
   "128": {
-    "name": "Coup d'Boule",
+    "name": "Coup d’Boule",
     "type": "",
     "damage": 0,
     "duration": 0,
@@ -1368,7 +1368,7 @@
     "dps": 0
   },
   "233": {
-    "name": "Coud'Boue",
+    "name": "Coud’Boue",
     "type": "Ground",
     "damage": 15,
     "duration": 1400,
@@ -1838,5 +1838,293 @@
     "duration": 1300,
     "energy": 20,
     "dps": 3.8
+  },
+  "292": {
+    "name": "Ball’Météo Feu",
+    "type": "Fire",
+    "damage": 60,
+    "duration": 1600,
+    "energy": 20,
+    "dps": 37.5
+  },
+  "293": {
+    "name": "Ball’Météo Glace",
+    "type": "Ice",
+    "damage": 60,
+    "duration": 1600,
+    "energy": 20,
+    "dps": 37.5
+  },
+  "294": {
+    "name": "Ball’Météo Roche",
+    "type": "Rock",
+    "damage": 60,
+    "duration": 1600,
+    "energy": 20,
+    "dps": 37.5
+  },
+  "295": {
+    "name": "Ball’Météo Eau",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "296": {
+    "name": "Végé-Attak",
+    "type": "Grass",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "297": {
+    "name": "Anti-Air",
+    "type": "Rock",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "298": {
+    "name": "Rafale Feu",
+    "type": "Fire",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "299": {
+    "name": "Hydroblast",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "300": {
+    "name": "Dernier Recours",
+    "type": "Normal",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "301": {
+    "name": "Point Météore",
+    "type": "Steel",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "302": {
+    "name": "Coud’Krane",
+    "type": "Normal",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "303": {
+    "name": "Bombe Acide",
+    "type": "Poison",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "304": {
+    "name": "Mégaphone",
+    "type": "Ground",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "305": {
+    "name": "Pince-Masse",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "306": {
+    "name": "Furie-Bond",
+    "type": "Bug",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "307": {
+    "name": "Eclate Griffe",
+    "type": "Normal",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "308": {
+    "name": "Octazooka",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "309": {
+    "name": "Miroi-Tir",
+    "type": "Steel",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "310": {
+    "name": "Surpuissance",
+    "type": "Fighting",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "311": {
+    "name": "Dard Mortel",
+    "type": "Bug",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "312": {
+    "name": "Phytomixeur",
+    "type": "Grass",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "313": {
+    "name": "Vampirisme",
+    "type": "Bug",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "314": {
+    "name": "Vampipoing",
+    "type": "Fighting",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "315": {
+    "name": "Os’Ombre",
+    "type": "Ghost",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "316": {
+    "name": "Ocroupi",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "317": {
+    "name": "Pied Bruleur",
+    "type": "Fire",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "318": {
+    "name": "Coquilame",
+    "type": "Water",
+    "damage": 5,
+    "duration": 1300,
+    "energy": 20,
+    "dps": 3.8
+  },
+  "319": {
+    "name": "Poing Boost",
+    "type": "Fighting",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "320": {
+    "name": "Charme",
+    "type": "Fairy",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "321": {
+    "name": "Giga Impact",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "322": {
+    "name": "Frustration",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "323": {
+    "name": "Retour",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "324": {
+    "name": "Synchropeine",
+    "type": "Psychic",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "325": {
+    "name": "Vérrouillage",
+    "type": "Normal",
+    "damage": 50,
+    "duration": 2000,
+    "energy": 33,
+    "dps": 25
+  },
+  "326": {
+    "name": "Crocs Eclair",
+    "type": "Electrik",
+    "damage": 12,
+    "duration": 1200,
+    "energy": 16,
+    "dps": 10
+  },
+  "327": {
+    "name": "Crocs Givre",
+    "type": "Ice",
+    "damage": 12,
+    "duration": 1500,
+    "energy": 20,
+    "dps": 8
   }
 }
