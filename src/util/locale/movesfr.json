@@ -163,7 +163,7 @@
     "name": "Force Poigne",
     "type": "Normal",
     "damage": 35,
-2    "duration": 1900,
+    "duration": 1900,
     "energy": 33,
     "dps": 18.42
   },
