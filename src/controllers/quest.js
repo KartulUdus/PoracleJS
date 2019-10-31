@@ -2,7 +2,7 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-const log = require('../lib/logger')
+const { log } = require('../lib/logger')
 
 class Quest extends Controller {
 	async questWhoCares(data) {

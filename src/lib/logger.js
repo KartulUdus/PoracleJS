@@ -30,6 +30,19 @@ const errorLog = new winston.transports.File({
 	level: 'warn',
 })
 
+const dataStoreLog = new winston.transports.File({
+	filename: path.join(__dirname, '../../logs/webhooks.json'),
+	format: winston.format.combine(
+		winston.format.timestamp(),
+		winston.format.json(),
+	),
+	maxsize: config.logger.logSize * 1000000,
+	tailable: true,
+	handleExceptions: true,
+	maxFiles: 1,
+	level: 'debug',
+})
+
 const consoleLog = new (winston.transports.Console)({
 	level: config.logger.level,
 	format: winston.format.combine(
@@ -41,10 +54,19 @@ const consoleLog = new (winston.transports.Console)({
 	handleExceptions: true,
 })
 
-module.exports =	winston.createLogger({
+module.exports.log = winston.createLogger({
 	transports: [
 		consoleLog,
 		errorLog,
 		debugLog,
 	],
 })
+
+
+module.exports.webhooks = winston.createLogger({
+	transports: [
+		dataStoreLog,
+	],
+})
+
+

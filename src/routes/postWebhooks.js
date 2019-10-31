@@ -9,6 +9,7 @@ module.exports = async (fastify, options, next) => {
 		for (const hook of data) {
 			switch (hook.type) {
 				case 'pokemon': {
+					fastify.webhooks.info('pokemon', hook.message)
 					if (fastify.cache.get(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
 						fastify.logger.warn(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
 						break
@@ -25,6 +26,7 @@ module.exports = async (fastify, options, next) => {
 					break
 				}
 				case 'raid': {
+					fastify.webhooks.info('raid', hook.message)
 					if (fastify.cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
 						fastify.logger.info(`Raid ${hook.message.encounter_id} was sent again too soon, ignoring`)
 						break
@@ -41,6 +43,7 @@ module.exports = async (fastify, options, next) => {
 				}
 				case 'invasion':
 				case 'pokestop': {
+					fastify.webhooks.info('pokestop', hook.message)
 					const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 					if (!incidentExpiration) break
 					if (await fastify.cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
@@ -59,6 +62,7 @@ module.exports = async (fastify, options, next) => {
 					break
 				}
 				case 'quest': {
+					fastify.webhooks.info('quest', hook.message)
 					if (await fastify.cache.get(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
 						fastify.logger.info(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
 						break

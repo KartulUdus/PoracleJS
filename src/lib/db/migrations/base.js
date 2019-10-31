@@ -1,4 +1,4 @@
-const log = require('../../logger')
+const { log } = require('../../logger')
 
 exports.up = async function migrationUp(knex) {
 	await knex.schema.createTable('humans', (table) => {

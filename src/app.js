@@ -26,7 +26,7 @@ const discordCache = new NodeCache({ stdTTL: config.discord.limitsec })
 const DiscordWorker = require('./lib/discordWorker')
 const DiscordCommando = require('./lib/discord/commando/')
 
-const log = require('./lib/logger')
+const { log, webhooks } = require('./lib/logger')
 const monsterData = require('./util/monsters')
 const utilData = require('./util/util')
 
@@ -43,6 +43,7 @@ const questController = new QuestController(knex, config, dts, geofence, monster
 const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
 
 fastify.decorate('logger', log)
+fastify.decorate('webhooks', webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
