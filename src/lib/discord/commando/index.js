@@ -7,6 +7,7 @@ module.exports = (knex, config, log, monsterData, utilData, dts, geofence, trans
 	const { Client } = require('discord.js')
 	const Enmap = require('enmap')
 	const fs = require('fs')
+	const S2 = require('s2-geometry').S2;
 	const mustache = require('handlebars')
 	const emojiStrip = require('emoji-strip')
 	const hastebin = require('hastebin-gen')
@@ -14,6 +15,7 @@ module.exports = (knex, config, log, monsterData, utilData, dts, geofence, trans
 	const client = new Client()
 	// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
 	client.config = config
+	client.S2 = S2
 	client.query = query
 	client.emojiStrip = emojiStrip
 	client.log = log

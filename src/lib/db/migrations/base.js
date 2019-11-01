@@ -93,6 +93,18 @@ exports.up = async function migrationUp(knex) {
 		table.unique(['id', 'gender', 'grunt_type'], 'invasion_tracking')
 	})
 
+	await knex.schema.createTable('weather', (table) => {
+		table.string('id').notNullable()
+		table.foreign('id').references('humans.id').onDelete('CASCADE')
+		table.text('ping').notNullable()
+		table.integer('template').notNullable()
+		table.boolean('clean').notNullable().defaultTo(false)
+		table.integer('condition').notNullable()
+		table.text('cell').notNullable()
+		table.unique(['id', 'condition', 'cell'], 'weather_tracking')
+	})
+
+
 	log.info('Base migration applied')
 }
 

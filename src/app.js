@@ -9,6 +9,7 @@ const readFileAsync = promisify(fs.readFile)
 const NodeCache = require('node-cache')
 const fastify = require('fastify')()
 
+
 const Config = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 

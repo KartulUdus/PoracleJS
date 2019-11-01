@@ -2,6 +2,7 @@
     "id": 1,
     "type": "monster",
     "default": true,
+    "platform": "discord",
     "template": {
       "embed": {
         "color": "{{ivcolor}}",
@@ -31,6 +32,7 @@
     "id": 1,
     "type": "raid",
     "default": true,
+    "platform": "discord",
     "template": {
       "embed": {
         "title": "Raid against {{name}}  has started! at {{gymname}}",
@@ -50,6 +52,7 @@
     "id": 1,
     "type": "egg",
     "default": true,
+    "platform": "discord",
     "template": {
       "embed": {
         "title": "Raid level{{lvl}}  has started! at {{gymname}}",
@@ -69,6 +72,7 @@
     "id": 1,
     "type": "quest",
     "default": true,
+    "platform": "discord",
     "template": {
       "embed": {
         "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
@@ -84,6 +88,7 @@
     "id": 1,
     "type": "Invasion",
     "default": true,
+    "platform": "discord",
     "template": {
       "embed": {
         "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
@@ -99,6 +104,7 @@
     "id": 1,
     "type": "greeting",
     "default": true,
+    "platform": "discord",
     "template": {
       "embed": {
         "title": "Welcome",

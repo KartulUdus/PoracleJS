@@ -215,6 +215,7 @@ class Controller {
 					egg: 'egg.id, egg.team, egg.exclusive, egg.level',
 					quest: 'quest.id, quest.reward_type, quest.reward',
 					invasion: 'invasion.id, invasion.gender, invasion.grunt_type',
+					weather: 'weather.id, weather.condition, weather.cell',
 				}
 
 				for (const val of values) {

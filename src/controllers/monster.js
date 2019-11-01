@@ -194,8 +194,8 @@ class Monster extends Controller {
 				}
 
 				const monsterDts = data.iv === -1
-					? this.dts.find((template) => (template.type === 'monsterNoIv' && template.id === cares.template) || (template.type === 'monsterNoIv' && template.default))
-					: this.dts.find((template) => (template.type === 'monster' && template.id === cares.template) || (template.type === 'monster' && template.default))
+					? this.dts.find((template) => (template.type === 'monsterNoIv' && template.id === cares.template && template.platform === 'discord') || (template.type === 'monsterNoIv' && template.default && template.platform === 'discord'))
+					: this.dts.find((template) => (template.type === 'monster' && template.id === cares.template && template.platform === 'discord') || (template.type === 'monster' && template.default && template.platform === 'discord'))
 
 				const template = JSON.stringify(monsterDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))

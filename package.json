@@ -48,7 +48,11 @@
     "pg": "^7.12.1",
     "point-in-polygon": "^1.0.1",
     "pokemon-gif": "^1.0.14",
+    "s2-geometry": "^1.2.10",
     "sqlite3": "^4.1.0",
+    "telegraf": "^3.33.3",
+    "telegraf-inline-menu": "^3.6.3",
+    "telegraf-ratelimit": "^2.0.0",
     "winston": "^3.2.1"
   },
   "devDependencies": {

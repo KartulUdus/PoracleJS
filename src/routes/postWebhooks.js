@@ -77,6 +77,11 @@ module.exports = async (fastify, options, next) => {
 					})
 					break
 				}
+				case 'weather': {
+					fastify.webhooks.info('weather', hook.message)
+					await fastify.weatherController.handle(q)
+					break
+				}
 				default:
 			}
 		}

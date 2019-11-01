@@ -154,7 +154,7 @@ class Quest extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				const questDts = this.dts.find((template) => (template.type === 'quets' && template.id === cares.template) || (template.type === 'quest' && template.default))
+				const questDts = this.dts.find((template) => (template.type === 'quets' && template.id === cares.template && template.platform === 'discord') || (template.type === 'quest' && template.default && template.platform === 'discord'))
 
 				const template = JSON.stringify(questDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
