@@ -53,6 +53,7 @@
   "geocoding": {
     "provider": "GEO_PROVIDER",
     "staticProvider": "STATIC_PROVIDER",
+    "osmServer": "OSM_SERVER",
     "geocodingKey":{
       "__name": "GEO_KEY",
       "__format": "json"

@@ -31,6 +31,7 @@
   "geocoding": {
     "provider": "OSM",
     "staticProvider": "OSM",
+    "osmServer":"http://nominatim.openstreetmap.org",
     "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
     "staticKey":["Your MapQuest or Google Key"],
     "width": 250,
