@@ -287,5 +287,63 @@
   "40": {
     "type": "",
     "grunt": "Player Team Leader"
+  },
+  "41": {
+    "type": "Executive Cliff",
+    "grunt": ""
+  },
+  "42": {
+    "type": "Executive Arlo",
+    "grunt": ""
+  },
+  "43": {
+    "type": "Executive Sierra",
+    "grunt": ""
+  },
+  "44": {
+    "type": "Giovanni",
+    "grunt": ""
+  },
+  "45": {
+    "type": "Decoy",
+    "grunt": "Male Grunt",
+    "gender": 1
+
+  },
+  "46": {
+    "type": "Decoy",
+    "grunt": "Female Grunt",
+    "gender": 2
+  },
+  "47": {
+    "type": "Ghost",
+    "grunt": "Female Grunt"
+  },
+  "48": {
+    "type": "Ghost",
+    "grunt": "Male Grunt",
+    "gender": 1,
+    "second_reward": "false",
+    "encounters":{
+        "first": ["302","353","355"],
+        "second":["302","354","356"],
+        "third":["302","354","477"]
+    }
+  },
+  "49": {
+    "type": "Electric",
+    "grunt": "Female Grunt",
+    "gender": 2,
+    "second_reward": "false",
+    "encounters":{
+        "first": ["125","179"],
+        "second":["125","180"],
+        "third":["125","181"]
+    }
+  },
+  "50": {
+    "type": "Electric",
+    "grunt": "Male Grunt",
+    "gender": 1
   }
 }
