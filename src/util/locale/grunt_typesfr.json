@@ -211,11 +211,11 @@
     "type": "Normal",
     "grunt": "Sbire Homme", 
     "gender": 1,
-    "second_reward": true,
+    "second_reward": false,
     "encounters":{
-        "first": ["19","41"],
-        "second":["19","20"],
-        "third":["20","143"]
+        "first": ["137"],
+        "second":["233"],
+        "third":["474","143"]
     }
   },
   "32": {
@@ -245,7 +245,7 @@
     "gender": 1,
     "second_reward": true,
     "encounters":{
-        "first": ["63","96","280"],
+        "first": ["63","202","280"],
         "second":["96","97","280"],
         "third":["64","97","281"]
     }
@@ -272,7 +272,7 @@
     "gender": 2,
     "second_reward": false,
     "encounters":{
-        "first": ["54","60"],
+        "first": ["54","60","258"],
         "second":["55","61"],
         "third":["56","61","186"]
     }
@@ -292,5 +292,85 @@
     "type": "",
     "grunt": "Chef d'équipe du joueur",
     "gender": 0
-  }
+  },
+  "41": {
+    "type": "Executive Cliff",
+    "grunt": "",
+    "second_reward": "false",
+    "encounters":{
+        "first": ["52"],
+        "second":["28","143","330"],
+        "third":["248","392","389"]
+    }
+  },
+  "42": {
+    "type": "Executive Arlo",
+    "grunt": "",
+    "second_reward": "false",
+    "encounters":{
+        "first": ["123"],
+        "second":["130","169","462"],
+        "third":["6","149","212"]
+    }
+  },
+  "43": {
+    "type": "Executive Sierra",
+    "grunt": "",
+    "second_reward": "false",
+    "encounters":{
+        "first": ["215"],
+        "second":["97","131","302"],
+        "third":["65","229","282"]
+    }
+  },
+  "44": {
+    "type": "Giovanni",
+    "grunt": "",
+    "second_reward": "false",
+    "encounters":{
+        "first": ["144"]
+    }
+  },
+  "45": {
+    "type": "Decoy",
+    "grunt": "Male Grunt",
+    "gender": 1
+
+  },
+  "46": {
+    "type": "Decoy",
+    "grunt": "Female Grunt",
+    "gender": 2
+  },
+  "47": {
+    "type": "Spectre",
+    "grunt": "Sbire Femme"
+  },
+  "48": {
+    "type": "Spectre",
+    "grunt": "Sbire Male",
+    "gender": 1,
+    "second_reward": "false",
+    "encounters":{
+        "first": ["302","353","355"],
+        "second":["302","354","356"],
+        "third":["302","354","477"]
+    }
+  },
+  "49": {
+    "type": "Electric",
+    "grunt": "Sbire Femme",
+    "gender": 2,
+    "second_reward": "false",
+    "encounters":{
+        "first": ["81","125","179"],
+        "second":["82","125","180"],
+        "third":["125","181"]
+    }
+  },
+  "50": {
+    "type": "Electric",
+    "grunt": "Sbire Male",
+    "gender": 1
+  }	  
 }
