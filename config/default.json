@@ -29,15 +29,18 @@
   },
 
   "geocoding": {
-    "provider": "OSM",
-    "staticProvider": "OSM",
+    "provider": "poracle",
+    "staticProvider": "poracle",
     "osmServer":"http://nominatim.openstreetmap.org",
     "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
     "staticKey":["Your MapQuest or Google Key"],
-    "width": 250,
-    "height": 175,
+    "width": 320,
+    "height": 200,
     "zoom": 15,
-    "type": "roadmap",
+    "spriteHeight": 20,
+    "spriteWidth": 20,
+    "scale": 2,
+    "type": "klokantech-basic",
     "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
     "geofence": "../../config/geofence.json"
   },

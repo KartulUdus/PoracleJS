@@ -70,6 +70,14 @@
       "__name": "MAP_HEIGHT",
       "__format": "json"
     },
+    "spriteHeight": {
+      "__name": "SPRITE_WIDTH",
+      "__format": "json"
+    },
+    "spriteWidth": {
+      "__name": "SPRITE_HEIGHT",
+      "__format": "json"
+    },
     "zoom": {
       "__name": "MAP_ZOOM",
       "__format": "json"

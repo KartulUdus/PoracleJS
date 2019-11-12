@@ -68,7 +68,9 @@
     "22": "Team leader",
     "23": "Another player",
     "24": "Location",
-    "25": "Distance"
+    "25": "Distance",
+    "26": "Pokemon Alignment(s): {{alignments}}",
+    "27": "Invasion Category(s): {{categories}}"
   },
 
   "throwType": {
@@ -76,6 +78,16 @@
     "11": "Great",
     "12": "Excellent"
   },
+
+  "alignments": {
+    "1": "Shadow",
+    "2": "Purified"
+  }
+
+  "categories": {
+    "1": "team leader",
+    "2": "grunt"
+  }
 
   "rewardItems": {
     "1": "Poke Ball",

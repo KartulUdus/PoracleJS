@@ -55,6 +55,13 @@ class Controller {
 
 	getGeocoder() {
 		switch (config.geocoding.provider.toLowerCase()) {
+			case 'poracle': {
+				return NodeGeocoder({
+					provider: 'openstreetmap',
+					osmServer: 'https://geocoding.poracle.world/nominatim/',
+					formatterPattern: config.locale.addressformat,
+				})
+			}
 			case 'google': {
 				return NodeGeocoder({
 					provider: 'google',
@@ -125,7 +132,9 @@ class Controller {
 							resolve(res)
 						})
 						.catch((err) => {
-							log.error(`GetAddress failed with error: ${err}`)
+							res.countryCode = 'EE'
+							log.error('GetAddress failed with error', err)
+							resolve(res)
 						})
 				}
 				else {
