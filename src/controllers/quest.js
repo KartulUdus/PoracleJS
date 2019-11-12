@@ -145,8 +145,8 @@ class Quest extends Controller {
 								width: config.geocoding.spriteWidth,
 								x_offset: 0,
 								y_offset: 0,
-								latitude: data.latitude.toString().substring(0, 8),
-								longitude: data.longitude.toString().substring(0, 8),
+								latitude: +data.latitude,
+								longitude: +data.longitude,
 							},
 						]))
 						if (config.geocoding.staticProvider === 'poracle') {
