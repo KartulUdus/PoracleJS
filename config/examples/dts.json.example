@@ -27,6 +27,9 @@
         "description": "IV:{{iv}}%. end: {{time}}, time left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n quick: {{move1}}, charge {{move2}} \n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgurl}}}"
+        },
+        "image":{
+          "url": "{{{staticmap}}}"
         }
       }
     },
@@ -77,6 +80,9 @@
         "thumbnail": {
           "url": "{{{imgurl}}}"
         },
+        "image":{
+          "url": "{{{staticmap}}}"
+        }
         "description":"#{{id}} {{name}} end: {{time}}, \ntime left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})"
 
       }
@@ -138,6 +144,9 @@
         "thumbnail": {
           "url": "{{{imgurl}}}"
         },
+        "image":{
+          "url": "{{{staticmap}}}"
+        }
         "author": {
           "name": "{{name}} lvl{{level}} end: {{time}}, {{tthm}}m {{tths}}s",
           "icon_url": "{{{detailsurl}}}"
@@ -205,6 +214,9 @@
         "thumbnail": {
           "url": "{{{detailsurl}}}"
         },
+        "image":{
+          "url": "{{{staticmap}}}"
+        }
         "author": {
           "name": "{{name}} lvl{{level}} end: {{time}}, {{tthm}}m {{tths}}s",
           "icon_url": "{{{imgurl}}}"
@@ -296,6 +308,9 @@
         "thumbnail": {
           "url": "{{{url}}}"
         },
+        "image":{
+          "url": "{{{staticmap}}}"
+        }
         "image": {
           "url": "{{{imgurl}}}"
         }
@@ -329,6 +344,9 @@
         "author": {
           "name": "end: {{time}} in {{tthm}}m {{tths}}s",
           "icon_url": "{{{imgurl}}}"
+        },
+        "image":{
+          "url": "{{{staticmap}}}"
         }
       }
     },
