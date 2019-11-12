@@ -82,7 +82,7 @@
         },
         "image":{
           "url": "{{{staticmap}}}"
-        }
+        },
         "description":"#{{id}} {{name}} end: {{time}}, \ntime left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})"
 
       }
@@ -146,7 +146,7 @@
         },
         "image":{
           "url": "{{{staticmap}}}"
-        }
+        },
         "author": {
           "name": "{{name}} lvl{{level}} end: {{time}}, {{tthm}}m {{tths}}s",
           "icon_url": "{{{detailsurl}}}"
@@ -216,7 +216,7 @@
         },
         "image":{
           "url": "{{{staticmap}}}"
-        }
+        },
         "author": {
           "name": "{{name}} lvl{{level}} end: {{time}}, {{tthm}}m {{tths}}s",
           "icon_url": "{{{imgurl}}}"
@@ -310,9 +310,6 @@
         },
         "image":{
           "url": "{{{staticmap}}}"
-        }
-        "image": {
-          "url": "{{{imgurl}}}"
         }
       }
     }
