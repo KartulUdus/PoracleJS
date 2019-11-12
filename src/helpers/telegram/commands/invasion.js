@@ -50,7 +50,7 @@ module.exports = (ctx) => {
 					if (t.toLowerCase() === 'mixed') {
 						types.push('Mixed')
 					}
-					else if(t.toLowerCase() === 'boss') {
+					else if (t.toLowerCase() === 'boss') {
 						types.push('Boss')
 					}
 					else {
