@@ -108,6 +108,10 @@ class Raid extends Controller {
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
+				case 'poracle': {
+					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${data.latitude.toString().substring(0, 8)}/${data.longitude.toString().substring(0, 8)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
+					break
+				}
 				case 'osm': {
 					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${config.geocoding.zoom}&key=${_.sample(config.geocoding.staticKey)}`
 					break
@@ -184,6 +188,21 @@ class Raid extends Controller {
 									}
 									this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
 
+										data.staticSprite = encodeURI(JSON.stringify([
+											{
+												url: data.imgurl,
+												height: config.geocoding.spriteHeight,
+												width: config.geocoding.spriteWidth,
+												x_offset: 0,
+												y_offset: 0,
+												latitude: +data.latitude,
+												longitude: +data.longitude,
+											},
+										]))
+										if (config.geocoding.staticProvider === 'poracle') {
+											data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
+										}
+
 										const jobs = []
 										whoCares.forEach((cares) => {
 											const alarmId = this.uuid
@@ -210,7 +229,7 @@ class Raid extends Controller {
 												staticmap: data.staticmap,
 												detailsurl: data.url,
 												mapurl: data.mapurl,
-												imgurl: data.imgurl.toLowerCase(),
+												imgurl: data.imgurl,
 												gif: pokemonGif(Number(data.pokemon_id)),
 												color: data.color,
 												// geocode stuff
@@ -313,6 +332,20 @@ class Raid extends Controller {
 										return null
 									}
 									this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
+										data.staticSprite = encodeURI(JSON.stringify([
+											{
+												url: data.imgurl,
+												height: config.geocoding.spriteHeight,
+												width: config.geocoding.spriteWidth,
+												x_offset: 0,
+												y_offset: 0,
+												latitude: +data.latitude,
+												longitude: +data.longitude,
+											},
+										]))
+										if (config.geocoding.staticProvider === 'poracle') {
+											data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
+										}
 										const jobs = []
 										const alarmId = this.uuid
 										log.log({
@@ -335,7 +368,7 @@ class Raid extends Controller {
 												mapurl: data.mapurl,
 												applemap: data.applemap,
 												rocketmap: data.rocketmap,
-												imgurl: data.imgurl.toLowerCase(),
+												imgurl: data.imgurl,
 												color: data.color,
 												ex: data.ex,
 												// geocode stuff

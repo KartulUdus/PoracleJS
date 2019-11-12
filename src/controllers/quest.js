@@ -63,6 +63,10 @@ class Quest extends Controller {
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
+				case 'poracle': {
+					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${data.latitude.toString().substring(0, 8)}/${data.longitude.toString().substring(0, 8)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
+					break
+				}
 				case 'osm': {
 					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${config.geocoding.zoom}&key=${_.sample(config.geocoding.staticKey)}`
 					break
@@ -133,6 +137,22 @@ class Quest extends Controller {
 					if (data.rewardData.items[1]) data.rewardemoji = emojiData.items[data.rewardData.items[1]]
 					if (data.rewardData.monsters[1]) data.rewardemoji = emojiData.pokemon[data.rewardData.monsters[1]]
 					this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
+
+						data.staticSprite = encodeURI(JSON.stringify([
+							{
+								url: data.imgurl,
+								height: config.geocoding.spriteHeight,
+								width: config.geocoding.spriteWidth,
+								x_offset: 0,
+								y_offset: 0,
+								latitude: +data.latitude,
+								longitude: +data.longitude,
+							},
+						]))
+						if (config.geocoding.staticProvider === 'poracle') {
+							data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
+						}
+
 						const view = _.extend(data, {
 							now: new Date(),
 							questType: data.questType,
@@ -142,7 +162,7 @@ class Quest extends Controller {
 							itemNames: itemnames.join(', '),
 							stardust: data.type === 3 ? 'stardust' : '',
 							rewardemoji: data.rewardemoji,
-							imgurl: data.imgurl.toLowerCase(),
+							imgurl: data.imgurl,
 							name: data.pokestop_name.replace(/\n/g, ' '),
 							url: data.pokestop_url,
 							minCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 10, 10, 10) : '',
@@ -283,16 +303,6 @@ class Quest extends Controller {
 						conditionString = conditionString.concat(cond)
 						break
 					}
-					case 3: {
-						const cond = this.qdts.questConditions['3']
-						conditionString = conditionString.concat(cond)
-						break
-					}
-					case 6: {
-						const cond = this.qdts.questConditions['6']
-						conditionString = conditionString.concat(cond)
-						break
-					}
 					case 7: {
 						const template = this.qdts.questConditions['7']
 						const cond = mustache.render(template, { levels: condition.info.raid_levels.join(', ') })
@@ -302,16 +312,6 @@ class Quest extends Controller {
 					case 8: {
 						const template = this.qdts.questConditions['8']
 						const cond = mustache.render(template, { throw_type: this.qdts.throwType[condition.info.throw_type_id] })
-						conditionString = conditionString.concat(cond)
-						break
-					}
-					case 9: {
-						const cond = this.qdts.questConditions['9']
-						conditionString = conditionString.concat(cond)
-						break
-					}
-					case 10: {
-						const cond = this.qdts.questConditions['10']
 						conditionString = conditionString.concat(cond)
 						break
 					}
@@ -328,12 +328,11 @@ class Quest extends Controller {
 						conditionString = conditionString.concat(cond)
 						break
 					}
-					case 15: {
-						const cond = this.qdts.questConditions['15']
+					default: {
+						const cond = this.qdts.questConditions[condition.type]
 						conditionString = conditionString.concat(cond)
 						break
 					}
-					default:
 				}
 			})
 			resolve(conditionString)

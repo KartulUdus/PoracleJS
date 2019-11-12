@@ -31,6 +31,7 @@ module.exports = (ctx) => {
 				greeting.forEach((field) => {
 					message = message.concat(`\n\n${field.name}\n\n${field.value}`)
 				})
+				message = message.replace(/{{prefix}}/g, '/')
 				ctx.reply(message, { parse_mode: 'Markdown' }).catch((O_o) => {
 					controller.log.error(O_o.message)
 				})

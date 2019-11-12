@@ -79,6 +79,10 @@ class Incident extends Controller {
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${config.geocoding.type}&zoom=${config.geocoding.zoom}&size=${config.geocoding.width}x${config.geocoding.height}&key=${_.sample(config.geocoding.staticKey)}`
 					break
 				}
+				case 'poracle': {
+					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${data.latitude.toString().substring(0, 8)}/${data.longitude.toString().substring(0, 8)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
+					break
+				}
 				case 'osm': {
 					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${config.geocoding.width},${config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${config.geocoding.zoom}&key=${_.sample(config.geocoding.staticKey)}`
 					break
@@ -203,7 +207,20 @@ class Incident extends Controller {
 						}
 						this.getAddress({ lat: data.latitude.toString().substring(0, 8), lon: data.longitude.toString().substring(0, 8) }).then((geoResult) => {
 							const jobs = []
-
+							data.staticSprite = encodeURI(JSON.stringify([
+								{
+									url: data.url,
+									height: config.geocoding.spriteHeight,
+									width: config.geocoding.spriteWidth,
+									x_offset: 0,
+									y_offset: 0,
+									latitude: +data.latitude,
+									longitude: +data.longitude,
+								},
+							]))
+							if (config.geocoding.staticProvider === 'poracle') {
+								data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
+							}
 
 							whoCares.forEach((cares) => {
 								const alarmId = this.uuid

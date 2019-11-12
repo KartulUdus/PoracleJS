@@ -55,6 +55,13 @@ class Controller {
 
 	getGeocoder() {
 		switch (config.geocoding.provider.toLowerCase()) {
+			case 'poracle': {
+				return NodeGeocoder({
+					provider: 'openstreetmap',
+					osmServer: 'https://geocoding.poracle.world/nominatim/',
+					formatterPattern: config.locale.addressformat,
+				})
+			}
 			case 'google': {
 				return NodeGeocoder({
 					provider: 'google',
@@ -66,6 +73,7 @@ class Controller {
 			{
 				return NodeGeocoder({
 					provider: 'openstreetmap',
+					osmServer: config.geocoding.osmServer ? config.geocoding.osmServer : 'http://nominatim.openstreetmap.org',
 					formatterPattern: config.locale.addressformat,
 				})
 			}
@@ -124,7 +132,9 @@ class Controller {
 							resolve(res)
 						})
 						.catch((err) => {
-							log.error(`GetAddress failed with error: ${err}`)
+							res.countryCode = 'EE'
+							log.error('GetAddress failed with error', err)
+							resolve(res)
 						})
 				}
 				else {
@@ -380,7 +390,7 @@ class Controller {
 
 	async checkSchema() {
 		return new Promise((resolve, reject) => {
-			this.db.query(`select count(*) as c from information_schema.tables where table_schema='${config.db.database}' 
+			this.db.query(`select count(*) as c from information_schema.tables where table_schema='${config.db.database}'
 							and table_name in('egg', 'raid', 'monsters', 'schema_version', 'gym-info', 'humans', 'quest', 'incident')`)
 				.then((schematablesMatched) => {
 					log.log({ level: 'debug', message: 'checkSchema', event: 'sql:checkSchema' })

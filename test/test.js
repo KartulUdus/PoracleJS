@@ -105,7 +105,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🌿')
 			chai.assert.equal(affirmative.message.embed.color, 16744448)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_001_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_001_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -131,7 +131,7 @@ describe('Pokemon Filters', () => {
 			const zero = work[2]
 			chai.assert.equal(affirmative.emoji[0], '🌿')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_002_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_002_00.png`)
 			negative.should.have.lengthOf(0)
 			zero.should.have.lengthOf(0)
 			done()
@@ -153,7 +153,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🌿')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_003_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_003_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -174,7 +174,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🔥')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_004_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_004_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -195,7 +195,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🔥')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_005_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_005_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -216,7 +216,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🔥')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_006_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_006_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -237,7 +237,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '💧')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_007_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_007_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -258,7 +258,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '💧')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_008_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_008_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -279,7 +279,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '💧')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_009_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_009_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -300,7 +300,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🐛')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_010_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_010_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -321,7 +321,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🐛')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_011_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_011_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -342,7 +342,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🔮')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_201_6.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_201_6.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -363,7 +363,7 @@ describe('Pokemon Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🐛')
 			chai.assert.equal(affirmative.message.embed.color, 10329501)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_012_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_012_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -388,7 +388,7 @@ describe('Raid Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🐛')
 			chai.assert.equal(affirmative.message.embed.color, 7915600)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_013_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_013_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -409,7 +409,7 @@ describe('Raid Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🐛')
 			chai.assert.equal(affirmative.message.embed.color, 7915600)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_014_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_014_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -431,7 +431,7 @@ describe('Raid Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '🐛')
 			chai.assert.equal(affirmative.message.embed.color, 16306224)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_015_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_015_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -452,7 +452,7 @@ describe('Raid Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '⭕')
 			chai.assert.equal(affirmative.message.embed.color, 16306224)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_016_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_016_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -473,7 +473,7 @@ describe('Raid Filters', () => {
 			const negative = work[1]
 			chai.assert.equal(affirmative.emoji[0], '⭕')
 			chai.assert.equal(affirmative.message.embed.color, 16306224)
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_017_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_017_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -576,7 +576,7 @@ describe('Quest Filters', () => {
 		Promise.all([questController.handle(positiveMessage), questController.handle(negativeMessage)]).then((work) => {
 			const affirmative = work[0][0]
 			const negative = work[1]
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_137_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_137_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -595,7 +595,7 @@ describe('Quest Filters', () => {
 		Promise.all([questController.handle(positiveMessage), questController.handle(negativeMessage)]).then((work) => {
 			const affirmative = work[0][0]
 			const negative = work[1]
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_025_00.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}pokemon_icon_025_00.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -614,7 +614,7 @@ describe('Quest Filters', () => {
 		Promise.all([questController.handle(positiveMessage), questController.handle(negativeMessage)]).then((work) => {
 			const affirmative = work[0][0]
 			const negative = work[1]
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}rewards/reward_2_1.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}rewards/reward_2_1.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -633,7 +633,7 @@ describe('Quest Filters', () => {
 		Promise.all([questController.handle(positiveMessage), questController.handle(negativeMessage)]).then((work) => {
 			const affirmative = work[0][0]
 			const negative = work[1]
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}rewards/reward_stardust.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}rewards/reward_stardust.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
@@ -652,7 +652,7 @@ describe('Quest Filters', () => {
 		Promise.all([questController.handle(positiveMessage), questController.handle(negativeMessage)]).then((work) => {
 			const affirmative = work[0][0]
 			const negative = work[1]
-			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}rewards/reward_705_1.png`.toLowerCase())
+			chai.assert.equal(affirmative.message.embed.thumbnail.url, `${config.general.imgurl}rewards/reward_705_1.png`)
 			negative.should.have.lengthOf(0)
 			done()
 		}).catch((err) => {
