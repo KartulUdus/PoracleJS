@@ -8,15 +8,15 @@ module.exports = (ctx) => {
 	const search = command.args
 
 	let target = { id: user.id.toString(), name: user.first_name }
-	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
+	if (!_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group' || ctx.update.message.chat.type === 'supergroup') {
 		return ctx.telegram.sendMessage(user.id, 'Please run commands in Direct Messages').catch((O_o) => {
 			controller.log.error(O_o.message)
 		})
 	}
-	if (_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') target = { id: ctx.update.message.chat.id.toString(), name: ctx.update.message.chat.title }
+	if (_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group' || ctx.update.message.chat.type === 'supergroup') target = { id: ctx.update.message.chat.id.toString(), name: ctx.update.message.chat.title }
 	controller.query.countQuery('id', 'humans', 'id', target.id)
 		.then((isregistered) => {
-			if (!isregistered && _.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
+			if (!isregistered && _.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group' || ctx.update.message.chat.type === 'supergroup') {
 				return ctx.reply(`${channelName} does not seem to be registered. add it with /channel add`).catch((O_o) => {
 					controller.log.error(O_o.message)
 				})

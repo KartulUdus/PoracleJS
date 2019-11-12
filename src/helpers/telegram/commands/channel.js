@@ -7,7 +7,7 @@ module.exports = (ctx) => {
 	const user = ctx.update.message.from
 	const args = command.splitArgs
 
-	if (_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group') {
+	if (_.includes(controller.config.telegram.admins, user.id.toString()) && ctx.update.message.chat.type === 'group' || ctx.update.message.chat.type === 'supergroup') {
 		const target = { id: ctx.update.message.chat.id, name: ctx.update.message.chat.title.toLowerCase() }
 		switch (args[0]) {
 			case 'add': {
