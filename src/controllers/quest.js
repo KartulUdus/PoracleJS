@@ -64,7 +64,7 @@ class Quest extends Controller {
 					break
 				}
 				case 'poracle': {
-					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
+					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${data.latitude.toString().substring(0, 8)}/${data.longitude.toString().substring(0, 8)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
 					break
 				}
 				case 'osm': {
@@ -145,8 +145,8 @@ class Quest extends Controller {
 								width: config.geocoding.spriteWidth,
 								x_offset: 0,
 								y_offset: 0,
-								latitude: +data.latitude.toFixed(5),
-								longitude: +data.longitude.toFixed(5),
+								latitude: data.latitude.toString().substring(0, 8),
+								longitude: data.longitude.toString().substring(0, 8),
 							},
 						]))
 						if (config.geocoding.staticProvider === 'poracle') {
