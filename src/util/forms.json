@@ -237,7 +237,8 @@
     "163": "Normal",
     "164": "Shadow",
     "165": "Purified",
-    "604": "NoEvolve"
+    "604": "NoEvolve",
+    "897": "Fall 2019"
   },
   "2": {
     "166": "Normal",
@@ -253,7 +254,8 @@
     "172": "Normal",
     "173": "Shadow",
     "174": "Purified",
-    "605": "NoEvolve"
+    "605": "NoEvolve",
+    "896": "Fall 2019"
   },
   "5": {
     "175": "Normal",
@@ -270,7 +272,8 @@
     "181": "Normal",
     "182": "Shadow",
     "183": "Purified",
-    "607": "NoEvolve"
+    "607": "NoEvolve",
+    "895": "Fall 2019"
   },
   "8": {
     "184": "Normal",
@@ -500,7 +503,8 @@
   },
   "25": {
     "598": "Normal",
-    "599": "NoEvolve"
+    "599": "NoEvolve",
+    "894": "Fall 2019"
   },
   "265": {
     "600": "Normal",
