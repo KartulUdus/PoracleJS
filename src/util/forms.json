@@ -106,11 +106,15 @@
   },
   "50": {
     "59": "Normal",
-    "60": "Alola"
+    "60": "Alola",
+    "842": "Shadow",
+    "843": "Purified"
   },
   "51": {
     "61": "Normal",
-    "62": "Alola"
+    "62": "Alola",
+    "844": "Shadow",
+    "845": "Purified"
   },
   "52": {
     "63": "Normal",
@@ -126,15 +130,21 @@
   },
   "74": {
     "67": "Normal",
-    "68": "Alola"
+    "68": "Alola",
+    "882": "Shadow",
+    "883": "Purified"
   },
   "75": {
     "69": "Normal",
-    "70": "Alola"
+    "70": "Alola",
+    "884": "Shadow",
+    "885": "Purified"
   },
   "76": {
     "71": "Normal",
-    "72": "Alola"
+    "72": "Alola",
+    "886": "Shadow",
+    "887": "Purified"
   },
   "88": {
     "73": "Normal",
@@ -949,5 +959,80 @@
     "920": "Normal",
     "921": "Shadow",
     "922": "Purified"
+  },
+  "90": {
+    "876": "Normal",
+    "877": "Shadow",
+    "878": "Purified"
+  },
+  "91": {
+    "879": "Normal",
+    "880": "Shadow",
+    "881": "Purified"
+  },
+  "98": {
+    "870": "Normal",
+    "871": "Shadow",
+    "872": "Purified"
+  },
+  "99": {
+    "873": "Normal",
+    "874": "Shadow",
+    "875": "Purified"
+  },
+  "111": {
+    "846": "Normal",
+    "847": "Shadow",
+    "848": "Purified"
+  },
+  "112": {
+    "849": "Normal",
+    "850": "Shadow",
+    "851": "Purified"
+  },
+  "115": {
+    "839": "Normal",
+    "840": "Shadow",
+    "841": "Purified"
+  },
+  "198": {
+    "855": "Normal",
+    "856": "Shadow",
+    "857": "Purified"
+  },
+  "430": {
+    "858": "Normal",
+    "859": "Shadow",
+    "860": "Purified"
+  },
+  "443": {
+    "861": "Normal",
+    "862": "Shadow",
+    "863": "Purified"
+  },
+  "444": {
+    "864": "Normal",
+    "865": "Shadow",
+    "866": "Purified"
+  },
+  "445": {
+    "867": "Normal",
+    "868": "Shadow",
+    "869": "Purified"
+  },
+  "449": {
+    "888": "Normal",
+    "889": "Shadow",
+    "890": "Purified"
+  },
+  "450": {
+    "891": "Normal",
+    "892": "Shadow",
+    "893": "Purified"
+  },
+  "464": {
+    "852": "Normal",
+    "853": "Shadow",
+    "854": "Purified"
   }
 }
