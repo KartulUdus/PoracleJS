@@ -100,7 +100,7 @@ exports.up = async function migrationUp(knex) {
 		table.integer('template').notNullable()
 		table.boolean('clean').notNullable().defaultTo(false)
 		table.integer('condition').notNullable()
-		table.text('cell').notNullable()
+		table.string('cell').notNullable()
 		table.unique(['id', 'condition', 'cell'], 'weather_tracking')
 	})
 
