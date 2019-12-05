@@ -27,7 +27,7 @@ class Pokestop extends Controller {
 				+ sin( radians(${data.latitude}) )
 				* sin( radians( humans.latitude ) ) ) < invasion.distance and invasion.distance != 0) or
 				invasion.distance = 0 and (${areastring})
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, raid.template, invasion.distance, raid.clean, raid.ping
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		} else {
 			query = query.concat(`
