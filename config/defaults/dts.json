@@ -18,6 +18,7 @@
     "id": 1,
     "type": "monsterNoIv",
     "default": true,
+    "platform": "discord",
     "template": {
       "embed": {
         "color": "{{color}}",
