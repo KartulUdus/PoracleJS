@@ -58,6 +58,10 @@ class Quest extends Controller {
 
 		try {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
+				case 'poracle': {
+					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
+					break
+				}
 				case 'google': {
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
@@ -109,6 +113,21 @@ class Quest extends Controller {
 			if (data.dustAmount) {
 				data.imgurl = `${this.config.general.imgurl}rewards/reward_stardust.png`
 				data.dustAmount = data.rewards[0].info.amount
+			}
+
+			data.staticSprite = encodeURI(JSON.stringify([
+				{
+					url: data.imgurl,
+					height: this.config.geocoding.spriteHeight,
+					width: this.config.geocoding.spriteWidth,
+					x_offset: 0,
+					y_offset: 0,
+					latitude: +data.latitude.toFixed(5),
+					longitude: +data.longitude.toFixed(5),
+				},
+			]))
+			if (this.config.geocoding.staticProvider === 'poracle') {
+				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
 			}
 
 			const whoCares = await this.questWhoCares(data)

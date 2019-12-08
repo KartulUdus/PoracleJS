@@ -60,6 +60,10 @@ class Pokestop extends Controller {
 
 		try {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
+				case 'poracle': {
+					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
+					break
+				}
 				case 'google': {
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break

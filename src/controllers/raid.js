@@ -108,6 +108,10 @@ class Raid extends Controller {
 
 		try {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
+				case 'poracle': {
+					data.staticmap = `https://tiles.poracle.world/static/${config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${config.geocoding.zoom}/${config.geocoding.width}/${config.geocoding.height}/${config.geocoding.scale}/png`
+					break
+				}
 				case 'google': {
 					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
@@ -146,6 +150,20 @@ class Raid extends Controller {
 				monster.types.forEach((type) => {
 					e.push(this.utilData.types[type.name].emoji)
 				})
+				data.staticSprite = encodeURI(JSON.stringify([
+					{
+						url: data.imgUrl,
+						height: this.config.geocoding.spriteHeight,
+						width: this.config.geocoding.spriteWidth,
+						x_offset: 0,
+						y_offset: 0,
+						latitude: +data.latitude.toFixed(5),
+						longitude: +data.longitude.toFixed(5),
+					},
+				]))
+				if (this.config.geocoding.staticProvider === 'poracle') {
+					data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
+				}
 				data.emoji = e
 				data.emojiString = e.join('')
 
@@ -238,6 +256,20 @@ class Raid extends Controller {
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+			data.staticSprite = encodeURI(JSON.stringify([
+				{
+					url: data.imgUrl,
+					height: this.config.geocoding.spriteHeight,
+					width: this.config.geocoding.spriteWidth,
+					x_offset: 0,
+					y_offset: 0,
+					latitude: +data.latitude.toFixed(5),
+					longitude: +data.longitude.toFixed(5),
+				},
+			]))
+			if (this.config.geocoding.staticProvider === 'poracle') {
+				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
+			}
 			if (!data.team_id) data.team_id = 0
 			if (data.name) data.gymName = data.name
 			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'

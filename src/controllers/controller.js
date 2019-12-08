@@ -30,6 +30,13 @@ class Controller {
 
 	getGeocoder() {
 		switch (this.config.geocoding.provider.toLowerCase()) {
+			case 'poracle': {
+				return NodeGeocoder({
+					provider: 'openstreetmap',
+					osmServer: 'https://geocoding.poracle.world/nominatim/',
+					formatterPattern: config.locale.addressformat,
+				})
+			}
 			case 'google': {
 				return NodeGeocoder({
 					provider: 'google',
