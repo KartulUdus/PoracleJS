@@ -292,6 +292,7 @@ class Raid extends Controller {
 				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
+				data.endtime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(config.locale.time)
 				data.imgurl = `${config.general.imgurl}egg${data.level}.png`
 				data.sticker = `${config.telegram.stickerurl}egg${data.level}.webp`
 				if (!data.team_id) data.team_id = 0
@@ -355,6 +356,7 @@ class Raid extends Controller {
 											const caresCache = this.getDiscordCache(cares.id)
 											const view = _.extend(data, {
 												time: data.hatchtime,
+												end: data.endtime,
 												tthh: data.tth.hours,
 												tthm: data.tth.minutes,
 												tths: data.tth.seconds,
