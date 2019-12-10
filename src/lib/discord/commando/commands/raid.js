@@ -62,7 +62,7 @@ exports.run = async (client, msg, command) => {
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 
 
-			if (!monsters.length && levels.length) {
+			if (!monsters.length && !levels.length) {
 				break
 			} else {
 				validTracks += 1
