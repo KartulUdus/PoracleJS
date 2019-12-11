@@ -174,7 +174,7 @@ class Pokestop extends Controller {
 
 			const whoCares = await this.invasionWhoCares(data)
 
-			this.log.info(`Invasion against ${this.gruntRewards} appeared and ${whoCares.length} humans cared.`)
+			this.log.info(`Invasion against ${data.gruntType} appeared and ${whoCares.length} humans cared.`)
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
