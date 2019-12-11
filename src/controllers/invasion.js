@@ -53,11 +53,11 @@ class Incident extends Controller {
 			where humans.enabled = 1 and
 			(incident.gruntType='' or incident.gruntType='${data.gruntType}') and
 			(incident.gender = ${data.gender} or incident.gender = 0) and
-            (round( 6371000 * acos( cos( radians(${data.latitude}) )
+            ((round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
               * cos( radians( humans.longitude ) - radians(${data.longitude}) )
               + sin( radians(${data.latitude}) )
-              * sin( radians( humans.latitude ) ) ) < incident.distance and incident.distance != 0) or
+              * sin( radians( humans.latitude ) ) ) ) < incident.distance and incident.distance != 0) or
 			  incident.distance = 0 and (${areastring}))
                group by humans.id, humans.name, incident.template`
 			log.log({ level: 'debug', message: 'invasionWhoCares query', event: 'sql:invasionWhoCares' })
