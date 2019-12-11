@@ -62,11 +62,6 @@ exports.run = async (client, msg, command) => {
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 
 
-			if (!monsters.length && !levels.length) {
-				break
-			} else {
-				validTracks += 1
-			}
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
 				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
@@ -76,9 +71,14 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'valor') team = 2
 				else if (element === 'mystic') team = 1
 				else if (element === 'harmony') team = 0
+				else if (element === 'everything') levels = [1, 2, 3, 4, 5]
 				else if (element === 'clean') clean = true
 			})
-
+			if (!levels.length && !monsters.length) {
+				break
+			} else {
+				validTracks += 1
+			}
 			if (!remove) {
 				const insert = monsters.map((mon) => ({
 					id: target.id,
@@ -109,6 +109,7 @@ exports.run = async (client, msg, command) => {
 				})
 
 				const result = await client.query.insertOrUpdateQuery('raid', insert)
+				client.log.info(`${target.name} started tracking level ${levels.join(', ')} raids`)
 				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			} else {
 				const monsterIds = monsters.map((mon) => mon.id)
@@ -119,12 +120,13 @@ exports.run = async (client, msg, command) => {
 				}
 				if (levels.length) {
 					const lvlResult = await client.query.deleteWhereInQuery('raid', target.id, levels, 'level')
+					client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} raids`)
 					result += lvlResult
 				}
-				if (result.length) reaction = '✅'
+				reaction = result.length || client.config.database.client === 'sqlite' ? '✅': reaction
 			}
 		}
-		if (validTracks) return await msg.reply(client.translator.translate('404 no valid tracks found'))
+		if (!validTracks) return await msg.reply(client.translator.translate('404 no valid tracks found'))
 		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('raid command unhappy:', err)
