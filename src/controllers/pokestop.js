@@ -32,7 +32,7 @@ class Pokestop extends Controller {
 		} else {
 			query = query.concat(`
 				and (invasion.distance = 0 and (${areastring}) or invasion.distance > 0)
-				group by humans.id, humans.name, invasion.template 
+				group by humans.id, humans.name, invasion.template
 			`)
 		}
 
@@ -162,7 +162,7 @@ class Pokestop extends Controller {
 								else first = false
 
 								const firstReward = +fr
-								const firstRewardMonster = Object.values(this.monsterData.find((mon) => mon.id === firstReward && !mon.form.id))
+								const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
 								gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
 							})
 						}
