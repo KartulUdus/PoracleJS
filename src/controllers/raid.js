@@ -33,7 +33,7 @@ class Raid extends Controller {
 		} else {
 			query = query.concat(`
 				and (raid.distance = 0 and (${areastring}) or raid.distance > 0)
-				group by humans.id, humans.name, raid.template 
+				group by humans.id, humans.name, raid.template
 			`)
 		}
 
@@ -61,11 +61,10 @@ class Raid extends Controller {
 		})
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
-		join humans on humans.id = raid.id
+		join humans on humans.id = egg.id
 		where humans.enabled = true and
-		(raid.team = ${data.team_id} or raid.team = 4) and
-		(raid.exclusive = ${data.ex} or raid.exclusive = false) and
-		(raid.form = ${data.form} or raid.form = 0) `
+		(egg.team = ${data.team_id} or egg.team = 4) and
+		(egg.exclusive = ${data.ex} or egg.exclusive = false) `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -74,14 +73,14 @@ class Raid extends Controller {
 				* cos( radians( humans.latitude ) )
 				* cos( radians( humans.longitude ) - radians(${data.longitude}) )
 				+ sin( radians(${data.latitude}) )
-				* sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
-				raid.distance = 0 and (${areastring})
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
+				* sin( radians( humans.latitude ) ) ) < egg.distance and egg.distance != 0) or
+				egg.distance = 0 and (${areastring})
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		} else {
 			query = query.concat(`
-				and (raid.distance = 0 and (${areastring}) or raid.distance > 0)
-				group by humans.id, humans.name, raid.template 
+				and (egg.distance = 0 and (${areastring}) or egg.distance > 0)
+				group by humans.id, humans.name, egg.template
 			`)
 		}
 
@@ -130,6 +129,7 @@ class Raid extends Controller {
 			}
 
 			if (data.pokemon_id) {
+
 				if (data.form === undefined || data.form === null) data.form = 0
 				const monster = this.monsterData[`${data.pokemon_id}_${data.form}`] ? this.monsterData[`${data.pokemon_id}_${data.form}`] : this.monsterData[`${data.pokemon_id}_0`]
 				if (!monster) {
@@ -251,102 +251,105 @@ class Raid extends Controller {
 				}
 				return jobs
 			}
-			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
-			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
-			data.staticSprite = encodeURI(JSON.stringify([
-				{
-					url: data.imgUrl,
-					height: this.config.geocoding.spriteHeight,
-					width: this.config.geocoding.spriteWidth,
-					x_offset: 0,
-					y_offset: 0,
-					latitude: +data.latitude.toFixed(5),
-					longitude: +data.longitude.toFixed(5),
-				},
-			]))
-			if (this.config.geocoding.staticProvider === 'poracle') {
-				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
-			}
-			if (!data.team_id) data.team_id = 0
-			if (data.name) data.gymName = data.name
-			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
-			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
+			else {
 
-			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				log.warn(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
-				return []
-			}
-
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
-			const whoCares = await this.eggWhoCares(data)
-
-			this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
-
-			if (!whoCares[0]) return []
-
-			let discordCacheBad = true // assume the worst
-			whoCares.forEach((cares) => {
-				const { count } = this.getDiscordCache(cares.id)
-				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
-			})
-
-			if (discordCacheBad) return []
-			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-
-			const jobs = []
-
-			for (const cares of whoCares) {
-				const caresCache = this.getDiscordCache(cares.id).count
-
-				const view = {
-					...data,
-					...geoResult,
-					id: data.pokemon_id,
-					time: data.distime,
-					tthh: data.tth.hours,
-					tthm: data.tth.minutes,
-					tths: data.tth.seconds,
-					confirmedTime: data.disappear_time_verified,
-					now: new Date(),
-					// gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
-					move1: data.quick_move,
-					move2: data.charge_move,
-					move1emoji: data.move1emoji,
-					move2emoji: data.move2emoji,
-					imgUrl: data.imgUrl,
-					// pokemoji: emojiData.pokemon[data.pokemon_id],
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+				data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
+				data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+				data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+				data.staticSprite = encodeURI(JSON.stringify([
+					{
+						url: data.imgUrl,
+						height: this.config.geocoding.spriteHeight,
+						width: this.config.geocoding.spriteWidth,
+						x_offset: 0,
+						y_offset: 0,
+						latitude: +data.latitude.toFixed(5),
+						longitude: +data.longitude.toFixed(5),
+					},
+				]))
+				if (this.config.geocoding.staticProvider === 'poracle') {
+					data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
+				}
+				if (!data.team_id) data.team_id = 0
+				if (data.name) data.gymName = data.name
+				data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
+				data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
+				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
+				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
+					log.warn(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+					return []
 				}
 
-				const eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template && template.platform === 'discord') || (template.type === 'egg' && template.default && template.platform === 'discord'))
+				data.matched = await this.pointInArea([data.latitude, data.longitude])
+				const whoCares = await this.eggWhoCares(data)
 
-				const template = JSON.stringify(eggDts.template)
-				const mustache = this.mustache.compile(template)
-				const message = JSON.parse(mustache(view))
+				this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
 
-				if (cares.ping) {
-					if (!message.content) message.content = cares.ping
-					if (message.content) message.content += cares.ping
-				}
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					// sticker: data.sticker.toLowerCase(),
-					message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitsec} seconds` } : message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-					emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-					// meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
-				}
-				if (caresCache <= this.config.discord.limitAmount + 1) {
-					jobs.push(work)
-					this.addDiscordCache(cares.id)
+				if (!whoCares[0]) return []
+
+				let discordCacheBad = true // assume the worst
+				whoCares.forEach((cares) => {
+					const { count } = this.getDiscordCache(cares.id)
+					if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+				})
+
+				if (discordCacheBad) return []
+				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+
+				const jobs = []
+
+				for (const cares of whoCares) {
+					const caresCache = this.getDiscordCache(cares.id).count
+
+					const view = {
+						...data,
+						...geoResult,
+						id: data.pokemon_id,
+						time: data.distime,
+						tthh: data.tth.hours,
+						tthm: data.tth.minutes,
+						tths: data.tth.seconds,
+						confirmedTime: data.disappear_time_verified,
+						now: new Date(),
+						// gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
+						move1: data.quick_move,
+						move2: data.charge_move,
+						move1emoji: data.move1emoji,
+						move2emoji: data.move2emoji,
+						imgUrl: data.imgUrl,
+						// pokemoji: emojiData.pokemon[data.pokemon_id],
+						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					}
+
+					const eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template && template.platform === 'discord') || (template.type === 'egg' && template.default && template.platform === 'discord'))
+
+					const template = JSON.stringify(eggDts.template)
+					const mustache = this.mustache.compile(template)
+					const message = JSON.parse(mustache(view))
+
+					if (cares.ping) {
+						if (!message.content) message.content = cares.ping
+						if (message.content) message.content += cares.ping
+					}
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						// sticker: data.sticker.toLowerCase(),
+						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitsec} seconds` } : message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: data.tth,
+						clean: cares.clean,
+						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						// meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
+					}
+					if (caresCache <= this.config.discord.limitAmount + 1) {
+						jobs.push(work)
+						this.addDiscordCache(cares.id)
+					}
 				}
 			}
 		} catch (e) {
