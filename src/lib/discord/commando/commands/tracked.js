@@ -35,13 +35,13 @@ exports.run = async (client, msg, [args]) => {
 		const monsters = await client.query.selectAllQuery('monsters', { id: target.id })
 		const raids = await client.query.selectAllQuery('raid', { id: target.id })
 		const eggs = await client.query.selectAllQuery('egg', { id: target.id })
-		const human = await client.query.selectAllQuery('humans', { id: target.id })
+		const human = (await client.query.selectAllQuery('humans', { id: target.id }))[0]
 		const quests = await client.query.selectAllQuery('quest', { id: target.id })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		let locationText = ''
-		if (human.latitude !== 0 && human.longitude !== 0) {
-			locationText = `Your location is currently set to ${maplink} \nand y`
+		if (+human.latitude !== 0 && +human.longitude !== 0) {
+			locationText = `Your location is currently set to ${maplink}.`
 		}
 		await msg.reply(`👋\n${locationText} You are currently set to receive alarms in ${human.area}`)
 
