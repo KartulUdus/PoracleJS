@@ -41,7 +41,7 @@ exports.run = async (client, msg, command) => {
 			let team = 4
 			let template = 1
 			let clean = false
-			const levels = []
+			let levels = []
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 			const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => arg.replace(client.translator.translate('form'), ''))
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
