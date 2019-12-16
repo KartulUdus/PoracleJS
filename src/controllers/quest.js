@@ -299,7 +299,7 @@ class Quest extends Controller {
 					case 7: {
 						const template = this.translator.translate(this.utilData.questConditions[7])
 						const mustache = this.mustache.compile(this.translator.translate(template))
-						const cond = mustache.render({ levels: condition.info.raid_levels.join(', ') })
+						const cond = mustache({ levels: condition.info.raid_levels.join(', ') })
 						conditionString = conditionString.concat(cond)
 						break
 					}
