@@ -71,7 +71,7 @@ exports.run = async (client, msg, [args]) => {
 			if (+raid.pokemon_id === 9000) {
 				message = message.concat(`\n**level:${raid.level} raids** ${raid.distance ? ', distance: ' + raid.distance + 'm' : ''}${raid.team === 4 ? '' : ' , controlled by ' + raidTeam}${raid.exclusive ? ', must be in park' : ''}`)
 			} else {
-				message = message.concat(`\n**${monsterName}**${formName ? ' form: ' + formName : ''}, ${raid.distance ? ', distance: ' + raid.distance + 'm' : ''}${raid.team === 4 ? '' : ', controlled by ' + raidTeam}${raid.exclusive ? ', must be in park' : ''}`)
+				message = message.concat(`\n**${monsterName}**${formName ? ' form: ' + formName : ''}${raid.distance ? ', distance: ' + raid.distance + 'm' : ''}${raid.team === 4 ? '' : ', controlled by ' + raidTeam}${raid.exclusive ? ', must be in park' : ''}`)
 			}
 		})
 		eggs.forEach((egg) => {
