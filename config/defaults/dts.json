@@ -87,7 +87,7 @@
   },
   {
     "id": 1,
-    "type": "Invasion",
+    "type": "invasion",
     "default": true,
     "platform": "discord",
     "template": {
