@@ -98,15 +98,17 @@ exports.run = async (client, msg, [args]) => {
 		invasions.forEach((invasion) => {
 			let genderText = ''
 			let typeText = ''
-			if (invasion.gender === 1) {
+			if (!invasion.gender || invasion.gender === '') {
+				genderText = 'Gender: any, '
+			else if (invasion.gender === 1) {
 				genderText = 'Gender: male, '
 			} else if (invasion.gender === 2) {
 				genderText = 'Gender: female, '
 			}
-			if (!invasion.gruntType || invasion.gruntType === '') {
+			if (!invasion.grunt_type || invasion.grunt_type === '') {
 				typeText = 'Any'
 			} else {
-				typeText = invasion.gruntType
+				typeText = invasion.grunt_type
 			}
 			message = message.concat(`\nInvasion: ${genderText}Grunt type: ${typeText}`)
 		})
