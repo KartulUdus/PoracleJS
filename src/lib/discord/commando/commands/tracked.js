@@ -100,7 +100,7 @@ exports.run = async (client, msg, [args]) => {
 			let typeText = ''
 			if (!invasion.gender || invasion.gender === '') {
 				genderText = 'Gender: any, '
-			else if (invasion.gender === 1) {
+			} else if (invasion.gender === 1) {
 				genderText = 'Gender: male, '
 			} else if (invasion.gender === 2) {
 				genderText = 'Gender: female, '
