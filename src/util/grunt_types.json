@@ -31,7 +31,7 @@
     "gender": 2,
     "second_reward": false,
     "encounters":{
-        "first": ["143"],
+        "first": ["131","143"],
         "second":["143","62","282"],
         "third":["143","149","130"]
     }
@@ -187,7 +187,13 @@
   "26": {
     "type": "Ice",
     "grunt": "Female Grunt",
-    "gender": 2
+    "gender": 2,
+    "second_reward": false,
+    "encounters":{
+        "first": ["225","459"],
+        "second":["225"],
+        "third":["225","460"]
+    }
   },
   "27": {
     "type": "Ice",
@@ -300,9 +306,9 @@
     "gender": 1,
     "second_reward": false,
     "encounters":{
-        "first": ["52"],
-        "second":["28","143","330"],
-        "third":["248","392","389"]
+        "first": ["234"],
+        "second":["95","105","466"],
+        "third":["248","260","389"]
     }
   },
   "42": {
@@ -311,9 +317,9 @@
     "gender": 1,
     "second_reward": false,
     "encounters":{
-        "first": ["123"],
-        "second":["130","169","462"],
-        "third":["06","149","212"]
+        "first": ["371"],
+        "second":["6","9","208"],
+        "third":["149","212","373"]
     }
   },
   "43": {
@@ -322,9 +328,9 @@
     "gender": 2,
     "second_reward": false,
     "encounters":{
-        "first": ["215"],
-        "second":["97","131","302"],
-        "third":["65","229","282"]
+        "first": ["359"],
+        "second":["65","131","332"],
+        "third":["229","275","475"]
     }
   },
   "44": {
@@ -333,7 +339,7 @@
     "gender": 1,
     "second_reward": false,
     "encounters":{
-        "first": ["144"]
+        "first": ["145"]
     }
   },
   "45": {
