@@ -1,5 +1,5 @@
 exports.run = async (client, msg, command) => {
-	const typeArray = Object.values(client.utilData.grunTypes).map((grunt) => grunt.type.toLowerCase())
+	const typeArray = Object.values(client.utilData.gruntTypes).map((grunt) => grunt.type.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 
@@ -67,7 +67,7 @@ exports.run = async (client, msg, command) => {
 				client.log.info(`${target.name} started tracking ${types.join(', ')} invasions`)
 				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			} else {
-				client.query.deleteWhereInQuery('incident', target.id, types, 'grunt_type')
+				client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
 				client.log.info(`${target.name} deleted ${types.join(', ')} ivasions`)
 			}
 		}
