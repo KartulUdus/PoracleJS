@@ -21,7 +21,7 @@
     },
     "4": {
       "type": "Gemischt",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1,
       "second_reward": true,
       "encounters":{
@@ -48,7 +48,7 @@
     },
     "7": {
       "type": "Kaefer",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1,
       "encounters":{
           "first": ["123"],
@@ -63,7 +63,7 @@
     },
     "9": {
       "type": "Geist",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "10": {
@@ -73,7 +73,7 @@
     },
     "11": {
       "type": "Unlicht",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "12": {
@@ -89,7 +89,7 @@
     },
     "13": {
       "type": "Drache",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "14": {
@@ -99,7 +99,7 @@
     },
     "15": {
       "type": "Fee",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "16": {
@@ -115,7 +115,7 @@
     },
     "17": {
       "type": "Kampf",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "18": {
@@ -131,7 +131,7 @@
     },
     "19": {
       "type": "Feuer",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "20": {
@@ -147,7 +147,7 @@
     },
     "21": {
       "type": "Flug",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "22": {
@@ -157,7 +157,7 @@
     },
     "23": {
       "type": "Pflanze",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1,
       "second_reward": true,
       "encounters":{
@@ -173,7 +173,7 @@
     },
     "25": {
       "type": "Boden",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1,
       "second_reward": false,
       "encounters":{
@@ -189,7 +189,7 @@
     },
     "27": {
       "type": "Eis",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "28": {
@@ -199,7 +199,7 @@
     },
     "29": {
       "type": "Stahl",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "30": {
@@ -209,7 +209,7 @@
     },
     "31": {
       "type": "Normal",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1,
       "second_reward": true,
       "encounters":{
@@ -231,7 +231,7 @@
     },
     "33": {
       "type": "Gift",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1
     },
     "34": {
@@ -241,7 +241,7 @@
     },
     "35": {
       "type": "Psycho",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1,
       "second_reward": true,
       "encounters":{
@@ -257,7 +257,7 @@
     },
     "37": {
       "type": "Gestein",
-      "grunt": "Männlicher Rüpel", 
+      "grunt": "Männlicher Rüpel",
       "gender": 1,
       "second_reward": false,
       "encounters":{
@@ -292,5 +292,89 @@
       "type": "",
       "grunt": "Spieler Teamleiter",
       "gender": 0
+    },
+    "41": {
+      "type": "Boss",
+      "grunt": "Boss Cliff",
+      "gender": 1,
+      "second_reward": false,
+      "encounters": {
+        "first": ["52"],
+        "second": ["28", "143", "330"],
+        "third": ["248", "392", "389"]
+      }
+    },
+    "42": {
+      "type": "Boss",
+      "grunt": "Boss Arlo",
+      "gender": 1,
+      "second_reward": false,
+      "encounters": {
+        "first": ["123"],
+        "second": ["130", "169", "462"],
+        "third": ["06", "149", "212"]
+      }
+    },
+    "43": {
+      "type": "Boss",
+      "grunt": "Boss Sierra",
+      "gender": 2,
+      "second_reward": false,
+      "encounters": {
+        "first": ["215"],
+        "second": ["97", "131", "302"],
+        "third": ["65", "229", "282"]
+      }
+    },
+    "44": {
+      "type": "Boss",
+      "grunt": "Giovanni oder Täusch-Rüpel",
+      "gender": 1,
+      "second_reward": false,
+      "encounters": {
+        "first": ["144"]
+      }
+    },
+    "45": {
+      "type": "Decoy",
+      "grunt": "Männlicher Täusch-Rüpel",
+      "gender": 1
+    },
+    "46": {
+      "type": "Decoy",
+      "grunt": "Weiblicher Täusch-Rüpel",
+      "gender": 2
+    },
+    "47": {
+      "type": "Geist",
+      "grunt": "Weiblicher Rüpel",
+      "gender": 2
+    },
+    "48": {
+      "type": "Geist",
+      "grunt": "Männlicher Rüpel",
+      "gender": 1,
+      "second_reward": "false",
+      "encounters": {
+        "first": ["302", "353", "355"],
+        "second": ["302", "354", "356"],
+        "third": ["302", "354", "477"]
+      }
+    },
+    "49": {
+      "type": "Elektro",
+      "grunt": "Weiblicher Rüpel",
+      "gender": 2,
+      "second_reward": "false",
+      "encounters": {
+        "first": ["81", "125", "179"],
+        "second": ["82", "125", "180"],
+        "third": ["125", "181"]
+      }
+    },
+    "50": {
+      "type": "Elektro",
+      "grunt": "Männlicher Rüpel",
+      "gender": 1
     }
-  }
+}
