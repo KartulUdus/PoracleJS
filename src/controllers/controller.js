@@ -34,7 +34,7 @@ class Controller {
 				return NodeGeocoder({
 					provider: 'openstreetmap',
 					osmServer: 'https://geocoding.poracle.world/nominatim/',
-					formatterPattern: config.locale.addressformat,
+					formatterPattern: this.config.locale.addressformat,
 				})
 			}
 			case 'google': {
