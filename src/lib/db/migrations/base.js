@@ -89,7 +89,7 @@ exports.up = async function migrationUp(knex) {
 		table.integer('distance').notNullable()
 		table.integer('template').notNullable()
 		table.integer('gender').notNullable()
-		table.integer('grunt_type').notNullable()
+		table.text('grunt_type').notNullable()
 		table.unique(['id', 'gender', 'grunt_type'], 'invasion_tracking')
 	})
 
