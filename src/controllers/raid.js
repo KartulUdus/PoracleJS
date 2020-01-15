@@ -259,7 +259,7 @@ class Raid extends Controller {
 											const work = {
 												lat: data.latitude.toString().substring(0, 8),
 												lon: data.longitude.toString().substring(0, 8),
-												sticker: data.sticker.toLowerCase(),
+												sticker: data.sticker,
 												message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 												target: cares.id,
 												name: cares.name,
@@ -395,7 +395,7 @@ class Raid extends Controller {
 											const work = {
 												lat: data.latitude.toString().substring(0, 8),
 												lon: data.longitude.toString().substring(0, 8),
-												sticker: data.sticker.toLowerCase(),
+												sticker: data.sticker,
 												message: caresCache === config.discord.limitamount + 1 ? { content: `You have reached the limit of ${config.discord.limitamount} messages over ${config.discord.limitsec} seconds` } : message,
 												target: cares.id,
 												name: cares.name,
