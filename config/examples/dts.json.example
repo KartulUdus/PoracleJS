@@ -373,7 +373,7 @@
   "greeting": {
     "embed": {
       "title": "Welcome",
-      "description": "Thank you for registering \nPlease set a location `{{prefix}}location name of place` or add ares where to receive alarms from",
+      "description": "Thank you for registering \nPlease set a location by typing `{{prefix}}location name of place` (use whatever works properly in Google Maps __without__ autocomplete); you will be setting a radius in metres from that point, for all commands. Alternatively, you can add multiple areas where you want to receive alarms from (if your admin has configured areas)",
       "fields": [
         {
           "name": "General commands",
@@ -393,11 +393,27 @@
         },
         {
           "name": "Quest tracking commands",
-          "value": "`{{prefix}}quest porygon pikachu poke ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokeballs as rewards \n `{{prefix}}quest remove all items` Removes tracking for all item based quests. Can also use `all pokemon` or `stardust`"
+          "value": "`{{prefix}}quest porygon pikachu poke ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokeballs as rewards \n `{{prefix}}quest remove all items` Removes tracking for all item based quests. Can also use `all pokemon` or `stardust` or `stardust1000`\n See [a list of quest items](https://github.com/KartulUdus/PoracleJS/blob/fb2daebbfb49b0af5ea8472228f9b726d4c4727e/config/examples/questdts.json.example#L92). \n Replace spaces with _ underscores"
         },
         {
           "name": "Invasion tracking commands",
           "value": "`{{prefix}}invasion template3 d500 dragon mixed`: Any arguments are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove` Removes tracking for all Team Rocket Incidents."
+        },
+        {
+          "name": "List your current configuration",
+          "value": "`{{prefix}}tracked`: Shows you what you are currently configured to be notified about."
+        },
+        {
+          "name": "Further info",
+          "value": "See [all the commands available](https://kartuludus.github.io/PoracleJS/#/commands) (including some not listed here)"
+        },
+        {
+          "name": "Examples",
+          "value": "You probably want to start off with something like these 3 commands: \n `{{prefix}}track gible gabite cranidos deino zweilous litwick lampent d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}quest silver_pinap_berry d500`"
+        },
+        {
+          "name": "How far can I walk in metres/minutes? According to the web...",
+          "value": "```Metres | Fast | Moderate | Easy Walk \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63```"
         }
       ]
     }
