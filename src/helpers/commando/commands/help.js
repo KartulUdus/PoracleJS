@@ -23,7 +23,7 @@ exports.run = (client, msg) => {
 				})
 			}
 			if (isregistered) {
-				const message = client.dts.greeting
+				const message = Object.assign({}, client.dts.greeting)
 				message.embed.title = ''
 				message.embed.description = ''
 				const view = { prefix: client.config.discord.prefix }
