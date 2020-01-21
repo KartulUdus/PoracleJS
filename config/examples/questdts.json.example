@@ -29,7 +29,8 @@
     "27": "Complete {{amount}} Battles",
     "28": "Take {{amount}} snapshots",
     "29": "Defeat {{amount}} Team Rocket Grunt",
-    "30": "Purify {{amount}} Pokemon"
+    "30": "Purify {{amount}} Pokemon",
+    "34": "Earn {{amount}} hearts with your buddy"
   },
   "questRewardTypes": {
     "0": "",
