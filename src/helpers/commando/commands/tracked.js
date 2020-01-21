@@ -61,9 +61,9 @@ exports.run = (client, msg) => {
 					const quests = data[4]
 					const invasions = data[5]
 					const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
-					let locationText = 'Y'
+					let locationText = `Your alarms are ${human.enabled ? 'enabled.' : 'disabled.'}\nY`
 					if (human.latitude !== 0 && human.longitude !== 0) {
-						locationText = `Your location is currently set to ${maplink} \nand y`
+						locationText = `Your alarms are ${human.enabled ? 'enabled.' : 'disabled.'}\nYour location is currently set to ${maplink} \nand y`
 					}
 					msg.reply(`👋\n${locationText}ou are currently set to receive alarms in ${human.area}`).catch((O_o) => {
 						client.log.error(O_o.message)
