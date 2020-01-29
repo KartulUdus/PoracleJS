@@ -60,11 +60,11 @@
         "__name": "TYPE_REACT",
         "__format": "json"
       },
-      "limitsec": {
+      "limitSec": {
         "__name": "LIMIT_SEC",
         "__format": "json"
       },
-      "limitamount": {
+      "limitAmount": {
         "__name": "LIMIT_MESSAGES",
         "__format": "json"
       },
