@@ -9,9 +9,13 @@ const readFileAsync = promisify(fs.readFile)
 const NodeCache = require('node-cache')
 const fastify = require('fastify')()
 
+const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
+const telegramController = require('./lib/telegram/middleware/controller')
 
 const Config = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
+const Telegraf = require('telegraf')
+const Telegram = require('./lib/telegram/Telegram')
 
 let {
 	config, knex, dts, geofence, translator,
@@ -19,12 +23,14 @@ let {
 
 const readDir = util.promisify(fs.readdir)
 
+const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
+
 
 const cache = new NodeCache({ stdTTL: 5400 })
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
-const DiscordWorker = require('./lib/discordWorker')
+const DiscordWorker = require('./lib/discord/DiscordWorker')
 const DiscordCommando = require('./lib/discord/commando/')
 
 const { log, webhooks } = require('./lib/logger')
@@ -57,13 +63,21 @@ fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)
 fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
-let discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator)
+let discordCommando = config.discord.enabled ? DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 let discordWorkers = []
-for (const key in config.discord.token) {
-	if (config.discord.token[key]) {
-		discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
+let telegram
+
+if (config.discord.enabled) {
+	for (const key in config.discord.token) {
+		if (config.discord.token[key]) {
+			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
+		}
 	}
+}
+
+if (config.telegram.enabled) {
+	telegram = new Telegram(config, log, dts, telegramController, monsterController, telegraf, translator, telegramCommandParser)
 }
 
 fs.watch('./config/', async (event, fileName) => {

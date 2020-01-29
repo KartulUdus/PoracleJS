@@ -1,9 +1,7 @@
 const { mount } = require('telegraf')
-
-const regex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]*)$/i
-
 /* eslint no-param-reassign: ["error", { "props": false }] */
-module.exports = () => mount('text', (ctx, next) => {
+module.exports = (translator) => mount('text', (ctx, next) => {
+	const regex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]*)$/i
 	if (!ctx.message) return next()
 	const parts = regex.exec(ctx.message.text)
 	if (!parts) return next()
@@ -14,7 +12,7 @@ module.exports = () => mount('text', (ctx, next) => {
 		args: parts[3],
 		get splitArgs() {
 			const args = parts[3].split(/\s+/)
-			return args.map((arg) => arg.toLowerCase())
+			return args.map((arg) => translator.translate(arg.toLowerCase().replace('_', ' ')))
 		},
 	}
 	ctx.state.command = command
