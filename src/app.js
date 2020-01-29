@@ -22,7 +22,7 @@ const readDir = util.promisify(fs.readdir)
 
 const cache = new NodeCache({ stdTTL: 5400 })
 
-const discordCache = new NodeCache({ stdTTL: config.discord.limitsec })
+const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
 const DiscordWorker = require('./lib/discordWorker')
 const DiscordCommando = require('./lib/discord/commando/')
