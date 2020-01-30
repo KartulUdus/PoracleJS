@@ -1,4 +1,5 @@
 const fs = require('fs')
+
 class Telegram {
 	constructor(config, log, dts, controller, query, telegraf, translator, commandParser) {
 		this.config = config
@@ -14,8 +15,8 @@ class Telegram {
 		this.bot = telegraf
 		this.bot
 			.use(commandParser(translator))
-			.use(controller(controller, dts, log, config ))
-		this.commandFiles.map(file => {
+			.use(controller(controller, dts, log, config))
+		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 			let commandName = file.split('.')[0]
@@ -23,16 +24,14 @@ class Telegram {
 			this.enabledCommands.push(commandName)
 			this.bot.command(this.translator.reverse(commandName), this.tempProps)
 		})
-		//this.work()
+		// this.work()
 		this.init()
-
 	}
 
 	static sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 	init() {
 		this.bot.launch()
-
 	}
 
 	async work(data) {

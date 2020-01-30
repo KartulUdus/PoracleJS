@@ -57,26 +57,26 @@ exports.run = async (client, msg, [args]) => {
 			let formName = mon.form.name
 			if (formName === undefined) formName = 'none'
 			if (miniv === -1) miniv = 0
-			message = message.concat(`\n**${monsterName}** form: ${formName} ${monster.distance ? ', distance: ' + monster.distance + 'm' : ''} iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}, gender:${client.utilData.genders[monster.gender]}`)
+			message = message.concat(`\n**${monsterName}** form: ${formName} ${monster.distance ? `, distance: ${monster.distance}m` : ''} iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}, gender:${client.utilData.genders[monster.gender]}`)
 		})
 		if (raids.length || eggs.length) {
 			message = message.concat('\n\nYou\'re tracking the following raids:\n')
 		} else message = message.concat('\n\nYou\'re not tracking any raids')
 		raids.forEach((raid) => {
 			const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
-			const monsterName = mon ? mon.name : 'levelMon'
+			const monsterName = mon ? mon.name : 'levelMon'
 			const raidTeam = client.utilData.teams[raid.team].name
 			const formName = mon ? mon.form.name : 'levelMonForm'
 
 			if (+raid.pokemon_id === 9000) {
-				message = message.concat(`\n**level:${raid.level} raids** ${raid.distance ? ', distance: ' + raid.distance + 'm' : ''}${raid.team === 4 ? '' : ' , controlled by ' + raidTeam}${raid.exclusive ? ', must be in park' : ''}`)
+				message = message.concat(`\n**level:${raid.level} raids** ${raid.distance ? `, distance: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , controlled by ${raidTeam}`}${raid.exclusive ? ', must be in park' : ''}`)
 			} else {
-				message = message.concat(`\n**${monsterName}**${formName ? ' form: ' + formName : ''}${raid.distance ? ', distance: ' + raid.distance + 'm' : ''}${raid.team === 4 ? '' : ', controlled by ' + raidTeam}${raid.exclusive ? ', must be in park' : ''}`)
+				message = message.concat(`\n**${monsterName}**${formName ? ` form: ${formName}` : ''}${raid.distance ? `, distance: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, controlled by ${raidTeam}`}${raid.exclusive ? ', must be in park' : ''}`)
 			}
 		})
 		eggs.forEach((egg) => {
 			const raidTeam = client.utilData.teams[egg.team].name
-			message = message.concat(`\n**Level ${egg.level} eggs** ${egg.distance ? ', distance: ' + egg.distance + 'm' : ''} ${egg.team === 4 ? '' : ', controlled by ' + raidTeam}${egg.exclusive ? ', must be in park' : ''}`)
+			message = message.concat(`\n**Level ${egg.level} eggs** ${egg.distance ? `, distance: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, controlled by ${raidTeam}`}${egg.exclusive ? ', must be in park' : ''}`)
 		})
 
 		if (quests.length) {

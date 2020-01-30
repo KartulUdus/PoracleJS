@@ -123,7 +123,7 @@ exports.run = async (client, msg, command) => {
 					client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} raids`)
 					result += lvlResult
 				}
-				reaction = result.length || client.config.database.client === 'sqlite' ? '✅': reaction
+				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			}
 		}
 		if (!validTracks) return await msg.reply(client.translator.translate('404 no valid tracks found'))
