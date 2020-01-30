@@ -30,7 +30,7 @@ const cache = new NodeCache({ stdTTL: 5400 })
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
-const DiscordWorker = require('./lib/discord/DiscordWorker')
+const DiscordWorker = require('./lib/discord/discordWorker')
 const DiscordCommando = require('./lib/discord/commando/')
 
 const { log, webhooks } = require('./lib/logger')
