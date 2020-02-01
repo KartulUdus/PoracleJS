@@ -26,7 +26,6 @@ function getNewKnex() {
 			})
 		}
 		default: {
-			console.log('sqlite')
 			return Knex({
 				client: 'sqlite3',
 				useNullAsDefault: true,
@@ -38,18 +37,29 @@ function getNewKnex() {
 	}
 }
 
-function getOldKnex(host, port, database, user, password) {
+function getOldKnex(creds) {
 	return Knex({
 		client: 'mysql2',
 		connection: {
-			host,
-			port,
-			database,
-			user,
-			password,
+			host: creds.host,
+			database: creds.database,
+			user: creds.user,
+			password: creds.password,
+			port: creds.port,
 		},
 		pool: { min: 2, max: 10 },
 	})
+}
+
+function snakeCaseKeys(sentList) {
+	const list = sentList
+	for (const key in list) {
+		if (Object.prototype.hasOwnProperty.call(list, key)) {
+			list[key.replace(/([A-Z])/g, '_$1').toLowerCase()] = list[key]
+			delete list[key]
+		}
+	}
+	return list.filter((a) => a)
 }
 
 function getDbCreds() {
@@ -62,10 +72,10 @@ function getDbCreds() {
 
 	while (!confirmV3) {
 		host = reader.question('Please enter your v3 database host: ')
-		port = reader.question('Please enter your v3 database port: ')
 		database = reader.question('please enter your v3 database name: ')
 		user = reader.question('please enter your v3 database username: ')
 		pw = reader.question('please enter your v3 database password: ')
+		port = reader.question('Please enter your v3 database port: ')
 
 		log.info(JSON.stringify({
 			host, port, database, user, pw,
@@ -75,13 +85,13 @@ function getDbCreds() {
 		if (['y', 'yes', 'affirmative', 'yep'].includes(confirmation.toLowerCase())) confirmV3 = true
 	}
 
-	log.info(JSON.stringify(config.database.conn, null, 4))
+	log.info(JSON.stringify(config.database, null, 4))
 	const confirmV4 = reader.question('Are the details ☝️ correct for your NEW v4 database? (Y/N)')
 	if (!['y', 'yes', 'affirmative', 'yep'].includes(confirmV4.toLowerCase())) return log.warn('Please edit your config files to match your new database')
 
 	return {
 		oldDb: getOldKnex({
-			host, port, database, user, pw,
+			host, database, user, password: pw, port: +port,
 		}),
 		newDb: getNewKnex(),
 	}
@@ -90,13 +100,14 @@ function getDbCreds() {
 async function run() {
 	try {
 		const { oldDb, newDb } = getDbCreds()
-		const humans = oldDb.select('*').from('humans')
-		const monsters = oldDb.select('*').from('monsters')
-		const invasions = oldDb.select('*').from('incident')
-		const raids = oldDb.select('*').from('raid')
-		const quests = oldDb.select('*').from('quest')
-		const eggs = oldDb.select('*').from('egg')
-		newDb.migrate.latest({
+		const humans = await oldDb.select('*').from('humans')
+		let monsters = await oldDb.select('*').from('monsters')
+		let invasions = await oldDb.select('*').from('incident')
+		let raids = await oldDb.select('*').from('raid')
+		let quests = await oldDb.select('*').from('quest')
+		let eggs = await oldDb.select('*').from('egg')
+
+		await newDb.migrate.latest({
 			directory: path.join(__dirname, '../lib/db/migrations'),
 			tableName: 'migrations',
 		})
@@ -108,7 +119,7 @@ async function run() {
 				} else {
 					human.type = 'telegram:channel'
 				}
-			} else if (human.id.math(hookRegex)) {
+			} else if (human.id.match(hookRegex)) {
 				human.type = 'webhook'
 			} else {
 				if (+human.id.toString().charAt(0) > 2) human.type = 'discord:channel'
@@ -116,6 +127,7 @@ async function run() {
 			}
 			human.last_checked = new Date()
 			human.fails = 0
+			delete human.alerts_sent
 		}
 		for (const monster of monsters) {
 			monster.ping = ''
@@ -141,16 +153,45 @@ async function run() {
 			egg.clean = false
 		}
 
-		await newDb.insert(humans).into('humans')
-		await newDb.insert(monsters).into('monsters')
-		await newDb.insert(raids).into('raid')
-		await newDb.insert(monsters).into('quest')
-		await newDb.insert(eggs).into('egg')
-		await newDb.insert(invasions).into('invasion') // might not work yet, sue me
 
-		log.info('seems to have worked, check above for nasty bad stuff')
-	} catch {
-		log.error('something was unhappy, check logs pls')
+		monsters = snakeCaseKeys(monsters)
+		invasions = snakeCaseKeys(invasions)
+		raids = snakeCaseKeys(raids)
+		quests = snakeCaseKeys(quests)
+		eggs = snakeCaseKeys(eggs)
+
+		const humanSlices = humans.map((e, i) => (i % 25 === 0 ? humans.slice(i, i + 25) : null)).filter((e) => e)
+		const monsterSlices = monsters.map((e, i) => (i % 25 === 0 ? monsters.slice(i, i + 25) : null)).filter((e) => e)
+		const invasionSlices = invasions.map((e, i) => (i % 25 === 0 ? invasions.slice(i, i + 25) : null)).filter((e) => e)
+		const raidsSlices = raids.map((e, i) => (i % 25 === 0 ? raids.slice(i, i + 25) : null)).filter((e) => e)
+		const questSlices = quests.map((e, i) => (i % 25 === 0 ? quests.slice(i, i + 25) : null)).filter((e) => e)
+		const eggSlices = eggs.map((e, i) => (i % 25 === 0 ? eggs.slice(i, i + 25) : null)).filter((e) => e)
+
+
+		for (const h of humanSlices) {
+			await newDb.insert(h).into('humans')
+		}
+		for (const m of monsterSlices) {
+			await newDb.insert(m).into('monsters')
+		}
+		for (const i of invasionSlices) {
+			await newDb.insert(i).into('invasion')
+		}
+		for (const r of raidsSlices) {
+			await newDb.insert(r).into('raid')
+		}
+		for (const q of questSlices) {
+			await newDb.insert(q).into('quest')
+		}
+		for (const e of eggSlices) {
+			await newDb.insert(e).into('egg')
+		}
+
+		log.info(`Updated ${humans.length} humans, ${monsters.length} monsters, ${invasions.length} invasions, ${raids.length} raids and ${eggs.length} eggs `)
+
+		process.exit(1)
+	} catch (e) {
+		log.error('something was unhappy: ', e)
 	}
 }
 

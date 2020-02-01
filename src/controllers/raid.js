@@ -282,7 +282,6 @@ class Raid extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 			const whoCares = await this.eggWhoCares(data)
-			console.log(whoCares)
 			this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
 
 			if (!whoCares[0]) return []
