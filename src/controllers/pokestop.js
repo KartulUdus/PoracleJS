@@ -83,6 +83,7 @@ class Pokestop extends Controller {
 
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.imgUrl = data.url
 
 			const incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp
 			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
