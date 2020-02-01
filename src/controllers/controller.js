@@ -246,6 +246,7 @@ class Controller {
 		try {
 			return await this.db(table).where(values).del()
 		} catch (err) {
+			console.log('bö')
 			throw new Error({ source: 'deleteQuery', error: err })
 		}
 	}

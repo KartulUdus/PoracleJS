@@ -300,7 +300,6 @@ class Raid extends Controller {
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
-
 				const view = {
 					...data,
 					...geoResult,

@@ -36,7 +36,7 @@
         "invite": "",
         "token": [],
         "channels": ["general"],
-        "userRole": ["roleNameHere"],
+        "userRole": ["roleId1", "358207117951369217"],
         "admins": ["222742859059560458"],
         "prefix": "!",
         "typereact": false,

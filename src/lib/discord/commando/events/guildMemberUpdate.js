@@ -1,48 +1,38 @@
-const mustache = require('handlebars')
-
-module.exports = (client, oldMember, newMember) => {
+module.exports = async (client, oldMember, newMember) => {
 	let before = false
 	let after = false
-	oldMember.roles.forEach((role) => {
-		if (client.config.discord.userRole.includes(role.name)) before = true
-	})
-	newMember.roles.forEach((role) => {
-		if (client.config.discord.userRole.includes(role.name)) after = true
-	})
+	const roleBefore = oldMember.roles.find((role) => client.config.discord.userRole.includes(role.id))
+	const roleAfter = newMember.roles.find((role) => client.config.discord.userRole.includes(role.id))
+	if (roleBefore) before = true
+	if (roleAfter) after = true
+	try {
+		if (!before && after) {
+			const isRegistered = await client.query.countQuery('humans', { id: oldMember.user.id })
+			if (!isRegistered) {
+				await client.query.insertOrUpdateQuery('humans', [{
+					id: oldMember.user.id, type: 'discord:user', name: client.emojiStrip(oldMember.user.username), area: '[]',
+				}])
+				const greetingDts = client.dts.find((template) => template.type === 'greeting')
+				const view = { prefix: client.config.discord.prefix }
+				const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
+				await oldMember.user.send(JSON.parse(greeting(view)))
 
-	if (!before && after) {
-		client.query.countQuery('id', 'humans', 'id', oldMember.user.id)
-			.then((isregistered) => {
-				if (!isregistered) {
-					client.query.insertOrUpdateQuery('humans', {
-						id: oldMember.user.id, type: 'discord:user', name: client.emojiStrip(oldMember.user.username), area: '[]',
-					})
-					const view = { prefix: client.config.discord.prefix }
-					const template = JSON.stringify(client.dts.greeting)
-					const greeting = JSON.parse(mustache.render(template, view))
-					oldMember.user.send(greeting)
-					client.log.log({ level: 'debug', message: `registered ${oldMember.user.name} because ${client.config.discord.userRole} role removed`, event: 'discord:roleCheck' })
-				}
-			})
-			.catch((err) => {
-				client.log.error(`Role based registration errored with: ${err.message}`)
-			})
-	}
+				client.log.log({ level: 'info', message: `registered ${oldMember.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
+			}
+		}
+		if (before && !after) {
+			const isRegistered = await client.query.countQuery('humans', { id: oldMember.user.id })
+			if (isRegistered) {
 
-	if (before && !after) {
-		client.query.countQuery('id', 'humans', 'id', oldMember.user.id)
-			.then((isregistered) => {
-				if (isregistered) {
-					client.query.deleteQuery('egg', 'id', oldMember.user.id)
-					client.query.deleteQuery('monsters', 'id', oldMember.user.id)
-					client.query.deleteQuery('raid', 'id', oldMember.user.id)
-					client.query.deleteQuery('quest', 'id', oldMember.user.id)
-					client.query.deleteQuery('humans', 'id', oldMember.user.id)
-					client.log.log({ level: 'debug', message: `unregistered ${oldMember.user.name} because ${client.config.discord.userRole} role removed`, event: 'discord:roleCheck' })
-				}
-			})
-			.catch((err) => {
-				client.log.error(`Role based unregistration errored with: ${err.message}`)
-			})
+				await client.query.deleteQuery('egg', { id: oldMember.user.id })
+				await client.query.deleteQuery('monsters', { id: oldMember.user.id })
+				await client.query.deleteQuery('raid', { id: oldMember.user.id })
+				await client.query.deleteQuery('quest', { id: oldMember.user.id })
+				await client.query.deleteQuery('humans', { id: oldMember.user.id })
+				client.log.log({ level: 'info', message: `unregistered ${oldMember.user.username} because ${roleBefore.name} role removed`, event: 'discord:roleCheck' })
+			}
+		}
+	} catch (e) {
+		client.log.error(`Role based registration errored : ${e}`)
 	}
 }
