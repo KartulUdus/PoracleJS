@@ -40,7 +40,7 @@ exports.run = async (client, msg, command) => {
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
 				const validAreas = confAreas.filter((x) => args.includes(x))
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
-				const newAreas = [...oldArea, ...addAreas].filter((area) => validAreas.includes(area))
+				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
 				if (!validAreas.length) {
 					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
 				}
