@@ -17,30 +17,36 @@ async function run() {
 	let telegramToken = ''
 	let discordConfigFinished = false
 	let telegramConfigFinished = false
-	while (!discordConfigFinished) {
-		useDiscord = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Discord (Y/N)')).toLowerCase())
-		if (useDiscord) {
-			discordToken = reader.question('Please enter your discord token ')
-			if (!discordToken.match(discordRe)) {
-				log.warn('that\'s not a discord token, try again: ')
-			} else {
-				config.discord.token = [discordToken]
-			}
-		}
-		discordConfigFinished = (!useDiscord || discordToken.match(discordRe))
-	}
+	let mvpConfig = false
 
-	while (!telegramConfigFinished) {
-		useTelegram = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Telegram (Y/N)')).toLowerCase())
-		if (useTelegram) {
-			telegramToken = reader.question('Please enter your tlegram token ')
-			if (!telegramToken.match(discordRe)) {
-				log.warn('that\'s not a telegrram token, try again:')
-			} else {
-				config.telegram.token = telegramToken
+	while (!mvpConfig) {
+
+		while (!discordConfigFinished) {
+			useDiscord = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Discord (Y/N)')).toLowerCase())
+			if (useDiscord) {
+				discordToken = reader.question('Please enter your discord token ')
+				if (!discordToken.match(discordRe)) {
+					log.warn('that\'s not a discord token, try again: ')
+				} else {
+					config.discord.token = [discordToken]
+				}
 			}
+			discordConfigFinished = (!useDiscord || discordToken.match(discordRe))
 		}
-		telegramConfigFinished = (!useTelegram || telegramToken.match(telegramRe))
+	
+		while (!telegramConfigFinished) {
+			useTelegram = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Telegram (Y/N)')).toLowerCase())
+			if (useTelegram) {
+				telegramToken = reader.question('Please enter your tlegram token ')
+				if (!telegramToken.match(discordRe)) {
+					log.warn('that\'s not a telegrram token, try again:')
+				} else {
+					config.telegram.token = telegramToken
+				}
+			}
+			telegramConfigFinished = (!useTelegram || telegramToken.match(telegramRe))
+		}
+		mvpConfig = useTelegram || useDiscord
 	}
 
 	fs.writeFileSync(path.join(__dirname, '../../config/local.json'), JSON.stringify(config, null, 4))
