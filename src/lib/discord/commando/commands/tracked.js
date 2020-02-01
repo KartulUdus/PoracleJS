@@ -43,7 +43,7 @@ exports.run = async (client, msg, [args]) => {
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `Your location is currently set to ${maplink}.`
 		}
-		await msg.reply(`👋\n${locationText} You are currently set to receive alarms in ${human.area}`)
+		await msg.reply(`Your alerts are currently ${human.enabled ? 'enabled' : 'disabled'}\n${locationText} You are currently set to receive alarms in ${human.area}`)
 
 		let message = ''
 		if (monsters.length) {
