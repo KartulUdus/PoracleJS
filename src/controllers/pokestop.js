@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-// const { log } = require('../lib/logger')
 
 class Pokestop extends Controller {
 	async invasionWhoCares(obj) {
@@ -122,9 +121,9 @@ class Pokestop extends Controller {
 					const gruntType = this.utilData.gruntTypes[data.gruntTypeId]
 					data.gruntName = gruntType.grunt
 					data.gender = gruntType.gender
-					// if (gruntType.type in emojiData.type) {
-					// 	data.gruntTypeEmoji = emojiData.type[gruntType.type]
-					// }
+					if (this.utilData.types[gruntType.type]) {
+						data.gruntTypeEmoji = this.utilData.types[gruntType.type].emoji
+					}
 					if (gruntType.type in this.utilData.types) {
 						data.gruntTypeColor = this.utilData.types[gruntType.type].color
 					}
