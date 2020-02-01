@@ -62,6 +62,7 @@ class Raid extends Controller {
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on humans.id = egg.id
 		where humans.enabled = true and
+		egg.level = ${data.level} and
 		(egg.team = ${data.team_id} or egg.team = 4) and
 		(egg.exclusive = ${data.ex} or egg.exclusive = false) `
 
