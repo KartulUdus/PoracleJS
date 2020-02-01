@@ -132,7 +132,7 @@ module.exports = (ctx) => {
 
 					controller.log.log({ level: 'debug', message: `${user.first_name} checked trackings`, event: 'telegram:tracked' })
 
-					if (message.length < 6000) {
+					if (message.length < 4000) {
 						ctx.reply(message)
 					}
 					else {
