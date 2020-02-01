@@ -36,7 +36,6 @@ class Raid extends Controller {
 				group by humans.id, humans.name, raid.template
 			`)
 		}
-		console.log(query.toString())
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -283,7 +282,7 @@ class Raid extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 			const whoCares = await this.eggWhoCares(data)
-
+			console.log(whoCares)
 			this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
 
 			if (!whoCares[0]) return []
@@ -349,6 +348,7 @@ class Raid extends Controller {
 					jobs.push(work)
 					this.addDiscordCache(cares.id)
 				}
+				return jobs
 			}
 		} catch (e) {
 			this.log.error('Can\'t seem to handle raid: ', e, data)

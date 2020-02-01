@@ -171,6 +171,7 @@ async function handleAlarms() {
 				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, hook)
 
 				const result = await fastify.raidController.handle(hook.message)
+				console.log(result)
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)

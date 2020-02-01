@@ -26,6 +26,7 @@ function getNewKnex() {
 			})
 		}
 		default: {
+			console.log('sqlite')
 			return Knex({
 				client: 'sqlite3',
 				useNullAsDefault: true,
