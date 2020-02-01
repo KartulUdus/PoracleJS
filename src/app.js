@@ -140,8 +140,9 @@ async function run() {
 }
 
 async function handleAlarms() {
-	if (Math.random() * 10 > 6) fastify.log.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
-	if (fastify.hookQueue.length && !workingOnHooks) {
+	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
+		if ((Math.random() * 100) > 80) fastify.log.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
+
 		const hook = fastify.hookQueue.shift()
 		switch (hook.type) {
 			case 'pokemon': {
