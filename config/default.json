@@ -71,8 +71,7 @@
         "spriteHeight": 20,
         "spriteWidth": 20,
         "scale": 2,
-        "type": "klokantech-basic",
-        "tileserver": "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        "type": "klokantech-basic"
       },
       "commands": {}
 }

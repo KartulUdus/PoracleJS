@@ -7,7 +7,8 @@
     "test": "mocha --exit",
     "lint": "./node_modules/.bin/eslint ./src --fix",
     "start": "node .",
-    "migrateV3": "node src/init/migrateV3.js"
+    "migrateV3": "node src/init/migrateV3.js",
+    "init": "node src/init/initConfig.js"
   },
   "repository": {
     "type": "git",
