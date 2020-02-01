@@ -36,7 +36,7 @@ class Raid extends Controller {
 				group by humans.id, humans.name, raid.template
 			`)
 		}
-
+		console.log(query.toString())
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {

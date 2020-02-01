@@ -104,7 +104,7 @@ exports.run = async (client, msg, command) => {
 						team,
 						clean,
 						level,
-						form: 9000,
+						form: 0,
 					})
 				})
 
