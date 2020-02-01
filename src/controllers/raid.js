@@ -305,7 +305,7 @@ class Raid extends Controller {
 					...data,
 					...geoResult,
 					id: data.pokemon_id,
-					time: data.distime,
+					time: data.hatchtime,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
