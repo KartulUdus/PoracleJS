@@ -12,6 +12,7 @@ class Worker {
 		this.busy = true
 		this.users = []
 		this.client = {}
+		this.axios = axios
 		this.bounceWorker()
 	}
 
@@ -104,12 +105,12 @@ class Worker {
 		return true
 	}
 
-	static async webhookAlert(firstData) {
+	async webhookAlert(firstData) {
 		const data = firstData
 		if (!data.target.match(hookRegex)) return log.warn(`Webhook, ${data.name} does not look like a link, exiting`)
 		if (data.message.embed) data.message.embeds = [data.message.embed]
 		try {
-			await axios({
+			await this.axios({
 				method: 'post',
 				url: data.target,
 				data: data.message,

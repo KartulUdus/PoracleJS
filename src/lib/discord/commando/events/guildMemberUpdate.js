@@ -23,7 +23,6 @@ module.exports = async (client, oldMember, newMember) => {
 		if (before && !after) {
 			const isRegistered = await client.query.countQuery('humans', { id: oldMember.user.id })
 			if (isRegistered) {
-
 				await client.query.deleteQuery('egg', { id: oldMember.user.id })
 				await client.query.deleteQuery('monsters', { id: oldMember.user.id })
 				await client.query.deleteQuery('raid', { id: oldMember.user.id })

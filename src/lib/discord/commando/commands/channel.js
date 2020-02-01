@@ -16,7 +16,6 @@ exports.run = async (client, msg, [args]) => {
 			if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name and an url')
 			if (client.config.discord.admins.includes(msg.author.id) && webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
 			if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
-
 			const isRegistered = await client.query.countQuery('humans', { id: target.id })
 			if (isRegistered) return await msg.react('👌')
 
