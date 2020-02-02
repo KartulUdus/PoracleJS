@@ -10,7 +10,7 @@ const telegramRe = /[0-9]{9}:[a-zA-Z0-9_-]{35}/gm
 // fs.writeFileSync(path.join(__dirname, '../../config/local.json'), defaultConfig)
 
 
-async function run() {
+async function run() {
 	let useDiscord = false
 	let discordToken = ''
 	let useTelegram = false
@@ -20,7 +20,6 @@ async function run() {
 	let mvpConfig = false
 
 	while (!mvpConfig) {
-
 		while (!discordConfigFinished) {
 			useDiscord = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Discord (Y/N)')).toLowerCase())
 			if (useDiscord) {
@@ -33,7 +32,7 @@ async function run() {
 			}
 			discordConfigFinished = (!useDiscord || discordToken.match(discordRe))
 		}
-	
+
 		while (!telegramConfigFinished) {
 			useTelegram = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Telegram (Y/N)')).toLowerCase())
 			if (useTelegram) {
@@ -52,7 +51,7 @@ async function run() {
 	fs.writeFileSync(path.join(__dirname, '../../config/local.json'), JSON.stringify(config, null, 4))
 
 	log.info(`your config has been created at ${path.join(__dirname, '../../config/local.json')}. Edit this file if you need config changes.`)
-
 }
+
 
 run()
