@@ -140,13 +140,13 @@ async function run() {
 }
 
 async function handleAlarms() {
-	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
+	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController && fastify.weatherController) {
 		if ((Math.random() * 100) > 80) fastify.log.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
 
 		const hook = fastify.hookQueue.shift()
 		switch (hook.type) {
 			case 'pokemon': {
-				fastify.webhooks.info('pokemon', hook.message)
+				fastify.webhooks.info('pokemon', hook )
 				if (fastify.cache.get(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
 					fastify.logger.warn(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
 					break
