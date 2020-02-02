@@ -26,20 +26,20 @@
       "client": "DB_TYPE",
       "conn": {
         "host": "DB_HOST",
+        "database": "DB_DATABASE",
         "user": "DB_USER",
         "password": "DB_PASSWORD",
-        "database": "DB_DATABASE",
-        "port": "DB_PORT",
-        "connectionLimit": {
-          "__name": "DB_CONNECTION_LIMIT",
-          "__format": "json"
-        },
-        "connectTimeout": {
-          "__name": "DB_CONNECTION_TIMEOUT",
-          "__format": "json"
-        }
+        "port": "DB_PORT"
       }
     },
+
+    "locale": {
+      "timeformat": "TIME_FORMAT",
+      "time": "TIME_STRING",
+      "addressFormat": "ADDRESS_FORMAT",
+      "language": "PORACLE_LANGUAGE"
+    },
+
     "discord": {
       "enabled": {
         "__name": "DISCORD_ENABLED",
@@ -49,17 +49,19 @@
         "__name": "DISCORD_TOKEN",
         "__format": "json"
       },
-      "channel": "REGISTER_CHANNEL",
-      "userRole": "REGISTER_ROLE",
+      "channel": {
+        "__name": "REGISTER_CHANNELS",
+        "__format": "json"
+      },
+      "userRole": {
+        "__name": "REGISTER_ROLES",
+        "__format": "json"
+      },
       "admins": {
         "__name": "ADMINS",
         "__format": "json"
       },
       "prefix": "PREFIX",
-      "typereact": {
-        "__name": "TYPE_REACT",
-        "__format": "json"
-      },
       "limitSec": {
         "__name": "LIMIT_SEC",
         "__format": "json"
@@ -72,6 +74,64 @@
         "__name": "IV_COLORS",
         "__format": "json"
       }
+    },
+
+    "telegram": {
+      "enabled": {
+        "__name": "TELEGRAM_ENABLED",
+        "__format": "json"
+      },
+      "location": {
+        "__name": "TELEGRAM_LOCATION",
+        "__format": "json"
+      },
+      "token": "TELEGRAM_TOLEN",
+      "admins": {
+        "__name": "TELEGRAM_ADMINS",
+        "__format": "json"
+      },
+      "group": {
+        "__name": "TELEGRAM_REGISTER_GROUPS",
+        "__format": "json"
+      }
+    },
+
+    "geocoding": {
+      "provider": "GEOCODING_PROVIDER",
+      "staticProvider": "STATIC_PROVIDER",
+      "geocodingKey":{
+        "__name": "GEOCODING_KEYS",
+        "__format": "json"
+      },
+      "staticKey":{
+        "__name": "STATIC_MAPS_KEYS",
+        "__format": "json"
+      },
+      "width": {
+        "__name": "STATIC_MAP_WIDTH",
+        "__format": "json"
+      },
+      "height": {
+        "__name": "STATIC_MAP_HEIGHT",
+        "__format": "json"
+      },
+      "zoom": {
+        "__name": "STATIC_MAP_ZOOM",
+        "__format": "json"
+      },
+      "spriteHeight": {
+        "__name": "STATIC_MAP_SPRITE_HEIGTH",
+        "__format": "json"
+      },
+      "spriteWidth": {
+        "__name": "STATIC_MAP_SPRITE_WIDTH",
+        "__format": "json"
+      },
+      "scale": {
+        "__name": "STATIC_MAP_SPRITE_SCALE",
+        "__format": "json"
+      },
+      "type": "STATIC_MAP_STYLE"
     }
 
 }

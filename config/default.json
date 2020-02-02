@@ -18,10 +18,10 @@
         "client": "sqlite",
         "conn": {
             "host": "127.0.0.1",
-            "port": 3306,
             "database": "poracle",
             "user": "poracleuser",
-            "password": "poraclepassword"
+            "password": "poraclepassword",
+            "port": 3306
         }
     },
     "locale": {
@@ -39,7 +39,6 @@
         "userRole": ["roleId1", "358207117951369217"],
         "admins": ["222742859059560458"],
         "prefix": "!",
-        "typereact": false,
         "limitSec": 30,
         "limitAmount": 20,
         "ivColors": [
@@ -72,6 +71,5 @@
         "spriteWidth": 20,
         "scale": 2,
         "type": "klokantech-basic"
-      },
-      "commands": {}
+      }
 }

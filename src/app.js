@@ -3,9 +3,7 @@ require('dotenv').config()
 
 const fs = require('fs')
 const util = require('util')
-const { promisify } = require('util')
 
-const readFileAsync = promisify(fs.readFile)
 const NodeCache = require('node-cache')
 const fastify = require('fastify')()
 const Telegraf = require('telegraf')
@@ -17,7 +15,7 @@ const Config = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 const Telegram = require('./lib/telegram/Telegram')
 
-let {
+const {
 	config, knex, dts, geofence, translator,
 } = Config()
 
@@ -65,9 +63,9 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-let discordCommando = config.discord.enabled ? DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
+const discordCommando = config.discord.enabled ? DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
-let discordWorkers = []
+const discordWorkers = []
 let telegram
 let workingOnHooks = false
 
@@ -84,37 +82,6 @@ if (config.telegram.enabled) {
 	log.info(telegram)
 }
 
-fs.watch('./config/', async (event, fileName) => {
-	if (!fileName.endsWith('.json')) return
-	discordWorkers = []
-	discordCommando = null
-
-	const newFile = await readFileAsync(`./config/${fileName}`, 'utf8')
-	try {
-		JSON.parse(newFile)
-		const newConfigs = Config()
-
-		config = newConfigs.config
-		knex = newConfigs.knex
-		dts = newConfigs.dts
-		geofence = newConfigs.geofence
-		translator = newConfigs.translator
-
-		for (const key in config.discord.token) {
-			if (config.discord.token[key]) {
-				discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
-			}
-		}
-		discordCommando = DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator)
-		fastify.config = config
-		fastify.knex = knex
-		fastify.dts = dts
-		fastify.geofence = geofence
-		fastify.translator = translator
-	} catch (err) {
-		log.warn('new config file unhappy: ', err)
-	}
-})
 
 async function run() {
 	setInterval(() => {
@@ -140,13 +107,13 @@ async function run() {
 }
 
 async function handleAlarms() {
-	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
+	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController && fastify.weatherController) {
 		if ((Math.random() * 100) > 80) fastify.log.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
 
 		const hook = fastify.hookQueue.shift()
 		switch (hook.type) {
 			case 'pokemon': {
-				fastify.webhooks.info('pokemon', hook.message)
+				fastify.webhooks.info('pokemon', hook)
 				if (fastify.cache.get(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
 					fastify.logger.warn(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
 					break
