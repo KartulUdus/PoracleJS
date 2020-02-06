@@ -53,13 +53,58 @@ function getOldKnex(creds) {
 
 function snakeCaseKeys(sentList) {
 	const list = sentList
-	for (const key in list) {
-		if (Object.prototype.hasOwnProperty.call(list, key)) {
-			list[key.replace(/([A-Z])/g, '_$1').toLowerCase()] = list[key]
-			delete list[key]
+
+	for (const obj of list) {
+		for (const key of Object.keys(obj)) {
+			if (key.match(/([A-Z])/g)) {
+				obj[key.replace(/([A-Z])/g, '_$1').toLowerCase()] = obj[key]
+				delete obj[key]
+			}
 		}
 	}
-	return list.filter((a) => a)
+	return list
+}
+
+async function insertOrUpdateQuery(db, table, values) {
+	switch (config.database.client) {
+		case 'pg': {
+			const firstData = values[0] ? values[0] : values
+			const query = `${db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT ${table}_tracking DO UPDATE SET ${
+				Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
+			await db.raw(query)
+			break
+		}
+		case 'mysql': {
+			const firstData = values[0] ? values[0] : values
+			const query = `${db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
+				Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
+			await db.raw(query)
+			break
+		}
+		default: {
+			const constraints = {
+				humans: 'id',
+				monsters: 'monsters.id, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.min_weight, monsters.max_weight, monsters.form, monsters.max_atk, monsters.max_def, monsters.max_sta, monsters.gender',
+				raid: 'raid.id, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
+				egg: 'egg.id, egg.team, egg.exclusive, egg.level',
+				quest: 'quest.id, quest.reward_type, quest.reward',
+				invasion: 'invasion.id, invasion.gender, invasion.grunt_type',
+				weather: 'weather.id, weather.condition, weather.cell',
+			}
+
+			for (const val of values) {
+				for (const v of Object.keys(val)) {
+					if (typeof val[v] === 'string') val[v] = `'${val[v]}'`
+				}
+			}
+
+			const firstData = values[0] ? values[0] : values
+			const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
+			const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
+				Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
+			await db.raw(query)
+		}
+	}
 }
 
 function getDbCreds() {
@@ -106,7 +151,6 @@ async function run() {
 		let raids = await oldDb.select('*').from('raid')
 		let quests = await oldDb.select('*').from('quest')
 		let eggs = await oldDb.select('*').from('egg')
-
 		await newDb.migrate.latest({
 			directory: path.join(__dirname, '../lib/db/migrations'),
 			tableName: 'migrations',
@@ -125,7 +169,7 @@ async function run() {
 				if (+human.id.toString().charAt(0) > 2) human.type = 'discord:channel'
 				if (+human.id.toString().charAt(0) < 3) human.type = 'discord:user'
 			}
-			human.last_checked = new Date()
+			human.last_checked = new Date().toUTCString()
 			human.fails = 0
 			delete human.alerts_sent
 		}
@@ -137,6 +181,8 @@ async function run() {
 		for (const raid of raids) {
 			raid.ping = ''
 			raid.clean = false
+			raid.exclusive = raid.park
+			delete raid.park
 		}
 
 		for (const invasion of invasions) {
@@ -151,6 +197,10 @@ async function run() {
 		for (const egg of eggs) {
 			egg.ping = ''
 			egg.clean = false
+			egg.exclusive = egg.park
+			delete egg.park
+			egg.level = egg.raid_level
+			delete egg.raid_level
 		}
 
 
@@ -169,27 +219,27 @@ async function run() {
 
 
 		for (const h of humanSlices) {
-			await newDb.insert(h).into('humans')
+			await insertOrUpdateQuery(newDb, 'humans', h)
 		}
 		for (const m of monsterSlices) {
-			await newDb.insert(m).into('monsters')
+			await insertOrUpdateQuery(newDb, 'monsters', m)
 		}
 		for (const i of invasionSlices) {
-			await newDb.insert(i).into('invasion')
+			await insertOrUpdateQuery(newDb, 'invasion', i)
 		}
 		for (const r of raidsSlices) {
-			await newDb.insert(r).into('raid')
+			await insertOrUpdateQuery(newDb, 'raid', r)
 		}
 		for (const q of questSlices) {
-			await newDb.insert(q).into('quest')
+			await insertOrUpdateQuery(newDb, 'quest', q)
 		}
 		for (const e of eggSlices) {
-			await newDb.insert(e).into('egg')
+			await insertOrUpdateQuery(newDb, 'egg', e)
 		}
 
 		log.info(`Updated ${humans.length} humans, ${monsters.length} monsters, ${invasions.length} invasions, ${raids.length} raids and ${eggs.length} eggs `)
 
-		process.exit(1)
+		process.exit()
 	} catch (e) {
 		log.error('something was unhappy: ', e)
 	}
