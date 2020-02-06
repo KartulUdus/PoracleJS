@@ -107,7 +107,7 @@ async function run() {
 }
 
 async function handleAlarms() {
-	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController && fastify.weatherController) {
+	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
 		if ((Math.random() * 100) > 80) fastify.log.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
 
 		const hook = fastify.hookQueue.shift()
@@ -181,11 +181,11 @@ async function handleAlarms() {
 				})
 				break
 			}
-			case 'weather': {
-				fastify.webhooks.info('weather', hook.message)
-				await fastify.weatherController.handle(hook.message)
-				break
-			}
+			// case 'weather': {
+			// 	fastify.webhooks.info('weather', hook.message)
+			// 	await fastify.weatherController.handle(hook.message)
+			// 	break
+			// }
 			default:
 		}
 		workingOnHooks = false

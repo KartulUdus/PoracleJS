@@ -1,7 +1,5 @@
 module.exports = (client, msg) => {
 	// Ignore all bots
-
-	console.log(msg)
 	if (msg.author.bot) return
 
 	// Ignore msgs not starting with the prefix (in config)
