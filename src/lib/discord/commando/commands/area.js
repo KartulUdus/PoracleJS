@@ -5,7 +5,7 @@ exports.run = async (client, msg, command) => {
 	try {
 		// Check target
 		const confAreas = client.geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
-		const confAreas2 = geofence.map(area => area.name.replace(/ /gi, '_')).sort()
+		const confAreas2 = client.geofence.map((area) => area.name.replace(/ /gi, '_')).sort()
 		const confUse = confAreas2.join('\n')
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
