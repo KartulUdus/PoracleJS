@@ -2,6 +2,8 @@ const _ = require('lodash')
 const geofence = require('../../../../config/geofence.json')
 
 const confAreas = geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
+const confAreas2 = geofence.map(area => area.name.replace(/ /gi, '_')).sort()
+const confUse = confAreas2.join('\n')
 
 
 exports.run = (client, msg, args) => {
@@ -95,7 +97,7 @@ exports.run = (client, msg, args) => {
 						break
 					}
 					case 'list': {
-						msg.reply(`Current configured areas are ${confAreas}`).catch((O_o) => {
+                                                msg.reply(`**Current configured areas are:** \`\`\`${confUse}\`\`\` `).catch((O_o) => {
 							client.log.error(O_o.message)
 						})
 						client.log.log({ level: 'debug', message: `${msg.author.tag} checked areas for ${target.name}`, event: 'discord:areaList' })
