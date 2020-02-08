@@ -64,7 +64,7 @@ exports.run = async (client, msg, command) => {
 			if (!remove) {
 				const insert = levels.map((lvl) => ({
 					id: target.id,
-					ping: pings.lenght ? pings : '""',
+					ping: pings,
 					exclusive: !!exclusive,
 					template,
 					distance,
