@@ -83,7 +83,7 @@ exports.run = async (client, msg, command) => {
 				const insert = monsters.map((mon) => ({
 					id: target.id,
 					pokemon_id: mon.id,
-					ping: pings.lenght ? pings : '""',
+					ping: pings,
 					exclusive: !!exclusive,
 					template,
 					distance,
@@ -97,7 +97,7 @@ exports.run = async (client, msg, command) => {
 					insert.push({
 						id: target.id,
 						pokemon_id: 9000,
-						ping: pings.lenght ? pings : '""',
+						ping: pings,
 						exclusive: !!exclusive,
 						template,
 						distance,
