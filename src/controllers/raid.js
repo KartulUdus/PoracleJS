@@ -69,12 +69,12 @@ class Raid extends Controller {
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			( 6371000 * acos( cos( radians(${data.latitude}) )
+			(round( 6371000 * acos( cos( radians(${data.latitude}) )
 				* cos( radians( humans.latitude ) )
 				* cos( radians( humans.longitude ) - radians(${data.longitude}) )
 				+ sin( radians(${data.latitude}) )
 				* sin( radians( humans.latitude ) ) ) < egg.distance and egg.distance != 0) or
-				egg.distance = 0 and (${areastring})
+				egg.distance = 0 and (${areastring}))
 				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		} else {
