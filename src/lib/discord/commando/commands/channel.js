@@ -12,11 +12,11 @@ exports.run = async (client, msg, [args]) => {
 		const webhookLink = msg.content.match(client.hookRegex) ? msg.content.match(client.hookRegex)[0] : false
 
 
+		if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name and an url')
+		if (client.config.discord.admins.includes(msg.author.id) && webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
+		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
+		const isRegistered = await client.query.countQuery('humans', { id: target.id })
 		if (args.find((arg) => arg === 'add')) {
-			if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name and an url')
-			if (client.config.discord.admins.includes(msg.author.id) && webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
-			if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
-			const isRegistered = await client.query.countQuery('humans', { id: target.id })
 			if (isRegistered) return await msg.react('👌')
 
 			await client.query.insertQuery('humans', {
@@ -27,14 +27,6 @@ exports.run = async (client, msg, [args]) => {
 			})
 			await msg.react('✅')
 		} else if (args.find((arg) => arg === 'remove')) {
-			if (client.config.discord.admins.includes(msg.author.id) && webhookName) {
-				target = { name: webhookName.replace(/name/gi, ''), webhook: true }
-			}
-			const isRegistered = target.webhook
-				? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
-				: await client.query.countQuery('humans', { id: target.id })
-
-			if (target.webhook && isRegistered) target.id = isRegistered.id
 
 			if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
 				return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.config.commands.webhook ? client.config.commands.webhook : 'webhook'} add <Your-Webhook-url> nameYourWebhookName`)
