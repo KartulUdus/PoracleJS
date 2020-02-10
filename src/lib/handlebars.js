@@ -1,5 +1,9 @@
 const handlebars = require('handlebars')
-const { cpMultipliers } = require('../util/util')
+const config = require('config')
+const { cpMultipliers, moves, types } = require('../util/util')
+
+const Translator = require(`${__dirname}/../util/translate`)
+const translator = new Translator(config.general.locale)
 
 module.exports = () => {
 	handlebars.registerHelper('numberFormat', (value, decimals = 2) => {
@@ -17,6 +21,13 @@ module.exports = () => {
 	handlebars.registerHelper('bigger', (value, comparable) => (value > comparable))
 
 	handlebars.registerHelper('smaller', (value, comparable) => (value < comparable))
+
+	handlebars.registerHelper('moveName', (value) => { return moves[value] ? translator.translate(moves[value].name) : '' })
+	handlebars.registerHelper('moveType', (value) => { return moves[value] ? translator.translate(moves[value].type) : '' })
+	handlebars.registerHelper('moveEmoji', (value) => {
+		if (!moves[value]) return ''
+		return types[moves[value].type] ? translator.translate(types[moves[value].type].emoji) : ''
+	})
 
 	handlebars.registerHelper('calculateCp', (value, baseStats, level = 25, ivAttack = 15, ivDefense = 15, ivStamina = 15) => {
 		if (!baseStats) return 0

@@ -195,7 +195,7 @@ class Monster extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					name: data.name,
 					now: new Date(),
-					// gendername: emojiData.gender && emojiData.gender[data.gender] ? emojiData.gender[data.gender] : genderData[data.gender],
+					genderData: this.utilData.genders[data.gender],
 					move1: data.quick_move,
 					move2: data.charge_move,
 					move1emoji: data.move1emoji,
