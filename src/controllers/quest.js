@@ -278,7 +278,7 @@ class Quest extends Controller {
 						break
 					}
 					case 2: {
-						const monsters = Object.valies(this.monsterData).filter((m) => condition.info.pokemon_ids.includes(m.id)).map((mon) => this.translator.translate(mon.name)).join(', ')
+						const monsters = Object.values(this.monsterData).filter((m) => condition.info.pokemon_ids.includes(m.id)).map((mon) => this.translator.translate(mon.name)).join(', ')
 
 						const template = this.translator.translate(this.utilData.questConditions[2])
 						const mustache = this.mustache.compile(this.translator.translate(template))
