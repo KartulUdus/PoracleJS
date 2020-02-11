@@ -105,7 +105,7 @@ class Quest extends Controller {
 
 			data.imgUrl = data.rewardData.monsters[1]
 				? `${this.config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
-				: 'saflkansd'
+				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
 
 			if (data.rewardData.items[1]) {
 				data.imgUrl = `${this.config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
