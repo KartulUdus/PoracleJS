@@ -103,21 +103,21 @@ class Quest extends Controller {
 			data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => this.translator.translate(m.name)).join(', ')
 			data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => this.translator.translate(this.utilData.items[i])).join(', ')
 
-			data.imgurl = data.rewardData.monsters[1]
+			data.imgUrl = data.rewardData.monsters[1]
 				? `${this.config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
 				: 'saflkansd'
 
 			if (data.rewardData.items[1]) {
-				data.imgurl = `${this.config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
+				data.imgUrl = `${this.config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
 			}
 			if (data.dustAmount) {
-				data.imgurl = `${this.config.general.imgurl}rewards/reward_stardust.png`
+				data.imgUrl = `${this.config.general.imgurl}rewards/reward_stardust.png`
 				data.dustAmount = data.rewards[0].info.amount
 			}
 
 			data.staticSprite = encodeURI(JSON.stringify([
 				{
-					url: data.imgurl,
+					url: data.imgUrl,
 					height: this.config.geocoding.spriteHeight,
 					width: this.config.geocoding.spriteWidth,
 					x_offset: 0,
@@ -168,7 +168,6 @@ class Quest extends Controller {
 					move2: data.charge_move,
 					move1emoji: data.move1emoji,
 					move2emoji: data.move2emoji,
-					imgUrl: data.imgUrl,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
