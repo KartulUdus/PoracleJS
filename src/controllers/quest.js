@@ -104,14 +104,14 @@ class Quest extends Controller {
 			data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => this.translator.translate(this.utilData.items[i])).join(', ')
 
 			data.imgUrl = data.rewardData.monsters[1]
-				? `${this.config.general.imgurl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
+				? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
 				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
 
 			if (data.rewardData.items[1]) {
-				data.imgUrl = `${this.config.general.imgurl}rewards/reward_${data.rewardData.items[1]}_1.png`
+				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
 			}
 			if (data.dustAmount) {
-				data.imgUrl = `${this.config.general.imgurl}rewards/reward_stardust.png`
+				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
 				data.dustAmount = data.rewards[0].info.amount
 			}
 
