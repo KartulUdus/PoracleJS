@@ -24,7 +24,7 @@ exports.run = async (client, msg, command) => {
 			return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}channel add`)
 		}
 		if (!isRegistered && msg.channel.type === 'dm') {
-			return await msg.author.send(`You don't seem to be registered. \nYou can do this by sending ${client.config.discord.prefix}${client.config.commands.poracle ? client.config.commands.poracle : 'poracle'} to #${client.config.discord.channel}`)
+			return await msg.react(client.translator.translate('🙅'))
 		}
 		if (target.webhook) target.id = isRegistered.id
 
