@@ -84,7 +84,8 @@ class Worker {
 			}
 			return true
 		} catch (err) {
-			log.error(`Failed to send Discord alert to ${data.name}`, err, data)
+			log.error(`Failed to send Discord alert to ${data.name}`, err)
+			log.error('Data used: %o', data)
 		}
 		return true
 	}
@@ -100,7 +101,9 @@ class Worker {
 			}
 			return true
 		} catch (err) {
-			log.error(`Failed to send Discord alert to ${data.name}`, err, data)
+			log.error(`Failed to send Discord alert to ${data.name}`, err)
+			log.error('Data used: %o', data)
+
 		}
 		return true
 	}
