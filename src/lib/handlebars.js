@@ -5,6 +5,10 @@ const { cpMultipliers, moves, types } = require('../util/util')
 const Translator = require(`${__dirname}/../util/translate`)
 const translator = new Translator(config.general.locale)
 
+require('handlebars-helpers')({
+	handlebars,
+})
+
 module.exports = () => {
 	handlebars.registerHelper('numberFormat', (value, decimals = 2) => {
 		if (Number.isNaN(+value) || Number.isNaN(+decimals)) return value
@@ -16,14 +20,8 @@ module.exports = () => {
 		return Number((+value + +add - +remove) * multiply / divide).toFixed(+decimals)
 	})
 
-	handlebars.registerHelper('equal', (value, comparable) => (value === comparable))
-
-	handlebars.registerHelper('bigger', (value, comparable) => (value > comparable))
-
-	handlebars.registerHelper('smaller', (value, comparable) => (value < comparable))
-
-	handlebars.registerHelper('moveName', (value) => { return moves[value] ? translator.translate(moves[value].name) : '' })
-	handlebars.registerHelper('moveType', (value) => { return moves[value] ? translator.translate(moves[value].type) : '' })
+	handlebars.registerHelper('moveName', (value) => (moves[value] ? translator.translate(moves[value].name) : ''))
+	handlebars.registerHelper('moveType', (value) => (moves[value] ? translator.translate(moves[value].type) : ''))
 	handlebars.registerHelper('moveEmoji', (value) => {
 		if (!moves[value]) return ''
 		return types[moves[value].type] ? translator.translate(types[moves[value].type].emoji) : ''
