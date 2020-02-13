@@ -202,8 +202,8 @@ class Pokestop extends Controller {
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-
-				const invasionDts = this.dts.find((template) => (template.type === 'invasion' && template.id === cares.template && template.platform === 'discord') || (template.type === 'invasion' && template.default && template.platform === 'discord'))
+				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id === cares.template && template.platform === 'discord')
+				if (!invasionDts) invasionDts = this.dts.find((template) => template.type === 'invasion' && template.default && template.platform === 'discord')
 				if (!invasionDts) {
 					this.log.warn(`Didn't get DTS for 'invasion',  template ${cares.templaste}`)
 					break

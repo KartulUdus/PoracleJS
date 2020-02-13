@@ -103,7 +103,6 @@ class Worker {
 		} catch (err) {
 			log.error(`Failed to send Discord alert to ${data.name}`, err)
 			log.error(JSON.stringify(data))
-
 		}
 		return true
 	}

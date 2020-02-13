@@ -208,11 +208,14 @@ class Monster extends Controller {
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-
-				const monsterDts = data.iv === -1
-					? this.dts.find((template) => (template.type === 'monsterNoIv' && template.id === cares.template && template.platform === 'discord') || (template.type === 'monsterNoIv' && template.default && template.platform === 'discord'))
-					: this.dts.find((template) => (template.type === 'monster' && template.id === cares.template && template.platform === 'discord') || (template.type === 'monster' && template.default && template.platform === 'discord'))
-
+				let monsterDts
+				if (data.iv === -1) {
+					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id === cares.template && template.platform === 'discord')
+					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.default && template.platform === 'discord')
+				} else {
+					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id === cares.template && template.platform === 'discord')
+					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monster' && template.default && template.platform === 'discord')
+				}
 				const template = JSON.stringify(monsterDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))

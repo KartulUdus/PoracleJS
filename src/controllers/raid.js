@@ -221,8 +221,8 @@ class Raid extends Controller {
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
-					const raidDts = this.dts.find((template) => (template.type === 'raid' && template.id === cares.template && template.platform === 'discord') || (template.type === 'raid' && template.default && template.platform === 'discord'))
-
+					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id === cares.template && template.platform === 'discord'))
+					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === 'discord')
 					const template = JSON.stringify(raidDts.template)
 					const mustache = this.mustache.compile(template)
 					const message = JSON.parse(mustache(view))
@@ -320,7 +320,8 @@ class Raid extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				const eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template && template.platform === 'discord') || (template.type === 'egg' && template.default && template.platform === 'discord'))
+				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template && template.platform === 'discord'))
+				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === 'discord')
 
 				const template = JSON.stringify(eggDts.template)
 				const mustache = this.mustache.compile(template)
