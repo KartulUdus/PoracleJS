@@ -92,7 +92,7 @@ async function run() {
 		// see if target has dedicated worker
 		let worker = discordWorkers.find((workerr) => workerr.users.includes(target.id))
 		if (!worker) {
-			worker = discordWorkers.reduce((prev, curr) => (prev.users.length < curr.users.length ? prev : curr))
+			worker = discordWorkers.reduce((prev, curr) => (prev.users.length < curr.users.length ? curr : prev))
 			worker.addUser(target.id)
 		}
 		if (!worker.busy) worker.work(fastify.discordQueue.shift())
