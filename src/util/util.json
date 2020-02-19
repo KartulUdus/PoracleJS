@@ -88,16 +88,14 @@
 		"1": {
 			"name": "male",
 			"emoji": "♂️"
-
-			},
+		},
 		"2": {
 			"name": "femaile",
 			"emoji": "♀️"
-
 		},
 		"3": {
 			"name": "genderless",
-			"emoji":"⚧"
+			"emoji": "⚧"
 		}
 	},
 	"questTypes": {
@@ -3023,4 +3021,4 @@
 			"max": 809
 		}
 	}
-} 
+}
