@@ -11,6 +11,7 @@ class Worker {
 		this.config = config
 		this.busy = true
 		this.users = []
+		this.userCount = 0
 		this.client = {}
 		this.axios = axios
 		this.bounceWorker()
@@ -20,6 +21,7 @@ class Worker {
 
 	addUser(id) {
 		this.users.push(id)
+		this.userCount += 1
 	}
 
 	async setLitseners() {

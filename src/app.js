@@ -92,11 +92,11 @@ async function run() {
 		// see if target has dedicated worker
 		let worker = discordWorkers.find((workerr) => workerr.users.includes(target.id))
 		if (!worker) {
-			let laziestWorkerId = 0
+			let laziestWorkerId
 			let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
 			Object.keys(discordWorkers).map((i) => {
-				if (discordWorkers[i].users.length < busyestWorkerHumanCount) {
-					busyestWorkerHumanCount = discordWorkers[i].users.length
+				if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
+					busyestWorkerHumanCount = discordWorkers[i].userCount
 					laziestWorkerId = i
 				}
 			})
