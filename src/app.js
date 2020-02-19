@@ -88,20 +88,21 @@ async function run() {
 		if (!fastify.discordQueue.length) {
 			return
 		}
-		const target = !fastify.discordQueue.slice(-1).shift()[0]
+		const { target } = fastify.discordQueue[0]
 		// see if target has dedicated worker
-		let worker = discordWorkers.find((workerr) => workerr.users.includes(target.id))
+		let worker = discordWorkers.find((workerr) => workerr.users.includes(target))
 		if (!worker) {
-			let laziestWorkerId
 			let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+			let laziestWorkerId
 			Object.keys(discordWorkers).map((i) => {
 				if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
 					busyestWorkerHumanCount = discordWorkers[i].userCount
 					laziestWorkerId = i
 				}
 			})
+			busyestWorkerHumanCount = Number.POSITIVE_INFINITY
 			worker = discordWorkers[laziestWorkerId]
-			worker.addUser(target.id)
+			worker.addUser(target)
 		}
 		if (!worker.busy) worker.work(fastify.discordQueue.shift())
 	}, 10)
