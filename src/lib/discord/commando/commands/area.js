@@ -78,7 +78,7 @@ exports.run = async (client, msg, command) => {
 				break
 			}
 			case 'list': {
-				await msg.reply(`**Current configured areas are:** \`\`\`${confUse}\`\`\` `)
+				await msg.reply(`**Current configured areas are:** \`\`\`\n${confUse}\`\`\` `)
 				break
 			}
 			default:
