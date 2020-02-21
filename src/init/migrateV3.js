@@ -3,6 +3,7 @@ const config = require('config')
 const path = require('path')
 const reader = require('readline-sync')
 const { log } = require('../lib/logger')
+const Daptcha = require('./daptcha')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
@@ -156,6 +157,12 @@ async function run() {
 			tableName: 'migrations',
 		})
 
+		const discordIds = humans.filter((h) => !h.id.toString().length < 17 && !h.id.match(hookRegex)).map((hm) => hm.id.toString())
+		let daptcha = { humans: [], channels: [] }
+		if (discordIds.length) {
+			daptcha = await Daptcha(discordIds, config, log)
+		}
+
 		for (const human of humans) {
 			if (human.id.toString().length < 17) {
 				if (+human.id < 0) {
@@ -166,8 +173,8 @@ async function run() {
 			} else if (human.id.match(hookRegex)) {
 				human.type = 'webhook'
 			} else {
-				if (+human.id.toString().charAt(0) > 2) human.type = 'discord:channel'
-				if (+human.id.toString().charAt(0) < 3) human.type = 'discord:user'
+				if (daptcha.humans.includes(human.id)) human.type = 'discord:user'
+				if (daptcha.channels.includes(human.id)) human.type = 'discord:channel'
 			}
 			human.last_checked = new Date().toUTCString()
 			human.fails = 0
