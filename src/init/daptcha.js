@@ -2,7 +2,7 @@
 
 const { Client } = require('discord.js')
 
-const sleep = (n) => { return new Promise((resolve) => setTimeout(resolve, n)) }
+const sleep = (n) => new Promise((resolve) => setTimeout(resolve, n))
 
 module.exports = async (idArray, config, log) => {
 	const client = new Client()
@@ -27,5 +27,4 @@ module.exports = async (idArray, config, log) => {
 
 	while (!ready) await sleep(1000)
 	return result
-
 }
