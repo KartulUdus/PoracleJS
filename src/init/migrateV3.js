@@ -169,7 +169,7 @@ async function run() {
 				if (+human.id.toString().charAt(0) > 2) human.type = 'discord:channel'
 				if (+human.id.toString().charAt(0) < 3) human.type = 'discord:user'
 			}
-			human.last_checked = new Date().toUTCString()
+			human.last_checked = new Date().toJSON().slice(0, 19).replace('T', ' ')
 			human.fails = 0
 			delete human.alerts_sent
 		}
