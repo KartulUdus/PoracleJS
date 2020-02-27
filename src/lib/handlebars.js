@@ -27,7 +27,7 @@ module.exports = () => {
 		return types[moves[value].type] ? translator.translate(types[moves[value].type].emoji) : ''
 	})
 
-	handlebars.registerHelper('calculateCp', (value, baseStats, level = 25, ivAttack = 15, ivDefense = 15, ivStamina = 15) => {
+	handlebars.registerHelper('calculateCp', (baseStats, level = 25, ivAttack = 15, ivDefense = 15, ivStamina = 15) => {
 		if (!baseStats) return 0
 		const cpMulti = cpMultipliers[level]
 		const atk = baseStats.baseAttack
