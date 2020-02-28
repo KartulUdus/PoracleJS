@@ -122,7 +122,7 @@ async function handleAlarms() {
 		const hook = fastify.hookQueue.shift()
 		switch (hook.type) {
 			case 'pokemon': {
-				fastify.webhooks.info('pokemon', JSON.stringify(hook))
+				fastify.webhooks.info('pokemon', hook.message)
 				if (fastify.cache.get(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
 					fastify.logger.warn(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
 					break
