@@ -233,7 +233,6 @@ class Raid extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						// sticker: data.sticker.toLowerCase(),
 						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
 						target: cares.id,
 						type: cares.type,
@@ -241,7 +240,6 @@ class Raid extends Controller {
 						tth: data.tth,
 						clean: cares.clean,
 						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-						// meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)
@@ -334,7 +332,6 @@ class Raid extends Controller {
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
 					lon: data.longitude.toString().substring(0, 8),
-					// sticker: data.sticker.toLowerCase(),
 					message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
 					target: cares.id,
 					type: cares.type,
@@ -342,7 +339,6 @@ class Raid extends Controller {
 					tth: data.tth,
 					clean: cares.clean,
 					emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-					// meta: { correlationId: data.correlationId, messageId: data.messageId, alarmId },
 				}
 				if (caresCache <= this.config.discord.limitAmount + 1) {
 					jobs.push(work)

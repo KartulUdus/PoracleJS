@@ -125,6 +125,7 @@ exports.run = async (client, msg, command) => {
 			}
 			const result = await client.query.insertOrUpdateQuery('monsters', insert)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+			client.log.info(`${target.name} started tracking monsters: ${monsters.map((m) => m.name).join(', ')}`)
 		}
 		if (!validTracks) return await msg.reply(client.translator.translate('404 No monsters found'))
 		await msg.react(reaction)

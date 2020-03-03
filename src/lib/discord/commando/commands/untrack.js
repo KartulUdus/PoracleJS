@@ -41,6 +41,7 @@ exports.run = async (client, msg, command) => {
 
 		const monsterIds = monsters.map((mon) => mon.id)
 		const result = await client.query.deleteWhereInQuery('monsters', target.id, monsterIds, 'pokemon_id')
+		client.log.info(`${target.name} removed tracking for monsters: ${monsters.map((m) => m.name).join(', ')}`)
 
 		if (result.length || client.config.database.client === 'sqlite') {
 			msg.react('✅')
