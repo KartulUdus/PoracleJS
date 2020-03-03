@@ -142,7 +142,7 @@
 		"4": "{{amount}} {{type}} Candy",
 		"5": "Avatar clothing",
 		"6": "Quest",
-		"7": "{{#isShiny}} Possible Shiny {{/isShiny}}{{pokemon}} {{emoji}}"
+		"7": "{{pokemon}}"
 	},
 	"questMonsterTypeString": "{{name}} {{{emoji}}} ",
 	"questConditions": {
