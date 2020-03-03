@@ -6,7 +6,9 @@ const discordMessaveValidator = require('../../../mocks/discordMessageValidator'
 const mustache = require('./../../../../src/lib/handlebars')()
 const { getKnex } = require('./../../../../src/lib/configFetcher')
 const Controller = require('./../../../../src/controllers/controller')
+const Translator = require('../../../../src/util/translate')
 
+const translator = new Translator(config.general.locale)
 const knex = getKnex(
 	{
 		database: {
@@ -17,7 +19,7 @@ const knex = getKnex(
 const controller = new Controller(knex, config)
 const poracle = require('../../../../src/lib/discord/commando/commands/poracle')
 
-const client = new Discord(controller, config, log, mustache)
+const client = new Discord(controller, config, log, mustache, translator)
 
 const testMessages = require('../../../testData/commandMessages')(client)
 

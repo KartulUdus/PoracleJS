@@ -1,5 +1,5 @@
 class Discord {
-	constructor(controller, config, log, mustache) {
+	constructor(controller, config, log, mustache, translator) {
 		this.lastReact = ''
 		this.lastMessage = ''
 		this.config = config
@@ -8,6 +8,8 @@ class Discord {
 		this.mustache = mustache
 		this.emojiStrip = require('emoji-strip')
 		this.query = controller
+		this.translator = translator
+		this.re = require('../../src/util/regex')(translator)
 	}
 
 	setDefaults() {
