@@ -2,6 +2,8 @@ const fs = require('fs')
 const Mocha = require('mocha')
 const { promisify } = require('util')
 const { resolve } = require('path')
+const config = require('config')
+const { log } = require('./../src/lib/logger')
 
 const mocha = new Mocha()
 const readdir = promisify(fs.readdir)
@@ -18,6 +20,11 @@ async function getFiles(dir) {
 }
 
 async function run() {
+	if (config.general.environment.toLowerCase() === 'production') {
+		log.info('Tests should not be run in Production mode, it affects your configured database')
+		log.info('If you know what you are doing, set config.general.environment to "Test" first')
+		process.exit()
+	}
 	const tests = await getFiles(`${__dirname}/tests`)
 	tests.filter((file) => file.substr(-3) === '.js').forEach((filePath) => mocha.addFile(filePath))
 	mocha.run((failures) => {

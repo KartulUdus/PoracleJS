@@ -34,6 +34,7 @@ describe('!poracle command tests', () => {
 		assert.equal(result.id, '222')
 		assert.equal(result.type, 'discord:user')
 		assert.equal(result.name, 'happyAuthorsUsername')
+		assert.equal(result.area, '[]')
 		assert.equal(client.lastReact, '✅')
 		assert.exists(client.lastMessage.embed)
 		assert.equal(client.lastMessage.embed.title, 'Welcome')
