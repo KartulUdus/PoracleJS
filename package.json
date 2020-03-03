@@ -4,7 +4,7 @@
   "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
-    "test": "mocha --exit",
+    "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
     "start": "node .",
     "migrateV3": "node src/init/migrateV3.js",
@@ -44,7 +44,7 @@
     "fastify": "^2.10.0",
     "flat-cache": "^2.0.1",
     "geo-tz": "^5.0.5",
-    "handlebars": "^4.4.5",
+    "handlebars": "^4.7.3",
     "handlebars-helpers": "^0.10.0",
     "hastebin-gen": "^2.0.5",
     "import-fresh": "^3.1.0",
@@ -66,6 +66,7 @@
     "winston": "^3.2.1"
   },
   "devDependencies": {
+    "ajv": "^6.12.0",
     "chai": "^4.2.0",
     "eslint": "^6.6.0",
     "eslint-config-airbnb-base": "^14.0.0",

@@ -11,7 +11,7 @@ const Telegraf = require('telegraf')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 
-const Config = require('./lib/configFetcher')
+const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 const Telegram = require('./lib/telegram/Telegram')
 

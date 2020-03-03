@@ -39,17 +39,21 @@ function getKnex(conf) {
 	}
 }
 
-module.exports = () => {
-	config = importFresh('config')
-	dts = importFresh(path.join(__dirname, '../../config/dts.json'))
-	geofence = importFresh(path.join(__dirname, '../../config/geofence.json'))
-	knex = getKnex(config)
-	knex.migrate.latest({
-		directory: path.join(__dirname, './db/migrations'),
-		tableName: 'migrations',
-	})
-	translator = new Translator(config.general.locale)
-	return {
-		config, knex, dts, geofence, translator,
-	}
+module.exports = {
+	Config: () => {
+		config = importFresh('config')
+		dts = importFresh(path.join(__dirname, '../../config/dts.json'))
+		geofence = importFresh(path.join(__dirname, '../../config/geofence.json'))
+		knex = getKnex(config)
+		knex.migrate.latest({
+			directory: path.join(__dirname, './db/migrations'),
+			tableName: 'migrations',
+		})
+		translator = new Translator(config.general.locale)
+		return {
+			config, knex, dts, geofence, translator,
+		}
+	},
+	getKnex,
+
 }
