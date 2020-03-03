@@ -128,7 +128,11 @@
 		"27": "Complete {{amount}} Battles",
 		"28": "Take {{amount}} snapshots",
 		"29": "Defeat {{amount}} Team Rocket Grunt",
-		"30": "Purify {{amount}} Pokemon"
+		"30": "Purify {{amount}} Pokemon",
+		"31": "Find {{amount}} Team Rocket Invasion(s)",
+   		"32": "{{amount}} time(s) First Grunt OTD",
+		"33": "",
+    		"34": "Earn {{amount}} hearts with your buddy"
 	},
 	"questRewardTypes": {
 		"0": "",
@@ -166,8 +170,21 @@
 		"22": "Team leader",
 		"23": "Another player",
 		"24": "Location",
-		"25": "Distance"
+		"25": "Distance",
+		"26": "Pokemon Alignment(s): {{alignments}}",
+    		"27": "Invasion Category(s): {{categories}}"
 	},
+	
+	"alignments": {
+   		"1": "Shadow",
+    		"2": "Purified"
+ 	},
+	
+	"categories": {
+    		"1": "Team Leader",
+    		"2": "Grunt"
+  	},
+	
 	"throwType": {
 		"10": "Nice",
 		"11": "Great",
