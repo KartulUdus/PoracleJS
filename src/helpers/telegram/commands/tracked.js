@@ -55,7 +55,7 @@ module.exports = (ctx) => {
 					const quests = data[4]
 					const invasions = data[5]
 					const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
-					ctx.reply(`👋\nYour location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`).catch((O_o) => {
+					ctx.reply(`👋\nYour alarms are ${human.enabled ? 'enabled.' : 'disabled.'}\nYour location is currently set to ${maplink} \nand you currently are set to receive alarms in ${human.area}`).catch((O_o) => {
 						controller.log.error(O_o.message)
 					})
 					let message = ''
@@ -132,7 +132,7 @@ module.exports = (ctx) => {
 
 					controller.log.log({ level: 'debug', message: `${user.first_name} checked trackings`, event: 'telegram:tracked' })
 
-					if (message.length < 6000) {
+					if (message.length < 4000) {
 						ctx.reply(message)
 					}
 					else {
@@ -150,7 +150,7 @@ module.exports = (ctx) => {
 									controller.log.error(O_o.message)
 								})
 								const attachment = fs.readFileSync(filepath, { encoding: 'utf-8' })
-								ctx.telegram.sendDocument(target.id, attachment)
+								ctx.telegram.sendDocument(target.id, { source: attachment, filename: 'tracked.txt' })
 									.then(() => {
 										fs.unlinkSync(filepath)
 									})
