@@ -1,10 +1,8 @@
-FROM ubuntu:18.04
+FROM node
 
 # DEPS
 RUN apt-get -y update && apt-get install -y curl \
 gnupg2 \
-nodejs \
-npm \
 git
 
 # PoracleJS
