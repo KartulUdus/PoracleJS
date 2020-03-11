@@ -35,12 +35,12 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-
+		const areaArgs = args.map(a => a.replace(/ /g, '_'))
 		switch (args[0]) {
 			case 'add': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter((x) => args.includes(x))
+				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
 				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
 				if (!validAreas.length) {
@@ -60,7 +60,7 @@ exports.run = async (client, msg, command) => {
 			case 'remove': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter((x) => args.includes(x))
+				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
 				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
