@@ -35,7 +35,7 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-		const areaArgs = args.map(a => a.replace(/ /g, '_'))
+		const areaArgs = args.map((a) => a.replace(/ /g, '_'))
 		switch (args[0]) {
 			case 'add': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
