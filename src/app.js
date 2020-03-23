@@ -139,6 +139,9 @@ async function handleAlarms() {
 				break
 			}
 			case 'raid': {
+				if(config.general.ignoreRaids) {
+					break
+				}
 				fastify.webhooks.info('raid', hook.message)
 				if (fastify.cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
 					fastify.logger.info(`Raid ${hook.message.encounter_id} was sent again too soon, ignoring`)
