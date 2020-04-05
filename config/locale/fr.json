@@ -963,7 +963,7 @@
 
 	"Added areas": "Zone ajoutée",
 	"Removed areas": "Zone supprimée",
-	"S2 cell not found"
+	"S2 cell not found": "Aucune cellule S2 trouvée",
 	"no valid areas there, please use one of": "Zones non valides, utiliser l'une d'elles",
 	"Current configured areas are:": "Liste des zones disponibles:",
 	"You don't seem to be registered. \nYou can do this by sending": "Tu ne sembles pas enregistré. \nTu peux le faire en écrivant",
@@ -972,8 +972,8 @@
 
 	"404 no locations found": "Erreur, aucune localisation trouvée",
 	"404 No valid invasion types found": "Erreur, Type inconnu",
-    "404 no valid tracks found": "404 no valid tracks found",
-    "404 No valid quests found": "Erreur, merci de vérifier votre quête",
+        "404 no valid tracks found": "404 no valid tracks found",
+        "404 No valid quests found": "Erreur, merci de vérifier votre quête",
 	"404 No raid egg levels found": "Erreur, niveau de raid inconnu",
 	"404 No monsters found": "Erreur, merci de vérifier le nom du Pokémon",
 
@@ -992,7 +992,6 @@
 	"\n\nYou're not tracking any raids": "\n\n:x: Aucun tracking de raid n'est activé.",
 	"\n\nYou're not tracking any quests": "\n\n:x: Aucun tracking de quête n'est activé.",
 	"\n\nYou're not tracking any invasions": "\n\n:x: Aucun tracking d'invasion n'est activé.",
-	"\nInvasion: {{genderText}Grunt type: ${typeText}": "\nInvasion:  ${genderText}Type Sbire: ${typeText}",
 
 	"tracking list is quite long. Have a look at": " la liste de suivi est assez longue. Jettes un coup d'oeil à",
 	"tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:": "la liste de suivi est longue et Hastebin est en panne, Vérifies ce fichier la:"
