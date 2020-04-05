@@ -949,5 +949,51 @@
 	"Synchronoise":"Synchropeine",
 	"Lock-On":"Vérrouillage",
 	"Thunder Fang":"Crocs Eclair",
-	"Ice Fang":"Crocs Givre"
+	"Ice Fang":"Crocs Givre",
+	"Horn Drill":"Empal'Korne",
+	"Fissure":"Fissure",
+	"Rock Wrecker":"Roc Boulet",
+
+	"form": "forme",
+	"name": "nom",
+	"webhook": "webhook",
+	"channel": "salon",
+	"add": "ajouter",
+	"remove": "supprimer",
+
+	"Added areas": "Zone ajoutée",
+	"Removed areas": "Zone supprimée",
+	"S2 cell not found"
+	"no valid areas there, please use one of": "Zones non valides, utiliser l'une d'elles",
+	"Current configured areas are:": "Liste des zones disponibles:",
+	"You don't seem to be registered. \nYou can do this by sending": "Tu ne sembles pas enregistré. \nTu peux le faire en écrivant",
+	"or more stardust": "ou plus de poussières",
+	"Reward:": "Récompense",
+
+	"404 no locations found": "Erreur, aucune localisation trouvée",
+	"404 No valid invasion types found": "Erreur, Type inconnu",
+    "404 no valid tracks found": "404 no valid tracks found",
+    "404 No valid quests found": "Erreur, merci de vérifier votre quête",
+	"404 No raid egg levels found": "Erreur, niveau de raid inconnu",
+	"404 No monsters found": "Erreur, merci de vérifier le nom du Pokémon",
+
+	"Please run commands in Direct Messages": "Merci d'exécuter les commandes en messages privés",
+	"does not seem to be registered. add it with": "Ce salon n'est pas enregistré. Active le avec",
+	"You are currently set to receive alarms in": "Vous êtes prêt à recevoir des alarmes sur",
+	"Your alerts are currently": "Vos alertes sont actuellement",
+	"Your location is currently set to": "Votre position est actuellement fixé à",
+
+	"\n\nYou're tracking the following monsters:\n": "\n\n:white_check_mark: Tracking activé pour les monstres suivants:\n",
+	"\n\nYou're tracking the following raids:\n": "\n\n:white_check_mark: Tracking activé pour les raids suivants:\n",
+	"\n\nYou're tracking the following quests:\n": "\n\n:white_check_mark: Tracking activé pour les quêtes suivantes:\n",
+	"\n\nYou're tracking the following invasions:\n": "\n\n:white_check_mark: Tracking activé pour les invasions suivantes:\n",
+
+	"\n\nYou're not tracking any monsters": "\n\n:x: Aucun tracking de Pokémon n'est activé.",
+	"\n\nYou're not tracking any raids": "\n\n:x: Aucun tracking de raid n'est activé.",
+	"\n\nYou're not tracking any quests": "\n\n:x: Aucun tracking de quête n'est activé.",
+	"\n\nYou're not tracking any invasions": "\n\n:x: Aucun tracking d'invasion n'est activé.",
+	"\nInvasion: {{genderText}Grunt type: ${typeText}": "\nInvasion:  ${genderText}Type Sbire: ${typeText}",
+
+	"tracking list is quite long. Have a look at": " la liste de suivi est assez longue. Jettes un coup d'oeil à",
+	"tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:": "la liste de suivi est longue et Hastebin est en panne, Vérifies ce fichier la:"
 }
