@@ -17,7 +17,8 @@ class Worker {
 		this.bounceWorker()
 	}
 
-	static sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
+	// eslint-disable-next-line class-methods-use-this
+	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 	addUser(id) {
 		this.users.push(id)

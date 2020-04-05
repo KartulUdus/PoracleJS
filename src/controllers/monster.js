@@ -187,7 +187,7 @@ class Monster extends Controller {
 					...data,
 					...geoResult,
 					id: data.pokemon_id,
-					baseStats: monster.baseStats,
+					baseStats: monster.stats,
 					time: data.distime,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,

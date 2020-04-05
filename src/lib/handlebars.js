@@ -1,5 +1,6 @@
 const handlebars = require('handlebars')
 const config = require('config')
+const monsters = require('../util/monsters')
 const { cpMultipliers, moves, types } = require('../util/util')
 
 const Translator = require(`${__dirname}/../util/translate`)
@@ -25,6 +26,13 @@ module.exports = () => {
 	handlebars.registerHelper('moveEmoji', (value) => {
 		if (!moves[value]) return ''
 		return types[moves[value].type] ? translator.translate(types[moves[value].type].emoji) : ''
+	})
+	
+	handlebars.registerHelper('pokemonName', (value) => {
+		if (!+value) return ''
+		const monster = Object.values(monsters).find((m) => m.id === +value)
+		if (!monster) return ''
+		return translator.translate(monster.name)
 	})
 
 	handlebars.registerHelper('calculateCp', (baseStats, level = 25, ivAttack = 15, ivDefense = 15, ivStamina = 15) => {

@@ -47,8 +47,8 @@ exports.run = async (client, msg, [args]) => {
 
 		let message = ''
 		if (monsters.length) {
-			message = message.concat('\n\nYou\'re  tracking the following monsters:\n')
-		} else message = message.concat('\n\nYou\'re not tracking any monsters')
+			message = message.concat(client.translator.translate('\n\nYou\'re  tracking the following monsters:\n'))
+		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any monsters'))
 
 		monsters.forEach((monster) => {
 			const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
@@ -60,8 +60,8 @@ exports.run = async (client, msg, [args]) => {
 			message = message.concat(`\n**${monsterName}** form: ${formName} ${monster.distance ? `, distance: ${monster.distance}m` : ''} iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}, gender:${client.utilData.genders[monster.gender].emoji}`)
 		})
 		if (raids.length || eggs.length) {
-			message = message.concat('\n\nYou\'re tracking the following raids:\n')
-		} else message = message.concat('\n\nYou\'re not tracking any raids')
+			message = message.concat(client.translator.translate('\n\nYou\'re tracking the following raids:\n'))
+		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any raids'))
 		raids.forEach((raid) => {
 			const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 			const monsterName = mon ? mon.name : 'levelMon'
@@ -80,8 +80,8 @@ exports.run = async (client, msg, [args]) => {
 		})
 
 		if (quests.length) {
-			message = message.concat('\n\nYou\'re tracking the following quests:\n')
-		} else message = message.concat('\n\nYou\'re not tracking any quests')
+			message = message.concat(client.translator.translate('\n\nYou\'re tracking the following quests:\n'))
+		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any quests'))
 
 		quests.forEach((quest) => {
 			let rewardThing = ''
@@ -92,8 +92,8 @@ exports.run = async (client, msg, [args]) => {
 		})
 
 		if (invasions.length) {
-			message = message.concat('\n\nYou\'re tracking the following invasions:\n')
-		} else message = message.concat('\n\nYou\'re not tracking any invasions')
+			message = message.concat(client.translator.translate('\n\nYou\'re tracking the following invasions:\n'))
+		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any invasions'))
 
 		invasions.forEach((invasion) => {
 			let genderText = ''
@@ -110,7 +110,7 @@ exports.run = async (client, msg, [args]) => {
 			} else {
 				typeText = invasion.grunt_type
 			}
-			message = message.concat(`\nInvasion: ${genderText}Grunt type: ${typeText}`)
+			message = message.concat(client.translator.translate(`\nInvasion: ${genderText}Grunt type: ${typeText}`))
 		})
 
 

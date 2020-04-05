@@ -26,6 +26,7 @@ class Controller {
 		this.utilData = require(path.join(__dirname, '../util/util'))
 		this.translator = translator
 		this.mustache = mustache
+		this.earthRadius = 6371 * 1000 // m
 	}
 
 	getGeocoder() {
@@ -54,13 +55,12 @@ class Controller {
 		}
 	}
 
-	static getDistance(start, end) {
+	getDistance(start, end) {
 		if (typeof (Number.prototype.toRad) === 'undefined') {
 			Number.prototype.toRad = function toRad() {
 				return this * Math.PI / 180
 			}
 		}
-		const earthRadius = 6371 * 1000 // m
 		let lat1 = parseFloat(start.lat)
 		let lat2 = parseFloat(end.lat)
 		const lon1 = parseFloat(start.lon)
@@ -74,7 +74,7 @@ class Controller {
 		const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
 				+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-		const d = earthRadius * c
+		const d = this.earthRadius * c
 		return Math.ceil(d)
 	}
 

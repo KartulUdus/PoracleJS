@@ -87,7 +87,7 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > super.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
@@ -204,7 +204,7 @@ class Raid extends Controller {
 						...data,
 						...geoResult,
 						id: data.pokemon_id,
-						baseStats: monster.baseStats,
+						baseStats: monster.stats,
 						time: data.distime,
 						tthh: data.tth.hours,
 						tthm: data.tth.minutes,
