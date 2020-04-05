@@ -217,7 +217,8 @@ class Raid extends Controller {
 						move1emoji: data.move1emoji,
 						move2emoji: data.move2emoji,
 						imgUrl: data.imgUrl,
-						// pokemoji: emojiData.pokemon[data.pokemon_id],
+						pokemoji: this.utilData.pokemon[data.pokemon_id],
+						eggemoji: this.utilData.eggs[data.level],
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
@@ -314,7 +315,8 @@ class Raid extends Controller {
 					move1emoji: data.move1emoji,
 					move2emoji: data.move2emoji,
 					imgUrl: data.imgUrl,
-					// pokemoji: emojiData.pokemon[data.pokemon_id],
+					pokemoji: this.utilData.pokemon[data.pokemon_id],
+					eggemoji: this.utilData.eggs[data.level],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
