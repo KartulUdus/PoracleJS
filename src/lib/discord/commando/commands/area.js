@@ -35,22 +35,22 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-
+		const areaArgs = args.map((a) => a.replace(/ /g, '_'))
 		switch (args[0]) {
 			case 'add': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter((x) => args.includes(x))
+				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
 				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
+					return await msg.reply(`${client.translator.translate('no valid areas there, please use one of')} ${confAreas}`)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
 
 				if (addAreas.length) {
-					await msg.reply(`Added areas: ${addAreas}`)
+					await msg.reply(`${client.translator.translate('Added areas')}: ${addAreas}`)
 				} else {
 					await msg.react('👌')
 				}
@@ -60,17 +60,17 @@ exports.run = async (client, msg, command) => {
 			case 'remove': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter((x) => args.includes(x))
+				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
 				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
+					return await msg.reply(`${client.translator.translate('no valid areas there, please use one of')} ${confAreas}`)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
 
 				if (removeAreas.length) {
-					await msg.reply(`Removed areas: ${removeAreas}`)
+					await msg.reply(`${client.translator.translate('Removed areas')}: ${removeAreas}`)
 				} else {
 					await msg.react('👌')
 				}
@@ -78,7 +78,7 @@ exports.run = async (client, msg, command) => {
 				break
 			}
 			case 'list': {
-				await msg.reply(`**Current configured areas are:** \`\`\`\n${confUse}\`\`\` `)
+				await msg.reply(`**${client.translator.translate('Current configured areas are:')}** \`\`\`\n${confUse}\`\`\` `)
 				break
 			}
 			default:
