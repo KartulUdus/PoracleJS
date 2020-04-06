@@ -1,4 +1,4 @@
-![logo](https://raw.githubusercontent.com/KartulUdus/poracleWiki/blob/master/assets/starchy.svg?sanitize=true)  
+![logo](https://raw.githubusercontent.com/KartulUdus/poracleWiki/master/assets/starchy.svg?sanitize=true)  
 
 [![Build Status](https://travis-ci.org/KartulUdus/PoracleJS.svg?branch=master)](https://travis-ci.org/KartulUdus/PoracleJS)
 
