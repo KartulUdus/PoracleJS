@@ -22,7 +22,7 @@ It allows for high end-user configurability using discord `!commands` or telegra
 git clone https://github.com/KartulUdus/PoracleJS.git   // Clone the repository
 cd PoracleJS                                            // Navigate to the root of the project
 npm install                                             // install dependencies
-npm run init											// Create your basic config
+npm run init                                            // Create your basic config
 npm start                                               // Start the application
 
 ```
