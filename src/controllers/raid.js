@@ -169,8 +169,8 @@ class Raid extends Controller {
 				data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
 
-				data.quick_move = this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
-				data.charge_move = this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
+				data.quickMove = this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
+				data.chargeMove = this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? this.utilData.types[this.utilData.moves[data.move_1].type].emoji : ''
 				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? this.utilData.types[this.utilData.moves[data.move_2].type].emoji : ''
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
@@ -212,8 +212,8 @@ class Raid extends Controller {
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
 						genderData: this.utilData.genders[data.gender],
-						move1: data.quick_move,
-						move2: data.charge_move,
+						move1: data.quickMove,
+						move2: data.chargeMove,
 						move1emoji: data.move1emoji,
 						move2emoji: data.move2emoji,
 						imgUrl: data.imgUrl,
@@ -309,8 +309,8 @@ class Raid extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1: data.quick_move,
-					move2: data.charge_move,
+					move1: data.quickMove,
+					move2: data.chargeMove,
 					move1emoji: data.move1emoji,
 					move2emoji: data.move2emoji,
 					imgUrl: data.imgUrl,
