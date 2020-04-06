@@ -6,7 +6,7 @@
 
 #### Introduction
 
-PoracleJS is a NodeJS application for Discord and Telegram pokemon alarms. It currently supports wild spawns, raids and quests.  
+PoracleJS is a NodeJS application for Discord and Telegram pokemon alarms. It currently supports wild spawns, raids, quests and invasions.  
 It allows for high end-user configurability using discord `!commands` or telegram `/commands` and private message or channel alarms.  
 
 #### Links
