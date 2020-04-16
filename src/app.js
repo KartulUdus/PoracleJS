@@ -13,7 +13,6 @@ const telegramController = require('./lib/telegram/middleware/controller')
 
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
-const Telegram = require('./lib/telegram/Telegram')
 
 const {
 	config, knex, dts, geofence, translator,
@@ -31,9 +30,12 @@ const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 const DiscordWorker = require('./lib/discord/discordWorker')
 const DiscordCommando = require('./lib/discord/commando/')
 
+const TelegramWorker = require('./lib/telegram/Telegram')
+
 const { log, webhooks } = require('./lib/logger')
 const monsterData = require('./util/monsters')
 const utilData = require('./util/util')
+const re = require('./util/regex')(translator)
 
 
 const MonsterController = require('./controllers/monster')
@@ -78,34 +80,63 @@ if (config.discord.enabled) {
 }
 
 if (config.telegram.enabled) {
-	telegram = new Telegram(config, log, dts, telegramController, monsterController, telegraf, translator, telegramCommandParser)
-	log.info(telegram)
+	telegram = new TelegramWorker(config, log, dts, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
 }
+
+// todo remove lint passing log
+log.debug(telegram)
 
 
 async function run() {
-	setInterval(() => {
-		if (!fastify.discordQueue.length) {
-			return
-		}
-		const { target } = fastify.discordQueue[0]
-		// see if target has dedicated worker
-		let worker = discordWorkers.find((workerr) => workerr.users.includes(target))
-		if (!worker) {
-			let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			let laziestWorkerId
-			Object.keys(discordWorkers).map((i) => {
-				if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
-					busyestWorkerHumanCount = discordWorkers[i].userCount
-					laziestWorkerId = i
-				}
-			})
-			busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			worker = discordWorkers[laziestWorkerId]
-			worker.addUser(target)
-		}
-		if (!worker.busy) worker.work(fastify.discordQueue.shift())
-	}, 10)
+	if (config.discord.enabled) {
+		setInterval(() => {
+			if (!fastify.discordQueue.length) {
+				return
+			}
+			const { target } = fastify.discordQueue[0]
+			// see if target has dedicated worker
+			let worker = discordWorkers.find((workerr) => workerr.users.includes(target))
+			if (!worker) {
+				let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+				let laziestWorkerId
+				Object.keys(discordWorkers).map((i) => {
+					if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
+						busyestWorkerHumanCount = discordWorkers[i].userCount
+						laziestWorkerId = i
+					}
+				})
+				busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+				worker = discordWorkers[laziestWorkerId]
+				worker.addUser(target)
+			}
+			if (!worker.busy) worker.work(fastify.discordQueue.shift())
+		}, 10)
+	}
+
+	// if (config.telegram.enabled) {
+	// 	setInterval(() => {
+	// 		if (!fastify.telegramQueue.length) {
+	// 			return
+	// 		}
+	// 		const { target } = fastify.telegramQueue[0]
+	// 		// see if target has dedicated worker
+	// 		let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
+	// 		if (!worker) {
+	// 			let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+	// 			let laziestWorkerId
+	// 			Object.keys(discordWorkers).map((i) => {
+	// 				if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
+	// 					busyestWorkerHumanCount = discordWorkers[i].userCount
+	// 					laziestWorkerId = i
+	// 				}
+	// 			})
+	// 			busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+	// 			worker = discordWorkers[laziestWorkerId]
+	// 			worker.addUser(target)
+	// 		}
+	// 		if (!worker.busy) worker.work(fastify.discordQueue.shift())
+	// 	}, 10)
+	// }
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
 	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
@@ -148,6 +179,7 @@ async function handleAlarms() {
 				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, JSON.stringify(hook))
 
 				const result = await fastify.raidController.handle(hook.message)
+				if (!result) break
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
@@ -166,6 +198,7 @@ async function handleAlarms() {
 				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
 
 				const result = await fastify.pokestopController.handle(hook.message)
+				if (!result) break
 
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
@@ -184,6 +217,8 @@ async function handleAlarms() {
 				const q = hook.message
 
 				const result = await fastify.questController.handle(q)
+				if (!result) break
+
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)

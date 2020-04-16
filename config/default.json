@@ -54,10 +54,9 @@
 
       "telegram": {
         "enabled": false,
-        "location": true,
         "token": "",
         "admins": [""],
-        "channel": "PoracleJsTest"
+        "channels": [""]
       },
 
       "geocoding": {

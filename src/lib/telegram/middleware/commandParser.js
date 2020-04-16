@@ -10,9 +10,9 @@ module.exports = (translator) => mount('text', (ctx, next) => {
 		command: parts[1],
 		bot: parts[2],
 		args: parts[3],
-		get splitArgs() {
-			const args = parts[3].split(/\s+/)
-			return args.map((arg) => translator.translate(arg.toLowerCase().replace('_', ' ')))
+		get splitArgsArray() {
+			const args = parts[3].split('|').map((x) => x.split(/\s+/))
+			return args.map((argss) => argss.map((arg) => translator.translate(arg.toLowerCase().replace('_', ' '))).filter((x) => x))
 		},
 	}
 	ctx.state.command = command

@@ -7,7 +7,7 @@
       "embed": {
         "color": "{{ivcolor}}",
         "title": "#{{id}} {{name}} cp:{{cp}} L{{level}} {{atk}}/{{ def }}/{{ sta }}",
-        "description": "IV:{{iv}}%. end: {{time}}, time left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n quick: {{move1}}, charge {{move2}} \n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "description": "IV:{{iv}}%. end: {{time}}, time left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }

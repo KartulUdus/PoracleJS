@@ -19,5 +19,5 @@ module.exports = (translator) => ({
 	weightRe: new RegExp(`${translator.translate('weight')}\\d{1,8}`, 'gi'),
 	dRe: new RegExp(`(${translator.translate('d')})[\\d.]{1,}`, 'gi'),
 	stardustRe: new RegExp(`${translator.translate('stardust')}\\d{1,8}`, 'gi'),
-
+	channelRe: new RegExp(`${translator.translate('channel')}-\\d{1,20}`, 'gi'),
 })

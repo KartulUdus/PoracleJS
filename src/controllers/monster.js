@@ -196,8 +196,6 @@ class Monster extends Controller {
 					name: data.name,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1: data.quick_move,
-					move2: data.charge_move,
 					move1emoji: data.move1emoji,
 					move2emoji: data.move2emoji,
 					level: Math.round(data.pokemon_level),

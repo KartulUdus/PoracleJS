@@ -164,8 +164,6 @@ class Quest extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1: data.quick_move,
-					move2: data.charge_move,
 					move1emoji: data.move1emoji,
 					move2emoji: data.move2emoji,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],

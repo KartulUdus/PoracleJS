@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 class Telegram {
-	constructor(config, log, dts, controller, query, telegraf, translator, commandParser) {
+	constructor(config, log, dts, controller, query, telegraf, translator, commandParser, re) {
 		this.config = config
 		this.log = log
 		this.translator = translator
@@ -15,16 +15,22 @@ class Telegram {
 		this.bot = telegraf
 		this.bot
 			.use(commandParser(translator))
-			.use(controller(controller, dts, log, config))
+			.use(controller(query, dts, log, config, re, translator))
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
-			let commandName = file.split('.')[0]
-			if (config.commands[commandName]) commandName = config.commands[commandName]
-			this.enabledCommands.push(commandName)
-			this.bot.command(this.translator.reverse(commandName), this.tempProps)
+			const commandName = file.split('.')[0]
+			this.enabledCommands.push(this.translator.translate(commandName))
+			this.bot.command(this.translator.translate(commandName), this.tempProps)
+		})
+		this.bot.catch((err, ctx) => {
+			log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)
+		})
+		this.bot.start(() => {
+			throw new Error('Telegraf error')
 		})
 		// this.work()
+		this.log.info(`Telegram commando loaded ${this.enabledCommands.join(', ')} commands`)
 		this.init()
 	}
 
@@ -37,12 +43,12 @@ class Telegram {
 	async work(data) {
 		this.busy = true
 		switch (data.type) {
-			case 'telegram-user': {
+			case 'telegram:user': {
 				await this.userAlert(data)
 				this.busy = false
 				break
 			}
-			case 'telegram-channel': {
+			case 'telegram:channel': {
 				await this.channelAlert(data)
 				this.busy = false
 				break
