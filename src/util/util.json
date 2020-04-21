@@ -132,7 +132,9 @@
 		"31": "Find {{amount}} Team Rocket Invasion(s)",
    		"32": "{{amount}} time(s) First Grunt OTD",
 		"33": "",
-    		"34": "Earn {{amount}} hearts with your buddy"
+    		"34": "Earn {{amount}} hearts with your buddy",
+    		"35": "Play with your Buddy {{amount}} times"
+	},
 	},
 	"questRewardTypes": {
 		"0": "",
