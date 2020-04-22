@@ -135,7 +135,6 @@
     		"34": "Earn {{amount}} hearts with your buddy",
     		"35": "Play with your Buddy {{amount}} times"
 	},
-	},
 	"questRewardTypes": {
 		"0": "",
 		"1": "{{amount}} XP",
