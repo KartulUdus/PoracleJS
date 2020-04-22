@@ -133,7 +133,7 @@
    		"32": "{{amount}} time(s) First Grunt OTD",
 		"33": "",
     		"34": "Earn {{amount}} hearts with your buddy",
-    		"35": "Play with your Buddy {{amount}} times"
+    		"35": "Play with your Buddy {{amount}} time(s)"
 	},
 	"questRewardTypes": {
 		"0": "",
