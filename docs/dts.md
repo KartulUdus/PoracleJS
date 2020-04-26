@@ -15,43 +15,43 @@ Sometimes it's necessary to use three curly braces on each side. This avoids url
 ###### Monster alarms
 
 ```json
-  "monster": {
-  "3":{
+    "id": 1,
+    "type": "monster",
+    "default": true,
+    "platform": "discord",
+    "template": {
       "embed": {
-        "title": "a wild {{{name}}} has appeared!",
-        "description": "It weighs {{weight}}kg and will despawn at {{time}}, you have {{tthm}}m {{tths}}s left \nPerfection: **{{iv}}%** , ({{atk}}/{{def}}/{{sta}}) \n{{move1}}|{{move2}} Level:{{level}} (cp:**{{cp}}**)\naddress: {{addr}} ",
-        "url": "{{{rocketmap}}}",
-        "color": "{{color}}",
+        "color": "{{ivcolor}}",
+        "title": "{{round iv}}% {{name}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
+        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
-          "url": "{{{imgurl}}}"
-        },
-        "image": {
-          "url": "{{{staticmap}}}"
-        },
-        "author": {
-          "name": "{{name}}",
-          "url": "{{{rocketmap}}}"
+          "url": "{{{imgUrl}}}"
         }
       }
     }
-  }
+  },
 
 ```
 
 For monsters without IV information, you can specify a different message.
 
 ```json
-  "monsterNoIv": {
-    "1": {
+  {
+    "id": 1,
+    "type": "monsterNoIv",
+    "default": true,
+    "platform": "discord",
+    "template": {
       "embed": {
         "color": "{{color}}",
-        "author": {
-          "name":"#{{id}} {{name}} end: {{time}}, time left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}}",
-          "icon_url": "{{{imgurl}}}"
-        },
-        "description": "\n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})"
+        "title": "?% {{name}} {{boostemoji}}",
+        "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        }
       }
-    },
+    }
+  },
 ```
 
 
@@ -79,13 +79,13 @@ Any of the fields can be customized with the following:
 |{{state}}| State name of the alerted location|
 |{{stateCode}}| 2 letter state code of the alerted location|
 |{{neighbourhood}}| Neighbourhood of the alerted location|
-|{{move1}}| Monsers quick move|
-|{{move2}}| Monsters charge move|
+|{{quickMove}}| Monsers quick move|
+|{{chargeMove}}| Monsters charge move|
 |{{move1emoji}}| Monsers quick move type emoji|
 |{{move2emoji}}| Monsters charge move type emoji|
 |{{iv}}| Monsters Individual Value Precentage|
 |{{cp}}| Monsters CP|
-|{{gendername}}| Monsters gender|
+|{{genderName}}| Monsters gender|
 |{{weight}}| Monsters weight|
 |{{level}}| Monsters level|
 |{{atk}}| Monsters attack|
@@ -94,8 +94,8 @@ Any of the fields can be customized with the following:
 |{{weight}}| Monsters weight in kilograms|
 |{{{staticmap}}}| Static link to map|
 |{{{mapurl}}}|Link to google maps search of the location|
-|{{{imgurl}}}| Link to monsters picture|
-|{{formname}}| Monsters form|
+|{{{imgUrl}}}| Link to monsters picture|
+|{{formName}}| Monsters form|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ivcolor}}| Color to be used for embed (Color of monsters perfection based on config.discord.iv_colors)|
 |{{boost}}| Monsters weather boost name|
@@ -111,18 +111,26 @@ Any of the fields can be customized with the following:
 ###### Raid alarms
 
 ```json
-  
-  "raid": {
-    "1": {
+    {
+    "id": 1,
+    "type": "raid",
+    "default": true,
+    "platform": "discord",
+    "template": {
       "embed": {
+        "title": "Raid against {{name}} has started at {{gymName}}!",
+        "description": "CP: {{cp}}, quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
         "author": {
-          "name": "R{{level}} {{name}} {{flagemoji}} {{lat}}, {{lon}} end: {{time}}, {{tthm}}m {{tths}}s",
-          "url": "{{{mapurl}}}",
-          "icon_url": "{{{imgurl}}}"
+          "name": "{{name}} lvl{{level}}. End: {{time}} in {{tthm}}m {{tths}}s",
+          "icon_url": "{{{detailsurl}}}"
         }
       }
-    },
+    }
+  },
 ```
 
 | Option        | Value         | 
@@ -146,8 +154,8 @@ Any of the fields can be customized with the following:
 |{{state}}| State name of the alerted location|
 |{{stateCode}}| 2 letter state code of the alerted location|
 |{{neighbourhood}}| Neighbourhood of the alerted location|
-|{{move1}}| Monsters quick move|
-|{{move2}}| Monsters charge move|
+|{{quickMove}}| Monsters quick move|
+|{{chargeMove}}| Monsters charge move|
 |{{move1emoji}}| Monsters quick move type emoji|
 |{{move2emoji}}| Monsters charge move type emoji|
 |{{cp}}| Raid boss cp|
@@ -156,13 +164,13 @@ Any of the fields can be customized with the following:
 |{{mincp20}}| Monsters cp with 0% perfect IV and level 20|
 |{{mincp20}}| Monsters cp with 0% perfect IV and level 25|
 |{{level}}| Raid level|
-|{{gymname}}| Name of the gym|
-|{{teamname}}| Team owner of the gym
+|{{gymName}}| Name of the gym|
+|{{teamName}}| Team owner of the gym
 |{{description}}| Description of the gym|
 |{{{detailsurl}}}| Descriptive picture url|
 |{{{staticmap}}}| Static link to map|
 |{{{mapurl}}}|Link to google maps search of the location|
-|{{{imgurl}}}| Link to monsters picture|
+|{{{imgUrl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ex}}| If raid takes place in a potential EX gym (empty string if false)|
 |{{#ex}}True{{/ex}}{{^ex}}False{{/ex}}| Prints True if ex eligible, False if not|
@@ -177,21 +185,26 @@ Any of the fields can be customized with the following:
 ###### Egg alarms
 
 ```json
-  "egg":{
-    "2": {
+  {
+    "id": 1,
+    "type": "egg",
+    "default": true,
+    "platform": "discord",
+    "template": {
       "embed": {
-        "title": "{{gymname}}: {{ex}}, \n {{countryCode}} {{flagemoji}} {{addr}} {{lat}}, {{lon}} )",
-        "description": "[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "title": "Raid egg level{{level}} at {{gymName}}",
+        "description": "Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{detailsurl}}}"
         },
         "author": {
-          "name": "lvl{{level}} hatch: {{time}} in {{tthm}}m {{tths}}s",
-          "icon_url": "{{{imgurl}}}"
+          "name": "Hatch at: {{time}} in {{tthm}}m {{tths}}s",
+          "icon_url": "{{{imgUrl}}}"
         }
       }
-    },
+    }
+  },
 ```
 
 
@@ -215,14 +228,14 @@ Any of the fields can be customized with the following:
 |{{state}}| State name of the alerted location|
 |{{stateCode}}| 2 letter state code of the alerted location|
 |{{neighbourhood}}| Neighbourhood of the alerted location|
-|{{gymname}}| Name of the gym|
+|{{gymName}}| Name of the gym|
 |{{description}}| Description of the gym|
 |{{level}}| Raid level|
 |{{{detailsurl}}}| Descriptive picture url|
 |{{{staticmap}}}| Static link to map|
 |{{{rocketmap}}}| Link to Rocketmap with alerted location|
 |{{{mapurl}}}|Link to google maps search of the location|
-|{{{imgurl}}}| Link to monsters picture|
+|{{{imgUrl}}}| Link to monsters picture|
 |{{color}}| Color to be used for embed (Color of monsters primary type)|
 |{{ex}}| If raid takes place in a potential EX gym (empty string if false|
 |{{#ex}}True{{/ex}}{{^ex}}False{{/ex}}| Prints True if ex eligible, False if not|
@@ -232,20 +245,22 @@ Any of the fields can be customized with the following:
 ###### Quest alarms
 
 ```json
-"quest":{
-    "4": {
+ {
+    "id": 1,
+    "type": "quest",
+    "default": true,
+    "platform": "discord",
+    "template": {
       "embed": {
-        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "title": "{{questType}} \n Pokestop Name: {{pokestop_name}}",
         "url": "{{{mapurl}}}",
-        "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
+        "description": "Conditions: {{conditionString}} \n Reward: {{rewardString}} {{monsterNames}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
-          "url": "{{{imgurl}}}"
-        },
-        "image": {
-          "url": "{{{url}}}"
+          "url": "{{{imgUrl}}}"
         }
       }
-    },
+    }
+  },
 ```
 
 
@@ -254,13 +269,13 @@ Any of the fields can be customized with the following:
 | --------------- |:-------------:|
 |{{now}}| Current Timestamp|
 |{{questType}}| The type of quest (for example: battle in 3 raids|
-|{{conditions}}| Extra conditions (for example: you must win these battles|
-|{{reward}}| Reward if you finish (Pokemon, item or stardust)|
+|{{conditionString}}| Extra conditions (for example: you must win these battles|
+|{{rewardString}}| Reward if you finish (Pokemon, item or stardust)|
 |{{monsterNames}}| Names of all reward monsters for this quest|
 |{{itemNames}}| Names of all reward Items for this quest|
-|{{stardust}}| The word "stardust" if it's that tyüe of quest|
-|{{{imgurl}}}| Image of the reward. Could be Pokemon or Item or stardust|
-|{{name}}| Name of the Pokestop|
+|{{stardust}}| The word "stardust" if it's that type of quest|
+|{{{imgUrl}}}| Image of the reward. Could be Pokemon or Item or stardust|
+|{{name}}| Name of the Pokestop (or might be {{pokestop_name}} )|
 |{{{rewardemoji}}}| emoji for the award as set in config/emoji.json|
 |{{url}}| Link to the image of the Pokestop|
 |{{minCp}}| Minimum CP of the reward pokemon |
@@ -285,19 +300,22 @@ Any of the fields can be customized with the following:
 ###### Invasion alarms
 
 ```json
-"incidents": {
-  "3": {
+  {
+    "id": 1,
+    "type": "invasion",
+    "default": true,
+    "platform": "discord",
+    "template": {
       "embed": {
-        "title": "Team Rocket  incident has started! at {{name}}",
-        "description": "Name: {{gruntName}} {{genderName}}\nType: {{gruntType}} {{gruntTypeEmoji}}\nPossible Rewards: {{gruntRewards}}\n[Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
-        "color": "{{gruntTypeColor}}",
-        "author": {
-          "name": "end: {{time}} in {{tthm}}m {{tths}}s",
-          "icon_url": "{{{imgurl}}}"
+        "title": "Team Rocket at {{name}}!",
+        "url": "{{{mapurl}}}",
+        "description": "Name: {{gruntName}} {{genderName}} \n Type: {{gruntType}} {{gruntTypeEmoji}} \n Possible Rewards: {{gruntRewards}} \n Ends: {{time}}, in {{tthm}}m {{tths}}s \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
         }
       }
-    },
-}
+    }
+  },
 ```
 
 
@@ -317,7 +335,7 @@ Any of the fields can be customized with the following:
 |{{gruntTypeId}}| The id of the invasion type|
 |{{gender}}| The id of the grunt gender|
 |{{name}}| Name of the Pokestop|
-|{{{imgurl}}}| alias for Link to the image of the Pokestop|
+|{{{imgUrl}}}| alias for Link to the image of the Pokestop|
 |{{url}}| Link to the image of the Pokestop|
 |{{{staticmap}}}| Static link to map|
 |{{{mapurl}}}| Link to google maps|
