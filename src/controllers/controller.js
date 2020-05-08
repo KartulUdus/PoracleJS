@@ -1,4 +1,3 @@
-/* eslint no-extend-native: ["error", { "exceptions": ["Number"] }] */
 
 const inside = require('point-in-polygon')
 const path = require('path')
@@ -14,7 +13,7 @@ const { log } = require('../lib/logger')
 
 
 class Controller {
-	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache) {
+	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController) {
 		this.db = db
 		this.cp = cp
 		this.config = config
@@ -27,6 +26,8 @@ class Controller {
 		this.translator = translator
 		this.mustache = mustache
 		this.earthRadius = 6371 * 1000 // m
+		this.weatherController = weatherController
+		this.controllerData = {}
 	}
 
 	getGeocoder() {
@@ -57,6 +58,7 @@ class Controller {
 
 	getDistance(start, end) {
 		if (typeof (Number.prototype.toRad) === 'undefined') {
+			// eslint-disable-next-line no-extend-native
 			Number.prototype.toRad = function toRad() {
 				return this * Math.PI / 180
 			}
@@ -154,7 +156,7 @@ class Controller {
 		try {
 			return await this.db.select('*').from(table).where(conditions)
 		} catch (err) {
-			throw new Error({ source: 'slectOneQuery', error: err })
+			throw new Error({ source: 'selectAllQuery', error: err })
 		}
 	}
 

@@ -28,7 +28,7 @@ const cache = new NodeCache({ stdTTL: 5400 })
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
 const DiscordWorker = require('./lib/discord/discordWorker')
-const DiscordCommando = require('./lib/discord/commando/')
+const DiscordCommando = require('./lib/discord/commando')
 
 const TelegramWorker = require('./lib/telegram/Telegram')
 
@@ -42,12 +42,14 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const WeatherController = require('./controllers/weather')
 
+const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null)
+const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
 
-const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
-const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
-const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
-const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache)
 
 fastify.decorate('logger', log)
 fastify.decorate('webhooks', webhooks)
@@ -58,6 +60,7 @@ fastify.decorate('monsterController', monsterController)
 fastify.decorate('raidController', raidController)
 fastify.decorate('questController', questController)
 fastify.decorate('pokestopController', pokestopController)
+fastify.decorate('weatherController', weatherController)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)
@@ -155,7 +158,7 @@ async function handleAlarms() {
 			case 'pokemon': {
 				fastify.webhooks.info('pokemon', hook.message)
 				if (fastify.cache.get(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
-					fastify.logger.warn(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
+					fastify.logger.debug(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
 					break
 				}
 
@@ -172,7 +175,7 @@ async function handleAlarms() {
 			case 'raid': {
 				fastify.webhooks.info('raid', hook.message)
 				if (fastify.cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
-					fastify.logger.info(`Raid ${hook.message.encounter_id} was sent again too soon, ignoring`)
+					fastify.logger.debug(`Raid ${hook.message.gym_id} was sent again too soon, ignoring`)
 					break
 				}
 
@@ -192,7 +195,7 @@ async function handleAlarms() {
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 				if (!incidentExpiration) break
 				if (await fastify.cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
-					fastify.logger.info(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
+					fastify.logger.debug(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
 					break
 				}
 				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
@@ -210,7 +213,7 @@ async function handleAlarms() {
 			case 'quest': {
 				fastify.webhooks.info('quest', hook.message)
 				if (await fastify.cache.get(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
-					fastify.logger.info(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
+					fastify.logger.debug(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
 					break
 				}
 				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
@@ -225,11 +228,16 @@ async function handleAlarms() {
 				})
 				break
 			}
-			// case 'weather': {
-			// 	fastify.webhooks.info('weather', hook.message)
-			// 	await fastify.weatherController.handle(hook.message)
-			// 	break
-			// }
+			case 'weather': {
+				fastify.webhooks.info('weather', hook.message)
+				if (await fastify.cache.get(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
+					fastify.logger.error(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
+					break
+				}
+				fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
+				await fastify.weatherController.handle(hook.message)
+				break
+			}
 			default:
 		}
 		workingOnHooks = false
