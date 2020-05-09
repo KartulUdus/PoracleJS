@@ -81,8 +81,8 @@ Any of the fields can be customized with the following:
 |{{neighbourhood}}| Neighbourhood of the alerted location|
 |{{quickMove}}| Monsers quick move|
 |{{chargeMove}}| Monsters charge move|
-|{{move1emoji}}| Monsers quick move type emoji|
-|{{move2emoji}}| Monsters charge move type emoji|
+|{{moveEmoji move_1}}| Monsers quick move type emoji|
+|{{moveEmoji move_2}}| Monsters charge move type emoji|
 |{{iv}}| Monsters Individual Value Precentage|
 |{{cp}}| Monsters CP|
 |{{genderName}}| Monsters gender|
