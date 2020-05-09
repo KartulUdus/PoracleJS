@@ -18,6 +18,7 @@ class Weather extends Controller {
 					whoCares = cellWeather.cares
 				}
 			}
+
 			this.controllerData[data.s2_cell_id] = {
 				time: data.time_changed,
 				weather: data.condition,
@@ -25,11 +26,11 @@ class Weather extends Controller {
 			}
 
 			if (oldWeather === data.condition || whoCares.length === 0) {
-				this.log.error(`weather was unchanged in ${data.s2_cell_id} or nobody cares (${whoCares.length}`)
+				this.log.debug(`weather was unchanged in ${data.s2_cell_id} or nobody cares.`)
 				return []
 			}
 
-			this.log.error(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
+			this.log.info(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			if (oldWeather > -1) {
 				data.oldweather = this.utilData.weather[oldWeather] ? this.utilData.weather[oldWeather].name : ''
@@ -43,19 +44,19 @@ class Weather extends Controller {
 
 			const jobs = []
 			const now = moment.now()
+			let weatherTth = moment.preciseDiff(now, moment().add(1,'hours'),true)
 
 			for (const cares of whoCares) {
 				if (cares.id in this.controllerData.caresUntil) {
 					const careUntil = this.controllerData.caresUntil[cares.id]
 					if (careUntil < now) {
-						this.log.error(`weather has changed in ${data.s2_cell_id} but we no longer care`)
+						this.log.debug(`weather changed in ${data.s2_cell_id} after mon despawn`)
 						delete this.controllerData.caresUntil[cares.id]
 						// eslint-disable-next-line no-continue
 						continue
 					}
 				}
 
-				this.log.error(`someone cares about the weather in ${data.s2_cell_id} - setting up an alert`)
 				const view = {
 					...data,
 					...geoResult,
@@ -74,7 +75,7 @@ class Weather extends Controller {
 					target: cares.id,
 					type: cares.type,
 					name: cares.name,
-					tth: data.tth,
+					tth: weatherTth,
 					clean: cares.clean,
 					emoji: [],
 				}
