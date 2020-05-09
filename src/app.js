@@ -235,7 +235,11 @@ async function handleAlarms() {
 					break
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
-				await fastify.weatherController.handle(hook.message)
+				const result = await fastify.weatherController.handle(hook.message)
+				result.forEach((job) => {
+					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+				})
 				break
 			}
 			default:
