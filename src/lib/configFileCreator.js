@@ -21,7 +21,6 @@ module.exports = () => {
 			}
 			if (!existingDtsConfig.find((x) => x.platform === 'discord' && x.type === 'monsterNoIv' && x.default)) {
 				writeNewFile = true
-				writeNewFile = true
 				existingDtsConfig.push(defaultDtsConfig.find((x) => x.platform === 'discord' && x.type === 'monsterNoIv' && x.default))
 			}
 			if (!existingDtsConfig.find((x) => x.platform === 'discord' && x.type === 'raid' && x.default)) {
