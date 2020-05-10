@@ -9,7 +9,8 @@
         "environment": "production",
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
-        "locale": "en"
+        "locale": "en",
+        "weatherChangeAlert": false
     },
     "logger": {
         "level": "info",

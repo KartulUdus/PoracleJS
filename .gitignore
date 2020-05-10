@@ -17,3 +17,4 @@ package-lock.json
 potato/*
 src/lib/db/poracle.sqlite
 .geoCache
+/.cache/cache/

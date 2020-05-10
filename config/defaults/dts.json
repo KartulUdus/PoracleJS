@@ -103,6 +103,18 @@
   },
   {
     "id": 1,
+    "type": "weatherchange",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Weather change!",
+        "description": "NB! The weather for some active mons have changed from {{oldweather}} {{oldweatheremoji}} to {{weather}} {{weatheremoji}}!\nThis could have altered the reported IV!"
+      }
+    }
+  },
+  {
+    "id": 1,
     "type": "greeting",
     "default": true,
     "platform": "discord",
