@@ -39,6 +39,10 @@ module.exports = () => {
 				writeNewFile = true
 				existingDtsConfig.push(defaultDtsConfig.find((x) => x.platform === 'discord' && x.type === 'invasion' && x.default))
 			}
+			if (!existingDtsConfig.find((x) => x.platform === 'discord' && x.type === 'weatherchange' && x.default)) {
+				writeNewFile = true
+				existingDtsConfig.push(defaultDtsConfig.find((x) => x.platform === 'discord' && x.type === 'weatherchange' && x.default))
+			}
 			if (!existingDtsConfig.find((x) => x.platform === 'discord' && x.type === 'greeting' && x.default)) {
 				writeNewFile = true
 				existingDtsConfig.push(defaultDtsConfig.find((x) => x.platform === 'discord' && x.type === 'greeting' && x.default))
