@@ -25,13 +25,18 @@ class Weather extends Controller {
 				cares: whoCares,
 			}
 
+			if(!this.config.general.weatherChangeAlert) {
+				this.log.debug(`weather change alerts are disabled, nobody cares.`)
+				return []
+			}
+
 			if (oldWeather === data.condition || whoCares.length === 0) {
 				this.log.debug(`weather was unchanged in ${data.s2_cell_id} or nobody cares.`)
 				return []
 			}
 
 			this.controllerData[data.s2_cell_id].cares = []
-			
+
 			this.log.info(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			if (oldWeather > -1) {
