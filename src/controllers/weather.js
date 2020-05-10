@@ -30,6 +30,8 @@ class Weather extends Controller {
 				return []
 			}
 
+			this.controllerData[data.s2_cell_id].cares = []
+			
 			this.log.info(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			if (oldWeather > -1) {
@@ -44,7 +46,7 @@ class Weather extends Controller {
 
 			const jobs = []
 			const now = moment.now()
-			let weatherTth = moment.preciseDiff(now, moment().add(1,'hours'),true)
+			const weatherTth = moment.preciseDiff(now, moment().add(1, 'hours'), true)
 
 			for (const cares of whoCares) {
 				if (cares.id in this.controllerData.caresUntil) {
