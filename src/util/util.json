@@ -130,10 +130,10 @@
 		"29": "Defeat {{amount}} Team Rocket Grunt",
 		"30": "Purify {{amount}} Pokemon",
 		"31": "Find {{amount}} Team Rocket Invasion(s)",
-   		"32": "{{amount}} time(s) First Grunt OTD",
+		"32": "{{amount}} time(s) First Grunt OTD",
 		"33": "",
-    		"34": "Earn {{amount}} hearts with your buddy",
-    		"35": "Play with your Buddy {{amount}} time(s)"
+		"34": "Earn {{amount}} hearts with your buddy",
+		"35": "Play with your Buddy {{amount}} time(s)"
 	},
 	"questRewardTypes": {
 		"0": "",
@@ -173,19 +173,19 @@
 		"24": "Location",
 		"25": "Distance",
 		"26": "Pokemon Alignment(s): {{alignments}}",
-    		"27": "Invasion Category(s): {{categories}}"
+		"27": "Invasion Category(s): {{categories}}"
 	},
-	
+
 	"alignments": {
-   		"1": "Shadow",
-    		"2": "Purified"
- 	},
-	
+		"1": "Shadow",
+		"2": "Purified"
+	},
+
 	"categories": {
-    		"1": "Team Leader",
-    		"2": "Grunt"
-  	},
-	
+		"1": "Team Leader",
+		"2": "Grunt"
+	},
+
 	"throwType": {
 		"10": "Nice",
 		"11": "Great",
@@ -2539,42 +2539,24 @@
 	},
 	"gruntTypes": {
 		"1": {
-			"type": "",
-			"grunt": "Blanche",
-			"gender": 2
+			"type": "Blanche",
+			"gender": 2,
+			"grunt": "Blanche"
 		},
 		"2": {
-			"type": "",
-			"grunt": "Candela",
-			"gender": 2
+			"type": "Candela",
+			"gender": 2,
+			"grunt": "Candela"
 		},
 		"3": {
-			"type": "",
-			"grunt": "Spark",
-			"gender": 1
+			"type": "Spark",
+			"gender": 1,
+			"grunt": "Spark"
 		},
 		"4": {
 			"type": "Mixed",
 			"grunt": "Male Grunt",
-			"gender": 1,
-			"second_reward": true,
-			"encounters": {
-				"first": [
-					1,
-					4,
-					7
-				],
-				"second": [
-					2,
-					5,
-					8
-				],
-				"third": [
-					3,
-					6,
-					9
-				]
-			}
+			"gender": 1
 		},
 		"5": {
 			"type": "Mixed",
@@ -2582,19 +2564,9 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					143
-				],
-				"second": [
-					143,
-					62,
-					282
-				],
-				"third": [
-					143,
-					149,
-					130
-				]
+				"first": [131],
+				"second": [62, 143, 282],
+				"third": [130, 143, 149]
 			}
 		},
 		"6": {
@@ -2608,17 +2580,9 @@
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					123
-				],
-				"second": [
-					123,
-					212
-				],
-				"third": [
-					123,
-					212
-				]
+				"first": [13, 48],
+				"second": [14, 49, 212],
+				"third": [15, 123, 212]
 			}
 		},
 		"8": {
@@ -2629,7 +2593,13 @@
 		"9": {
 			"type": "Ghost",
 			"grunt": "Male Grunt",
-			"gender": 1
+			"gender": 1,
+			"second_reward": false,
+			"encounters": {
+				"first": [200],
+				"second": [302, 354, 356],
+				"third": [302, 354, 477]
+			}
 		},
 		"10": {
 			"type": "Dark",
@@ -2644,22 +2614,7 @@
 		"12": {
 			"type": "Dragon",
 			"grunt": "Female Grunt",
-			"gender": 2,
-			"second_reward": false,
-			"encounters": {
-				"first": [
-					147
-				],
-				"second": [
-					147,
-					148
-				],
-				"third": [
-					148,
-					149,
-					130
-				]
-			}
+			"gender": 2
 		},
 		"13": {
 			"type": "Dragon",
@@ -2682,15 +2637,9 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					107
-				],
-				"second": [
-					107
-				],
-				"third": [
-					107
-				]
+				"first": [106, 107],
+				"second": [107],
+				"third": [107]
 			}
 		},
 		"17": {
@@ -2704,20 +2653,9 @@
 			"gender": 2,
 			"second_reward": true,
 			"encounters": {
-				"first": [
-					4,
-					58,
-					228
-				],
-				"second": [
-					5,
-					229
-				],
-				"third": [
-					6,
-					59,
-					229
-				]
+				"first": [37, 58, 228],
+				"second": [5, 38, 229],
+				"third": [5, 59, 229]
 			}
 		},
 		"19": {
@@ -2731,20 +2669,9 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					41,
-					42
-				],
-				"second": [
-					42,
-					123,
-					169
-				],
-				"third": [
-					130,
-					149,
-					169
-				]
+				"first": [41, 42],
+				"second": [42, 123, 169],
+				"third": [130, 149, 169]
 			}
 		},
 		"21": {
@@ -2763,21 +2690,9 @@
 			"gender": 1,
 			"second_reward": true,
 			"encounters": {
-				"first": [
-					1,
-					43,
-					387
-				],
-				"second": [
-					1,
-					2,
-					44
-				],
-				"third": [
-					2,
-					3,
-					388
-				]
+				"first": [1, 69, 102],
+				"second": [2, 44, 70],
+				"third": [45, 71, 275]
 			}
 		},
 		"24": {
@@ -2791,20 +2706,9 @@
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					19,
-					104,
-					246
-				],
-				"second": [
-					20,
-					104,
-					105
-				],
-				"third": [
-					20,
-					105
-				]
+				"first": [27, 246, 328],
+				"second": [105, 247, 329],
+				"third": [105, 330]
 			}
 		},
 		"26": {
@@ -2818,12 +2722,12 @@
 			"gender": 1
 		},
 		"28": {
-			"type": "Steel",
+			"type": "Metal",
 			"grunt": "Female Grunt",
 			"gender": 2
 		},
 		"29": {
-			"type": "Steel",
+			"type": "Metal",
 			"grunt": "Male Grunt",
 			"gender": 1
 		},
@@ -2836,44 +2740,17 @@
 			"type": "Normal",
 			"grunt": "Male Grunt",
 			"gender": 1,
-			"second_reward": true,
+			"second_reward": false,
 			"encounters": {
-				"first": [
-					19,
-					41
-				],
-				"second": [
-					19,
-					20
-				],
-				"third": [
-					20,
-					143
-				]
+				"first": [137],
+				"second": [233],
+				"third": [143, 474]
 			}
 		},
 		"32": {
 			"type": "Poison",
 			"grunt": "Female Grunt",
-			"gender": 2,
-			"second_reward": true,
-			"encounters": {
-				"first": [
-					41,
-					48,
-					88
-				],
-				"second": [
-					42,
-					88,
-					89
-				],
-				"third": [
-					42,
-					49,
-					89
-				]
-			}
+			"gender": 2
 		},
 		"33": {
 			"type": "Poison",
@@ -2891,21 +2768,9 @@
 			"gender": 1,
 			"second_reward": true,
 			"encounters": {
-				"first": [
-					63,
-					96,
-					280
-				],
-				"second": [
-					96,
-					97,
-					280
-				],
-				"third": [
-					64,
-					97,
-					281
-				]
+				"first": [63, 202, 280],
+				"second": [96, 97, 280],
+				"third": [64, 97, 281]
 			}
 		},
 		"36": {
@@ -2919,17 +2784,9 @@
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					246
-				],
-				"second": [
-					246,
-					247
-				],
-				"third": [
-					247,
-					248
-				]
+				"first": [138, 246],
+				"second": [246, 247],
+				"third": [247, 248]
 			}
 		},
 		"38": {
@@ -2938,41 +2795,103 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					54,
-					60
-				],
-				"second": [
-					55,
-					61
-				],
-				"third": [
-					56,
-					61,
-					186
-				]
+				"first": [60, 258, 318],
+				"second": [55, 61],
+				"third": [62, 186]
 			}
 		},
 		"39": {
 			"type": "Water",
 			"grunt": "Male Grunt",
+			"gender": 1
+		},
+		"40": {
+			"type": "Player Team Leader",
+			"grunt": "Player Team Leader"
+		},
+		"41": {
+			"type": "Cliff",
+			"gender": 1,
+			"grunt": "Executive Cliff",
+			"second_reward": false,
+			"encounters": {
+				"first": [127],
+				"second": [105, 138, 466],
+				"third": [248, 260, 389]
+			}
+		},
+		"42": {
+			"type": "Arlo",
+			"gender": 1,
+			"grunt": "Executive Arlo",
+			"second_reward": false,
+			"encounters": {
+				"first": [303],
+				"second": [6, 9, 208],
+				"third": [149, 212, 373]
+			}
+		},
+		"43": {
+			"type": "Sierra",
+			"gender": 2,
+			"grunt": "Executive Sierra",
+			"second_reward": false,
+			"encounters": {
+				"first": [374],
+				"second": [103, 131, 319],
+				"third": [65, 228, 275]
+			}
+		},
+		"44": {
+			"type": "Giovanni",
+			"gender": 0,
+			"grunt": "",
+			"second_reward": false,
+			"encounters": {
+				"first": [244]
+			}
+		},
+		"45": {
+			"type": "Decoy",
+			"grunt": "Male Grunt",
+			"gender": 1
+		},
+		"46": {
+			"type": "Decoy",
+			"grunt": "Female Grunt",
+			"gender": 2
+		},
+		"47": {
+			"type": "Ghost",
+			"grunt": "Female Grunt",
+			"gender": 2
+		},
+		"48": {
+			"type": "Ghost",
+			"grunt": "Male Grunt",
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					129
-				],
-				"second": [
-					129
-				],
-				"third": [
-					129
-				]
+				"first": [302, 353, 355],
+				"second": [302, 354, 356],
+				"third": [302, 354, 477]
 			}
 		},
-		"40": {
-			"type": "",
-			"grunt": "Player Team Leader"
+		"49": {
+			"type": "Electric",
+			"grunt": "Female Grunt",
+			"gender": 2,
+			"second_reward": false,
+			"encounters": {
+				"first": [81, 125, 179],
+				"second": [82, 125, 180],
+				"third": [125, 181]
+			}
+		},
+		"50": {
+			"type": "Electric",
+			"grunt": "Male Grunt",
+			"gender": 1
 		}
 	},
 	"weather": {
