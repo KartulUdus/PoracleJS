@@ -231,7 +231,7 @@ async function handleAlarms() {
 			}
 			case 'weather': {
 				fastify.webhooks.info('weather', hook.message)
-				if (hook.message.s2_cell_id === undefined) {
+				if (!hook.message.s2_cell_id) {
 			    		weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
                             		hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
 				}
