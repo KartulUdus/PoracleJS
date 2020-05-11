@@ -230,6 +230,10 @@ async function handleAlarms() {
 			}
 			case 'weather': {
 				fastify.webhooks.info('weather', hook.message)
+				if (hook.message.s2_cell_id === undefined) {
+			    		weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
+                            		hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
+				}
 				if (await fastify.cache.get(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
 					fastify.logger.error(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
 					break
