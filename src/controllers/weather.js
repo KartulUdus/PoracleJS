@@ -1,5 +1,4 @@
 const moment = require('moment-timezone')
-const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
 
 require('moment-precise-range-plugin')
@@ -12,11 +11,6 @@ class Weather extends Controller {
 
 			let oldWeather = -1
 			let whoCares = []
-			
-			if (data.s2_cell_id === undefined) {
-			    weatherCellKey = S2.latLngToKey(data.latitude, data.longitude, 10)
-                            data.s2_cell_id = S2.keyToId(weatherCellKey)
-			}
 			
 			if (data.s2_cell_id in this.controllerData) {
 				const cellWeather = this.controllerData[data.s2_cell_id]
