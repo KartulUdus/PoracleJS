@@ -164,8 +164,6 @@ class Quest extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1emoji: data.move1emoji,
-					move2emoji: data.move2emoji,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}

@@ -122,7 +122,7 @@ class Pokestop extends Controller {
 					data.gruntName = gruntType.grunt
 					data.gender = gruntType.gender
 					if (this.utilData.types[gruntType.type]) {
-						data.gruntTypeEmoji = this.utilData.types[gruntType.type].emoji
+						data.gruntTypeEmoji = this.translator.translate(this.utilData.types[gruntType.type].emoji)
 					}
 					if (gruntType.type in this.utilData.types) {
 						data.gruntTypeColor = this.utilData.types[gruntType.type].color

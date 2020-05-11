@@ -133,12 +133,12 @@ class Monster extends Controller {
 			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
 			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 			if (!data.weather) data.weather = 0
-			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.utilData.types[this.utilData.moves[data.move_1].type].emoji : ''
-			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.utilData.types[this.utilData.moves[data.move_2].type].emoji : ''
+			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
+			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
 			data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
-			data.boostemoji = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].emoji : ''
+			data.boostemoji = this.utilData.weather[data.weather] ? this.translator.translate(this.utilData.weather[data.weather].emoji) : ''
 			data.gameweather = this.utilData.weather[weather] ? this.utilData.weather[weather].name : ''
-			data.gameweatheremoji = this.utilData.weather[weather] ? this.utilData.weather[weather].emoji : ''
+			data.gameweatheremoji = this.utilData.weather[weather] ? this.translator.translate(this.utilData.weather[weather].emoji) : ''
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.color = monster.types[0].color
@@ -149,7 +149,7 @@ class Monster extends Controller {
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			const e = []
 			monster.types.forEach((type) => {
-				e.push(this.utilData.types[type.name].emoji)
+				e.push(this.translator.translate(this.utilData.types[type.name].emoji))
 			})
 			data.emoji = e
 			data.emojiString = e.join('')
@@ -229,8 +229,6 @@ class Monster extends Controller {
 					name: data.name,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1emoji: data.move1emoji,
-					move2emoji: data.move2emoji,
 					level: Math.round(data.pokemon_level),
 					atk: data.individual_attack,
 					def: data.individual_defense,

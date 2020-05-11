@@ -171,8 +171,8 @@ class Raid extends Controller {
 
 				data.quickMove = this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
 				data.chargeMove = this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
-				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? this.utilData.types[this.utilData.moves[data.move_1].type].emoji : ''
-				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? this.utilData.types[this.utilData.moves[data.move_2].type].emoji : ''
+				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
+				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 					log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -214,8 +214,6 @@ class Raid extends Controller {
 						genderData: this.utilData.genders[data.gender],
 						move1: data.quickMove,
 						move2: data.chargeMove,
-						move1emoji: data.move1emoji,
-						move2emoji: data.move2emoji,
 						imgUrl: data.imgUrl,
 						// pokemoji: emojiData.pokemon[data.pokemon_id],
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
@@ -311,8 +309,6 @@ class Raid extends Controller {
 					genderData: this.utilData.genders[data.gender],
 					move1: data.quickMove,
 					move2: data.chargeMove,
-					move1emoji: data.move1emoji,
-					move2emoji: data.move2emoji,
 					imgUrl: data.imgUrl,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
