@@ -3,6 +3,7 @@ require('dotenv').config()
 
 const fs = require('fs')
 const util = require('util')
+const { S2 } = require('s2-geometry')
 
 const NodeCache = require('node-cache')
 const fastify = require('fastify')()
