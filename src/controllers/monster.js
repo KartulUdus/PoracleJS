@@ -217,8 +217,8 @@ class Monster extends Controller {
 				}
 
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					id: data.pokemon_id,
 					baseStats: monster.stats,
 					time: data.distime,

@@ -201,8 +201,8 @@ class Raid extends Controller {
 					const caresCache = this.getDiscordCache(cares.id).count
 
 					const view = {
-						...data,
 						...geoResult,
+						...data,
 						id: data.pokemon_id,
 						baseStats: monster.stats,
 						time: data.distime,
@@ -297,8 +297,8 @@ class Raid extends Controller {
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					id: data.pokemon_id,
 					time: data.hatchtime,
 					tthh: data.tth.hours,

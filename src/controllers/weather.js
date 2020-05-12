@@ -25,8 +25,8 @@ class Weather extends Controller {
 				cares: whoCares,
 			}
 
-			if(!this.config.general.weatherChangeAlert) {
-				this.log.debug(`weather change alerts are disabled, nobody cares.`)
+			if (!this.config.general.weatherChangeAlert) {
+				this.log.debug('weather change alerts are disabled, nobody cares.')
 				return []
 			}
 

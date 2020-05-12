@@ -191,8 +191,8 @@ class Pokestop extends Controller {
 				const caresCache = this.getDiscordCache(cares.id).count
 
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					time: data.distime,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,

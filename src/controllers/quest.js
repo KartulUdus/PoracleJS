@@ -150,10 +150,9 @@ class Quest extends Controller {
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					...data.rewardData,
-
 					id: data.pokemon_id,
 					lat: +data.latitude.toFixed(4),
 					lon: +data.longitude.toFixed(4),
