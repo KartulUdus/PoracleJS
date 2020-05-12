@@ -161,8 +161,8 @@ class Monster extends Controller {
 					width: this.config.geocoding.spriteWidth,
 					x_offset: 0,
 					y_offset: 0,
-					latitude: +data.latitude.toFixed(5),
-					longitude: +data.longitude.toFixed(5),
+					latitude: +data.latitude,
+					longitude: +data.longitude,
 				},
 			]))
 			if (this.config.geocoding.staticProvider === 'poracle') {
