@@ -90,7 +90,7 @@ class Quest extends Controller {
 			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				log.warn(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				log.debug(`quest ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -150,10 +150,9 @@ class Quest extends Controller {
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					...data.rewardData,
-
 					id: data.pokemon_id,
 					lat: +data.latitude.toFixed(4),
 					lon: +data.longitude.toFixed(4),
@@ -164,10 +163,6 @@ class Quest extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1: data.quick_move,
-					move2: data.charge_move,
-					move1emoji: data.move1emoji,
-					move2emoji: data.move2emoji,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}

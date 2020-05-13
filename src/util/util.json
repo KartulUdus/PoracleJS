@@ -132,7 +132,8 @@
 		"31": "Find {{amount}} Team Rocket Invasion(s)",
    		"32": "{{amount}} time(s) First Grunt OTD",
 		"33": "",
-    		"34": "Earn {{amount}} hearts with your buddy"
+    		"34": "Earn {{amount}} hearts with your buddy",
+    		"35": "Play with your Buddy {{amount}} time(s)"
 	},
 	"questRewardTypes": {
 		"0": "",
@@ -2497,7 +2498,7 @@
 		},
 		"Ground": {
 			"id": 5,
-			"emoji": "🗿",
+			"emoji": "⛰️",
 			"color": 14729320
 		},
 		"Fairy": {
@@ -2981,7 +2982,7 @@
 		},
 		"1": {
 			"name": "sunny",
-			"emoji": ":sunny:️"
+			"emoji": ":sunny:"
 		},
 		"2": {
 			"name": "rain",
@@ -3001,7 +3002,7 @@
 		},
 		"6": {
 			"name": "snow",
-			"emoji": ":snowflake:️"
+			"emoji": ":snowflake:"
 		},
 		"7": {
 			"name": "fog",

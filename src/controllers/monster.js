@@ -1,11 +1,10 @@
 const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
-
 require('moment-precise-range-plugin')
-
 
 class Monster extends Controller {
 	async monsterWhoCares(data) {
@@ -105,6 +104,17 @@ class Monster extends Controller {
 				return
 			}
 
+			const weatherCellKey = S2.latLngToKey(data.latitude, data.longitude, 10)
+			const weatherCellId = S2.keyToId(weatherCellKey)
+
+			let wData = null
+			let weather = null
+			if (weatherCellId in this.weatherController.controllerData) {
+				wData = this.weatherController.controllerData[weatherCellId]
+				weather = wData.weather
+			}
+
+
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
 			|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
 			|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
@@ -123,10 +133,12 @@ class Monster extends Controller {
 			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
 			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 			if (!data.weather) data.weather = 0
-			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.utilData.types[this.utilData.moves[data.move_1].type].emoji : ''
-			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.utilData.types[this.utilData.moves[data.move_2].type].emoji : ''
+			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
+			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
 			data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
-			data.boostemoji = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].emoji : ''
+			data.boostemoji = this.utilData.weather[data.weather] ? this.translator.translate(this.utilData.weather[data.weather].emoji) : ''
+			data.gameweather = this.utilData.weather[weather] ? this.utilData.weather[weather].name : ''
+			data.gameweatheremoji = this.utilData.weather[weather] ? this.translator.translate(this.utilData.weather[weather].emoji) : ''
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.color = monster.types[0].color
@@ -137,7 +149,7 @@ class Monster extends Controller {
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			const e = []
 			monster.types.forEach((type) => {
-				e.push(this.utilData.types[type.name].emoji)
+				e.push(this.translator.translate(this.utilData.types[type.name].emoji))
 			})
 			data.emoji = e
 			data.emojiString = e.join('')
@@ -149,8 +161,8 @@ class Monster extends Controller {
 					width: this.config.geocoding.spriteWidth,
 					x_offset: 0,
 					y_offset: 0,
-					latitude: +data.latitude.toFixed(5),
-					longitude: +data.longitude.toFixed(5),
+					latitude: +data.latitude,
+					longitude: +data.longitude,
 				},
 			]))
 			if (this.config.geocoding.staticProvider === 'poracle') {
@@ -158,7 +170,7 @@ class Monster extends Controller {
 			}
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				log.warn(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				log.debug(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -180,12 +192,33 @@ class Monster extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
 			const jobs = []
+
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
+				if (wData && wData.cares) {
+					let exists = false
+					for (const oc of wData.cares) {
+						if (oc.id === cares.id) {
+							exists = true
+							break
+						}
+					}
+					if (!exists) wData.cares.push(cares)
+				} else if (wData) {
+					wData.cares = []
+					wData.cares.push(cares)
+				}
+
+				if (!this.weatherController.controllerData.caresUntil) {
+					this.weatherController.controllerData.caresUntil = []
+					this.weatherController.controllerData.caresUntil[cares.id] = data.disappear_time * 1000
+				} else if (!(cares.id in this.weatherController.controllerData.caresUntil) || this.weatherController.controllerData.caresUntil[cares.id] < (data.disappear_time * 1000)) {
+					this.weatherController.controllerData.caresUntil[cares.id] = data.disappear_time * 1000
+				}
 
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					id: data.pokemon_id,
 					baseStats: monster.stats,
 					time: data.distime,
@@ -196,10 +229,6 @@ class Monster extends Controller {
 					name: data.name,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1: data.quick_move,
-					move2: data.charge_move,
-					move1emoji: data.move1emoji,
-					move2emoji: data.move2emoji,
 					level: Math.round(data.pokemon_level),
 					atk: data.individual_attack,
 					def: data.individual_defense,

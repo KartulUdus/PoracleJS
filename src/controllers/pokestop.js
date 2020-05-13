@@ -90,7 +90,7 @@ class Pokestop extends Controller {
 
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				this.log.warn(`${data.name} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`${data.name} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -122,7 +122,7 @@ class Pokestop extends Controller {
 					data.gruntName = gruntType.grunt
 					data.gender = gruntType.gender
 					if (this.utilData.types[gruntType.type]) {
-						data.gruntTypeEmoji = this.utilData.types[gruntType.type].emoji
+						data.gruntTypeEmoji = this.translator.translate(this.utilData.types[gruntType.type].emoji)
 					}
 					if (gruntType.type in this.utilData.types) {
 						data.gruntTypeColor = this.utilData.types[gruntType.type].color
@@ -191,8 +191,8 @@ class Pokestop extends Controller {
 				const caresCache = this.getDiscordCache(cares.id).count
 
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					time: data.distime,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,

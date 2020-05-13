@@ -6,8 +6,8 @@
     "template": {
       "embed": {
         "color": "{{ivcolor}}",
-        "title": "#{{id}} {{name}} cp:{{cp}} L{{level}} {{atk}}/{{ def }}/{{ sta }}",
-        "description": "IV:{{iv}}%. end: {{time}}, time left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n quick: {{move1}}, charge {{move2}} \n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "title": "{{round iv}}% {{name}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
+        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -22,10 +22,11 @@
     "template": {
       "embed": {
         "color": "{{color}}",
+        "title": "?% {{name}} {{boostemoji}}",
+        "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
-        },
-        "description": "#{{id}} {{name}} end: {{time}}, \ntime left: {{tthm}}m {{tths}}s {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n{{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})"
+        }
       }
     }
   },
@@ -36,14 +37,14 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "Raid against {{name}}  has started! at {{gymname}}",
-        "description": " {{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "title": "Raid against {{name}} has started at {{gymName}}!",
+        "description": "CP: {{cp}}, quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         },
         "author": {
-          "name": "{{name}} lvl{{level}} end: {{time}}, {{tthm}}m {{tths}}s",
+          "name": "{{name}} lvl{{level}}. End: {{time}} in {{tthm}}m {{tths}}s",
           "icon_url": "{{{detailsurl}}}"
         }
       }
@@ -56,14 +57,14 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "Raid level{{lvl}}  has started! at {{gymname}}",
-        "description": " {{{emojistring}}}  [Google Maps]({{{mapurl}}}) [Apple Maps]({{{applemap}}})",
+        "title": "Raid egg level{{level}} at {{gymName}}",
+        "description": "Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{detailsurl}}}"
         },
         "author": {
-          "name": "{{name}} lvl{{level}} end: {{time}}, {{tthm}}m {{tths}}s",
+          "name": "Hatch at: {{time}} in {{tthm}}m {{tths}}s",
           "icon_url": "{{{imgUrl}}}"
         }
       }
@@ -76,9 +77,9 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "title": "{{questType}} \n Pokestop Name: {{pokestop_name}}",
         "url": "{{{mapurl}}}",
-        "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
+        "description": "Conditions: {{conditionString}} \n Reward: {{rewardString}} {{monsterNames}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -92,12 +93,24 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "{{questType}}, {{flagemoji}} {{lat}}, {{lon}} {{addr}} \n Pokestop Name: {{name}}",
+        "title": "Team Rocket at {{name}}!",
         "url": "{{{mapurl}}}",
-        "description": "Conditions: {{conditions}} \nReward:  {{reward}} {{monsterNames}} \n[Google Maps]({{{mapurl}}}) | [Apple Maps]({{{applemap}}})",
+        "description": "Name: {{gruntName}} {{genderName}} \n Type: {{gruntType}} {{gruntTypeEmoji}} \n Possible Rewards: {{gruntRewards}} \n Ends: {{time}}, in {{tthm}}m {{tths}}s \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "type": "weatherchange",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Weather change!",
+        "description": "NB! The weather for some active mons have changed from {{oldweather}} {{oldweatheremoji}} to {{weather}} {{weatheremoji}}!\nThis could have altered the reported IV!"
       }
     }
   },
