@@ -2583,7 +2583,7 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [
-					143
+					131
 				],
 				"second": [
 					143,
@@ -2609,7 +2609,8 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [
-					123
+					13,
+					48
 				],
 				"second": [
 					123,
@@ -2683,6 +2684,7 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [
+					106,
 					107
 				],
 				"second": [
@@ -2705,12 +2707,13 @@
 			"second_reward": true,
 			"encounters": {
 				"first": [
-					4,
+					37,
 					58,
 					228
 				],
 				"second": [
 					5,
+					38,
 					229
 				],
 				"third": [
@@ -2764,14 +2767,12 @@
 			"second_reward": true,
 			"encounters": {
 				"first": [
-					1,
-					43,
-					387
+					102
 				],
 				"second": [
-					1,
 					2,
-					44
+					44,
+					70
 				],
 				"third": [
 					2,
@@ -2792,9 +2793,9 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [
-					19,
-					104,
-					246
+					27,
+					246,
+					328
 				],
 				"second": [
 					20,
@@ -2836,19 +2837,17 @@
 			"type": "Normal",
 			"grunt": "Male Grunt",
 			"gender": 1,
-			"second_reward": true,
+			"second_reward": false,
 			"encounters": {
 				"first": [
-					19,
-					41
+					137
 				],
 				"second": [
-					19,
-					20
+					233
 				],
 				"third": [
-					20,
-					143
+					143,
+					474
 				]
 			}
 		},
@@ -2893,7 +2892,7 @@
 			"encounters": {
 				"first": [
 					63,
-					96,
+					202,
 					280
 				],
 				"second": [
@@ -2920,6 +2919,7 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [
+					138,					
 					246
 				],
 				"second": [
@@ -2939,8 +2939,8 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [
-					54,
-					60
+					258,
+					318
 				],
 				"second": [
 					55,
@@ -2973,7 +2973,111 @@
 		"40": {
 			"type": "",
 			"grunt": "Player Team Leader"
-		}
+		},
+		"41": {
+			"type": "Cliff",
+			"grunt": "Leader",
+			"gender": 1,
+			"second_reward": false,
+			"encounters": {
+				"first": [
+					127
+				],
+				"second": [
+					105
+				],
+				"third": [
+					248
+				]
+			}
+		},
+		"42": {
+			"type": "Arlo",
+			"grunt": "Leader",
+			"gender": 1,
+			"second_reward": false,
+			"encounters": {
+				"first": [
+					303
+				],
+				"second": [
+					6
+				],
+				"third": [
+					149
+				]
+			}
+		},
+		"43": {
+			"type": "Sierra",
+			"grunt": "Leader",
+			"gender": 2,
+			"second_reward": false,
+			"encounters": {
+				"first": [
+					374
+				],
+				"second": [
+					103
+				],
+				"third": [
+					65
+				]
+			}
+		},
+		"44": {
+			"type": "Giovanni or Decoy",
+			"grunt": "Boss",
+			"gender": 1,
+			"second_reward": false,
+			"encounters": {
+				"first": [
+					244
+				],
+				"second": [
+					244
+				],
+				"third": [
+					244
+				]
+			}
+		},
+		"48": {
+			"type": "Ghost",
+			"grunt": "Male Grunt",
+			"gender": 1,
+			"second_reward": false,
+			"encounters": {
+				"first": [
+					200
+				],
+				"second": [
+					302
+				],
+				"third": [
+					302
+				]
+			}
+		},
+		"49": {
+			"type": "Electric",
+			"grunt": "Female Grunt",
+			"gender": 2,
+			"second_reward": false,
+			"encounters": {
+				"first": [
+					81,
+					125,
+					179
+				],
+				"second": [
+					82
+				],
+				"third": [
+					125
+				]
+			}
+		}        
 	},
 	"weather": {
 		"0": {
