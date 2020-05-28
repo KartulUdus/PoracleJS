@@ -68,7 +68,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let telegram
