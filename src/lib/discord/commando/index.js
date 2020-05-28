@@ -27,7 +27,7 @@ class DiscordCommando {
 		try {
 			this.client.on('error', (err) => {
 				this.busy = true
-				log.error(`Discord worker #${this.id} \n bouncing`, err)
+				this.log.error(`Discord worker #${this.id} \n bouncing`, err)
 				this.bounceWorker()
 			})
 			// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
