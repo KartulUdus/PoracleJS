@@ -143,7 +143,7 @@
 		"4": "{{amount}} {{type}} Candy",
 		"5": "Avatar clothing",
 		"6": "Quest",
-		"7": "{{#isShiny}}Shiny {{/isShiny}}{{pokemon}} {{emoji}}"
+		"7": "{{#isShiny}}Shiny {{/isShiny}}{{pokemon}} {{{emoji}}}"
 	},
 	"questMonsterTypeString": "{{name}} {{{emoji}}} ",
 	"questConditions": {
@@ -2893,7 +2893,6 @@
 			"grunt": "Male Grunt",
 			"gender": 1
 		}
-	},
 	"weather": {
 		"0": {
 			"name": "",

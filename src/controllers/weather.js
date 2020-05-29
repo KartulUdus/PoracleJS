@@ -40,14 +40,14 @@ class Weather extends Controller {
 			this.log.info(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			if (oldWeather > -1) {
-				data.oldweather = this.utilData.weather[oldWeather] ? this.utilData.weather[oldWeather].name : ''
-				data.oldweatheremoji = this.utilData.weather[oldWeather] ? this.utilData.weather[oldWeather].emoji : ''
+				data.oldweather = this.utilData.weather[oldWeather] ? this.translator.translate(this.utilData.weather[oldWeather].name) : ''
+				data.oldweatheremoji = this.utilData.weather[oldWeather] ? this.translator.translate(this.utilData.weather[oldWeather].emoji) : ''
 			} else {
 				data.oldweather = ''
 				data.oldweatheremoji = ''
 			}
-			data.weather = this.utilData.weather[data.condition] ? this.utilData.weather[data.condition].name : ''
-			data.weatheremoji = this.utilData.weather[data.condition] ? this.utilData.weather[data.condition].emoji : ''
+			data.weather = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].name) : ''
+			data.weatheremoji = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].emoji) : ''
 
 			const jobs = []
 			const now = moment.now()

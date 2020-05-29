@@ -150,10 +150,9 @@ class Quest extends Controller {
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
 				const view = {
-					...data,
 					...geoResult,
+					...data,
 					...data.rewardData,
-
 					id: data.pokemon_id,
 					lat: +data.latitude.toFixed(4),
 					lon: +data.longitude.toFixed(4),
@@ -164,8 +163,6 @@ class Quest extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					genderData: this.utilData.genders[data.gender],
-					move1emoji: data.move1emoji,
-					move2emoji: data.move2emoji,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
