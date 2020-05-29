@@ -2690,7 +2690,7 @@
 			"gender": 1,
 			"second_reward": true,
 			"encounters": {
-				"first": [1, 69, 102],
+				"first": [102],
 				"second": [2, 44, 70],
 				"third": [45, 71, 275]
 			}
@@ -2795,7 +2795,7 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [60, 258, 318],
+				"first": [258, 318],
 				"second": [55, 61],
 				"third": [62, 186]
 			}
@@ -2872,7 +2872,7 @@
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [302, 353, 355],
+				"first": [200],
 				"second": [302, 354, 356],
 				"third": [302, 354, 477]
 			}
