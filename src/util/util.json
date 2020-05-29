@@ -2893,6 +2893,7 @@
 			"grunt": "Male Grunt",
 			"gender": 1
 		}
+	},
 	"weather": {
 		"0": {
 			"name": "",
