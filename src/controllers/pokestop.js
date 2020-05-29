@@ -131,7 +131,7 @@ class Pokestop extends Controller {
 
 					let gruntRewards = ''
 					if (gruntType.encounters) {
-						if (gruntType.second_reward) {
+						if (gruntType.second_reward && gruntType.encounters.second) {
 							// one out of two rewards
 							gruntRewards = '85%: '
 							let first = true
@@ -199,7 +199,7 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					// pokemoji: emojiData.pokemon[data.pokemon_id],
+					genderData: this.utilData.genders[data.gender],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id === cares.template && template.platform === 'discord')

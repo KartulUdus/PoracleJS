@@ -93,9 +93,10 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "Team Rocket at {{name}}!",
+        "title": "Team Rocket at {{name}}",
         "url": "{{{mapurl}}}",
-        "description": "Name: {{gruntName}} {{genderName}} \n Type: {{gruntType}} {{gruntTypeEmoji}} \n Possible Rewards: {{gruntRewards}} \n Ends: {{time}}, in {{tthm}}m {{tths}}s \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "color": "{{gruntTypeColor}}",
+        "description": "Type:  {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{gruntRewards}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{addr}}\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
