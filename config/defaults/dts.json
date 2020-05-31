@@ -135,7 +135,7 @@
           },
           {
             "name": "Monster tracking commands",
-            "value": "The command needs to include at least one monster and any amount of filters. E.g. \n `{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume \n See more options and details at [the manual](https://kartuludus.github.io/PoracleJS/#/commands?id=track)"
+            "value": "The command needs to include at least one monster and any amount of filters. E.g. \n `{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume \n See more options and details at [the manual](https://wiki.poracle.world/commands)"
           },
           {
             "name": "Raid tracking commands",
