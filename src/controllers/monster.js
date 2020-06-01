@@ -160,13 +160,13 @@ class Monster extends Controller {
 			data.bestUltraLeagueRank = 9999
 			if (data.pvp_rankings_ultra_league) {
 				for (const stats of data.pvp_rankings_ultra_league) {
-					if (stats.rank < data.bestUltraLeagueRank) data.bestUltraLeagueRank = stats.rank
+					if (stats.rank && stats.rank < data.bestUltraLeagueRank) data.bestUltraLeagueRank = stats.rank
 				}
 			}
 			data.bestGreatLeagueRank = 9999
 			if (data.pvp_rankings_great_league) {
 				for (const stats of data.pvp_rankings_great_league) {
-					if (stats.rank < data.bestGreatLeagueRank) data.bestGreatLeagueRank = stats.rank
+					if (stats.rank && stats.rank < data.bestGreatLeagueRank) data.bestGreatLeagueRank = stats.rank
 				}
 			}
 
