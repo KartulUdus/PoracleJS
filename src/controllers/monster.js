@@ -32,7 +32,10 @@ class Monster extends Controller {
 		max_def>=${data.individual_defense} and
 		max_sta>=${data.individual_stamina} and
 		min_weight<=${data.weight} * 1000 and
-		max_weight>=${data.weight} * 1000 `
+		max_weight>=${data.weight} * 1000 and
+		great_league_ranking>=${data.bestGreatLeagueRank} and
+		ultra_league_ranking>=${data.bestUltraLeagueRank}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -153,6 +156,19 @@ class Monster extends Controller {
 			})
 			data.emoji = e
 			data.emojiString = e.join('')
+
+			data.bestUltraLeagueRank = 9999
+			if (!(data.pvp_rankings_ultra_league === undefined || data.pvp_rankings_ultra_league === null)) {
+				for (const stats of data.pvp_rankings_ultra_league) {
+					if (stats.rank < data.bestUltraLeagueRank) data.bestUltraLeagueRank = stats.rank
+				}
+			}
+			data.bestGreatLeagueRank = 9999
+			if (!(data.pvp_rankings_great_league === undefined || data.pvp_rankings_great_league === null)) {
+				for (const stats of data.pvp_rankings_great_league) {
+					if (stats.rank < data.bestGreatLeagueRank) data.bestGreatLeagueRank = stats.rank
+				}
+			}
 
 			data.staticSprite = encodeURI(JSON.stringify([
 				{

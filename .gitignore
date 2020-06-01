@@ -12,6 +12,7 @@ src/lib/discord/commando/commands/template.js
 npm-debug.log
 .DS_Store
 .env
+.idea/
 node_modules/*
 package-lock.json
 potato/*

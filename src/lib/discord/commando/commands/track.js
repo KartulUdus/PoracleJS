@@ -50,6 +50,8 @@ exports.run = async (client, msg, command) => {
 			let gender = 0
 			let weight = 0
 			let maxweight = 9000000
+			let greatLeague = 4096
+			let ultraLeague = 4096
 			let template = 1
 			let clean = false
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
@@ -88,6 +90,8 @@ exports.run = async (client, msg, command) => {
 				else if (element.match(client.re.defRe)) def = element.match(client.re.defRe)[0].replace(client.translator.translate('def'), '')
 				else if (element.match(client.re.staRe)) sta = element.match(client.re.staRe)[0].replace(client.translator.translate('sta'), '')
 				else if (element.match(client.re.weightRe)) weight = element.match(client.re.weightRe)[0].replace(client.translator.translate('weight'), '')
+				else if (element.match(client.re.greatLeagueRe)) greatLeague = element.match(client.re.greatLeagueRe)[0].replace(client.translator.translate('great'), '')
+				else if (element.match(client.re.ultraLeagueRe)) ultraLeague = element.match(client.re.ultraLeagueRe)[0].replace(client.translator.translate('ultra'), '')
 				else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
 				else if (element === 'female') gender = 2
 				else if (element === 'clean') clean = true
@@ -117,6 +121,8 @@ exports.run = async (client, msg, command) => {
 				max_sta: maxSta,
 				gender,
 				clean,
+				great_league_ranking: greatLeague,
+				ultra_league_ranking: ultraLeague
 			}))
 			if (!insert.length) {
 				break
