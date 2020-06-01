@@ -57,8 +57,9 @@ exports.run = async (client, msg, [args]) => {
 			let formName = mon.form.name
 			if (formName === undefined) formName = 'none'
 			if (miniv === -1) miniv = 0
-			let greatLeague = monster.great_league_ranking >= 4096 ? 'any' : 'top' + monster.great_league_ranking
-			let ultraLeague = monster.ultra_league_ranking >= 4096 ? 'any' : 'top' + monster.ultra_league_ranking
+
+			const greatLeague = monster.great_league_ranking >= 4096 ? 'any' : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
+			const ultraLeague = monster.ultra_league_ranking >= 4096 ? 'any' : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
 			message = message.concat(`\n**${monsterName}** form: ${formName} ${monster.distance ? `, distance: ${monster.distance}m` : ''} iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} greatpvp: ${greatLeague} ultrapvp: ${ultraLeague} gender:${client.utilData.genders[monster.gender].emoji}`)
 		})
 		if (raids.length || eggs.length) {

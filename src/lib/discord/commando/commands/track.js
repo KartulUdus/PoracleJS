@@ -51,7 +51,9 @@ exports.run = async (client, msg, command) => {
 			let weight = 0
 			let maxweight = 9000000
 			let greatLeague = 4096
+			let greatLeagueCP = 0
 			let ultraLeague = 4096
+			let ultraLeagueCP = 0
 			let template = 1
 			let clean = false
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
@@ -77,6 +79,10 @@ exports.run = async (client, msg, command) => {
 			args.forEach((element) => {
 				if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[0].replace(client.translator.translate('maxlevel'), '')
 				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
+				else if (element.match(client.re.greatLeagueRe)) greatLeague = element.match(client.re.greatLeagueRe)[0].replace(client.translator.translate('great'), '')
+				else if (element.match(client.re.greatLeagueCPRe)) greatLeagueCP = element.match(client.re.greatLeagueCPRe)[0].replace(client.translator.translate('greatcp'), '')
+				else if (element.match(client.re.ultraLeagueRe)) ultraLeague = element.match(client.re.ultraLeagueRe)[0].replace(client.translator.translate('ultra'), '')
+				else if (element.match(client.re.ultraLeagueCPRe)) ultraLeagueCP = element.match(client.re.ultraLeagueCPRe)[0].replace(client.translator.translate('ultracp'), '')
 				else if (element.match(client.re.maxcpRe)) maxcp = element.match(client.re.maxcpRe)[0].replace(client.translator.translate('maxcp'), '')
 				else if (element.match(client.re.maxivRe)) maxiv = element.match(client.re.maxivRe)[0].replace(client.translator.translate('maxiv'), '')
 				else if (element.match(client.re.maxweightRe)) maxweight = element.match(client.re.maxweightRe)[0].replace(client.translator.translate('maxweight'), '')
@@ -90,8 +96,6 @@ exports.run = async (client, msg, command) => {
 				else if (element.match(client.re.defRe)) def = element.match(client.re.defRe)[0].replace(client.translator.translate('def'), '')
 				else if (element.match(client.re.staRe)) sta = element.match(client.re.staRe)[0].replace(client.translator.translate('sta'), '')
 				else if (element.match(client.re.weightRe)) weight = element.match(client.re.weightRe)[0].replace(client.translator.translate('weight'), '')
-				else if (element.match(client.re.greatLeagueRe)) greatLeague = element.match(client.re.greatLeagueRe)[0].replace(client.translator.translate('great'), '')
-				else if (element.match(client.re.ultraLeagueRe)) ultraLeague = element.match(client.re.ultraLeagueRe)[0].replace(client.translator.translate('ultra'), '')
 				else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
 				else if (element === 'female') gender = 2
 				else if (element === 'clean') clean = true
@@ -122,7 +126,9 @@ exports.run = async (client, msg, command) => {
 				gender,
 				clean,
 				great_league_ranking: greatLeague,
-				ultra_league_ranking: ultraLeague
+				great_league_ranking_min_cp: greatLeagueCP,
+				ultra_league_ranking: ultraLeague,
+				ultra_league_ranking_min_cp: ultraLeagueCP,
 			}))
 			if (!insert.length) {
 				break
