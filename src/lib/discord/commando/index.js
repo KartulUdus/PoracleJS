@@ -20,7 +20,7 @@ class DiscordCommando {
 		this.re = require('../../../util/regex')(translator)
 		this.bounceWorker()
 	}
-	
+
 	async bounceWorker() {
 		delete this.client
 		this.client = new Client()

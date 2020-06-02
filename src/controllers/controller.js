@@ -105,7 +105,7 @@ class Controller {
 			const geocoder = this.getGeocoder()
 			return await geocoder.geocode(locationString)
 		} catch (err) {
-			throw new Error({ source: 'geolocate', err })
+			throw { source: 'geolocate', err }
 		}
 	}
 
@@ -125,7 +125,7 @@ class Controller {
 			geoCache.save(true)
 			return result
 		} catch (err) {
-			throw new Error({ source: 'getAddress', error: err })
+			throw { source: 'getAddress', error: err }
 		}
 	}
 
@@ -148,7 +148,7 @@ class Controller {
 		try {
 			return await this.db.select('*').from(table).where(conditions).first()
 		} catch (err) {
-			throw new Error({ source: 'slectOneQuery', error: err })
+			throw { source: 'slectOneQuery', error: err }
 		}
 	}
 
@@ -156,7 +156,7 @@ class Controller {
 		try {
 			return await this.db.select('*').from(table).where(conditions)
 		} catch (err) {
-			throw new Error({ source: 'selectAllQuery', error: err })
+			throw { source: 'selectAllQuery', error: err }
 		}
 	}
 
@@ -164,7 +164,7 @@ class Controller {
 		try {
 			return this.db(table).update(values).where(conditions)
 		} catch (err) {
-			throw new Error({ source: 'updateQuery', error: err })
+			throw { source: 'updateQuery', error: err }
 		}
 	}
 
@@ -174,7 +174,7 @@ class Controller {
 				.first()
 			return +(Object.values(result)[0])
 		} catch (err) {
-			throw new Error({ source: 'countQuery', error: err })
+			throw { source: 'countQuery', error: err }
 		}
 	}
 
@@ -182,7 +182,7 @@ class Controller {
 		try {
 			return await this.db.insert(values).into(table)
 		} catch (err) {
-			throw new Error({ source: 'insertQuery', error: err })
+			throw { source: 'insertQuery', error: err }
 		}
 	}
 
@@ -190,7 +190,7 @@ class Controller {
 		try {
 			return this.returnByDatabaseType(await this.db.raw(sql))
 		} catch (err) {
-			throw new Error({ source: 'misteryQuery', error: err })
+			throw { source: 'misteryQuery', error: err }
 		}
 	}
 
@@ -198,7 +198,7 @@ class Controller {
 		try {
 			return this.db.whereIn(valuesColumn, values).where({ id }).from(table).del()
 		} catch (err) {
-			throw new Error({ source: 'deleteWhereInQuery unhappy', error: err })
+			throw { source: 'deleteWhereInQuery unhappy', error: err }
 		}
 	}
 
@@ -248,7 +248,7 @@ class Controller {
 		try {
 			return await this.db(table).where(values).del()
 		} catch (err) {
-			throw new Error({ source: 'deleteQuery', error: err })
+			throw { source: 'deleteQuery', error: err }
 		}
 	}
 

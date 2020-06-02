@@ -29,7 +29,7 @@ module.exports = () => {
 		if (!moves[value]) return ''
 		return types[moves[value].type] ? translator.translate(types[moves[value].type].emoji) : ''
 	})
-	
+
 	handlebars.registerHelper('pokemonName', (value) => {
 		if (!+value) return ''
 		const monster = Object.values(monsters).find((m) => m.id === +value)
