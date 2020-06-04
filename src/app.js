@@ -231,7 +231,7 @@ async function handleAlarms() {
 			case 'weather': {
 				fastify.webhooks.info('weather', hook.message)
 				if (await fastify.cache.get(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
-					fastify.logger.error(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
+					fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
 					break
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
