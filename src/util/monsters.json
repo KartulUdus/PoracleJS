@@ -2846,8 +2846,8 @@
 		"id": 26,
 		"stats": {
 			"baseStamina": 155,
-			"baseAttack": 193,
-			"baseDefense": 151
+			"baseAttack": 201,
+			"baseDefense": 154
 		},
 		"types": [
 			{
@@ -2895,7 +2895,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -2916,7 +2916,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -2937,7 +2937,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -2985,7 +2985,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3006,7 +3006,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3027,7 +3027,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3075,7 +3075,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3096,7 +3096,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3228,7 +3228,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3255,7 +3255,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3282,7 +3282,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3309,7 +3309,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3504,7 +3504,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3531,7 +3531,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3558,7 +3558,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -3585,7 +3585,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5259,7 +5259,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5280,7 +5280,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5301,7 +5301,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5322,7 +5322,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5343,7 +5343,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5364,7 +5364,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -5391,7 +5391,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5412,7 +5412,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5433,7 +5433,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -5454,7 +5454,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7536,7 +7536,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7590,7 +7590,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7617,7 +7617,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7644,7 +7644,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7671,7 +7671,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7698,7 +7698,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7725,7 +7725,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7752,7 +7752,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7779,7 +7779,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7833,7 +7833,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7860,7 +7860,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7887,7 +7887,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -7914,7 +7914,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -8243,27 +8243,27 @@
 			}
 		]
 	},
-	"79_31": {
-		"name": "Slowpoke",
-		"form": {
-			"id": 31,
-			"name": "Galarian"
-		},
-		"id": 79,
-		"stats": {
-			"baseStamina": 207,
-			"baseAttack": 109,
-			"baseDefense": 98
-		},
-		"types": [
-			{
-				"id": 14,
-				"name": "Psychic",
-				"emoji": "🔮",
-				"color": 16275592
-			}
-		]
-	},
+ 	"79_31": {
+ 		"name": "Slowpoke",
+ 		"form": {
+ 			"id": 31,
+ 			"name": "Galarian"
+ 		},
+ 		"id": 79,
+ 		"stats": {
+ 			"baseStamina": 207,
+ 			"baseAttack": 109,
+ 			"baseDefense": 98
+ 		},
+ 		"types": [
+ 			{
+ 				"id": 14,
+ 				"name": "Psychic",
+ 				"emoji": "🔮",
+ 				"color": 16275592
+ 			}
+ 		]
+ 	},
 	"80_1022": {
 		"name": "Slowbro",
 		"form": {
@@ -8696,27 +8696,27 @@
 			}
 		]
 	},
-	"83_2338": {
-		"name": "Farfetchd",
-		"form": {
-			"id": 2338,
-			"name": "Galarian"
-		},
-		"id": 83,
-		"stats": {
-			"baseStamina": 141,
-			"baseAttack": 124,
-			"baseDefense": 115
-		},
-		"types": [
-			{
-				"id": 2,
-				"name": "Fighting",
-				"emoji": "👊",
-				"color": 12595240
-			}
-		]
-	},
+ 	"83_2338": {
+ 		"name": "Farfetchd",
+ 		"form": {
+ 			"id": 2338,
+ 			"name": "Galarian"
+ 		},
+ 		"id": 83,
+ 		"stats": {
+ 			"baseStamina": 141,
+ 			"baseAttack": 124,
+ 			"baseDefense": 115
+ 		},
+ 		"types": [
+ 			{
+ 				"id": 2,
+ 				"name": "Fighting",
+ 				"emoji": "👊",
+ 				"color": 12595240
+ 			}
+ 		]
+ 	},
 	"84_1026": {
 		"name": "Doduo",
 		"form": {
@@ -9885,7 +9885,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -9912,7 +9912,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -9939,7 +9939,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -9966,7 +9966,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10734,7 +10734,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10755,7 +10755,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10776,7 +10776,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10797,7 +10797,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10818,7 +10818,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10839,7 +10839,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10860,7 +10860,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10881,7 +10881,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -10902,7 +10902,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -11364,7 +11364,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -11391,7 +11391,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -11418,7 +11418,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -11445,7 +11445,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -11472,7 +11472,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -11499,7 +11499,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -11526,7 +11526,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -11553,7 +11553,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -12452,27 +12452,27 @@
 			}
 		]
 	},
-	"122_31": {
-		"name": "Mr mime",
-		"form": {
-			"id": 31,
-			"name": "Galarian"
-		},
-		"id": 122,
-		"stats": {
-			"baseStamina": 120,
-			"baseAttack": 192,
-			"baseDefense": 205
-		},
-		"types": [
-			{
-				"id": 15,
-				"name": "Ice",
-				"emoji": "❄",
-				"color": 10016984
-			}
-		]
-	},
+ 	"122_31": {
+ 		"name": "Mr mime",
+ 		"form": {
+ 			"id": 31,
+ 			"name": "Galarian"
+ 		},
+ 		"id": 122,
+ 		"stats": {
+ 			"baseStamina": 120,
+ 			"baseAttack": 192,
+ 			"baseDefense": 205
+ 		},
+ 		"types": [
+ 			{
+ 				"id": 15,
+ 				"name": "Ice",
+ 				"emoji": "❄",
+ 				"color": 10016984
+ 			}
+ 		]
+ 	},
 	"123_249": {
 		"name": "Scyther",
 		"form": {
@@ -19539,7 +19539,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -19566,7 +19566,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -19593,7 +19593,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -19620,7 +19620,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -19647,7 +19647,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -19674,7 +19674,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -19701,7 +19701,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -19728,7 +19728,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -21315,7 +21315,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -21342,7 +21342,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -21369,7 +21369,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -21396,7 +21396,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -21429,7 +21429,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -21456,7 +21456,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -21483,7 +21483,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -21510,7 +21510,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22605,7 +22605,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22632,7 +22632,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22659,7 +22659,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22686,7 +22686,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22713,7 +22713,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22740,7 +22740,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22767,7 +22767,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -22794,7 +22794,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23739,7 +23739,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23760,7 +23760,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23781,7 +23781,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23802,7 +23802,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23823,7 +23823,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23844,7 +23844,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23865,7 +23865,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -23886,7 +23886,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25029,7 +25029,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25056,7 +25056,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25083,7 +25083,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25110,7 +25110,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25137,7 +25137,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25164,7 +25164,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25191,7 +25191,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -25218,7 +25218,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26313,7 +26313,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26340,7 +26340,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26367,7 +26367,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26394,7 +26394,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26421,7 +26421,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26448,7 +26448,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26475,7 +26475,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -26502,7 +26502,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -29436,7 +29436,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -29463,7 +29463,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -29490,7 +29490,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -29517,7 +29517,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32460,7 +32460,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32487,7 +32487,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32514,7 +32514,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32541,7 +32541,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32568,7 +32568,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32595,7 +32595,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32622,7 +32622,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -32649,7 +32649,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -33363,7 +33363,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -33384,7 +33384,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -33405,7 +33405,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -33426,7 +33426,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -33447,7 +33447,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -33474,7 +33474,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -33501,7 +33501,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -33528,7 +33528,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -33555,7 +33555,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -33582,7 +33582,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -33609,7 +33609,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -33636,7 +33636,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -34461,7 +34461,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34488,7 +34488,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34515,7 +34515,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34542,7 +34542,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34569,7 +34569,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34596,7 +34596,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34623,7 +34623,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34650,7 +34650,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -34863,7 +34863,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -34890,7 +34890,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -34917,7 +34917,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -34944,7 +34944,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -34971,7 +34971,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -34998,7 +34998,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -35025,7 +35025,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -35052,7 +35052,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -38652,7 +38652,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -38673,7 +38673,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -38694,7 +38694,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -38715,7 +38715,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -39231,7 +39231,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -39258,7 +39258,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -39285,7 +39285,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -39312,7 +39312,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -41733,7 +41733,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -42699,7 +42699,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -42726,7 +42726,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -42753,7 +42753,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -42780,7 +42780,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -42807,7 +42807,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -42834,7 +42834,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44697,7 +44697,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44724,7 +44724,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44751,7 +44751,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44778,7 +44778,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44805,7 +44805,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44832,7 +44832,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44859,7 +44859,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44886,7 +44886,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44913,7 +44913,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44940,7 +44940,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44967,7 +44967,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -44994,7 +44994,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45291,7 +45291,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45312,7 +45312,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45333,7 +45333,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45354,7 +45354,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45375,7 +45375,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45396,7 +45396,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45417,7 +45417,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -45438,7 +45438,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -46767,7 +46767,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -46794,7 +46794,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -46821,7 +46821,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -46848,7 +46848,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -47511,7 +47511,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -47538,7 +47538,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -47565,7 +47565,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -47592,7 +47592,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -47625,7 +47625,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -47652,7 +47652,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -47679,7 +47679,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -47706,7 +47706,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -49785,7 +49785,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53253,7 +53253,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53274,7 +53274,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53295,7 +53295,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53316,7 +53316,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53337,7 +53337,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -53364,7 +53364,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -53391,7 +53391,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -53418,7 +53418,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -53871,7 +53871,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53898,7 +53898,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53925,7 +53925,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53952,7 +53952,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -53979,7 +53979,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -54006,7 +54006,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -54033,7 +54033,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -54060,7 +54060,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -55344,7 +55344,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55371,7 +55371,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55398,7 +55398,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55425,7 +55425,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55452,7 +55452,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55479,7 +55479,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55506,7 +55506,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55533,7 +55533,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55560,7 +55560,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55587,7 +55587,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55614,7 +55614,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55641,7 +55641,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -55736,27 +55736,27 @@
 			}
 		]
 	},
-	"554_2341": {
-		"name": "Darumaka",
-		"form": {
-			"id": 2341,
-			"name": "Galarian"
-		},
-		"id": 554,
-		"stats": {
-			"baseStamina": 172,
-			"baseAttack": 153,
-			"baseDefense": 86
-		},
-		"types": [
-			{
-				"id": 15,
-				"name": "Ice",
-				"emoji": "❄",
-				"color": 10016984
-			}
-		]
-	},
+ 	"554_2341": {
+ 		"name": "Darumaka",
+ 		"form": {
+ 			"id": 2341,
+ 			"name": "Galarian"
+ 		},
+ 		"id": 554,
+ 		"stats": {
+ 			"baseStamina": 172,
+ 			"baseAttack": 153,
+ 			"baseDefense": 86
+ 		},
+ 		"types": [
+ 			{
+ 				"id": 15,
+ 				"name": "Ice",
+ 				"emoji": "❄",
+ 				"color": 10016984
+ 			}
+ 		]
+ 	},
 	"555_139": {
 		"name": "Darmanitan",
 		"form": {
@@ -55832,54 +55832,54 @@
 			}
 		]
 	},
-	"555_2342": {
-		"name": "Darmanitan",
-		"form": {
-			"id": 2342,
-			"name": "Galarian"
-		},
-		"id": 555,
-		"stats": {
-			"baseStamina": 233,
-			"baseAttack": 243,
-			"baseDefense": 202
-		},
-		"types": [
-			{
-				"id": 15,
-				"name": "Ice",
-				"emoji": "❄",
-				"color": 10016984
-			}
-		]
-	},
-	"555_2343": {
-		"name": "Darmanitan",
-		"form": {
-			"id": 2343,
-			"name": "Galarian Transe"
-		},
-		"id": 555,
-		"stats": {
-			"baseStamina": 233,
-			"baseAttack": 243,
-			"baseDefense": 202
-		},
-		"types": [
-			{
-				"id": 10,
-				"name": "Fire",
-				"emoji": "🔥",
-				"color": 15761456
-			},
-			{
-				"id": 15,
-				"name": "Ice",
-				"emoji": "❄",
-				"color": 10016984
-			}
-		]
-	},
+ 	"555_2342": {
+ 		"name": "Darmanitan",
+ 		"form": {
+ 			"id": 2342,
+ 			"name": "Galarian"
+ 		},
+ 		"id": 555,
+ 		"stats": {
+ 			"baseStamina": 233,
+ 			"baseAttack": 243,
+ 			"baseDefense": 202
+ 		},
+ 		"types": [
+ 			{
+ 				"id": 15,
+ 				"name": "Ice",
+ 				"emoji": "❄",
+ 				"color": 10016984
+ 			}
+ 		]
+ 	},
+ 	"555_2343": {
+ 		"name": "Darmanitan",
+ 		"form": {
+ 			"id": 2343,
+ 			"name": "Galarian Transe"
+ 		},
+ 		"id": 555,
+ 		"stats": {
+ 			"baseStamina": 233,
+ 			"baseAttack": 243,
+ 			"baseDefense": 202
+ 		},
+ 		"types": [
+ 			{
+ 				"id": 10,
+ 				"name": "Fire",
+ 				"emoji": "🔥",
+ 				"color": 15761456
+ 			},
+ 			{
+ 				"id": 15,
+ 				"name": "Ice",
+ 				"emoji": "❄",
+ 				"color": 10016984
+ 			}
+ 		]
+ 	},
 	"556_2067": {
 		"name": "Maractus",
 		"form": {
@@ -61899,7 +61899,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -61926,7 +61926,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -61953,7 +61953,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -61980,7 +61980,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -61991,33 +61991,33 @@
 			}
 		]
 	},
-	"618_2345": {
-		"name": "Stunfisk",
-		"form": {
-			"id": 2345,
-			"name": "Galarian"
-		},
-		"id": 618,
-		"stats": {
-			"baseStamina": 240,
-			"baseAttack": 144,
-			"baseDefense": 171
-		},
-		"types": [
-			{
-				"id": 5,
-				"name": "Ground",
-				"emoji": "🗿",
-				"color": 14729320
-			},
-			{
-				"id": 9,
-				"name": "Steel",
-				"emoji": "🔩",
-				"color": 12105936
-			}
-		]
-	},
+ 	"618_2345": {
+ 		"name": "Stunfisk",
+ 		"form": {
+ 			"id": 2345,
+ 			"name": "Galarian"
+ 		},
+ 		"id": 618,
+ 		"stats": {
+ 			"baseStamina": 240,
+ 			"baseAttack": 144,
+ 			"baseDefense": 171
+ 		},
+ 		"types": [
+ 			{
+ 				"id": 5,
+ 				"name": "Ground",
+ 				"emoji": "🗿",
+ 				"color": 14729320
+ 			},
+ 			{
+ 				"id": 9,
+ 				"name": "Steel",
+ 				"emoji": "🔩",
+ 				"color": 12105936
+ 			}
+ 		]
+ 	},
 	"619_2249": {
 		"name": "Mienfoo",
 		"form": {
@@ -62286,7 +62286,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -62313,7 +62313,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -62340,7 +62340,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -62367,7 +62367,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -62394,7 +62394,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -62421,7 +62421,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -62448,7 +62448,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -62475,7 +62475,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -64650,7 +64650,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -64677,7 +64677,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -64704,7 +64704,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			},
 			{
@@ -65397,7 +65397,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -66819,7 +66819,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -67584,7 +67584,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -67605,7 +67605,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -68076,7 +68076,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
@@ -68103,7 +68103,7 @@
 			{
 				"id": 5,
 				"name": "Ground",
-				"emoji": "🗿",
+				"emoji": "⛰️",
 				"color": 14729320
 			}
 		]
