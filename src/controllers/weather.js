@@ -19,25 +19,30 @@ class Weather extends Controller {
 				}
 			}
 
+			const newWeather = data.condition || cellWeather.gameplay_condition
+
 			this.controllerData[data.s2_cell_id] = {
-				time: data.time_changed,
-				weather: data.condition,
+				time: data.time_changed || data.updated,
+				weather: newWeather,
 				cares: whoCares,
 			}
 
 			if (!this.config.general.weatherChangeAlert) {
 				this.log.debug('weather change alerts are disabled, nobody cares.')
+				this.controllerData[data.s2_cell_id].cares = []
 				return []
 			}
 
-			if (oldWeather === data.condition || whoCares.length === 0) {
+			if (oldWeather === newWeather || whoCares.length === 0) {
 				this.log.debug(`weather was unchanged in ${data.s2_cell_id} or nobody cares.`)
 				return []
 			}
 
 			this.controllerData[data.s2_cell_id].cares = []
 
-			this.log.info(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
+
+
+			this.log.info(`weather has changed to ${newWeather} in ${data.s2_cell_id} and someone might care`)
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			if (oldWeather > -1) {
 				data.oldweather = this.utilData.weather[oldWeather] ? this.translator.translate(this.utilData.weather[oldWeather].name) : ''
@@ -46,8 +51,8 @@ class Weather extends Controller {
 				data.oldweather = ''
 				data.oldweatheremoji = ''
 			}
-			data.weather = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].name) : ''
-			data.weatheremoji = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].emoji) : ''
+			data.weather = this.utilData.weather[newWeather] ? this.translator.translate(this.utilData.weather[newWeather].name) : ''
+			data.weatheremoji = this.utilData.weather[newWeather] ? this.translator.translate(this.utilData.weather[newWeather].emoji) : ''
 
 			const jobs = []
 			const now = moment.now()
@@ -55,7 +60,7 @@ class Weather extends Controller {
 
 			for (const cares of whoCares) {
 				if (cares.id in this.controllerData.caresUntil) {
-					const careUntil = this.controllerData.caresUntil[cares.id]
+					const careUntil = moment.this.controllerData.caresUntil[cares.id]
 					if (careUntil < now) {
 						this.log.debug(`weather changed in ${data.s2_cell_id} after mon despawn`)
 						delete this.controllerData.caresUntil[cares.id]
