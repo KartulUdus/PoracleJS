@@ -19,7 +19,7 @@ class Weather extends Controller {
 				}
 			}
 
-			const newWeather = data.condition || cellWeather.gameplay_condition
+			const newWeather = data.condition || data.gameplay_condition
 
 			this.controllerData[data.s2_cell_id] = {
 				time: data.time_changed || data.updated,
@@ -60,7 +60,7 @@ class Weather extends Controller {
 
 			for (const cares of whoCares) {
 				if (cares.id in this.controllerData.caresUntil) {
-					const careUntil = moment.this.controllerData.caresUntil[cares.id]
+					const careUntil = this.controllerData.caresUntil[cares.id]
 					if (careUntil < now) {
 						this.log.debug(`weather changed in ${data.s2_cell_id} after mon despawn`)
 						delete this.controllerData.caresUntil[cares.id]
