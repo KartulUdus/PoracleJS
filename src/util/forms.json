@@ -120,7 +120,8 @@
     "63": "Normal",
     "64": "Alola",
     "709": "Shadow",
-    "710": "Purified"
+    "710": "Purified",
+    "2335": "Galarian"
   },
   "53": {
     "65": "Normal",
@@ -145,6 +146,9 @@
     "72": "Alola",
     "886": "Shadow",
     "887": "Purified"
+  },
+  "83": {
+    "2338": "Galarian"
   },
   "88": {
     "73": "Normal",
@@ -959,6 +963,16 @@
     "920": "Normal",
     "921": "Shadow",
     "922": "Purified"
+  },
+  "554": {
+    "2341": "Galarian"
+  },
+  "555": {
+    "2342": "Galarian_Standard_Mode",
+    "2343": "Galarian_Zen_Mode"
+  },
+  "618": {
+    "2345": "Galarian"
   },
   "90": {
     "876": "Normal",
