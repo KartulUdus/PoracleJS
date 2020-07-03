@@ -2421,6 +2421,78 @@
 			"durration": 0,
 			"energy": 0,
 			"dps": 0
+		},
+		"333": {
+			"name": "Payback",
+		    	"type": "Dark",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		},
+		"334": {
+		    	"name": "Rock Wrecker",
+		    	"type": "Rock",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "335": {
+		    	"name": "Aeroblast",
+		    	"type": "Flying",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "336": {
+		    	"name": "Techno Blast Normal",
+		    	"type": "Normal",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "337": {
+		    	"name": "Techno Blast Burn",
+		    	"type": "Fire",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "338": {
+		    	"name": "Techno Blast Chill",
+		    	"type": "Ice",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "339": {
+		    	"name": "Techno Blast Water",
+		    	"type": "Water",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "340": {
+		    	"name": "Techno Blast Shock",
+		    	"type": "Electric",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "341": {
+		    	"name": "Fly",
+		    	"type": "Flying",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
 		}
 	},
 	"teams": {
