@@ -2917,8 +2917,8 @@
 			"grunt": "Executive Cliff",
 			"second_reward": false,
 			"encounters": {
-				"first": [127],
-				"second": [105, 138, 466],
+				"first": [88],
+				"second": [139, 466, 68],
 				"third": [248, 260, 389]
 			}
 		},
@@ -2928,7 +2928,7 @@
 			"grunt": "Executive Arlo",
 			"second_reward": false,
 			"encounters": {
-				"first": [303],
+				"first": [204],
 				"second": [6, 9, 208],
 				"third": [149, 212, 373]
 			}
@@ -2939,7 +2939,7 @@
 			"grunt": "Executive Sierra",
 			"second_reward": false,
 			"encounters": {
-				"first": [374],
+				"first": [131],
 				"second": [103, 131, 319],
 				"third": [65, 228, 275]
 			}
@@ -2951,8 +2951,8 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [53],
-				"second": [99, 208, 464],
-				"third": [244]
+				"second": [34, 51, 445],
+				"third": [245]
 			}
 		},
 		"45": {
