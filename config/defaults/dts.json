@@ -6,8 +6,8 @@
     "template": {
       "embed": {
         "color": "{{ivcolor}}",
-        "title": "{{round iv}}% {{name}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
-        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "title": "{{round iv}}% {{name}}{{#if form}}{{isnt formname 'normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
+        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge: {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -22,7 +22,7 @@
     "template": {
       "embed": {
         "color": "{{color}}",
-        "title": "?% {{name}} {{boostemoji}}",
+        "title": "?% {{name}}{{#if form}}{{isnt formname 'normal'}} {{formname}}{{/isnt}}{{/if}} {{boostemoji}}",
         "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
@@ -37,8 +37,8 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "Raid against {{name}} has started at {{gymName}}!",
-        "description": "CP: {{cp}}, quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "title": "Raid against {{name}} has started at {{gymName}}! {{#ex}}(Ex){{/ex}}",
+        "description": "CP: {{cp}}, quick: {{quickMove}}, charge: {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
@@ -57,7 +57,7 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "Raid egg level{{level}} at {{gymName}}",
+        "title": "Raid egg level{{level}} at {{gymName}} {{#ex}}(Ex){{/ex}}",
         "description": "Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "color": "{{color}}",
         "thumbnail": {
@@ -77,7 +77,7 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "{{questType}} \n Pokestop Name: {{pokestop_name}}",
+        "title": "{{questType}} \n Pokestop: {{pokestop_name}}",
         "url": "{{{mapurl}}}",
         "description": "Conditions: {{conditionString}} \n Reward: {{rewardString}} {{monsterNames}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
@@ -123,27 +123,27 @@
     "template": {
       "embed": {
         "title": "Welcome",
-        "description": "Thank you for registering \nPlease set a location `{{prefix}}location name of place` or add ares where to receive alarms from",
+        "description": "Thank you for registering \n To start, please set a location by replying to this bot with `{{prefix}}location name of place` \n That will set a center point for your scanning circle for most of the other commands.",
         "fields": [
           {
             "name": "**General commands**",
-            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n`{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`{{prefix}}area remove somePlace`: Removes a configured area \n `{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://wiki.poracle.world/commands)"
+            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n `{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://wiki.poracle.world/commands)"
           },
           {
             "name": "**_Basic Examples_**",
-            "value": "You probably want to start off with something like these 5 commands. Change the distances (d=metres) to suit yourself. \n `{{prefix}}location 123 Common Road, Town, Region` \n `{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka unown d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}track everything iv100 d1000` \n `{{prefix}}quest silver_pinap_berry d500 clean"
+            "value": "You probably want to start off with something like these commands. One command at a time. Change the distances (d=metres) to suit yourself. \n `{{prefix}}location 123 Common Road, Town, Region` \n `{{prefix}}track unown azelf mesprit uxie d5000 ` \n `{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}track everything iv100 d1000` \n `{{prefix}}quest silver_pinap_berry d500 clean`"
           },
           {
             "name": "**Monster tracking commands**",
-            "value": "The command needs to include at least one monster and any amount of filters. E.g. \n `{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
+            "value": "The command needs to include at least one monster and any amount of variables. E.g. \n `{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
           },
           {
             "name": "**Raid tracking commands**",
-            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any variables are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}raid remove lapras vileplume`: will remove tracking for lapras and vileplume raids"
+            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any variables are optional. This command would alert you about snorlax and lapras raids within 500 meters of your location (or inside an added area), if the Gym is controlled by team Instinct. \n`{{prefix}}raid remove klink vileplume`: Remove tracking for klink and vileplume raids"
           },
           {
             "name": "**Raid egg tracking commands**",
-            "value": "`{{prefix}}egg level3 d500 instinct`: Any variables are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}egg remove level3`: will remove tracking for level 3 raid eggs"
+            "value": "`{{prefix}}egg level3 d500 instinct`: Any variables are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}egg remove level3`: Remove tracking for level 3 raid eggs"
           },
           {
             "name": "**Quest tracking commands**",
@@ -154,17 +154,17 @@
             "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
           },
           {
-			"name": "**Areas**",
-			"value": "If your admin has configured areas, these other commands are available: \n `{{prefix}}area list`: lists the possible areas you can add. \n `{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n `{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
-		  },
-		  {
-			"name": "**Further info**",
-			"value": "See all details about the commands in [the full manual](https://kartuludus.github.io/PoracleJS/#/commands)"
-		  },
-		  {
-			"name": "**How far can I walk in metres/minutes? According to the web...**",
-			"value": "```Metres | Fast | Moderate | Easy Walk \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63```"
-		  }
+            "name": "**Areas**",
+            "value": "If your admin has configured areas, these other commands are available: \n `{{prefix}}area list`: Lists the possible areas you can add. \n `{{prefix}}location yourArea`: Sets yourArea as your location \n Admin commands: \n `{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
+	  },
+	  {
+            "name": "**Further info**",
+            "value": "See all details about the commands in [the full manual](https://wiki.poracle.world/commands)"
+	  },
+	  {
+            "name": "**How far can I walk in metres/minutes? According to the web...**",
+            "value": "```Metres | Fast | Moderate | Easy Walk \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63```"
+	  }
         ]
       }
     }
