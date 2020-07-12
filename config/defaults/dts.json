@@ -6,7 +6,7 @@
     "template": {
       "embed": {
         "color": "{{ivcolor}}",
-        "title": "{{round iv}}% {{name}}{{#if form}}{{isnt formname 'normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
+        "title": "{{round iv}}% {{name}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
         "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge: {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
@@ -22,7 +22,7 @@
     "template": {
       "embed": {
         "color": "{{color}}",
-        "title": "?% {{name}}{{#if form}}{{isnt formname 'normal'}} {{formname}}{{/isnt}}{{/if}} {{boostemoji}}",
+        "title": "?% {{name}} {{boostemoji}}",
         "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
