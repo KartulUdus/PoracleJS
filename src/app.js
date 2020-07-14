@@ -230,11 +230,13 @@ async function handleAlarms() {
 			}
 			case 'weather': {
 				fastify.webhooks.info('weather', hook.message)
-				if (await fastify.cache.get(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
-					fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
-					break
+				if(hook.message.time_changed) {
+					if (await fastify.cache.get(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
+						fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
+						break
+					}
+					fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
 				}
-				fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
 				const result = await fastify.weatherController.handle(hook.message)
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
