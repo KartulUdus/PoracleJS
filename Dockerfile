@@ -1,16 +1,7 @@
-FROM ubuntu:18.10
+FROM node
 
-# CURL
-RUN apt-get -y update && apt-get install -y curl
-
-# gnupg2
-RUN apt-get -y update && apt-get install -y gnupg2
-
-# NodeJS
-RUN curl -sL https://deb.nodesource.com/setup_8.x | bash - && apt-get -y update && apt-get install -y nodejs
-
-# Git
-RUN apt-get -y update && apt-get install -y git
+# DEPS
+RUN apt-get -y update && apt-get install -y curl gnupg2
 
 # PoracleJS
 WORKDIR PoracleJS
