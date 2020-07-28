@@ -98,7 +98,9 @@
 
     "geocoding": {
       "provider": "GEOCODING_PROVIDER",
+      "providerURL": "GEOCODING_PROVIDER_URL",
       "staticProvider": "STATIC_PROVIDER",
+      "staticProviderURL": "STATIC_PROVIDER_URL",
       "geocodingKey":{
         "__name": "GEOCODING_KEYS",
         "__format": "json"
