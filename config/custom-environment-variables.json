@@ -14,6 +14,15 @@
             "__format": "json"
           }
     },
+
+	"general": {
+        "environment": "ENVIRONMENT_CONFIGURATION",
+        "alertMinimumTime": "MINIMUM_ALERT_TIME",
+        "imgUrl": "IMAGE_URL",
+        "locale": "PORACLE_LANGUAGE",
+        "weatherChangeAlert": "WEATHER_ALERTS"
+    },
+
     "logger": {
         "level": "SERVICE_LOGGER_LEVEL",
         "logSize": {
@@ -45,11 +54,16 @@
         "__name": "DISCORD_ENABLED",
         "__format": "json"
       },
+      "unknownResponse": {
+        "__name": "DISCORD_UNKNOWN_RESPONSE",
+        "__format": "json"
+      },
+      "invite": "DISCORD_INVITE",
       "token": {
         "__name": "DISCORD_TOKEN",
         "__format": "json"
       },
-      "channel": {
+      "channels": {
         "__name": "REGISTER_CHANNELS",
         "__format": "json"
       },
