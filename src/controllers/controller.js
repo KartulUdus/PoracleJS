@@ -55,6 +55,13 @@ class Controller {
 
 	getGeocoder() {
 		switch (config.geocoding.provider.toLowerCase()) {
+                        case 'nominatim': {
+                                return NodeGeocoder({
+                                        provider: 'openstreetmap',
+                                        osmServer: config.geocoding.providerURL,
+                                        formatterPattern: config.locale.addressformat,
+                                })
+                        }
 			case 'poracle': {
 				return NodeGeocoder({
 					provider: 'openstreetmap',
