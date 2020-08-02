@@ -305,7 +305,7 @@ class Raid extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
 			}
 
 			for (const cares of whoCares) {
