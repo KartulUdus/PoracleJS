@@ -32,6 +32,7 @@
     "30": "Purify {{amount}} Pokemon",
     "31": "Find {{amount}} Team Rocket Invasion(s)",
     "32": "{{amount}} time(s) First Grunt OTD",
+    "33": "",
     "34": "Earn {{amount}} hearts with your buddy"
   },
   "questRewardTypes": {
@@ -88,11 +89,12 @@
   },
 
   "categories": {
-    "1": "team leader",
-    "2": "grunt"
+    "1": "Team Leader",
+    "2": "Grunt"
   },
 
   "rewardItems": {
+    "0": "Unkown",
     "1": "Poke Ball",
     "2": "Great Ball",
     "3": "Ultra Ball",
@@ -109,6 +111,7 @@
     "402": "Incense Spicy",
     "403": "Incense Cool",
     "404": "Incense Floral",
+    "405": "Incense beluga box",
     "501": "Troy Disk",
     "502": "Troy Glacial Disk",
     "503": "Troy Mossy Disk",
@@ -124,6 +127,7 @@
     "706": "Golden Razz Berry",
     "707": "Golden Nanab Berry",
     "708": "Silver Pinap Berry",
+    "709": "Poffin",
     "801": "Special Camera",
     "901": "Incubator Basic Unlimited",
     "902": "Incubator Basic",
@@ -144,6 +148,11 @@
     "1402": "Paid Raid Ticket",
     "1403": "Legendary Raid Ticket",
     "1404": "Star Piece",
-    "1405": "Friend Gift Box"
+    "1405": "Friend Gift Box",
+    "1406": "Team change",
+    "1501": "Leader map fragment",
+    "1502": "Leader map",
+    "1503": "Giovanni map",
+    "1600": "Global event ticket"
   }
 }
