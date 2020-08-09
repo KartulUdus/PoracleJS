@@ -2008,7 +2008,7 @@
 		},
 		"281": {
 			"name": "Hidden Power",
-			"type": "Normal",
+			"type": "Fighting",
 			"damage": 15,
 			"duration": 1500,
 			"energy": 15,
