@@ -14,7 +14,7 @@ class TileserverPregen {
 		try {
 			const result = await axios.post(url, data)
 			if (result.status !== 200) {
-				this.log.warn(`Failed to Pregenerate StaticMap. Got ${result.status}.`)
+				this.log.warn(`Failed to Pregenerate StaticMap. Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
 				return null
 			} if (typeof result.data !== 'string') {
 				this.log.warn('Failed to Pregenerate StaticMap. No id returned.')
