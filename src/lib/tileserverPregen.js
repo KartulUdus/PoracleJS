@@ -22,7 +22,11 @@ class TileserverPregen {
 			}
 			return `${this.config.geocoding.staticProviderURL}/staticmap/pregenerated/${result.data}`
 		} catch (error) {
-			this.log.warn(`Failed to Pregenerate StaticMap. Error: ${error}`)
+			if (error.response) {
+				this.log.warn(`Failed to Pregenerate StaticMap. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+			} else {
+				this.log.warn(`Failed to Pregenerate StaticMap. Error: ${error}.`)
+			}
 			return null
 		}
 	}
