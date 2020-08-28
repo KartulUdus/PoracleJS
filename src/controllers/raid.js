@@ -17,6 +17,7 @@ const emojiData = require('../../config/emoji')
 
 const monsterData = require(monsterDataPath)
 const teamData = require('../util/teams')
+const evolutionData = require('../util/evolutions')
 const types = require('../util/types')
 
 const moveData = require(moveDataPath)
@@ -135,6 +136,7 @@ class Raid extends Controller {
 				if (!data.form) data.form = 0
 				if (data.form) data.formname = formData[data.pokemon_id] ? formData[data.pokemon_id][data.form] : ''
 				if (!data.team_id) data.team_id = 0
+				if (!data.evolution) data.evolution = 0
 				if (data.name) data.gym_name = data.name
 				data.name = monsterData[data.pokemon_id] ? monsterData[data.pokemon_id].name : 'errormon'
 				data.imgurl = `${config.general.imgurl}pokemon_icon_${(data.pokemon_id).toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
@@ -146,6 +148,7 @@ class Raid extends Controller {
 				data.emoji = e
 				data.emojiString = e.join('')
 				data.teamname = data.team_id ? teamData[data.team_id].name : 'Harmony'
+				data.evolutionname = data.evolution ? evolutionData[data.evolution].name : ''
 				data.color = data.team_id ? teamData[data.team_id].color : 7915600
 
 				data.quick_move = moveData[data.move_1] ? moveData[data.move_1].name : ''
