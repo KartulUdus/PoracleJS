@@ -33,7 +33,8 @@ class Quest extends Controller {
             where humans.enabled = 1 and
             ((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1 or reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0)
             or (reward_type = 2 and reward in (${data.rewardData.items}))
-            or (reward_type = 3 and reward <= ${data.dustAmount}))
+            or (reward_type = 3 and reward <= ${data.dustAmount})
+            or (reward_type = 12 and reward <= ${data.energyAmount}))
             and
             (round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
@@ -88,6 +89,7 @@ class Quest extends Controller {
 				[data.questType, data.rewardData, data.conditionstring, data.matched] = questData
 				data.dustAmount = data.rewardData.dustAmount
 				data.isShiny = data.rewardData.isShiny
+				data.energyAmount = data.rewardData.energyAmount
 
 				log.log({
 					level: 'debug', message: `webhook message ${data.messageId} processing`, messageId: data.messageId, correlationId: data.correlationId, event: 'message:start', type: 'quest', meta: data,
@@ -116,6 +118,11 @@ class Quest extends Controller {
 					data.imgurl = `${config.general.imgurl}rewards/reward_stardust.png`
 					data.sticker = `${config.telegram.stickerurl}rewards/reward_stardust.webp`
 					data.dustAmount = data.rewards[0].info.amount
+				}
+				if (data.energyAmount) {
+					data.imgurl = `${config.general.imgurl}rewards/reward_mega_energy.png`
+					data.sticker = `${config.telegram.stickerurl}rewards/reward_mega_energy.webp`
+					data.energyAmount = data.rewards[0].info.amount
 				}
 
 				this.questWhoCares(data).then((whoCares) => {
@@ -163,7 +170,7 @@ class Quest extends Controller {
 							stardust: data.type === 3 ? 'stardust' : '',
 							rewardemoji: data.rewardemoji,
 							imgurl: data.imgurl,
-							name: data.pokestop_name.replace(/\n/g, ' '),
+							name: data.pokestop_name.replace(/\n/g, ' ').replace(/["']/g, ""),
 							url: data.pokestop_url,
 							minCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 10, 10, 10) : '',
 							maxCp: data.rewardData.monsters[1] ? this.getCp(data.rewardData.monsters[1], 15, 15, 15, 15) : '',
@@ -240,6 +247,7 @@ class Quest extends Controller {
 			let rewardString = ''
 			let dustAmount = 0
 			let isShiny = 0
+			let energyAmount = 0
 
 			data.rewards.forEach(async (reward) => {
 				if (reward.type === 2) {
@@ -267,9 +275,16 @@ class Quest extends Controller {
 					monsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				}
+				else if (reward.type === 12) {
+					const template = this.qdts.questRewardTypes['12']
+					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, amount: reward.info.amount })
+					energyAmount = reward.info.amount
+					rewardString = rewardString.concat(rew)
+
+				}
 			})
 			resolve({
-				rewardstring: rewardString, monsters, items, dustAmount, isShiny,
+				rewardstring: rewardString, monsters, items, dustAmount, isShiny, energyAmount,
 			})
 		})
 	}
