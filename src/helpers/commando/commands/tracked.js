@@ -114,6 +114,7 @@ exports.run = (client, msg) => {
 						if (quest.reward_type === 7) rewardThing = monsterData[quest.reward].name
 						if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
 						if (quest.reward_type === 2) rewardThing = questDts.rewardItems[quest.reward]
+						if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
 						message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 					})
 
