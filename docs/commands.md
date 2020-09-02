@@ -171,11 +171,12 @@ Available filters:
 |all items|`!quest all items`| tracks quests for all item rewards within your area|
 |d|`!quest snorlax d50`| Tracks Snorlax awarding quests within 50m of set location|
 |stardust|`!quest stardust d1000`| Tracks quests within 1km that awards stardust|
+|energy|`!quest energy1`| Tracks quests that awards 1 or more mega energy|
 
 
 ###### !quest remove
 
-`!quest remove all pokemon pinap berry stardust`  
+`!quest remove all pokemon pinap berry stardust energy`  
 Removes quest tracking for all pokemon, pinap berries and strdust.
 
 ##### !invasion
