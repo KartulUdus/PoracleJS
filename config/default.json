@@ -30,6 +30,7 @@
 
   "geocoding": {
     "provider": "poracle",
+    "providerURL": "Your Nominatim Server Address",
     "staticProvider": "poracle",
     "osmServer":"http://nominatim.openstreetmap.org",
     "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],

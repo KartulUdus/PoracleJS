@@ -52,6 +52,7 @@
 
   "geocoding": {
     "provider": "GEO_PROVIDER",
+    "providerURL": "GEO_PROVIDER_URL",
     "staticProvider": "STATIC_PROVIDER",
     "osmServer": "OSM_SERVER",
     "geocodingKey":{
