@@ -277,7 +277,12 @@ class Quest extends Controller {
 				}
 				else if (reward.type === 12) {
 					const template = this.qdts.questRewardTypes['12']
-					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, amount: reward.info.amount })
+					let e = []
+					monsterData[reward.info.pokemon_id].types.forEach((type) => {
+						e.push(emojiData.type[type])
+					})
+					e = e.join()
+					const rew = mustache.render(template, { pokemon: monsterData[reward.info.pokemon_id].name, emoji: e, amount: reward.info.amount })
 					energyAmount = reward.info.amount
 					rewardString = rewardString.concat(rew)
 
@@ -340,6 +345,16 @@ class Quest extends Controller {
 					case 14: {
 						const template = this.qdts.questConditions['14']
 						const cond = mustache.render(template, { throw_type: this.qdts.throwType[condition.info.throw_type_id], amount: data.target })
+						conditionString = conditionString.concat(cond)
+						break
+					}
+					case 37: {
+						const pokemons = []
+						condition.info.raid_pokemon_evolutions.forEach((pokemonId) => {
+							pokemons.push(monsterData[pokemonId].name)
+						})
+						const template = this.qdts.questConditions['37']
+						const cond = mustache.render(template, { monsters: pokemons.join(', ') })
 						conditionString = conditionString.concat(cond)
 						break
 					}
