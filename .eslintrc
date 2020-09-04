@@ -16,6 +16,8 @@
         "no-return-assign": ["off"],
         "no-await-in-loop": [ "off" ],
         "no-plusplus": [ "off" ],
+        "no-throw-literal": ["off"],
+        "no-param-reassign": ["off"],
         "no-bitwise": ["error", { "allow": ["~"] }]
     }
 }

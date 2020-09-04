@@ -132,6 +132,7 @@ class Monster extends Controller {
 			data.weight = encountered ? data.weight.toFixed(1) : 0
 			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
 			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
+			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
 			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
 			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
@@ -249,10 +250,14 @@ class Monster extends Controller {
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 
-				if (cares.ping) {
-					if (!message.content) message.content = cares.ping
-					if (message.content) message.content += cares.ping
-				}
+                                if (cares.ping) {
+                                        if (!message.content) {
+                                                message.content = cares.ping;
+                                        } else {
+                                                message.content += cares.ping;
+                                        }
+                                }
+
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
 					lon: data.longitude.toString().substring(0, 8),

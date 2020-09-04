@@ -11,7 +11,7 @@ It allows for high end-user configurability using discord `!commands` or telegra
 
 #### Links
 
-- [WIKI](https://wiki.poracle.world/) - Useful for words of wizdom!  
+- [WIKI](https://wiki.poracle.world/) - Useful for words of wizdom! ([source](https://github.com/KartulUdus/poracleWiki))
 - [Discord](https://discord.gg/AathPCp) - Place for #help and #announcments  
 
 ### Install

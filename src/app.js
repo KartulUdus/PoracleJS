@@ -68,7 +68,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let telegram
@@ -231,7 +231,7 @@ async function handleAlarms() {
 			case 'weather': {
 				fastify.webhooks.info('weather', hook.message)
 				if (await fastify.cache.get(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
-					fastify.logger.error(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
+					fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
 					break
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
