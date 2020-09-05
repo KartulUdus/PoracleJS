@@ -70,6 +70,7 @@ class Monster extends Controller {
 
 
 	async handle(obj) {
+		let pregenerateTile = false
 		const data = obj
 		try {
 			moment.locale(this.config.locale.timeformat)
@@ -78,6 +79,10 @@ class Monster extends Controller {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'poracle': {
 					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
+					break
+				}
+				case 'tileservercache': {
+					pregenerateTile = true
 					break
 				}
 				case 'google': {
@@ -191,8 +196,11 @@ class Monster extends Controller {
 
 			if (discordCacheBad) return []
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-
 			const jobs = []
+
+			if (pregenerateTile) {
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
+			}
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
@@ -250,13 +258,13 @@ class Monster extends Controller {
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 
-                                if (cares.ping) {
-                                        if (!message.content) {
-                                                message.content = cares.ping;
-                                        } else {
-                                                message.content += cares.ping;
-                                        }
-                                }
+				if (cares.ping) {
+					if (!message.content) {
+						message.content = cares.ping
+					} else {
+						message.content += cares.ping
+					}
+				}
 
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),

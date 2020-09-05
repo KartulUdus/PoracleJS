@@ -62,7 +62,9 @@
 
       "geocoding": {
         "provider": "poracle",
+        "providerURL": "Your Nominatim Server Address",
         "staticProvider": "poracle",
+        "staticProviderURL": "Your TileServerCache Server Address",
         "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
         "staticKey":["Your MapQuest or Google Key"],
         "width": 320,
