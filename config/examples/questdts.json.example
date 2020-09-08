@@ -36,7 +36,10 @@
     "34": "Earn {{amount}} hearts with your buddy",
     "35": "Play with your buddy {{amount}} time(s)",
     "36": "Earn {{amount}} Buddy Level(s)",
-    "37": "Walk {{amount}} KM(s) with your Buddy"
+    "37": "Walk {{amount}} KM(s) with your Buddy",
+    "38": "Earn {{amount}} Souvenir(s) from your Buddy",
+    "39": "Use Incense {{amount}} time(s)",
+    "43": "Mega-Evolve {{amount}} Pokemon"
   },
   "questRewardTypes": {
     "0": "",
@@ -81,7 +84,10 @@
     "25": "Distance",
     "26": "Pokemon Alignment(s): {{alignments}}",
     "27": "Invasion Category(s): {{categories}}",
-    "28": "Buddy Interaction"
+    "28": "Buddy Interaction",
+    "29": "Interesting POI",
+    "30": "Daily Buddy Affection",
+    "37": "Mega Evolution(s): {{monsters}}"
   },
 
   "throwType": {
