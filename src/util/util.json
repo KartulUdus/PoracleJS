@@ -98,6 +98,20 @@
 			"emoji": "⚧"
 		}
 	},
+	"evolution": {
+		"0": {
+			"name": ""
+		},
+		"1": {
+			"name": "Mega"
+		},
+		"2": { 
+			"name": "Mega X"
+		},
+		"3": { 
+			"name": "Mega Y"
+		}
+	},
 	"questTypes": {
 		"0": "",
 		"1": "{{amount}} time(s) First Catch OTD",
