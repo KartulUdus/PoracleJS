@@ -147,9 +147,10 @@ class Raid extends Controller {
 				data.gif = pokemonGif(Number(data.pokemon_id))
 				data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 				if (!data.team_id) data.team_id = 0
+				if (!data.evolution) data.evolution = 0
 				if (data.name) data.gymName = data.name ? data.name : ''
 				data.name = this.translator.translate(monster.name)
-				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? '_'+data.evolution.toString() : ''}.png`				
 				const e = []
 				monster.types.forEach((type) => {
 					e.push(this.utilData.types[type.name].emoji)
@@ -174,6 +175,7 @@ class Raid extends Controller {
 				data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
 				data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
 
+				data.evolutionname = data.evolution ? this.utilData.evolution[data.evolution].name : ''
 				data.quickMove = this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
 				data.chargeMove = this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
