@@ -55,6 +55,10 @@ module.exports = (ctx) => {
 				let gender = 0
 				let weight = 0
 				let maxweight = 9000000
+				let greatLeague = 4096
+				let greatLeagueCP = 0
+				let ultraLeague = 4096
+				let ultraLeagueCP = 0
 				let template = 3
 				let gen = 0
 				const forms = []
@@ -67,6 +71,10 @@ module.exports = (ctx) => {
 
 					if (element.match(/maxlevel\d/gi)) 	maxlevel = element.replace(/maxlevel/gi, '')
 					else if (element.match(/template[1-5]/gi)) template = element.replace(/template/gi, '')
+					else if (element.match(/greatLeagueRe\d/gi)) greatLeague = element.replace(/greatLeagueRe/gi, '')					
+					else if (element.match(/greatLeagueCPRe\d/gi)) greatLeagueCP = element.replace(/greatLeagueCPRe/gi, '')					
+					else if (element.match(/ultraLeagueRe\d/gi)) ultraLeague = element.replace(/ultraLeagueRe/gi, '')					
+					else if (element.match(/ultraLeagueCPRe\d/gi)) ultraLeagueCP = element.replace(/ultraLeagueCPRe/gi, '')					
 					else if (element.match(/maxcp\d/gi)) maxcp = element.replace(/maxcp/gi, '')
 					else if (element.match(/maxiv\d/gi)) maxiv = element.replace(/maxiv/gi, '')
 					else if (element.match(/maxweight\d/gi)) maxweight = element.replace(/maxweight/gi, '')
@@ -105,7 +113,7 @@ module.exports = (ctx) => {
 				})
 				if (monsters.length && !forms.length) {
 					const form = 0
-					const insertData = monsters.map((pokemonId) => [target.id, pokemonId, template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender])
+					const insertData = monsters.map((pokemonId) => [target.id, pokemonId, template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender, greatLeague, greatLeagueCP, ultraLeague, ultraLeagueCP])
 					controller.query.insertOrUpdateQuery(
 						'monsters',
 						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender'],

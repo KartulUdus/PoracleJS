@@ -60,6 +60,11 @@ class Monster extends Controller {
             maxSta>=${data.individual_stamina} and
             min_weight<=${data.weight} * 1000 and
             max_weight>=${data.weight} * 1000 and
+			max_weight>=${data.weight} * 1000 and
+			great_league_ranking>=${data.bestGreatLeagueRank} and
+			great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and 
+			ultra_league_ranking>=${data.bestUltraLeagueRank} and 
+			ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP} and
             (round( 6371000 * acos( cos( radians(${data.latitude}) )
               * cos( radians( humans.latitude ) )
               * cos( radians( humans.longitude ) - radians(${data.longitude}) )
@@ -167,6 +172,32 @@ class Monster extends Controller {
 			}
 			data.emoji = e
 			data.emojiString = e.join('')
+
+			data.bestGreatLeagueRank = 4096
+			data.bestGreatLeagueRankCP = 0
+			if (data.pvp_rankings_great_league) {
+				for (const stats of data.pvp_rankings_great_league) {
+					if (stats.rank && stats.rank < data.bestGreatLeagueRank) {
+						data.bestGreatLeagueRank = stats.rank
+						data.bestGreatLeagueRankCP = stats.cp || 0
+					} else if (stats.rank && stats.cp && stats.rank === data.bestGreatLeagueRank && stats.cp > data.bestGreatLeagueRankCP) {
+						data.bestGreatLeagueRankCP = stats.cp
+					}
+				}
+			}
+
+			data.bestUltraLeagueRank = 4096
+			data.bestUltraLeagueRankCP = 0
+			if (data.pvp_rankings_ultra_league) {
+				for (const stats of data.pvp_rankings_ultra_league) {
+					if (stats.rank && stats.rank < data.bestUltraLeagueRank) {
+						data.bestUltraLeagueRank = stats.rank
+						data.bestUltraLeagueRankCP = stats.cp || 0
+					} else if (stats.rank && stats.cp && stats.rank === data.bestUltraLeagueRank && stats.cp > data.bestUltraLeagueRankCP) {
+						data.bestUltraLeagueRankCP = stats.cp
+					}
+				}
+			}
 
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {

@@ -7,7 +7,7 @@ const fastify = require('fastify')()
 const cp = require('child_process')
 const log = require('./logger')
 const migrator = require('./helpers/migrator')
-
+const pvp = require('./helpers/pvp')
 
 fastify
 	.post('/', {}, require('./handlers/receiver'))
@@ -29,6 +29,7 @@ fastify
 const start = async () => {
 	try {
 		await migrator()
+		await pvp()
 		if (config.discord.enabled) cp.fork(`${__dirname}/helpers/discordCommando.js`)
 		await fastify.listen(config.general.port, config.general.host)
 		log.info(`Poracle started on ${fastify.server.address().address}:${fastify.server.address().port}`)
