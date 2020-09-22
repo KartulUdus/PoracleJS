@@ -116,7 +116,7 @@ module.exports = (ctx) => {
 					const insertData = monsters.map((pokemonId) => [target.id, pokemonId, template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender, greatLeague, greatLeagueCP, ultraLeague, ultraLeagueCP])
 					controller.query.insertOrUpdateQuery(
 						'monsters',
-						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender'],
+						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender', 'greatLeague', 'greatLeagueCP', 'ultraLeague', 'ultraLeagueCP'],
 						insertData,
 					).catch((O_o) => {})
 
@@ -148,11 +148,11 @@ module.exports = (ctx) => {
 						const fid = _.findKey(formData[monsters[0]], (monforms) => monforms.toLowerCase() === form)
 						if (fid) fids.push(fid)
 					})
-					const insertData = fids.map((form) => [target.id, monsters[0], template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender])
+					const insertData = fids.map((form) => [target.id, monsters[0], template, distance, iv, maxiv, cp, maxcp, level, maxlevel, atk, def, sta, weight, maxweight, form, maxAtk, maxDef, maxSta, gender, greatLeague, greatLeagueCP, ultraLeague, ultraLeagueCP])
 					controller.log.log({ level: 'debug', message: `${user.first_name} started tracking ${monsters[0]} form: ${fids} in ${target.name}`, event: 'discord:track' })
 					controller.query.insertOrUpdateQuery(
 						'monsters',
-						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender'],
+						['id', 'pokemon_id', 'template', 'distance', 'min_iv', 'max_iv', 'min_cp', 'max_cp', 'min_level', 'max_level', 'atk', 'def', 'sta', 'min_weight', 'max_weight', 'form', 'maxAtk', 'maxDef', 'maxSta', 'gender', 'greatLeague', 'greatLeagueCP', 'ultraLeague', 'ultraLeagueCP'],
 						insertData,
 					).catch((O_o) => {})
 					if (fids.length > 0) {
