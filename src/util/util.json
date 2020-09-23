@@ -3009,6 +3009,32 @@
 			"emoji": ":foggy:"
 		}
 	},
+	"rarity": {
+		"0": {
+			"name": "",
+			"emoji": "∅"
+		},
+		"1": {
+			"name": "Uncommon",
+			"emoji": "⭐"
+		},
+		"2": {
+			"name": "Common",
+			"emoji": "⭐⭐"
+		},
+		"3": {
+			"name": "Rare",
+			"emoji": "⭐⭐⭐"
+		},
+		"4": {
+			"name": "Very Rare",
+			"emoji": "⭐⭐⭐⭐"
+		},
+		"5": {
+			"name": "Ultra Rare",
+			"emoji": "⭐⭐⭐⭐⭐"
+		}
+	},
 	"genData": {
 		"1": {
 			"min": 1,
