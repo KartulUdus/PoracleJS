@@ -1,4 +1,4 @@
-const { log } = require('../../logger')
+const log = require('../logger')
 const config = require('config')
 
 exports.up = async function migrationUp(knex) {
