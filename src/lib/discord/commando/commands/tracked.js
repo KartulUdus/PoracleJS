@@ -88,6 +88,7 @@ exports.run = async (client, msg, [args]) => {
 			if (quest.reward_type === 7) rewardThing = Object.values(client.monsters).find((m) => m.id === quest.reward).name
 			if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
 			if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
+			if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
 			message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 		})
 

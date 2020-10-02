@@ -139,15 +139,17 @@
 		"23": "Trade {{amount}} Pokemon",
 		"24": "Send {{amount}} Gift(s)",
 		"25": "Evolve {{amount}} Pokemon",
-		"27": "Complete {{amount}} Battles",
+		"27": "Complete {{amount}} Trainer Battle(s)",
 		"28": "Take {{amount}} snapshots",
 		"29": "Defeat {{amount}} Team Rocket Grunt",
 		"30": "Purify {{amount}} Pokemon",
 		"31": "Find {{amount}} Team Rocket Invasion(s)",
 		"32": "{{amount}} time(s) First Grunt OTD",
-		"33": "",
+		"33": "Feed your Buddy {{amount}} Berries",
 		"34": "Earn {{amount}} hearts with your buddy",
-		"35": "Play with your Buddy {{amount}} time(s)"
+		"35": "Play with your buddy {{amount}} time(s)",
+		"36": "Earn {{amount}} Buddy Level(s)",
+		"37": "Walk {{amount}} KM(s) with your Buddy"
 	},
 	"questRewardTypes": {
 		"0": "",
@@ -157,7 +159,11 @@
 		"4": "{{amount}} {{type}} Candy",
 		"5": "Avatar clothing",
 		"6": "Quest",
-		"7": "{{pokemon}} {{{emoji}}}"
+		"7": "{{pokemon}} {{{emoji}}}",
+		"8": "{{amount}} Pokecoin",
+		"11": "{{amount}} {{type}} Sticker",
+		"12": "{{amount}} {{pokemon}} Mega Energy"
+
 	},
 	"questMonsterTypeString": "{{name}} {{{emoji}}} ",
 	"questConditions": {
@@ -187,7 +193,8 @@
 		"24": "Location",
 		"25": "Distance",
 		"26": "Pokemon Alignment(s): {{alignments}}",
-		"27": "Invasion Category(s): {{categories}}"
+		"27": "Invasion Category(s): {{categories}}",
+		"28": "Buddy Interaction"
 	},
 
 	"alignments": {
@@ -223,11 +230,11 @@
 		"402": "Incense Spicy",
 		"403": "Incense Cool",
 		"404": "Incense Floral",
-		"405": "Incense beluga box",
-		"501": "Troy Disk",
-		"502": "Troy disk glacial",
-		"503": "Troy disk mossy",
-		"504": "Troy disk magnetic",
+		"405": "Incense Box",
+		"501": "Normal Lure Module",
+		"502": "Glacial Lure Module",
+		"503": "Mossy Lure Module",
+		"504": "Magnetic Lure Module",
 		"602": "X Attack",
 		"603": "X Defense",
 		"604": "X Miracle",
@@ -241,6 +248,7 @@
 		"708": "Silver Pinap Berry",
 		"709": "Poffin",
 		"801": "Special Camera",
+		"802": "Sticker",
 		"901": "Incubator Basic Unlimited",
 		"902": "Incubator Basic",
 		"903": "Incubator Super",
@@ -255,17 +263,21 @@
 		"1107": "Gen5 evolution stone",
 		"1201": "Fast TM",
 		"1202": "Charged TM",
+		"1203": "Elite Fast TM",
+		"1204": "Elite Charged TM",	
 		"1301": "Rare Candy",
 		"1401": "Free Raid Ticket",
 		"1402": "Paid Raid Ticket",
 		"1403": "Legendary Raid Ticket",
 		"1404": "Star Piece",
 		"1405": "Friend Gift Box",
-		"1406": "Team change",
-		"1501": "Leader map fragment",
-		"1502": "Leader map",
-		"1503": "Giovanni map",
-		"1600": "Global event ticket"
+		"1406": "Team Medallion",
+		"1408": "Remote Raid Pass",
+		"1501": "Mysterious Component",
+		"1502": "Rocket Radar",
+		"1503": "Super Rocket Radar",
+		"1600": "Global Event Ticket",
+		"1601": "Special Event Ticket"
 	},
 	"moves": {
 		"0": {
