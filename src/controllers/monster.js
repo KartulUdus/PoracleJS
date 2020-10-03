@@ -43,10 +43,12 @@ class Monster extends Controller {
 			  + sin( radians(${data.latitude}) )
 			  * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
 			   monsters.distance = 0 and (${areastring}))
+			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
 			`)
 		} else {
 			query = query.concat(`
 				and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
+				group by humans.id, humans.name, monsters.template 
 			`)
 		}
 		let result = await this.db.raw(query)

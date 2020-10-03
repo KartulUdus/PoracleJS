@@ -28,10 +28,12 @@ class Raid extends Controller {
 				+ sin( radians(${data.latitude}) )
 				* sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
 				raid.distance = 0 and (${areastring}))
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		} else {
 			query = query.concat(`
 				and ((raid.distance = 0 and (${areastring})) or raid.distance > 0)
+				group by humans.id, humans.name, raid.template
 			`)
 		}
 
@@ -75,10 +77,12 @@ class Raid extends Controller {
 				+ sin( radians(${data.latitude}) )
 				* sin( radians( humans.latitude ) ) ) < egg.distance and egg.distance != 0) or
 				egg.distance = 0 and (${areastring}))
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		} else {
 			query = query.concat(`
 				and ((egg.distance = 0 and (${areastring})) or egg.distance > 0)
+				group by humans.id, humans.name, egg.template
 			`)
 		}
 
