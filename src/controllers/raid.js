@@ -89,7 +89,7 @@ class Raid extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => +res.distance == 0 || +res.distance > 0 && +res.distance > super.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > super.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 
 		result = this.returnByDatabaseType(result)
