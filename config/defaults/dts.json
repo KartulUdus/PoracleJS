@@ -7,7 +7,7 @@
       "embed": {
         "color": "{{ivcolor}}",
         "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
-        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n {{{rarityemoji}}} {{rarity}} \n quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
