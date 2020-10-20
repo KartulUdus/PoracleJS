@@ -139,6 +139,7 @@ class Monster extends Controller {
 			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
+			if (!data.rarity) data.rarity = 0
 			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
 			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
 			data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
@@ -243,6 +244,8 @@ class Monster extends Controller {
 					def: data.individual_defense,
 					sta: data.individual_stamina,
 					imgUrl: data.imgUrl,
+					rarity: this.utilData.rarity[data.rarity].name,
+					rarityemoji: this.utilData.rarity[data.rarity].emoji,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
