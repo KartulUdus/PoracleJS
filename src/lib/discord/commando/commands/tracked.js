@@ -51,11 +51,19 @@ exports.run = async (client, msg, [args]) => {
 		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any monsters'))
 
 		monsters.forEach((monster) => {
-			const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
-			const monsterName = mon.name
+			let monsterName
+			let formName
+
+			if (monster.pokemon_id == 0) {
+				monsterName='everything'
+				formName = 'none'
+			} else {
+				const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
+				monsterName = mon.name
+				formName = mon.form.name
+				if (formName === undefined) formName = 'none'
+			}
 			let miniv = monster.min_iv
-			let formName = mon.form.name
-			if (formName === undefined) formName = 'none'
 			if (miniv === -1) miniv = 0
 			message = message.concat(`\n**${monsterName}** form: ${formName} ${monster.distance ? `, distance: ${monster.distance}m` : ''} iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}, gender:${client.utilData.genders[monster.gender].emoji}`)
 		})

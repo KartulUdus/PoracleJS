@@ -68,7 +68,15 @@ exports.run = async (client, msg, command) => {
 			} else {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
-				|| args.includes(client.translator.translate('everything'))) && !mon.form.id)
+				) && !mon.form.id)
+				if (args.includes(client.translator.translate('everything'))) {
+					monsters.push({
+						"id": 0,
+						"form": {
+							"id": 0
+						}
+					});
+				}
 			}
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			// Parse command elements to stuff
