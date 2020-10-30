@@ -28,12 +28,12 @@ class Quest extends Controller {
 			  + sin( radians(${data.latitude}) )
 			  * sin( radians( humans.latitude ) ) ) < quest.distance and quest.distance != 0) or
 			   quest.distance = 0 and (${areastring}))
-			group by humans.id, humans.name, quest.template
+			group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
 			`)
 		} else {
 			query = query.concat(`
 				and ((quest.distance = 0 and (${areastring})) or quest.distance > 0)
-				group by humans.id, humans.name, quest.template 
+			group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
 			`)
 		}
 

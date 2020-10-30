@@ -82,7 +82,7 @@ class Raid extends Controller {
 		} else {
 			query = query.concat(`
 				and ((egg.distance = 0 and (${areastring})) or egg.distance > 0)
-				group by humans.id, humans.name, egg.template
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		}
 

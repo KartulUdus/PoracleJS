@@ -32,7 +32,7 @@ class Pokestop extends Controller {
 		} else {
 			query = query.concat(`
 				and ((invasion.distance = 0 and (${areastring})) or invasion.distance > 0)
-				group by humans.id, humans.name, invasion.template
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
 

@@ -48,7 +48,7 @@ class Monster extends Controller {
 		} else {
 			query = query.concat(`
 				and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
-				group by humans.id, humans.name, monsters.template 
+			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
 			`)
 		}
 		let result = await this.db.raw(query)
