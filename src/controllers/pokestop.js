@@ -1,6 +1,7 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
+const { log } = require('../lib/logger')
 
 class Pokestop extends Controller {
 	async invasionWhoCares(obj) {
@@ -13,8 +14,8 @@ class Pokestop extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
 		join humans on humans.id = invasion.id
-		where humans.enabled = true and
-		(invasion.grunt_type='${data.gruntType}' or invasion.grunt_type = 'everything') and
+		where humans.enabled = 1 and
+		(invasion.grunt_type='${String(data.gruntType).toLowerCase()}' or invasion.grunt_type = 'everything') and
 		(invasion.gender = ${data.gender} or invasion.gender = 0)`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
@@ -30,8 +31,8 @@ class Pokestop extends Controller {
 			`)
 		} else {
 			query = query.concat(`
-				and (invasion.distance = 0 and (${areastring}) or invasion.distance > 0)
-				group by humans.id, humans.name, invasion.template
+				and ((invasion.distance = 0 and (${areastring})) or invasion.distance > 0)
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
 

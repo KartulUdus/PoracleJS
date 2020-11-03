@@ -13,10 +13,10 @@ class Raid extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
 		join humans on humans.id = raid.id
-		where humans.enabled = true and
+		where humans.enabled = 1 and
 		(pokemon_id=${data.pokemon_id} or (pokemon_id=9000 and raid.level=${data.level})) and
 		(raid.team = ${data.team_id} or raid.team = 4) and
-		(raid.exclusive = ${data.ex} or raid.exclusive = false) and
+		(raid.exclusive = ${data.ex} or raid.exclusive = 0) and
 		(raid.form = ${data.form} or raid.form = 0) `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
@@ -32,16 +32,18 @@ class Raid extends Controller {
 			`)
 		} else {
 			query = query.concat(`
-				and (raid.distance = 0 and (${areastring}) or raid.distance > 0)
+				and ((raid.distance = 0 and (${areastring})) or raid.distance > 0)
 				group by humans.id, humans.name, raid.template
 			`)
 		}
+
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
+
 		// remove any duplicates
 		const alertIds = []
 		result = result.filter((alert) => {
@@ -61,10 +63,10 @@ class Raid extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on humans.id = egg.id
-		where humans.enabled = true and
+		where humans.enabled = 1 and
 		egg.level = ${data.level} and
 		(egg.team = ${data.team_id} or egg.team = 4) and
-		(egg.exclusive = ${data.ex} or egg.exclusive = false) `
+		(egg.exclusive = ${data.ex} or egg.exclusive = 0) `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -79,16 +81,17 @@ class Raid extends Controller {
 			`)
 		} else {
 			query = query.concat(`
-				and (egg.distance = 0 and (${areastring}) or egg.distance > 0)
-				group by humans.id, humans.name, egg.template
+				and ((egg.distance = 0 and (${areastring})) or egg.distance > 0)
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		}
 
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > super.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > super.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
+
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
 		const alertIds = []
@@ -360,8 +363,8 @@ class Raid extends Controller {
 					jobs.push(work)
 					this.addDiscordCache(cares.id)
 				}
-				return jobs
 			}
+			return jobs
 		} catch (e) {
 			this.log.error('Can\'t seem to handle raid: ', e, data)
 		}

@@ -47,14 +47,14 @@ class Monster extends Controller {
 			`)
 		} else {
 			query = query.concat(`
-				and (monsters.distance = 0 and (${areastring}) or monsters.distance > 0)
-				group by humans.id, humans.name, monsters.template 
+				and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
+			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
 			`)
 		}
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
