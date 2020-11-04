@@ -72,13 +72,11 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'stardust') {
 					minDust = 0
 					stardustTracking = -1
-				} 
-				else if (element.match(/energy\d/gi)) minEnergy = element.replace(/energy/gi, '')
+				} else if (element.match(/energy\d/gi)) minEnergy = element.replace(/energy/gi, '')
 				else if (element === 'energy') {
 					minEnergy = 1
 					energyTracking = -1
-				}
-				else if (element === 'shiny') mustShiny = 1
+				} else if (element === 'shiny') mustShiny = 1
 				else if (element === 'remove') remove = true
 				else if (element === 'clean') clean = true
 			})
@@ -95,7 +93,7 @@ exports.run = async (client, msg, command) => {
 					clean,
 				})
 			}
-			
+
 			if (+minEnergy < 10000000) {
 				questTracks.push({
 					id: target.id,
@@ -108,7 +106,7 @@ exports.run = async (client, msg, command) => {
 					clean,
 				})
 			}
-			
+
 			monsters.forEach((pid) => {
 				questTracks.push({
 					id: target.id,

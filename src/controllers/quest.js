@@ -23,12 +23,22 @@ class Quest extends Controller {
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			(round( 6371000 * acos( cos( radians(${data.latitude}) )
-			  * cos( radians( humans.latitude ) )
-			  * cos( radians( humans.longitude ) - radians(${data.longitude}) )
-			  + sin( radians(${data.latitude}) )
-			  * sin( radians( humans.latitude ) ) ) < quest.distance and quest.distance != 0) or
-			   quest.distance = 0 and (${areastring}))
+			(
+				(
+					round(
+						6371000 
+						* acos(cos( radians(${data.latitude}) )
+						* cos( radians( humans.latitude ) )
+						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+						+ sin( radians(${data.latitude}) )
+						* sin( radians( humans.latitude ) ) 
+						) 
+					) < quest.distance and quest.distance != 0) 
+					or
+					(
+						quest.distance = 0 and (${areastring})
+					)
+			)
 			group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
 			`)
 		} else {
@@ -261,7 +271,7 @@ class Quest extends Controller {
 					rewardString = rewardString.concat(rew)
 				} else if (reward.type === 12) {
 					const template = this.utilData.questRewardTypes['12']
-					const monster = Object.values(this.monsterData).find((mon) => mon.id === reward.info.pokemon_id && mon.form.id === 0)		
+					const monster = Object.values(this.monsterData).find((mon) => mon.id === reward.info.pokemon_id && mon.form.id === 0)
 					const mustache = this.mustache.compile(this.translator.translate(template))
 					const rew = mustache({ pokemon: this.translator.translate(monster.name), amount: reward.info.amount })
 					energyAmount = reward.info.amount

@@ -22,12 +22,22 @@ class Raid extends Controller {
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			(round( 6371000 * acos( cos( radians(${data.latitude}) )
-				* cos( radians( humans.latitude ) )
-				* cos( radians( humans.longitude ) - radians(${data.longitude}) )
-				+ sin( radians(${data.latitude}) )
-				* sin( radians( humans.latitude ) ) ) < raid.distance and raid.distance != 0) or
-				raid.distance = 0 and (${areastring}))
+			(
+				(
+					round(
+						6371000 
+						* acos(cos( radians(${data.latitude}) )
+						* cos( radians( humans.latitude ) )
+						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+						+ sin( radians(${data.latitude}) )
+						* sin( radians( humans.latitude ) ) 
+						) 
+					) < raid.distance and raid.distance != 0) 
+					or
+					(
+						raid.distance = 0 and (${areastring})
+					)
+			)
 				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		} else {
@@ -71,12 +81,22 @@ class Raid extends Controller {
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			(round( 6371000 * acos( cos( radians(${data.latitude}) )
-				* cos( radians( humans.latitude ) )
-				* cos( radians( humans.longitude ) - radians(${data.longitude}) )
-				+ sin( radians(${data.latitude}) )
-				* sin( radians( humans.latitude ) ) ) < egg.distance and egg.distance != 0) or
-				egg.distance = 0 and (${areastring}))
+			(
+				(
+					round(					
+						6371000 
+						* acos(cos( radians(${data.latitude}) )
+						* cos( radians( humans.latitude ) )
+						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+						+ sin( radians(${data.latitude}) )
+						* sin( radians( humans.latitude ) ) 
+						) 
+					) < egg.distance and egg.distance != 0) 
+					or
+					(
+						egg.distance = 0 and (${areastring})
+					)
+			)
 				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		} else {
@@ -153,7 +173,7 @@ class Raid extends Controller {
 				if (!data.evolution) data.evolution = 0
 				if (data.name) data.gymName = data.name ? data.name : ''
 				data.name = this.translator.translate(monster.name)
-				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? '_'+data.evolution.toString() : ''}.png`				
+				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				const e = []
 				monster.types.forEach((type) => {
 					e.push(this.utilData.types[type.name].emoji)

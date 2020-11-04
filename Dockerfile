@@ -1,13 +1,12 @@
-FROM node
+FROM node:lts
 
+WORKDIR /usr/src/app
 # DEPS
 RUN apt-get -y update && apt-get install -y curl \
 gnupg2 \
 git
 
-# PoracleJS
-RUN git clone https://github.com/KartulUdus/PoracleJS.git && cd PoracleJS && npm install
-
-WORKDIR PoracleJS
-
+COPY . .
+RUN npm install
+EXPOSE 3030
 CMD npm start

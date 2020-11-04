@@ -1,16 +1,16 @@
 {
     "server": {
-        "host": "SERVICE_SERVER_HOST",
+        "host": "PORACLE_SERVER_HOST",
         "port": {
-            "__name": "SERVICE_SERVER_PORT",
+            "__name": "PORACLE_SERVER_PORT",
             "__format": "json"
           },
         "ipWhitelist": {
-            "__name": "SERVICE_IP_WHITELIST",
+            "__name": "PORACLE_IP_WHITELIST",
             "__format": "json"
           },
         "ipBlacklist": {
-            "__name": "SERVICE_IP_BLACKLIST",
+            "__name": "PORACLE_IP_BLACKLIST",
             "__format": "json"
           }
     },
@@ -23,13 +23,16 @@
     },
 
     "database": {
-      "client": "DB_TYPE",
+      "client": "PORACLE_DB_TYPE",
       "conn": {
-        "host": "DB_HOST",
-        "database": "DB_DATABASE",
-        "user": "DB_USER",
-        "password": "DB_PASSWORD",
-        "port": "DB_PORT"
+        "host": "PORACLE_DB_HOST",
+        "database": "PORACLE_DB_DATABASE",
+        "user": "PORACLE_DB_USER",
+        "password": "PORACLE_DB_PASSWORD",
+        "port": {
+          "__name": "PORACLE_DB_PORT",
+          "__format": "json"
+        }
       }
     },
 

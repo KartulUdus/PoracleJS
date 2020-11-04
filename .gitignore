@@ -1,6 +1,8 @@
 logs/*.json
 config/*.json
 config/locale/*.json
+.idea
+.vscode 
 
 !config/locale/fr.json
 !config/locale/de.json

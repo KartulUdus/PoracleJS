@@ -54,7 +54,7 @@
     "mysql2": "^2.0.0",
     "node-cache": "^5.0.0",
     "node-geocoder": "^3.25.0",
-    "pg": "^7.12.1",
+    "pg": "^8.4.2",
     "point-in-polygon": "^1.0.1",
     "pokemon-gif": "^1.0.14",
     "readline-sync": "^1.4.10",
