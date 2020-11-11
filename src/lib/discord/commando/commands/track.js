@@ -59,12 +59,20 @@ exports.run = async (client, msg, command) => {
 			const formNames = formArgs ? formArgs.map((arg) => client.translator.reverse(arg.replace(client.translator.translate('form'), ''))) : []
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
 			const genCommand = args.filter((arg) => arg.match(client.re.genRe))
-			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
+			const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].replace(client.translator.translate('gen'), ''))] : 0
 
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
 				|| args.includes(client.translator.translate('everything'))) && formNames.includes(mon.form.name.toLowerCase()))
+
+				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
+			} else if (gen) {
+				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
+				|| args.includes(client.translator.translate('everything'))) && !mon.form.id)
+
+				monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			} else {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
@@ -78,7 +86,6 @@ exports.run = async (client, msg, command) => {
 					});
 				}
 			}
-			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			// Parse command elements to stuff
 			args.forEach((element) => {
 				if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[0].replace(client.translator.translate('maxlevel'), '')
