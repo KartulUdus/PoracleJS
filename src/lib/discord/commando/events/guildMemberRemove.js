@@ -1,5 +1,5 @@
 module.exports = (client, member) => {
-	if (!client.users.keyArray().includes(member.id)) {
+	if (!client.users.cache.keyArray().includes(member.id)) {
 		client.query.countQuery('id', 'humans', 'id', member.id).then((isregistered) => {
 			if (isregistered) {
 				client.query.deleteQuery('egg', 'id', member.id)

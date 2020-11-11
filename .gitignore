@@ -6,6 +6,9 @@ config/locale/*.json
 
 !config/locale/fr.json
 !config/locale/de.json
+nominatimData/*
+!nominatimData/.gitkeep
+!nominatimData/postgres/.gitkeep
 
 !config/default.json
 
