@@ -77,10 +77,14 @@ class Worker {
 	}
 
 	async userAlert(data) {
-		const user = this.client.users.cache.get(data.target)
+		let user = this.client.users.cache.get(data.target)
 		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
-		if (!user) return log.warn(`user ${data.name} not found`)
 		try {
+			if (!user) {
+				log.warn(`Originating connection to ${data.name}`)
+				user = await this.client.fetchUser(data.target)
+				await user.createDM()
+			}
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
 				msg.delete(msgDeletionMs)
