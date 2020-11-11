@@ -2524,115 +2524,115 @@
 	"teams": {
 		"0": {
 			"name": "Uncontested",
-			"color": 7915600
+			"color": "BABABA"
 		},
 		"1": {
 			"name": "Mystic",
-			"color": 6852848
+			"color": "3B4CCA"
 		},
 		"2": {
 			"name": "Valor",
-			"color": 12595240
+			"color": "CC0000"
 		},
 		"3": {
 			"name": "Instinct",
-			"color": 16306224
+			"color": "FFDE00"
 		},
 		"4": {
 			"name": "Any team",
-			"color": 1300169
+			"color": "93C7B2"
 		}
 	},
 	"types": {
 		"Grass": {
 			"id": 12,
 			"emoji": "🌿",
-			"color": 7915600
+			"color": "78C850"
 		},
 		"Poison": {
 			"id": 4,
 			"emoji": "☠",
-			"color": 10502304
+			"color": "A040A0"
 		},
 		"Fire": {
 			"id": 10,
 			"emoji": "🔥",
-			"color": 15761456
+			"color": "F08030"
 		},
 		"Flying": {
 			"id": 3,
 			"emoji": "🐦",
-			"color": 11047152
+			"color": "A890F0"
 		},
 		"Water": {
 			"id": 11,
 			"emoji": "💧",
-			"color": 6852848
+			"color": "6890F0"
 		},
 		"Bug": {
 			"id": 7,
 			"emoji": "🐛",
-			"color": 11057184
+			"color": "A8B820"
 		},
 		"Normal": {
 			"id": 1,
 			"emoji": "⭕",
-			"color": 9079385
+			"color": "A8A878"
 		},
 		"Dark": {
 			"id": 17,
 			"emoji": "🌑",
-			"color": 7368816
+			"color": "705848"
 		},
 		"Electric": {
 			"id": 13,
 			"emoji": "⚡",
-			"color": 16306224
+			"color": "F8D030"
 		},
 		"Rock": {
 			"id": 6,
 			"emoji": "🗿",
-			"color": 12099640
+			"color": "B8A038"
 		},
 		"Ground": {
 			"id": 5,
 			"emoji": "⛰️",
-			"color": 14729320
+			"color": "E0C068"
 		},
 		"Fairy": {
 			"id": 18,
 			"emoji": "🦋",
-			"color": 15243496
+			"color": "EE99AC"
 		},
 		"Fighting": {
 			"id": 2,
 			"emoji": "👊",
-			"color": 12595240
+			"color": "C03028"
 		},
 		"Psychic": {
 			"id": 14,
 			"emoji": "🔮",
-			"color": 16275592
+			"color": "F85888"
 		},
 		"Steel": {
 			"id": 9,
 			"emoji": "🔩",
-			"color": 12105936
+			"color": "B8B8D0"
 		},
 		"Ice": {
 			"id": 15,
 			"emoji": "❄",
-			"color": 10016984
+			"color": "98D8D8"
 		},
 		"Ghost": {
 			"id": 8,
 			"emoji": "👻",
-			"color": 7362712
+			"color": "705898"
 		},
 		"Dragon": {
 			"id": 16,
 			"emoji": "🐲",
-			"color": 7354616
+			"color": "7038F8"
 		}
 	},
 	"gruntTypes": {
