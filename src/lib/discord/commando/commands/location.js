@@ -36,7 +36,7 @@ exports.run = async (client, msg, command) => {
 		let lat
 		let lon
 
-		var matches=search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
+		let matches=search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
 		if (matches != null && matches.length >= 2) {
 			lat=parseFloat(matches[1]);
 			lon=parseFloat(matches[2]);
