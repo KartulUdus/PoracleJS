@@ -16,7 +16,7 @@ class Monster extends Controller {
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping from monsters
 		join humans on humans.id = monsters.id
 		where humans.enabled = true and
-		pokemon_id=${data.pokemon_id} and
+		(pokemon_id=${data.pokemon_id} or pokemon_id=0) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
 		min_cp<=${data.cp} and
