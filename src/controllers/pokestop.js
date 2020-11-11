@@ -120,11 +120,11 @@ class Pokestop extends Controller {
 			}
 
 			data.gruntTypeEmoji = '❓'
-			data.gruntTypeColor = '12595240'
+			data.gruntTypeColor = 'BABABA'
 
 			data.gender = 0
 			data.gruntName = ''
-			data.gruntTypeColor = '12595240'
+			data.gruntTypeColor = 'BABABA'
 			data.gruntRewards = ''
 
 			if (data.gruntTypeId) {
