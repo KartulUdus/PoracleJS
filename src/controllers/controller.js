@@ -1,4 +1,3 @@
-
 const inside = require('point-in-polygon')
 const path = require('path')
 const NodeGeocoder = require('node-geocoder')
@@ -149,7 +148,6 @@ class Controller {
 		return matchAreas
 	}
 
-
 	// database methods below
 
 	async selectOneQuery(table, conditions) {
@@ -251,7 +249,6 @@ class Controller {
 		}
 	}
 
-
 	async deleteQuery(table, values) {
 		try {
 			return await this.db(table).where(values).del()
@@ -274,7 +271,6 @@ class Controller {
 		}
 	}
 
-
 	findIvColor(iv) {
 		// it must be perfect if none of the ifs kick in
 		// orange / legendary
@@ -286,7 +282,7 @@ class Controller {
 		else if (iv < 90) colorIdx = 3 // blue / rare
 		else if (iv < 100) colorIdx = 4 // purple epic
 
-		return parseInt(this.config.discord.ivColors[colorIdx].replace(/^#/, ''), 16)
+		return this.config.discord.ivColors[colorIdx]
 	}
 
 	execPromise(command) {
@@ -301,6 +297,5 @@ class Controller {
 		})
 	}
 }
-
 
 module.exports = Controller

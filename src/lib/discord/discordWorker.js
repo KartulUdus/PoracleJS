@@ -82,7 +82,7 @@ class Worker {
 		try {
 			if (!user) {
 				log.warn(`Originating connection to ${data.name}`)
-				user = await this.client.fetchUser(data.target)
+				user = await this.client.users.fetch(data.target)
 				await user.createDM()
 			}
 			const msg = await user.send(data.message.content || '', data.message)
