@@ -39,6 +39,10 @@ exports.run = async (client, msg, [args]) => {
 		const quests = await client.query.selectAllQuery('quest', { id: target.id })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
+		if (args.includes('area')) {
+			return msg.reply(`You are currently set to receive alarms in ${human.area}`)
+		}
+		if (!args.includes(args[0])) {
 		let locationText = ''
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `Your location is currently set to ${maplink}.`
@@ -136,6 +140,7 @@ exports.run = async (client, msg, [args]) => {
 			await msg.reply(`${target.name} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] })
 			fs.unlinkSync(filepath)
 			client.log.warn('Hastebin seems down, got error: ', e)
+		}
 		}
 	} catch (err) {
 		client.log.error(`${msg.content} command unhappy: `, err)
