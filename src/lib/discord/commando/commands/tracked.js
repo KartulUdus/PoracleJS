@@ -62,7 +62,7 @@ exports.run = async (client, msg, [args]) => {
 			} else {
 				const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
 				monsterName = client.translator.translate(mon.name)
-				formName = mon.form.name
+				formName = client.translator.translate(mon.form.name)
 				if (formName === undefined) formName = 'none'
 			}
 			let miniv = monster.min_iv
