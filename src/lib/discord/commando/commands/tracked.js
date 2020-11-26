@@ -41,14 +41,16 @@ exports.run = async (client, msg, [args]) => {
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		let locationText = ''
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
-			locationText = `Your location is currently set to ${maplink}.`
+			locationText = client.translator.translate('Your location is set to').concat(` ${maplink}.`)
 		}
-		await msg.reply(`Your alerts are currently ${human.enabled ? 'enabled' : 'disabled'}\n${locationText} You are currently set to receive alarms in ${human.area}`)
+		const alertResponseString1 = client.translator.translate('Your alerts are currently ').concat(client.translator.translate(human.enabled ? 'enabled' : 'disabled'))
+                const alertResponseString2 = client.translator.translate('You are currently set to receive alarms in ').concat(human.area)
+                await msg.reply(alertResponseString1.concat('\n', locationText, '\n', alertResponseString2, '\n\n'))
 
 		let message = ''
 		if (monsters.length) {
-			message = message.concat(client.translator.translate('\n\nYou\'re  tracking the following monsters:\n'))
-		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any monsters'))
+			message = message.concat('\n\n', client.translator.translate('You\'re  tracking the following monsters:'),'\n')
+		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any monster'))
 
 		monsters.forEach((monster) => {
 			let monsterName
@@ -59,7 +61,7 @@ exports.run = async (client, msg, [args]) => {
 				formName = 'none'
 			} else {
 				const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
-				monsterName = mon.name
+				monsterName = client.translator.translate(mon.name)
 				formName = mon.form.name
 				if (formName === undefined) formName = 'none'
 			}
@@ -68,8 +70,8 @@ exports.run = async (client, msg, [args]) => {
 			message = message.concat(`\n**${monsterName}** form: ${formName} ${monster.distance ? `, distance: ${monster.distance}m` : ''} iv: ${miniv}%-${monster.max_iv}% cp: ${monster.min_cp}-${monster.max_cp} level: ${monster.min_level}-${monster.max_level} stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}, gender:${client.utilData.genders[monster.gender].emoji}`)
 		})
 		if (raids.length || eggs.length) {
-			message = message.concat(client.translator.translate('\n\nYou\'re tracking the following raids:\n'))
-		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any raids'))
+			message = message.concat('\n\n', client.translator.translate('You\'re  tracking the following raids:'),'\n')
+		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any raid'))
 		raids.forEach((raid) => {
 			const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 			const monsterName = mon ? mon.name : 'levelMon'
@@ -88,8 +90,8 @@ exports.run = async (client, msg, [args]) => {
 		})
 
 		if (quests.length) {
-			message = message.concat(client.translator.translate('\n\nYou\'re tracking the following quests:\n'))
-		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any quests'))
+			message = message.concat('\n\n', client.translator.translate('You\'re  tracking the following quests:'),'\n')
+		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any quest'))
 
 		quests.forEach((quest) => {
 			let rewardThing = ''
@@ -101,8 +103,8 @@ exports.run = async (client, msg, [args]) => {
 		})
 
 		if (invasions.length) {
-			message = message.concat(client.translator.translate('\n\nYou\'re tracking the following invasions:\n'))
-		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any invasions'))
+			message = message.concat('\n\n', client.translator.translate('You\'re  tracking the following invasions:'),'\n')
+		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any invasion'))
 
 		invasions.forEach((invasion) => {
 			let genderText = ''
