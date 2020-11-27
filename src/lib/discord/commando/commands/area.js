@@ -44,13 +44,13 @@ exports.run = async (client, msg, command) => {
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
 				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
+					return await msg.reply(client.translator.translate('no valid areas there, please use one of ').concat(confAreas))
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
 
 				if (addAreas.length) {
-					await msg.reply(`Added areas: ${addAreas}`)
+					await msg.reply(client.translator.translate('Added areas: ').concat(addAreas))
 				} else {
 					await msg.react('👌')
 				}
@@ -64,13 +64,13 @@ exports.run = async (client, msg, command) => {
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
 				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
+					return await msg.reply(client.translator.translate('no valid areas there, please use one of ').concat(confAreas))
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
 
 				if (removeAreas.length) {
-					await msg.reply(`Removed areas: ${removeAreas}`)
+					await msg.reply(client.translator.translate('Removed areas: ').concat(addAreas))
 				} else {
 					await msg.react('👌')
 				}

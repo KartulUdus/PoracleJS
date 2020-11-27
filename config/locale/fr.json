@@ -959,7 +959,7 @@
 	"You're not tracking any raid":"Vous ne suivez aucun Raid/Oeuf",
 	"You're  tracking the following quests:":"Vous suivez les Quêtes suivantes:",
 	"You're not tracking any quest":"Vous ne suivez aucune Quête",
-	"You're  tracking the following invasionss:":"Vous suivez les Invasions suivantes:",
+	"You're  tracking the following invasions:":"Vous suivez les Invasions suivantes:",
 	"You're not tracking any invasion":"Vous ne suivez aucune Invasion",
 	"Your location is currently set to":"Votre localisation est actuellement configurée sur",
 	"Your alerts are currently":"Vos alertes sont actuellement",
@@ -971,5 +971,8 @@
 	"enabled":"actives",
 	"disabled":"inactives",
 	"You are currently set to receive alarms in ":"Vous recevez actuellement des alarmes pour ",
-        "404 No monsters found":"404 Ce Pokemon n'existe pas"
+        "404 No monsters found":"404 Ce Pokemon n'existe pas",
+        "no valid areas there, please use one of ":"Zone non valide, merci d'utiliser une de ces zones: ",
+        "Added areas: ":"Zones Ajoutées: ",
+        "Removed areas: ":"Zones Supprimées: "
 }
