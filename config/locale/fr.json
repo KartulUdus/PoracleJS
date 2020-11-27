@@ -970,5 +970,6 @@
 	"Your alerts are currently ":"Vos alertes sont actuellement ",
 	"enabled":"actives",
 	"disabled":"inactives",
-	"You are currently set to receive alarms in ":"Vous recevez actuellement des alarmes pour "
+	"You are currently set to receive alarms in ":"Vous recevez actuellement des alarmes pour ",
+        "404 No monsters found":"404 Ce Pokemon n'existe pas"
 }
