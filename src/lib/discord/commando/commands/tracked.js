@@ -41,7 +41,7 @@ exports.run = async (client, msg, [args]) => {
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		let locationText = ''
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
-			locationText = client.translator.translate('Your location is set to').concat(` ${maplink}.`)
+			locationText = client.translator.translate('Your location is set to').concat(` ${maplink}`)
 		}
 		const alertResponseString1 = client.translator.translate('Your alerts are currently ').concat(client.translator.translate(human.enabled ? 'enabled' : 'disabled'))
                 const alertResponseString2 = client.translator.translate('You are currently set to receive alarms in ').concat(human.area)
