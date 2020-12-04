@@ -87,7 +87,7 @@ class Worker {
 			}
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete(msgDeletionMs)
+				msg.delete({ timeout: msgDeletionMs })
 			}
 			return true
 		} catch (err) {
