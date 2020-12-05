@@ -157,12 +157,12 @@ async function handleAlarms() {
 		switch (hook.type) {
 			case 'pokemon': {
 				fastify.webhooks.info('pokemon', hook.message)
-				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`)) {
+				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
 					fastify.logger.debug(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
 					break
 				}
 
-				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.weight}`, 'cached')
+				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached')
 
 				const result = await fastify.monsterController.handle(hook.message)
 				result.forEach((job) => {
