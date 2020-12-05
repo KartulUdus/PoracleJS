@@ -77,13 +77,17 @@ class Worker {
 	}
 
 	async userAlert(data) {
-		const user = this.client.users.get(data.target)
+		let user = this.client.users.cache.get(data.target)
 		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
-		if (!user) return log.warn(`user ${data.name} not found`)
 		try {
+			if (!user) {
+				log.warn(`Originating connection to ${data.name}`)
+				user = await this.client.users.fetch(data.target)
+				await user.createDM()
+			}
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete(msgDeletionMs)
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 			}
 			return true
 		} catch (err) {
@@ -94,13 +98,13 @@ class Worker {
 	}
 
 	async channelAlert(data) {
-		const channel = this.client.channels.get(data.target)
+		const channel = this.client.channels.cache.get(data.target)
 		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 		if (!channel) return log.warn(`channel ${data.name} not found`)
 		try {
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete(msgDeletionMs)
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 			}
 			return true
 		} catch (err) {

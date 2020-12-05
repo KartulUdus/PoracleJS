@@ -1,4 +1,3 @@
-
 const inside = require('point-in-polygon')
 const path = require('path')
 const NodeGeocoder = require('node-geocoder')
@@ -10,7 +9,7 @@ const geoCache = pcache.load('.geoCache', path.resolve(`${__dirname}../../../`))
 const emojiFlags = require('emoji-flags')
 
 const { log } = require('../lib/logger')
-
+const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
 	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController) {
@@ -28,6 +27,7 @@ class Controller {
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherController = weatherController
 		this.controllerData = {}
+		this.tileserverPregen = new TileserverPregen()
 	}
 
 	getGeocoder() {
@@ -35,7 +35,14 @@ class Controller {
 			case 'poracle': {
 				return NodeGeocoder({
 					provider: 'openstreetmap',
-					osmServer: 'https://geocoding.poracle.world/nominatim/',
+					osmServer: this.config.geocoding.providerURL,
+					formatterPattern: this.config.locale.addressformat,
+				})
+			}
+			case 'nominatim': {
+				return NodeGeocoder({
+					provider: 'openstreetmap',
+					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressformat,
 				})
 			}
@@ -105,7 +112,7 @@ class Controller {
 			const geocoder = this.getGeocoder()
 			return await geocoder.geocode(locationString)
 		} catch (err) {
-			throw new Error({ source: 'geolocate', err })
+			throw { source: 'geolocate', err }
 		}
 	}
 
@@ -125,7 +132,7 @@ class Controller {
 			geoCache.save(true)
 			return result
 		} catch (err) {
-			throw new Error({ source: 'getAddress', error: err })
+			throw { source: 'getAddress', error: err }
 		}
 	}
 
@@ -141,14 +148,13 @@ class Controller {
 		return matchAreas
 	}
 
-
 	// database methods below
 
 	async selectOneQuery(table, conditions) {
 		try {
 			return await this.db.select('*').from(table).where(conditions).first()
 		} catch (err) {
-			throw new Error({ source: 'slectOneQuery', error: err })
+			throw { source: 'slectOneQuery', error: err }
 		}
 	}
 
@@ -156,7 +162,7 @@ class Controller {
 		try {
 			return await this.db.select('*').from(table).where(conditions)
 		} catch (err) {
-			throw new Error({ source: 'selectAllQuery', error: err })
+			throw { source: 'selectAllQuery', error: err }
 		}
 	}
 
@@ -164,7 +170,7 @@ class Controller {
 		try {
 			return this.db(table).update(values).where(conditions)
 		} catch (err) {
-			throw new Error({ source: 'updateQuery', error: err })
+			throw { source: 'updateQuery', error: err }
 		}
 	}
 
@@ -174,7 +180,7 @@ class Controller {
 				.first()
 			return +(Object.values(result)[0])
 		} catch (err) {
-			throw new Error({ source: 'countQuery', error: err })
+			throw { source: 'countQuery', error: err }
 		}
 	}
 
@@ -182,7 +188,7 @@ class Controller {
 		try {
 			return await this.db.insert(values).into(table)
 		} catch (err) {
-			throw new Error({ source: 'insertQuery', error: err })
+			throw { source: 'insertQuery', error: err }
 		}
 	}
 
@@ -190,7 +196,7 @@ class Controller {
 		try {
 			return this.returnByDatabaseType(await this.db.raw(sql))
 		} catch (err) {
-			throw new Error({ source: 'misteryQuery', error: err })
+			throw { source: 'misteryQuery', error: err }
 		}
 	}
 
@@ -198,7 +204,7 @@ class Controller {
 		try {
 			return this.db.whereIn(valuesColumn, values).where({ id }).from(table).del()
 		} catch (err) {
-			throw new Error({ source: 'deleteWhereInQuery unhappy', error: err })
+			throw { source: 'deleteWhereInQuery unhappy', error: err }
 		}
 	}
 
@@ -243,12 +249,11 @@ class Controller {
 		}
 	}
 
-
 	async deleteQuery(table, values) {
 		try {
 			return await this.db(table).where(values).del()
 		} catch (err) {
-			throw new Error({ source: 'deleteQuery', error: err })
+			throw { source: 'deleteQuery', error: err }
 		}
 	}
 
@@ -266,7 +271,6 @@ class Controller {
 		}
 	}
 
-
 	findIvColor(iv) {
 		// it must be perfect if none of the ifs kick in
 		// orange / legendary
@@ -278,7 +282,7 @@ class Controller {
 		else if (iv < 90) colorIdx = 3 // blue / rare
 		else if (iv < 100) colorIdx = 4 // purple epic
 
-		return parseInt(this.config.discord.ivColors[colorIdx].replace(/^#/, ''), 16)
+		return this.config.discord.ivColors[colorIdx]
 	}
 
 	execPromise(command) {
@@ -293,6 +297,5 @@ class Controller {
 		})
 	}
 }
-
 
 module.exports = Controller

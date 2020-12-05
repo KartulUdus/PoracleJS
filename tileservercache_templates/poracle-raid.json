@@ -1,0 +1,23 @@
+{
+    "style": "klokantech-basic",
+    "latitude": #(latitude),
+    "longitude": #(longitude),
+    "zoom": 15,
+    "width": 500,
+    "height": 250,
+    "scale": 1,
+    "markers": [
+        {
+            #if(pokemon_id != nil && pokemon_id != 0):
+            "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_#if(form != nil):#pad(form, 2)#else:00#endif#if(evolution > 0):_#pad(evolution,1)#else:''#endif.png",
+            "fallback_url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_00.png",
+            #else:
+            "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/egg#(level).png",	
+            #endif
+            "latitude": #(latitude),
+            "longitude": #(longitude),
+            "width": 50,
+            "height": 50
+        }
+    ]
+}

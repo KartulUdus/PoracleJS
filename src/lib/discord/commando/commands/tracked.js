@@ -51,11 +51,19 @@ exports.run = async (client, msg, [args]) => {
 		} else message = message.concat(client.translator.translate('\n\nYou\'re not tracking any monsters'))
 
 		monsters.forEach((monster) => {
-			const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
-			const monsterName = mon.name
+			let monsterName
+			let formName
+
+			if (monster.pokemon_id == 0) {
+				monsterName='everything'
+				formName = 'none'
+			} else {
+				const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
+				monsterName = mon.name
+				formName = mon.form.name
+				if (formName === undefined) formName = 'none'
+			}
 			let miniv = monster.min_iv
-			let formName = mon.form.name
-			if (formName === undefined) formName = 'none'
 			if (miniv === -1) miniv = 0
 
 			const greatLeague = monster.great_league_ranking >= 4096 ? 'any' : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
@@ -91,6 +99,7 @@ exports.run = async (client, msg, [args]) => {
 			if (quest.reward_type === 7) rewardThing = Object.values(client.monsters).find((m) => m.id === quest.reward).name
 			if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
 			if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
+			if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
 			message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
 		})
 
