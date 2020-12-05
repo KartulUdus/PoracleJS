@@ -283,7 +283,6 @@ class Raid extends Controller {
 				return jobs
 			}
 
-
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
@@ -390,6 +389,5 @@ class Raid extends Controller {
 		}
 	}
 }
-
 
 module.exports = Raid

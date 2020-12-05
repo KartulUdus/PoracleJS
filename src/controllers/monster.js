@@ -83,7 +83,6 @@ class Monster extends Controller {
 		return result
 	}
 
-
 	async handle(obj) {
 		let pregenerateTile = false
 		const data = obj
@@ -133,7 +132,6 @@ class Monster extends Controller {
 				wData = this.weatherController.controllerData[weatherCellId]
 				weather = wData.weather
 			}
-
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
 			|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))

@@ -83,11 +83,11 @@ exports.run = async (client, msg, command) => {
 				) && !mon.form.id)
 				if (args.includes(client.translator.translate('everything'))) {
 					monsters.push({
-						"id": 0,
-						"form": {
-							"id": 0
-						}
-					});
+						id: 0,
+						form: {
+							id: 0,
+						},
+					})
 				}
 			}
 			// Parse command elements to stuff

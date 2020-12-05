@@ -4,7 +4,6 @@ const path = require('path')
 exports.run = async (client, msg, [args]) => {
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
-
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
@@ -55,7 +54,7 @@ exports.run = async (client, msg, [args]) => {
 			let formName
 
 			if (monster.pokemon_id == 0) {
-				monsterName='everything'
+				monsterName = 'everything'
 				formName = 'none'
 			} else {
 				const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
@@ -124,7 +123,6 @@ exports.run = async (client, msg, [args]) => {
 			}
 			message = message.concat(client.translator.translate(`\nInvasion: ${genderText}Grunt type: ${typeText}`))
 		})
-
 
 		if (message.length < 6000) {
 			return await msg.reply(message, { split: true })

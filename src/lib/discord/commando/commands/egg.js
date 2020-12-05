@@ -1,7 +1,6 @@
 exports.run = async (client, msg, command) => {
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
-
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
@@ -40,7 +39,6 @@ exports.run = async (client, msg, command) => {
 			let clean = false
 			let levels = []
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
-
 
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1

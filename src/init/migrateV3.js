@@ -7,7 +7,6 @@ const Daptcha = require('./daptcha')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
-
 function getNewKnex() {
 	switch (config.database.client) {
 		case 'mysql': {
@@ -211,7 +210,6 @@ async function run() {
 			delete egg.raid_level
 		}
 
-
 		monsters = snakeCaseKeys(monsters)
 		invasions = snakeCaseKeys(invasions)
 		raids = snakeCaseKeys(raids)
@@ -224,7 +222,6 @@ async function run() {
 		const raidsSlices = raids.map((e, i) => (i % 25 === 0 ? raids.slice(i, i + 25) : null)).filter((e) => e)
 		const questSlices = quests.map((e, i) => (i % 25 === 0 ? quests.slice(i, i + 25) : null)).filter((e) => e)
 		const eggSlices = eggs.map((e, i) => (i % 25 === 0 ? eggs.slice(i, i + 25) : null)).filter((e) => e)
-
 
 		for (const h of humanSlices) {
 			await insertOrUpdateQuery(newDb, 'humans', h)

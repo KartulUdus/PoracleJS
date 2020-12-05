@@ -36,10 +36,10 @@ exports.run = async (client, msg, command) => {
 		let lat
 		let lon
 
-		let matches=search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
+		const matches = search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
 		if (matches != null && matches.length >= 2) {
-			lat=parseFloat(matches[1]);
-			lon=parseFloat(matches[2]);
+			lat = parseFloat(matches[1])
+			lon = parseFloat(matches[2])
 		} else {
 			const locations = await client.query.geolocate(search)
 			if (locations === undefined || locations.length == 0) {
@@ -48,7 +48,6 @@ exports.run = async (client, msg, command) => {
 			lat = locations[0].latitude
 			lon = locations[0].longitude
 		}
-
 
 		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`

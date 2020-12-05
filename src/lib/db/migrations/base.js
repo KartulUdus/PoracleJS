@@ -104,7 +104,6 @@ exports.up = async function migrationUp(knex) {
 		table.unique(['id', 'condition', 'cell'], 'weather_tracking')
 	})
 
-
 	log.info('Base migration applied')
 }
 

@@ -61,7 +61,6 @@ class Pokestop extends Controller {
 		return result
 	}
 
-
 	async handle(obj) {
 		let pregenerateTile = false
 		const data = obj
@@ -108,7 +107,6 @@ class Pokestop extends Controller {
 				this.log.debug(`${data.name} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
-
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
@@ -186,7 +184,6 @@ class Pokestop extends Controller {
 				}
 			}
 
-
 			const whoCares = await this.invasionWhoCares(data)
 
 			this.log.info(`Invasion against ${data.gruntType} appeared and ${whoCares.length} humans cared.`)
@@ -260,6 +257,5 @@ class Pokestop extends Controller {
 		}
 	}
 }
-
 
 module.exports = Pokestop

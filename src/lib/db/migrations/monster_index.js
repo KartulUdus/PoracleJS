@@ -1,8 +1,6 @@
 const { log } = require('../../logger')
-const config = require('config')
 
 exports.up = async function migrationUp(knex) {
-
 	// add monster index to speed up mon lookup
 	await knex.schema.alterTable('monsters', (table) => {
 		table.index('pokemon_id')
@@ -12,4 +10,4 @@ exports.up = async function migrationUp(knex) {
 
 exports.down = async function migrationDown(knex) {
 	log.info(knex)
-} 
+}

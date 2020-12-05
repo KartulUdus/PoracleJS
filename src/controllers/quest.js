@@ -153,7 +153,6 @@ class Quest extends Controller {
 
 			const whoCares = await this.questWhoCares(data)
 
-
 			if (!whoCares[0]) return []
 
 			let discordCacheBad = true // assume the worst
@@ -284,7 +283,6 @@ class Quest extends Controller {
 		})
 	}
 
-
 	async getConditionString(data) {
 		return new Promise((resolve) => {
 			let conditionString = ''
@@ -376,6 +374,5 @@ class Quest extends Controller {
 		})
 	}
 }
-
 
 module.exports = Quest

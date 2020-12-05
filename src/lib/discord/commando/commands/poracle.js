@@ -1,4 +1,3 @@
-
 exports.run = async (client, msg) => {
 	if (!client.config.discord.channels.includes(msg.channel.id)) {
 		return client.log.info(`${msg.author.tag} tried to register in ${msg.channel.name}`)
@@ -6,7 +5,6 @@ exports.run = async (client, msg) => {
 	try {
 		const isRegistered = await client.query.countQuery('humans', { id: msg.author.id })
 		if (isRegistered) {
-
 			await msg.react('👌')
 		} else {
 			await client.query.insertQuery('humans', {
