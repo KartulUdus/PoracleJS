@@ -51,7 +51,7 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'valor') team = 2
 				else if (element === 'mystic') team = 1
 				else if (element === 'harmony') team = 0
-				else if (element === 'everything') levels = [1, 2, 3, 4, 5]
+				else if (element === 'everything') levels = [1, 2, 3, 4, 5, 6]
 				else if (element === 'clean') clean = true
 			})
 
