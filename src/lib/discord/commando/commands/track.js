@@ -140,6 +140,10 @@ exports.run = async (client, msg, command) => {
 				max_sta: maxSta,
 				gender,
 				clean,
+				great_league_ranking: greatLeague,
+				great_league_ranking_min_cp: greatLeagueCP,
+				ultra_league_ranking: ultraLeague,
+				ultra_league_ranking_min_cp: ultraLeagueCP,
 			}))
 			if (!insert.length) {
 				break
