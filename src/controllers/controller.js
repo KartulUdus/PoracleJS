@@ -108,6 +108,10 @@ class Controller {
 	}
 
 	async geolocate(locationString) {
+		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+			return []
+		}
+
 		try {
 			const geocoder = this.getGeocoder()
 			return await geocoder.geocode(locationString)
@@ -117,6 +121,10 @@ class Controller {
 	}
 
 	async getAddress(locationObject) {
+		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+			return { addr: 'Unknown', flag: '' }
+		}
+
 		const cacheKey = `${String(+locationObject.lat.toFixed(3))}-${String(+locationObject.lon.toFixed(3))}`
 		const cachedResult = geoCache.getKey(cacheKey)
 		if (cachedResult) return cachedResult
@@ -132,7 +140,8 @@ class Controller {
 			geoCache.save(true)
 			return result
 		} catch (err) {
-			throw { source: 'getAddress', error: err }
+			this.log.error('getAddress: failed to fetch data', err)
+			return { addr: 'Unknown', flag: '' }
 		}
 	}
 
