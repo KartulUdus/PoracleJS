@@ -117,6 +117,10 @@ class Worker {
 	async webhookAlert(firstData) {
 		const data = firstData
 		if (!data.target.match(hookRegex)) return log.warn(`Webhook, ${data.name} does not look like a link, exiting`)
+		if (data.message.embed && data.message.embed.color) {
+			data.message.embed.color = parseInt(data.message.embed.color.replace(/^#/, ''), 16)
+		}
+
 		if (data.message.embed) data.message.embeds = [data.message.embed]
 		try {
 			await this.axios({
