@@ -1,17 +1,16 @@
 const fs = require('fs')
 const path = require('path')
 
-exports.run = async (client, msg, [args]) => {
+exports.run = async (client, msg, command) => {
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-
-
+	const [args] = command
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
-		const webhookArray = args.find((arg) => arg.match(client.re.nameRe))
+		const webhookArray = command.find((args) => args.find((arg) => arg.match(client.re.nameRe)))
 		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
 		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
@@ -42,7 +41,6 @@ exports.run = async (client, msg, [args]) => {
 		if (args.includes('area')) {
 			return msg.reply(`You are currently set to receive alarms in ${human.area}`)
 		}
-		if (!args.includes(args[0])) {
 		let locationText = ''
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `Your location is currently set to ${maplink}.`
@@ -140,7 +138,6 @@ exports.run = async (client, msg, [args]) => {
 			await msg.reply(`${target.name} tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:`, { files: [filepath] })
 			fs.unlinkSync(filepath)
 			client.log.warn('Hastebin seems down, got error: ', e)
-		}
 		}
 	} catch (err) {
 		client.log.error(`${msg.content} command unhappy: `, err)
