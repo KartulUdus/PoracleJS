@@ -16,7 +16,7 @@ class Monster extends Controller {
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping from monsters
 		join humans on humans.id = monsters.id
 		where humans.enabled = true and
-		pokemon_id=${data.pokemon_id} and
+		(pokemon_id=${data.pokemon_id} or pokemon_id=0) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
 		min_cp<=${data.cp} and
@@ -32,29 +32,44 @@ class Monster extends Controller {
 		max_def>=${data.individual_defense} and
 		max_sta>=${data.individual_stamina} and
 		min_weight<=${data.weight} * 1000 and
-		max_weight>=${data.weight} * 1000 `
+		max_weight>=${data.weight} * 1000 and
+		great_league_ranking>=${data.bestGreatLeagueRank} and
+		great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and 
+		ultra_league_ranking>=${data.bestUltraLeagueRank} and 
+		ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			(round (6371000 * acos( cos( radians(${data.latitude}) )
-			  * cos( radians( humans.latitude ) )
-			  * cos( radians( humans.longitude ) - radians(${data.longitude}) )
-			  + sin( radians(${data.latitude}) )
-			  * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
-			   monsters.distance = 0 and (${areastring}))
+			(
+				(
+					round(					
+						6371000 
+						* acos(cos( radians(${data.latitude}) )
+						* cos( radians( humans.latitude ) )
+						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+						+ sin( radians(${data.latitude}) )
+						* sin( radians( humans.latitude ) ) 
+						) 
+					) < monsters.distance and monsters.distance != 0) 
+					or
+					(
+						monsters.distance = 0 and (${areastring})
+					)
+			)
 			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
 			`)
 		} else {
 			query = query.concat(`
-				and (monsters.distance = 0 and (${areastring}) or monsters.distance > 0)
-				group by humans.id, humans.name, monsters.template 
+				and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
+			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
 			`)
 		}
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
@@ -68,8 +83,8 @@ class Monster extends Controller {
 		return result
 	}
 
-
 	async handle(obj) {
+		let pregenerateTile = false
 		const data = obj
 		try {
 			moment.locale(this.config.locale.timeformat)
@@ -78,6 +93,10 @@ class Monster extends Controller {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'poracle': {
 					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
+					break
+				}
+				case 'tileservercache': {
+					pregenerateTile = true
 					break
 				}
 				case 'google': {
@@ -113,7 +132,6 @@ class Monster extends Controller {
 				wData = this.weatherController.controllerData[weatherCellId]
 				weather = wData.weather
 			}
-
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
 			|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
@@ -155,6 +173,32 @@ class Monster extends Controller {
 			data.emoji = e
 			data.emojiString = e.join('')
 
+			data.bestGreatLeagueRank = 4096
+			data.bestGreatLeagueRankCP = 0
+			if (data.pvp_rankings_great_league) {
+				for (const stats of data.pvp_rankings_great_league) {
+					if (stats.rank && stats.rank < data.bestGreatLeagueRank) {
+						data.bestGreatLeagueRank = stats.rank
+						data.bestGreatLeagueRankCP = stats.cp || 0
+					} else if (stats.rank && stats.cp && stats.rank === data.bestGreatLeagueRank && stats.cp > data.bestGreatLeagueRankCP) {
+						data.bestGreatLeagueRankCP = stats.cp
+					}
+				}
+			}
+
+			data.bestUltraLeagueRank = 4096
+			data.bestUltraLeagueRankCP = 0
+			if (data.pvp_rankings_ultra_league) {
+				for (const stats of data.pvp_rankings_ultra_league) {
+					if (stats.rank && stats.rank < data.bestUltraLeagueRank) {
+						data.bestUltraLeagueRank = stats.rank
+						data.bestUltraLeagueRankCP = stats.cp || 0
+					} else if (stats.rank && stats.cp && stats.rank === data.bestUltraLeagueRank && stats.cp > data.bestUltraLeagueRankCP) {
+						data.bestUltraLeagueRankCP = stats.cp
+					}
+				}
+			}
+
 			data.staticSprite = encodeURI(JSON.stringify([
 				{
 					url: data.imgUrl,
@@ -191,8 +235,11 @@ class Monster extends Controller {
 
 			if (discordCacheBad) return []
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-
 			const jobs = []
+
+			if (pregenerateTile) {
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
+			}
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
@@ -250,13 +297,13 @@ class Monster extends Controller {
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 
-                                if (cares.ping) {
-                                        if (!message.content) {
-                                                message.content = cares.ping;
-                                        } else {
-                                                message.content += cares.ping;
-                                        }
-                                }
+				if (cares.ping) {
+					if (!message.content) {
+						message.content = cares.ping
+					} else {
+						message.content += cares.ping
+					}
+				}
 
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),

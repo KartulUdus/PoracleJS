@@ -50,6 +50,10 @@ exports.run = async (client, msg, command) => {
 			let gender = 0
 			let weight = 0
 			let maxweight = 9000000
+			let greatLeague = 4096
+			let greatLeagueCP = 0
+			let ultraLeague = 4096
+			let ultraLeagueCP = 0
 			let template = 1
 			let clean = false
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
@@ -59,22 +63,41 @@ exports.run = async (client, msg, command) => {
 			const formNames = formArgs ? formArgs.map((arg) => client.translator.reverse(arg.replace(client.translator.translate('form'), ''))) : []
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
 			const genCommand = args.filter((arg) => arg.match(client.re.genRe))
-			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
+			const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].replace(client.translator.translate('gen'), ''))] : 0
 
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
 				|| args.includes(client.translator.translate('everything'))) && formNames.includes(mon.form.name.toLowerCase()))
-			} else {
+
+				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
+			} else if (gen || args.includes(client.translator.translate('individually'))) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
 				|| args.includes(client.translator.translate('everything'))) && !mon.form.id)
+
+				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
+			} else {
+				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
+				) && !mon.form.id)
+				if (args.includes(client.translator.translate('everything'))) {
+					monsters.push({
+						id: 0,
+						form: {
+							id: 0,
+						},
+					})
+				}
 			}
-			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			// Parse command elements to stuff
 			args.forEach((element) => {
 				if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[0].replace(client.translator.translate('maxlevel'), '')
 				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
+				else if (element.match(client.re.greatLeagueRe)) greatLeague = element.match(client.re.greatLeagueRe)[0].replace(client.translator.translate('great'), '')
+				else if (element.match(client.re.greatLeagueCPRe)) greatLeagueCP = element.match(client.re.greatLeagueCPRe)[0].replace(client.translator.translate('greatcp'), '')
+				else if (element.match(client.re.ultraLeagueRe)) ultraLeague = element.match(client.re.ultraLeagueRe)[0].replace(client.translator.translate('ultra'), '')
+				else if (element.match(client.re.ultraLeagueCPRe)) ultraLeagueCP = element.match(client.re.ultraLeagueCPRe)[0].replace(client.translator.translate('ultracp'), '')
 				else if (element.match(client.re.maxcpRe)) maxcp = element.match(client.re.maxcpRe)[0].replace(client.translator.translate('maxcp'), '')
 				else if (element.match(client.re.maxivRe)) maxiv = element.match(client.re.maxivRe)[0].replace(client.translator.translate('maxiv'), '')
 				else if (element.match(client.re.maxweightRe)) maxweight = element.match(client.re.maxweightRe)[0].replace(client.translator.translate('maxweight'), '')
@@ -117,6 +140,10 @@ exports.run = async (client, msg, command) => {
 				max_sta: maxSta,
 				gender,
 				clean,
+				great_league_ranking: greatLeague,
+				great_league_ranking_min_cp: greatLeagueCP,
+				ultra_league_ranking: ultraLeague,
+				ultra_league_ranking_min_cp: ultraLeagueCP,
 			}))
 			if (!insert.length) {
 				break

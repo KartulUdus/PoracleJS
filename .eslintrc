@@ -18,6 +18,7 @@
         "no-plusplus": [ "off" ],
         "no-throw-literal": ["off"],
         "no-param-reassign": ["off"],
-        "no-bitwise": ["error", { "allow": ["~"] }]
+        "no-bitwise": ["error", { "allow": ["~"] }],
+        "eqeqeq": [ "off" ]
     }
 }

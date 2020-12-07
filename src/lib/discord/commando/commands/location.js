@@ -33,11 +33,24 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
+		let lat
+		let lon
 
-		const location = await client.query.geolocate(search)
+		const matches = search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
+		if (matches != null && matches.length >= 2) {
+			lat = parseFloat(matches[1])
+			lon = parseFloat(matches[2])
+		} else {
+			const locations = await client.query.geolocate(search)
+			if (locations === undefined || locations.length == 0) {
+				return await msg.react(client.translator.translate('🙅'))
+			}
+			lat = locations[0].latitude
+			lon = locations[0].longitude
+		}
 
-		await client.query.updateQuery('humans', { latitude: location[0].latitude, longitude: location[0].longitude }, { id: target.id })
-		const maplink = `https://www.google.com/maps/search/?api=1&query=${location[0].latitude},${location[0].longitude}`
+		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })
+		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
 		await msg.reply(`${client.translator.translate(':wave:, I set ')}${target.name}${client.translator.translate('s location to : ')}\n${maplink}`)
 		await msg.react('✅')
 	} catch (err) {

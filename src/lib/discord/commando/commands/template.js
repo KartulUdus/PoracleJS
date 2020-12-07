@@ -28,7 +28,6 @@ exports.run = async (client, msg, command) => {
 		}
 		if (target.webhook) target.id = isRegistered.id
 
-
 		// PUT CODE HERE
 	} catch (err) {
 		client.log.error('TEMPLATE command unhappy:', err)

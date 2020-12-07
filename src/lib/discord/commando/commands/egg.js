@@ -1,7 +1,6 @@
 exports.run = async (client, msg, command) => {
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
-
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
@@ -41,7 +40,6 @@ exports.run = async (client, msg, command) => {
 			let levels = []
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 
-
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
 				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
@@ -51,7 +49,7 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'valor') team = 2
 				else if (element === 'mystic') team = 1
 				else if (element === 'harmony') team = 0
-				else if (element === 'everything') levels = [1, 2, 3, 4, 5]
+				else if (element === 'everything') levels = [1, 2, 3, 4, 5, 6]
 				else if (element === 'clean') clean = true
 			})
 

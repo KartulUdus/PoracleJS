@@ -3,7 +3,6 @@ exports.run = async (client, msg, command) => {
 	const [args] = command
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
-
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
@@ -40,6 +39,9 @@ exports.run = async (client, msg, command) => {
 		&& !mon.form.id)
 
 		const monsterIds = monsters.map((mon) => mon.id)
+		if (args.includes(client.translator.translate('everything'))) {
+			monsterIds.push(0)
+		}
 		const result = await client.query.deleteWhereInQuery('monsters', target.id, monsterIds, 'pokemon_id')
 		client.log.info(`${target.name} removed tracking for monsters: ${monsters.map((m) => m.name).join(', ')}`)
 

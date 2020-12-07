@@ -11,34 +11,46 @@ class Quest extends Controller {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
 		let query = `
-		select humans.id, humans.name, humans.type, quest.distance, quest.clean, quest.ping, quest.template from quest
+		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on humans.id = quest.id
 		where humans.enabled = 1 and
-		((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1 or reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0)
+		(((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0))
 		or (reward_type = 2 and reward in (${data.rewardData.items}))
-		or (reward_type = 3 and reward <= ${data.dustAmount}))
+		or (reward_type = 3 and reward <= ${data.dustAmount})
+		or (reward_type = 12 and reward <= ${data.energyAmount}))
 `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			(round( 6371000 * acos( cos( radians(${data.latitude}) )
-			  * cos( radians( humans.latitude ) )
-			  * cos( radians( humans.longitude ) - radians(${data.longitude}) )
-			  + sin( radians(${data.latitude}) )
-			  * sin( radians( humans.latitude ) ) ) < quest.distance and quest.distance != 0) or
-			   quest.distance = 0 and (${areastring}))
-			group by humans.id, humans.name, quest.template`)
+			(
+				(
+					round(
+						6371000 
+						* acos(cos( radians(${data.latitude}) )
+						* cos( radians( humans.latitude ) )
+						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+						+ sin( radians(${data.latitude}) )
+						* sin( radians( humans.latitude ) ) 
+						) 
+					) < quest.distance and quest.distance != 0) 
+					or
+					(
+						quest.distance = 0 and (${areastring})
+					)
+			)
+			group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
+			`)
 		} else {
 			query = query.concat(`
-				and (quest.distance = 0 and (${areastring}) or quest.distance > 0)
-				group by humans.id, humans.name, quest.template 
+				and ((quest.distance = 0 and (${areastring})) or quest.distance > 0)
+			group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
 			`)
 		}
 
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance === 0 || res.distance > 0 && res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
@@ -53,6 +65,7 @@ class Quest extends Controller {
 	}
 
 	async handle(obj) {
+		let pregenerateTile = false
 		const data = obj
 		const minTth = this.config.general.alertMinimumTime || 0
 
@@ -60,6 +73,10 @@ class Quest extends Controller {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'poracle': {
 					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
+					break
+				}
+				case 'tileservercache': {
+					pregenerateTile = true
 					break
 				}
 				case 'google': {
@@ -100,6 +117,7 @@ class Quest extends Controller {
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
+			data.energyAmount = data.rewardData.energyAmount
 			data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => this.translator.translate(m.name)).join(', ')
 			data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => this.translator.translate(this.utilData.items[i])).join(', ')
 
@@ -114,7 +132,10 @@ class Quest extends Controller {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
 				data.dustAmount = data.rewards[0].info.amount
 			}
-
+			if (data.energyAmount) {
+				data.imgurl = `${this.config.general.imgUrl}rewards/reward_mega_energy.png`
+				data.energyAmount = data.rewards[0].info.amount
+			}
 			data.staticSprite = encodeURI(JSON.stringify([
 				{
 					url: data.imgUrl,
@@ -132,7 +153,6 @@ class Quest extends Controller {
 
 			const whoCares = await this.questWhoCares(data)
 
-
 			if (!whoCares[0]) return []
 
 			let discordCacheBad = true // assume the worst
@@ -144,8 +164,11 @@ class Quest extends Controller {
 			if (discordCacheBad) return []
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-
 			const jobs = []
+
+			if (pregenerateTile) {
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
+			}
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
@@ -172,13 +195,13 @@ class Quest extends Controller {
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 
-                                if (cares.ping) {
-                                        if (!message.content) {
-                                                message.content = cares.ping;
-                                        } else {
-                                                message.content += cares.ping;
-                                        }
-                                }
+				if (cares.ping) {
+					if (!message.content) {
+						message.content = cares.ping
+					} else {
+						message.content += cares.ping
+					}
+				}
 
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
@@ -218,6 +241,7 @@ class Quest extends Controller {
 			let rewardString = ''
 			let dustAmount = 0
 			let isShiny = 0
+			let energyAmount = 0
 
 			data.rewards.forEach((reward) => {
 				if (reward.type === 2) {
@@ -244,14 +268,20 @@ class Quest extends Controller {
 					const rew = mustache({ pokemon: this.translator.translate(monster.name), emoji, isShiny })
 					monsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
+				} else if (reward.type === 12) {
+					const template = this.utilData.questRewardTypes['12']
+					const monster = Object.values(this.monsterData).find((mon) => mon.id === reward.info.pokemon_id && mon.form.id === 0)
+					const mustache = this.mustache.compile(this.translator.translate(template))
+					const rew = mustache({ pokemon: this.translator.translate(monster.name), amount: reward.info.amount })
+					energyAmount = reward.info.amount
+					rewardString = rewardString.concat(rew)
 				}
 			})
 			resolve({
-				rewardString, monsters, items, dustAmount, isShiny,
+				rewardString, monsters, items, dustAmount, isShiny, energyAmount,
 			})
 		})
 	}
-
 
 	async getConditionString(data) {
 		return new Promise((resolve) => {
@@ -344,6 +374,5 @@ class Quest extends Controller {
 		})
 	}
 }
-
 
 module.exports = Quest

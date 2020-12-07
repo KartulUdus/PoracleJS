@@ -6,7 +6,7 @@
     "template": {
       "embed": {
         "color": "{{ivcolor}}",
-        "title": "{{round iv}}% {{name}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
+        "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
         "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge: {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
@@ -22,7 +22,7 @@
     "template": {
       "embed": {
         "color": "{{color}}",
-        "title": "?% {{name}} {{boostemoji}}",
+        "title": "?% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} {{boostemoji}}",
         "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
@@ -37,7 +37,7 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "Raid against {{name}} has started at {{gymName}}! {{#ex}}(Ex){{/ex}}",
+        "title": "Raid against {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} has started at {{gymName}}! {{#ex}}(Ex){{/ex}}",
         "description": "CP: {{cp}}, quick: {{quickMove}}, charge: {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "color": "{{color}}",
         "thumbnail": {
@@ -96,7 +96,7 @@
         "title": "Team Rocket at {{name}}",
         "url": "{{{mapurl}}}",
         "color": "{{gruntTypeColor}}",
-        "description": "Type:  {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{gruntRewards}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{addr}}\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "description": "Type: {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{gruntRewards}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{addr}}\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -127,7 +127,7 @@
         "fields": [
           {
             "name": "**General commands**",
-            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n `{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://wiki.poracle.world/commands)"
+            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n `{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/)"
           },
           {
             "name": "**_Basic Examples_**",
@@ -159,7 +159,7 @@
 	  },
 	  {
             "name": "**Further info**",
-            "value": "See all details about the commands in [the full manual](https://wiki.poracle.world/commands)"
+            "value": "See all details about the commands in [the full manual](https://muckelba.github.io/poracleWiki/)"
 	  },
 	  {
             "name": "**How far can I walk in metres/minutes? According to the web...**",

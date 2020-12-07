@@ -2,7 +2,6 @@ exports.run = async (client, msg, command) => {
 	const typeArray = Object.values(client.utilData.gruntTypes).map((grunt) => grunt.type.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
-
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
