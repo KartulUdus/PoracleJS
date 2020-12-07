@@ -103,7 +103,8 @@ class Controller {
 			ch = { count: 1 }
 		}
 		const ttl = this.discordCache.getTtl(id)
-		this.discordCache.set(id, { count: ch.count + 1 }, Math.floor((ttl - Date.now()) / 1000))
+		const newTtl = Math.floor((ttl - Date.now()) / 1000)
+		if (newTtl > 0) this.discordCache.set(id, { count: ch.count + 1 }, newTtl)
 		return true
 	}
 

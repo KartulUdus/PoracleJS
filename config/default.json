@@ -41,7 +41,7 @@
         "userRole": ["roleId1", "358207117951369217"],
         "admins": ["222742859059560458"],
         "prefix": "!",
-        "limitSec": 30,
+        "limitSec": 240,
         "limitAmount": 20,
         "ivColors": [
             "#9D9D9D",
