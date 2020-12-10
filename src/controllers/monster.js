@@ -13,7 +13,7 @@ class Monster extends Controller {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
 		let query = `
-		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping from monsters
+		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on humans.id = monsters.id
 		where humans.enabled = true and
 		(pokemon_id=${data.pokemon_id} or pokemon_id=0) and
@@ -58,12 +58,12 @@ class Monster extends Controller {
 						monsters.distance = 0 and (${areastring})
 					)
 			)
-			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
+			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 			`)
 		} else {
 			query = query.concat(`
 				and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
-			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
+			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 			`)
 		}
 		let result = await this.db.raw(query)
@@ -282,6 +282,8 @@ class Monster extends Controller {
 					def: data.individual_defense,
 					sta: data.individual_stamina,
 					imgUrl: data.imgUrl,
+					greatleagueranking: cares.great_league_ranking === 4096 ? 0 : cares.great_league_ranking,
+					ultraleagueranking: cares.ultra_league_ranking === 4096 ? 0 : cares.ultra_league_ranking,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
