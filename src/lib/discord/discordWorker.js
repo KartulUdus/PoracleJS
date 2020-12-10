@@ -98,10 +98,10 @@ class Worker {
 	}
 
 	async channelAlert(data) {
-		const channel = this.client.channels.cache.get(data.target)
-		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
-		if (!channel) return log.warn(`channel ${data.name} not found`)
 		try {
+			const channel = await this.client.channels.fetch(data.target)
+			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
+			if (!channel) return log.warn(`channel ${data.name} not found`)
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
 				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
