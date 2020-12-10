@@ -44,7 +44,7 @@ exports.run = async (client, msg, command) => {
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
 				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
+					return await msg.reply(`no valid areas there, please use one of \`\`\`\n${confUse}\`\`\` `)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
@@ -63,7 +63,7 @@ exports.run = async (client, msg, command) => {
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
 				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`no valid areas there, please use one of ${confAreas}`)
+					return await msg.reply(`no valid areas there, please use one of \`\`\`\n${confUse}\`\`\` `)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
