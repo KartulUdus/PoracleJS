@@ -152,6 +152,7 @@ async function handleAlarms() {
 		const hook = fastify.hookQueue.shift()
 		switch (hook.type) {
 			case 'pokemon': {
+				if (!config.alarmtypes.enablepokemon) break
 				fastify.webhooks.info('pokemon', hook.message)
 				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
 					fastify.logger.debug(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
@@ -169,6 +170,7 @@ async function handleAlarms() {
 				break
 			}
 			case 'raid': {
+				if (!config.alarmtypes.enableraid) break
 				fastify.webhooks.info('raid', hook.message)
 				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
 					fastify.logger.debug(`Raid ${hook.message.gym_id} was sent again too soon, ignoring`)
@@ -187,6 +189,7 @@ async function handleAlarms() {
 			}
 			case 'invasion':
 			case 'pokestop': {
+				if (!config.alarmtypes.enablepokestop) break
 				fastify.webhooks.info('pokestop', hook.message)
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 				if (!incidentExpiration) break
@@ -207,6 +210,7 @@ async function handleAlarms() {
 				break
 			}
 			case 'quest': {
+				if (!config.alarmtypes.enablequest) break
 				fastify.webhooks.info('quest', hook.message)
 				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
 					fastify.logger.debug(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
@@ -225,6 +229,7 @@ async function handleAlarms() {
 				break
 			}
 			case 'weather': {
+				if (!config.alarmtypes.enableweather) break
 				fastify.webhooks.info('weather', hook.message)
 				if (fastify.cache.has(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
 					fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)

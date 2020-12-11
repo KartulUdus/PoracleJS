@@ -1,5 +1,5 @@
 [{
-    "id": 1,
+    "id": "1",
     "type": "monster",
     "default": true,
     "platform": "discord",
@@ -7,7 +7,7 @@
       "embed": {
         "color": "{{ivcolor}}",
         "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
-        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -15,7 +15,7 @@
     }
   },
   {
-    "id": 1,
+    "id": "1",
     "type": "monsterNoIv",
     "default": true,
     "platform": "discord",
@@ -31,7 +31,7 @@
     }
   },
   {
-    "id": 1,
+    "id": "1",
     "type": "raid",
     "default": true,
     "platform": "discord",
@@ -51,7 +51,7 @@
     }
   },
   {
-    "id": 1,
+    "id": "1",
     "type": "egg",
     "default": true,
     "platform": "discord",
@@ -71,7 +71,7 @@
     }
   },
   {
-    "id": 1,
+    "id": "1",
     "type": "quest",
     "default": true,
     "platform": "discord",
@@ -87,7 +87,7 @@
     }
   },
   {
-    "id": 1,
+    "id": "1",
     "type": "invasion",
     "default": true,
     "platform": "discord",
@@ -104,7 +104,7 @@
     }
   },
   {
-    "id": 1,
+    "id": "1",
     "type": "weatherchange",
     "default": true,
     "platform": "discord",
@@ -116,7 +116,7 @@
     }
   },
   {
-    "id": 1,
+    "id": "1",
     "type": "greeting",
     "default": true,
     "platform": "discord",

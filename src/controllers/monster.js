@@ -34,8 +34,8 @@ class Monster extends Controller {
 		min_weight<=${data.weight} * 1000 and
 		max_weight>=${data.weight} * 1000 and
 		great_league_ranking>=${data.bestGreatLeagueRank} and
-		great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and 
-		ultra_league_ranking>=${data.bestUltraLeagueRank} and 
+		great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and
+		ultra_league_ranking>=${data.bestUltraLeagueRank} and
 		ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}
 		`
 
@@ -44,15 +44,15 @@ class Monster extends Controller {
 			and
 			(
 				(
-					round(					
-						6371000 
+					round(
+						6371000
 						* acos(cos( radians(${data.latitude}) )
 						* cos( radians( humans.latitude ) )
 						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
 						+ sin( radians(${data.latitude}) )
-						* sin( radians( humans.latitude ) ) 
-						) 
-					) < monsters.distance and monsters.distance != 0) 
+						* sin( radians( humans.latitude ) )
+						)
+					) < monsters.distance and monsters.distance != 0)
 					or
 					(
 						monsters.distance = 0 and (${areastring})
@@ -138,7 +138,7 @@ class Monster extends Controller {
 			|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			data.name = this.translator.translate(monster.name)
-			data.formname = monster.form.name
+			data.formname = this.translator.translate(monster.form.name)
 			data.iv = encountered ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
 			data.individual_attack = encountered ? data.individual_attack : 0
 			data.individual_defense = encountered ? data.individual_defense : 0
@@ -284,6 +284,9 @@ class Monster extends Controller {
 					imgUrl: data.imgUrl,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
+					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
+					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
 				}
 				let monsterDts
 				if (data.iv === -1) {

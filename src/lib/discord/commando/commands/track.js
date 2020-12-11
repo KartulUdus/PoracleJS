@@ -117,6 +117,14 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'male') gender = 1
 				else if (element === 'genderless') gender = 3
 			})
+			if (greatLeague < 4096 && greatLeague > client.config.pvp.pvpFilterMaxRank) greatLeague = client.config.pvp.pvpFilterMaxRank
+			if (ultraLeague < 4096 && ultraLeague > client.config.pvp.pvpFilterMaxRank) ultraLeague = client.config.pvp.pvpFilterMaxRank
+			if (greatLeagueCP > 0 && greatLeagueCP <= client.config.pvp.pvpFilterGreatMinCP) greatLeagueCP = client.config.pvp.pvpFilterGreatMinCP
+			if (ultraLeagueCP > 0 && ultraLeagueCP <= client.config.pvp.pvpFilterUltraMinCP) ultraLeagueCP = client.config.pvp.pvpFilterUltraMinCP
+			if (greatLeague <= client.config.pvp.pvpFilterMaxRank && greatLeagueCP === 0) greatLeagueCP = client.config.pvp.pvpFilterGreatMinCP
+			if (ultraLeague <= client.config.pvp.pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = client.config.pvp.pvpFilterUltraMinCP
+			if (greatLeagueCP >= client.config.pvp.pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = client.config.pvp.pvpFilterMaxRank
+			if (ultraLeagueCP >= client.config.pvp.pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = client.config.pvp.pvpFilterMaxRank
 			const insert = monsters.map((mon) => ({
 				id: target.id,
 				pokemon_id: mon.id,

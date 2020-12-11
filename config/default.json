@@ -32,6 +32,22 @@
         "addressFormat": "{{ streetName}} {{ streetNumber }}:",
         "language": "en"
     },
+    "pvp": {
+        "pvpDisplayMaxRank": 10,
+        "pvpDisplayGreatMinCP": 1450,
+        "pvpDisplayUltraMinCP": 2450,
+        "pvpFilterMaxRank": 10,
+        "pvpFilterGreatMinCP": 1450,
+        "pvpFilterUltraMinCP": 2450
+    },
+    "alarmtypes": {
+        "enablepokemon": true,
+        "enableraid": true,
+        "enableinvasion": true,
+        "enablepokestop": true,
+        "enablequest": true,
+        "enableweather": true
+    },
     "discord": {
         "enabled": true,
         "unknownResponse": false,
@@ -52,14 +68,12 @@
             "#FF8000"
         ]
       },
-
       "telegram": {
         "enabled": false,
         "token": "",
         "admins": [""],
         "channels": [""]
       },
-
       "geocoding": {
         "provider": "poracle",
         "providerURL": "Your Nominatim Server Address",

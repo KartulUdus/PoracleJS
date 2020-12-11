@@ -3,7 +3,7 @@ module.exports = (translator) => ({
 	formRe: new RegExp(`${translator.translate('form')}\\S+`, 'gi'),
 	genRe: new RegExp(`${translator.translate('gen')}[1-7]+`, 'gi'),
 	maxlevelRe: new RegExp(`${translator.translate('maxlevel')}\\d{1,2}`, 'gi'),
-	templateRe: new RegExp(`${translator.translate('template')}\\d{1,4}`, 'gi'),
+	templateRe: new RegExp(`${translator.translate('template')}\\S+`, 'gi'),
 	maxcpRe: new RegExp(`${translator.translate('maxcp')}\\d{1,5}`, 'gi'),
 	maxivRe: new RegExp(`${translator.translate('maxiv')}\\d{1,3}`, 'gi'),
 	maxweightRe: new RegExp(`${translator.translate('maxweight')}\\d{1,6}`, 'gi'),
