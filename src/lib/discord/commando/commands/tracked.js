@@ -60,7 +60,7 @@ exports.run = async (client, msg, command) => {
 				const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
 				monsterName = mon.name
 				formName = mon.form.name
-				if (formName === undefined) formName = 'none'
+				if (formName === undefined) formName = ''
 			}
 			let miniv = monster.min_iv
 			if (miniv === -1) miniv = 0
@@ -91,7 +91,7 @@ exports.run = async (client, msg, command) => {
 
 		if (quests.length) {
 			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following quests:'),'\n')
-		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any quests/'))
+		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any quests'))
 
 		quests.forEach((quest) => {
 			let rewardThing = ''
