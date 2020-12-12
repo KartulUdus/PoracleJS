@@ -286,7 +286,7 @@ class Monster extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
-					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP
+					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
 				}
 				let monsterDts
 				if (data.iv === -1) {
