@@ -1,5 +1,5 @@
 [{
-    "id": "1",
+    "id": 1,
     "type": "monster",
     "default": true,
     "platform": "discord",
@@ -15,7 +15,7 @@
     }
   },
   {
-    "id": "1",
+    "id": 1,
     "type": "monsterNoIv",
     "default": true,
     "platform": "discord",
@@ -31,7 +31,7 @@
     }
   },
   {
-    "id": "1",
+    "id": 1,
     "type": "raid",
     "default": true,
     "platform": "discord",
@@ -51,7 +51,7 @@
     }
   },
   {
-    "id": "1",
+    "id": 1,
     "type": "egg",
     "default": true,
     "platform": "discord",
@@ -71,7 +71,7 @@
     }
   },
   {
-    "id": "1",
+    "id": 1,
     "type": "quest",
     "default": true,
     "platform": "discord",
@@ -87,7 +87,7 @@
     }
   },
   {
-    "id": "1",
+    "id": 1,
     "type": "invasion",
     "default": true,
     "platform": "discord",
@@ -104,7 +104,7 @@
     }
   },
   {
-    "id": "1",
+    "id": 1,
     "type": "weatherchange",
     "default": true,
     "platform": "discord",
@@ -116,7 +116,7 @@
     }
   },
   {
-    "id": "1",
+    "id": 1,
     "type": "greeting",
     "default": true,
     "platform": "discord",

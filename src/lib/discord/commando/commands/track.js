@@ -54,6 +54,9 @@ exports.run = async (client, msg, command) => {
 			let greatLeagueCP = 0
 			let ultraLeague = 4096
 			let ultraLeagueCP = 0
+			let pvpFilterMaxRank = client.config.pvp.pvpFilterMaxRank || 4096
+			let pvpFilterGreatMinCP = client.config.pvp.pvpFilterGreatMinCP || 1500
+			let pvpFilterUltraMinCP = client.config.pvp.pvpFilterUltraMinCP || 2500
 			let template = 1
 			let clean = false
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
@@ -117,14 +120,14 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'male') gender = 1
 				else if (element === 'genderless') gender = 3
 			})
-			if (greatLeague < 4096 && greatLeague > client.config.pvp.pvpFilterMaxRank) greatLeague = client.config.pvp.pvpFilterMaxRank
-			if (ultraLeague < 4096 && ultraLeague > client.config.pvp.pvpFilterMaxRank) ultraLeague = client.config.pvp.pvpFilterMaxRank
-			if (greatLeagueCP > 0 && greatLeagueCP <= client.config.pvp.pvpFilterGreatMinCP) greatLeagueCP = client.config.pvp.pvpFilterGreatMinCP
-			if (ultraLeagueCP > 0 && ultraLeagueCP <= client.config.pvp.pvpFilterUltraMinCP) ultraLeagueCP = client.config.pvp.pvpFilterUltraMinCP
-			if (greatLeague <= client.config.pvp.pvpFilterMaxRank && greatLeagueCP === 0) greatLeagueCP = client.config.pvp.pvpFilterGreatMinCP
-			if (ultraLeague <= client.config.pvp.pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = client.config.pvp.pvpFilterUltraMinCP
-			if (greatLeagueCP >= client.config.pvp.pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = client.config.pvp.pvpFilterMaxRank
-			if (ultraLeagueCP >= client.config.pvp.pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = client.config.pvp.pvpFilterMaxRank
+			if (greatLeague < 4096 && greatLeague > pvpFilterMaxRank) greatLeague = pvpFilterMaxRank
+			if (ultraLeague < 4096 && ultraLeague > pvpFilterMaxRank) ultraLeague = pvpFilterMaxRank
+			if (greatLeagueCP > 0 && greatLeagueCP <= pvpFilterGreatMinCP) greatLeagueCP = pvpFilterGreatMinCP
+			if (ultraLeagueCP > 0 && ultraLeagueCP <= pvpFilterUltraMinCP) ultraLeagueCP = pvpFilterUltraMinCP
+			if (greatLeague <= pvpFilterMaxRank && greatLeagueCP === 0) greatLeagueCP = pvpFilterGreatMinCP
+			if (ultraLeague <= pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
+			if (greatLeagueCP >= pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = pvpFilterMaxRank
+			if (ultraLeagueCP >= pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
 			const insert = monsters.map((mon) => ({
 				id: target.id,
 				pokemon_id: mon.id,

@@ -25,14 +25,14 @@ class Raid extends Controller {
 			(
 				(
 					round(
-						6371000 
+						6371000
 						* acos(cos( radians(${data.latitude}) )
 						* cos( radians( humans.latitude ) )
 						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
 						+ sin( radians(${data.latitude}) )
-						* sin( radians( humans.latitude ) ) 
-						) 
-					) < raid.distance and raid.distance != 0) 
+						* sin( radians( humans.latitude ) )
+						)
+					) < raid.distance and raid.distance != 0)
 					or
 					(
 						raid.distance = 0 and (${areastring})
@@ -83,15 +83,15 @@ class Raid extends Controller {
 			and
 			(
 				(
-					round(					
-						6371000 
+					round(
+						6371000
 						* acos(cos( radians(${data.latitude}) )
 						* cos( radians( humans.latitude ) )
 						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
 						+ sin( radians(${data.latitude}) )
-						* sin( radians( humans.latitude ) ) 
-						) 
-					) < egg.distance and egg.distance != 0) 
+						* sin( radians( humans.latitude ) )
+						)
+					) < egg.distance and egg.distance != 0)
 					or
 					(
 						egg.distance = 0 and (${areastring})
@@ -252,7 +252,7 @@ class Raid extends Controller {
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
-					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id === cares.template && template.platform === 'discord'))
+					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template && template.platform === 'discord'))
 					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === 'discord')
 					const template = JSON.stringify(raidDts.template)
 					const mustache = this.mustache.compile(template)
@@ -352,7 +352,7 @@ class Raid extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id === cares.template && template.platform === 'discord'))
+				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id.toString() === cares.template && template.platform === 'discord'))
 				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === 'discord')
 
 				const template = JSON.stringify(eggDts.template)

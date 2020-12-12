@@ -41,12 +41,12 @@
         "pvpFilterUltraMinCP": 2450
     },
     "alarmtypes": {
-        "enablepokemon": true,
-        "enableraid": true,
-        "enableinvasion": true,
-        "enablepokestop": true,
-        "enablequest": true,
-        "enableweather": true
+        "disablePokemon": false,
+        "disableRaid": false,
+        "disableInvasion": false,
+        "disablePokestop": false,
+        "disableQuest": false,
+        "disableWeather": false
     },
     "discord": {
         "enabled": true,

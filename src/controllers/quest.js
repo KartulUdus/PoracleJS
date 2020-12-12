@@ -26,14 +26,14 @@ class Quest extends Controller {
 			(
 				(
 					round(
-						6371000 
+						6371000
 						* acos(cos( radians(${data.latitude}) )
 						* cos( radians( humans.latitude ) )
 						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
 						+ sin( radians(${data.latitude}) )
-						* sin( radians( humans.latitude ) ) 
-						) 
-					) < quest.distance and quest.distance != 0) 
+						* sin( radians( humans.latitude ) )
+						)
+					) < quest.distance and quest.distance != 0)
 					or
 					(
 						quest.distance = 0 and (${areastring})
@@ -189,7 +189,7 @@ class Quest extends Controller {
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-				let questDts = this.dts.find((template) => template.type === 'quest' && template.id === cares.template && template.platform === 'discord')
+				let questDts = this.dts.find((template) => template.type === 'quest' && template.id.toString() === cares.template && template.platform === 'discord')
 				if (!questDts) questDts = this.dts.find((template) => template.type === 'quest' && template.default && template.platform === 'discord')
 				const template = JSON.stringify(questDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
