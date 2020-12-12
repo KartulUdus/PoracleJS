@@ -75,18 +75,18 @@ exports.run = async (client, msg, command) => {
 		raids.forEach((raid) => {
 			const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 			const monsterName = mon ? mon.name : 'levelMon'
-			const raidTeam = client.utilData.teams[raid.team].name
+			const raidTeam = client.translator.translate(client.utilData.teams[raid.team].name)
 			const formName = mon ? mon.form.name : 'levelMonForm'
 
 			if (+raid.pokemon_id === 9000) {
-				message = message.concat(`\n**level:${raid.level} raids** ${raid.distance ? `, distance: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , controlled by ${raidTeam}`}${raid.exclusive ? ', must be in park' : ''}`)
+				message = message.concat(`\n**${client.translator.translate(`Level`)} ${raid.level} ${client.translator.translate(`raids`)}** ${raid.distance ? `, ${client.translator.translate(`distance`)}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate(`controlled by`)} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
 			} else {
-				message = message.concat(`\n**${monsterName}**${formName ? ` form: ${formName}` : ''}${raid.distance ? `, distance: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, controlled by ${raidTeam}`}${raid.exclusive ? ', must be in park' : ''}`)
+				message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate(`form`)}: ${formName}` : ''}${raid.distance ? `, ${client.translator.translate(`distance`)}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, ${client.translator.translate(`controlled by`)} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
 			}
 		})
 		eggs.forEach((egg) => {
 			const raidTeam = client.utilData.teams[egg.team].name
-			message = message.concat(`\n**Level ${egg.level} eggs** ${egg.distance ? `, distance: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, controlled by ${raidTeam}`}${egg.exclusive ? ', must be in park' : ''}`)
+			message = message.concat(`\n**${client.translator.translate(`Level`)} ${egg.level} ${client.translator.translate(`eggs`)}** ${egg.distance ? `, ${client.translator.translate(`distance`)}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate(`controlled by`)} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
 		})
 
 		if (quests.length) {

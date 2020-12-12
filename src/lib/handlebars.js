@@ -51,6 +51,20 @@ module.exports = () => {
 		return translatorAlt.translate(monster.name)
 	})
 
+	handlebars.registerHelper('pokemonForm', (value) => {
+		if (!+value) return ''
+		const monster = Object.values(monsters).find((m) => m.id === +value)
+		if (!monster) return ''
+		return translator.translate(monster.form.name)
+	})
+
+	handlebars.registerHelper('pokemonFormAlt', (value) => {
+		if (!+value) return ''
+		const monster = Object.values(monsters).find((m) => m.id === +value)
+		if (!monster) return ''
+		return translatorAlt.translate(monster.form.name)
+	})
+
 	handlebars.registerHelper('calculateCp', (baseStats, level = 25, ivAttack = 15, ivDefense = 15, ivStamina = 15) => {
 		if (!baseStats) return 0
 		const cpMulti = cpMultipliers[level]
