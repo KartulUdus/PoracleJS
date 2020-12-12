@@ -35,11 +35,11 @@ exports.run = async (client, msg, command) => {
 
 		let monsters = []
 		monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
-		|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) || args.includes(client.translator.translate('everything')))
+		|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) || args.includes('everything'))
 		&& !mon.form.id)
 
 		const monsterIds = monsters.map((mon) => mon.id)
-		if (args.includes(client.translator.translate('everything'))) {
+		if (args.includes('everything')) {
 			monsterIds.push(0)
 		}
 		const result = await client.query.deleteWhereInQuery('monsters', target.id, monsterIds, 'pokemon_id')
