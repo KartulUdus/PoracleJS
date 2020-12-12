@@ -42,11 +42,11 @@ exports.run = async (client, msg, command) => {
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `${client.translator.translate('Your location is currently set to')} ${maplink}\n`
 		}
-		await msg.reply(`${client.translator.translate('Your alerts are currently')} **${human.enabled ? `${client.translator.translate('enabled')}` : `${client.translator.translate('disabled')}`}**\n${locationText}\n${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+		await msg.reply(`${client.translator.translate('Your alerts are currently')} **${human.enabled ? `${client.translator.translate('enabled')}` : `${client.translator.translate('disabled')}`}**\n${locationText}${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 
 		let message = ''
 		if (monsters.length) {
-			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following monsters:'),'\n')
+			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following monsters:'), '\n')
 		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any monsters'))
 
 		monsters.forEach((monster) => {
@@ -70,7 +70,7 @@ exports.run = async (client, msg, command) => {
 			message = message.concat(`\n**${client.translator.translate(`${monsterName}`)}** ${client.translator.translate(`${formName}`)} ${monster.distance ? ` | distance: ${monster.distance}m` : ''} | iv: ${miniv}%-${monster.max_iv}% | ${client.translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | level: ${monster.min_level}-${monster.max_level} | stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${client.translator.translate('greatpvp')}: ${greatLeague} | ${client.translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${client.translator.translate('gender')}: ${client.utilData.genders[monster.gender].emoji}` : ''}`)
 		})
 		if (raids.length || eggs.length) {
-			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following raids:'),'\n')
+			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following raids:'), '\n')
 		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any raids'))
 		raids.forEach((raid) => {
 			const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
@@ -90,7 +90,7 @@ exports.run = async (client, msg, command) => {
 		})
 
 		if (quests.length) {
-			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following quests:'),'\n')
+			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following quests:'), '\n')
 		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any quests'))
 
 		quests.forEach((quest) => {
@@ -103,7 +103,7 @@ exports.run = async (client, msg, command) => {
 		})
 
 		if (invasions.length) {
-			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following invasions:'),'\n')
+			message = message.concat('\n\n', client.translator.translate('You\'re tracking the following invasions:'), '\n')
 		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any invasions'))
 
 		invasions.forEach((invasion) => {
