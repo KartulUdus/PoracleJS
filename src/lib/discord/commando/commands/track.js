@@ -71,20 +71,22 @@ exports.run = async (client, msg, command) => {
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-				|| args.includes('everything')) && formNames.includes(mon.form.name.toLowerCase()))
+				|| args.includes('everything') && !client.config.alarmtypes.disableEverythingTracking
+				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) && formNames.includes(mon.form.name.toLowerCase()))
 
 				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			} else if (gen || args.includes(client.translator.translate('individually'))) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
-				|| args.includes('everything')) && !mon.form.id)
+				|| args.includes('everything') && !client.config.alarmtypes.disableEverythingTracking
+				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) && !mon.form.id)
 
 				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			} else {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
 				) && !mon.form.id)
-				if (args.includes('everything')) {
+				if (args.includes('everything') && !client.config.alarmtypes.disableEverythingTracking || args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
 					monsters.push({
 						id: 0,
 						form: {

@@ -47,7 +47,8 @@
         "disableInvasion": false,
         "disablePokestop": false,
         "disableQuest": false,
-        "disableWeather": false
+        "disableWeather": false,
+        "disableEverythingTracking": false
     },
     "discord": {
         "enabled": true,
