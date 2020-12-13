@@ -74,19 +74,19 @@ exports.run = async (client, msg, command) => {
 		} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any raids'))
 		raids.forEach((raid) => {
 			const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
-			const monsterName = mon ? mon.name : 'levelMon'
+			const monsterName = mon ? client.translator.translate(mon.name) : 'levelMon'
 			const raidTeam = client.translator.translate(client.utilData.teams[raid.team].name)
-			const formName = mon ? mon.form.name : 'levelMonForm'
+			const formName = mon ? client.translator.translate(mon.form.name) : 'levelMonForm'
 
 			if (+raid.pokemon_id === 9000) {
-				message = message.concat(`\n**${client.translator.translate(`Level`)} ${raid.level} ${client.translator.translate(`raids`)}** ${raid.distance ? `, ${client.translator.translate(`distance`)}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate(`controlled by`)} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
+				message = message.concat(`\n**${client.translator.translate('Level')} ${raid.level} ${client.translator.translate('raids')}** ${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 			} else {
-				message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate(`form`)}: ${formName}` : ''}${raid.distance ? `, ${client.translator.translate(`distance`)}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, ${client.translator.translate(`controlled by`)} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
+				message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate('form')}: ${formName}` : ''}${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 			}
 		})
 		eggs.forEach((egg) => {
-			const raidTeam = client.utilData.teams[egg.team].name
-			message = message.concat(`\n**${client.translator.translate(`Level`)} ${egg.level} ${client.translator.translate(`eggs`)}** ${egg.distance ? `, ${client.translator.translate(`distance`)}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate(`controlled by`)} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
+			const raidTeam = client.translator.translate(client.utilData.teams[egg.team].name)
+			message = message.concat(`\n**${client.translator.translate('Level')} ${egg.level} ${client.translator.translate('eggs')}** ${egg.distance ? `, ${client.translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 		})
 
 		if (quests.length) {
