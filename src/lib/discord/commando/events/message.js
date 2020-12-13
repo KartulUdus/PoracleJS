@@ -9,6 +9,8 @@ module.exports = (client, msg) => {
 	args = args.map((arg) => client.translator.reverse(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
 	const command = client.translator.reverse(args.shift().toLowerCase())
 
+	if (client.config.general.disabledCommands.includes(command)) return
+
 	let initialArgs
 	if (args.includes('|')) {
 		initialArgs = args.join(' ').split('|').map((com) => com.split(' ').filter((a) => a))

@@ -17,8 +17,8 @@ exports.run = async (client, msg, command) => {
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
 
 		const isRegistered = target.webhook
-		? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
-		: await client.query.countQuery('humans', { id: target.id })
+			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
+			: await client.query.countQuery('humans', { id: target.id })
 
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
 			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')}`)
@@ -46,8 +46,7 @@ exports.run = async (client, msg, command) => {
 
 		let message = ''
 
-		if (!client.config.alarmtypes.disablePokemon)
-		{
+		if (!client.config.alarmtypes.disablePokemon) {
 			if (monsters.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following monsters:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any monsters'))
@@ -74,8 +73,7 @@ exports.run = async (client, msg, command) => {
 			})
 		}
 
-		if (!client.config.alarmtypes.disableRaid)
-		{
+		if (!client.config.alarmtypes.disableRaid) {
 			if (raids.length || eggs.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following raids:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any raids'))
@@ -86,19 +84,18 @@ exports.run = async (client, msg, command) => {
 				const formName = mon ? client.translator.translate(mon.form.name) : 'levelMonForm'
 
 				if (+raid.pokemon_id === 9000) {
-					message = message.concat(`\n**${client.translator.translate(`Level`)} ${raid.level} ${client.translator.translate(`raids`)}** ${raid.distance ? `, ${client.translator.translate(`distance`)}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate(`controlled by`)} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
+					message = message.concat(`\n**${client.translator.translate('Level')} ${raid.level} ${client.translator.translate('raids')}** ${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 				} else {
-					message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate(`form`)}: ${formName}` : ''}${raid.distance ? `, ${client.translator.translate(`distance`)}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, ${client.translator.translate(`controlled by`)} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
+					message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate('form')}: ${formName}` : ''}${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 				}
 			})
 			eggs.forEach((egg) => {
 				const raidTeam = client.translator.translate(client.utilData.teams[egg.team].name)
-				message = message.concat(`\n**${client.translator.translate(`Level`)} ${egg.level} ${client.translator.translate(`eggs`)}** ${egg.distance ? `, ${client.translator.translate(`distance`)}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate(`controlled by`)} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate(`must be in park`)}` : ''}`)
+				message = message.concat(`\n**${client.translator.translate('Level')} ${egg.level} ${client.translator.translate('eggs')}** ${egg.distance ? `, ${client.translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 			})
 		}
 
-		if (!client.config.alarmtypes.disableQuest)
-		{
+		if (!client.config.alarmtypes.disableQuest) {
 			if (quests.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following quests:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any quests'))
@@ -113,8 +110,7 @@ exports.run = async (client, msg, command) => {
 			})
 		}
 
-		if (!client.config.alarmtypes.disablePokestop)
-		{
+		if (!client.config.alarmtypes.disablePokestop) {
 			if (invasions.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following invasions:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any invasions'))
