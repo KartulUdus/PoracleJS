@@ -2627,6 +2627,48 @@
 			}
 		]
 	},
+	"25_2669": {
+		"name": "Pikachu",
+		"form": {
+			"id": 978,
+			"name": "Adventure Hat 2020"
+		},
+		"id": 25,
+		"stats": {
+			"baseStamina": 111,
+			"baseAttack": 112,
+			"baseDefense": 96
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric",
+				"emoji": "⚡",
+				"color": "F8D030"
+			}
+		]
+	},
+	"25_2670": {
+		"name": "Pikachu",
+		"form": {
+			"id": 978,
+			"name": "Winter 2020"
+		},
+		"id": 25,
+		"stats": {
+			"baseStamina": 111,
+			"baseAttack": 112,
+			"baseDefense": 96
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric",
+				"emoji": "⚡",
+				"color": "F8D030"
+			}
+		]
+	},
 	"25_978": {
 		"name": "Pikachu",
 		"form": {
