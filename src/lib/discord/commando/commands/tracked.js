@@ -46,7 +46,7 @@ exports.run = async (client, msg, command) => {
 
 		let message = ''
 
-		if (!client.config.alarmtypes.disablePokemon) {
+		if (!client.config.general.disablePokemon) {
 			if (monsters.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following monsters:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any monsters'))
@@ -73,7 +73,7 @@ exports.run = async (client, msg, command) => {
 			})
 		}
 
-		if (!client.config.alarmtypes.disableRaid) {
+		if (!client.config.general.disableRaid) {
 			if (raids.length || eggs.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following raids:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any raids'))
@@ -95,7 +95,7 @@ exports.run = async (client, msg, command) => {
 			})
 		}
 
-		if (!client.config.alarmtypes.disableQuest) {
+		if (!client.config.general.disableQuest) {
 			if (quests.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following quests:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any quests'))
@@ -110,7 +110,7 @@ exports.run = async (client, msg, command) => {
 			})
 		}
 
-		if (!client.config.alarmtypes.disablePokestop) {
+		if (!client.config.general.disablePokestop) {
 			if (invasions.length) {
 				message = message.concat('\n\n', client.translator.translate('You\'re tracking the following invasions:'), '\n')
 			} else message = message.concat('\n\n', client.translator.translate('You\'re not tracking any invasions'))

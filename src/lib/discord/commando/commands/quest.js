@@ -79,6 +79,8 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'remove') remove = true
 				else if (element === 'clean') clean = true
 			})
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
 
 			if (+minDust < 10000000) {
 				questTracks.push({
@@ -148,7 +150,7 @@ exports.run = async (client, msg, command) => {
 			items.push(0)
 			monsters.push(0)
 			const remQuery = `
-				delete from quest WHERE id=${target.id} and 
+				delete from quest WHERE id=${target.id} and
 				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward > ${energyTracking}))
 				`
 			const result = await client.query.misteryQuery(remQuery)

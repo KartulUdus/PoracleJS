@@ -72,6 +72,8 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'everything') levels = [1, 2, 3, 4, 5]
 				else if (element === 'clean') clean = true
 			})
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
 			if (!levels.length && !monsters.length) {
 				break
 			} else {

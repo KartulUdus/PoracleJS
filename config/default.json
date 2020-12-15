@@ -11,7 +11,13 @@
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
         "locale": "en",
         "weatherChangeAlert": false,
-        "disabledCommands": []
+        "disabledCommands": [],
+        "disablePokemon": false,
+        "disableRaid": false,
+        "disableInvasion": false,
+        "disablePokestop": false,
+        "disableQuest": false,
+        "disableWeather": false
     },
     "logger": {
         "level": "info",
@@ -46,14 +52,10 @@
         "pvpFilterGreatMinCP": 1450,
         "pvpFilterUltraMinCP": 2450
     },
-    "alarmtypes": {
-        "disablePokemon": false,
-        "disableRaid": false,
-        "disableInvasion": false,
-        "disablePokestop": false,
-        "disableQuest": false,
-        "disableWeather": false,
-        "disableEverythingTracking": false
+    "tracking": {
+        "disableEverythingTracking": false,
+        "defaultDistance": 0,
+        "maxDistance": 0
     },
     "discord": {
         "enabled": true,

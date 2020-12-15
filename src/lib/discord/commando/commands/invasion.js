@@ -47,6 +47,8 @@ exports.run = async (client, msg, command) => {
 				else if (element === client.translator.translate('clean')) clean = true
 				else if (typeArray.includes(element) || element === 'everything') types.push(element)
 			}
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
 			if (!types.length) {
 				break
 			} else {

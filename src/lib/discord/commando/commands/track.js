@@ -71,14 +71,14 @@ exports.run = async (client, msg, command) => {
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-				|| args.includes('everything') && !client.config.alarmtypes.disableEverythingTracking
+				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
 				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) && formNames.includes(mon.form.name.toLowerCase()))
 
 				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			} else if (gen || args.includes(client.translator.translate('individually'))) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
-				|| args.includes('everything') && !client.config.alarmtypes.disableEverythingTracking
+				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
 				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) && !mon.form.id)
 
 				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
@@ -86,7 +86,7 @@ exports.run = async (client, msg, command) => {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
 				) && !mon.form.id)
-				if (args.includes('everything') && !client.config.alarmtypes.disableEverythingTracking || args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
+				if (args.includes('everything') && !client.config.tracking.disableEverythingTracking || args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
 					monsters.push({
 						id: 0,
 						form: {
@@ -130,6 +130,8 @@ exports.run = async (client, msg, command) => {
 			if (ultraLeague <= pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
 			if (greatLeagueCP >= pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = pvpFilterMaxRank
 			if (ultraLeagueCP >= pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
 			const insert = monsters.map((mon) => ({
 				id: target.id,
 				pokemon_id: mon.id,
