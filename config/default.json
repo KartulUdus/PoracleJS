@@ -33,6 +33,11 @@
         "addressFormat": "{{ streetName}} {{ streetNumber }}:",
         "language": "en"
     },
+    "geofence": {
+        "path": "./config/geofence.json",
+        "defaultGeofenceName": "city",
+        "defaultGeofenceColor": "#3399ff"
+    },
     "pvp": {
         "pvpDisplayMaxRank": 10,
         "pvpDisplayGreatMinCP": 1450,
