@@ -54,9 +54,9 @@ exports.run = async (client, msg, command) => {
 			let greatLeagueCP = 0
 			let ultraLeague = 4096
 			let ultraLeagueCP = 0
-			const pvpFilterMaxRank = client.config.pvp.pvpFilterMaxRank || 4096
-			const pvpFilterGreatMinCP = client.config.pvp.pvpFilterGreatMinCP || 1500
-			const pvpFilterUltraMinCP = client.config.pvp.pvpFilterUltraMinCP || 2500
+			const pvpFilterMaxRank = client.config.pvp.pvpFilterMaxRank
+			const pvpFilterGreatMinCP = client.config.pvp.pvpFilterGreatMinCP
+			const pvpFilterUltraMinCP = client.config.pvp.pvpFilterUltraMinCP
 			let template = 1
 			let clean = false
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
@@ -75,7 +75,7 @@ exports.run = async (client, msg, command) => {
 				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) && formNames.includes(mon.form.name.toLowerCase()))
 
 				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
-			} else if (gen || args.includes(client.translator.translate('individually'))) {
+			} else if (gen || args.includes('individually') || client.config.tracking.forceEverythingSeparately) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
 				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
