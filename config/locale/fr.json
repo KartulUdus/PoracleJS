@@ -1,4 +1,6 @@
 {
+	"Oops, a distance was set in command but no location is defined for your tracking - check the":"Oups, une distance est spécifiée dans la commande mais aucune position centrale de recherche n'a été définie - consultez l'aide :",
+	"Oops, no distance was set in command and no area is defined for your tracking - check the":"Oups, aucune distance n'est spécifiée dans la commande et aucune zone de recherche n'a été définie - consultez l'aide :",
 	"Please run commands in Direct Messages":"Les commandes doivent être envoyées par message privé",
 	"name":"name",
 	"does not seem to be registered. add it with":"ne semble pas être enregistré, ajoutez-le avec",
