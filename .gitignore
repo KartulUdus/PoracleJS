@@ -1,6 +1,7 @@
 logs/*.json
 config/*.json
 config/locale/*.json
+docker-compose.yml
 .idea
 .vscode 
 
@@ -9,6 +10,7 @@ config/locale/*.json
 nominatimData/*
 !nominatimData/.gitkeep
 !nominatimData/postgres/.gitkeep
+poracledb/*
 
 !config/default.json
 

@@ -1,0 +1,30 @@
+version: "3.5"
+services:
+  poracle_db:
+    image: mariadb:10.4
+    restart: always
+    command: ['mysqld', '--character-set-server=utf8mb4', '--collation-server=utf8mb4_unicode_ci']
+    environment:
+      MYSQL_ROOT_PASSWORD: poracle_secure_root_database_password
+      MYSQL_DATABASE: poracle_database
+      MYSQL_USER: poracle_user
+      MYSQL_PASSWORD: poracle_secure_database_password
+    volumes:
+      - ./poracledb:/var/lib/mysql
+  poracle:
+    build: 
+      context: .
+    ports:
+      - "3030:3030"
+    depends_on: 
+      - poracle_db
+    environment: 
+      PORACLE_SERVER_HOST: 0.0.0.0
+      PORACLE_SERVER_PORT: 3030
+      PORACLE_DB_TYPE: mysql
+      PORACLE_DB_HOST: poracle_db
+      PORACLE_DB_DATABASE: poracle_database
+      PORACLE_DB_USER: poracle_user
+      PORACLE_DB_PASSWORD: poracle_secure_database_password
+    volumes:
+      - ./config/:/usr/src/app/config/
