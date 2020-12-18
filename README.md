@@ -11,11 +11,11 @@ It allows for high end-user configurability using discord `!commands` or telegra
 
 #### Links
 
-- [WIKI](https://wiki.poracle.world/) - Useful for words of wizdom! ([source](https://github.com/KartulUdus/poracleWiki))
+- [WIKI](https://muckelba.github.io/poracleWiki/) - Useful for words of wizdom! 
 - [Discord](https://discord.gg/AathPCp) - Place for #help and #announcments  
 
 ### Install
-- [Install NodeJS](https://nodejs.org/en/) version 10 or higher
+- [Install NodeJS](https://nodejs.org/en/) version 12 or higher
 - [Create a discord bot and invite it to your server](https://wiki.poracle.world/createBot)
 
 ```bash

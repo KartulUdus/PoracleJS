@@ -20,3 +20,4 @@
 **/src/lib/db/poracle.sqlite
 **/.geoCache
 .cache/cache/
+**/nominatimData/*
