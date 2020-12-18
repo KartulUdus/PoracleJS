@@ -62,9 +62,9 @@ exports.run = async (client, msg, command) => {
 			let greatLeagueCP = 0
 			let ultraLeague = 4096
 			let ultraLeagueCP = 0
-			const pvpFilterMaxRank = client.config.pvp.pvpFilterMaxRank
-			const pvpFilterGreatMinCP = client.config.pvp.pvpFilterGreatMinCP
-			const pvpFilterUltraMinCP = client.config.pvp.pvpFilterUltraMinCP
+			const { pvpFilterMaxRank } = client.config.pvp
+			const { pvpFilterGreatMinCP } = client.config.pvp
+			const { pvpFilterUltraMinCP } = client.config.pvp
 			let template = 1
 			let clean = false
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
