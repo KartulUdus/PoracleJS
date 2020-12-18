@@ -290,10 +290,10 @@ class Monster extends Controller {
 				}
 				let monsterDts
 				if (data.iv === -1) {
-					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id.toString() === cares.template && template.platform === 'discord')
+					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
 					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.default && template.platform === 'discord')
 				} else {
-					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id.toString() === cares.template && template.platform === 'discord')
+					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
 					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monster' && template.default && template.platform === 'discord')
 				}
 				const template = JSON.stringify(monsterDts.template)
