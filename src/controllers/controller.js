@@ -36,14 +36,14 @@ class Controller {
 				return NodeGeocoder({
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
-					formatterPattern: this.config.locale.addressformat,
+					formatterPattern: this.config.locale.addressFormat,
 				})
 			}
 			case 'nominatim': {
 				return NodeGeocoder({
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
-					formatterPattern: this.config.locale.addressformat,
+					formatterPattern: this.config.locale.addressFormat,
 				})
 			}
 			case 'google': {
@@ -57,7 +57,7 @@ class Controller {
 			{
 				return NodeGeocoder({
 					provider: 'openstreetmap',
-					formatterPattern: this.config.locale.addressformat,
+					formatterPattern: this.config.locale.addressFormat,
 				})
 			}
 		}

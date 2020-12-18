@@ -1,10 +1,15 @@
-FROM node:lts
+FROM node:12-alpine
 
 WORKDIR /usr/src/app
+ADD . ./
 # DEPS
-RUN apt-get -y update && apt-get install -y curl gnupg2 git
-
-COPY . .
-RUN npm install
+ENV HUSKY_SKIP_INSTALL=1
+RUN apk add git \
+    && apk add --no-cache --virtual .gyp \
+        python \
+        make \
+        g++ \
+    && npm install \
+    && apk del .gyp
 EXPOSE 3030
 CMD npm start

@@ -17,6 +17,14 @@ exports.run = async (client, msg, command) => {
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await client.query.countQuery('humans', { id: target.id })
 
+		let userHasLocation = false
+		let userHasArea = false
+		if (isRegistered && !target.webhook) {
+			const human = await client.query.selectOneQuery('humans', { id: target.id })
+			if (+human.latitude !== 0 && +human.longitude !== 0) userHasLocation = true
+			if (human.area.length > 2) userHasArea = true
+		}
+
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
 			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')}`)
 		}
@@ -79,6 +87,16 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'remove') remove = true
 				else if (element === 'clean') clean = true
 			})
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+			if (distance > 0 && !userHasLocation && !target.webhook) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
+			if (distance === 0 && !userHasArea && !target.webhook) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
 
 			if (+minDust < 10000000) {
 				questTracks.push({
@@ -148,7 +166,7 @@ exports.run = async (client, msg, command) => {
 			items.push(0)
 			monsters.push(0)
 			const remQuery = `
-				delete from quest WHERE id=${target.id} and 
+				delete from quest WHERE id=${target.id} and
 				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward > ${energyTracking}))
 				`
 			const result = await client.query.misteryQuery(remQuery)

@@ -10,7 +10,14 @@
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
         "locale": "en",
-        "weatherChangeAlert": false
+        "weatherChangeAlert": false,
+        "disabledCommands": [],
+        "disablePokemon": false,
+        "disableRaid": false,
+        "disableInvasion": false,
+        "disablePokestop": false,
+        "disableQuest": false,
+        "disableWeather": false
     },
     "logger": {
         "level": "info",
@@ -32,6 +39,25 @@
         "addressFormat": "{{ streetName}} {{ streetNumber }}:",
         "language": "en"
     },
+    "geofence": {
+        "path": "./config/geofence.json",
+        "defaultGeofenceName": "city",
+        "defaultGeofenceColor": "#3399ff"
+    },
+    "pvp": {
+        "pvpDisplayMaxRank": 10,
+        "pvpDisplayGreatMinCP": 1450,
+        "pvpDisplayUltraMinCP": 2450,
+        "pvpFilterMaxRank": 10,
+        "pvpFilterGreatMinCP": 1450,
+        "pvpFilterUltraMinCP": 2450
+    },
+    "tracking": {
+        "disableEverythingTracking": false,
+        "forceEverythingSeparately": false,
+        "defaultDistance": 0,
+        "maxDistance": 0
+    },
     "discord": {
         "enabled": true,
         "unknownResponse": false,
@@ -52,14 +78,12 @@
             "#FF8000"
         ]
       },
-
       "telegram": {
         "enabled": false,
         "token": "",
         "admins": [""],
         "channels": [""]
       },
-
       "geocoding": {
         "provider": "poracle",
         "providerURL": "Your Nominatim Server Address",
