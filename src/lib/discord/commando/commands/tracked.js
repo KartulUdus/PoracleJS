@@ -69,7 +69,7 @@ exports.run = async (client, msg, command) => {
 
 				const greatLeague = monster.great_league_ranking >= 4096 ? client.translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
 				const ultraLeague = monster.ultra_league_ranking >= 4096 ? client.translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-				message = message.concat(`\n**${client.translator.translate(`${monsterName}`)}** ${client.translator.translate(`${formName}`)} ${monster.distance ? ` | distance: ${monster.distance}m` : ''} | iv: ${miniv}%-${monster.max_iv}% | ${client.translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | level: ${monster.min_level}-${monster.max_level} | ${client.translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${client.translator.translate('greatpvp')}: ${greatLeague} | ${client.translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${client.translator.translate('gender')}: ${client.utilData.genders[monster.gender].emoji}` : ''}`)
+				message = message.concat(`\n**${client.translator.translate(`${monsterName}`)}** ${client.translator.translate(`${formName}`)} ${monster.distance ? ` | ${client.translator.translate('distance')}: ${monster.distance}m` : ''} | ${client.translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${client.translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${client.translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${client.translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${client.translator.translate('greatpvp')}: ${greatLeague} | ${client.translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${client.translator.translate('gender')}: ${client.utilData.genders[monster.gender].emoji}` : ''}`)
 			})
 		}
 
@@ -126,7 +126,7 @@ exports.run = async (client, msg, command) => {
 					genderText = client.translator.translate('female')
 				}
 				if (!invasion.grunt_type || invasion.grunt_type === '') {
-					typeText = client.translator.translate('Any')
+					typeText = client.translator.translate('any')
 				} else {
 					typeText = invasion.grunt_type
 				}
