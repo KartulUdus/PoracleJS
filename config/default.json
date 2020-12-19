@@ -55,6 +55,7 @@
     "tracking": {
         "disableEverythingTracking": false,
         "forceEverythingSeparately": false,
+        "forceLocationOrArea": false,
         "defaultDistance": 0,
         "maxDistance": 0
     },

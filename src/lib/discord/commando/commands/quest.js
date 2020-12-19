@@ -93,7 +93,7 @@ exports.run = async (client, msg, command) => {
 				await msg.react(client.translator.translate('🙅'))
 				return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
 			}
-			if (distance === 0 && !userHasArea && !target.webhook) {
+			if (distance === 0 && !userHasArea && !target.webhook && client.config.tracking.forceLocationOrArea) {
 				await msg.react(client.translator.translate('🙅'))
 				return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
 			}
