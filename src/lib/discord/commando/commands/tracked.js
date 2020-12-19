@@ -140,11 +140,11 @@ exports.run = async (client, msg, command) => {
 
 		try {
 			const hastelink = await client.hastebin(message)
-			return await msg.reply(`${client.translator.translate('tracking list is quite long. Have a look at')} ${hastelink}`)
+			return await msg.reply(`${client.translator.translate('Tracking list is quite long. Have a look at')} ${hastelink}`)
 		} catch (e) {
 			const filepath = path.join(__dirname, `./${target.name}.txt`)
 			fs.writeFileSync(filepath, message)
-			await msg.reply(`${target.name} ${client.translator.translate('Tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:')}`, { files: [filepath] })
+			await msg.reply(`${client.translator.translate('Tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:')}`, { files: [filepath] })
 			fs.unlinkSync(filepath)
 			client.log.warn('Hastebin seems down, got error: ', e)
 		}
