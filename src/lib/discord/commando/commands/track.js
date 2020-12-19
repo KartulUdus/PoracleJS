@@ -142,11 +142,11 @@ exports.run = async (client, msg, command) => {
 			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
 
 			if (distance > 0 && !userHasLocation && !target.webhook) {
-				await msg.react(client.translator.translate(':person_gesturing_no:'))
+				await msg.react(client.translator.translate('🙅'))
 				return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
 			}
 			if (distance === 0 && !userHasArea && !target.webhook) {
-				await msg.react(client.translator.translate(':person_gesturing_no:'))
+				await msg.react(client.translator.translate('🙅'))
 				return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
 			}
 			const insert = monsters.map((mon) => ({
