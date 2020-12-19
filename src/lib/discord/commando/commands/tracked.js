@@ -69,7 +69,7 @@ exports.run = async (client, msg, command) => {
 
 				const greatLeague = monster.great_league_ranking >= 4096 ? client.translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
 				const ultraLeague = monster.ultra_league_ranking >= 4096 ? client.translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-				message = message.concat(`\n**${client.translator.translate(`${monsterName}`)}** ${client.translator.translate(`${formName}`)} ${monster.distance ? ` | distance: ${monster.distance}m` : ''} | iv: ${miniv}%-${monster.max_iv}% | ${client.translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | level: ${monster.min_level}-${monster.max_level} | stats: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${client.translator.translate('greatpvp')}: ${greatLeague} | ${client.translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${client.translator.translate('gender')}: ${client.utilData.genders[monster.gender].emoji}` : ''}`)
+				message = message.concat(`\n**${client.translator.translate(`${monsterName}`)}** ${client.translator.translate(`${formName}`)} ${monster.distance ? ` | ${client.translator.translate('distance')}: ${monster.distance}m` : ''} | ${client.translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${client.translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${client.translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${client.translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${client.translator.translate('greatpvp')}: ${greatLeague} | ${client.translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${client.translator.translate('gender')}: ${client.utilData.genders[monster.gender].emoji}` : ''}`)
 			})
 		}
 
@@ -106,7 +106,7 @@ exports.run = async (client, msg, command) => {
 				if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
 				if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
 				if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
-				message = message.concat(`\nReward: ${rewardThing} distance: ${quest.distance}m `)
+				message = message.concat(`\n${client.translator.translate('Reward')}: ${rewardThing} ${client.translator.translate('distance')}: ${quest.distance}m `)
 			})
 		}
 
@@ -119,18 +119,18 @@ exports.run = async (client, msg, command) => {
 				let genderText = ''
 				let typeText = ''
 				if (!invasion.gender || invasion.gender === '') {
-					genderText = 'Gender: any, '
+					genderText = client.translator.translate('any')
 				} else if (invasion.gender === 1) {
-					genderText = 'Gender: male, '
+					genderText = client.translator.translate('male')
 				} else if (invasion.gender === 2) {
-					genderText = 'Gender: female, '
+					genderText = client.translator.translate('female')
 				}
 				if (!invasion.grunt_type || invasion.grunt_type === '') {
-					typeText = 'Any'
+					typeText = client.translator.translate('any')
 				} else {
 					typeText = invasion.grunt_type
 				}
-				message = message.concat(client.translator.translate(`\nInvasion: ${genderText}Grunt type: ${typeText}`))
+				message = message.concat(`\n${client.translator.translate('Invasion')}: ${client.translator.translate('Grunt type')}: ${typeText}, ${client.translator.translate('Gender')}: ${genderText}`)
 			})
 		}
 
@@ -140,11 +140,11 @@ exports.run = async (client, msg, command) => {
 
 		try {
 			const hastelink = await client.hastebin(message)
-			return await msg.reply(`${target.name} ${client.translator.translate('tracking list is quite long. Have a look at')} ${hastelink}`)
+			return await msg.reply(`${client.translator.translate('Tracking list is quite long. Have a look at')} ${hastelink}`)
 		} catch (e) {
 			const filepath = path.join(__dirname, `./${target.name}.txt`)
 			fs.writeFileSync(filepath, message)
-			await msg.reply(`${target.name} ${client.translator.translate('tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:')}`, { files: [filepath] })
+			await msg.reply(`${client.translator.translate('Tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:')}`, { files: [filepath] })
 			fs.unlinkSync(filepath)
 			client.log.warn('Hastebin seems down, got error: ', e)
 		}
