@@ -1,10 +1,12 @@
 {
+	"Oops, a distance was set in command but no location is defined for your tracking - check the":"Próbujesz użyć filtra `d` bez ustawionego `!location`. Ustaw lokalizację przed użyciem `d`. W razie wątpliwości użyj komendy",
+	"Oops, no distance was set in command and no area is defined for your tracking - check the":"Żeby korzystać z powiadomień musisz mieć dodany obszar i/lub lokalizację. Ustaw je lub w razie wątpliwości użyj komendy",
 	"Please run commands in Direct Messages":"Komendy wysyłaj do bota na priv",
 	"no valid areas there, please use one of":"Brak wybranego obszaru. Proszę użyć jednego z podanych:",
 	"Added areas:":"Dodano obszar:",
 	"Removed areas:":"Usunięto obszar:",
 	"Current configured areas are:":"Dostępne obszary:",
-	"distance:":"odległość:",
+	"distance":"odległość",
 	"stats":"statystyki",
 	"404 No raid egg levels found":"Nie znaleziono Raidu",
 	"404 No valid invasion types found":"Nie znaleziono Inwazji",
@@ -33,5 +35,7 @@
 	"Tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:":"Lista śledzenie jest zbyt długa, a do tego Hastebin nie działa. ☹️ \nLista śledzenia została wrzucona do poniższego pliku:",
 	"404 no locations found: ":"Nie znaleziono lokalizacji",
 	"reward":"nagroda",
-	"Gender":"płeć"
+	"Gender":"płeć",
+	"controlled by":"pod kontrolą",
+	"must be an EX Gym":"musi być EXowy"
 }
