@@ -3,7 +3,7 @@ const path = require('path')
 
 exports.run = async (client, msg, command) => {
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-
+	const [args] = command
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
@@ -38,6 +38,9 @@ exports.run = async (client, msg, command) => {
 		const quests = await client.query.selectAllQuery('quest', { id: target.id })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
+		if (args.includes('area')) {
+			return msg.reply(`${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+		}
 		let locationText = ''
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `${client.translator.translate('Your location is currently set to')} ${maplink}\n`
@@ -84,14 +87,14 @@ exports.run = async (client, msg, command) => {
 				const formName = mon ? client.translator.translate(mon.form.name) : 'levelMonForm'
 
 				if (+raid.pokemon_id === 9000) {
-					message = message.concat(`\n**${client.translator.translate('level').charAt(0).toUpperCase() + client.translator.translate('level').slice(1)} ${raid.level} ${client.translator.translate('raids')}** ${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
+					message = message.concat(`\n**${client.translator.translate('level').charAt(0).toUpperCase() + client.translator.translate('level').slice(1)} ${raid.level} ${client.translator.translate('raids')}** ${raid.distance ? ` | ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${client.translator.translate('must be an EX Gym')}` : ''}`)
 				} else {
-					message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate('form')}: ${formName}` : ''}${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
+					message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${client.translator.translate('must be an EX Gym')}` : ''}`)
 				}
 			})
 			eggs.forEach((egg) => {
 				const raidTeam = client.translator.translate(client.utilData.teams[egg.team].name)
-				message = message.concat(`\n**${client.translator.translate('level').charAt(0).toUpperCase() + client.translator.translate('level').slice(1)} ${egg.level} ${client.translator.translate('eggs')}** ${egg.distance ? `, ${client.translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
+				message = message.concat(`\n**${client.translator.translate('level').charAt(0).toUpperCase() + client.translator.translate('level').slice(1)} ${egg.level} ${client.translator.translate('eggs')}** ${egg.distance ? ` | ${client.translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${client.translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${client.translator.translate('must be an EX Gym')}` : ''}`)
 			})
 		}
 
@@ -106,7 +109,7 @@ exports.run = async (client, msg, command) => {
 				if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
 				if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
 				if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
-				message = message.concat(`\n${client.translator.translate('reward').charAt(0).toUpperCase() + client.translator.translate('reward').slice(1)}: ${rewardThing} ${client.translator.translate('distance')}: ${quest.distance}m `)
+				message = message.concat(`\n${client.translator.translate('reward').charAt(0).toUpperCase() + client.translator.translate('reward').slice(1)}: ${rewardThing} | ${client.translator.translate('distance')}: ${quest.distance}m `)
 			})
 		}
 
@@ -130,7 +133,7 @@ exports.run = async (client, msg, command) => {
 				} else {
 					typeText = invasion.grunt_type
 				}
-				message = message.concat(`\n${client.translator.translate('invasion').charAt(0).toUpperCase() + client.translator.translate('invasion').slice(1)}: ${client.translator.translate('Grunt type')}: ${typeText}, ${client.translator.translate('Gender')}: ${genderText}`)
+				message = message.concat(`\n${client.translator.translate('invasion').charAt(0).toUpperCase() + client.translator.translate('invasion').slice(1)}: ${client.translator.translate('Grunt type')}: ${typeText} | ${client.translator.translate('Gender')}: ${genderText}`)
 			})
 		}
 
