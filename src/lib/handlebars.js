@@ -53,14 +53,14 @@ module.exports = () => {
 
 	handlebars.registerHelper('pokemonForm', (value) => {
 		if (!+value) return ''
-		const monster = Object.values(monsters).find((m) => m.id === +value)
+		const monster = Object.values(monsters).find((m) => m.form.id === +value)
 		if (!monster) return ''
 		return translator.translate(monster.form.name)
 	})
 
 	handlebars.registerHelper('pokemonFormAlt', (value) => {
 		if (!+value) return ''
-		const monster = Object.values(monsters).find((m) => m.id === +value)
+		const monster = Object.values(monsters).find((m) => m.form.id === +value)
 		if (!monster) return ''
 		return translatorAlt.translate(monster.form.name)
 	})
