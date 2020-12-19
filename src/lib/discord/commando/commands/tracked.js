@@ -84,14 +84,14 @@ exports.run = async (client, msg, command) => {
 				const formName = mon ? client.translator.translate(mon.form.name) : 'levelMonForm'
 
 				if (+raid.pokemon_id === 9000) {
-					message = message.concat(`\n**${client.translator.translate('Level')} ${raid.level} ${client.translator.translate('raids')}** ${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
+					message = message.concat(`\n**${client.translator.translate('level').charAt(0).toUpperCase() + client.translator.translate('level').slice(1)} ${raid.level} ${client.translator.translate('raids')}** ${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` , ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 				} else {
 					message = message.concat(`\n**${monsterName}**${formName ? ` ${client.translator.translate('form')}: ${formName}` : ''}${raid.distance ? `, ${client.translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 				}
 			})
 			eggs.forEach((egg) => {
 				const raidTeam = client.translator.translate(client.utilData.teams[egg.team].name)
-				message = message.concat(`\n**${client.translator.translate('Level')} ${egg.level} ${client.translator.translate('eggs')}** ${egg.distance ? `, ${client.translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
+				message = message.concat(`\n**${client.translator.translate('level').charAt(0).toUpperCase() + client.translator.translate('level').slice(1)} ${egg.level} ${client.translator.translate('eggs')}** ${egg.distance ? `, ${client.translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : `, ${client.translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? `, ${client.translator.translate('must be in park')}` : ''}`)
 			})
 		}
 
@@ -106,7 +106,7 @@ exports.run = async (client, msg, command) => {
 				if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
 				if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
 				if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
-				message = message.concat(`\n${client.translator.translate('Reward')}: ${rewardThing} ${client.translator.translate('distance')}: ${quest.distance}m `)
+				message = message.concat(`\n${client.translator.translate('reward').charAt(0).toUpperCase() + client.translator.translate('reward').slice(1)}: ${rewardThing} ${client.translator.translate('distance')}: ${quest.distance}m `)
 			})
 		}
 
@@ -130,7 +130,7 @@ exports.run = async (client, msg, command) => {
 				} else {
 					typeText = invasion.grunt_type
 				}
-				message = message.concat(`\n${client.translator.translate('Invasion')}: ${client.translator.translate('Grunt type')}: ${typeText}, ${client.translator.translate('Gender')}: ${genderText}`)
+				message = message.concat(`\n${client.translator.translate('invasion').charAt(0).toUpperCase() + client.translator.translate('invasion').slice(1)}: ${client.translator.translate('Grunt type')}: ${typeText}, ${client.translator.translate('Gender')}: ${genderText}`)
 			})
 		}
 
