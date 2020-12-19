@@ -106,7 +106,7 @@ exports.run = async (client, msg, command) => {
 				if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
 				if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
 				if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
-				message = message.concat(`\n${client.translator.translate('Reward:')} ${rewardThing} ${client.translator.translate('distance:')} ${quest.distance}m `)
+				message = message.concat(`\n${client.translator.translate('Reward')}: ${rewardThing} ${client.translator.translate('distance')}: ${quest.distance}m `)
 			})
 		}
 
@@ -119,18 +119,18 @@ exports.run = async (client, msg, command) => {
 				let genderText = ''
 				let typeText = ''
 				if (!invasion.gender || invasion.gender === '') {
-					genderText = client.translator.translate('Gender: any')
+					genderText = client.translator.translate('any')
 				} else if (invasion.gender === 1) {
-					genderText = client.translator.translate('Gender: male')
+					genderText = client.translator.translate('male')
 				} else if (invasion.gender === 2) {
-					genderText = client.translator.translate('Gender: female')
+					genderText = client.translator.translate('female')
 				}
 				if (!invasion.grunt_type || invasion.grunt_type === '') {
 					typeText = client.translator.translate('Any')
 				} else {
 					typeText = invasion.grunt_type
 				}
-				message = message.concat(`\n${client.translator.translate('Invasion:')} ${client.translator.translate('Grunt type:')} ${typeText}, ${genderText}`)
+				message = message.concat(`\n${client.translator.translate('Invasion')}: ${client.translator.translate('Grunt type')}: ${typeText}, ${client.translator.translate('Gender')}: ${genderText}`)
 			})
 		}
 
