@@ -49184,8 +49184,8 @@
 		"id": 487,
 		"stats": {
 			"baseStamina": 284,
-			"baseAttack": 225,
-			"baseDefense": 187
+			"baseAttack": 187,
+			"baseDefense": 225
 		},
 		"types": [
 			{
