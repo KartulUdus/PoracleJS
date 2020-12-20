@@ -65,6 +65,11 @@ module.exports = () => {
 		return translatorAlt.translate(monster.form.name)
 	})
 
+	handlebars.registerHelper('translateAlt', (value) => {
+		if (!value) return ''
+		return translatorAlt.translate(value)
+	})
+
 	handlebars.registerHelper('calculateCp', (baseStats, level = 25, ivAttack = 15, ivDefense = 15, ivStamina = 15) => {
 		if (!baseStats) return 0
 		const cpMulti = cpMultipliers[level]

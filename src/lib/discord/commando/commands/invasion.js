@@ -85,7 +85,7 @@ exports.run = async (client, msg, command) => {
 				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			} else {
 				client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
-				client.log.info(`${target.name} deleted ${types.join(', ')} ivasions`)
+				client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
 			}
 		}
 

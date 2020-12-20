@@ -129,11 +129,11 @@ exports.run = async (client, msg, command) => {
 					genderText = client.translator.translate('female')
 				}
 				if (!invasion.grunt_type || invasion.grunt_type === '') {
-					typeText = client.translator.translate('any')
+					typeText = 'any'
 				} else {
 					typeText = invasion.grunt_type
 				}
-				message = message.concat(`\n${client.translator.translate('invasion').charAt(0).toUpperCase() + client.translator.translate('invasion').slice(1)}: ${client.translator.translate('Grunt type')}: ${typeText} | ${client.translator.translate('Gender')}: ${genderText}`)
+				message = message.concat(`\n${client.translator.translate('grunt type').charAt(0).toUpperCase() + client.translator.translate('grunt type').slice(1)}: **${client.translator.translate(typeText)}**${invasion.distance ? ` | ${client.translator.translate('distance')}: ${invasion.distance}m` : ''} | ${client.translator.translate('gender')}: ${genderText}`)
 			})
 		}
 
