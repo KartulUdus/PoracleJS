@@ -3,7 +3,6 @@ const path = require('path')
 
 exports.run = async (client, msg, command) => {
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-	const [args] = command
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
@@ -38,7 +37,7 @@ exports.run = async (client, msg, command) => {
 		const quests = await client.query.selectAllQuery('quest', { id: target.id })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
-		if (args.includes('area')) {
+		if (command.find((args) => args.includes('area'))) {
 			return msg.reply(`${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 		}
 		let locationText = ''
@@ -129,11 +128,11 @@ exports.run = async (client, msg, command) => {
 					genderText = client.translator.translate('female')
 				}
 				if (!invasion.grunt_type || invasion.grunt_type === '') {
-					typeText = client.translator.translate('any')
+					typeText = 'any'
 				} else {
 					typeText = invasion.grunt_type
 				}
-				message = message.concat(`\n${client.translator.translate('invasion').charAt(0).toUpperCase() + client.translator.translate('invasion').slice(1)}: ${client.translator.translate('Grunt type')}: ${typeText} | ${client.translator.translate('Gender')}: ${genderText}`)
+				message = message.concat(`\n${client.translator.translate('grunt type').charAt(0).toUpperCase() + client.translator.translate('grunt type').slice(1)}: **${client.translator.translate(typeText)}**${invasion.distance ? ` | ${client.translator.translate('distance')}: ${invasion.distance}m` : ''} | ${client.translator.translate('gender')}: ${genderText}`)
 			})
 		}
 

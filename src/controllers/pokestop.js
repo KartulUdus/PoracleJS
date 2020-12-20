@@ -124,6 +124,7 @@ class Pokestop extends Controller {
 			data.gruntName = ''
 			data.gruntTypeColor = 'BABABA'
 			data.gruntRewards = ''
+			data.gruntRewardsList = {}
 
 			if (data.gruntTypeId) {
 				data.gender = 0
@@ -143,10 +144,13 @@ class Pokestop extends Controller {
 					data.gruntType = gruntType.type
 
 					let gruntRewards = ''
+					const gruntRewardsList = {}
+					gruntRewardsList.first = { chance: 100, monsters: [] }
 					if (gruntType.encounters) {
 						if (gruntType.second_reward && gruntType.encounters.second) {
 							// one out of two rewards
 							gruntRewards = '85%: '
+							gruntRewardsList.first = { chance: 85, monsters: [] }
 							let first = true
 							gruntType.encounters.first.forEach((fr) => {
 								if (!first) gruntRewards += ', '
@@ -155,8 +159,10 @@ class Pokestop extends Controller {
 								const firstReward = +fr
 								const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
 								gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
+								gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
 							})
 							gruntRewards += '\\n15%: '
+							gruntRewardsList.second = { chance: 15, monsters: [] }
 							first = true
 							gruntType.encounters.second.forEach((sr) => {
 								if (!first) gruntRewards += ', '
@@ -166,6 +172,7 @@ class Pokestop extends Controller {
 								const secondRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === secondReward && !mon.form.id)
 
 								gruntRewards += secondRewardMonster ? secondRewardMonster.name : ''
+								gruntRewardsList.second.monsters.push({ id: secondReward, name: secondRewardMonster.name })
 							})
 						} else {
 							// Single Reward 100% of encounter (might vary based on actual fight).
@@ -177,9 +184,11 @@ class Pokestop extends Controller {
 								const firstReward = +fr
 								const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
 								gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
+								gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
 							})
 						}
 						data.gruntRewards = gruntRewards
+						data.gruntRewardsList = gruntRewardsList
 					}
 				}
 			}
