@@ -3,7 +3,6 @@ const path = require('path')
 
 exports.run = async (client, msg, command) => {
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-	const [args] = command
 	try {
 		// Check target
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
@@ -38,7 +37,7 @@ exports.run = async (client, msg, command) => {
 		const quests = await client.query.selectAllQuery('quest', { id: target.id })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
-		if (args.includes('area')) {
+		if (command.find((args) => args.includes('area'))) {
 			return msg.reply(`${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 		}
 		let locationText = ''
