@@ -92,6 +92,8 @@ async function run() {
 			if (!fastify.discordQueue.length) {
 				return
 			}
+			if ((Math.random() * 100) > 80) fastify.logger.debug(`DiscordQueue is currently ${fastify.discordQueue.length}`)
+
 			const { target } = fastify.discordQueue[0]
 			// see if target has dedicated worker
 			let worker = discordWorkers.find((workerr) => workerr.users.includes(target))
