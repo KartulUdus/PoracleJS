@@ -87,6 +87,8 @@ class Monster extends Controller {
 		let pregenerateTile = false
 		const data = obj
 		try {
+			let hrstart = process.hrtime()
+
 			moment.locale(this.config.locale.timeformat)
 			const minTth = this.config.general.alertMinimumTime || 0
 
@@ -223,10 +225,13 @@ class Monster extends Controller {
 
 			const whoCares = await this.monsterWhoCares(data)
 
-			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared.`)
+			let hrend = process.hrtime(hrstart)
+			let hrendms = hrend[1] / 1000000
+			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0]) return []
 
+			hrstart = process.hrtime()
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
 				const { count } = this.getDiscordCache(cares.id)
@@ -326,6 +331,10 @@ class Monster extends Controller {
 					this.addDiscordCache(cares.id)
 				}
 			}
+			hrend = process.hrtime(hrstart)
+			let hrendprocessing = hrend[1] / 1000000
+			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
+
 			return jobs
 		} catch (e) {
 			this.log.error('Can\'t seem to handle monster: ', e, data)
