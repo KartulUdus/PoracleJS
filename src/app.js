@@ -5,7 +5,9 @@ const fs = require('fs')
 const util = require('util')
 
 const NodeCache = require('node-cache')
-const fastify = require('fastify')()
+const fastify = require('fastify')({
+	bodyLimit: 5242880
+})
 const Telegraf = require('telegraf')
 
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
