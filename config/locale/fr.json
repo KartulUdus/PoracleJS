@@ -1,4 +1,5 @@
 {
+	"Oops, both Great and Ultra league parameters were set in command! - check the":"Oups, vous avez spécifié à la fois des paramètres pour la league Super et Hyper dans la même commande - consultez l'aide :",
 	"Oops, a distance was set in command but no location is defined for your tracking - check the":"Oups, une distance est spécifiée dans la commande mais aucune position centrale de recherche n'a été définie - consultez l'aide :",
 	"Oops, no distance was set in command and no area is defined for your tracking - check the":"Oups, aucune distance n'est spécifiée dans la commande et aucune zone de recherche n'a été définie - consultez l'aide :",
 	"Please run commands in Direct Messages":"Les commandes doivent être envoyées par message privé",
@@ -167,7 +168,7 @@
 	"Water":"Eau",
 	"Autumn":"Automne",
 	"Blue striped":"Motif bleu",
-	"East Sea":"Mer Orient",
+	"East sea":"Mer Orient",
 	"Fall 2019":"Automne 2019",
 	"Galarian":"Galar",
 	"Mega":"Méga",
@@ -184,7 +185,7 @@
 	"Summer":"Été",
 	"Sunny":"Solaire",
 	"Trash":"Déchet",
-	"West Sea":"Mer Occident",
+	"West sea":"Mer Occident",
 	"Winter":"Hiver",
 	"Adventure Hat 2020":"Explorateur 2020",
 	"Winter 2020":"Hiver 2020",
