@@ -130,7 +130,7 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'male') gender = 1
 				else if (element === 'genderless') gender = 3
 			})
-			if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096) {
+			if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
 				await msg.react(client.translator.translate('🙅'))
 				return await msg.reply(`${client.translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
 			}
