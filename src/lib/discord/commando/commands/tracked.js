@@ -104,11 +104,22 @@ exports.run = async (client, msg, command) => {
 
 			quests.forEach((quest) => {
 				let rewardThing = ''
-				if (quest.reward_type === 7) rewardThing = Object.values(client.monsters).find((m) => m.id === quest.reward).name
-				if (quest.reward_type === 3) rewardThing = `${quest.reward} or more stardust`
-				if (quest.reward_type === 2) rewardThing = client.utilData.items[quest.reward]
-				if (quest.reward_type === 12) rewardThing = `${quest.reward} or more energy`
-				message = message.concat(`\n${client.translator.translate('reward').charAt(0).toUpperCase() + client.translator.translate('reward').slice(1)}: ${rewardThing} | ${client.translator.translate('distance')}: ${quest.distance}m `)
+				if (quest.reward_type === 7) {
+					rewardThing = Object.values(client.monsters).find((m) => m.id === quest.reward).name
+					rewardThing = client.translator.translate(rewardThing)
+				}
+				if (quest.reward_type === 3) rewardThing = `${quest.reward} ${client.translator.translate('or more stardust')}`
+				if (quest.reward_type === 2) rewardThing = client.translator.translate(client.utilData.items[quest.reward])
+				if (quest.reward_type === 12) {
+					if (quest.reward == 0) {
+						rewardThing = `${client.translator.translate('mega energy')}`
+					} else {
+						const mon = Object.values(client.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
+						const monsterName = mon ? client.translator.translate(mon.name) : 'energyMon'
+						rewardThing = `${client.translator.translate('mega energy')} ${monsterName}`
+					}
+				}
+				message = message.concat(`\n${client.translator.translate('reward').charAt(0).toUpperCase() + client.translator.translate('reward').slice(1)}: **${rewardThing}**${quest.distance ? ` | ${client.translator.translate('distance')}: ${quest.distance}m` : ''}`)
 			})
 		}
 

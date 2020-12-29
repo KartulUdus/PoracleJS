@@ -17,7 +17,7 @@ class Quest extends Controller {
 		(((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0))
 		or (reward_type = 2 and reward in (${data.rewardData.items}))
 		or (reward_type = 3 and reward <= ${data.dustAmount})
-		or (reward_type = 12 and reward <= ${data.energyAmount}))
+		or (reward_type = 12 and reward in (${data.energyPokemon}) and ${data.rewardData.energyAmount}>0))
 `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
@@ -112,12 +112,13 @@ class Quest extends Controller {
 			}
 
 			data.questType = await this.getQuestTypeString(data)
-			data.rewardData = await this.getRewardSting(data)
+			data.rewardData = await this.getRewardString(data)
 			data.conditionString = await this.getConditionString(data)
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
 			data.energyAmount = data.rewardData.energyAmount
+			data.energyPokemon = data.rewardData.energyPokemon
 			data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => this.translator.translate(m.name)).join(', ')
 			data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => this.translator.translate(this.utilData.items[i])).join(', ')
 
@@ -133,7 +134,7 @@ class Quest extends Controller {
 				data.dustAmount = data.rewards[0].info.amount
 			}
 			if (data.energyAmount) {
-				data.imgurl = `${this.config.general.imgUrl}rewards/reward_mega_energy.png`
+				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyPokemon[1]}.png`
 				data.energyAmount = data.rewards[0].info.amount
 			}
 			data.staticSprite = encodeURI(JSON.stringify([
@@ -234,7 +235,7 @@ class Quest extends Controller {
 		})
 	}
 
-	async getRewardSting(data) {
+	async getRewardString(data) {
 		return new Promise((resolve) => {
 			const monsters = [0]
 			const items = [0]
@@ -242,6 +243,7 @@ class Quest extends Controller {
 			let dustAmount = 0
 			let isShiny = 0
 			let energyAmount = 0
+			const energyPokemon = [0]
 
 			data.rewards.forEach((reward) => {
 				if (reward.type === 2) {
@@ -274,11 +276,12 @@ class Quest extends Controller {
 					const mustache = this.mustache.compile(this.translator.translate(template))
 					const rew = mustache({ pokemon: this.translator.translate(monster.name), amount: reward.info.amount })
 					energyAmount = reward.info.amount
+					energyPokemon.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				}
 			})
 			resolve({
-				rewardString, monsters, items, dustAmount, isShiny, energyAmount,
+				rewardString, monsters, items, dustAmount, isShiny, energyAmount, energyPokemon,
 			})
 		})
 	}
@@ -292,7 +295,7 @@ class Quest extends Controller {
 						let typestring = ''
 						condition.info.pokemon_type_ids.forEach((typeId) => {
 							const type = Object.keys(this.utilData.types).find((key) => this.utilData.types[key].id === typeId)
-							const typename = type ? type.name : this.translator.translate('errorType')
+							const typename = type ? type : this.translator.translate('errorType')
 							const template = this.utilData.questMonsterTypeString
 							const mustache = this.mustache.compile(this.translator.translate(template))
 							const monsterType = mustache({ name: this.translator.translate(typename), emoji: this.translator.translate(type.emoji) })

@@ -50,8 +50,8 @@ exports.run = async (client, msg, command) => {
 			let remove = false
 			let minDust = 10000000
 			let stardustTracking = 9999999
-			let minEnergy = 10000000
-			let energyTracking = 9999999
+			let energyMonsters = []
+			let pokemonEnergy = 0
 			let clean = false
 
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
@@ -69,6 +69,7 @@ exports.run = async (client, msg, command) => {
 				items = Object.keys(client.utilData.items)
 				minDust = 0
 				stardustTracking = -1
+				energyMonsters.push('0')
 			}
 			args.forEach((element) => {
 				if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
@@ -79,10 +80,14 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'stardust') {
 					minDust = 0
 					stardustTracking = -1
-				} else if (element.match(/energy\d/gi)) minEnergy = element.replace(/energy/gi, '')
-				else if (element === 'energy') {
-					minEnergy = 1
-					energyTracking = -1
+				} else if (element.match(client.re.energyRe)) {
+					pokemonEnergy = element.match(client.re.energyRe)[0].replace(client.translator.translate('energy'), '')
+					pokemonEnergy = client.translator.reverse(pokemonEnergy.toLowerCase(), true).toLowerCase()
+					pokemonEnergy = Object.values(client.monsters).filter((mon) => pokemonEnergy.includes(mon.name.toLowerCase()) && mon.form.id === 0)
+					pokemonEnergy = pokemonEnergy.map((mon) => mon.id)
+					if (+pokemonEnergy > 0) energyMonsters.push(pokemonEnergy)
+				} else if (element === 'energy') {
+					energyMonsters.push('0')
 				} else if (element === 'shiny') mustShiny = 1
 				else if (element === 'remove') remove = true
 				else if (element === 'clean') clean = true
@@ -111,18 +116,18 @@ exports.run = async (client, msg, command) => {
 				})
 			}
 
-			if (+minEnergy < 10000000) {
+			energyMonsters.forEach((pid) => {
 				questTracks.push({
 					id: target.id,
 					ping: pings,
-					reward: minEnergy,
+					reward: pid,
 					template,
 					shiny: mustShiny,
 					reward_type: 12,
 					distance,
 					clean,
 				})
-			}
+			})
 
 			monsters.forEach((pid) => {
 				questTracks.push({
@@ -165,9 +170,10 @@ exports.run = async (client, msg, command) => {
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql
 			items.push(0)
 			monsters.push(0)
+			energyMonsters.push(10000)
 			const remQuery = `
 				delete from quest WHERE id=${target.id} and
-				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward > ${energyTracking}))
+				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward in(${energyMonsters})))
 				`
 			const result = await client.query.misteryQuery(remQuery)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
