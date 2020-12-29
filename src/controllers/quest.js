@@ -17,7 +17,7 @@ class Quest extends Controller {
 		(((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0))
 		or (reward_type = 2 and reward in (${data.rewardData.items}))
 		or (reward_type = 3 and reward <= ${data.dustAmount})
-		or (reward_type = 12 and reward in (${data.energyPokemon}) and ${data.rewardData.energyAmount}>0))
+		or (reward_type = 12 and reward in (${data.energyMonsters}) and ${data.rewardData.energyAmount}>0))
 `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
@@ -118,7 +118,7 @@ class Quest extends Controller {
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
 			data.energyAmount = data.rewardData.energyAmount
-			data.energyPokemon = data.rewardData.energyPokemon
+			data.energyMonsters = data.rewardData.energyMonsters
 			data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => this.translator.translate(m.name)).join(', ')
 			data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => this.translator.translate(this.utilData.items[i])).join(', ')
 
@@ -134,7 +134,7 @@ class Quest extends Controller {
 				data.dustAmount = data.rewards[0].info.amount
 			}
 			if (data.energyAmount) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyPokemon[1]}.png`
+				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.png`
 				data.energyAmount = data.rewards[0].info.amount
 			}
 			data.staticSprite = encodeURI(JSON.stringify([
@@ -243,7 +243,7 @@ class Quest extends Controller {
 			let dustAmount = 0
 			let isShiny = 0
 			let energyAmount = 0
-			const energyPokemon = [0]
+			const energyMonsters = [0]
 
 			data.rewards.forEach((reward) => {
 				if (reward.type === 2) {
@@ -276,12 +276,12 @@ class Quest extends Controller {
 					const mustache = this.mustache.compile(this.translator.translate(template))
 					const rew = mustache({ pokemon: this.translator.translate(monster.name), amount: reward.info.amount })
 					energyAmount = reward.info.amount
-					energyPokemon.push(reward.info.pokemon_id)
+					energyMonsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				}
 			})
 			resolve({
-				rewardString, monsters, items, dustAmount, isShiny, energyAmount, energyPokemon,
+				rewardString, monsters, items, dustAmount, isShiny, energyAmount, energyMonsters,
 			})
 		})
 	}

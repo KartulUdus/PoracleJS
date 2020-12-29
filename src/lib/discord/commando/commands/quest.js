@@ -51,7 +51,7 @@ exports.run = async (client, msg, command) => {
 			let minDust = 10000000
 			let stardustTracking = 9999999
 			let energyMonsters = []
-			let pokemonEnergy = 0
+			let energyMonster = 0
 			let clean = false
 
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
@@ -81,11 +81,11 @@ exports.run = async (client, msg, command) => {
 					minDust = 0
 					stardustTracking = -1
 				} else if (element.match(client.re.energyRe)) {
-					pokemonEnergy = element.match(client.re.energyRe)[0].replace(client.translator.translate('energy'), '')
-					pokemonEnergy = client.translator.reverse(pokemonEnergy.toLowerCase(), true).toLowerCase()
-					pokemonEnergy = Object.values(client.monsters).filter((mon) => pokemonEnergy.includes(mon.name.toLowerCase()) && mon.form.id === 0)
-					pokemonEnergy = pokemonEnergy.map((mon) => mon.id)
-					if (+pokemonEnergy > 0) energyMonsters.push(pokemonEnergy)
+					energyMonster = element.match(client.re.energyRe)[0].replace(client.translator.translate('energy'), '')
+					energyMonster = client.translator.reverse(energyMonster.toLowerCase(), true).toLowerCase()
+					energyMonster = Object.values(client.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
+					energyMonster = energyMonster.map((mon) => mon.id)
+					if (+energyMonster > 0) energyMonsters.push(energyMonster)
 				} else if (element === 'energy') {
 					energyMonsters.push('0')
 				} else if (element === 'shiny') mustShiny = 1
