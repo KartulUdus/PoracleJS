@@ -16,7 +16,7 @@ class Monster extends Controller {
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on humans.id = monsters.id
 		where humans.enabled = true and
-		(pokemon_id=${data.pokemon_id} or pokemon_id=0) and
+		(pokemon_id=${data.pokemon_id} or pokemon_id=0 or pokemon_id=${data.pvp_pokemon_id}) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
 		min_cp<=${data.cp} and
@@ -175,6 +175,9 @@ class Monster extends Controller {
 			data.emoji = e
 			data.emojiString = e.join('')
 
+			data.pvp_pokemon_id = data.pokemon_id
+			data.pvpEvolutionData = []
+
 			data.bestGreatLeagueRank = 4096
 			data.bestGreatLeagueRankCP = 0
 			if (data.pvp_rankings_great_league) {
@@ -184,6 +187,10 @@ class Monster extends Controller {
 						data.bestGreatLeagueRankCP = stats.cp || 0
 					} else if (stats.rank && stats.cp && stats.rank === data.bestGreatLeagueRank && stats.cp > data.bestGreatLeagueRankCP) {
 						data.bestGreatLeagueRankCP = stats.cp
+					}
+					if (stats.rank && stats.pokemon != data.pokemon_id) {
+						if(data.pvpEvolutionData[stats.pokemon]) data.pvpEvolutionData[stats.pokemon].greatLeague = {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}
+							else data.pvpEvolutionData[stats.pokemon] = {greatLeague: {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}}
 					}
 				}
 			}
@@ -197,6 +204,10 @@ class Monster extends Controller {
 						data.bestUltraLeagueRankCP = stats.cp || 0
 					} else if (stats.rank && stats.cp && stats.rank === data.bestUltraLeagueRank && stats.cp > data.bestUltraLeagueRankCP) {
 						data.bestUltraLeagueRankCP = stats.cp
+					}
+					if (stats.rank && stats.pokemon != data.pokemon_id) {
+						if(data.pvpEvolutionData[stats.pokemon]) data.pvpEvolutionData[stats.pokemon].ultraLeague = {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}
+							else data.pvpEvolutionData[stats.pokemon] = {ultraLeague: {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}}
 					}
 				}
 			}
@@ -224,6 +235,22 @@ class Monster extends Controller {
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
 			const whoCares = await this.monsterWhoCares(data)
+
+			const pvpEvoData = data
+			if (Object.keys(data.pvpEvolutionData).length !== 0) {
+			  for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
+			    pvpEvoData.pvp_pokemon_id = key
+			    pvpEvoData.form = pvpMon.greatLeague ? pvpMon.greatLeague.form : pvpMon.ultraLeague.form
+					pvpEvoData.bestGreatLeagueRank = pvpMon.greatLeague ? pvpMon.greatLeague.rank : 4096
+			    pvpEvoData.bestGreatLeagueRankCP = pvpMon.greatLeague ? pvpMon.greatLeague.cp : 0
+					pvpEvoData.bestUltraLeagueRank = pvpMon.ultraLeague ? pvpMon.ultraLeague.rank : 4096
+			    pvpEvoData.bestUltraLeagueRankCP = pvpMon.ultraLeague ? pvpMon.ultraLeague.cp : 0
+			    const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
+			    if (pvpWhoCares[0]) {
+			      whoCares.push(...pvpWhoCares)
+			    }
+			  }
+			}
 
 			let hrend = process.hrtime(hrstart)
 			let hrendms = hrend[1] / 1000000
