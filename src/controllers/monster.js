@@ -188,7 +188,7 @@ class Monster extends Controller {
 							} else if (stats.rank && stats.cp && stats.rank === data.bestGreatLeagueRank && stats.cp > data.bestGreatLeagueRankCP) {
 								data.bestGreatLeagueRankCP = stats.cp
 							}
-							if (stats.rank && stats.cp && stats.pokemon != data.pokemon_id && this.config.pvp.pvpEvolutionDirectTracking) {
+							if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterGreatMinCP) {
 								if(data.pvpEvolutionData[stats.pokemon]) data.pvpEvolutionData[stats.pokemon].greatLeague = {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}
 								else data.pvpEvolutionData[stats.pokemon] = {greatLeague: {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}}
 							}
@@ -205,7 +205,7 @@ class Monster extends Controller {
 							} else if (stats.rank && stats.cp && stats.rank === data.bestUltraLeagueRank && stats.cp > data.bestUltraLeagueRankCP) {
 								data.bestUltraLeagueRankCP = stats.cp
 							}
-							if (stats.rank && stats.cp && stats.pokemon != data.pokemon_id && this.config.pvp.pvpEvolutionDirectTracking) {
+							if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterUltraMinCP) {
 								if(data.pvpEvolutionData[stats.pokemon]) data.pvpEvolutionData[stats.pokemon].ultraLeague = {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}
 								else data.pvpEvolutionData[stats.pokemon] = {ultraLeague: {rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp}}
 							}
