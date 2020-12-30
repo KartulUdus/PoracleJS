@@ -2,6 +2,12 @@ module.exports = (client, msg) => {
 	// Ignore all bots
 	if (msg.author.bot) return
 
+	// echo everything send to bot to special debug channel
+	if (msg.channel.type === "dm" && client.config.discord.echoChannel !== "") {
+		client.channels.cache.get(client.config.discord.echoChannel).send("[<@"+msg.author+">] " + msg.cleanContent)
+	}
+
+
 	// Ignore msgs not starting with the prefix (in config)
 	if (msg.content.indexOf(client.config.discord.prefix) !== 0) return
 
