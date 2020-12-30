@@ -76,7 +76,8 @@
             "#0070DD",
             "#A335EE",
             "#FF8000"
-        ]
+        ],
+        "echoChannel": ""
       },
       "telegram": {
         "enabled": false,
