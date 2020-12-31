@@ -12,8 +12,8 @@ class Monster extends Controller {
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
-		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0)`
-		if (data.pvpEvoLookup) pokemonQueryString=`(pokemon_id=${data.pvp_pokemon_id} and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
+		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
+		if (data.pvpEvoLookup) pokemonQueryString=`(pokemon_id=${data.pvp_pokemon_id} and (form = 0 or form = ${data.pvp_form}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on humans.id = monsters.id
@@ -24,7 +24,6 @@ class Monster extends Controller {
 		min_cp<=${data.cp} and
 		max_cp>=${data.cp} and
 		(gender = ${data.gender} or gender = 0) and
-		(form = 0 or (form = ${data.form} and ${data.pvpEvoLookup}=0) or (form=${data.pvp_form} and ${data.pvpEvoLookup}=1)) and
 		min_level<=${data.pokemon_level} and
 		max_level>=${data.pokemon_level} and
 		atk<=${data.individual_attack} and
