@@ -1,6 +1,4 @@
-const moment = require('moment-timezone')
 const { log } = require('../../../logger')
-require('moment-precise-range-plugin')
 
 module.exports = async (client, msg) => {
 	// Ignore all bots
@@ -8,11 +6,10 @@ module.exports = async (client, msg) => {
 
 	// Log all DM messages to dmLogChannelID
 	if (msg.channel.type === "dm" && client.config.discord.dmLogChannelID !== "") {
-		moment.locale(client.config.locale.timeformat)
 		const message = '<@'+msg.author+'> > ' + msg.cleanContent
 		try {
 			const channel = await client.channels.fetch(client.config.discord.dmLogChannelID)
-			const msgDeletionMs = (client.config.discord.dmLogChannelDeletionTime ) * 1000 || 0
+			const msgDeletionMs = (client.config.discord.dmLogChannelDeletionTime * 60) * 1000 || 0
 			if (!channel) return log.warn(`channel dmLogChannel not found`)
 			const logmsg = await channel.send(message)
 			if (msgDeletionMs > 0) {
