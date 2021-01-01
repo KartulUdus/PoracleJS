@@ -64,7 +64,7 @@ exports.run = async (client, msg, command) => {
 			|| args.includes('all pokemon')) && !mon.form.id)
 			if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			monsters = fullMonsters.map((mon) => mon.id)
-			items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes(client.translator.translate('all items')))
+			items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes('all items'))
 			if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
 				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
 				monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
