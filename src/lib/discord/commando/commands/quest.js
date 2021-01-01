@@ -50,8 +50,9 @@ exports.run = async (client, msg, command) => {
 			let remove = false
 			let minDust = 10000000
 			let stardustTracking = 9999999
-			let energyMonsters = []
+			const energyMonsters = []
 			let energyMonster = 0
+			let commandEverything = 0
 			let clean = false
 
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
@@ -64,12 +65,14 @@ exports.run = async (client, msg, command) => {
 			if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			monsters = fullMonsters.map((mon) => mon.id)
 			items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes(client.translator.translate('all items')))
-			if (args.includes('everything')) {
+			if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
 				monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
 				items = Object.keys(client.utilData.items)
 				minDust = 0
 				stardustTracking = -1
 				energyMonsters.push('0')
+				commandEverything = 1
 			}
 			args.forEach((element) => {
 				if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
@@ -173,7 +176,7 @@ exports.run = async (client, msg, command) => {
 			energyMonsters.push(10000)
 			const remQuery = `
 				delete from quest WHERE id=${target.id} and
-				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward in(${energyMonsters})))
+				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward in(${energyMonsters})) or (reward_type = 12 and ${commandEverything}=1))
 				`
 			const result = await client.query.misteryQuery(remQuery)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
