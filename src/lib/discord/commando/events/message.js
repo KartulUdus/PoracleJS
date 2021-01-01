@@ -12,11 +12,11 @@ module.exports = async (client, msg) => {
 		const message = '<@'+msg.author+'> > ' + msg.cleanContent
 		try {
 			const channel = await client.channels.fetch(client.config.discord.dmLogChannelID)
-			const msgDeletionMs = (client.config.discord.dmLogChannelDeletionTime * 60) * 1000 || 0
+			const msgDeletionMs = (client.config.discord.dmLogChannelDeletionTime ) * 1000 || 0
 			if (!channel) return log.warn(`channel dmLogChannel not found`)
-			const msg = await channel.send(message)
+			const logmsg = await channel.send(message)
 			if (msgDeletionMs > 0) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
+				logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 			}
 		} catch (err) {
 			log.error(`Failed to send Discord alert to dmLogChannel`, err)
