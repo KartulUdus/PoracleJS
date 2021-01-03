@@ -133,6 +133,24 @@ class Worker {
 		}
 		return true
 	}
+
+	async checkRole(users, roles) {
+		const allUsers = users
+		const validRoles = roles
+		const invalidUsers = []
+		const guild = await this.client.guilds.fetch(this.config.discord.guild)
+		allUsers.forEach(async function(user) {
+			log.info(`Checking role for: ${user.name} - ${user.id}`)
+			let discorduser = await guild.members.fetch(user.id)
+			if(discorduser.roles.cache.find(r => validRoles.includes(r.id))) {
+				log.info(`${discorduser.user.username} has a valid role`)
+			}else{
+				log.info(`${discorduser.user.username} doesn't have a valid role`)
+				invalidUsers.push(user)
+			}
+		})
+		return invalidUsers
+	}
 }
 
 module.exports = Worker

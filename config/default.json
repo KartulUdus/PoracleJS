@@ -60,9 +60,12 @@
     },
     "discord": {
         "enabled": true,
+        "checkRole": false,
+        "checkRoleInterval": 6,
         "unknownResponse": false,
         "invite": "",
         "token": [],
+        "guild": "",
         "channels": ["533927791096233984"],
         "userRole": ["roleId1", "358207117951369217"],
         "admins": ["222742859059560458"],

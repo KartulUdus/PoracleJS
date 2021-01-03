@@ -116,6 +116,31 @@ async function run() {
 		}, 10)
 	}
 
+	if (config.discord.checkRole && config.discord.guild != "") {
+		setInterval(async () => {
+			log.info(`Verification of Poracle user's roles starting`)
+			const allUsers = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
+			let invalidUsers = []
+			let worker = discordWorkers[0]
+			if (!worker.busy) {
+				invalidUsers = await worker.checkRole(allUsers, config.discord.userRole)
+			}
+			if(invalidUsers[0]) {
+				log.info(`Invalid users found, removing from dB...`)
+				invalidUsers.forEach(async function(user) {
+					log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
+					await fastify.monsterController.deleteQuery('egg', { id: user.id })
+					await fastify.monsterController.deleteQuery('monsters', { id: user.id })
+					await fastify.monsterController.deleteQuery('raid', { id: user.id })
+					await fastify.monsterController.deleteQuery('quest', { id: user.id })
+					await fastify.monsterController.deleteQuery('humans', { id: user.id })
+				})
+			}else{
+				log.info(`No invalid users found, all good!`)
+			}
+		}, config.discord.checkRoleInterval * 3600000)
+	}
+
 	// if (config.telegram.enabled) {
 	// 	setInterval(() => {
 	// 		if (!fastify.telegramQueue.length) {
