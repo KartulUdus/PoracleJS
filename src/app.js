@@ -116,17 +116,13 @@ async function run() {
 		}, 10)
 	}
 
-	if (config.discord.checkRole && config.discord.guild != "") {
+	if (config.discord.enabled && config.discord.checkRole && config.discord.guild != "") {
+		let roleWorker = new DiscordWorker(config.discord.token[0], 0, config)
 		setInterval(async () => {
 			log.info(`Verification of Poracle user's roles starting`)
 			const allUsers = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
 			let invalidUsers = []
-			let worker = discordWorkers.find((workerr) => !workerr.busy)
-			if (!worker.busy) {
-				worker.busy = true
-				invalidUsers = await worker.checkRole(allUsers, config.discord.userRole)
-				worker.busy = false
-			}
+			invalidUsers = await roleWorker.checkRole(allUsers, config.discord.userRole)
 			if(invalidUsers[0]) {
 				log.info(`Invalid users found, removing from dB...`)
 				invalidUsers.forEach(async function(user) {
