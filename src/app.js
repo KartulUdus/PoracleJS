@@ -121,9 +121,11 @@ async function run() {
 			log.info(`Verification of Poracle user's roles starting`)
 			const allUsers = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
 			let invalidUsers = []
-			let worker = discordWorkers[0]
+			let worker = discordWorkers.find((workerr) => !workerr.busy)
 			if (!worker.busy) {
+				worker.busy = true
 				invalidUsers = await worker.checkRole(allUsers, config.discord.userRole)
+				worker.busy = false
 			}
 			if(invalidUsers[0]) {
 				log.info(`Invalid users found, removing from dB...`)
