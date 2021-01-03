@@ -140,7 +140,7 @@ async function run() {
 			} catch (err) {
 				log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
 			}
-		}, config.discord.checkRoleInterval * 1000)
+		}, config.discord.checkRoleInterval * 3600000)
 	}
 
 	// if (config.telegram.enabled) {
