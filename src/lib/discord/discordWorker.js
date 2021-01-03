@@ -134,11 +134,11 @@ class Worker {
 		return true
 	}
 
-	async checkRole(users, roles) {
+	async checkRole(guildID, users, roles) {
 		const allUsers = users
 		const validRoles = roles
 		const invalidUsers = []
-		const guild = await this.client.guilds.fetch(this.config.discord.guild)
+		const guild = await this.client.guilds.fetch(guildID)
 		allUsers.forEach(async function(user) {
 			log.info(`Checking role for: ${user.name} - ${user.id}`)
 			let discorduser = await guild.members.fetch(user.id)
