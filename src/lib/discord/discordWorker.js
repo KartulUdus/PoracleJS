@@ -139,7 +139,7 @@ class Worker {
 		const validRoles = roles
 		const invalidUsers = []
 		const guild = await this.client.guilds.fetch(guildID)
-		allUsers.forEach(async function(user) {
+		for (const user of allUsers) {
 			log.info(`Checking role for: ${user.name} - ${user.id}`)
 			let discorduser = await guild.members.fetch(user.id)
 			if(discorduser.roles.cache.find(r => validRoles.includes(r.id))) {
@@ -148,7 +148,7 @@ class Worker {
 				log.info(`${discorduser.user.username} doesn't have a valid role`)
 				invalidUsers.push(user)
 			}
-		})
+		}
 		return invalidUsers
 	}
 }
