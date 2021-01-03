@@ -7,6 +7,7 @@
     },
     "general": {
         "environment": "production",
+        "listenFileChanges": false,
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
         "locale": "en",

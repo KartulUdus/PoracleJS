@@ -3,6 +3,8 @@ require('dotenv').config()
 
 const fs = require('fs')
 const util = require('util')
+const path = require('path')
+const chokidar = require('chokidar')
 
 const NodeCache = require('node-cache')
 const fastify = require('fastify')({
@@ -16,7 +18,7 @@ const telegramController = require('./lib/telegram/middleware/controller')
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 
-const {
+let {
 	config, knex, dts, geofence, translator,
 } = Config()
 
@@ -44,11 +46,11 @@ const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
 const WeatherController = require('./controllers/weather')
 
-const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null)
-const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+let weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null)
+let monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+let raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+let questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+let pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
 
 fastify.decorate('logger', log)
 fastify.decorate('webhooks', webhooks)
@@ -67,7 +69,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
+let discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let telegram
@@ -251,6 +253,31 @@ async function handleAlarms() {
 		}
 		workingOnHooks = false
 	}
+}
+
+if (config.general.listenFileChanges) {
+	chokidar.watch(path.join(__dirname, '../config/')).on('change', () => {
+		let {
+			// eslint-disable-next-line no-shadow
+			config, knex, dts, geofence, translator,
+		} = Config()
+		weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null)
+		monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+		raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+		questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+		pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+		fastify.config = config
+		fastify.monsterController = monsterController
+		fastify.raidController = raidController
+		fastify.questController = questController
+		fastify.pokestopController = pokestopController
+		fastify.weatherController = weatherController
+		fastify.dts = dts
+		fastify.geofence = geofence
+		fastify.translator = translator
+		discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
+		log.info(`A config file has changed - reloading...`);
+	});
 }
 
 run()
