@@ -65,7 +65,7 @@
         "unknownResponse": false,
         "invite": "",
         "token": [],
-        "guild": "",
+        "guilds": ["358180805031493634"],
         "channels": ["533927791096233984"],
         "userRole": ["roleId1", "358207117951369217"],
         "admins": ["222742859059560458"],
