@@ -226,7 +226,7 @@ class Monster extends Controller {
 			const whoCares = await this.monsterWhoCares(data)
 
 			let hrend = process.hrtime(hrstart)
-			let hrendms = hrend[1] / 1000000
+			const hrendms = hrend[1] / 1000000
 			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0]) return []
@@ -295,13 +295,16 @@ class Monster extends Controller {
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
 				}
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
 				let monsterDts
 				if (data.iv === -1) {
-					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
-					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.default && template.platform === 'discord')
+					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id.toString() === cares.template.toString() && template.platform === platform)
+					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.default && template.platform === platform)
 				} else {
-					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
-					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monster' && template.default && template.platform === 'discord')
+					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id.toString() === cares.template.toString() && template.platform === platform)
+					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monster' && template.default && template.platform === platform)
 				}
 				const template = JSON.stringify(monsterDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
@@ -332,7 +335,7 @@ class Monster extends Controller {
 				}
 			}
 			hrend = process.hrtime(hrstart)
-			let hrendprocessing = hrend[1] / 1000000
+			const hrendprocessing = hrend[1] / 1000000
 			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
 
 			return jobs

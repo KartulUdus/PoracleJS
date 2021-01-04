@@ -16,6 +16,17 @@
   },
   {
     "id": 1,
+    "type": "monster",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "{{round iv}}% {{name}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}}",
+      "sticker": "{{{imgUrl}}}",
+      "location": true
+    }
+  },
+  {
+    "id": 1,
     "type": "monsterNoIv",
     "default": true,
     "platform": "discord",

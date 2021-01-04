@@ -82,7 +82,7 @@ if (config.discord.enabled) {
 }
 
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker(config, log, dts, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
+	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
 }
 
 // todo remove lint passing log
@@ -116,30 +116,33 @@ async function run() {
 		}, 10)
 	}
 
-	// if (config.telegram.enabled) {
-	// 	setInterval(() => {
-	// 		if (!fastify.telegramQueue.length) {
-	// 			return
-	// 		}
-	// 		const { target } = fastify.telegramQueue[0]
-	// 		// see if target has dedicated worker
-	// 		let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
-	// 		if (!worker) {
-	// 			let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-	// 			let laziestWorkerId
-	// 			Object.keys(discordWorkers).map((i) => {
-	// 				if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
-	// 					busyestWorkerHumanCount = discordWorkers[i].userCount
-	// 					laziestWorkerId = i
-	// 				}
-	// 			})
-	// 			busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-	// 			worker = discordWorkers[laziestWorkerId]
-	// 			worker.addUser(target)
-	// 		}
-	// 		if (!worker.busy) worker.work(fastify.discordQueue.shift())
-	// 	}, 10)
-	// }
+	if (config.telegram.enabled) {
+		setInterval(() => {
+			if (!fastify.telegramQueue.length) {
+				return
+			}
+			if ((Math.random() * 100) > 80) fastify.logger.debug(`TelegramQueue is currently ${fastify.telegramQueue.length}`)
+
+			const worker = telegram
+			// const { target } = fastify.telegramQueue[0]
+			// // see if target has dedicated worker
+			// let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
+			// if (!worker) {
+			// 	let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+			// 	let laziestWorkerId
+			// 	Object.keys(telegramWorkers).map((i) => {
+			// 		if (telegramWorkers[i].userCount < busyestWorkerHumanCount) {
+			// 			busyestWorkerHumanCount = telegramWorkers[i].userCount
+			// 			laziestWorkerId = i
+			// 		}
+			// 	})
+			// 	busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+			// 	worker = telegramWorkers[laziestWorkerId]
+			// 	worker.addUser(target)
+			// }
+			if (!worker.busy) worker.work(fastify.telegramQueue.shift())
+		}, 10)
+	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
 	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
@@ -168,7 +171,7 @@ async function handleAlarms() {
 				const result = await fastify.monsterController.handle(hook.message)
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 				})
 
 				break
@@ -187,7 +190,7 @@ async function handleAlarms() {
 				if (!result) break
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 				})
 				break
 			}
@@ -208,7 +211,7 @@ async function handleAlarms() {
 
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 				})
 
 				break
@@ -228,7 +231,7 @@ async function handleAlarms() {
 
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 				})
 				break
 			}
@@ -243,7 +246,7 @@ async function handleAlarms() {
 				const result = await fastify.weatherController.handle(hook.message)
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 				})
 				break
 			}

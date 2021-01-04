@@ -1,9 +1,12 @@
 const fs = require('fs')
 
 class Telegram {
-	constructor(config, log, dts, controller, query, telegraf, translator, commandParser, re) {
+	constructor(config, log, monsterData, utilData, dts, geofence, controller, query, telegraf, translator, commandParser, re) {
 		this.config = config
 		this.log = log
+		this.monsterData = monsterData
+		this.utilData = utilData
+		this.geofence = geofence
 		this.translator = translator
 		this.commandParser = commandParser
 		this.tempProps = {}
@@ -15,7 +18,7 @@ class Telegram {
 		this.bot = telegraf
 		this.bot
 			.use(commandParser(translator))
-			.use(controller(query, dts, log, config, re, translator))
+			.use(controller(query, dts, log, monsterData, utilData, geofence, config, re, translator))
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
@@ -38,13 +41,21 @@ class Telegram {
 
 	init() {
 		this.bot.launch()
+		this.busy = false
 	}
 
 	async work(data) {
+		this.log.warn(`Telegram asked to work ${data.type} ${data.target}`)
+
 		this.busy = true
 		switch (data.type) {
 			case 'telegram:user': {
 				await this.userAlert(data)
+				this.busy = false
+				break
+			}
+			case 'telegram:group': {
+				await this.groupAlert(data)
 				this.busy = false
 				break
 			}
@@ -58,17 +69,34 @@ class Telegram {
 	}
 
 	async userAlert(data) {
-		const user = this.client.users.get(data.job.target)
-		if (!user) return this.log.warning(`user ${data.name} not found`)
+		this.log.warn(`Telegram sending message ${data.message} / connection to ${data.name} ${data.target}`)
 		try {
-			await user.send(data.message.content || '', data.message)
-			return user
+			if (data.message.sticker) {
+				await this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true })
+			}
+			if (data.message.photo) {
+				await this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true })
+			}
+			await this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
+				parse_mode: 'Markdown',
+				disable_web_page_preview: true,
+			})
+			if (data.message.location) {
+				await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
+			}
 		} catch (err) {
-			throw this.log.error(`Failed to send Discord alert to ${data.name}, ${err.message}`)
+			this.log.error(`Failed to send Telegram alert to ${data.name}, ${err.message}`)
 		}
 	}
 
-	static async channelAlert(data) {
+	async groupAlert(data) {
+		this.log.warn(`Telegram sending channel message ${data.message} / connection to ${data.name} ${data.target}`)
+		this.log.info(data)
+		return this.userAlert(data)
+	}
+
+	async channelAlert(data) {
+		this.log.warn(`Telegram sending channel message ${data.message} / connection to ${data.name} ${data.target}`)
 		this.log.info(data)
 	}
 }
