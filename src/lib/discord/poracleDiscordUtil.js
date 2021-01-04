@@ -14,8 +14,8 @@ class PoracleDiscordUtil {
 		let id
 		const language = null
 
-		const human = target.channel
-			? await this.client.query.selectOneQuery('humans', { name: target.name, type: 'telegram:channel' })
+		const human = target.webhook
+			? await this.client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await this.client.query.selectOneQuery('humans', { id: target.id })
 
 		if (human) {
