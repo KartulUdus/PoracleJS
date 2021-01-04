@@ -12,8 +12,9 @@ services:
     volumes:
       - ./poracledb:/var/lib/mysql
   poracle:
-    build: 
-      context: .
+    #build: 
+    #  context: .
+    image: kartuludus/poracle:develop 
     ports:
       - "3030:3030"
     depends_on: 
