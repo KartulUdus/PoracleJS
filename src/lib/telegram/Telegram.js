@@ -69,7 +69,7 @@ class Telegram {
 	}
 
 	async userAlert(data) {
-		this.log.warn(`Telegram sending message ${data.message} / connection to ${data.name} ${data.target}`)
+		this.log.warn(`Telegram sending message ${JSON.stringify(data.message)} / connection to ${data.name} ${data.target}`)
 		try {
 			if (data.message.sticker) {
 				await this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true })

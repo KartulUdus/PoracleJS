@@ -7,9 +7,12 @@ module.exports = async (ctx) => {
 		return controller.log.log({ level: 'info', message: `${ctx.update.message.from.username} tried to register in ${channelName}`, event: 'telegram:registerFail' })
 	}
 
-	if (ctx.state.controller.config.telegram.register_chat !== '' && ctx.update.message.chat.id.toString() !== ctx.state.controller.config.telegram.register_chat) {
+	if (!ctx.state.controller.config.telegram.channels.includes(ctx.update.message.chat.id.toString())) {
 		return controller.log.log({ level: 'info', message: `${ctx.update.message.from.username} tried to register in other than prepared (${ctx.state.controller.config.telegram.register_chat}) register channel ${ctx.update.message.chat.id}`, event: 'telegram:registerFail' })
 	}
+	//	if (ctx.state.controller.config.telegram.register_chat !== '' && ctx.update.message.chat.id.toString() !== ctx.state.controller.config.telegram.register_chat) {
+	//		return controller.log.log({ level: 'info', message: `${ctx.update.message.from.username} tried to register in other than prepared (${ctx.state.controller.config.telegram.register_chat}) register channel ${ctx.update.message.chat.id}`, event: 'telegram:registerFail' })
+	//	}
 
 	try {
 		const isRegistered = await controller.query.countQuery('humans', { id: user.id })
