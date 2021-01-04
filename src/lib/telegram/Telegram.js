@@ -71,8 +71,13 @@ class Telegram {
 	async userAlert(data) {
 		this.log.warn(`Telegram sending message ${JSON.stringify(data.message)} / connection to ${data.name} ${data.target}`)
 		try {
-			if (data.message.sticker) {
-				await this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true })
+			try {
+				if (data.message.sticker) {
+					await this.bot.telegram.sendSticker(data.target, data.message.sticker, {disable_notification: true})
+				}
+			}
+			catch (err) {
+				this.log.error(`Failed to send Telegram sticker to ${data.name}/${data.target}, ${err.message}`)
 			}
 			if (data.message.photo) {
 				await this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true })
@@ -85,7 +90,7 @@ class Telegram {
 				await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
 			}
 		} catch (err) {
-			this.log.error(`Failed to send Telegram alert to ${data.name}, ${err.message}`)
+			this.log.error(`Failed to send Telegram alert to ${data.name}/${data.target}, ${err.message}`)
 		}
 	}
 
