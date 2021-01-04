@@ -42,8 +42,19 @@ class PoracleDiscordUtil {
 
 		let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(this.client.translator.translate('name'), '')
-		if (this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') target = { id: this.msg.msg.channel.id, name: this.msg.msg.channel.name, webhook: false }
-		if (this.msg.isFromAdmin && webhookName) target = { name: webhookName.replace(this.client.translator.translate('name'), ''), webhook: true }
+		if (this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
+			target = {
+				id: this.msg.msg.channel.id,
+				name: this.msg.msg.channel.name,
+				webhook: false,
+			}
+		}
+		if (this.msg.isFromAdmin && webhookName) {
+			target = {
+				name: webhookName.replace(this.client.translator.translate('name'), ''),
+				webhook: true,
+			}
+		}
 
 		const status = await this.checkRegistrationStatus(target)
 

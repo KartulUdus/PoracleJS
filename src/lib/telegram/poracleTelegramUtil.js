@@ -38,26 +38,33 @@ class PoracleTelegramUtil {
 			return { canContinue: false }
 		}
 
-		const target = { id: this.msg.userId, name: this.msg.userName, channel: false }
+		let target = { id: this.msg.userId, name: this.msg.userName, channel: false }
 
-		// let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
-		// if (webhookName) webhookName = webhookName.replace(this.client.translator.translate('name'), '')
-		// if (this.msg.isFromAdmin() && this.msg.msg.channel.type === 'text') target = { id: this.msg.msg.channel.id, name: msg.channel.name, webhook: false }
-		// if (this.msg.isFromAdmin() && webhookName) target = { name: webhookName.replace(this.client.translator.translate('name'), ''), channel: true }
+		let channelName = args.find((arg) => arg.match(this.client.re.nameRe))
+		if (channelName) channelName = channelName.replace(this.client.translator.translate('name'), '')
+		if (this.msg.isFromAdmin && !this.msg.isDM) {
+			target = {
+				id: this.msg.ctx.update.message.chat.id.toString(),
+				name: this.msg.ctx.update.message.chat ? this.msg.ctx.update.message.chat.title.toLowerCase() : '',
+				channel: false,
+			}
+		}
+
+		if (this.msg.isFromAdmin && channelName) target = { name: channelName, channel: true }
 
 		const status = await this.checkRegistrationStatus(target)
 
-		// if (!status.isRegistered && this.msg.isFromAdmin() && target.webhook) {
-		// 	await this.msg.reply(`Webhook ${target.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')} ${this.client.translator.translate('name')}webhookname ${this.client.translator.translate('<Your-Webhook-url>')}`)
-		// 	return { canContinue: false }
-		// }
-		//
-		// if (!status.isRegistered && this.msg.isFromAdmin() && msg.channel.type === 'text') {
-		// 	await this.msg.reply(`${this.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
-		// 	return { canContinue: false }
-		// }
+		if (!status.isRegistered && this.msg.isFromAdmin && target.webhook) {
+			await this.msg.reply(`Channel ${target.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.msg.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')} ${this.client.translator.translate('name')}name ${this.client.translator.translate('<Your-Channel-id>')}`)
+			return { canContinue: false }
+		}
 
-		if (!status.isRegistered && this.msg.isDM()) {
+		if (!status.isRegistered && this.msg.isFromAdmin && !this.msg.isDM) {
+			await this.msg.reply(`${this.msg.ctx.update.message.chat.title} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.msg.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
+			return { canContinue: false }
+		}
+
+		if (!status.isRegistered && this.msg.isDM) {
 			await this.msg.react(this.client.translator.translate('🙅'))
 			return { canContinue: false }
 		}

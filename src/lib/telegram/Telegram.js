@@ -90,7 +90,7 @@ class Telegram {
 	}
 
 	async groupAlert(data) {
-		this.log.warn(`Telegram sending channel message ${data.message} / connection to ${data.name} ${data.target}`)
+		this.log.warn(`Telegram sending group message ${data.message} / connection to ${data.name} ${data.target}`)
 		this.log.info(data)
 		return this.userAlert(data)
 	}
@@ -98,6 +98,7 @@ class Telegram {
 	async channelAlert(data) {
 		this.log.warn(`Telegram sending channel message ${data.message} / connection to ${data.name} ${data.target}`)
 		this.log.info(data)
+		return this.userAlert(data)
 	}
 }
 

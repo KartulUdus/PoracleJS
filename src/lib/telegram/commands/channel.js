@@ -1,4 +1,7 @@
 module.exports = async (ctx) => {
+	// channel message authors aren't identifiable, ignore all commands sent in channels
+	if (Object.keys(ctx.update).includes('channel_post')) return
+
 	const { controller, command } = ctx.state
 	const user = ctx.update.message.from || ctx.update.message.chat
 
@@ -7,11 +10,21 @@ module.exports = async (ctx) => {
 
 	try {
 		// Check target
-		if (!controller.config.telegram.admins.includes(user.id.toString()) && ctx.update.message.chat.type !== 'private') {
-			return await ctx.reply(controller.translator.translate('Please run commands in Direct Messages'))
-		}
+		if (!controller.config.telegram.admins.includes(user.id.toString())) return
 
-		const target = { id: ctx.update.message.chat.id, name: ctx.update.message.chat ? ctx.update.message.chat.title.toLowerCase() : '' }
+		let target = { id: ctx.update.message.from.id.toString(), name: ctx.update.message.from.username, channel: false }
+
+		let channelName = args.find((arg) => arg.match(controller.re.nameRe))
+		if (channelName) channelName = channelName.replace(controller.translator.translate('name'), '')
+		const channelRegex = new RegExp('-\\d{1,20}', 'gi')
+
+		const channelId = command.args.match(channelRegex) ? command.args.match(channelRegex)[0] : false
+
+		if (channelName && !channelId || !channelName && channelId) return await ctx.reply('To add a channel, provide both a name and an channel id')
+		if (controller.config.telegram.admins.includes(user.id.toString()) && channelName && channelId) target = { id: channelId, name: channelName, channel: true }
+		if (controller.config.telegram.admins.includes(user.id.toString()) && ctx.update.message.chat.type !== 'private' && !target.channel) {
+			target = { id: ctx.update.message.chat.id.toString(), name: ctx.update.message.chat ? ctx.update.message.chat.title.toLowerCase() : '', channel: false }
+		}
 
 		const isRegistered = await controller.query.countQuery('humans', { id: target.id })
 		if (args.find((arg) => arg === 'add')) {
@@ -19,7 +32,7 @@ module.exports = async (ctx) => {
 
 			await controller.query.insertQuery('humans', {
 				id: target.id,
-				type: 'telegram:group',
+				type: target.channel ? 'telegram:channel' : 'telegram:group',
 				name: target.name,
 				area: '[]',
 			})

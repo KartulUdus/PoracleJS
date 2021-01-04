@@ -11,7 +11,7 @@ class PoracleTelegramMessage {
 	}
 
 	get isFromAdmin() {
-		return (!this.config.telegram.admins.includes(this.userId.toString()))
+		return (this.config.telegram.admins.includes(this.userId.toString()))
 	}
 
 	get isDM() {
@@ -30,7 +30,7 @@ class PoracleTelegramMessage {
 	}
 
 	async replyByDM(message) {
-		// return this.msg.author.send(message)
+		return this.ctx.telegram.sendMessage(this.userId, message)
 	}
 
 	async send(target, message) {
