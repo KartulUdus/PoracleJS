@@ -9,6 +9,7 @@
         "environment": "production",
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
+        "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
         "locale": "en",
         "weatherChangeAlert": false,
         "disabledCommands": [],

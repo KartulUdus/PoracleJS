@@ -101,6 +101,8 @@ class Quest extends Controller {
 			data.disTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day')
 			data.tth = moment.preciseDiff(Date.now(), data.disTime.clone().utc(), true)
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
+
 			if (!data.team_id) data.team_id = 0
 			if (data.name) data.gymName = data.name
 			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
