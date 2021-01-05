@@ -7,6 +7,7 @@ class PoracleDiscordMessage {
 		//		this.userId = this.user.id
 
 		this.discord = msg
+		this.userId = msg.author.id
 	}
 
 	get isFromAdmin() {
