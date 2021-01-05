@@ -1,10 +1,18 @@
 module.exports = async (ctx) => {
+	// channel message authors aren't identifiable, ignore all commands sent in channels
+	if (Object.keys(ctx.update).includes('channel_post')) return
+
 	const { controller } = ctx.state
+
+	if (ctx.update.message.chat.type === 'private') {
+		return controller.log.info({ level: 'info', message: `${ctx.update.message.from.username} tried to register in direct message`, event: 'telegram:registerFail' })
+	}
+
 	const user = ctx.update.message.from || ctx.update.message.chat
 
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 	if (ctx.update.message.chat.type === 'private' && channelName.toLowerCase() !== ctx.state.controller.config.telegram.channel.toLowerCase()) {
-		return controller.log.log({ level: 'info', message: `${ctx.update.message.from.username} tried to register in ${channelName}`, event: 'telegram:registerFail' })
+		return controller.log.info({ level: 'info', message: `${ctx.update.message.from.username} tried to register in ${channelName}`, event: 'telegram:registerFail' })
 	}
 
 	if (!ctx.state.controller.config.telegram.channels.includes(ctx.update.message.chat.id.toString())) {

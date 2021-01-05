@@ -98,7 +98,7 @@ class Telegram {
 			messageIds.push(message_id)
 
 			if (data.message.location) {
-				const { message_id } =  await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
+				const { message_id } = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
 				messageIds.push(message_id)
 			}
 

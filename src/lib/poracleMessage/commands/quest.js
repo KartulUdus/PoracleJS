@@ -12,8 +12,8 @@ exports.run = async (client, msg, args) => {
 		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 
 		let reaction = '👌'
-//		for (const args of command) {
-//			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
+		//		for (const args of command) {
+		//			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 		const pings = ''
 		let monsters = []
 		let fullMonsters = []
@@ -143,8 +143,8 @@ exports.run = async (client, msg, args) => {
 			const result = await client.query.misteryQuery(remQuery)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
-//		}
-//		if (!validTracks)
+		//		}
+		//		if (!validTracks)
 		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('Quest command unhappy:', err)
