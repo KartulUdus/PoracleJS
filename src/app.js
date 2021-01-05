@@ -116,10 +116,11 @@ async function run() {
 		}, 10)
 	}
 
-	if (config.discord.enabled && config.discord.checkRole && config.discord.guild != "") {
-		let roleWorker = new DiscordWorker(config.discord.token[0], 0, config)
-		setInterval(async () => {
+	if (config.discord.enabled && config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != "") {
+		let roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
+		async function syncRole() {
 			try {
+				log.info(`Verification of Poracle user's roles starting...`)
 				let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
 				let invalidUsers = []
 				for (const guild of config.discord.guilds) {
@@ -142,7 +143,9 @@ async function run() {
 			} catch (err) {
 				log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
 			}
-		}, config.discord.checkRoleInterval * 3600000)
+			setTimeout(syncRole, config.discord.checkRoleInterval * 3600000)
+		}
+		setTimeout(syncRole, 10000)
 	}
 
 	// if (config.telegram.enabled) {
