@@ -12,7 +12,7 @@ module.exports = (translator) => mount('text', (ctx, next) => {
 		args: parts[3],
 		get splitArgsArray() {
 			const args = parts[3].split('|').map((x) => x.split(/\s+/))
-			return args.map((argss) => argss.map((arg) => translator.translate(arg.toLowerCase().replace('_', ' '))).filter((x) => x))
+			return args.map((argss) => argss.map((arg) => translator.reverse(arg.toLowerCase().replace('_', ' '))).filter((x) => x))
 		},
 	}
 	ctx.state.command = command
