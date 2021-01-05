@@ -227,8 +227,11 @@ class Pokestop extends Controller {
 					genderData: this.utilData.genders[data.gender],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
-				if (!invasionDts) invasionDts = this.dts.find((template) => template.type === 'invasion' && template.default && template.platform === 'discord')
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
+				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id.toString() === cares.template.toString() && template.platform === platform)
+				if (!invasionDts) invasionDts = this.dts.find((template) => template.type === 'invasion' && template.default && template.platform === platform)
 				if (!invasionDts) {
 					this.log.warn(`Didn't get DTS for 'invasion',  template ${cares.templaste}`)
 					break

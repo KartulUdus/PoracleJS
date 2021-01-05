@@ -251,9 +251,11 @@ class Raid extends Controller {
 						// pokemoji: emojiData.pokemon[data.pokemon_id],
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
+					let platform = cares.type.split(':')[0]
+					if (platform == 'webhook') platform = 'discord'
 
-					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template.toString() && template.platform === 'discord'))
-					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === 'discord')
+					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template.toString() && template.platform === platform))
+					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === platform)
 					const template = JSON.stringify(raidDts.template)
 					const mustache = this.mustache.compile(template)
 					const message = JSON.parse(mustache(view))
@@ -352,8 +354,11 @@ class Raid extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id.toString() === cares.template.toString() && template.platform === 'discord'))
-				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === 'discord')
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
+				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id.toString() === cares.template.toString() && template.platform === platform))
+				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === platform)
 
 				const template = JSON.stringify(eggDts.template)
 				const mustache = this.mustache.compile(template)

@@ -70,7 +70,10 @@ class Weather extends Controller {
 					id: data.s2_cell_id,
 					now: new Date(),
 				}
-				const weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.platform === 'discord')
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
+				const weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.platform === platform)
 				const template = JSON.stringify(weatherDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))

@@ -189,8 +189,11 @@ class Quest extends Controller {
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-				let questDts = this.dts.find((template) => template.type === 'quest' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
-				if (!questDts) questDts = this.dts.find((template) => template.type === 'quest' && template.default && template.platform === 'discord')
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
+				let questDts = this.dts.find((template) => template.type === 'quest' && template.id.toString() === cares.template.toString() && template.platform === platform)
+				if (!questDts) questDts = this.dts.find((template) => template.type === 'quest' && template.default && template.platform === platform)
 				const template = JSON.stringify(questDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
