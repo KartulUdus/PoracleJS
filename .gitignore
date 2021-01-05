@@ -26,4 +26,4 @@ potato/*
 src/lib/db/poracle.sqlite
 .geoCache
 /.cache/cache/
-backups/*
+backups/*.json
