@@ -3023,31 +3023,31 @@
 		},
 		"1": {
 			"name": "sunny",
-			"emoji": ":sunny:"
+			"emoji": "\u2600"
 		},
 		"2": {
 			"name": "rain",
-			"emoji": ":cloud_rain:"
+			"emoji": "\u1F327"
 		},
 		"3": {
 			"name": "partly cloudy",
-			"emoji": ":white_sun_small_cloud:"
+			"emoji": "\u1F324"
 		},
 		"4": {
 			"name": "cloudy",
-			"emoji": ":cloud:"
+			"emoji": "\u2601"
 		},
 		"5": {
 			"name": "windy",
-			"emoji": ":leaves:"
+			"emoji": "\u1F343"
 		},
 		"6": {
 			"name": "snow",
-			"emoji": ":snowflake:"
+			"emoji": "\u2744"
 		},
 		"7": {
 			"name": "fog",
-			"emoji": ":foggy:"
+			"emoji": "\u1F32B"
 		}
 	},
 	"genData": {
