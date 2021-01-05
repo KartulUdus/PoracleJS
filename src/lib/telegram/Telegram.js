@@ -105,6 +105,8 @@ class Telegram {
 			}
 
 			if (data.clean) {
+				this.log.warn(`Telegram setting to clean in ${msgDeletionMs}ms`)
+
 				setTimeout(() => {
 					for (const id of messageIds) {
 						this.bot.telegram.deleteMessage(data.target, id)
