@@ -23,8 +23,10 @@ class Telegram {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 			const commandName = file.split('.')[0]
-			this.enabledCommands.push(this.translator.translate(commandName))
-			this.bot.command(this.translator.translate(commandName), this.tempProps)
+			if (!this.config.general.disabledCommands.includes(commandName)) {
+				this.enabledCommands.push(this.translator.translate(commandName))
+				this.bot.command(this.translator.translate(commandName), this.tempProps)
+			}
 		})
 		this.bot.catch((err, ctx) => {
 			log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)

@@ -20,8 +20,8 @@ module.exports = (translator) => mount('text', (ctx, next) => {
 				initialArgs = [args]
 			}
 			return initialArgs
-//			const args = parts[3].split('|').map((x) => x.split(/\s+/))
-//			return args.map((argss) => argss.map((arg) => translator.reverse(arg.toLowerCase().replace('_', ' '))).filter((x) => x))
+			// const args = parts[3].split('|').map((x) => x.split(/\s+/))
+			// return args.map((argss) => argss.map((arg) => translator.reverse(arg.toLowerCase().replace('_', ' '))).filter((x) => x))
 		},
 	}
 	ctx.state.command = command
