@@ -77,7 +77,9 @@
             "#0070DD",
             "#A335EE",
             "#FF8000"
-        ]
+        ],
+        "dmLogChannelID": "",
+        "dmLogChannelDeletionTime": 0
       },
       "telegram": {
         "enabled": false,
