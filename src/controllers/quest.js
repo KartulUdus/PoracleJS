@@ -128,21 +128,21 @@ class Quest extends Controller {
 				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
 
 			data.stickerUrl = data.rewardData.monsters[1]
-				? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
-				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
+				? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
+				: ''
 
 			if (data.rewardData.items[1]) {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
+				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
 			}
 			if (data.dustAmount) {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
+				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
 				data.dustAmount = data.rewards[0].info.amount
 			}
 			if (data.energyAmount) {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy.png`
+				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy.webp`
 				data.energyAmount = data.rewards[0].info.amount
 			}
 			data.staticSprite = encodeURI(JSON.stringify([
