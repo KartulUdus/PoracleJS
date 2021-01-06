@@ -38,19 +38,20 @@ class PoracleTelegramUtil {
 			return { canContinue: false }
 		}
 
-		let target = { id: this.msg.userId, name: this.msg.userName, channel: false }
+		let target = { id: this.msg.userId, name: this.msg.userName, type: 'telegram:user', channel: false }
 
 		let channelName = args.find((arg) => arg.match(this.client.re.nameRe))
 		if (channelName) channelName = channelName.replace(this.client.translator.translate('name'), '')
 		if (this.msg.isFromAdmin && !this.msg.isDM) {
 			target = {
 				id: this.msg.ctx.update.message.chat.id.toString(),
+				type: 'telegram:group',
 				name: this.msg.ctx.update.message.chat ? this.msg.ctx.update.message.chat.title.toLowerCase() : '',
 				channel: false,
 			}
 		}
 
-		if (this.msg.isFromAdmin && channelName) target = { name: channelName, channel: true }
+		if (this.msg.isFromAdmin && channelName) target = { name: channelName, type: 'telegram:channel', channel: true }
 
 		const status = await this.checkRegistrationStatus(target)
 

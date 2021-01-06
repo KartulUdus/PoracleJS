@@ -1,5 +1,6 @@
 const PoracleTelegramUtil = require('./poracleTelegramUtil')
 const PoracleTelegramMessage = require('./poracleTelegramMessage')
+const mustache = require('handlebars')
 
 class PoracleTelegramState {
 	constructor(ctx) {
@@ -13,6 +14,7 @@ class PoracleTelegramState {
 		this.re = ctx.state.controller.re
 		this.translator = ctx.state.controller.translator
 		this.config = ctx.state.controller.config
+		this.mustache = mustache
 	}
 
 	createMessage(msg) {

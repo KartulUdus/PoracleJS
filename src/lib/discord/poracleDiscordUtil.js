@@ -38,7 +38,7 @@ class PoracleDiscordUtil {
 			return { canContinue: false }
 		}
 
-		let target = { id: this.msg.msg.author.id, name: this.msg.msg.author.tag, webhook: false }
+		let target = { id: this.msg.msg.author.id, type: 'discord:user', name: this.msg.msg.author.tag, webhook: false }
 
 		let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(this.client.translator.translate('name'), '')
@@ -46,12 +46,14 @@ class PoracleDiscordUtil {
 			target = {
 				id: this.msg.msg.channel.id,
 				name: this.msg.msg.channel.name,
+				type: 'discord:channel',
 				webhook: false,
 			}
 		}
 		if (this.msg.isFromAdmin && webhookName) {
 			target = {
 				name: webhookName.replace(this.client.translator.translate('name'), ''),
+				type: 'webhook',
 				webhook: true,
 			}
 		}
