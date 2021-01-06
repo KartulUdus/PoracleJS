@@ -3027,11 +3027,11 @@
 		},
 		"2": {
 			"name": "rain",
-			"emoji": "\u1F327"
+			"emoji": "\uD83C\uDF27"
 		},
 		"3": {
 			"name": "partly cloudy",
-			"emoji": "\u1F324"
+			"emoji": "\uD83C\uDF24"
 		},
 		"4": {
 			"name": "cloudy",
@@ -3039,7 +3039,7 @@
 		},
 		"5": {
 			"name": "windy",
-			"emoji": "\u1F343"
+			"emoji": "\uD83C\uDF43"
 		},
 		"6": {
 			"name": "snow",
@@ -3047,7 +3047,7 @@
 		},
 		"7": {
 			"name": "fog",
-			"emoji": "\u1F32B"
+			"emoji": "\uD83C\uDF2B"
 		}
 	},
 	"genData": {
