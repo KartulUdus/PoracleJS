@@ -1,28 +1,29 @@
 [{
-    "id": 1,
-    "type": "monster",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "color": "{{ivcolor}}",
-        "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
-        "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
-        "thumbnail": {
-          "url": "{{{imgUrl}}}"
-        }
+  "id": 1,
+  "type": "monster",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "color": "{{ivcolor}}",
+      "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
+      "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
       }
     }
-  },
+  }
+},
   {
     "id": 1,
     "type": "monster",
     "default": true,
     "platform": "telegram",
     "template": {
-      "content": "{{round iv}}% {{name}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}}",
-      "sticker": "{{{imgUrl}}}",
-      "location": true
+      "content": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}\nEnd: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "sticker": "{{{stickerUrl}}}",
+      "location": true,
+      "webpage_preview": true
     }
   },
   {
@@ -39,6 +40,18 @@
           "url": "{{{imgUrl}}}"
         }
       }
+    }
+  },
+  {
+    "id": 1,
+    "type": "monsterNoIv",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "?% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} {{boostemoji}}\nEnds: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "sticker": "{{{stickerUrl}}}",
+      "location": true,
+      "webpage_preview": true
     }
   },
   {
@@ -63,6 +76,18 @@
   },
   {
     "id": 1,
+    "type": "raid",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "Raid against {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} has started at {{gymName}}! {{#ex}}(Ex){{/ex}}\nCP: {{cp}}, quick: {{quickMove}}, charge: {{chargeMove}} \n{{name}} lvl{{level}}. End: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "sticker": "{{{stickerUrl}}}",
+      "location": true,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": 1,
     "type": "egg",
     "default": true,
     "platform": "discord",
@@ -83,6 +108,18 @@
   },
   {
     "id": 1,
+    "type": "egg",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "Raid egg level{{level}} at {{gymName}} {{#ex}}(Ex){{/ex}}\nHatch at: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "sticker": "{{{stickerUrl}}}",
+      "location": true,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": 1,
     "type": "quest",
     "default": true,
     "platform": "discord",
@@ -95,6 +132,18 @@
           "url": "{{{imgUrl}}}"
         }
       }
+    }
+  },
+  {
+    "id": 1,
+    "type": "quest",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "{{questType}} \n Pokestop: {{pokestop_name}}\nConditions: {{conditionString}} \n Reward: {{rewardString}} {{monsterNames}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "sticker": "{{{stickerUrl}}}",
+      "location": true,
+      "webpage_preview": true
     }
   },
   {
@@ -116,6 +165,18 @@
   },
   {
     "id": 1,
+    "type": "invasion",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "Team Rocket at {{name}}\nType: {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{addr}}\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "sticker": "{{{stickerUrl}}}",
+      "location": true,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": 1,
     "type": "weatherchange",
     "default": true,
     "platform": "discord",
@@ -124,6 +185,15 @@
         "title": "Weather change!",
         "description": "NB! The weather for some active mons have changed from {{oldweather}} {{oldweatheremoji}} to {{weather}} {{weatheremoji}}!\nThis could have altered the reported IV!"
       }
+    }
+  },
+  {
+    "id": 1,
+    "type": "weatherchange",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "NB! The weather for some active mons have changed from {{oldweather}} {{oldweatheremoji}} to {{weather}} {{weatheremoji}}!\nThis could have altered the reported IV!"
     }
   },
   {
@@ -167,15 +237,65 @@
           {
             "name": "**Areas**",
             "value": "If your admin has configured areas, these other commands are available: \n `{{prefix}}area list`: Lists the possible areas you can add. \n `{{prefix}}location yourArea`: Sets yourArea as your location \n Admin commands: \n `{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
-	  },
-	  {
+          },
+          {
             "name": "**Further info**",
             "value": "See all details about the commands in [the full manual](https://muckelba.github.io/poracleWiki/v4/commands.html)"
-	  },
-	  {
+          },
+          {
             "name": "**How far can I walk in metres/minutes? According to the web...**",
             "value": "```Metres | Fast | Moderate | Easy Walk \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63```"
-	  }
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": 1,
+    "type": "greeting",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "embed": {
+        "title": "Welcome",
+        "description": "Thank you for registering \nPlease set a location `{{prefix}}location name of place` or add ares where to receive alarms from",
+        "fields": [
+          {
+            "name": "***General commands***",
+            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n`{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`{{prefix}}area remove somePlace`: Removes a configured area \n `{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/)"
+          },
+          {
+            "name": "***Basic Examples***",
+            "value": "You probably want to start off with something like these 5 commands. Change the distances (d=metres) to suit yourself. \n `{{prefix}}location 123 Common Road, Town, Region` \n `{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka unown d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}track everything iv100 d1000` \n `{{prefix}}quest silver_pinap_berry d500 clean`"
+          },
+          {
+            "name": "***Monster tracking commands***",
+            "value": "The command needs to include at least one monster and any amount of filters. E.g. \n `{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
+          },
+          {
+            "name": "***Raid tracking commands***",
+            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any variables are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}raid remove lapras vileplume`: will remove tracking for lapras and vileplume raids"
+          },
+          {
+            "name": "***Quest tracking commands***",
+            "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n `{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
+          },
+          {
+            "name": "***Invasion tracking commands***",
+            "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
+          },
+          {
+            "name": "***Areas***",
+            "value": "If your admin has configured areas, these other commands are available: \n `{{prefix}}area list`: lists the possible areas you can add. \n `{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n `{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
+          },
+          {
+            "name": "***Further info***",
+            "value": "See all details about the commands in [the full manual](https://muckelba.github.io/poracleWiki/v4/commands.html)"
+          },
+          {
+            "name": "***How far can I walk in metres/minutes? According to the web...***",
+            "value": "`Metres | Fast | Moderate | Easy Walk \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63`"
+          }
         ]
       }
     }

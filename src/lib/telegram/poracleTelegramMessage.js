@@ -1,3 +1,5 @@
+const fs = require('fs')
+
 class PoracleTelegramMessage {
 	constructor(ctx) {
 		this.ctx = ctx
@@ -23,6 +25,15 @@ class PoracleTelegramMessage {
 			parse_mode: 'Markdown',
 			disable_web_page_preview: true,
 		})
+	}
+
+	async replyWithAttachment(message, filename) {
+		const document = fs.readFileSync(filename)
+		this.ctx.reply(message, {
+			parse_mode: 'Markdown',
+			disable_web_page_preview: true,
+		})
+		return this.ctx.telegram.sendDocument(this.user.id, { source: document, filename: 'tracked.txt'})
 	}
 
 	async react(message) {

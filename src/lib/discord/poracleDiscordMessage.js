@@ -22,6 +22,10 @@ class PoracleDiscordMessage {
 		return this.msg.reply(message)
 	}
 
+	async replyWithAttachment(message, attachment) {
+		return this.msg.reply(message, { files: [attachment] })
+	}
+
 	async react(message) {
 		return this.msg.react(message)
 	}
