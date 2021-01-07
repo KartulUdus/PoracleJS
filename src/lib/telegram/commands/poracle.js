@@ -6,7 +6,7 @@ module.exports = async (ctx) => {
 
 	const { controller } = ctx.state
 
-	let userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`
+	let userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name ? ctx.update.message.from.last_name : ''} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`
 	if (ctx.update.message.chat.type === 'private') {
 		return controller.log.info({ level: 'info', message: `${userName} tried to register in direct message`, event: 'telegram:registerFail' })
 	}
@@ -34,6 +34,10 @@ module.exports = async (ctx) => {
 				id: user.id, type: 'telegram:user', name: userName || '', area: '[]',
 			})
 			await ctx.reply('✅')
+		}
+
+		if (controller.config.telegram.groupWelcomeText) {
+			await ctx.reply(controller.config.telegram.groupWelcomeText, {parse_mode: 'Markdown'})
 		}
 
 		const dts = controller.dts.find((template) => template.type === 'greeting' && template.platform === 'telegram' && template.default)

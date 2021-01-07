@@ -12,6 +12,7 @@ const Telegraf = require('telegraf')
 
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
+const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
@@ -81,12 +82,52 @@ if (config.discord.enabled) {
 	}
 }
 
+let telegramUtil
 if (config.telegram.enabled) {
 	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
+
+	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
+		telegramUtil = new TelegramUtil(config, log, telegraf)
+	}
 }
 
-// todo remove lint passing log
-log.debug(telegram)
+async function removeInvalidUser(user) {
+	await fastify.monsterController.deleteQuery('egg', { id: user.id })
+	await fastify.monsterController.deleteQuery('monsters', { id: user.id })
+	await fastify.monsterController.deleteQuery('raid', { id: user.id })
+	await fastify.monsterController.deleteQuery('quest', { id: user.id })
+	await fastify.monsterController.deleteQuery('humans', { id: user.id })
+}
+
+async function syncTelegramMembership() {
+	try {
+		log.info('Verification of Telegram group membership to Poracle user\'s roles starting...')
+
+		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'telegram:user' })
+		let invalidUsers = []
+		for (const channel of config.telegram.channels) {
+			invalidUsers = await telegramUtil.checkMembership(usersToCheck, channel)
+			usersToCheck = invalidUsers
+		}
+
+		if (invalidUsers[0]) {
+			log.info('Invalid users found, removing from dB...')
+			for(const user of invalidUsers) {
+				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
+				if (config.general.roleCheckDeletionsAllowed) {
+					await removeInvalidUser(user)
+				}
+			}
+		} else {
+			log.info('No invalid users found, all good!')
+		}
+	} catch (err) {
+		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
+	}
+	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
+}
+
+
 
 async function run() {
 	if (config.discord.enabled) {
@@ -142,6 +183,10 @@ async function run() {
 			// }
 			if (!worker.busy) worker.work(fastify.telegramQueue.shift())
 		}, 10)
+
+		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
+			setTimeout(syncTelegramMembership, 30000)
+		}
 	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)

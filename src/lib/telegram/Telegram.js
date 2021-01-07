@@ -134,6 +134,27 @@ class Telegram {
 		this.log.info(data)
 		return this.userAlert(data)
 	}
+
+	async checkMembership(users, group) {
+		const allUsers = users
+		const invalidUsers = []
+		//const guild = await this.client.guilds.fetch(guildID)
+		for (const user of allUsers) {
+			this.log.info(`Checking role for: ${user.name} - ${user.id}`)
+			let telegramduser = await this.bot.telegram.getChatMember(group, user.id)
+			if (telegramuser) {
+
+			}
+			// if(discorduser.roles.cache.find(r => validRoles.includes(r.id))) {
+			// 	log.info(`${discorduser.user.username} has a valid role`)
+			// }else{
+			// 	log.info(`${discorduser.user.username} doesn't have a valid role`)
+			// 	invalidUsers.push(user)
+			// }
+		}
+		return invalidUsers
+	}
+
 }
 
 module.exports = Telegram

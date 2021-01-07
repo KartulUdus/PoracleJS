@@ -18,7 +18,8 @@
         "disableInvasion": false,
         "disablePokestop": false,
         "disableQuest": false,
-        "disableWeather": false
+        "disableWeather": false,
+        "roleCheckDeletionsAllowed": false
     },
     "logger": {
         "level": "info",
@@ -83,6 +84,8 @@
       },
       "telegram": {
         "enabled": false,
+        "checkRole": false,
+        "checkRoleInterval": 6,
         "token": "",
         "admins": [""],
         "channels": [""]

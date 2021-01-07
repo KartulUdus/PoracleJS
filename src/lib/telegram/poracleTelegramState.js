@@ -1,6 +1,7 @@
 const PoracleTelegramUtil = require('./poracleTelegramUtil')
 const PoracleTelegramMessage = require('./poracleTelegramMessage')
 const mustache = require('handlebars')
+const hastebin = require('hastebin-gen')
 
 class PoracleTelegramState {
 	constructor(ctx) {
@@ -15,6 +16,7 @@ class PoracleTelegramState {
 		this.translator = ctx.state.controller.translator
 		this.config = ctx.state.controller.config
 		this.mustache = mustache
+		this.hastebin = hastebin
 	}
 
 	createMessage(msg) {

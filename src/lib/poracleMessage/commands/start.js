@@ -1,3 +1,5 @@
+const helpCommand = require('./help.js')
+
 exports.run = async (client, msg, args) => {
 	try {
 		// Check target
@@ -11,6 +13,8 @@ exports.run = async (client, msg, args) => {
 
 		await client.query.updateQuery('humans', { enabled: 1 }, { id: target.id })
 		await msg.react('✅')
+
+		return helpCommand.run(client, msg, args)
 	} catch (err) {
 		client.log.error(`start command ${msg.content} unhappy:`, err)
 	}
