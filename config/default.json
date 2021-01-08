@@ -45,6 +45,7 @@
         "defaultGeofenceColor": "#3399ff"
     },
     "pvp": {
+        "pvpEvolutionDirectTracking": false,
         "pvpDisplayMaxRank": 10,
         "pvpDisplayGreatMinCP": 1450,
         "pvpDisplayUltraMinCP": 2450,
