@@ -12,7 +12,7 @@ exports.run = async (client, msg, args) => {
 		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 		let reaction = '👌'
 
-		//const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
+		// const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 		const pings = ''
 		let monsters = []
 		let fullMonsters = []
@@ -139,7 +139,7 @@ exports.run = async (client, msg, args) => {
 		if (!remove) {
 			const result = await client.query.insertOrUpdateQuery('quest', questTracks)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
-			client.log.info(`${target.name} added quest trackings to ${target.name}`)
+			client.log.info(`${target.name} added quest trackings`)
 		} else {
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql
 			items.push(0)

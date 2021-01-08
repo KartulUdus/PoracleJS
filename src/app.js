@@ -81,6 +81,10 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
 		}
 	}
+
+	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+		roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
+	}
 }
 
 let telegramUtil
@@ -128,11 +132,7 @@ async function syncTelegramMembership() {
 	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
 }
 
-if (config.discord.enabled && config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-	roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
-}
-
-async function syncRole() {
+async function syncDiscordRole() {
 	try {
 		log.info('Verification of Poracle user\'s roles starting...')
 		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
@@ -155,7 +155,7 @@ async function syncRole() {
 	} catch (err) {
 		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
 	}
-	setTimeout(syncRole, config.discord.checkRoleInterval * 3600000)
+	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
 async function run() {
@@ -184,6 +184,10 @@ async function run() {
 			}
 			if (!worker.busy) worker.work(fastify.discordQueue.shift())
 		}, 10)
+
+		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+			setTimeout(syncDiscordRole, 10000)
+		}
 	}
 
 	if (config.telegram.enabled) {
@@ -216,10 +220,6 @@ async function run() {
 		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 			setTimeout(syncTelegramMembership, 30000)
 		}
-	}
-
-	if (config.discord.enabled && config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-		setTimeout(syncRole, 10000)
 	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
