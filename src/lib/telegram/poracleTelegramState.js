@@ -1,7 +1,7 @@
-const PoracleTelegramUtil = require('./poracleTelegramUtil')
-const PoracleTelegramMessage = require('./poracleTelegramMessage')
 const mustache = require('handlebars')
 const hastebin = require('hastebin-gen')
+const PoracleTelegramUtil = require('./poracleTelegramUtil')
+const PoracleTelegramMessage = require('./poracleTelegramMessage')
 
 class PoracleTelegramState {
 	constructor(ctx) {

@@ -6,7 +6,7 @@ module.exports = async (ctx) => {
 
 	const { controller } = ctx.state
 
-	let userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name ? ctx.update.message.from.last_name : ''} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`
+	const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name ? ctx.update.message.from.last_name : ''} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`
 	if (ctx.update.message.chat.type === 'private') {
 		return controller.log.info({ level: 'info', message: `${userName} tried to register in direct message`, event: 'telegram:registerFail' })
 	}
@@ -26,7 +26,7 @@ module.exports = async (ctx) => {
 	//	}
 
 	try {
-		const isRegistered = await controller.query.countQuery('humans', {id: user.id})
+		const isRegistered = await controller.query.countQuery('humans', { id: user.id })
 		if (isRegistered) {
 			await ctx.reply('👌')
 		} else {
@@ -37,13 +37,13 @@ module.exports = async (ctx) => {
 		}
 
 		if (controller.config.telegram.groupWelcomeText) {
-			await ctx.reply(controller.config.telegram.groupWelcomeText, {parse_mode: 'Markdown'})
+			await ctx.reply(controller.config.telegram.groupWelcomeText, { parse_mode: 'Markdown' })
 		}
 
 		const dts = controller.dts.find((template) => template.type === 'greeting' && template.platform === 'telegram' && template.default)
 		if (dts) {
-			let message = dts.template
-			const view = {prefix: '/'}
+			const message = dts.template
+			const view = { prefix: '/' }
 
 			let messageText = ''
 			if (message.embed) {
@@ -54,13 +54,13 @@ module.exports = async (ctx) => {
 			const compiledMustache = mustache.compile(JSON.stringify(message))
 			const greeting = JSON.parse(compiledMustache(view))
 
-			const fields = greeting.embed.fields
+			const { fields } = greeting.embed
 			fields.forEach((field) => {
 				messageText = messageText.concat(`\n\n${field.name}\n\n${field.value}`)
 			})
-			await ctx.telegram.sendMessage(user.id, messageText, {parse_mode: 'Markdown'})
+			await ctx.telegram.sendMessage(user.id, messageText, { parse_mode: 'Markdown' })
 		}
-		await ctx.telegram.sendMessage(user.id, 'You are now registered with Poracle', {parse_mode: 'Markdown'})
+		await ctx.telegram.sendMessage(user.id, 'You are now registered with Poracle', { parse_mode: 'Markdown' })
 
 		controller.log.info(`${userName} Registered!`)
 	} catch (err) {

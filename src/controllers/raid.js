@@ -258,6 +258,12 @@ class Raid extends Controller {
 
 					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template.toString() && template.platform === platform))
 					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === platform)
+					if (!raidDts) {
+						this.log.error(`Cannot find DTS template ${platform} raid ${cares.template}`)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+
 					const template = JSON.stringify(raidDts.template)
 					const mustache = this.mustache.compile(template)
 					const message = JSON.parse(mustache(view))
@@ -363,6 +369,11 @@ class Raid extends Controller {
 
 				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id.toString() === cares.template.toString() && template.platform === platform))
 				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === platform)
+				if (!eggDts) {
+					this.log.error(`Cannot find DTS template ${platform} egg ${cares.template}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
 
 				const template = JSON.stringify(eggDts.template)
 				const mustache = this.mustache.compile(template)

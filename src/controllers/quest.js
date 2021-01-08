@@ -203,6 +203,12 @@ class Quest extends Controller {
 
 				let questDts = this.dts.find((template) => template.type === 'quest' && template.id.toString() === cares.template.toString() && template.platform === platform)
 				if (!questDts) questDts = this.dts.find((template) => template.type === 'quest' && template.default && template.platform === platform)
+				if (!questDts) {
+					this.log.error(`Cannot find DTS template ${platform} quest ${cares.template}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+
 				const template = JSON.stringify(questDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))

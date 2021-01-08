@@ -112,7 +112,7 @@ async function syncTelegramMembership() {
 
 		if (invalidUsers[0]) {
 			log.info('Invalid users found, removing from dB...')
-			for(const user of invalidUsers) {
+			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
 				if (config.general.roleCheckDeletionsAllowed) {
 					await removeInvalidUser(user)
@@ -126,8 +126,6 @@ async function syncTelegramMembership() {
 	}
 	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
 }
-
-
 
 async function run() {
 	if (config.discord.enabled) {

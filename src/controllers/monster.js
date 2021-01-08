@@ -301,12 +301,12 @@ class Monster extends Controller {
 				if (platform == 'webhook') platform = 'discord'
 
 				let monsterDts
-				if (data.iv === -1) {
-					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id.toString() === cares.template.toString() && template.platform === platform)
-					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.default && template.platform === platform)
-				} else {
-					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id.toString() === cares.template.toString() && template.platform === platform)
-					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monster' && template.default && template.platform === platform)
+				const templateName = (data.iv === -1) ? 'monsterNoIv' : 'monster'
+				monsterDts = this.dts.find((template) => template.type === templateName && template.id.toString() === cares.template.toString() && template.platform === platform)
+				if (!monsterDts) monsterDts = this.dts.find((template) => template.type === templateName && template.default && template.platform === platform)
+				if (!monsterDts) {
+					this.log.error(`Cannot find DTS template ${platform} ${templateName} ${cares.template}`)
+					continue
 				}
 				const template = JSON.stringify(monsterDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))

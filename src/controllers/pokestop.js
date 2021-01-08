@@ -233,8 +233,8 @@ class Pokestop extends Controller {
 				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id.toString() === cares.template.toString() && template.platform === platform)
 				if (!invasionDts) invasionDts = this.dts.find((template) => template.type === 'invasion' && template.default && template.platform === platform)
 				if (!invasionDts) {
-					this.log.warn(`Didn't get DTS for 'invasion',  template ${cares.templaste}`)
-					break
+					this.log.warn(`Didn't get DTS for 'invasion',  template ${cares.template}`)
+					continue
 				}
 				const template = JSON.stringify(invasionDts.template)
 				const mustache = this.mustache.compile(template)

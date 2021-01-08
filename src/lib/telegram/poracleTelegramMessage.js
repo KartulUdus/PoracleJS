@@ -33,7 +33,7 @@ class PoracleTelegramMessage {
 			parse_mode: 'Markdown',
 			disable_web_page_preview: true,
 		})
-		return this.ctx.telegram.sendDocument(this.user.id, { source: document, filename: 'tracked.txt'})
+		return this.ctx.telegram.sendDocument(this.user.id, { source: document, filename: 'tracked.txt' })
 	}
 
 	async react(message) {

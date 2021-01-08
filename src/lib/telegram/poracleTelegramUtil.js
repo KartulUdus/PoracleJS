@@ -38,7 +38,9 @@ class PoracleTelegramUtil {
 			return { canContinue: false }
 		}
 
-		let target = { id: this.msg.userId, name: this.msg.userName, type: 'telegram:user', channel: false }
+		let target = {
+			id: this.msg.userId, name: this.msg.userName, type: 'telegram:user', channel: false,
+		}
 
 		let channelName = args.find((arg) => arg.match(this.client.re.nameRe))
 		if (channelName) channelName = channelName.replace(this.client.translator.translate('name'), '')

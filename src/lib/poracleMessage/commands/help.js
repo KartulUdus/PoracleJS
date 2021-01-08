@@ -1,5 +1,4 @@
 exports.run = async (client, msg, args) => {
-
 	try {
 		// Check target
 		const util = client.createUtil(msg, args)
@@ -20,7 +19,6 @@ exports.run = async (client, msg, args) => {
 			if (message.embed.description) message.embed.description = ''
 		}
 
-
 		const view = { prefix: util.prefix }
 		const mustache = client.mustache.compile(JSON.stringify(message))
 		const greeting = JSON.parse(mustache(view))
@@ -29,7 +27,7 @@ exports.run = async (client, msg, args) => {
 			await msg.reply(greeting)
 		} else {
 			let messageText = ''
-			const fields = greeting.embed.fields
+			const { fields } = greeting.embed
 			fields.forEach((field) => {
 				messageText = messageText.concat(`\n\n${field.name}\n\n${field.value}`)
 			})
