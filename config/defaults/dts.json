@@ -77,9 +77,9 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "{{questType}} \n Pokestop: {{pokestop_name}}",
+        "title": "{{questType}}\nPokestop Name: {{{pokestop_name}}}",
         "url": "{{{mapurl}}}",
-        "description": "Conditions: {{conditionString}} \n Reward: {{rewardString}} {{monsterNames}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "description": "{{#if conditionString}}Conditions: {{conditionString}}\n{{/if}}Reward: {{#if monsterNames}}{{monsterNames}}{{else}}{{rewardString}}{{/if}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
