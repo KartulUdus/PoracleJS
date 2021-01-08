@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, isRegistered, userHasLocation, userHasArea,
+			canContinue, target,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return

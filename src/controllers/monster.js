@@ -306,6 +306,7 @@ class Monster extends Controller {
 				if (!monsterDts) monsterDts = this.dts.find((template) => template.type === templateName && template.default && template.platform === platform)
 				if (!monsterDts) {
 					this.log.error(`Cannot find DTS template ${platform} ${templateName} ${cares.template}`)
+					// eslint-disable-next-line no-continue
 					continue
 				}
 				const template = JSON.stringify(monsterDts.template)

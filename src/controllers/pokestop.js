@@ -234,6 +234,7 @@ class Pokestop extends Controller {
 				if (!invasionDts) invasionDts = this.dts.find((template) => template.type === 'invasion' && template.default && template.platform === platform)
 				if (!invasionDts) {
 					this.log.warn(`Didn't get DTS for 'invasion',  template ${cares.template}`)
+					// eslint-disable-next-line no-continue
 					continue
 				}
 				const template = JSON.stringify(invasionDts.template)

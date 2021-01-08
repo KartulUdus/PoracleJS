@@ -4,15 +4,10 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, isRegistered, userHasLocation, userHasArea,
+			canContinue, target,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-
-		// Check target
-		const confAreas = client.geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
-		const confAreas2 = client.geofence.map((area) => area.name.replace(/ /gi, '_')).sort()
-		const confUse = confAreas2.join('\n')
 
 		// Remove arguments that we don't want to keep for area processing
 		for (let i = 0; i < args.length; i++) {

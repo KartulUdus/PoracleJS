@@ -6,7 +6,6 @@ module.exports = async (ctx) => {
 	const user = ctx.update.message.from || ctx.update.message.chat
 
 	const [args] = command.splitArgsArray
-	controller.log.info('group ${args}')
 
 	try {
 		// Check target
@@ -39,7 +38,7 @@ module.exports = async (ctx) => {
 			await ctx.reply('✅')
 		} else if (args.find((arg) => arg === 'remove')) {
 			if (!isRegistered) {
-				return await msg.reply(`${target.id} ${controller.translator.translate('does not seem to be registered. add it with')} /${controller.translator.translate('channel')} ${controller.translator.translate('add')}`)
+				return await ctx.reply(`${target.id} ${controller.translator.translate('does not seem to be registered. add it with')} /${controller.translator.translate('channel')} ${controller.translator.translate('add')}`)
 			}
 			if (isRegistered) {
 				await controller.query.deleteQuery('humans', { id: target.id })

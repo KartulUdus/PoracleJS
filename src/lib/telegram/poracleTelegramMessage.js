@@ -45,7 +45,7 @@ class PoracleTelegramMessage {
 	}
 
 	async send(target, message) {
-
+		return this.ctx.telegram.sendMessage(target, message)
 	}
 }
 

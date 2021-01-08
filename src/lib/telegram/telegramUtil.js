@@ -1,5 +1,3 @@
-const fs = require('fs')
-
 class TelegramUtil {
 	constructor(config, log, telegraf) {
 		this.config = config
@@ -10,8 +8,7 @@ class TelegramUtil {
 	async checkMembership(users, group) {
 		const allUsers = users
 		const invalidUsers = []
-		// const guild = await this.client.guilds.fetch(guildID)
-		const chat = await this.telegraf.telegram.getChat(group)
+
 		for (const user of allUsers) {
 			this.log.info(`Checking role for: ${user.name} - ${user.id}`)
 			const telegramUser = await this.telegraf.telegram.getChatMember(group, user.id)

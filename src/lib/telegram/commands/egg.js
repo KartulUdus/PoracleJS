@@ -13,7 +13,7 @@ module.exports = async (ctx) => {
 		const ptm = new PoracleTelegramMessage(ctx)
 		const pts = new PoracleTelegramState(ctx)
 
-		await commandLogic.run(pts, ptm, ctx.state.command.splitArgsArray[0])
+		await commandLogic.run(pts, ptm, command.splitArgsArray[0])
 	} catch (err) {
 		controller.log.error('Track command unhappy:', err)
 	}

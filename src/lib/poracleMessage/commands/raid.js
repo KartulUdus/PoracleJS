@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, isRegistered, userHasLocation, userHasArea,
+			canContinue, target, userHasLocation, userHasArea,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -12,9 +12,7 @@ exports.run = async (client, msg, args) => {
 		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 
 		let reaction = '👌'
-		const validTracks = 0
 
-		//		for (const args of command) {
 		const remove = !!args.find((arg) => arg === 'remove')
 
 		let monsters = []
@@ -116,8 +114,6 @@ exports.run = async (client, msg, args) => {
 			}
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
-		//		}
-		//		if (!validTracks) return await msg.reply(client.translator.translate('404 no valid tracks found'))
 		await msg.react(reaction)
 	} catch (err) {
 		client.log.error('raid command unhappy:', err)
