@@ -71,6 +71,7 @@ fastify.decorate('hookQueue', [])
 const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
+let roleWorker
 let telegram
 let workingOnHooks = false
 
@@ -125,6 +126,36 @@ async function syncTelegramMembership() {
 		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
 	}
 	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
+}
+
+if (config.discord.enabled && config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+	roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
+}
+
+async function syncRole() {
+	try {
+		log.info('Verification of Poracle user\'s roles starting...')
+		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
+		let invalidUsers = []
+		for (const guild of config.discord.guilds) {
+			invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
+			usersToCheck = invalidUsers
+		}
+		if (invalidUsers[0]) {
+			log.info('Invalid users found, removing from dB...')
+			for (const user of invalidUsers) {
+				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
+				if (config.general.roleCheckDeletionsAllowed) {
+					await removeInvalidUser(user)
+				}
+			}
+		} else {
+			log.info('No invalid users found, all good!')
+		}
+	} catch (err) {
+		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
+	}
+	setTimeout(syncRole, config.discord.checkRoleInterval * 3600000)
 }
 
 async function run() {
@@ -185,6 +216,10 @@ async function run() {
 		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 			setTimeout(syncTelegramMembership, 30000)
 		}
+	}
+
+	if (config.discord.enabled && config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+		setTimeout(syncRole, 10000)
 	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)

@@ -47,6 +47,7 @@
         "defaultGeofenceColor": "#3399ff"
     },
     "pvp": {
+        "pvpEvolutionDirectTracking": false,
         "pvpDisplayMaxRank": 10,
         "pvpDisplayGreatMinCP": 1450,
         "pvpDisplayUltraMinCP": 2450,
@@ -62,9 +63,12 @@
     },
     "discord": {
         "enabled": true,
+        "checkRole": false,
+        "checkRoleInterval": 6,
         "unknownResponse": false,
         "invite": "",
         "token": [],
+        "guilds": ["358180805031493634"],
         "channels": ["533927791096233984"],
         "userRole": ["roleId1", "358207117951369217"],
         "admins": ["222742859059560458"],

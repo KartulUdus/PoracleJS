@@ -12,17 +12,18 @@ class Monster extends Controller {
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
+		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
+		if (data.pvpEvoLookup) pokemonQueryString = `(pokemon_id=${data.pvp_pokemon_id} and (form = 0 or form = ${data.pvp_form}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on humans.id = monsters.id
 		where humans.enabled = true and
-		(pokemon_id=${data.pokemon_id} or pokemon_id=0) and
+		(${pokemonQueryString}) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
 		min_cp<=${data.cp} and
 		max_cp>=${data.cp} and
 		(gender = ${data.gender} or gender = 0) and
-		(form = ${data.form} or form = 0) and
 		min_level<=${data.pokemon_level} and
 		max_level>=${data.pokemon_level} and
 		atk<=${data.individual_attack} and
@@ -41,35 +42,38 @@ class Monster extends Controller {
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-			and
-			(
+				and
 				(
-					round(
-						6371000
-						* acos(cos( radians(${data.latitude}) )
-						* cos( radians( humans.latitude ) )
-						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
-						+ sin( radians(${data.latitude}) )
-						* sin( radians( humans.latitude ) )
+					(
+						round(
+							6371000
+							* acos(cos( radians(${data.latitude}) )
+							* cos( radians( humans.latitude ) )
+							* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+							+ sin( radians(${data.latitude}) )
+							* sin( radians( humans.latitude ) )
 						)
 					) < monsters.distance and monsters.distance != 0)
 					or
 					(
 						monsters.distance = 0 and (${areastring})
 					)
-			)
-			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
-			`)
+				)
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
+				`)
 		} else {
 			query = query.concat(`
-				and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
-			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
-			`)
+					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
+					group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
+					`)
 		}
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({
+				lat: res.latitude,
+				lon: res.longitude,
+			}, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
@@ -136,8 +140,8 @@ class Monster extends Controller {
 			}
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-			|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-			|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			data.name = this.translator.translate(monster.name)
 			data.formname = this.translator.translate(monster.form.name)
@@ -177,6 +181,10 @@ class Monster extends Controller {
 			data.emoji = e
 			data.emojiString = e.join('')
 
+			data.pvp_pokemon_id = data.pokemon_id
+			data.pvp_form = data.form
+			data.pvpEvolutionData = {}
+
 			data.bestGreatLeagueRank = 4096
 			data.bestGreatLeagueRankCP = 0
 			if (data.pvp_rankings_great_league) {
@@ -186,6 +194,29 @@ class Monster extends Controller {
 						data.bestGreatLeagueRankCP = stats.cp || 0
 					} else if (stats.rank && stats.cp && stats.rank === data.bestGreatLeagueRank && stats.cp > data.bestGreatLeagueRankCP) {
 						data.bestGreatLeagueRankCP = stats.cp
+					}
+					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterGreatMinCP) {
+						if (data.pvpEvolutionData[stats.pokemon]) {
+							data.pvpEvolutionData[stats.pokemon].greatLeague = {
+								rank: stats.rank,
+								percentage: stats.percentage,
+								pokemon: stats.pokemon,
+								form: stats.form,
+								level: stats.level,
+								cp: stats.cp,
+							}
+						} else {
+							data.pvpEvolutionData[stats.pokemon] = {
+								greatLeague: {
+									rank: stats.rank,
+									percentage: stats.percentage,
+									pokemon: stats.pokemon,
+									form: stats.form,
+									level: stats.level,
+									cp: stats.cp,
+								},
+							}
+						}
 					}
 				}
 			}
@@ -199,6 +230,29 @@ class Monster extends Controller {
 						data.bestUltraLeagueRankCP = stats.cp || 0
 					} else if (stats.rank && stats.cp && stats.rank === data.bestUltraLeagueRank && stats.cp > data.bestUltraLeagueRankCP) {
 						data.bestUltraLeagueRankCP = stats.cp
+					}
+					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterUltraMinCP) {
+						if (data.pvpEvolutionData[stats.pokemon]) {
+							data.pvpEvolutionData[stats.pokemon].ultraLeague = {
+								rank: stats.rank,
+								percentage: stats.percentage,
+								pokemon: stats.pokemon,
+								form: stats.form,
+								level: stats.level,
+								cp: stats.cp,
+							}
+						} else {
+							data.pvpEvolutionData[stats.pokemon] = {
+								ultraLeague: {
+									rank: stats.rank,
+									percentage: stats.percentage,
+									pokemon: stats.pokemon,
+									form: stats.form,
+									level: stats.level,
+									cp: stats.cp,
+								},
+							}
+						}
 					}
 				}
 			}
@@ -225,13 +279,39 @@ class Monster extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
+			data.pvpEvoLookup = 0
 			const whoCares = await this.monsterWhoCares(data)
+
+			if (this.config.pvp.pvpEvolutionDirectTracking) {
+				const pvpEvoData = data
+				if (Object.keys(data.pvpEvolutionData).length !== 0) {
+					for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
+						pvpEvoData.pvp_pokemon_id = key
+						pvpEvoData.pvp_form = pvpMon.greatLeague ? pvpMon.greatLeague.form : pvpMon.ultraLeague.form
+						pvpEvoData.bestGreatLeagueRank = pvpMon.greatLeague ? pvpMon.greatLeague.rank : 4096
+						pvpEvoData.bestGreatLeagueRankCP = pvpMon.greatLeague ? pvpMon.greatLeague.cp : 0
+						pvpEvoData.bestUltraLeagueRank = pvpMon.ultraLeague ? pvpMon.ultraLeague.rank : 4096
+						pvpEvoData.bestUltraLeagueRankCP = pvpMon.ultraLeague ? pvpMon.ultraLeague.cp : 0
+						pvpEvoData.pvpEvoLookup = 1
+						const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
+						if (pvpWhoCares[0]) {
+							whoCares.push(...pvpWhoCares)
+						}
+					}
+				}
+			}
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
 			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0]) return []
+
+			if (whoCares[0] && whoCares.length > 1 && this.config.pvp.pvpEvolutionDirectTracking) {
+				const whoCaresNoDuplicates = whoCares.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i)
+				whoCares.length = 0
+				whoCares.push(...whoCaresNoDuplicates)
+			}
 
 			hrstart = process.hrtime()
 			let discordCacheBad = true // assume the worst
