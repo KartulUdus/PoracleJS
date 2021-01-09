@@ -20,8 +20,8 @@ exports.run = async (client, msg, args) => {
 		let gender = 0
 		let clean = false
 		const types = args.filter((arg) => typeArray.includes(arg))
-		//			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
-		const pings = ''
+		const pings = msg.getPings()
+
 		for (const element of args) {
 			if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
 			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')

@@ -12,6 +12,11 @@ class PoracleTelegramMessage {
 		this.prefix = '/'
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	getPings() {
+		return ''
+	}
+
 	get isFromAdmin() {
 		return (this.config.telegram.admins.includes(this.userId.toString()))
 	}

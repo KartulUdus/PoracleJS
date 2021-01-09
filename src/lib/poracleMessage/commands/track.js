@@ -40,8 +40,7 @@ exports.run = async (client, msg, args) => {
 		const { pvpFilterUltraMinCP } = client.config.pvp
 		let template = 1
 		let clean = false
-		//	const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
-		const pings = '' // TEMP
+		const pings = msg.getPings()
 
 		// Check for monsters or forms
 		const formArgs = args.filter((arg) => arg.match(client.re.formRe))

@@ -10,6 +10,10 @@ class PoracleDiscordMessage {
 		this.userId = msg.author.id
 	}
 
+	getPings() {
+		return [this.msg.mentions.users.array().map((u) => `<@!${u.id}>`), this.msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
+	}
+
 	get isFromAdmin() {
 		return (this.client.config.discord.admins.includes(this.msg.author.id))
 	}

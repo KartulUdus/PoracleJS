@@ -12,8 +12,7 @@ exports.run = async (client, msg, args) => {
 		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 		let reaction = '👌'
 
-		// const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
-		const pings = ''
+		const pings = msg.getPings()
 		let monsters = []
 		let fullMonsters = []
 		let items = []

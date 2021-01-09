@@ -18,8 +18,7 @@ exports.run = async (client, msg, args) => {
 		let template = 1
 		let clean = false
 		let levels = []
-		// const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
-		const pings = ''
+		const pings = msg.getPings()
 
 		args.forEach((element) => {
 			if (element === 'ex') exclusive = 1
