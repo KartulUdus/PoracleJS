@@ -106,9 +106,10 @@ async function removeInvalidUser(user) {
 
 async function syncTelegramMembership() {
 	try {
-		log.info('Verification of Telegram group membership to Poracle user\'s roles starting...')
+		log.info('Verification of Telegram group membership for Poracle users starting...')
 
 		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'telegram:user' })
+		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
 		let invalidUsers = []
 		for (const channel of config.telegram.channels) {
 			invalidUsers = await telegramUtil.checkMembership(usersToCheck, channel)
@@ -134,8 +135,9 @@ async function syncTelegramMembership() {
 
 async function syncDiscordRole() {
 	try {
-		log.info('Verification of Poracle user\'s roles starting...')
+		log.info('Verification of Discord role membership to Poracle users starting...')
 		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
+		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
 		let invalidUsers = []
 		for (const guild of config.discord.guilds) {
 			invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)

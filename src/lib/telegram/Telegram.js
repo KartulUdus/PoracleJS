@@ -78,7 +78,6 @@ class Telegram {
 	}
 
 	async userAlert(data) {
-		//		this.log.warn(`Telegram sending message ${JSON.stringify(data.message)} / connection to ${data.name} ${data.target}`)
 		try {
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 			const messageIds = []
@@ -112,7 +111,6 @@ class Telegram {
 
 			if (data.clean) {
 				//				this.log.warn(`Telegram setting to clean in ${msgDeletionMs}ms`)
-
 				setTimeout(() => {
 					for (const id of messageIds) {
 						this.bot.telegram.deleteMessage(data.target, id)
