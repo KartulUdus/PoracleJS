@@ -295,7 +295,7 @@ class Quest extends Controller {
 						let typestring = ''
 						condition.info.pokemon_type_ids.forEach((typeId) => {
 							const type = Object.keys(this.utilData.types).find((key) => this.utilData.types[key].id === typeId)
-							const typename = type ? type : this.translator.translate('errorType')
+							const typename = type || this.translator.translate('errorType')
 							const template = this.utilData.questMonsterTypeString
 							const mustache = this.mustache.compile(this.translator.translate(template))
 							const monsterType = mustache({ name: this.translator.translate(typename), emoji: this.translator.translate(type.emoji) })

@@ -108,7 +108,7 @@ exports.run = async (client, msg, command) => {
 					rewardThing = Object.values(client.monsters).find((m) => m.id === quest.reward).name
 					rewardThing = client.translator.translate(rewardThing)
 				}
-				if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${client.translator.translate('or more stardust')}`:`${client.translator.translate('stardust')}`}`
+				if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${client.translator.translate('or more stardust')}` : `${client.translator.translate('stardust')}`}`
 				if (quest.reward_type === 2) rewardThing = client.translator.translate(client.utilData.items[quest.reward])
 				if (quest.reward_type === 12) {
 					if (quest.reward == 0) {

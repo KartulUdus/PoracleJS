@@ -5,21 +5,24 @@ module.exports = async (client, msg) => {
 	if (msg.author.bot) return
 
 	// Log all DM messages to dmLogChannelID
-	if (msg.channel.type === "dm" && client.config.discord.dmLogChannelID !== "") {
-		const message = `${msg.author.username} <@${msg.author.id}> > ${msg.cleanContent}`
+	if (msg.channel.type === 'dm' && client.config.discord.dmLogChannelID !== '') {
+		let message = `<@${msg.author.id}> > ${msg.cleanContent}`
+		if (client.config.discord.guilds.length > 1) {
+			message = `${msg.author.username} <@${msg.author.id}> > ${msg.cleanContent}`
+		}
 		try {
 			const channel = await client.channels.fetch(client.config.discord.dmLogChannelID)
 			const msgDeletionMs = (client.config.discord.dmLogChannelDeletionTime * 60) * 1000 || 0
 			if (!channel) {
-				log.warn(`channel dmLogChannel not found`)
+				log.warn('channel dmLogChannel not found')
 			} else {
-				const logmsg = await channel.send(message, {"allowedMentions": { "users" : []}})
+				const logmsg = await channel.send(message, { allowedMentions: { users: [] } })
 				if (msgDeletionMs > 0) {
 					logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 				}
 			}
 		} catch (err) {
-			log.error(`Failed to send Discord alert to dmLogChannel`, err)
+			log.error('Failed to send Discord alert to dmLogChannel', err)
 		}
 	}
 
