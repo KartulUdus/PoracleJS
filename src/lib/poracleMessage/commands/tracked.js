@@ -129,7 +129,7 @@ exports.run = async (client, msg, args) => {
 		}
 
 		if (message.length < 4000) {
-			return await msg.reply(message, { split: true })
+			return await msg.reply(message)
 		}
 
 		try {

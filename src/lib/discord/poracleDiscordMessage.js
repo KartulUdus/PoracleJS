@@ -23,6 +23,9 @@ class PoracleDiscordMessage {
 	}
 
 	async reply(message) {
+		if (message.length > 1999) {
+			return this.msg.reply(message, { split: true })
+		}
 		return this.msg.reply(message)
 	}
 
