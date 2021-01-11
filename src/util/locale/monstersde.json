@@ -3675,7 +3675,7 @@
     "spawn_rate": ""
   },
   "435": {
-    "name": "Skunktank",
+    "name": "Skuntank",
     "rarity": "",
     "types": [
       "Poison",
@@ -5228,7 +5228,7 @@
     "spawn_rate": ""
   },
   "619": {
-    "name": "Fu",
+    "name": "Lin-Fu",
     "rarity": "",
     "types": [
       "Fighting"
@@ -5236,7 +5236,7 @@
     "spawn_rate": ""
   },
   "620": {
-    "name": "Shu",
+    "name": "Wie-Shu",
     "rarity": "",
     "types": [
       "Fighting"
@@ -5703,7 +5703,7 @@
     "spawn_rate": ""
   },
   "674": {
-    "name": "Pam",
+    "name": "Pam-Pam",
     "rarity": "",
     "types": [
       "Fighting"
