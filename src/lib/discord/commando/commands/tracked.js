@@ -40,13 +40,22 @@ exports.run = async (client, msg, command) => {
 		if (command.find((args) => args.includes('area'))) {
 			return msg.reply(`${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 		}
-		let locationText = ''
-		if (+human.latitude !== 0 && +human.longitude !== 0) {
-			locationText = `${client.translator.translate('Your location is currently set to')} ${maplink}\n`
-		}
-		await msg.reply(`${client.translator.translate('Your alerts are currently')} **${human.enabled ? `${client.translator.translate('enabled')}` : `${client.translator.translate('disabled')}`}**\n${locationText}${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 
 		let message = ''
+		let locationText
+
+		if (+human.latitude !== 0 && +human.longitude !== 0) {
+			locationText = `\n${client.translator.translate('Your location is currently set to')} ${maplink}`
+		}else{
+			locationText = `\n${client.translator.translate('You have not set a location yet')}`
+		}
+		await msg.reply(`${client.translator.translate('Your alerts are currently')} **${human.enabled ? `${client.translator.translate('enabled')}` : `${client.translator.translate('disabled')}`}**${locationText}`)
+
+		if (human.area != '[]') {
+			message = message.concat('\n\n', `${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+		}else{
+			message = message.concat('\n\n', client.translator.translate('You have not selected any area yet'))
+		}
 
 		if (!client.config.general.disablePokemon) {
 			if (monsters.length) {
