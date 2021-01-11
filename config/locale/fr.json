@@ -32,7 +32,7 @@
 	"male":"mâle",
 	"clean":"clean",
 	"404 No valid invasion types found":"Erreur de commande",
-	":wave:, I set ":":wave:, la position de ",
+	"I set ":"la position de ",
 	"s location to : ":" est maintenant définie à : ",
 	"'s location to the following coordinates in":" est maintenant définie aux coordonnées suivantes à",
 	"Oops, you need to specify more than just a city name to locate accurately your position":"Oups, il faut préciser plus qu'un nom de ville pour situer précisément votre position",

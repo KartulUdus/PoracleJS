@@ -35,8 +35,7 @@ exports.run = async (client, msg, command) => {
 
 		let lat
 		let lon
-		let city
-		let country
+		let placeConfirmation = ''
 
 		const matches = search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
 		if (matches != null && matches.length >= 2) {
@@ -53,13 +52,12 @@ exports.run = async (client, msg, command) => {
 			}
 			lat = locations[0].latitude
 			lon = locations[0].longitude
-			city = locations[0].city
-			country = locations[0].country
+			placeConfirmation = locations[0].city ? ' **' + locations[0].city + ' - ' + locations[0].country + '** ' : ' **' + locations[0].country + '** '
 		}
 
 		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
-		await msg.reply(`${client.translator.translate(':wave:, I set ')}${target.name}${client.translator.translate('\'s location to the following coordinates in')} **${city} - ${country}** :\n${maplink}`)
+		await msg.reply(`👋, ${client.translator.translate('I set ')}${target.name}${client.translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`)
 		await msg.react('✅')
 	} catch (err) {
 		client.log.error(`location command ${msg.content} unhappy:`, err)
