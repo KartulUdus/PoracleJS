@@ -305,7 +305,7 @@ class Raid extends Controller {
 			}
 			if (!data.team_id) data.team_id = 0
 			if (data.name) data.gymName = data.name
-			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
+			data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
 			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
