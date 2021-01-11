@@ -104,7 +104,7 @@ class Quest extends Controller {
 			if (!data.team_id) data.team_id = 0
 			if (data.name) data.gymName = data.name
 			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
-			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 7915600
+			data.color = data.team_id ? this.utilData.teams[data.team_id].color : '50C878'
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				log.debug(`quest ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
