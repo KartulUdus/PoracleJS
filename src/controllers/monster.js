@@ -14,6 +14,8 @@ class Monster extends Controller {
 		})
 		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
 		if (data.pvpEvoLookup) pokemonQueryString = `(pokemon_id=${data.pvp_pokemon_id} and (form = 0 or form = ${data.pvp_form}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
+		let pvpQueryString = `great_league_ranking>=${data.bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and ultra_league_ranking>=${data.bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}`
+		if (data.pvpEvoLookup) pvpQueryString = `great_league_ranking>=${data.pvp_bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.pvp_bestGreatLeagueRankCP} and ultra_league_ranking>=${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.pvp_bestUltraLeagueRankCP}`
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on humans.id = monsters.id
@@ -34,10 +36,7 @@ class Monster extends Controller {
 		max_sta>=${data.individual_stamina} and
 		min_weight<=${data.weight} * 1000 and
 		max_weight>=${data.weight} * 1000 and
-		great_league_ranking>=${data.bestGreatLeagueRank} and
-		great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and
-		ultra_league_ranking>=${data.bestUltraLeagueRank} and
-		ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}
+		(${pvpQueryString})
 		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
@@ -288,10 +287,10 @@ class Monster extends Controller {
 					for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
 						pvpEvoData.pvp_pokemon_id = key
 						pvpEvoData.pvp_form = pvpMon.greatLeague ? pvpMon.greatLeague.form : pvpMon.ultraLeague.form
-						pvpEvoData.bestGreatLeagueRank = pvpMon.greatLeague ? pvpMon.greatLeague.rank : 4096
-						pvpEvoData.bestGreatLeagueRankCP = pvpMon.greatLeague ? pvpMon.greatLeague.cp : 0
-						pvpEvoData.bestUltraLeagueRank = pvpMon.ultraLeague ? pvpMon.ultraLeague.rank : 4096
-						pvpEvoData.bestUltraLeagueRankCP = pvpMon.ultraLeague ? pvpMon.ultraLeague.cp : 0
+						pvpEvoData.pvp_bestGreatLeagueRank = pvpMon.greatLeague ? pvpMon.greatLeague.rank : 4096
+						pvpEvoData.pvp_bestGreatLeagueRankCP = pvpMon.greatLeague ? pvpMon.greatLeague.cp : 0
+						pvpEvoData.pvp_bestUltraLeagueRank = pvpMon.ultraLeague ? pvpMon.ultraLeague.rank : 4096
+						pvpEvoData.pvp_bestUltraLeagueRankCP = pvpMon.ultraLeague ? pvpMon.ultraLeague.cp : 0
 						pvpEvoData.pvpEvoLookup = 1
 						const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
 						if (pvpWhoCares[0]) {

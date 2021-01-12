@@ -6,9 +6,12 @@ module.exports = async (client, msg) => {
 
 	// Log all DM messages to dmLogChannelID
 	if (msg.channel.type === 'dm' && client.config.discord.dmLogChannelID !== '') {
-		let message = `<@${msg.author.id}> > ${msg.cleanContent}`
+		let message = `${msg.author} > ${msg.cleanContent}`
 		if (client.config.discord.guilds.length > 1) {
-			message = `${msg.author.username} <@${msg.author.id}> > ${msg.cleanContent}`
+			message = `${msg.author.username} ${msg.author} > ${msg.cleanContent}`
+		}
+		if (client.config.discord.admins.includes(msg.author.id)) {
+			message = `**${msg.author.username}** > ${msg.cleanContent}`
 		}
 		try {
 			const channel = await client.channels.fetch(client.config.discord.dmLogChannelID)
@@ -16,7 +19,7 @@ module.exports = async (client, msg) => {
 			if (!channel) {
 				log.warn('channel dmLogChannel not found')
 			} else {
-				const logmsg = await channel.send(message, { allowedMentions: { users: [] } })
+				const logmsg = await channel.send(message)
 				if (msgDeletionMs > 0) {
 					logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 				}
