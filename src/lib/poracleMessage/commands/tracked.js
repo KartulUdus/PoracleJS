@@ -21,13 +21,22 @@ exports.run = async (client, msg, args) => {
 		if (args.includes('area')) {
 			return msg.reply(`${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 		}
-		let locationText = ''
-		if (+human.latitude !== 0 && +human.longitude !== 0) {
-			locationText = `${client.translator.translate('Your location is currently set to')} ${maplink}\n`
-		}
-		await msg.reply(`${client.translator.translate('Your alerts are currently')} **${human.enabled ? `${client.translator.translate('enabled')}` : `${client.translator.translate('disabled')}`}**\n${locationText}${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 
 		let message = ''
+		let locationText
+
+		if (+human.latitude !== 0 && +human.longitude !== 0) {
+			locationText = `\n${client.translator.translate('Your location is currently set to')} ${maplink}`
+		} else {
+			locationText = `\n${client.translator.translate('You have not set a location yet')}`
+		}
+		await msg.reply(`${client.translator.translate('Your alerts are currently')} **${human.enabled ? `${client.translator.translate('enabled')}` : `${client.translator.translate('disabled')}`}**${locationText}`)
+
+		if (human.area != '[]') {
+			message = message.concat('\n\n', `${client.translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+		} else {
+			message = message.concat('\n\n', client.translator.translate('You have not selected any area yet'))
+		}
 
 		if (!client.config.general.disablePokemon) {
 			if (monsters.length) {
@@ -124,7 +133,7 @@ exports.run = async (client, msg, args) => {
 				} else {
 					typeText = invasion.grunt_type
 				}
-				message = message.concat(`\n${client.translator.translate('grunt type').charAt(0).toUpperCase() + client.translator.translate('grunt type').slice(1)}: **${client.translator.translate(typeText)}**${invasion.distance ? ` | ${client.translator.translate('distance')}: ${invasion.distance}m` : ''} | ${client.translator.translate('gender')}: ${genderText}`)
+				message = message.concat(`\n${client.translator.translate('grunt type').charAt(0).toUpperCase() + client.translator.translate('grunt type').slice(1)}: **${client.translator.translate(typeText, true)}**${invasion.distance ? ` | ${client.translator.translate('distance')}: ${invasion.distance}m` : ''} | ${client.translator.translate('gender')}: ${genderText}`)
 			})
 		}
 

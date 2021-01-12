@@ -70,11 +70,11 @@ exports.run = async (client, msg, args) => {
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
-		if (distance > 0 && !userHasLocation && !target.webhook) {
+		if (distance > 0 && !userHasLocation && !remove) {
 			await msg.react(client.translator.translate('🙅'))
 			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
 		}
-		if (distance === 0 && !userHasArea && !target.webhook) {
+		if (distance === 0 && !userHasArea && !remove) {
 			await msg.react(client.translator.translate('🙅'))
 			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
 		}
