@@ -11,6 +11,7 @@ class PoracleDiscordState {
 		this.geofence = client.geofence
 		this.utilData = client.utilData
 		this.re = client.re
+		this.translatorFactory = client.translatorFactory
 		this.translator = client.translator
 		this.config = client.config
 	}

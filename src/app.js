@@ -18,7 +18,7 @@ const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 
 const {
-	config, knex, dts, geofence, translator,
+	config, knex, dts, geofence, translator, translatorFactory,
 } = Config()
 
 const readDir = util.promisify(fs.readdir)
@@ -37,7 +37,7 @@ const TelegramWorker = require('./lib/telegram/Telegram')
 const { log, webhooks } = require('./lib/logger')
 const monsterData = require('./util/monsters')
 const utilData = require('./util/util')
-const re = require('./util/regex')(translator)
+const re = require('./util/regex')(translatorFactory)
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
@@ -45,11 +45,11 @@ const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
 const WeatherController = require('./controllers/weather')
 
-const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null)
-const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, null)
+const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController)
+const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController)
+const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController)
+const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController)
 
 fastify.decorate('logger', log)
 fastify.decorate('webhooks', webhooks)
@@ -68,7 +68,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translatorFactory) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let roleWorker
@@ -89,7 +89,7 @@ if (config.discord.enabled) {
 
 let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
+	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re)
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 		telegramUtil = new TelegramUtil(config, log, telegraf)

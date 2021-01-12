@@ -1,29 +1,44 @@
-module.exports = (translator) => ({
-	nameRe: new RegExp(`^${translator.translate('name')}\\S+`, 'gi'),
-	userRe: new RegExp(`^${translator.translate('user')}\\S+`, 'gi'),
-	formRe: new RegExp(`^${translator.translate('form')}\\S+`, 'gi'),
-	genRe: new RegExp(`^${translator.translate('gen')}[1-7]+`, 'gi'),
-	maxlevelRe: new RegExp(`^${translator.translate('maxlevel')}\\d{1,2}`, 'gi'),
-	templateRe: new RegExp(`^${translator.translate('template')}\\S+`, 'gi'),
-	maxcpRe: new RegExp(`^${translator.translate('maxcp')}\\d{1,5}`, 'gi'),
-	maxivRe: new RegExp(`^${translator.translate('maxiv')}\\d{1,3}`, 'gi'),
-	maxweightRe: new RegExp(`^${translator.translate('maxweight')}\\d{1,6}`, 'gi'),
-	maxatkRe: new RegExp(`^${translator.translate('maxatk')}\\d{1,2}`, 'gi'),
-	maxdefRe: new RegExp(`^${translator.translate('maxdef')}\\d{1,2}`, 'gi'),
-	maxstaRe: new RegExp(`^${translator.translate('maxsta')}\\d{1,2}`, 'gi'),
-	cpRe: new RegExp(`^${translator.translate('cp')}\\d{1,5}`, 'gi'),
-	levelRe: new RegExp(`^${translator.translate('level')}\\d{1,2}`, 'gi'),
-	ivRe: new RegExp(`^${translator.translate('iv')}\\d{1,3}`, 'gi'),
-	atkRe: new RegExp(`^${translator.translate('atk')}\\d{1,2}`, 'gi'),
-	defRe: new RegExp(`^${translator.translate('def')}\\d{1,2}`, 'gi'),
-	staRe: new RegExp(`^${translator.translate('sta')}\\d{1,2}`, 'gi'),
-	weightRe: new RegExp(`^${translator.translate('weight')}\\d{1,8}`, 'gi'),
-	greatLeagueRe: new RegExp(`^${translator.translate('great')}\\d{1,4}`, 'gi'),
-	greatLeagueCPRe: new RegExp(`^${translator.translate('greatcp')}\\d{1,5}`, 'gi'),
-	ultraLeagueRe: new RegExp(`^${translator.translate('ultra')}\\d{1,4}`, 'gi'),
-	ultraLeagueCPRe: new RegExp(`^${translator.translate('ultracp')}\\d{1,5}`, 'gi'),
-	dRe: new RegExp(`^(${translator.translate('d')})[\\d.]{1,}`, 'gi'),
-	stardustRe: new RegExp(`^${translator.translate('stardust')}\\d{1,8}`, 'gi'),
-	energyRe: new RegExp(`^${translator.translate('energy')}\\S+`, 'gi'),
-	channelRe: new RegExp(`^${translator.translate('channel')}-\\d{1,20}`, 'gi'),
-})
+// eslint-disable-next-line func-names
+const createCommandRegex = function (translatorFactory, commandName, paramMatch, flags = 'i') {
+	const translatedCommands = translatorFactory.translateCommand(commandName)
+	let expr = `^(${commandName}`
+	for (const translatedCommand of translatedCommands) {
+		if (translatedCommand !== commandName) {
+			expr += `|${translatedCommand}`
+		}
+	}
+	expr += `)(${paramMatch})$`
+
+	return new RegExp(expr, flags)
+}
+
+module.exports = (translatorFactory) => ({
+	nameRe: createCommandRegex(translatorFactory, 'name', '\\S+'),
+	userRe: createCommandRegex(translatorFactory, 'user', '\\S+'),
+	formRe: createCommandRegex(translatorFactory, 'form', '\\S+'),
+	genRe: createCommandRegex(translatorFactory, 'gen', '[1-7]+'),
+	maxlevelRe: createCommandRegex(translatorFactory, 'maxlevel', '\\d{1,2}'),
+	templateRe: createCommandRegex(translatorFactory, 'template', '\\S+'),
+	maxcpRe: createCommandRegex(translatorFactory, 'maxcp', '\\d{1,5}'),
+	maxivRe: createCommandRegex(translatorFactory, 'maxiv', '\\d{1,3}'),
+	maxweightRe: createCommandRegex(translatorFactory, 'maxweight', '\\d{1,6}'),
+	maxatkRe: createCommandRegex(translatorFactory, 'maxatk', '\\d{1,2}'),
+	maxdefRe: createCommandRegex(translatorFactory, 'maxdef', '\\d{1,2}'),
+	maxstaRe: createCommandRegex(translatorFactory, 'maxsta', '\\d{1,2}'),
+	cpRe: createCommandRegex(translatorFactory, 'cp', '\\d{1,5}'),
+	levelRe: createCommandRegex(translatorFactory, 'level', '\\d{1,2}'),
+	ivRe: createCommandRegex(translatorFactory, 'iv', '\\d{1,3}'),
+	atkRe: createCommandRegex(translatorFactory, 'atk', '\\d{1,2}'),
+	defRe: createCommandRegex(translatorFactory, 'def', '\\d{1,2}'),
+	staRe: createCommandRegex(translatorFactory, 'sta', '\\d{1,2}'),
+	weightRe: createCommandRegex(translatorFactory, 'weight', '\\d{1,8}'),
+	greatLeagueRe: createCommandRegex(translatorFactory, 'great', '\\d{1,4}'),
+	greatLeagueCPRe: createCommandRegex(translatorFactory, 'greatcp', '\\d{1,5}'),
+	ultraLeagueRe: createCommandRegex(translatorFactory, 'ultra', '\\d{1,4}'),
+	ultraLeagueCPRe: createCommandRegex(translatorFactory, 'ultracp', '\\d{1,5}'),
+	dRe: createCommandRegex(translatorFactory, 'd', '[\\d.]{1,}'),
+	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),
+	energyRe: createCommandRegex(translatorFactory, 'energy', '\\S+'),
+	channelRe: createCommandRegex(translatorFactory, 'channel', '\\d{1,20}'),
+}
+)

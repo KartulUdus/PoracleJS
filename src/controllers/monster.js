@@ -17,7 +17,7 @@ class Monster extends Controller {
 		let pvpQueryString = `great_league_ranking>=${data.bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and ultra_league_ranking>=${data.bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}`
 		if (data.pvpEvoLookup) pvpQueryString = `great_league_ranking>=${data.pvp_bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.pvp_bestGreatLeagueRankCP} and ultra_league_ranking>=${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.pvp_bestUltraLeagueRankCP}`
 		let query = `
-		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on humans.id = monsters.id
 		where humans.enabled = true and
 		(${pokemonQueryString}) and
@@ -58,12 +58,12 @@ class Monster extends Controller {
 						monsters.distance = 0 and (${areastring})
 					)
 				)
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
+				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 				`)
 		} else {
 			query = query.concat(`
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
-					group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
+					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 					`)
 		}
 		let result = await this.db.raw(query)
@@ -142,8 +142,6 @@ class Monster extends Controller {
 				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
 				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
-			data.name = this.translator.translate(monster.name)
-			data.formname = this.translator.translate(monster.form.name)
 			data.iv = encountered ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
 			data.individual_attack = encountered ? data.individual_attack : 0
 			data.individual_defense = encountered ? data.individual_defense : 0
@@ -153,16 +151,8 @@ class Monster extends Controller {
 			data.move_1 = encountered ? data.move_1 : 0
 			data.move_2 = encountered ? data.move_2 : 0
 			data.weight = encountered ? data.weight.toFixed(1) : 0
-			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
-			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
-			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
-			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
-			data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
-			data.boostemoji = this.utilData.weather[data.weather] ? this.translator.translate(this.utilData.weather[data.weather].emoji) : ''
-			data.gameweather = this.utilData.weather[weather] ? this.utilData.weather[weather].name : ''
-			data.gameweatheremoji = this.utilData.weather[weather] ? this.translator.translate(this.utilData.weather[weather].emoji) : ''
 			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.color = monster.types[0].color
@@ -172,13 +162,6 @@ class Monster extends Controller {
 			data.gif = pokemonGif(Number(data.pokemon_id))
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
-
-			const e = []
-			monster.types.forEach((type) => {
-				e.push(this.translator.translate(this.utilData.types[type.name].emoji))
-			})
-			data.emoji = e
-			data.emojiString = e.join('')
 
 			data.pvp_pokemon_id = data.pokemon_id
 			data.pvp_form = data.form
@@ -272,7 +255,7 @@ class Monster extends Controller {
 			}
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				log.debug(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				log.debug(`${monster.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -302,7 +285,7 @@ class Monster extends Controller {
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
-			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			this.log.info(`${monster.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0]) return []
 
@@ -350,6 +333,26 @@ class Monster extends Controller {
 					this.weatherController.controllerData.caresUntil[cares.id] = data.disappear_time * 1000
 				}
 
+				const language = cares.language || this.config.general.locale
+				const translator = this.translatorFactory.Translator(language)
+
+				data.name = translator.translate(monster.name)
+				data.formname = translator.translate(monster.form.name)
+				data.quickMove = data.weight && this.utilData.moves[data.move_1] ? translator.translate(this.utilData.moves[data.move_1].name) : ''
+				data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? translator.translate(this.utilData.moves[data.move_2].name) : ''
+				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
+				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
+				data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
+				data.boostemoji = this.utilData.weather[data.weather] ? translator.translate(this.utilData.weather[data.weather].emoji) : ''
+				data.gameweather = this.utilData.weather[weather] ? this.utilData.weather[weather].name : ''
+				data.gameweatheremoji = this.utilData.weather[weather] ? translator.translate(this.utilData.weather[weather].emoji) : ''
+				const e = []
+				monster.types.forEach((type) => {
+					e.push(translator.translate(this.utilData.types[type.name].emoji))
+				})
+				data.emoji = e
+				data.emojiString = e.join('')
+
 				const view = {
 					...geoResult,
 					...data,
@@ -376,21 +379,17 @@ class Monster extends Controller {
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
 				}
+
 				let platform = cares.type.split(':')[0]
 				if (platform == 'webhook') platform = 'discord'
 
-				let monsterDts
-				const templateName = (data.iv === -1) ? 'monsterNoIv' : 'monster'
-				monsterDts = this.dts.find((template) => template.type === templateName && template.id.toString() === cares.template.toString() && template.platform === platform)
-				if (!monsterDts) monsterDts = this.dts.find((template) => template.type === templateName && template.default && template.platform === platform)
-				if (!monsterDts) {
-					this.log.error(`Cannot find DTS template ${platform} ${templateName} ${cares.template}`)
+				const mustache = this.getDts((data.iv === -1) ? 'monsterNoIv' : 'monster', platform, cares.template, language)
+				if (mustache == null) {
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				const template = JSON.stringify(monsterDts.template)
-				const mustache = this.mustache.compile(this.translator.translate(template))
-				const message = JSON.parse(mustache(view))
+
+				const message = JSON.parse(mustache(view, { data: { language } }))
 
 				if (cares.ping) {
 					if (!message.content) {
@@ -418,7 +417,7 @@ class Monster extends Controller {
 			}
 			hrend = process.hrtime(hrstart)
 			const hrendprocessing = hrend[1] / 1000000
-			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
+			this.log.info(`${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
 
 			return jobs
 		} catch (e) {

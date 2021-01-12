@@ -8,7 +8,7 @@ const hastebin = require('hastebin-gen')
 const Controller = require('../../../controllers/controller')
 
 class DiscordCommando {
-	constructor(knex, config, log, monsterData, utilData, dts, geofence, translator) {
+	constructor(knex, config, log, monsterData, utilData, dts, geofence, translatorFactory) {
 		this.config = config
 		this.query = new Controller(knex, config)
 		this.log = log
@@ -16,8 +16,9 @@ class DiscordCommando {
 		this.utilData = utilData
 		this.dts = dts
 		this.geofence = geofence
-		this.translator = translator
-		this.re = require('../../../util/regex')(translator)
+		this.translatorFactory = translatorFactory
+		this.translator = translatorFactory.default
+		this.re = require('../../../util/regex')(this.translatorFactory)
 		this.bounceWorker()
 	}
 
@@ -43,6 +44,7 @@ class DiscordCommando {
 			this.client.utilData = this.utilData
 			this.client.mustache = mustache
 			this.client.hastebin = hastebin
+			this.client.translatorFactory = this.translatorFactory
 			this.client.translator = this.translator
 			this.client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 

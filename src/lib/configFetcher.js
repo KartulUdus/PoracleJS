@@ -1,13 +1,14 @@
 const importFresh = require('import-fresh')
 const path = require('path')
 const Knex = require('knex')
-const Translator = require('../util/translate')
+const TranslatorFactory = require('../util/translatorFactory')
 
 let config
 let knex
 let dts
 let geofence
 let translator
+let translatorFactory
 
 function getGeofenceFromGEOjson(file) {
 	const rawdata = importFresh(file)
@@ -67,9 +68,11 @@ module.exports = {
 			directory: path.join(__dirname, './db/migrations'),
 			tableName: 'migrations',
 		})
-		translator = new Translator(config.general.locale)
+		translatorFactory = new TranslatorFactory(config)
+		translator = translatorFactory.default
+
 		return {
-			config, knex, dts, geofence, translator,
+			config, knex, dts, geofence, translator, translatorFactory,
 		}
 	},
 	getKnex,

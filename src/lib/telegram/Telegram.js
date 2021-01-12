@@ -1,13 +1,14 @@
 const fs = require('fs')
 
 class Telegram {
-	constructor(config, log, monsterData, utilData, dts, geofence, controller, query, telegraf, translator, commandParser, re) {
+	constructor(config, log, monsterData, utilData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
 		this.config = config
 		this.log = log
 		this.monsterData = monsterData
 		this.utilData = utilData
 		this.geofence = geofence
-		this.translator = translator
+		this.translatorFactory = translatorFactory
+		this.translator = translatorFactory.default
 		this.commandParser = commandParser
 		this.tempProps = {}
 		this.controller = controller
@@ -17,19 +18,22 @@ class Telegram {
 		this.commandFiles = fs.readdirSync(`${__dirname}/commands`)
 		this.bot = telegraf
 		this.bot
-			.use(commandParser(translator))
-			.use(controller(query, dts, log, monsterData, utilData, geofence, config, re, translator))
+			.use(commandParser(this.translatorFactory))
+			.use(controller(query, dts, log, monsterData, utilData, geofence, config, re, translatorFactory))
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 			const commandName = file.split('.')[0]
 			if (!this.config.general.disabledCommands.includes(commandName)) {
-				const translatedCommand = this.translator.translate(commandName)
 				this.enabledCommands.push(commandName)
 				this.bot.command(commandName, this.tempProps)
-				if (translatedCommand != commandName) {
-					this.enabledCommands.push(translatedCommand)
-					this.bot.command(translatedCommand, this.tempProps)
+
+				const translatedCommands = this.translatorFactory.translateCommand(commandName)
+				for (const translatedCommand of translatedCommands) {
+					if (translatedCommand != commandName) {
+						this.enabledCommands.push(translatedCommand)
+						this.bot.command(translatedCommand, this.tempProps)
+					}
 				}
 			}
 		})

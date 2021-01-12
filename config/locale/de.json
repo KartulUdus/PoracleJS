@@ -934,5 +934,11 @@
 	"enabled":"aktiviert",
 	"disabled":"deaktiviert",
 	"You are currently set to receive alarms in ":"Du bekommst aktuell Benachrichtigungen aus",
-	"404 No monsters found":"404 Keine Monster gefunden"
+	"404 No monsters found":"404 Keine Monster gefunden",
+	"remove": "löschen",
+	"energy": "energie",
+	"location": "standort",
+	"egg": "ei",
+	"level": "stufe",
+	"remove": "löschen"
 }

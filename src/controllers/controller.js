@@ -12,7 +12,7 @@ const { log } = require('../lib/logger')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
-	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController) {
+	constructor(db, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController) {
 		this.db = db
 		this.cp = cp
 		this.config = config
@@ -22,12 +22,14 @@ class Controller {
 		this.monsterData = monsterData
 		this.discordCache = discordCache
 		this.utilData = require(path.join(__dirname, '../util/util'))
-		this.translator = translator
+		this.translatorFactory = translatorFactory
+		this.translator = translatorFactory ? this.translatorFactory.default : null
 		this.mustache = mustache
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherController = weatherController
 		this.controllerData = {}
 		this.tileserverPregen = new TileserverPregen()
+		this.dtsCache = {}
 	}
 
 	getGeocoder() {
@@ -61,6 +63,38 @@ class Controller {
 				})
 			}
 		}
+	}
+
+	getDts(templateType, platform, templateName, language) {
+		const key = `${templateType} ${platform} ${templateName} ${language}`
+		if (this.dtsCache[key]) {
+			return this.dtsCache[key]
+		}
+
+		// Exact match
+		let findDts = this.dts.find((template) => template.type === templateType && template.id.toString() === templateName && template.platform === platform && template.language == language)
+
+		// Default of right template type, platform and language
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language == language)
+		}
+
+		// First default of right template type and language
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform)
+		}
+
+		if (!findDts) {
+			this.log.error(`Cannot find DTS template or matching default ${key}`)
+			// eslint-disable-next-line no-continue
+			return null
+		}
+
+		const template = JSON.stringify(findDts.template)
+		const mustache = this.mustache.compile(template)
+
+		this.dtsCache[key] = mustache
+		return mustache
 	}
 
 	getDistance(start, end) {

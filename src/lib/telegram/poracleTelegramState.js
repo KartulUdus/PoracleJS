@@ -14,6 +14,7 @@ class PoracleTelegramState {
 		this.utilData = ctx.state.controller.utilData
 		this.re = ctx.state.controller.re
 		this.translator = ctx.state.controller.translator
+		this.translatorFactory = ctx.state.controller.translatorFactory
 		this.config = ctx.state.controller.config
 		this.mustache = mustache
 		this.hastebin = hastebin

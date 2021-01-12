@@ -3,13 +3,22 @@ const config = require('config')
 const monsters = require('../util/monsters')
 const { cpMultipliers, moves, types } = require('../util/util')
 
-const Translator = require(`${__dirname}/../util/translate`)
-const translator = new Translator(config.general.locale)
-const translatorAlt = new Translator(config.locale.language)
+const TranslatorFactory = require('../util/translatorFactory')
+
+const translatorFactory = new TranslatorFactory(config)
 
 require('handlebars-helpers')({
 	handlebars,
 })
+
+// eslint-disable-next-line func-names
+const userTranslator = function (options) {
+	return options.data.language ? translatorFactory.Translator(options.data.language) : translatorFactory.default
+}
+// eslint-disable-next-line func-names
+const translatorAlt = function () {
+	return translatorFactory.AltTranslator
+}
 
 module.exports = () => {
 	handlebars.registerHelper('numberFormat', (value, decimals = 2) => {
@@ -24,24 +33,24 @@ module.exports = () => {
 
 	handlebars.registerHelper('pad0', (value) => (value.toString().padStart(3, '0')))
 
-	handlebars.registerHelper('moveName', (value) => (moves[value] ? translator.translate(moves[value].name) : ''))
+	handlebars.registerHelper('moveName', (value, options) => (moves[value] ? userTranslator(options).translate(moves[value].name) : ''))
 	handlebars.registerHelper('moveNameAlt', (value) => (moves[value] ? translatorAlt.translate(moves[value].name) : ''))
-	handlebars.registerHelper('moveType', (value) => (moves[value] ? translator.translate(moves[value].type) : ''))
+	handlebars.registerHelper('moveType', (value, options) => (moves[value] ? userTranslator(options).translate(moves[value].type) : ''))
 	handlebars.registerHelper('moveTypeAlt', (value) => (moves[value] ? translatorAlt.translate(moves[value].type) : ''))
-	handlebars.registerHelper('moveEmoji', (value) => {
+	handlebars.registerHelper('moveEmoji', (value, options) => {
 		if (!moves[value]) return ''
-		return types[moves[value].type] ? translator.translate(types[moves[value].type].emoji) : ''
+		return types[moves[value].type] ? userTranslator(options).translate(types[moves[value].type].emoji) : ''
 	})
 	handlebars.registerHelper('moveEmojiAlt', (value) => {
 		if (!moves[value]) return ''
 		return types[moves[value].type] ? translatorAlt.translate(types[moves[value].type].emoji) : ''
 	})
 
-	handlebars.registerHelper('pokemonName', (value) => {
+	handlebars.registerHelper('pokemonName', (value, options) => {
 		if (!+value) return ''
 		const monster = Object.values(monsters).find((m) => m.id === +value)
 		if (!monster) return ''
-		return translator.translate(monster.name)
+		return userTranslator(options).translate(monster.name)
 	})
 
 	handlebars.registerHelper('pokemonNameAlt', (value) => {
@@ -51,11 +60,11 @@ module.exports = () => {
 		return translatorAlt.translate(monster.name)
 	})
 
-	handlebars.registerHelper('pokemonForm', (value) => {
+	handlebars.registerHelper('pokemonForm', (value, options) => {
 		if (!+value) return ''
 		const monster = Object.values(monsters).find((m) => m.form.id === +value)
 		if (!monster) return ''
-		return translator.translate(monster.form.name)
+		return userTranslator(options).translate(monster.form.name)
 	})
 
 	handlebars.registerHelper('pokemonFormAlt', (value) => {
