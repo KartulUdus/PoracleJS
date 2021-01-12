@@ -10,6 +10,7 @@ class PoracleDiscordState {
 		this.query = client.query
 		this.geofence = client.geofence
 		this.utilData = client.utilData
+		this.mustache = client.mustache
 		this.re = client.re
 		this.translator = client.translator
 		this.config = client.config
