@@ -6116,5 +6116,48 @@
       "Water"
     ],
     "spawn_rate": ""
+  },
+  "862": {
+    "name": "Obstagoon",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "863": {
+    "name": "Perrserker",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "864": {
+    "name": "Cursola",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "866": {
+    "name": "Mr. Rime",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "867": {
+    "name": "Runerigus",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "spawn_rate": ""
   }
 }

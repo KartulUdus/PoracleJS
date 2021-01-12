@@ -6116,5 +6116,30 @@
       "Water"
     ],
     "spawn_rate": ""
+  },
+  "862": {
+    "name": "Обстагун",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "863": {
+    "name": "Перрсеркер",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "864": {
+    "name": "Курсола",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
   }
 }

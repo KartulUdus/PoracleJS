@@ -6116,5 +6116,48 @@
       "Water"
     ],
     "spawn_rate": ""
+  },
+  "862": {
+    "name": "가로막구리",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "863": {
+    "name": "나이킹",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "864": {
+    "name": "산호르곤",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "866": {
+    "name": "마임꽁꽁",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "867": {
+    "name": "데스판",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "spawn_rate": ""
   }
 }

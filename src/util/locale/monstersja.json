@@ -6116,5 +6116,48 @@
       "Water"
     ],
     "spawn_rate": ""
+  },
+  "862": {
+    "name": "タチフサグマ",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "863": {
+    "name": "ニャイキング",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "864": {
+    "name": "サニゴーン",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "866": {
+    "name": "バリコオル",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "867": {
+    "name": "デスバーン",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "spawn_rate": ""
   }
 }

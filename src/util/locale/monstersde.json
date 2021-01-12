@@ -6116,5 +6116,48 @@
       "Water"
     ],
     "spawn_rate": ""
+  },
+  "862": {
+    "name": "Barrikadax",
+    "rarity": "",
+    "types": [
+      "Dark",
+      "Normal"
+    ],
+    "spawn_rate": ""
+  },
+  "863": {
+    "name": "Mauzinger",
+    "rarity": "",
+    "types": [
+      "Steel"
+    ],
+    "spawn_rate": ""
+  },
+  "864": {
+    "name": "Gorgasonn",
+    "rarity": "",
+    "types": [
+      "Ghost"
+    ],
+    "spawn_rate": ""
+  },
+  "866": {
+    "name": "Pantifrost",
+    "rarity": "",
+    "types": [
+      "Ice",
+      "Psychic"
+    ],
+    "spawn_rate": ""
+  },
+  "867": {
+    "name": "Oghnatoll",
+    "rarity": "",
+    "types": [
+      "Ground",
+      "Ghost"
+    ],
+    "spawn_rate": ""
   }
 }
