@@ -1,5 +1,4 @@
-// eslint-disable-next-line func-names
-const createCommandRegex = function (translatorFactory, commandName, paramMatch, flags = 'i') {
+function createCommandRegex(translatorFactory, commandName, paramMatch, flags = 'i') {
 	const translatedCommands = translatorFactory.translateCommand(commandName)
 	let expr = `^(${commandName}`
 	for (const translatedCommand of translatedCommands) {

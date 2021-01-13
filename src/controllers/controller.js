@@ -86,7 +86,6 @@ class Controller {
 
 		if (!findDts) {
 			this.log.error(`Cannot find DTS template or matching default ${key}`)
-			// eslint-disable-next-line no-continue
 			return null
 		}
 

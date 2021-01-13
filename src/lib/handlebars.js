@@ -11,12 +11,11 @@ require('handlebars-helpers')({
 	handlebars,
 })
 
-// eslint-disable-next-line func-names
-const userTranslator = function (options) {
+function userTranslator(options) {
 	return options.data.language ? translatorFactory.Translator(options.data.language) : translatorFactory.default
 }
-// eslint-disable-next-line func-names
-const translatorAlt = function () {
+
+function translatorAlt() {
 	return translatorFactory.AltTranslator
 }
 

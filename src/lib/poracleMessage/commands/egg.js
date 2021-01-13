@@ -24,10 +24,8 @@ exports.run = async (client, msg, args) => {
 		args.forEach((element) => {
 			if (element === 'ex') exclusive = 1
 			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[2])
-			// eslint-disable-next-line prefer-destructuring
-			else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[2]
-			// eslint-disable-next-line prefer-destructuring
-			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[2]
+			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
+			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'instinct') team = 3
 			else if (element === 'valor') team = 2
 			else if (element === 'mystic') team = 1
