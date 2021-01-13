@@ -380,39 +380,36 @@ class Monster extends Controller {
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
 				}
 
-				let platform = cares.type.split(':')[0]
+				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
 				const mustache = this.getDts((data.iv === -1) ? 'monsterNoIv' : 'monster', platform, cares.template, language)
-				if (mustache == null) {
-					// eslint-disable-next-line no-continue
-					continue
-				}
+				if (mustache) {
+					const message = JSON.parse(mustache(view, {data: {language}}))
 
-				const message = JSON.parse(mustache(view, { data: { language } }))
-
-				if (cares.ping) {
-					if (!message.content) {
-						message.content = cares.ping
-					} else {
-						message.content += cares.ping
+					if (cares.ping) {
+						if (!message.content) {
+							message.content = cares.ping
+						} else {
+							message.content += cares.ping
+						}
 					}
-				}
 
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-					emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-				}
-				if (caresCache <= this.config.discord.limitAmount + 1) {
-					jobs.push(work)
-					this.addDiscordCache(cares.id)
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: data.tth,
+						clean: cares.clean,
+						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+					}
+					if (caresCache <= this.config.discord.limitAmount + 1) {
+						jobs.push(work)
+						this.addDiscordCache(cares.id)
+					}
 				}
 			}
 			hrend = process.hrtime(hrstart)
