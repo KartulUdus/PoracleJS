@@ -4,7 +4,6 @@ const NodeGeocoder = require('node-geocoder')
 const cp = require('child_process')
 
 const pcache = require('flat-cache')
-
 const geoCache = pcache.load('.geoCache', path.resolve(`${__dirname}../../../`))
 const emojiFlags = require('emoji-flags')
 
@@ -81,7 +80,7 @@ class Controller {
 		lat2 = lat2.toRad()
 
 		const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-		+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
+				+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 		const d = this.earthRadius * c
 		return Math.ceil(d)
@@ -301,9 +300,9 @@ class Controller {
 		const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
 		let types = ''
 		if (monster) {
-			types = monster.types.map((type) => type.id)
+			types = monster.types.map(type => type.id)
 		} else {
-			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map((type) => type.id)
+			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map(type => type.id)
 		}
 		return types
 	}
