@@ -59,6 +59,7 @@
     "pokemon-gif": "^1.0.14",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",
+    "nodes2ts": "^2.0.0",
     "sqlite3": "^4.1.0",
     "telegraf": "^3.33.3",
     "telegraf-inline-menu": "^3.6.3",

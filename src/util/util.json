@@ -105,10 +105,10 @@
 		"1": {
 			"name": "Mega"
 		},
-		"2": { 
+		"2": {
 			"name": "Mega X"
 		},
-		"3": { 
+		"3": {
 			"name": "Mega Y"
 		}
 	},
@@ -264,7 +264,7 @@
 		"1201": "Fast TM",
 		"1202": "Charged TM",
 		"1203": "Elite Fast TM",
-		"1204": "Elite Charged TM",	
+		"1204": "Elite Charged TM",
 		"1301": "Rare Candy",
 		"1401": "Free Raid Ticket",
 		"1402": "Paid Raid Ticket",
@@ -2518,7 +2518,7 @@
 		    	"damage": 0,
 		    	"duration": 0,
 		    	"energy": 0,
-		    	"dps": 0			
+		    	"dps": 0
 		}
 	},
 	"teams": {
@@ -3023,32 +3023,41 @@
 		},
 		"1": {
 			"name": "sunny",
-			"emoji": ":sunny:"
+			"emoji": "\u2600"
 		},
 		"2": {
 			"name": "rain",
-			"emoji": ":cloud_rain:"
+			"emoji": "\uD83C\uDF27"
 		},
 		"3": {
 			"name": "partly cloudy",
-			"emoji": ":white_sun_small_cloud:"
+			"emoji": "\uD83C\uDF24"
 		},
 		"4": {
 			"name": "cloudy",
-			"emoji": ":cloud:"
+			"emoji": "\u2601"
 		},
 		"5": {
 			"name": "windy",
-			"emoji": ":leaves:"
+			"emoji": "\uD83C\uDF43"
 		},
 		"6": {
 			"name": "snow",
-			"emoji": ":snowflake:"
+			"emoji": "\u2744"
 		},
 		"7": {
 			"name": "fog",
-			"emoji": ":foggy:"
+			"emoji": "\uD83C\uDF2B"
 		}
+	},
+	"weatherTypeBoost": {
+		"1": [5,10,12],
+		"2": [7,11,13],
+		"3": [1,6],
+		"4": [2,4,18],
+		"5": [3,14,16],
+		"6": [9,15],
+		"7": [8,17]
 	},
 	"genData": {
 		"1": {

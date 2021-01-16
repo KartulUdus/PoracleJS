@@ -10,7 +10,6 @@
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
         "locale": "en",
-        "weatherChangeAlert": false,
         "disabledCommands": [],
         "disablePokemon": false,
         "disableRaid": false,
@@ -43,6 +42,14 @@
         "path": "./config/geofence.json",
         "defaultGeofenceName": "city",
         "defaultGeofenceColor": "#3399ff"
+    },
+    "weather": {
+        "weatherChangeAlert": false,
+        "enableWeatherForecast": false,
+        "apiKeyAccuWeather": ["key1", "key2", "key3"],
+        "apiKeyDayQuota": 50,
+        "localFirstFetchHOD": 3,
+        "forecastRefreshInterval": 8
     },
     "pvp": {
         "pvpEvolutionDirectTracking": false,

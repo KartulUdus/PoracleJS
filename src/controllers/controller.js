@@ -4,7 +4,6 @@ const NodeGeocoder = require('node-geocoder')
 const cp = require('child_process')
 
 const pcache = require('flat-cache')
-
 const geoCache = pcache.load('.geoCache', path.resolve(`${__dirname}../../../`))
 const emojiFlags = require('emoji-flags')
 
@@ -12,7 +11,7 @@ const { log } = require('../lib/logger')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
-	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController) {
+	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, weatherCacheData) {
 		this.db = db
 		this.cp = cp
 		this.config = config
@@ -26,7 +25,7 @@ class Controller {
 		this.mustache = mustache
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherController = weatherController
-		this.controllerData = {}
+		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen()
 	}
 
@@ -81,7 +80,7 @@ class Controller {
 		lat2 = lat2.toRad()
 
 		const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-				+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
+		+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
 		const d = this.earthRadius * c
 		return Math.ceil(d)
@@ -187,7 +186,7 @@ class Controller {
 	async countQuery(table, conditions) {
 		try {
 			const result = await this.db.select().from(table).where(conditions).count()
-				.first()
+			.first()
 			return +(Object.values(result)[0])
 		} catch (err) {
 			throw { source: 'countQuery', error: err }
@@ -224,88 +223,101 @@ class Controller {
 				const firstData = values[0] ? values[0] : values
 				const query = `${this.db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT ${table}_tracking DO UPDATE SET ${
 					Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
-				return this.returnByDatabaseType(await this.db.raw(query))
-			}
-			case 'mysql': {
-				const firstData = values[0] ? values[0] : values
-				const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
-					Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
-				return this.returnByDatabaseType(await this.db.raw(query))
-			}
-			default: {
-				const constraints = {
-					humans: 'id',
-					monsters: 'monsters.id, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.form, monsters.gender, monsters.min_weight, monsters.great_league_ranking, monsters.great_league_ranking_min_cp, monsters.ultra_league_ranking, monsters.ultra_league_ranking_min_cp',
-					raid: 'raid.id, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
-					egg: 'egg.id, egg.team, egg.exclusive, egg.level',
-					quest: 'quest.id, quest.reward_type, quest.reward',
-					invasion: 'invasion.id, invasion.gender, invasion.grunt_type',
-					weather: 'weather.id, weather.condition, weather.cell',
+					return this.returnByDatabaseType(await this.db.raw(query))
 				}
+				case 'mysql': {
+					const firstData = values[0] ? values[0] : values
+					const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
+						Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
+						return this.returnByDatabaseType(await this.db.raw(query))
+					}
+					default: {
+						const constraints = {
+							humans: 'id',
+							monsters: 'monsters.id, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.form, monsters.gender, monsters.min_weight, monsters.great_league_ranking, monsters.great_league_ranking_min_cp, monsters.ultra_league_ranking, monsters.ultra_league_ranking_min_cp',
+							raid: 'raid.id, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
+							egg: 'egg.id, egg.team, egg.exclusive, egg.level',
+							quest: 'quest.id, quest.reward_type, quest.reward',
+							invasion: 'invasion.id, invasion.gender, invasion.grunt_type',
+							weather: 'weather.id, weather.condition, weather.cell',
+						}
 
-				for (const val of values) {
-					for (const v of Object.keys(val)) {
-						if (typeof val[v] === 'string') val[v] = `'${val[v]}'`
+						for (const val of values) {
+							for (const v of Object.keys(val)) {
+								if (typeof val[v] === 'string') val[v] = `'${val[v]}'`
+							}
+						}
+
+						const firstData = values[0] ? values[0] : values
+						const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
+						const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
+							Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
+							const result = await this.db.raw(query)
+							return this.returnByDatabaseType(result)
+						}
 					}
 				}
 
-				const firstData = values[0] ? values[0] : values
-				const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
-				const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
-					Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
-				const result = await this.db.raw(query)
-				return this.returnByDatabaseType(result)
-			}
-		}
-	}
-
-	async deleteQuery(table, values) {
-		try {
-			return await this.db(table).where(values).del()
-		} catch (err) {
-			throw { source: 'deleteQuery', error: err }
-		}
-	}
-
-	returnByDatabaseType(data) {
-		switch (this.config.database.client) {
-			case 'pg': {
-				return data.rows
-			}
-			case 'mysql': {
-				return data[0]
-			}
-			default: {
-				return data
-			}
-		}
-	}
-
-	findIvColor(iv) {
-		// it must be perfect if none of the ifs kick in
-		// orange / legendary
-		let colorIdx = 5
-
-		if (iv < 25) colorIdx = 0 // gray / trash / missing
-		else if (iv < 50) colorIdx = 1 // white / common
-		else if (iv < 82) colorIdx = 2 // green / uncommon
-		else if (iv < 90) colorIdx = 3 // blue / rare
-		else if (iv < 100) colorIdx = 4 // purple epic
-
-		return this.config.discord.ivColors[colorIdx]
-	}
-
-	execPromise(command) {
-		return new Promise((resolve, reject) => {
-			this.cp.exec(command, (error, stdout) => {
-				if (error) {
-					reject(error)
-					return
+				async deleteQuery(table, values) {
+					try {
+						return await this.db(table).where(values).del()
+					} catch (err) {
+						throw { source: 'deleteQuery', error: err }
+					}
 				}
-				resolve(stdout.trim())
-			})
-		})
-	}
-}
 
-module.exports = Controller
+				returnByDatabaseType(data) {
+					switch (this.config.database.client) {
+						case 'pg': {
+							return data.rows
+						}
+						case 'mysql': {
+							return data[0]
+						}
+						default: {
+							return data
+						}
+					}
+				}
+
+				findIvColor(iv) {
+					// it must be perfect if none of the ifs kick in
+					// orange / legendary
+					let colorIdx = 5
+
+					if (iv < 25) colorIdx = 0 // gray / trash / missing
+					else if (iv < 50) colorIdx = 1 // white / common
+					else if (iv < 82) colorIdx = 2 // green / uncommon
+					else if (iv < 90) colorIdx = 3 // blue / rare
+					else if (iv < 100) colorIdx = 4 // purple epic
+
+					return this.config.discord.ivColors[colorIdx]
+				}
+
+				getPokemonTypes(pokemonId, formId) {
+					if (!+pokemonId) return ''
+					const monsterFamily = Object.values(this.monsterData).filter((m) => m.id === +pokemonId)
+					const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
+					let types = ''
+					if (monster) {
+						types = monster.types.map(type => type.id)
+					} else {
+						types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map(type => type.id)
+					}
+					return types
+				}
+
+				execPromise(command) {
+					return new Promise((resolve, reject) => {
+						this.cp.exec(command, (error, stdout) => {
+							if (error) {
+								reject(error)
+								return
+							}
+							resolve(stdout.trim())
+						})
+					})
+				}
+			}
+
+			module.exports = Controller

@@ -1,0 +1,36 @@
+{
+  "style": "klokantech-basic",
+  "latitude": #(latitude),
+  "longitude": #(longitude),
+  "zoom": 11,
+  "width": 500,
+  "height": 250,
+  "scale": 1,
+  "markers": [
+    {
+      "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/ICONS_STANDARD/weather/#(condition).png",
+      "fallback_url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_025_00.png",
+      "height": 40,
+      "width": 40,
+      "x_offset": 0,
+      "y_offset": 0,
+      "latitude": #(latitude),
+      "longitude": #(longitude)
+    }
+  ]
+  #if(coords != nil):
+  ,
+  "polygons": [
+    {
+      "fill_color": "rgba(46,204,113,0.3)",
+      "stroke_color": "rgba(46,204,113)",
+      "stroke_width": 2,
+      "path": [
+        #for(coord in coords):
+        #if(index != 0):,#endif[#index(coord, 0), #index(coord, 1)]
+        #endfor
+      ]
+    }
+  ]
+  #endif
+}
