@@ -83,32 +83,6 @@ class PoracleTelegramUtil {
 			language: status.language,
 		}
 	}
-
-	// async buildTarget(client, msg) {
-	// 	const target = { id: msg.userId, name: msg.userName, channel: false }
-	//
-	// 	// if admin started command, look for a mentioned channel
-	// 	if (msg.fromAdmin()) {
-	// 		this.command.splitArgsArray.map((splitArgs) => {
-	// 			splitArgs.map(async (arg) => {
-	// 				if (arg.match(this.re.channelRe)) {
-	// 					target.id = arg.replace(this.translator.translate('channel'), '')
-	// 					target.channel = true
-	// 					let targetChannel
-	// 					try {
-	// 						targetChannel = await this.ctx.telegram.getChat(target.id)
-	// 						target.name = targetChannel.title
-	// 					} catch (e) {
-	// 						this.controller.log.warn(`${arg} unhappy `, e)
-	// 						return this.ctx.reply(`${arg} unhappy`)
-	// 					}
-	// 				}
-	// 			})
-	// 		})
-	// 	}
-	//
-	// 	return target
-	// }
 }
 
 module.exports = PoracleTelegramUtil
