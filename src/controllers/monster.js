@@ -160,8 +160,8 @@ this.log.error('[DEBUG MONSTER] conditions met to update weather in that cell')
 			}
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-			|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-			|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+					|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+					|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			data.name = this.translator.translate(monster.name)
 			data.formname = this.translator.translate(monster.form.name)
