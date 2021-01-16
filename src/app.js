@@ -128,7 +128,6 @@ async function syncRole() {
 }
 
 async function run() {
-
 	if (config.discord.enabled) {
 		setInterval(() => {
 			if (!fastify.discordQueue.length) {
