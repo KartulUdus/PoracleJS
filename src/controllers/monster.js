@@ -137,18 +137,20 @@ class Monster extends Controller {
 			}
 			const weatherCellData = this.weatherController.controllerData[weatherCellId]
 
-			if((this.config.weather.weatherChangeAlert || this.config.weather.enableWeatherForecast) && data.weather && data.weather !== weatherCellData[currentHourTimestamp]) {
+			if(nowTimestamp > (currentHourTimestamp + 10) && (this.config.weather.weatherChangeAlert || this.config.weather.enableWeatherForecast) && data.weather && data.weather !== weatherCellData[currentHourTimestamp]) {
 //this.log.error(`[DEBUG MONSTER] monsterController maj weather : ${data.weather}`)
 				weatherCellData[currentHourTimestamp] = data.weather
 //this.log.error(`[DEBUG MONSTER] monsterController maj weather ${currentHourTimestamp} de ${weatherCacheData[currentHourTimestamp]} vers ${currentInGameWeather}`)
 //this.log.error('[DEBUG MONSTER] monsterController maj weather dans cache :', weatherCacheData)
 			}
-			let currentCellWeather = weatherCellData[currentHourTimestamp] || null
+
+			let currentCellWeather = data.weather || null
+			if(!currentCellWeather && weatherCellData['lastCurrentWeatherCheck'] > currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
 
 			let weatherChangeAlertJobs = []
 			if (this.config.weather.weatherChangeAlert && weatherCellData.cares && (data.testing || weatherCellData['lastCurrentWeatherCheck'] < currentHourTimestamp) && weatherCellData[previousHourTimestamp] > 0 && currentCellWeather > 0 && weatherCellData[previousHourTimestamp] != currentCellWeather) {
 this.log.error(`[DEBUG MONSTER] Start of handle tracing : [${tracer}]`)
-this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to update weather in that cell')
+this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to update weather cell '+weatherCellId)
 				const weatherDataPayload = {
 					longitude: data.longitude,
 					latitude: data.latitude,
@@ -374,11 +376,13 @@ this.log.error(`[DEBUG MONSTER] something wrong with current weather info : ${we
 				if (this.config.weather.weatherChangeAlert && weatherCellData) {
 					if (weatherCellData.cares) {
 						let exists = false
-						for (const oc of weatherCellData.cares) {
-							if (oc.id === cares.id) {
-								if (oc.caresUntil < data.disappear_time) {
-									oc.caresUntil = data.disappear_time
+						for (const caring of weatherCellData.cares) {
+							if (caring.id === cares.id) {
+								if (caring.caresUntil < data.disappear_time) {
+									caring.caresUntil = data.disappear_time
 								}
+								if (!caring.id.caredPokemons) caring.id.caredPokemons = []
+								caring.id.caredPokemons.push({pokemon_id: data.pokemon_id, disappear_time: data.disappear_time, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time})
 								exists = true
 								break
 							}

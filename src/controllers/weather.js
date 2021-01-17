@@ -188,8 +188,8 @@ this.log.error(`[DEBUG WEATHER] forecast data successfully updated at : ${curren
 		res.next = data[nextHourTimestamp]
 		this.log.error('[DEBUG WEATHER] forecast query result : ', res)
 
-		await weatherCache.setKey('weatherCacheData', this.controllerData)
-		await weatherCache.save(true)
+		weatherCache.setKey('weatherCacheData', this.controllerData)
+		weatherCache.save(true)
 
 		return res
 	}
@@ -251,8 +251,8 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | 
 //this.log.error('[DEBUG WEATHER] ['+data.trace+'] weatherCellData if updating current weather :', weatherCellData)
 			}
 
-			await weatherCache.setKey('weatherCacheData', this.controllerData)
-			await weatherCache.save(true)
+			weatherCache.setKey('weatherCacheData', this.controllerData)
+			weatherCache.save(true)
 
 			if (!this.config.weather.weatherChangeAlert) {
 				this.log.debug('weather change alerts are disabled, nobody cares.')
