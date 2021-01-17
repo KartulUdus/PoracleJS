@@ -381,8 +381,6 @@ this.log.error(`[DEBUG MONSTER] something wrong with current weather info : ${we
 								if (caring.caresUntil < data.disappear_time) {
 									caring.caresUntil = data.disappear_time
 								}
-								if (!caring.id.caredPokemons) caring.id.caredPokemons = []
-								caring.id.caredPokemons.push({pokemon_id: data.pokemon_id, disappear_time: data.disappear_time, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time})
 								exists = true
 								break
 							}
