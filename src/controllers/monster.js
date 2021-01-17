@@ -84,6 +84,7 @@ class Monster extends Controller {
 	}
 
 	async handle(obj) {
+		const tracer = Math.floor((Math.random() * 100)*1000)
 		let pregenerateTile = false
 		const data = obj
 		try {
@@ -146,17 +147,19 @@ class Monster extends Controller {
 
 			let weatherChangeAlertJobs = []
 			if (this.config.weather.weatherChangeAlert && weatherCellData.cares && (data.testing || weatherCellData['lastCurrentWeatherCheck'] < currentHourTimestamp) && weatherCellData[previousHourTimestamp] > 0 && currentCellWeather > 0 && weatherCellData[previousHourTimestamp] != currentCellWeather) {
-this.log.error('[DEBUG MONSTER] conditions met to update weather in that cell')
+this.log.error(`[DEBUG MONSTER] Start of handle tracing : [${tracer}]`)
+this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to update weather in that cell')
 				const weatherDataPayload = {
 					longitude: data.longitude,
 					latitude: data.latitude,
 					s2_cell_id: weatherCellId,
 					gameplay_condition: currentCellWeather,
 					updated: nowTimestamp,
-					source: 'fromMonster'
+					source: 'fromMonster',
+					trace: tracer
 				}
 				weatherChangeAlertJobs = await this.weatherController.handle(weatherDataPayload) || null
-//this.log.error('[DEBUG MONSTER] users caring about weather change in that cell :', weatherChangeAlertJobs)
+//this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
 			}
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
@@ -305,6 +308,7 @@ this.log.error('[DEBUG MONSTER] conditions met to update weather in that cell')
 			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0] && !weatherChangeAlertJobs[0]) return []
+//this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
 
 			if (whoCares[0] && whoCares.length > 1 && this.config.pvp.pvpEvolutionDirectTracking) {
 				const whoCaresNoDuplicates = whoCares.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i)
@@ -319,7 +323,7 @@ this.log.error('[DEBUG MONSTER] conditions met to update weather in that cell')
 				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
 			})
 
-			if (discordCacheBad) return []
+			if (discordCacheBad && !weatherChangeAlertJobs[0]) return []
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
@@ -331,6 +335,7 @@ this.log.error('[DEBUG MONSTER] conditions met to update weather in that cell')
 				const weatherForecast = await this.weatherController.getWeather({lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time})
 				let pokemonShouldBeBoosted = false
 				if (weatherForecast.current > 0 && this.utilData.weatherTypeBoost[weatherForecast.current].filter(boostedType => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
+this.log.error(`[DEBUG MONSTER] Tracing : [${tracer}]`)
 this.log.error(`[DEBUG MONSTER] pokemon : ${data.name} (iv ${data.iv})`)
 this.log.error(`[DEBUG MONSTER] pokemon types : ${data.types}`)
 this.log.error(`[DEBUG MONSTER] weather forecast : ${weatherForecast.current} to ${weatherForecast.next}`)
@@ -451,6 +456,7 @@ this.log.error(`[DEBUG MONSTER] something wrong with current weather info : ${we
 			const hrendprocessing = hrend[1] / 1000000
 			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
 
+//this.log.error(`[DEBUG MONSTER] Tracing : [${tracer}]`)
 //this.log.error('[DEBUG MONSTER] users caring about weather :', weatherChangeAlertJobs)
 //this.log.error('[DEBUG MONSTER] users caring about pokemon :', jobs)
 			if (weatherChangeAlertJobs[0]) weatherChangeAlertJobs.forEach(weatherJob => jobs.push(weatherJob))

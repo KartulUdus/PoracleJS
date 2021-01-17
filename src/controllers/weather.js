@@ -188,8 +188,8 @@ this.log.error(`[DEBUG WEATHER] forecast data successfully updated at : ${curren
 		res.next = data[nextHourTimestamp]
 		this.log.error('[DEBUG WEATHER] forecast query result : ', res)
 
-		weatherCache.setKey('weatherCacheData', this.controllerData)
-		weatherCache.save(true)
+		await weatherCache.setKey('weatherCacheData', this.controllerData)
+		await weatherCache.save(true)
 
 		return res
 	}
@@ -223,13 +223,13 @@ this.log.error(`[DEBUG WEATHER] forecast data successfully updated at : ${curren
 			}
 
 			let whoCares = []
-this.log.error('[DEBUG WEATHER] data payload :', data)
+this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
 			if (data.updated && data.gameplay_condition) {
 				data.time_changed = data.updated
 				data.condition = data.gameplay_condition
 				data.coords = data.polygon
 			}
-this.log.error(`[DEBUG WEATHER] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
+this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
 			const currentInGameWeather = data.condition
 			const updateHourTimestamp = data.time_changed - (data.time_changed % 3600)
 			const previousHourTimestamp = updateHourTimestamp - 3600
@@ -238,20 +238,21 @@ this.log.error(`[DEBUG WEATHER] s2_cell_id ${data.s2_cell_id} | time_changed ${d
 //this.log.error('[DEBUG WEATHER] controllerData :', this.controllerData)
 
 			const weatherCellData = this.controllerData[data.s2_cell_id]
-this.log.error('[DEBUG WEATHER] weatherCellData at start :', weatherCellData)
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] weatherCellData at start :', weatherCellData)
 			let previousWeather = weatherCellData[previousHourTimestamp] || -1
 			if ('cares' in weatherCellData) {
 				whoCares = weatherCellData.cares
 			}
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] whoCares from cell :', whoCares)
 
 			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData['lastCurrentWeatherCheck'] < updateHourTimestamp) {
 				weatherCellData[updateHourTimestamp] = currentInGameWeather
 				weatherCellData['lastCurrentWeatherCheck'] = updateHourTimestamp
-this.log.error('[DEBUG WEATHER] weatherCellData if updating current weather :', weatherCellData)
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] weatherCellData if updating current weather :', weatherCellData)
 			}
 
-			weatherCache.setKey('weatherCacheData', this.controllerData)
-			weatherCache.save(true)
+			await weatherCache.setKey('weatherCacheData', this.controllerData)
+			await weatherCache.save(true)
 
 			if (!this.config.weather.weatherChangeAlert) {
 				this.log.debug('weather change alerts are disabled, nobody cares.')
@@ -259,6 +260,7 @@ this.log.error('[DEBUG WEATHER] weatherCellData if updating current weather :', 
 			}
 
 			if (previousWeather === data.condition || whoCares.length === 0) {
+//this.log.error(`[DEBUG WEATHER] [${data.trace}] return with : previousWeather ${previousWeather} | data.condition ${data.condition} | whoCares.length ${whoCares.length}`)
 				this.log.debug(`weather has not changed in ${data.s2_cell_id} or nobody cares.`)
 				return []
 			}
@@ -275,18 +277,20 @@ this.log.error('[DEBUG WEATHER] weatherCellData if updating current weather :', 
 					let vertex = S2ts.S2LatLng.fromPoint(s2cell.getVertex(i));
 					data.coords.push([parseFloat(vertex.latDegrees), parseFloat(vertex.lngDegrees)]);
 				}
+//this.log.error(`[DEBUG WEATHER] [${data.trace}] generating polygon`)
 			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
 			if (pregenerateTile) {
 				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-this.log.error(`[DEBUG WEATHER] pregenerated staticMap : ${data.staticmap}`)
+this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated staticMap : ${data.staticmap}`)
 			}
 
 			if (previousWeather > -1) {
 				data.oldweather = this.utilData.weather[previousWeather] ? this.translator.translate(this.utilData.weather[previousWeather].name) : ''
 				data.oldweatheremoji = this.utilData.weather[previousWeather] ? this.translator.translate(this.utilData.weather[previousWeather].emoji) : ''
+//this.log.error(`[DEBUG WEATHER] [${data.trace}] in test previousWeather > -1`)
 			} else {
 				data.oldweather = ''
 				data.oldweatheremoji = ''
@@ -300,20 +304,25 @@ this.log.error(`[DEBUG WEATHER] pregenerated staticMap : ${data.staticmap}`)
 			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
 			const nextHourTimestamp = currentHourTimestamp + 3600
 			const weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
+//this.log.error(`[DEBUG WEATHER] [${data.trace}] currentHourTimestamp ${currentHourTimestamp} nextHourTimestamp ${nextHourTimestamp}`)
 
 			for (const cares of whoCares) {
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares', cares)
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.debug(`last tracked pokemon despawned before weather changed in ${data.s2_cell_id}`)
 					weatherCellData.cares = weatherCellData.cares.filter(caring => caring.id != cares.id)
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current weatherCellData.cares', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				if (cares.lastChangeAlert == currentHourTimestamp) {
 					this.log.debug(`user already alerted for this weather change in ${data.s2_cell_id}`)
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares.lastChangeAlert == currentHourTimestamp', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				weatherCellData.cares.filter(caring => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current lastChangeAlert = currentHourTimestamp', weatherCellData.cares)
 
 				const view = {
 					...data,
@@ -335,12 +344,14 @@ this.log.error(`[DEBUG WEATHER] pregenerated staticMap : ${data.staticmap}`)
 					name: cares.name,
 					tth: weatherTth,
 					clean: cares.clean,
+					tracing: data.trace,
 					emoji: [],
 				}
 				jobs.push(work)
 				this.addDiscordCache(cares.id)
 			}
 
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] jobs after current run', jobs)
 			return jobs
 		} catch (e) {
 			this.log.error('Can\'t seem to handle weather: ', e, data)
