@@ -111,7 +111,7 @@
     "template": {
       "embed": {
         "title": "⚠️ Weather change ⚠️",
-        "description": "The weather for some active Pokémons you are tracking has changed!\nIt went from {{oldweather}} {{oldweatheremoji}} to {{weather}} {{weatheremoji}}\nThis could have altered the reported stats and IV...",
+        "description": "The weather for some active Pokémons you are tracking has changed!\n{{#if oldweather}}It went from {{oldweather}} {{oldweatheremoji}} to {{else}}It is now {{/if}}{{weather}} {{weatheremoji}}\nThis could have altered the reported stats and IV...",
         "image": {
           "url": "{{{staticmap}}}"
         }
