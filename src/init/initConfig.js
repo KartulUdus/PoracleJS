@@ -9,7 +9,6 @@ const telegramRe = /[0-9]{9}:[a-zA-Z0-9_-]{35}/gm
 
 // fs.writeFileSync(path.join(__dirname, '../../config/local.json'), defaultConfig)
 
-
 async function run() {
 	let useDiscord = false
 	let discordToken = ''
@@ -52,6 +51,5 @@ async function run() {
 
 	log.info(`your config has been created at ${path.join(__dirname, '../../config/local.json')}. Edit this file if you need config changes.`)
 }
-
 
 run()

@@ -77,13 +77,17 @@ class Worker {
 	}
 
 	async userAlert(data) {
-		const user = this.client.users.get(data.target)
+		let user = this.client.users.cache.get(data.target)
 		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
-		if (!user) return log.warn(`user ${data.name} not found`)
 		try {
+			if (!user) {
+				log.warn(`Originating connection to ${data.name}`)
+				user = await this.client.users.fetch(data.target)
+				await user.createDM()
+			}
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete(msgDeletionMs)
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 			}
 			return true
 		} catch (err) {
@@ -94,13 +98,13 @@ class Worker {
 	}
 
 	async channelAlert(data) {
-		const channel = this.client.channels.get(data.target)
-		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
-		if (!channel) return log.warn(`channel ${data.name} not found`)
 		try {
+			const channel = await this.client.channels.fetch(data.target)
+			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
+			if (!channel) return log.warn(`channel ${data.name} not found`)
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete(msgDeletionMs)
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 			}
 			return true
 		} catch (err) {
@@ -113,6 +117,10 @@ class Worker {
 	async webhookAlert(firstData) {
 		const data = firstData
 		if (!data.target.match(hookRegex)) return log.warn(`Webhook, ${data.name} does not look like a link, exiting`)
+		if (data.message.embed && data.message.embed.color) {
+			data.message.embed.color = parseInt(data.message.embed.color.replace(/^#/, ''), 16)
+		}
+
 		if (data.message.embed) data.message.embeds = [data.message.embed]
 		try {
 			await this.axios({
@@ -124,6 +132,24 @@ class Worker {
 			log.error(`Webhook ${data.name} failed with, ${err.message}`)
 		}
 		return true
+	}
+
+	async checkRole(guildID, users, roles) {
+		const allUsers = users
+		const validRoles = roles
+		const invalidUsers = []
+		const guild = await this.client.guilds.fetch(guildID)
+		for (const user of allUsers) {
+			log.info(`Checking role for: ${user.name} - ${user.id}`)
+			const discorduser = await guild.members.fetch(user.id)
+			if (discorduser.roles.cache.find((r) => validRoles.includes(r.id))) {
+				log.info(`${discorduser.user.username} has a valid role`)
+			} else {
+				log.info(`${discorduser.user.username} doesn't have a valid role`)
+				invalidUsers.push(user)
+			}
+		}
+		return invalidUsers
 	}
 }
 

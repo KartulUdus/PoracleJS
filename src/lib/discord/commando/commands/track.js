@@ -18,6 +18,14 @@ exports.run = async (client, msg, command) => {
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await client.query.countQuery('humans', { id: target.id })
 
+		let userHasLocation = false
+		let userHasArea = false
+		if (isRegistered && !target.webhook) {
+			const human = await client.query.selectOneQuery('humans', { id: target.id })
+			if (+human.latitude !== 0 && +human.longitude !== 0) userHasLocation = true
+			if (human.area.length > 2) userHasArea = true
+		}
+
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
 			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')}`)
 		}
@@ -50,31 +58,59 @@ exports.run = async (client, msg, command) => {
 			let gender = 0
 			let weight = 0
 			let maxweight = 9000000
+			let greatLeague = 4096
+			let greatLeagueCP = 0
+			let ultraLeague = 4096
+			let ultraLeagueCP = 0
+			const { pvpFilterMaxRank } = client.config.pvp
+			const { pvpFilterGreatMinCP } = client.config.pvp
+			const { pvpFilterUltraMinCP } = client.config.pvp
 			let template = 1
 			let clean = false
 			const pings = [...msg.mentions.users.array().map((u) => `<@!${u.id}>`), ...msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 
 			// Check for monsters or forms
 			const formArgs = args.filter((arg) => arg.match(client.re.formRe))
-			const formNames = formArgs ? formArgs.map((arg) => client.translator.reverse(arg.replace(client.translator.translate('form'), ''))) : []
+			const formNames = formArgs ? formArgs.map((arg) => client.translator.reverse(arg.replace(client.translator.translate('form'), ''), true).toLowerCase()) : []
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
 			const genCommand = args.filter((arg) => arg.match(client.re.genRe))
-			const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
+			const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].replace(client.translator.translate('gen'), ''))] : 0
 
 			if (formNames.length) {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-				|| args.includes(client.translator.translate('everything'))) && formNames.includes(mon.form.name.toLowerCase()))
+				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) && formNames.includes(mon.form.name.toLowerCase()))
+
+				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
+			} else if (gen || args.includes('individually') || client.config.tracking.forceEverythingSeparately) {
+				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
+				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) && !mon.form.id)
+
+				if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			} else {
 				monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
-				|| args.includes(client.translator.translate('everything'))) && !mon.form.id)
+				) && !mon.form.id)
+				if (args.includes('everything') && !client.config.tracking.disableEverythingTracking || args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
+					monsters.push({
+						id: 0,
+						form: {
+							id: 0,
+						},
+					})
+				}
 			}
-			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			// Parse command elements to stuff
 			args.forEach((element) => {
 				if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[0].replace(client.translator.translate('maxlevel'), '')
 				else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
+				else if (element.match(client.re.greatLeagueRe)) greatLeague = element.match(client.re.greatLeagueRe)[0].replace(client.translator.translate('great'), '')
+				else if (element.match(client.re.greatLeagueCPRe)) greatLeagueCP = element.match(client.re.greatLeagueCPRe)[0].replace(client.translator.translate('greatcp'), '')
+				else if (element.match(client.re.ultraLeagueRe)) ultraLeague = element.match(client.re.ultraLeagueRe)[0].replace(client.translator.translate('ultra'), '')
+				else if (element.match(client.re.ultraLeagueCPRe)) ultraLeagueCP = element.match(client.re.ultraLeagueCPRe)[0].replace(client.translator.translate('ultracp'), '')
 				else if (element.match(client.re.maxcpRe)) maxcp = element.match(client.re.maxcpRe)[0].replace(client.translator.translate('maxcp'), '')
 				else if (element.match(client.re.maxivRe)) maxiv = element.match(client.re.maxivRe)[0].replace(client.translator.translate('maxiv'), '')
 				else if (element.match(client.re.maxweightRe)) maxweight = element.match(client.re.maxweightRe)[0].replace(client.translator.translate('maxweight'), '')
@@ -94,6 +130,29 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'male') gender = 1
 				else if (element === 'genderless') gender = 3
 			})
+			if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
+			if (greatLeague < 4096 && greatLeague > pvpFilterMaxRank) greatLeague = pvpFilterMaxRank
+			if (ultraLeague < 4096 && ultraLeague > pvpFilterMaxRank) ultraLeague = pvpFilterMaxRank
+			if (greatLeagueCP > 0 && greatLeagueCP <= pvpFilterGreatMinCP) greatLeagueCP = pvpFilterGreatMinCP
+			if (ultraLeagueCP > 0 && ultraLeagueCP <= pvpFilterUltraMinCP) ultraLeagueCP = pvpFilterUltraMinCP
+			if (greatLeague <= pvpFilterMaxRank && greatLeagueCP === 0) greatLeagueCP = pvpFilterGreatMinCP
+			if (ultraLeague <= pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
+			if (greatLeagueCP >= pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = pvpFilterMaxRank
+			if (ultraLeagueCP >= pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+
+			if (distance > 0 && !userHasLocation && !target.webhook) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
+			if (distance === 0 && !userHasArea && !target.webhook) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
 			const insert = monsters.map((mon) => ({
 				id: target.id,
 				pokemon_id: mon.id,
@@ -117,6 +176,10 @@ exports.run = async (client, msg, command) => {
 				max_sta: maxSta,
 				gender,
 				clean,
+				great_league_ranking: greatLeague,
+				great_league_ranking_min_cp: greatLeagueCP,
+				ultra_league_ranking: ultraLeague,
+				ultra_league_ranking_min_cp: ultraLeagueCP,
 			}))
 			if (!insert.length) {
 				break

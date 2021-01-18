@@ -2,7 +2,6 @@ exports.run = async (client, msg, command) => {
 	const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
-
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
@@ -17,6 +16,14 @@ exports.run = async (client, msg, command) => {
 		const isRegistered = target.webhook
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await client.query.countQuery('humans', { id: target.id })
+
+		let userHasLocation = false
+		let userHasArea = false
+		if (isRegistered && !target.webhook) {
+			const human = await client.query.selectOneQuery('humans', { id: target.id })
+			if (+human.latitude !== 0 && +human.longitude !== 0) userHasLocation = true
+			if (human.area.length > 2) userHasArea = true
+		}
 
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
 			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')}`)
@@ -61,7 +68,6 @@ exports.run = async (client, msg, command) => {
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 
-
 			args.forEach((element) => {
 				if (element === 'ex') exclusive = 1
 				else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
@@ -71,9 +77,19 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'valor') team = 2
 				else if (element === 'mystic') team = 1
 				else if (element === 'harmony') team = 0
-				else if (element === 'everything') levels = [1, 2, 3, 4, 5]
+				else if (element === 'everything') levels = [1, 2, 3, 4, 5, 6]
 				else if (element === 'clean') clean = true
 			})
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+			if (distance > 0 && !userHasLocation && !target.webhook && !remove) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
+			if (distance === 0 && !userHasArea && !target.webhook && !remove) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
 			if (!levels.length && !monsters.length) {
 				break
 			} else {

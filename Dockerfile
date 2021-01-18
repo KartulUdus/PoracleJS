@@ -1,13 +1,15 @@
-FROM node
+FROM node:12-alpine
 
+WORKDIR /usr/src/app
+ADD . ./
 # DEPS
-RUN apt-get -y update && apt-get install -y curl \
-gnupg2 \
-git
-
-# PoracleJS
-RUN git clone https://github.com/KartulUdus/PoracleJS.git && cd PoracleJS && npm install
-
-WORKDIR PoracleJS
-
+ENV HUSKY_SKIP_INSTALL=1
+RUN apk add git \
+    && apk add --no-cache --virtual .gyp \
+        python \
+        make \
+        g++ \
+    && npm install \
+    && apk del .gyp
+EXPOSE 3030
 CMD npm start

@@ -17,6 +17,14 @@ exports.run = async (client, msg, command) => {
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await client.query.countQuery('humans', { id: target.id })
 
+		let userHasLocation = false
+		let userHasArea = false
+		if (isRegistered && !target.webhook) {
+			const human = await client.query.selectOneQuery('humans', { id: target.id })
+			if (+human.latitude !== 0 && +human.longitude !== 0) userHasLocation = true
+			if (human.area.length > 2) userHasArea = true
+		}
+
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
 			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')}`)
 		}
@@ -42,8 +50,10 @@ exports.run = async (client, msg, command) => {
 			let remove = false
 			let minDust = 10000000
 			let stardustTracking = 9999999
+			const energyMonsters = []
+			let energyMonster = 0
+			let commandEverything = 0
 			let clean = false
-
 
 			const argTypes = args.filter((arg) => typeArray.includes(arg))
 			const genCommand = args.filter((arg) => arg.match(client.re.genRe))
@@ -54,12 +64,15 @@ exports.run = async (client, msg, command) => {
 			|| args.includes('all pokemon')) && !mon.form.id)
 			if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 			monsters = fullMonsters.map((mon) => mon.id)
-			items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes(client.translator.translate('all items')))
-			if (args.includes('everything')) {
+			items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes('all items'))
+			if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
 				monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
 				items = Object.keys(client.utilData.items)
 				minDust = 0
 				stardustTracking = -1
+				energyMonsters.push('0')
+				commandEverything = 1
 			}
 			args.forEach((element) => {
 				if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
@@ -70,10 +83,28 @@ exports.run = async (client, msg, command) => {
 				else if (element === 'stardust') {
 					minDust = 0
 					stardustTracking = -1
+				} else if (element.match(client.re.energyRe)) {
+					energyMonster = element.match(client.re.energyRe)[0].replace(client.translator.translate('energy'), '')
+					energyMonster = client.translator.reverse(energyMonster.toLowerCase(), true).toLowerCase()
+					energyMonster = Object.values(client.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
+					energyMonster = energyMonster.map((mon) => mon.id)
+					if (+energyMonster > 0) energyMonsters.push(energyMonster)
+				} else if (element === 'energy') {
+					energyMonsters.push('0')
 				} else if (element === 'shiny') mustShiny = 1
 				else if (element === 'remove') remove = true
 				else if (element === 'clean') clean = true
 			})
+			if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
+			if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+			if (distance > 0 && !userHasLocation && !target.webhook && !remove) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
+			if (distance === 0 && !userHasArea && !target.webhook && !remove) {
+				await msg.react(client.translator.translate('🙅'))
+				return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			}
 
 			if (+minDust < 10000000) {
 				questTracks.push({
@@ -87,6 +118,19 @@ exports.run = async (client, msg, command) => {
 					clean,
 				})
 			}
+
+			energyMonsters.forEach((pid) => {
+				questTracks.push({
+					id: target.id,
+					ping: pings,
+					reward: pid,
+					template,
+					shiny: mustShiny,
+					reward_type: 12,
+					distance,
+					clean,
+				})
+			})
 
 			monsters.forEach((pid) => {
 				questTracks.push({
@@ -129,9 +173,10 @@ exports.run = async (client, msg, command) => {
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql
 			items.push(0)
 			monsters.push(0)
+			energyMonsters.push(10000)
 			const remQuery = `
-				delete from quest WHERE id=${target.id} and 
-				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}))		
+				delete from quest WHERE id=${target.id} and
+				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward in(${energyMonsters})) or (reward_type = 12 and ${commandEverything}=1))
 				`
 			const result = await client.query.misteryQuery(remQuery)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction

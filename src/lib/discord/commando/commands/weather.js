@@ -32,7 +32,7 @@ exports.run = async (client, msg, command) => {
 		const clean = command[1] ? command[1].includes('clean') : false
 		const template = command[1] && command[1].find((arg) => arg.match(client.re.templateRe)) ? command[1].find((arg) => arg.match(client.re.templateRe))[0].replace(client.translator.translate('template'), '') : 1
 		const [location] = await client.query.geolocate(command[0].join(' '))
-		if (!location) return await msg.reply(`${client.translator.translate('404 no locations found: ')}${command[0].join(' ')}`)
+		if (!location) return await msg.reply(`${client.translator.translate('404 no locations found:')} ${command[0].join(' ')}`)
 		const key = client.S2.latLngToKey(location.latitude, location.longitude, 10)
 		const cell = client.S2.keyToId(key)
 		if (!cell) return await msg.reply(`${client.translator.tranlate('S2 cell not found')}${command[1].join(' ')}: ${location.latitude},${location.longitude}`)
@@ -41,7 +41,6 @@ exports.run = async (client, msg, command) => {
 			conditions.push(...Object.keys(client.utilData.types).filter((t) => command[1].includes(t.toLowerCase())).map((name) => client.utilData.types[name].id))
 			if (command[1].includes('everything')) conditions.push(0)
 		}
-
 
 		const insert = conditions.map((c) => ({
 			id: target.id,

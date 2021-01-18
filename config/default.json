@@ -1,7 +1,7 @@
 {
     "server": {
         "host": "127.0.0.1",
-        "port": "4201",
+        "port": "3030",
         "ipWhitelist": [],
         "ipBlacklist": []
     },
@@ -10,7 +10,14 @@
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
         "locale": "en",
-        "weatherChangeAlert": false
+        "weatherChangeAlert": false,
+        "disabledCommands": [],
+        "disablePokemon": false,
+        "disableRaid": false,
+        "disableInvasion": false,
+        "disablePokestop": false,
+        "disableQuest": false,
+        "disableWeather": false
     },
     "logger": {
         "level": "info",
@@ -32,16 +39,39 @@
         "addressFormat": "{{ streetName}} {{ streetNumber }}:",
         "language": "en"
     },
+    "geofence": {
+        "path": "./config/geofence.json",
+        "defaultGeofenceName": "city",
+        "defaultGeofenceColor": "#3399ff"
+    },
+    "pvp": {
+        "pvpEvolutionDirectTracking": false,
+        "pvpDisplayMaxRank": 10,
+        "pvpDisplayGreatMinCP": 1450,
+        "pvpDisplayUltraMinCP": 2450,
+        "pvpFilterMaxRank": 10,
+        "pvpFilterGreatMinCP": 1450,
+        "pvpFilterUltraMinCP": 2450
+    },
+    "tracking": {
+        "disableEverythingTracking": false,
+        "forceEverythingSeparately": false,
+        "defaultDistance": 0,
+        "maxDistance": 0
+    },
     "discord": {
         "enabled": true,
+        "checkRole": false,
+        "checkRoleInterval": 6,
         "unknownResponse": false,
         "invite": "",
         "token": [],
+        "guilds": ["358180805031493634"],
         "channels": ["533927791096233984"],
         "userRole": ["roleId1", "358207117951369217"],
         "admins": ["222742859059560458"],
         "prefix": "!",
-        "limitSec": 30,
+        "limitSec": 240,
         "limitAmount": 20,
         "ivColors": [
             "#9D9D9D",
@@ -50,19 +80,21 @@
             "#0070DD",
             "#A335EE",
             "#FF8000"
-        ]
+        ],
+        "dmLogChannelID": "",
+        "dmLogChannelDeletionTime": 0
       },
-
       "telegram": {
         "enabled": false,
         "token": "",
         "admins": [""],
         "channels": [""]
       },
-
       "geocoding": {
         "provider": "poracle",
+        "providerURL": "Your Nominatim Server Address",
         "staticProvider": "poracle",
+        "staticProviderURL": "Your TileServerCache Server Address",
         "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
         "staticKey":["Your MapQuest or Google Key"],
         "width": 320,
