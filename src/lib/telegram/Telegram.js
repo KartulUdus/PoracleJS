@@ -117,8 +117,10 @@ class Telegram {
 					}
 				}, msgDeletionMs)
 			}
+			return true
 		} catch (err) {
 			this.log.error(`Failed to send Telegram alert to ${data.name}/${data.target}, ${err.message}`)
+			return false
 		}
 	}
 
