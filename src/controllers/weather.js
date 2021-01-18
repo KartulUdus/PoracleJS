@@ -246,7 +246,7 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | 
 
 			// Removing whoCares who don't have a Pokemon affected by this weather change
 			if (this.config.weather.showAlteredPokemon) {
-				whoCares = whoCares.filter(cares => cares.caredPokemons.find(pokemon => pokemon.alteringWeathers.includes(currentInGameWeather)))
+				whoCares = whoCares.filter(cares => ('caredPokemons' in cares ) ? cares.caredPokemons.find(pokemon => pokemon.alteringWeathers.includes(currentInGameWeather)) : '')
 			}
 //this.log.error('[DEBUG WEATHER] ['+data.trace+'] whoCares from cell :', whoCares)
 
