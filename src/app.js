@@ -73,7 +73,7 @@ log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let roleWorker
 let telegram
-let workingOnHooks = false
+const workingOnHooks = false
 
 if (config.discord.enabled) {
 	for (const key in config.discord.token) {
