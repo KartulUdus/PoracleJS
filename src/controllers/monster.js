@@ -183,7 +183,7 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to update weather ce
 			if (this.config.weather.weatherChangeAlert && this.config.weather.showAlteredPokemon && weatherCellData.cares) {
 				// delete despawned
 				for (const cares of weatherCellData.cares) {
-				cares.caredPokemons = cares.caredPokemons.filter(pokemon => pokemon.disappear_time > nowTimestamp)
+					if(cares.caredPokemons) cares.caredPokemons = cares.caredPokemons.filter(pokemon => pokemon.disappear_time > nowTimestamp)
 				}
 			}
 
