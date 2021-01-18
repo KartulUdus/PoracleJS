@@ -40,6 +40,7 @@ exports.run = async (client, msg, command) => {
 		let reaction = '👌'
 		for (const args of command) {
 			const remove = !!args.find((arg) => arg === 'remove')
+			const commandEverything = !!args.find((arg) => arg === 'everything')
 			let distance = 0
 			let template = 1
 			let gender = 0
@@ -84,7 +85,13 @@ exports.run = async (client, msg, command) => {
 				client.log.info(`${target.name} started tracking ${types.join(', ')} invasions`)
 				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			} else {
-				client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
+				if (commandEverything) {
+					const remQuery = `delete from invasion WHERE id=${target.id}`
+					const result = await client.query.misteryQuery(remQuery)
+					reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+				}else{
+					client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
+				}
 				client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
 			}
 		}
