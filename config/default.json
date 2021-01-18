@@ -45,9 +45,13 @@
     },
     "weather": {
         "weatherChangeAlert": false,
+        "showAlteredPokemon": false,
+        "showAlteredPokemonStaticMap": false,
+        "showAlteredPokemonMaxCount": 10,
         "enableWeatherForecast": false,
         "apiKeyAccuWeather": ["key1", "key2", "key3"],
         "apiKeyDayQuota": 50,
+        "smartForecast": false,
         "localFirstFetchHOD": 3,
         "forecastRefreshInterval": 8
     },

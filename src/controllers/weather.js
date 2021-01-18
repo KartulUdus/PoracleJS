@@ -91,29 +91,29 @@ this.log.error(`[DEBUG WEATHER] -----------------------------------------`)
 		const id = S2.keyToId(key)
 this.log.error(`[DEBUG WEATHER] S2cell id : ${id}`)
 
-		const disappearHourTimestamp = weatherObject.disappear - (weatherObject.disappear % 3600)
+//		const disappearHourTimestamp = weatherObject.disappear - (weatherObject.disappear % 3600)
 		const nowTimestamp = Math.floor(Date.now() / 1000)
 		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
 		const nextHourTimestamp = currentHourTimestamp + 3600
+		let forecastTimeout = nowTimestamp + this.config.weather.forecastRefreshInterval * 3600
 		//	const currentHourTimestamp = nextHourTimestamp - 3600
 
-		const currentMoment = moment(currentHourTimestamp * 1000)
-		const currentHour = currentMoment.hour()
+		if (this.config.weather.localFirstFetchHOD && !this.config.weather.smartForecast) {
+			const currentMoment = moment(currentHourTimestamp * 1000)
+			const currentHour = currentMoment.hour()
 
-		const disappearMoment = moment(disappearHourTimestamp * 1000)
-		const disappearHour = disappearMoment.hour()
 this.log.error(`[DEBUG WEATHER] currentHour : ${currentHour}`)
-this.log.error(`[DEBUG WEATHER] disapHour : ${disappearHour}`)
 
-		// Weather must be refreshed at the time set in config with the interval given
-		const localFirstFetchTOD = this.config.weather.localFirstFetchHOD
-		const forecastRefreshInterval = this.config.weather.forecastRefreshInterval
-		// eslint-disable-next-line no-bitwise
-		const nextUpdateHour = (((currentHour + ((currentHour % forecastRefreshInterval) < localFirstFetchTOD ? 0 : (forecastRefreshInterval-1))) & -forecastRefreshInterval) + localFirstFetchTOD) % 24
-		const nextUpdateInHours = (nextUpdateHour > currentHour ? nextUpdateHour : (24+localFirstFetchTOD)) - currentHour
+			// Weather must be refreshed at the time set in config with the interval given
+			const localFirstFetchTOD = this.config.weather.localFirstFetchHOD
+			const forecastRefreshInterval = this.config.weather.forecastRefreshInterval
+			// eslint-disable-next-line no-bitwise
+			const nextUpdateHour = (((currentHour + ((currentHour % forecastRefreshInterval) < localFirstFetchTOD ? 0 : (forecastRefreshInterval-1))) & -forecastRefreshInterval) + localFirstFetchTOD) % 24
+			const nextUpdateInHours = (nextUpdateHour > currentHour ? nextUpdateHour : (24+localFirstFetchTOD)) - currentHour
 
-		const forecastTimeout = currentMoment.add(nextUpdateInHours, 'hours').unix()
-this.log.error(`[DEBUG WEATHER] forecastTimeout : ${forecastTimeout}`)
+			forecastTimeout = currentMoment.add(nextUpdateInHours, 'hours').unix()
+this.log.error(`[DEBUG WEATHER] interval forecastTimeout : ${forecastTimeout}`)
+		}
 
 		if(!this.controllerData[id]) this.controllerData[id] = {}
 		const data = this.controllerData[id]
@@ -243,6 +243,11 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | 
 			if ('cares' in weatherCellData) {
 				whoCares = weatherCellData.cares
 			}
+
+			// Removing whoCares who don't have a Pokemon affected by this weather change
+			if (this.config.weather.showAlteredPokemon) {
+				whoCares = whoCares.filter(cares => cares.caredPokemons.find(pokemon => pokemon.alteringWeathers.includes(currentInGameWeather)))
+			}
 //this.log.error('[DEBUG WEATHER] ['+data.trace+'] whoCares from cell :', whoCares)
 
 			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData['lastCurrentWeatherCheck'] < updateHourTimestamp) {
@@ -282,9 +287,9 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | 
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
-			if (pregenerateTile) {
+			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated staticMap : ${data.staticmap}`)
+this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
 			}
 
 			if (previousWeather > -1) {
@@ -323,6 +328,13 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated staticMap : ${data.
 				}
 				weatherCellData.cares.filter(caring => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
 //this.log.error('[DEBUG WEATHER] ['+data.trace+'] current lastChangeAlert = currentHourTimestamp', weatherCellData.cares)
+
+				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
+					const activePokemons = weatherCellData.cares.filter(caring => caring.id == cares.id)[0].caredPokemons.filter(pokemon => pokemon.alteringWeathers.includes(data.condition))
+					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
+					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
+this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
+				}
 
 				const view = {
 					...data,
