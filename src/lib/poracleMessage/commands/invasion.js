@@ -63,7 +63,7 @@ exports.run = async (client, msg, args) => {
 				const remQuery = `delete from invasion WHERE id=${target.id}`
 				const result = await client.query.misteryQuery(remQuery)
 				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
-			}else {
+			} else {
 				client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
 			}
 			client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
