@@ -59,17 +59,17 @@ function getKnex(conf) {
 }
 
 function readDtsFiles() {
-	let dts = importFresh(path.join(__dirname, '../../config/dts.json'))
+	let localDts = importFresh(path.join(__dirname, '../../config/dts.json'))
 	const dirpath = path.join(__dirname, '../../config/dts')
 
 	const filesList = fs.readdirSync(dirpath).filter((e) => path.extname(e).toLowerCase() === '.json')
 
 	for (const filename of filesList) {
 		const dtsAddition = importFresh(path.join(dirpath, filename))
-		dts = dts.concat(dtsAddition)
+		localDts = localDts.concat(dtsAddition)
 	}
 
-	return dts
+	return localDts
 }
 
 module.exports = {
