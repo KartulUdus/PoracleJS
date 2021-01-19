@@ -1,0 +1,126 @@
+{
+	"monsters": [
+		{
+			"id": 0,
+			"ping": "",
+			"clean": 0,
+			"pokemon_id": 25,
+			"distance": 0,
+			"min_iv": -1,
+			"max_iv": 100,
+			"min_cp": 0,
+			"max_cp": 9000,
+			"min_level": 0,
+			"max_level": 40,
+			"atk": 0,
+			"def": 0,
+			"sta": 0,
+			"template": 1,
+			"min_weight": 0,
+			"max_weight": 9000000,
+			"form": 0,
+			"max_atk": 15,
+			"max_def": 15,
+			"max_sta": 15,
+			"gender": 0
+		},
+		{
+			"id": 0,
+			"ping": "",
+			"clean": 0,
+			"pokemon_id": 26,
+			"distance": 0,
+			"min_iv": -1,
+			"max_iv": 100,
+			"min_cp": 0,
+			"max_cp": 9000,
+			"min_level": 0,
+			"max_level": 40,
+			"atk": 0,
+			"def": 0,
+			"sta": 0,
+			"template": 1,
+			"min_weight": 0,
+			"max_weight": 9000000,
+			"form": 0,
+			"max_atk": 15,
+			"max_def": 15,
+			"max_sta": 15,
+			"gender": 0
+		},
+		{
+			"id": 0,
+			"ping": "",
+			"clean": 0,
+			"pokemon_id": 143,
+			"distance": 0,
+			"min_iv": -1,
+			"max_iv": 100,
+			"min_cp": 0,
+			"max_cp": 9000,
+			"min_level": 0,
+			"max_level": 40,
+			"atk": 0,
+			"def": 0,
+			"sta": 0,
+			"template": 1,
+			"min_weight": 0,
+			"max_weight": 9000000,
+			"form": 0,
+			"max_atk": 15,
+			"max_def": 15,
+			"max_sta": 15,
+			"gender": 0
+		}
+	],
+	"raid": [
+		{
+			"id": 0,
+			"ping": "",
+			"clean": 0,
+			"pokemon_id": 9000,
+			"exclusive": 0,
+			"template": 1,
+			"distance": 0,
+			"team": 4,
+			"level": 3,
+			"form": 0
+		}
+	],
+	"egg": [
+		{
+			"id": 0,
+			"ping": "",
+			"clean": 0,
+			"exclusive": 0,
+			"template": 1,
+			"distance": 0,
+			"team": 4,
+			"level": 3
+		}
+	],
+	"quest": [
+		{
+			"id": 0,
+			"ping": "",
+			"clean": 0,
+			"reward": 1,
+			"template": 1,
+			"shiny": 0,
+			"reward_type": 2,
+			"distance": 0
+		}
+	],
+	"invasion": [
+		{
+			"id": 0,
+			"ping": "",
+			"clean": 0,
+			"distance": 0,
+			"template": 1,
+			"gender": 0,
+			"grunt_type": "dragon"
+		}
+	],
+	"weather": []
+}

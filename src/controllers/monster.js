@@ -12,17 +12,20 @@ class Monster extends Controller {
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
+		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
+		if (data.pvpEvoLookup) pokemonQueryString = `(pokemon_id=${data.pvp_pokemon_id} and (form = 0 or form = ${data.pvp_form}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
+		let pvpQueryString = `great_league_ranking>=${data.bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and ultra_league_ranking>=${data.bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}`
+		if (data.pvpEvoLookup) pvpQueryString = `great_league_ranking>=${data.pvp_bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.pvp_bestGreatLeagueRankCP} and ultra_league_ranking>=${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.pvp_bestUltraLeagueRankCP}`
 		let query = `
-		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping from monsters
+		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on humans.id = monsters.id
 		where humans.enabled = true and
-		pokemon_id=${data.pokemon_id} and
+		(${pokemonQueryString}) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
 		min_cp<=${data.cp} and
 		max_cp>=${data.cp} and
 		(gender = ${data.gender} or gender = 0) and
-		(form = ${data.form} or form = 0) and
 		min_level<=${data.pokemon_level} and
 		max_level>=${data.pokemon_level} and
 		atk<=${data.individual_attack} and
@@ -32,29 +35,41 @@ class Monster extends Controller {
 		max_def>=${data.individual_defense} and
 		max_sta>=${data.individual_stamina} and
 		min_weight<=${data.weight} * 1000 and
-		max_weight>=${data.weight} * 1000 `
+		max_weight>=${data.weight} * 1000 and
+		(${pvpQueryString})
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-			and
-			(round (6371000 * acos( cos( radians(${data.latitude}) )
-			  * cos( radians( humans.latitude ) )
-			  * cos( radians( humans.longitude ) - radians(${data.longitude}) )
-			  + sin( radians(${data.latitude}) )
-			  * sin( radians( humans.latitude ) ) ) < monsters.distance and monsters.distance != 0) or
-			   monsters.distance = 0 and (${areastring}))
-			   group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping
-			`)
+				and
+				(
+					(
+						round(
+							6371000
+							* acos(cos( radians(${data.latitude}) )
+							* cos( radians( humans.latitude ) )
+							* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+							+ sin( radians(${data.latitude}) )
+							* sin( radians( humans.latitude ) )
+						)
+					) < monsters.distance and monsters.distance != 0)
+					or
+					(
+						monsters.distance = 0 and (${areastring})
+					)
+				)
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
+				`)
 		} else {
 			query = query.concat(`
-				and (monsters.distance = 0 and (${areastring}) or monsters.distance > 0)
-				group by humans.id, humans.name, monsters.template 
-			`)
+					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
+					group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
+					`)
 		}
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
@@ -68,16 +83,22 @@ class Monster extends Controller {
 		return result
 	}
 
-
 	async handle(obj) {
+		let pregenerateTile = false
 		const data = obj
 		try {
+			let hrstart = process.hrtime()
+
 			moment.locale(this.config.locale.timeformat)
 			const minTth = this.config.general.alertMinimumTime || 0
 
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'poracle': {
 					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
+					break
+				}
+				case 'tileservercache': {
+					pregenerateTile = true
 					break
 				}
 				case 'google': {
@@ -114,13 +135,12 @@ class Monster extends Controller {
 				weather = wData.weather
 			}
 
-
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-			|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-			|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+					|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+					|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			data.name = this.translator.translate(monster.name)
-			data.formname = monster.form.name
+			data.formname = this.translator.translate(monster.form.name)
 			data.iv = encountered ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
 			data.individual_attack = encountered ? data.individual_attack : 0
 			data.individual_defense = encountered ? data.individual_defense : 0
@@ -132,6 +152,7 @@ class Monster extends Controller {
 			data.weight = encountered ? data.weight.toFixed(1) : 0
 			data.quickMove = data.weight && this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
 			data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
+			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
 			data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
 			data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
@@ -153,6 +174,62 @@ class Monster extends Controller {
 			})
 			data.emoji = e
 			data.emojiString = e.join('')
+
+			data.pvp_pokemon_id = data.pokemon_id
+			data.pvp_form = data.form
+			data.pvpEvolutionData = {}
+
+			data.bestGreatLeagueRank = 4096
+			data.bestGreatLeagueRankCP = 0
+			if (data.pvp_rankings_great_league) {
+				for (const stats of data.pvp_rankings_great_league) {
+					if (stats.rank && stats.rank < data.bestGreatLeagueRank) {
+						data.bestGreatLeagueRank = stats.rank
+						data.bestGreatLeagueRankCP = stats.cp || 0
+					} else if (stats.rank && stats.cp && stats.rank === data.bestGreatLeagueRank && stats.cp > data.bestGreatLeagueRankCP) {
+						data.bestGreatLeagueRankCP = stats.cp
+					}
+					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterGreatMinCP) {
+						if (data.pvpEvolutionData[stats.pokemon]) {
+							data.pvpEvolutionData[stats.pokemon].greatLeague = {
+								rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+							}
+						} else {
+							data.pvpEvolutionData[stats.pokemon] = {
+								greatLeague: {
+									rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+								},
+							}
+						}
+					}
+				}
+			}
+
+			data.bestUltraLeagueRank = 4096
+			data.bestUltraLeagueRankCP = 0
+			if (data.pvp_rankings_ultra_league) {
+				for (const stats of data.pvp_rankings_ultra_league) {
+					if (stats.rank && stats.rank < data.bestUltraLeagueRank) {
+						data.bestUltraLeagueRank = stats.rank
+						data.bestUltraLeagueRankCP = stats.cp || 0
+					} else if (stats.rank && stats.cp && stats.rank === data.bestUltraLeagueRank && stats.cp > data.bestUltraLeagueRankCP) {
+						data.bestUltraLeagueRankCP = stats.cp
+					}
+					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterUltraMinCP) {
+						if (data.pvpEvolutionData[stats.pokemon]) {
+							data.pvpEvolutionData[stats.pokemon].ultraLeague = {
+								rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+							}
+						} else {
+							data.pvpEvolutionData[stats.pokemon] = {
+								ultraLeague: {
+									rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+								},
+							}
+						}
+					}
+				}
+			}
 
 			data.staticSprite = encodeURI(JSON.stringify([
 				{
@@ -176,12 +253,41 @@ class Monster extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
+			data.pvpEvoLookup = 0
 			const whoCares = await this.monsterWhoCares(data)
 
-			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared.`)
+			if (this.config.pvp.pvpEvolutionDirectTracking) {
+				const pvpEvoData = data
+				if (Object.keys(data.pvpEvolutionData).length !== 0) {
+					for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
+						pvpEvoData.pvp_pokemon_id = key
+						pvpEvoData.pvp_form = pvpMon.greatLeague ? pvpMon.greatLeague.form : pvpMon.ultraLeague.form
+						pvpEvoData.pvp_bestGreatLeagueRank = pvpMon.greatLeague ? pvpMon.greatLeague.rank : 4096
+						pvpEvoData.pvp_bestGreatLeagueRankCP = pvpMon.greatLeague ? pvpMon.greatLeague.cp : 0
+						pvpEvoData.pvp_bestUltraLeagueRank = pvpMon.ultraLeague ? pvpMon.ultraLeague.rank : 4096
+						pvpEvoData.pvp_bestUltraLeagueRankCP = pvpMon.ultraLeague ? pvpMon.ultraLeague.cp : 0
+						pvpEvoData.pvpEvoLookup = 1
+						const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
+						if (pvpWhoCares[0]) {
+							whoCares.push(...pvpWhoCares)
+						}
+					}
+				}
+			}
+
+			let hrend = process.hrtime(hrstart)
+			const hrendms = hrend[1] / 1000000
+			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0]) return []
 
+			if (whoCares[0] && whoCares.length > 1 && this.config.pvp.pvpEvolutionDirectTracking) {
+				const whoCaresNoDuplicates = whoCares.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i)
+				whoCares.length = 0
+				whoCares.push(...whoCaresNoDuplicates)
+			}
+
+			hrstart = process.hrtime()
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
 				const { count } = this.getDiscordCache(cares.id)
@@ -190,8 +296,11 @@ class Monster extends Controller {
 
 			if (discordCacheBad) return []
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-
 			const jobs = []
+
+			if (pregenerateTile) {
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
+			}
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
@@ -234,15 +343,20 @@ class Monster extends Controller {
 					def: data.individual_defense,
 					sta: data.individual_stamina,
 					imgUrl: data.imgUrl,
+					greatleagueranking: cares.great_league_ranking === 4096 ? 0 : cares.great_league_ranking,
+					ultraleagueranking: cares.ultra_league_ranking === 4096 ? 0 : cares.ultra_league_ranking,
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
+					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
+					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
 				}
 				let monsterDts
 				if (data.iv === -1) {
-					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id === cares.template && template.platform === 'discord')
+					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
 					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.default && template.platform === 'discord')
 				} else {
-					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id === cares.template && template.platform === 'discord')
+					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
 					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monster' && template.default && template.platform === 'discord')
 				}
 				const template = JSON.stringify(monsterDts.template)
@@ -250,9 +364,13 @@ class Monster extends Controller {
 				const message = JSON.parse(mustache(view))
 
 				if (cares.ping) {
-					if (!message.content) message.content = cares.ping
-					if (message.content) message.content += cares.ping
+					if (!message.content) {
+						message.content = cares.ping
+					} else {
+						message.content += cares.ping
+					}
 				}
+
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
 					lon: data.longitude.toString().substring(0, 8),
@@ -269,6 +387,10 @@ class Monster extends Controller {
 					this.addDiscordCache(cares.id)
 				}
 			}
+			hrend = process.hrtime(hrstart)
+			const hrendprocessing = hrend[1] / 1000000
+			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
+
 			return jobs
 		} catch (e) {
 			this.log.error('Can\'t seem to handle monster: ', e, data)

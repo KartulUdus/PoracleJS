@@ -98,6 +98,20 @@
 			"emoji": "⚧"
 		}
 	},
+	"evolution": {
+		"0": {
+			"name": ""
+		},
+		"1": {
+			"name": "Mega"
+		},
+		"2": { 
+			"name": "Mega X"
+		},
+		"3": { 
+			"name": "Mega Y"
+		}
+	},
 	"questTypes": {
 		"0": "",
 		"1": "{{amount}} time(s) First Catch OTD",
@@ -125,15 +139,17 @@
 		"23": "Trade {{amount}} Pokemon",
 		"24": "Send {{amount}} Gift(s)",
 		"25": "Evolve {{amount}} Pokemon",
-		"27": "Complete {{amount}} Battles",
+		"27": "Complete {{amount}} Trainer Battle(s)",
 		"28": "Take {{amount}} snapshots",
 		"29": "Defeat {{amount}} Team Rocket Grunt",
 		"30": "Purify {{amount}} Pokemon",
 		"31": "Find {{amount}} Team Rocket Invasion(s)",
-   		"32": "{{amount}} time(s) First Grunt OTD",
-		"33": "",
-    		"34": "Earn {{amount}} hearts with your buddy",
-    		"35": "Play with your Buddy {{amount}} time(s)"
+		"32": "{{amount}} time(s) First Grunt OTD",
+		"33": "Feed your Buddy {{amount}} Berries",
+		"34": "Earn {{amount}} hearts with your buddy",
+		"35": "Play with your buddy {{amount}} time(s)",
+		"36": "Earn {{amount}} Buddy Level(s)",
+		"37": "Walk {{amount}} KM(s) with your Buddy"
 	},
 	"questRewardTypes": {
 		"0": "",
@@ -143,7 +159,11 @@
 		"4": "{{amount}} {{type}} Candy",
 		"5": "Avatar clothing",
 		"6": "Quest",
-		"7": "{{#isShiny}}Shiny {{/isShiny}}{{pokemon}} {{emoji}}"
+		"7": "{{pokemon}} {{{emoji}}}",
+		"8": "{{amount}} Pokecoin",
+		"11": "{{amount}} {{type}} Sticker",
+		"12": "{{amount}} {{pokemon}} Mega Energy"
+
 	},
 	"questMonsterTypeString": "{{name}} {{{emoji}}} ",
 	"questConditions": {
@@ -173,19 +193,20 @@
 		"24": "Location",
 		"25": "Distance",
 		"26": "Pokemon Alignment(s): {{alignments}}",
-    		"27": "Invasion Category(s): {{categories}}"
+		"27": "Invasion Category(s): {{categories}}",
+		"28": "Buddy Interaction"
 	},
-	
+
 	"alignments": {
-   		"1": "Shadow",
-    		"2": "Purified"
- 	},
-	
+		"1": "Shadow",
+		"2": "Purified"
+	},
+
 	"categories": {
-    		"1": "Team Leader",
-    		"2": "Grunt"
-  	},
-	
+		"1": "Team Leader",
+		"2": "Grunt"
+	},
+
 	"throwType": {
 		"10": "Nice",
 		"11": "Great",
@@ -209,11 +230,11 @@
 		"402": "Incense Spicy",
 		"403": "Incense Cool",
 		"404": "Incense Floral",
-		"405": "Incense beluga box",
-		"501": "Troy Disk",
-		"502": "Troy disk glacial",
-		"503": "Troy disk mossy",
-		"504": "Troy disk magnetic",
+		"405": "Incense Box",
+		"501": "Normal Lure Module",
+		"502": "Glacial Lure Module",
+		"503": "Mossy Lure Module",
+		"504": "Magnetic Lure Module",
 		"602": "X Attack",
 		"603": "X Defense",
 		"604": "X Miracle",
@@ -227,6 +248,7 @@
 		"708": "Silver Pinap Berry",
 		"709": "Poffin",
 		"801": "Special Camera",
+		"802": "Sticker",
 		"901": "Incubator Basic Unlimited",
 		"902": "Incubator Basic",
 		"903": "Incubator Super",
@@ -241,17 +263,21 @@
 		"1107": "Gen5 evolution stone",
 		"1201": "Fast TM",
 		"1202": "Charged TM",
+		"1203": "Elite Fast TM",
+		"1204": "Elite Charged TM",	
 		"1301": "Rare Candy",
 		"1401": "Free Raid Ticket",
 		"1402": "Paid Raid Ticket",
 		"1403": "Legendary Raid Ticket",
 		"1404": "Star Piece",
 		"1405": "Friend Gift Box",
-		"1406": "Team change",
-		"1501": "Leader map fragment",
-		"1502": "Leader map",
-		"1503": "Giovanni map",
-		"1600": "Global event ticket"
+		"1406": "Team Medallion",
+		"1408": "Remote Raid Pass",
+		"1501": "Mysterious Component",
+		"1502": "Rocket Radar",
+		"1503": "Super Rocket Radar",
+		"1600": "Global Event Ticket",
+		"1601": "Special Event Ticket"
 	},
 	"moves": {
 		"0": {
@@ -2008,7 +2034,7 @@
 		},
 		"281": {
 			"name": "Hidden Power",
-			"type": "Normal",
+			"type": "Fighting",
 			"damage": 15,
 			"duration": 1500,
 			"energy": 15,
@@ -2421,160 +2447,214 @@
 			"durration": 0,
 			"energy": 0,
 			"dps": 0
+		},
+		"333": {
+			"name": "Payback",
+		    	"type": "Dark",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		},
+		"334": {
+		    	"name": "Rock Wrecker",
+		    	"type": "Rock",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "335": {
+		    	"name": "Aeroblast",
+		    	"type": "Flying",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "336": {
+		    	"name": "Techno Blast Normal",
+		    	"type": "Normal",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "337": {
+		    	"name": "Techno Blast Burn",
+		    	"type": "Fire",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "338": {
+		    	"name": "Techno Blast Chill",
+		    	"type": "Ice",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "339": {
+		    	"name": "Techno Blast Water",
+		    	"type": "Water",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "340": {
+		    	"name": "Techno Blast Shock",
+		    	"type": "Electric",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0
+		 },
+		 "341": {
+		    	"name": "Fly",
+		    	"type": "Flying",
+		    	"damage": 0,
+		    	"duration": 0,
+		    	"energy": 0,
+		    	"dps": 0			
 		}
 	},
 	"teams": {
 		"0": {
 			"name": "Uncontested",
-			"color": 7915600
+			"color": "BABABA"
 		},
 		"1": {
 			"name": "Mystic",
-			"color": 6852848
+			"color": "3B4CCA"
 		},
 		"2": {
 			"name": "Valor",
-			"color": 12595240
+			"color": "CC0000"
 		},
 		"3": {
 			"name": "Instinct",
-			"color": 16306224
+			"color": "FFDE00"
 		},
 		"4": {
 			"name": "Any team",
-			"color": 1300169
+			"color": "93C7B2"
 		}
 	},
 	"types": {
 		"Grass": {
 			"id": 12,
 			"emoji": "🌿",
-			"color": 7915600
+			"color": "78C850"
 		},
 		"Poison": {
 			"id": 4,
 			"emoji": "☠",
-			"color": 10502304
+			"color": "A040A0"
 		},
 		"Fire": {
 			"id": 10,
 			"emoji": "🔥",
-			"color": 15761456
+			"color": "F08030"
 		},
 		"Flying": {
 			"id": 3,
 			"emoji": "🐦",
-			"color": 11047152
+			"color": "A890F0"
 		},
 		"Water": {
 			"id": 11,
 			"emoji": "💧",
-			"color": 6852848
+			"color": "6890F0"
 		},
 		"Bug": {
 			"id": 7,
 			"emoji": "🐛",
-			"color": 11057184
+			"color": "A8B820"
 		},
 		"Normal": {
 			"id": 1,
 			"emoji": "⭕",
-			"color": 9079385
+			"color": "A8A878"
 		},
 		"Dark": {
 			"id": 17,
 			"emoji": "🌑",
-			"color": 7368816
+			"color": "705848"
 		},
 		"Electric": {
 			"id": 13,
 			"emoji": "⚡",
-			"color": 16306224
+			"color": "F8D030"
 		},
 		"Rock": {
 			"id": 6,
 			"emoji": "🗿",
-			"color": 12099640
+			"color": "B8A038"
 		},
 		"Ground": {
 			"id": 5,
 			"emoji": "⛰️",
-			"color": 14729320
+			"color": "E0C068"
 		},
 		"Fairy": {
 			"id": 18,
 			"emoji": "🦋",
-			"color": 15243496
+			"color": "EE99AC"
 		},
 		"Fighting": {
 			"id": 2,
 			"emoji": "👊",
-			"color": 12595240
+			"color": "C03028"
 		},
 		"Psychic": {
 			"id": 14,
 			"emoji": "🔮",
-			"color": 16275592
+			"color": "F85888"
 		},
 		"Steel": {
 			"id": 9,
 			"emoji": "🔩",
-			"color": 12105936
+			"color": "B8B8D0"
 		},
 		"Ice": {
 			"id": 15,
 			"emoji": "❄",
-			"color": 10016984
+			"color": "98D8D8"
 		},
 		"Ghost": {
 			"id": 8,
 			"emoji": "👻",
-			"color": 7362712
+			"color": "705898"
 		},
 		"Dragon": {
 			"id": 16,
 			"emoji": "🐲",
-			"color": 7354616
+			"color": "7038F8"
 		}
 	},
 	"gruntTypes": {
 		"1": {
-			"type": "",
-			"grunt": "Blanche",
-			"gender": 2
+			"type": "Blanche",
+			"gender": 2,
+			"grunt": "Blanche"
 		},
 		"2": {
-			"type": "",
-			"grunt": "Candela",
-			"gender": 2
+			"type": "Candela",
+			"gender": 2,
+			"grunt": "Candela"
 		},
 		"3": {
-			"type": "",
-			"grunt": "Spark",
-			"gender": 1
+			"type": "Spark",
+			"gender": 1,
+			"grunt": "Spark"
 		},
 		"4": {
 			"type": "Mixed",
 			"grunt": "Male Grunt",
-			"gender": 1,
-			"second_reward": true,
-			"encounters": {
-				"first": [
-					1,
-					4,
-					7
-				],
-				"second": [
-					2,
-					5,
-					8
-				],
-				"third": [
-					3,
-					6,
-					9
-				]
-			}
+			"gender": 1
 		},
 		"5": {
 			"type": "Mixed",
@@ -2582,19 +2662,9 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					143
-				],
-				"second": [
-					143,
-					62,
-					282
-				],
-				"third": [
-					143,
-					149,
-					130
-				]
+				"first": [142],
+				"second": [62, 143, 282],
+				"third": [130, 143, 149]
 			}
 		},
 		"6": {
@@ -2608,17 +2678,9 @@
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					123
-				],
-				"second": [
-					123,
-					212
-				],
-				"third": [
-					123,
-					212
-				]
+				"first": [13, 48, 213],
+				"second": [14, 49, 212],
+				"third": [15, 123, 212]
 			}
 		},
 		"8": {
@@ -2629,12 +2691,24 @@
 		"9": {
 			"type": "Ghost",
 			"grunt": "Male Grunt",
-			"gender": 1
+			"gender": 1,
+			"second_reward": false,
+			"encounters": {
+				"first": [302, 353, 355],
+				"second": [302, 354, 356],
+				"third": [302, 354, 477]
+			}
 		},
 		"10": {
 			"type": "Dark",
 			"grunt": "Female Grunt",
-			"gender": 2
+			"gender": 2,
+			"second_reward": false,
+			"encounters": {
+				"first": [434],
+				"second": [435],
+				"third": [435]
+			}
 		},
 		"11": {
 			"type": "Dark",
@@ -2647,18 +2721,9 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					147
-				],
-				"second": [
-					147,
-					148
-				],
-				"third": [
-					148,
-					149,
-					130
-				]
+				"first": [147],
+				"second": [148],
+				"third": [149]
 			}
 		},
 		"13": {
@@ -2682,15 +2747,9 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					107
-				],
-				"second": [
-					107
-				],
-				"third": [
-					107
-				]
+				"first": [66, 106],
+				"second": [107],
+				"third": [107]
 			}
 		},
 		"17": {
@@ -2704,20 +2763,9 @@
 			"gender": 2,
 			"second_reward": true,
 			"encounters": {
-				"first": [
-					4,
-					58,
-					228
-				],
-				"second": [
-					5,
-					229
-				],
-				"third": [
-					6,
-					59,
-					229
-				]
+				"first": [37, 228],
+				"second": [38, 229],
+				"third": [5, 59, 229]
 			}
 		},
 		"19": {
@@ -2731,20 +2779,9 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					41,
-					42
-				],
-				"second": [
-					42,
-					123,
-					169
-				],
-				"third": [
-					130,
-					149,
-					169
-				]
+				"first": [41, 42, 227],
+				"second": [42, 123, 169],
+				"third": [130, 149, 169]
 			}
 		},
 		"21": {
@@ -2763,21 +2800,9 @@
 			"gender": 1,
 			"second_reward": true,
 			"encounters": {
-				"first": [
-					1,
-					43,
-					387
-				],
-				"second": [
-					1,
-					2,
-					44
-				],
-				"third": [
-					2,
-					3,
-					388
-				]
+				"first": [1, 187],
+				"second": [2, 44, 70],
+				"third": [45, 71, 275]
 			}
 		},
 		"24": {
@@ -2791,26 +2816,21 @@
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					19,
-					104,
-					246
-				],
-				"second": [
-					20,
-					104,
-					105
-				],
-				"third": [
-					20,
-					105
-				]
+				"first": [50 ,207],
+				"second": [105, 247, 329],
+				"third": [105, 330]
 			}
 		},
 		"26": {
 			"type": "Ice",
 			"grunt": "Female Grunt",
-			"gender": 2
+			"gender": 2,
+			"second_reward": false,
+			"encounters": {
+				"first": [91, 459],
+				"second": [460],
+				"third": [460]
+			}
 		},
 		"27": {
 			"type": "Ice",
@@ -2818,12 +2838,12 @@
 			"gender": 1
 		},
 		"28": {
-			"type": "Steel",
+			"type": "Metal",
 			"grunt": "Female Grunt",
 			"gender": 2
 		},
 		"29": {
-			"type": "Steel",
+			"type": "Metal",
 			"grunt": "Male Grunt",
 			"gender": 1
 		},
@@ -2836,43 +2856,22 @@
 			"type": "Normal",
 			"grunt": "Male Grunt",
 			"gender": 1,
-			"second_reward": true,
+			"second_reward": false,
 			"encounters": {
-				"first": [
-					19,
-					41
-				],
-				"second": [
-					19,
-					20
-				],
-				"third": [
-					20,
-					143
-				]
+				"first": [216],
+				"second": [233],
+				"third": [143, 474]
 			}
 		},
 		"32": {
 			"type": "Poison",
 			"grunt": "Female Grunt",
 			"gender": 2,
-			"second_reward": true,
+			"second_reward": false,
 			"encounters": {
-				"first": [
-					41,
-					48,
-					88
-				],
-				"second": [
-					42,
-					88,
-					89
-				],
-				"third": [
-					42,
-					49,
-					89
-				]
+				"first": [29, 32],
+				"second": [88],
+				"third": [30, 33]
 			}
 		},
 		"33": {
@@ -2891,21 +2890,9 @@
 			"gender": 1,
 			"second_reward": true,
 			"encounters": {
-				"first": [
-					63,
-					96,
-					280
-				],
-				"second": [
-					96,
-					97,
-					280
-				],
-				"third": [
-					64,
-					97,
-					281
-				]
+				"first": [63, 79, 202],
+				"second": [96, 97, 280],
+				"third": [64, 97, 281]
 			}
 		},
 		"36": {
@@ -2919,17 +2906,9 @@
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					246
-				],
-				"second": [
-					246,
-					247
-				],
-				"third": [
-					247,
-					248
-				]
+				"first": [142, 246],
+				"second": [246, 247],
+				"third": [247, 248]
 			}
 		},
 		"38": {
@@ -2938,41 +2917,103 @@
 			"gender": 2,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					54,
-					60
-				],
-				"second": [
-					55,
-					61
-				],
-				"third": [
-					56,
-					61,
-					186
-				]
+				"first": [54, 90],
+				"second": [55, 61],
+				"third": [62, 186]
 			}
 		},
 		"39": {
 			"type": "Water",
 			"grunt": "Male Grunt",
+			"gender": 1
+		},
+		"40": {
+			"type": "Player Team Leader",
+			"grunt": "Player Team Leader"
+		},
+		"41": {
+			"type": "Cliff",
+			"gender": 1,
+			"grunt": "Executive Cliff",
+			"second_reward": false,
+			"encounters": {
+				"first": [138],
+				"second": [105, 138, 466],
+				"third": [248, 260, 389]
+			}
+		},
+		"42": {
+			"type": "Arlo",
+			"gender": 1,
+			"grunt": "Executive Arlo",
+			"second_reward": false,
+			"encounters": {
+				"first": [58],
+				"second": [6, 9, 208],
+				"third": [149, 212, 373]
+			}
+		},
+		"43": {
+			"type": "Sierra",
+			"gender": 2,
+			"grunt": "Executive Sierra",
+			"second_reward": false,
+			"encounters": {
+				"first": [96],
+				"second": [103, 131, 319],
+				"third": [65, 228, 275]
+			}
+		},
+		"44": {
+			"type": "Giovanni",
+			"gender": 0,
+			"grunt": "",
+			"second_reward": false,
+			"encounters": {
+				"first": [150]
+			}
+		},
+		"45": {
+			"type": "Decoy",
+			"grunt": "Male Grunt",
+			"gender": 1
+		},
+		"46": {
+			"type": "Decoy",
+			"grunt": "Female Grunt",
+			"gender": 2
+		},
+		"47": {
+			"type": "Ghost",
+			"grunt": "Female Grunt",
+			"gender": 2
+		},
+		"48": {
+			"type": "Ghost",
+			"grunt": "Male Grunt",
 			"gender": 1,
 			"second_reward": false,
 			"encounters": {
-				"first": [
-					129
-				],
-				"second": [
-					129
-				],
-				"third": [
-					129
-				]
+				"first": [302, 353, 355],
+				"second": [302, 354, 356],
+				"third": [302, 354, 477]
 			}
 		},
-		"40": {
-			"type": "",
-			"grunt": "Player Team Leader"
+		"49": {
+			"type": "Electric",
+			"grunt": "Female Grunt",
+			"gender": 2,
+			"second_reward": false,
+			"encounters": {
+				"first": [81, 125, 179],
+				"second": [82, 125, 180],
+				"third": [125, 181]
+			}
+		},
+		"50": {
+			"type": "Electric",
+			"grunt": "Male Grunt",
+			"gender": 1
 		}
 	},
 	"weather": {

@@ -13,25 +13,35 @@ class Pokestop extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
 		join humans on humans.id = invasion.id
-		where humans.enabled = true and
-		(invasion.grunt_type='${data.gruntType}' or invasion.grunt_type = 'everything') and
+		where humans.enabled = 1 and
+		(invasion.grunt_type='${String(data.gruntType).toLowerCase()}' or invasion.grunt_type = 'everything') and
 		(invasion.gender = ${data.gender} or invasion.gender = 0)`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-			(round( 6371000 * acos( cos( radians(${data.latitude}) )
-				* cos( radians( humans.latitude ) )
-				* cos( radians( humans.longitude ) - radians(${data.longitude}) )
-				+ sin( radians(${data.latitude}) )
-				* sin( radians( humans.latitude ) ) ) < invasion.distance and invasion.distance != 0) or
-				invasion.distance = 0 and (${areastring}))
+			(
+				(
+					round(
+						6371000
+						* acos(cos( radians(${data.latitude}) )
+						* cos( radians( humans.latitude ) )
+						* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+						+ sin( radians(${data.latitude}) )
+						* sin( radians( humans.latitude ) )
+						)
+					) < invasion.distance and invasion.distance != 0)
+					or
+					(
+						invasion.distance = 0 and (${areastring})
+					)
+			)
 				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		} else {
 			query = query.concat(`
-				and (invasion.distance = 0 and (${areastring}) or invasion.distance > 0)
-				group by humans.id, humans.name, invasion.template
+				and ((invasion.distance = 0 and (${areastring})) or invasion.distance > 0)
+				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
 
@@ -51,8 +61,8 @@ class Pokestop extends Controller {
 		return result
 	}
 
-
 	async handle(obj) {
+		let pregenerateTile = false
 		const data = obj
 		const minTth = this.config.general.monsterMinimumTimeTillHidden || 0
 		// const minTth = this.config.general.alertMinimumTime || 0
@@ -61,6 +71,10 @@ class Pokestop extends Controller {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'poracle': {
 					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
+					break
+				}
+				case 'tileservercache': {
+					pregenerateTile = true
 					break
 				}
 				case 'google': {
@@ -94,7 +108,6 @@ class Pokestop extends Controller {
 				return []
 			}
 
-
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
 			data.gruntTypeId = 0
@@ -105,12 +118,13 @@ class Pokestop extends Controller {
 			}
 
 			data.gruntTypeEmoji = '❓'
-			data.gruntTypeColor = '12595240'
+			data.gruntTypeColor = 'BABABA'
 
 			data.gender = 0
 			data.gruntName = ''
-			data.gruntTypeColor = '12595240'
+			data.gruntTypeColor = 'BABABA'
 			data.gruntRewards = ''
+			data.gruntRewardsList = {}
 
 			if (data.gruntTypeId) {
 				data.gender = 0
@@ -130,10 +144,13 @@ class Pokestop extends Controller {
 					data.gruntType = gruntType.type
 
 					let gruntRewards = ''
+					const gruntRewardsList = {}
+					gruntRewardsList.first = { chance: 100, monsters: [] }
 					if (gruntType.encounters) {
-						if (gruntType.second_reward) {
+						if (gruntType.second_reward && gruntType.encounters.second) {
 							// one out of two rewards
 							gruntRewards = '85%: '
+							gruntRewardsList.first = { chance: 85, monsters: [] }
 							let first = true
 							gruntType.encounters.first.forEach((fr) => {
 								if (!first) gruntRewards += ', '
@@ -142,8 +159,10 @@ class Pokestop extends Controller {
 								const firstReward = +fr
 								const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
 								gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
+								gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
 							})
 							gruntRewards += '\\n15%: '
+							gruntRewardsList.second = { chance: 15, monsters: [] }
 							first = true
 							gruntType.encounters.second.forEach((sr) => {
 								if (!first) gruntRewards += ', '
@@ -153,6 +172,7 @@ class Pokestop extends Controller {
 								const secondRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === secondReward && !mon.form.id)
 
 								gruntRewards += secondRewardMonster ? secondRewardMonster.name : ''
+								gruntRewardsList.second.monsters.push({ id: secondReward, name: secondRewardMonster.name })
 							})
 						} else {
 							// Single Reward 100% of encounter (might vary based on actual fight).
@@ -164,13 +184,14 @@ class Pokestop extends Controller {
 								const firstReward = +fr
 								const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
 								gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
+								gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
 							})
 						}
 						data.gruntRewards = gruntRewards
+						data.gruntRewardsList = gruntRewardsList
 					}
 				}
 			}
-
 
 			const whoCares = await this.invasionWhoCares(data)
 
@@ -187,6 +208,10 @@ class Pokestop extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
+			if (pregenerateTile) {
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('pokestop', data)
+			}
+
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
 
@@ -199,10 +224,10 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					// pokemoji: emojiData.pokemon[data.pokemon_id],
+					genderData: this.utilData.genders[data.gender],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id === cares.template && template.platform === 'discord')
+				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
 				if (!invasionDts) invasionDts = this.dts.find((template) => template.type === 'invasion' && template.default && template.platform === 'discord')
 				if (!invasionDts) {
 					this.log.warn(`Didn't get DTS for 'invasion',  template ${cares.templaste}`)
@@ -212,8 +237,11 @@ class Pokestop extends Controller {
 				const mustache = this.mustache.compile(template)
 				const message = JSON.parse(mustache(view))
 				if (cares.ping) {
-					if (!message.content) message.content = cares.ping
-					if (message.content) message.content += cares.ping
+					if (!message.content) {
+						message.content = cares.ping
+					} else {
+						message.content += cares.ping
+					}
 				}
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
@@ -238,6 +266,5 @@ class Pokestop extends Controller {
 		}
 	}
 }
-
 
 module.exports = Pokestop

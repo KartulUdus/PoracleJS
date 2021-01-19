@@ -75,7 +75,6 @@ module.exports.log = winston.createLogger({
 	],
 })
 
-
 module.exports.webhooks = winston.createLogger({
 	transports: [
 		dataStoreLog,
