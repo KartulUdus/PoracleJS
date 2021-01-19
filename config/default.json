@@ -11,6 +11,7 @@
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
         "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
         "locale": "en",
+        "commandLanguages": ["en" ],
         "weatherChangeAlert": false,
         "disabledCommands": [],
         "disablePokemon": false,

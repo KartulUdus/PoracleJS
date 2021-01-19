@@ -1,6 +1,7 @@
 const importFresh = require('import-fresh')
 const path = require('path')
 const Knex = require('knex')
+const fs = require('fs')
 const TranslatorFactory = require('../util/translatorFactory')
 
 let config
@@ -57,10 +58,24 @@ function getKnex(conf) {
 	}
 }
 
+function readDtsFiles() {
+	let dts = importFresh(path.join(__dirname, '../../config/dts.json'))
+	const dirpath = path.join(__dirname, '../../config/dts')
+
+	const filesList = fs.readdirSync(dirpath).filter((e) => path.extname(e).toLowerCase() === '.json')
+
+	for (const filename of filesList) {
+		const dtsAddition = importFresh(path.join(dirpath, filename))
+		dts = dts.concat(dtsAddition)
+	}
+
+	return dts
+}
+
 module.exports = {
 	Config: () => {
 		config = importFresh('config')
-		dts = importFresh(path.join(__dirname, '../../config/dts.json'))
+		dts = readDtsFiles()
 		geofence = importFresh(path.join(__dirname, `../../${config.geofence.path}`))
 		if (geofence.type === 'FeatureCollection') geofence = getGeofenceFromGEOjson(path.join(__dirname, `../../${config.geofence.path}`))
 		knex = getKnex(config)
@@ -76,5 +91,4 @@ module.exports = {
 		}
 	},
 	getKnex,
-
 }

@@ -79,7 +79,7 @@ class Controller {
 			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language == language)
 		}
 
-		// First default of right template type and language
+		// First default of right template type and platform
 		if (!findDts) {
 			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform)
 		}
