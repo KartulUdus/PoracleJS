@@ -15,6 +15,7 @@ exports.run = async (client, msg, args) => {
 		let reaction = '👌'
 		//		for (const args of command) {
 		const remove = !!args.find((arg) => arg === 'remove')
+		const commandEverything = !!args.find((arg) => arg === 'everything')
 		let distance = 0
 		let template = 1
 		let gender = 0
@@ -25,9 +26,9 @@ exports.run = async (client, msg, args) => {
 		for (const element of args) {
 			if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
 			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
-			else if (element === client.translator.translate('female')) gender = 2
-			else if (element === client.translator.translate('male')) gender = 1
-			else if (element === client.translator.translate('clean')) clean = true
+			else if (element === 'female') gender = 2
+			else if (element === 'male') gender = 1
+			else if (element === 'clean') clean = true
 			else if (typeArray.includes(element) || element === 'everything') types.push(element)
 		}
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
@@ -58,7 +59,13 @@ exports.run = async (client, msg, args) => {
 			client.log.info(`${target.name} started tracking ${types.join(', ')} invasions`)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		} else {
-			client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
+			if (commandEverything) {
+				const remQuery = `delete from invasion WHERE id=${target.id}`
+				const result = await client.query.misteryQuery(remQuery)
+				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+			}else {
+				client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
+			}
 			client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
 		}
 		//		}
