@@ -145,28 +145,35 @@ class Monster extends Controller {
 			const weatherCellData = this.weatherController.controllerData[weatherCellId]
 			let currentCellWeather = null
 
+//if (weatherCellId == 5178082940801777664) this.log.error('5178082940801777664',weatherCellData)
+
 			if(nowTimestamp > (currentHourTimestamp + 30) && (this.config.weather.weatherChangeAlert || this.config.weather.enableWeatherForecast) && data.weather) {
 				if (!weatherCellData['weatherFromBoost']) weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
-				if (data.weather == weatherCellData[currentHourTimestamp]) weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
-				if (data.weather !== weatherCellData[currentHourTimestamp]) {
+				if (!weatherCellData['lastCurrentWeatherCheck']) weatherCellData['lastCurrentWeatherCheck'] = previousHourTimestamp
+				if (data.weather == weatherCellData[currentHourTimestamp] && weatherCellData['lastCurrentWeatherCheck'] >= currentHourTimestamp) {
+					weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
+				}
+				if (data.weather !== weatherCellData[currentHourTimestamp] || data.weather == weatherCellData[currentHourTimestamp] && weatherCellData['lastCurrentWeatherCheck'] < currentHourTimestamp) {
 					weatherCellData['weatherFromBoost'] = weatherCellData['weatherFromBoost'].map(function(value, index) { if (index == data.weather) return value += 1 ; return value -= 1})
 					if(weatherCellData['weatherFromBoost'].filter(x => x > 4).length) {
-this.log.error(`[DEBUG MONSTER] Force update of weather in cell ${weatherCellId} boost ${weatherCellData['weatherFromBoost'].indexOf(5)} !== ${weatherCellData[currentHourTimestamp]} [${tracer}]`)
-						weatherCellData[currentHourTimestamp] = weatherCellData['weatherFromBoost'].indexOf(5)
-						currentCellWeather = weatherCellData['weatherFromBoost'].indexOf(5)
-						weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
-						weatherCellData['forecastTimeout'] = null
-this.log.error(`[DEBUG MONSTER] smartForecast forecastTimeout reset [${tracer}]`)
+						if (weatherCellData['weatherFromBoost'].indexOf(5) == -1) weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
+this.log.error(`[DEBUG MONSTER] Force update of weather in cell ${weatherCellId} boost ${data.weather} [${tracer}]`)
+						if (data.weather != weatherCellData[currentHourTimestamp]) weatherCellData['forecastTimeout'] = null
+						weatherCellData[currentHourTimestamp] = data.weather
+						currentCellWeather = data.weather
+						// Remove users not caring about anything anymore
+						if(weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter(caring => caring.caresUntil > nowTimestamp)
+						if(!weatherCellData.cares || !weatherCellData[previousHourTimestamp] || weatherCellData[previousHourTimestamp] && currentCellWeather == weatherCellData[previousHourTimestamp]) weatherCellData['lastCurrentWeatherCheck'] = currentHourTimestamp
+//						weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
+//this.log.error(`[DEBUG MONSTER] smartForecast forecastTimeout reset [${tracer}]`)
 					}
 				}
 			}
 
-//this.log.error('[DEBUG MONSTER] monsterController update weather in cache :', weatherCacheData)
-
 			let weatherChangeAlertJobs = []
 			if (this.config.weather.weatherChangeAlert && weatherCellData.cares && (data.testing || weatherCellData['lastCurrentWeatherCheck'] < currentHourTimestamp) && weatherCellData[previousHourTimestamp] > 0 && currentCellWeather > 0 && weatherCellData[previousHourTimestamp] != currentCellWeather) {
 this.log.error(`[DEBUG MONSTER] Start of handle tracing : [${tracer}]`)
-this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to update weather cell '+weatherCellId)
+this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather change in cell '+weatherCellId)
 				const weatherDataPayload = {
 					longitude: data.longitude,
 					latitude: data.latitude,
@@ -187,7 +194,7 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to update weather ce
 				}
 			}
 
-			if(!currentCellWeather && weatherCellData['lastCurrentWeatherCheck'] > currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
+			if(!currentCellWeather && weatherCellData['lastCurrentWeatherCheck'] >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
 					|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))

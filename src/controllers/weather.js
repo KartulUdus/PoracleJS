@@ -231,6 +231,9 @@ this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
 			}
 this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
 			const currentInGameWeather = data.condition
+			const nowTimestamp = Math.floor(Date.now() / 1000)
+			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
+			const nextHourTimestamp = currentHourTimestamp + 3600
 			const updateHourTimestamp = data.time_changed - (data.time_changed % 3600)
 			const previousHourTimestamp = updateHourTimestamp - 3600
 
@@ -243,11 +246,14 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | 
 			if ('cares' in weatherCellData) {
 				whoCares = weatherCellData.cares
 			}
+			// Remove users not caring about anything anymore
+			if(weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter(caring => caring.caresUntil > nowTimestamp)
 
-			// Removing whoCares who don't have a Pokemon affected by this weather change
 			if (this.config.weather.showAlteredPokemon) {
+				// Removing whoCares who don't have a Pokemon affected by this weather change
 				whoCares = whoCares.filter(cares => ('caredPokemons' in cares ) ? cares.caredPokemons.find(pokemon => pokemon.alteringWeathers.includes(currentInGameWeather)) : '')
 			}
+
 //this.log.error('[DEBUG WEATHER] ['+data.trace+'] whoCares from cell :', whoCares)
 
 			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData['lastCurrentWeatherCheck'] < updateHourTimestamp) {
@@ -305,9 +311,6 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : 
 
 			const jobs = []
 			const now = moment.now()
-			const nowTimestamp = Math.floor(Date.now() / 1000)
-			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
-			const nextHourTimestamp = currentHourTimestamp + 3600
 			const weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 //this.log.error(`[DEBUG WEATHER] [${data.trace}] currentHourTimestamp ${currentHourTimestamp} nextHourTimestamp ${nextHourTimestamp}`)
 
