@@ -145,8 +145,6 @@ class Monster extends Controller {
 			const weatherCellData = this.weatherController.controllerData[weatherCellId]
 			let currentCellWeather = null
 
-//if (weatherCellId == 5178082940801777664) this.log.error('5178082940801777664',weatherCellData)
-
 			if(nowTimestamp > (currentHourTimestamp + 30) && (this.config.weather.weatherChangeAlert || this.config.weather.enableWeatherForecast) && data.weather) {
 				if (!weatherCellData['weatherFromBoost']) weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
 				if (!weatherCellData['lastCurrentWeatherCheck']) weatherCellData['lastCurrentWeatherCheck'] = previousHourTimestamp
@@ -157,15 +155,13 @@ class Monster extends Controller {
 					weatherCellData['weatherFromBoost'] = weatherCellData['weatherFromBoost'].map(function(value, index) { if (index == data.weather) return value += 1 ; return value -= 1})
 					if(weatherCellData['weatherFromBoost'].filter(x => x > 4).length) {
 						if (weatherCellData['weatherFromBoost'].indexOf(5) == -1) weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
-this.log.error(`[DEBUG MONSTER] Force update of weather in cell ${weatherCellId} boost ${data.weather} [${tracer}]`)
+this.log.error(`[DEBUG MONSTER] Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${data.weather} [${tracer}]`)
 						if (data.weather != weatherCellData[currentHourTimestamp]) weatherCellData['forecastTimeout'] = null
 						weatherCellData[currentHourTimestamp] = data.weather
 						currentCellWeather = data.weather
 						// Remove users not caring about anything anymore
 						if(weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter(caring => caring.caresUntil > nowTimestamp)
 						if(!weatherCellData.cares || !weatherCellData[previousHourTimestamp] || weatherCellData[previousHourTimestamp] && currentCellWeather == weatherCellData[previousHourTimestamp]) weatherCellData['lastCurrentWeatherCheck'] = currentHourTimestamp
-//						weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
-//this.log.error(`[DEBUG MONSTER] smartForecast forecastTimeout reset [${tracer}]`)
 					}
 				}
 			}
@@ -184,7 +180,7 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather 
 					trace: tracer
 				}
 				weatherChangeAlertJobs = await this.weatherController.handle(weatherDataPayload) || null
-//this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
+this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
 			}
 
 			if (this.config.weather.weatherChangeAlert && this.config.weather.showAlteredPokemon && weatherCellData.cares) {
@@ -309,7 +305,7 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather 
 				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
 			}
 			// Stop handling if it already disappeared or is about to go away
-			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
+			if ((data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) && !weatherChangeAlertJobs[0]) {
 				log.debug(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
@@ -343,7 +339,6 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather 
 			this.log.info(`${data.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0] && !weatherChangeAlertJobs[0]) return []
-//this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
 
 			if (whoCares[0] && whoCares.length > 1 && this.config.pvp.pvpEvolutionDirectTracking) {
 				const whoCaresNoDuplicates = whoCares.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i)
@@ -370,21 +365,21 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather 
 				const weatherForecast = await this.weatherController.getWeather({lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time})
 				let pokemonShouldBeBoosted = false
 				if (weatherForecast.current > 0 && this.utilData.weatherTypeBoost[weatherForecast.current].filter(boostedType => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
-this.log.error(`[DEBUG MONSTER] Tracing : [${tracer}]`)
-this.log.error(`[DEBUG MONSTER] pokemon : ${data.name} (iv ${data.iv})`)
-this.log.error(`[DEBUG MONSTER] pokemon types : ${data.types}`)
-this.log.error(`[DEBUG MONSTER] weather forecast : ${weatherForecast.current} to ${weatherForecast.next}`)
-this.log.error(`[DEBUG MONSTER] pokemonShouldBeBoosted : ${pokemonShouldBeBoosted}`)
-this.log.error(`[DEBUG MONSTER] hasBoost : ${data.weather}`)
+//this.log.error(`[DEBUG MONSTER] Tracing : [${tracer}]`)
+//this.log.error(`[DEBUG MONSTER] pokemon : ${data.name} (iv ${data.iv})`)
+//this.log.error(`[DEBUG MONSTER] pokemon types : ${data.types}`)
+//this.log.error(`[DEBUG MONSTER] weather forecast : ${weatherForecast.current} to ${weatherForecast.next}`)
+//this.log.error(`[DEBUG MONSTER] pokemonShouldBeBoosted : ${pokemonShouldBeBoosted}`)
+//this.log.error(`[DEBUG MONSTER] hasBoost : ${data.weather}`)
 				if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather == 0))) {
 					const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time).slice(0, -3)
 					const pokemonWillBeBoosted = this.utilData.weatherTypeBoost[weatherForecast.next].filter(boostedType => data.types.includes(boostedType)).length > 0 ? 1 : 0
-this.log.error(`[DEBUG MONSTER] pokemonWillBeBoosted : ${pokemonWillBeBoosted}`)
+//this.log.error(`[DEBUG MONSTER] pokemonWillBeBoosted : ${pokemonWillBeBoosted}`)
 					if (data.weather > 0 && !pokemonWillBeBoosted || data.weather == 0 && pokemonWillBeBoosted) {
-this.log.error(`[DEBUG MONSTER] conditions met for wheater change altering boost`)
+//this.log.error(`[DEBUG MONSTER] conditions met for wheater change altering boost`)
 						weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current
 						if (pokemonShouldBeBoosted && data.weather == 0) {
-this.log.error(`[DEBUG MONSTER] something wrong with current weather info : ${weatherForecast.current} in cache`)
+//this.log.error(`[DEBUG MONSTER] something wrong with current weather info : ${weatherForecast.current} in cache`)
 							data.weatherChange = `⚠️ ${this.translator.translate('Possible weather change at')} ${weatherChangeTime} : ➡️ ${this.translator.translate(this.utilData.weather[weatherForecast.next].name)} ${this.translator.translate(this.utilData.weather[weatherForecast.next].emoji)}`
 							data.weatherCurrent = 0
 							data.weatherCurrentName = this.translator.translate('unknown')
