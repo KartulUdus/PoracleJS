@@ -24,7 +24,7 @@ const {
 const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
-const channel_telegraf = config.telegram.channel_token ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
+const channel_telegraf = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false })
 
