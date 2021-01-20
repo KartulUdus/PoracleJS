@@ -105,7 +105,7 @@ exports.run = async (client, msg, args) => {
 		})
 		if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (greatLeague < 4096 && greatLeague > pvpFilterMaxRank) greatLeague = pvpFilterMaxRank
 		if (ultraLeague < 4096 && ultraLeague > pvpFilterMaxRank) ultraLeague = pvpFilterMaxRank
@@ -120,11 +120,11 @@ exports.run = async (client, msg, args) => {
 
 		if (distance > 0 && !userHasLocation && !target.webhook) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !target.webhook) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		const insert = monsters.map((mon) => ({
 			id: target.id,
