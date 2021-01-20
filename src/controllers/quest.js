@@ -11,7 +11,7 @@ class Quest extends Controller {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
 		let query = `
-		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on humans.id = quest.id
 		where humans.enabled = 1 and
 		(((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0))
@@ -39,12 +39,12 @@ class Quest extends Controller {
 						quest.distance = 0 and (${areastring})
 					)
 			)
-			group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
+			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
 			`)
 		} else {
 			query = query.concat(`
 				and ((quest.distance = 0 and (${areastring})) or quest.distance > 0)
-			group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
+			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
 			`)
 		}
 
@@ -113,16 +113,11 @@ class Quest extends Controller {
 				return []
 			}
 
-			data.questType = await this.getQuestTypeString(data)
-			data.rewardData = await this.getRewardString(data)
-			data.conditionString = await this.getConditionString(data)
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
 			data.energyAmount = data.rewardData.energyAmount
 			data.energyMonsters = data.rewardData.energyMonsters
-			data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => this.translator.translate(m.name)).join(', ')
-			data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => this.translator.translate(this.utilData.items[i])).join(', ')
 
 			data.imgUrl = data.rewardData.monsters[1]
 				? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
@@ -183,6 +178,17 @@ class Quest extends Controller {
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
+
+				const language = cares.language || this.config.general.locale
+				const translator = this.translatorFactory.Translator(language)
+
+				data.questType = await this.getQuestTypeString(data, translator)
+				data.rewardData = await this.getRewardString(data, translator)
+
+				data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
+				data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => translator.translate(this.utilData.items[i])).join(', ')
+
+
 				const view = {
 					...geoResult,
 					...data,
@@ -200,42 +206,36 @@ class Quest extends Controller {
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-				let platform = cares.type.split(':')[0]
+
+				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				let questDts = this.dts.find((template) => template.type === 'quest' && template.id.toString() === cares.template.toString() && template.platform === platform)
-				if (!questDts) questDts = this.dts.find((template) => template.type === 'quest' && template.default && template.platform === platform)
-				if (!questDts) {
-					this.log.error(`Cannot find DTS template ${platform} quest ${cares.template}`)
-					// eslint-disable-next-line no-continue
-					continue
-				}
+				const mustache = this.getDts('quest', platform, cares.template, language)
+				if (mustache) {
+					const message = JSON.parse(mustache(view, {data: {language}}))
 
-				const template = JSON.stringify(questDts.template)
-				const mustache = this.mustache.compile(this.translator.translate(template))
-				const message = JSON.parse(mustache(view))
-
-				if (cares.ping) {
-					if (!message.content) {
-						message.content = cares.ping
-					} else {
-						message.content += cares.ping
+					if (cares.ping) {
+						if (!message.content) {
+							message.content = cares.ping
+						} else {
+							message.content += cares.ping
+						}
 					}
-				}
 
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-				}
-				if (caresCache <= this.config.discord.limitAmount + 1) {
-					jobs.push(work)
-					this.addDiscordCache(cares.id)
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: data.tth,
+						clean: cares.clean,
+					}
+					if (caresCache <= this.config.discord.limitAmount + 1) {
+						jobs.push(work)
+						this.addDiscordCache(cares.id)
+					}
 				}
 			}
 
@@ -245,16 +245,16 @@ class Quest extends Controller {
 		}
 	}
 
-	async getQuestTypeString(data) {
+	async getQuestTypeString(data, translator) {
 		return new Promise((resolve) => {
-			const template = this.translator.translate(this.utilData.questTypes[data.type])
-			const mustache = this.mustache.compile(this.translator.translate(template))
+			const template = translator.translate(this.utilData.questTypes[data.type])
+			const mustache = this.mustache.compile(translator.translate(template))
 			const quest = mustache({ amount: data.target })
 			resolve(quest)
 		})
 	}
 
-	async getRewardString(data) {
+	async getRewardString(data, translator) {
 		return new Promise((resolve) => {
 			const monsters = [0]
 			const items = [0]
@@ -267,13 +267,13 @@ class Quest extends Controller {
 			data.rewards.forEach((reward) => {
 				if (reward.type === 2) {
 					const template = this.utilData.questRewardTypes[2]
-					const mustache = this.mustache.compile(this.translator.translate(template))
-					const rew = mustache({ amount: reward.info.amount, item: this.translator.translate(this.utilData.items[reward.info.item_id] || 'unknown item') })
+					const mustache = this.mustache.compile(translator.translate(template))
+					const rew = mustache({ amount: reward.info.amount, item: translator.translate(this.utilData.items[reward.info.item_id] || 'unknown item') })
 					items.push(reward.info.item_id)
 					rewardString = rewardString.concat(rew)
 				} else if (reward.type === 3) {
 					const template = this.utilData.questRewardTypes[3]
-					const mustache = this.mustache.compile(this.translator.translate(template))
+					const mustache = this.mustache.compile(translator.translate(template))
 					const rew = mustache({ amount: reward.info.amount })
 					dustAmount = reward.info.amount
 					rewardString = rewardString.concat(rew)
@@ -281,19 +281,19 @@ class Quest extends Controller {
 					const template = this.utilData.questRewardTypes[7]
 
 					const monster = Object.values(this.monsterData).find((mon) => mon.id === reward.info.pokemon_id && mon.form.id === 0)
-					const emoji = monster.types.map((t) => this.translator.translate(t.emoji)).join('')
+					const emoji = monster.types.map((t) => translator.translate(t.emoji)).join('')
 
 					if (reward.info.shiny) isShiny = 1
-					const mustache = this.mustache.compile(this.translator.translate(template))
+					const mustache = this.mustache.compile(translator.translate(template))
 
-					const rew = mustache({ pokemon: this.translator.translate(monster.name), emoji, isShiny })
+					const rew = mustache({ pokemon: translator.translate(monster.name), emoji, isShiny })
 					monsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
 				} else if (reward.type === 12) {
 					const template = this.utilData.questRewardTypes['12']
 					const monster = Object.values(this.monsterData).find((mon) => mon.id === reward.info.pokemon_id && mon.form.id === 0)
-					const mustache = this.mustache.compile(this.translator.translate(template))
-					const rew = mustache({ pokemon: this.translator.translate(monster.name), amount: reward.info.amount })
+					const mustache = this.mustache.compile(translator.translate(template))
+					const rew = mustache({ pokemon: translator.translate(monster.name), amount: reward.info.amount })
 					energyAmount = reward.info.amount
 					energyMonsters.push(reward.info.pokemon_id)
 					rewardString = rewardString.concat(rew)
@@ -305,7 +305,7 @@ class Quest extends Controller {
 		})
 	}
 
-	async getConditionString(data) {
+	async getConditionString(data, translator) {
 		return new Promise((resolve) => {
 			let conditionString = ''
 			data.conditions.forEach((condition) => {
@@ -314,78 +314,78 @@ class Quest extends Controller {
 						let typestring = ''
 						condition.info.pokemon_type_ids.forEach((typeId) => {
 							const type = Object.keys(this.utilData.types).find((key) => this.utilData.types[key].id === typeId)
-							const typename = type || this.translator.translate('errorType')
+							const typename = type || translator.translate('errorType')
 							const template = this.utilData.questMonsterTypeString
-							const mustache = this.mustache.compile(this.translator.translate(template))
-							const monsterType = mustache({ name: this.translator.translate(typename), emoji: this.translator.translate(type.emoji) })
+							const mustache = this.mustache.compile(translator.translate(template))
+							const monsterType = mustache({ name: translator.translate(typename), emoji: translator.translate(type.emoji) })
 							typestring = typestring.concat(monsterType)
 						})
-						const template = this.translator.translate(this.utilData.questConditions[1])
-						const mustache = this.mustache.compile(this.translator.translate(template))
+						const template = translator.translate(this.utilData.questConditions[1])
+						const mustache = this.mustache.compile(translator.translate(template))
 						const cond = mustache({ types: typestring })
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 2: {
-						const monsters = Object.values(this.monsterData).filter((m) => condition.info.pokemon_ids.includes(m.id)).map((mon) => this.translator.translate(mon.name)).join(', ')
+						const monsters = Object.values(this.monsterData).filter((m) => condition.info.pokemon_ids.includes(m.id)).map((mon) => translator.translate(mon.name)).join(', ')
 
-						const template = this.translator.translate(this.utilData.questConditions[2])
-						const mustache = this.mustache.compile(this.translator.translate(template))
+						const template = translator.translate(this.utilData.questConditions[2])
+						const mustache = this.mustache.compile(translator.translate(template))
 						const cond = mustache({ monsters })
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 3: {
-						const cond = this.translator.translate(this.utilData.questConditions[3])
+						const cond = translator.translate(this.utilData.questConditions[3])
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 6: {
-						const cond = this.translator.translate(this.utilData.questConditions[6])
+						const cond = translator.translate(this.utilData.questConditions[6])
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 7: {
-						const template = this.translator.translate(this.utilData.questConditions[7])
-						const mustache = this.mustache.compile(this.translator.translate(template))
+						const template = translator.translate(this.utilData.questConditions[7])
+						const mustache = this.mustache.compile(translator.translate(template))
 						const cond = mustache({ levels: condition.info.raid_levels.join(', ') })
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 8: {
-						const template = this.translator.translate(this.utilData.questConditions[8])
-						const mustache = this.mustache.compile(this.translator.translate(template))
-						const cond = mustache({ throw_type: this.translator.translate(this.utilData.throwType[condition.info.throw_type_id]) })
+						const template = translator.translate(this.utilData.questConditions[8])
+						const mustache = this.mustache.compile(translator.translate(template))
+						const cond = mustache({ throw_type: translator.translate(this.utilData.throwType[condition.info.throw_type_id]) })
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 9: {
-						const cond = this.translator.translate(this.utilData.questConditions[9])
+						const cond = translator.translate(this.utilData.questConditions[9])
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 10: {
-						const cond = this.translator.translate(this.utilData.questConditions[10])
+						const cond = translator.translate(this.utilData.questConditions[10])
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 11: {
-						const template = this.translator.translate(this.utilData.questConditions[11])
-						const item = condition.info ? this.translator.translate(this.utilData.items[condition.info.item_id]) : ''
-						const mustache = this.mustache.compile(this.translator.translate(template))
+						const template = translator.translate(this.utilData.questConditions[11])
+						const item = condition.info ? translator.translate(this.utilData.items[condition.info.item_id]) : ''
+						const mustache = this.mustache.compile(translator.translate(template))
 						const cond = mustache({ item })
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 14: {
-						const template = this.translator.translate(this.utilData.questConditions[14])
-						const mustache = this.mustache.compile(this.translator.translate(template))
-						const cond = mustache({ throw_type: this.translator.translate(this.utilData.throwType[condition.info.throw_type_id]), amount: data.target })
+						const template = translator.translate(this.utilData.questConditions[14])
+						const mustache = this.mustache.compile(translator.translate(template))
+						const cond = mustache({ throw_type: translator.translate(this.utilData.throwType[condition.info.throw_type_id]), amount: data.target })
 						conditionString = conditionString.concat(cond)
 						break
 					}
 					case 15: {
-						const cond = this.translator.translate(this.utilData.questConditions[15])
+						const cond = translator.translate(this.utilData.questConditions[15])
 						conditionString = conditionString.concat(cond)
 						break
 					}

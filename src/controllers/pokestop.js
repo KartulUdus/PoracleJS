@@ -11,7 +11,7 @@ class Pokestop extends Controller {
 		})
 		if (!data.gender) data.gender = -1
 		let query = `
-		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
 		join humans on humans.id = invasion.id
 		where humans.enabled = 1 and
 		(invasion.grunt_type='${String(data.gruntType).toLowerCase()}' or invasion.grunt_type = 'everything') and
@@ -36,12 +36,12 @@ class Pokestop extends Controller {
 						invasion.distance = 0 and (${areastring})
 					)
 			)
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
+				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		} else {
 			query = query.concat(`
 				and ((invasion.distance = 0 and (${areastring})) or invasion.distance > 0)
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
+				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
 
@@ -126,72 +126,6 @@ class Pokestop extends Controller {
 			data.gruntRewards = ''
 			data.gruntRewardsList = {}
 
-			if (data.gruntTypeId) {
-				data.gender = 0
-				data.gruntName = 'Grunt'
-				data.gruntType = 'Mixed'
-				data.gruntRewards = ''
-				if (data.gruntTypeId in this.utilData.gruntTypes) {
-					const gruntType = this.utilData.gruntTypes[data.gruntTypeId]
-					data.gruntName = gruntType.grunt
-					data.gender = gruntType.gender
-					if (this.utilData.types[gruntType.type]) {
-						data.gruntTypeEmoji = this.translator.translate(this.utilData.types[gruntType.type].emoji)
-					}
-					if (gruntType.type in this.utilData.types) {
-						data.gruntTypeColor = this.utilData.types[gruntType.type].color
-					}
-					data.gruntType = gruntType.type
-
-					let gruntRewards = ''
-					const gruntRewardsList = {}
-					gruntRewardsList.first = { chance: 100, monsters: [] }
-					if (gruntType.encounters) {
-						if (gruntType.second_reward && gruntType.encounters.second) {
-							// one out of two rewards
-							gruntRewards = '85%: '
-							gruntRewardsList.first = { chance: 85, monsters: [] }
-							let first = true
-							gruntType.encounters.first.forEach((fr) => {
-								if (!first) gruntRewards += ', '
-								else first = false
-
-								const firstReward = +fr
-								const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
-								gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
-								gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
-							})
-							gruntRewards += '\\n15%: '
-							gruntRewardsList.second = { chance: 15, monsters: [] }
-							first = true
-							gruntType.encounters.second.forEach((sr) => {
-								if (!first) gruntRewards += ', '
-								else first = false
-
-								const secondReward = +sr
-								const secondRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === secondReward && !mon.form.id)
-
-								gruntRewards += secondRewardMonster ? secondRewardMonster.name : ''
-								gruntRewardsList.second.monsters.push({ id: secondReward, name: secondRewardMonster.name })
-							})
-						} else {
-							// Single Reward 100% of encounter (might vary based on actual fight).
-							let first = true
-							gruntType.encounters.first.forEach((fr) => {
-								if (!first) gruntRewards += ', '
-								else first = false
-
-								const firstReward = +fr
-								const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
-								gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
-								gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
-							})
-						}
-						data.gruntRewards = gruntRewards
-						data.gruntRewardsList = gruntRewardsList
-					}
-				}
-			}
 
 			const whoCares = await this.invasionWhoCares(data)
 
@@ -215,6 +149,76 @@ class Pokestop extends Controller {
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
 
+				const language = cares.language || this.config.general.locale
+				const translator = this.translatorFactory.Translator(language)
+
+				if (data.gruntTypeId) {
+					data.gender = 0
+					data.gruntName = 'Grunt'
+					data.gruntType = 'Mixed'
+					data.gruntRewards = ''
+					if (data.gruntTypeId in this.utilData.gruntTypes) {
+						const gruntType = this.utilData.gruntTypes[data.gruntTypeId]
+						data.gruntName = gruntType.grunt
+						data.gender = gruntType.gender
+						if (this.utilData.types[gruntType.type]) {
+							data.gruntTypeEmoji = translator.translate(this.utilData.types[gruntType.type].emoji)
+						}
+						if (gruntType.type in this.utilData.types) {
+							data.gruntTypeColor = this.utilData.types[gruntType.type].color
+						}
+						data.gruntType = gruntType.type
+
+						let gruntRewards = ''
+						const gruntRewardsList = {}
+						gruntRewardsList.first = { chance: 100, monsters: [] }
+						if (gruntType.encounters) {
+							if (gruntType.second_reward && gruntType.encounters.second) {
+								// one out of two rewards
+								gruntRewards = '85%: '
+								gruntRewardsList.first = { chance: 85, monsters: [] }
+								let first = true
+								gruntType.encounters.first.forEach((fr) => {
+									if (!first) gruntRewards += ', '
+									else first = false
+
+									const firstReward = +fr
+									const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
+									gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
+									gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
+								})
+								gruntRewards += '\\n15%: '
+								gruntRewardsList.second = { chance: 15, monsters: [] }
+								first = true
+								gruntType.encounters.second.forEach((sr) => {
+									if (!first) gruntRewards += ', '
+									else first = false
+
+									const secondReward = +sr
+									const secondRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === secondReward && !mon.form.id)
+
+									gruntRewards += secondRewardMonster ? secondRewardMonster.name : ''
+									gruntRewardsList.second.monsters.push({ id: secondReward, name: secondRewardMonster.name })
+								})
+							} else {
+								// Single Reward 100% of encounter (might vary based on actual fight).
+								let first = true
+								gruntType.encounters.first.forEach((fr) => {
+									if (!first) gruntRewards += ', '
+									else first = false
+
+									const firstReward = +fr
+									const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
+									gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
+									gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
+								})
+							}
+							data.gruntRewards = gruntRewards
+							data.gruntRewardsList = gruntRewardsList
+						}
+					}
+				}
+
 				const view = {
 					...geoResult,
 					...data,
@@ -227,40 +231,36 @@ class Pokestop extends Controller {
 					genderData: this.utilData.genders[data.gender],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-				let platform = cares.type.split(':')[0]
+
+				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				let invasionDts = this.dts.find((template) => template.type === 'invasion' && template.id.toString() === cares.template.toString() && template.platform === platform)
-				if (!invasionDts) invasionDts = this.dts.find((template) => template.type === 'invasion' && template.default && template.platform === platform)
-				if (!invasionDts) {
-					this.log.warn(`Didn't get DTS for 'invasion',  template ${cares.template}`)
-					// eslint-disable-next-line no-continue
-					continue
-				}
-				const template = JSON.stringify(invasionDts.template)
-				const mustache = this.mustache.compile(template)
-				const message = JSON.parse(mustache(view))
-				if (cares.ping) {
-					if (!message.content) {
-						message.content = cares.ping
-					} else {
-						message.content += cares.ping
+				const mustache = this.getDts('invasion', platform, cares.template, language)
+				if (mustache) {
+					const message = JSON.parse(mustache(view, {data: {language}}))
+
+					if (cares.ping) {
+						if (!message.content) {
+							message.content = cares.ping
+						} else {
+							message.content += cares.ping
+						}
 					}
-				}
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-					emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-				}
-				if (caresCache <= this.config.discord.limitAmount + 1) {
-					jobs.push(work)
-					this.addDiscordCache(cares.id)
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: data.tth,
+						clean: cares.clean,
+						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+					}
+					if (caresCache <= this.config.discord.limitAmount + 1) {
+						jobs.push(work)
+						this.addDiscordCache(cares.id)
+					}
 				}
 			}
 

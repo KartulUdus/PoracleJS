@@ -11,7 +11,7 @@ class Raid extends Controller {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
 		let query = `
-		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
 		join humans on humans.id = raid.id
 		where humans.enabled = 1 and
 		(pokemon_id=${data.pokemon_id} or (pokemon_id=9000 and raid.level=${data.level})) and
@@ -38,12 +38,12 @@ class Raid extends Controller {
 						raid.distance = 0 and (${areastring})
 					)
 			)
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
+				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		} else {
 			query = query.concat(`
 				and ((raid.distance = 0 and (${areastring})) or raid.distance > 0)
-				group by humans.id, humans.name, raid.template
+				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		}
 
@@ -71,7 +71,7 @@ class Raid extends Controller {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
 		let query = `
-		select humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on humans.id = egg.id
 		where humans.enabled = 1 and
 		egg.level = ${data.level} and
@@ -97,12 +97,12 @@ class Raid extends Controller {
 						egg.distance = 0 and (${areastring})
 					)
 			)
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
+				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		} else {
 			query = query.concat(`
 				and ((egg.distance = 0 and (${areastring})) or egg.distance > 0)
-				group by humans.id, humans.name, humans.type, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
+				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		}
 
@@ -172,7 +172,6 @@ class Raid extends Controller {
 				if (!data.team_id) data.team_id = 0
 				if (!data.evolution) data.evolution = 0
 				if (data.name) data.gymName = data.name ? data.name : ''
-				data.name = this.translator.translate(monster.name)
 				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 
@@ -201,10 +200,6 @@ class Raid extends Controller {
 				data.color = data.team_id ? this.utilData.teams[data.team_id].color : 'BABABA'
 
 				data.evolutionname = data.evolution ? this.utilData.evolution[data.evolution].name : ''
-				data.quickMove = this.utilData.moves[data.move_1] ? this.translator.translate(this.utilData.moves[data.move_1].name) : ''
-				data.chargeMove = this.utilData.moves[data.move_2] ? this.translator.translate(this.utilData.moves[data.move_2].name) : ''
-				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
-				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? this.translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 					log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -235,6 +230,15 @@ class Raid extends Controller {
 				for (const cares of whoCares) {
 					const caresCache = this.getDiscordCache(cares.id).count
 
+					const language = cares.language || this.config.general.locale
+					const translator = this.translatorFactory.Translator(language)
+
+					data.name = translator.translate(monster.name)
+					data.quickMove = this.utilData.moves[data.move_1] ? translator.translate(this.utilData.moves[data.move_1].name) : ''
+					data.chargeMove = this.utilData.moves[data.move_2] ? translator.translate(this.utilData.moves[data.move_2].name) : ''
+					data.move1emoji = this.utilData.moves[data.move_1] && utilData.moves[data.move_1].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
+					data.move2emoji = this.utilData.moves[data.move_2] && utilData.moves[data.move_2].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
+
 					const view = {
 						...geoResult,
 						...data,
@@ -253,41 +257,37 @@ class Raid extends Controller {
 						// pokemoji: emojiData.pokemon[data.pokemon_id],
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
-					let platform = cares.type.split(':')[0]
+
+
+					let [platform] = cares.type.split(':')
 					if (platform == 'webhook') platform = 'discord'
 
-					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template.toString() && template.platform === platform))
-					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === platform)
-					if (!raidDts) {
-						this.log.error(`Cannot find DTS template ${platform} raid ${cares.template}`)
-						// eslint-disable-next-line no-continue
-						continue
-					}
+					const mustache = this.getDts('raid', platform, cares.template, language)
+					if (mustache) {
+						const message = JSON.parse(mustache(view, {data: {language}}))
 
-					const template = JSON.stringify(raidDts.template)
-					const mustache = this.mustache.compile(template)
-					const message = JSON.parse(mustache(view))
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
+						if (cares.ping) {
+							if (!message.content) {
+								message.content = cares.ping
+							} else {
+								message.content += cares.ping
+							}
 						}
-					}
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
-						jobs.push(work)
-						this.addDiscordCache(cares.id)
+						const work = {
+							lat: data.latitude.toString().substring(0, 8),
+							lon: data.longitude.toString().substring(0, 8),
+							message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+							target: cares.id,
+							type: cares.type,
+							name: cares.name,
+							tth: data.tth,
+							clean: cares.clean,
+							emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						}
+						if (caresCache <= this.config.discord.limitAmount + 1) {
+							jobs.push(work)
+							this.addDiscordCache(cares.id)
+						}
 					}
 				}
 				return jobs
@@ -321,7 +321,7 @@ class Raid extends Controller {
 			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -347,6 +347,10 @@ class Raid extends Controller {
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
+
+				const language = cares.language || this.config.general.locale
+				const translator = this.translatorFactory.Translator(language)
+
 				const view = {
 					...geoResult,
 					...data,
@@ -365,43 +369,37 @@ class Raid extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				let platform = cares.type.split(':')[0]
+				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id.toString() === cares.template.toString() && template.platform === platform))
-				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === platform)
-				if (!eggDts) {
-					this.log.error(`Cannot find DTS template ${platform} egg ${cares.template}`)
-					// eslint-disable-next-line no-continue
-					continue
-				}
+				const mustache = this.getDts('egg', platform, cares.template, language)
+				if (mustache) {
+					const message = JSON.parse(mustache(view, {data: {language}}))
 
-				const template = JSON.stringify(eggDts.template)
-				const mustache = this.mustache.compile(template)
-				const message = JSON.parse(mustache(view))
 
-				if (cares.ping) {
-					if (!message.content) {
-						message.content = cares.ping
-					} else {
-						message.content += cares.ping
+					if (cares.ping) {
+						if (!message.content) {
+							message.content = cares.ping
+						} else {
+							message.content += cares.ping
+						}
 					}
-				}
 
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-					emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-				}
-				if (caresCache <= this.config.discord.limitAmount + 1) {
-					jobs.push(work)
-					this.addDiscordCache(cares.id)
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: data.tth,
+						clean: cares.clean,
+						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+					}
+					if (caresCache <= this.config.discord.limitAmount + 1) {
+						jobs.push(work)
+						this.addDiscordCache(cares.id)
+					}
 				}
 			}
 			return jobs
