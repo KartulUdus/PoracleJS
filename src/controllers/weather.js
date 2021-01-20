@@ -1,6 +1,6 @@
 const moment = require('moment-timezone')
 const axios = require('axios')
-const S2 = require('s2-geometry').S2
+const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
 const path = require('path')
 const pcache = require('flat-cache')
@@ -18,13 +18,13 @@ class Weather extends Controller {
 			return ''
 		}
 
-		const cacheKey = `${moment().year()}-${moment().month()+1}-${moment().date()}`
+		const cacheKey = `${moment().year()}-${moment().month() + 1}-${moment().date()}`
 		const cachedResult = weatherKeyCache.getKey(cacheKey)
 		let keyToUse
 
 		if (cachedResult) {
 			// Using the first key that isn't in cache at all
-			[keyToUse] = this.config.weather.apiKeyAccuWeather.filter(key => !Object.keys(cachedResult).includes(key))
+			[keyToUse] = this.config.weather.apiKeyAccuWeather.filter((key) => !Object.keys(cachedResult).includes(key))
 			// or find laziest key in cache
 			if (!keyToUse) {
 				let busyestKeyCount = Number.POSITIVE_INFINITY
@@ -98,14 +98,14 @@ class Weather extends Controller {
 			const currentHour = currentMoment.hour()
 			// Weather must be refreshed at the time set in config with the interval given
 			const localFirstFetchTOD = this.config.weather.localFirstFetchHOD
-			const forecastRefreshInterval = this.config.weather.forecastRefreshInterval
+			const { forecastRefreshInterval } = this.config.weather
 			// eslint-disable-next-line no-bitwise
-			const nextUpdateHour = (((currentHour + ((currentHour % forecastRefreshInterval) < localFirstFetchTOD ? 0 : (forecastRefreshInterval-1))) & -forecastRefreshInterval) + localFirstFetchTOD) % 24
-			const nextUpdateInHours = (nextUpdateHour > currentHour ? nextUpdateHour : (24+localFirstFetchTOD)) - currentHour
+			const nextUpdateHour = (((currentHour + ((currentHour % forecastRefreshInterval) < localFirstFetchTOD ? 0 : (forecastRefreshInterval - 1))) & -forecastRefreshInterval) + localFirstFetchTOD) % 24
+			const nextUpdateInHours = (nextUpdateHour > currentHour ? nextUpdateHour : (24 + localFirstFetchTOD)) - currentHour
 			forecastTimeout = currentMoment.add(nextUpdateInHours, 'hours').unix()
 		}
 
-		if(!this.controllerData[id]) this.controllerData[id] = {}
+		if (!this.controllerData[id]) this.controllerData[id] = {}
 		const data = this.controllerData[id]
 
 		if (!Object.keys(data).length || !data.location) {
@@ -199,13 +199,13 @@ class Weather extends Controller {
 			}
 
 			let whoCares = []
-//this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
+			// this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
 			if (data.updated && data.gameplay_condition) {
 				data.time_changed = data.updated
 				data.condition = data.gameplay_condition
 				data.coords = data.polygon
 			}
-//this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
+			// this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
 			const currentInGameWeather = data.condition
 			const nowTimestamp = Math.floor(Date.now() / 1000)
 			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
@@ -213,24 +213,24 @@ class Weather extends Controller {
 			const updateHourTimestamp = data.time_changed - (data.time_changed % 3600)
 			const previousHourTimestamp = updateHourTimestamp - 3600
 
-			if(!this.controllerData[data.s2_cell_id]) this.controllerData[data.s2_cell_id] = {}
+			if (!this.controllerData[data.s2_cell_id]) this.controllerData[data.s2_cell_id] = {}
 
 			const weatherCellData = this.controllerData[data.s2_cell_id]
-			let previousWeather = weatherCellData[previousHourTimestamp] || -1
+			const previousWeather = weatherCellData[previousHourTimestamp] || -1
 			if ('cares' in weatherCellData) {
 				whoCares = weatherCellData.cares
 			}
 			// Remove users not caring about anything anymore
-			if(weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter(caring => caring.caresUntil > nowTimestamp)
+			if (weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.caresUntil > nowTimestamp)
 
 			if (this.config.weather.showAlteredPokemon) {
 				// Removing whoCares who don't have a Pokemon affected by this weather change
-				whoCares = whoCares.filter(cares => ('caredPokemons' in cares ) ? cares.caredPokemons.find(pokemon => pokemon.alteringWeathers.includes(currentInGameWeather)) : '')
+				whoCares = whoCares.filter((cares) => (('caredPokemons' in cares) ? cares.caredPokemons.find((pokemon) => pokemon.alteringWeathers.includes(currentInGameWeather)) : ''))
 			}
 
-			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData['lastCurrentWeatherCheck'] < updateHourTimestamp) {
+			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData.lastCurrentWeatherCheck < updateHourTimestamp) {
 				weatherCellData[updateHourTimestamp] = currentInGameWeather
-				weatherCellData['lastCurrentWeatherCheck'] = updateHourTimestamp
+				weatherCellData.lastCurrentWeatherCheck = updateHourTimestamp
 			}
 
 			weatherCache.setKey('weatherCacheData', this.controllerData)
@@ -249,14 +249,14 @@ class Weather extends Controller {
 			this.log.info(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
 
 			if (data.source == 'fromMonster') {
-				let s2cell = new S2ts.S2Cell(new S2ts.S2CellId(data.s2_cell_id));
-				let s2cellCenter = S2ts.S2LatLng.fromPoint(s2cell.getCenter());
+				const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(data.s2_cell_id))
+				const s2cellCenter = S2ts.S2LatLng.fromPoint(s2cell.getCenter())
 				data.latitude = s2cellCenter.latRadians * 180 / Math.PI
 				data.longitude = s2cellCenter.lngRadians * 180 / Math.PI
-				data.coords = [];
+				data.coords = []
 				for (let i = 0; i <= 3; i++) {
-					let vertex = S2ts.S2LatLng.fromPoint(s2cell.getVertex(i));
-					data.coords.push([parseFloat(vertex.latDegrees), parseFloat(vertex.lngDegrees)]);
+					const vertex = S2ts.S2LatLng.fromPoint(s2cell.getVertex(i))
+					data.coords.push([parseFloat(vertex.latDegrees), parseFloat(vertex.lngDegrees)])
 				}
 			}
 
@@ -264,7 +264,7 @@ class Weather extends Controller {
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-//this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
+				// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
 			}
 
 			if (previousWeather > -1) {
@@ -282,28 +282,28 @@ class Weather extends Controller {
 			const weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
 			for (const cares of whoCares) {
-//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares', cares)
+				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares', cares)
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.info(`last tracked pokemon despawned before weather changed in ${data.s2_cell_id}`)
-					weatherCellData.cares = weatherCellData.cares.filter(caring => caring.id != cares.id)
-//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current weatherCellData.cares', weatherCellData.cares)
+					weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.id != cares.id)
+					// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current weatherCellData.cares', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				if (cares.lastChangeAlert == currentHourTimestamp) {
 					this.log.info(`user already alerted for this weather change in ${data.s2_cell_id}`)
-//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares.lastChangeAlert == currentHourTimestamp', weatherCellData.cares)
+					// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares.lastChangeAlert == currentHourTimestamp', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				weatherCellData.cares.filter(caring => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
-//this.log.error('[DEBUG WEATHER] ['+data.trace+'] current lastChangeAlert = currentHourTimestamp', weatherCellData.cares)
+				weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
+				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current lastChangeAlert = currentHourTimestamp', weatherCellData.cares)
 
 				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
-					const activePokemons = weatherCellData.cares.filter(caring => caring.id == cares.id)[0].caredPokemons.filter(pokemon => pokemon.alteringWeathers.includes(data.condition))
+					const activePokemons = weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
 					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-//this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
+					// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
 				}
 
 				const view = {
