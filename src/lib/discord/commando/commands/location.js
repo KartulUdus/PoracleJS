@@ -52,7 +52,7 @@ exports.run = async (client, msg, command) => {
 			}
 			lat = locations[0].latitude
 			lon = locations[0].longitude
-			placeConfirmation = locations[0].city ? ' **' + locations[0].city + ' - ' + locations[0].country + '** ' : ' **' + locations[0].country + '** '
+			placeConfirmation = locations[0].city ? ` **${locations[0].city} - ${locations[0].country}** ` : ` **${locations[0].country}** `
 		}
 
 		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })

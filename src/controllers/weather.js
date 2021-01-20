@@ -199,13 +199,13 @@ class Weather extends Controller {
 			}
 
 			let whoCares = []
-this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
+//this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
 			if (data.updated && data.gameplay_condition) {
 				data.time_changed = data.updated
 				data.condition = data.gameplay_condition
 				data.coords = data.polygon
 			}
-this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
+//this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
 			const currentInGameWeather = data.condition
 			const nowTimestamp = Math.floor(Date.now() / 1000)
 			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
@@ -264,7 +264,7 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | 
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
+//this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
 			}
 
 			if (previousWeather > -1) {
@@ -303,7 +303,7 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : 
 					const activePokemons = weatherCellData.cares.filter(caring => caring.id == cares.id)[0].caredPokemons.filter(pokemon => pokemon.alteringWeathers.includes(data.condition))
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
 					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
+//this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
 				}
 
 				const view = {
@@ -312,7 +312,11 @@ this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : 
 					id: data.s2_cell_id,
 					now: new Date(),
 				}
-				const weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.platform === 'discord')
+				let weatherDts
+				if (cares.template) {
+					weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.platform === 'discord' && template.id.toString() == cares.template.toString())
+				}
+				if (!weatherDts) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.platform === 'discord' && template.default)
 				const template = JSON.stringify(weatherDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))

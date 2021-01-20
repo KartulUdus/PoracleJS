@@ -301,9 +301,9 @@ class Controller {
 		const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
 		let types = ''
 		if (monster) {
-			types = monster.types.map(type => type.id)
+			types = monster.types.map((type) => type.id)
 		} else {
-			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map(type => type.id)
+			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map((type) => type.id)
 		}
 		return types
 	}

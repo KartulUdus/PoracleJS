@@ -3,7 +3,7 @@ require('dotenv').config()
 
 const fs = require('fs')
 const util = require('util')
-const S2 = require('s2-geometry').S2
+const { S2 } = require('s2-geometry')
 
 const NodeCache = require('node-cache')
 const fastify = require('fastify')({
@@ -11,6 +11,8 @@ const fastify = require('fastify')({
 })
 const Telegraf = require('telegraf')
 
+const path = require('path')
+const pcache = require('flat-cache')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 
@@ -29,8 +31,6 @@ const cache = new NodeCache({ stdTTL: 5400, useClones: false })
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
-const path = require('path')
-const pcache = require('flat-cache')
 const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../`))
 const weatherCacheData = weatherCache.getKey('weatherCacheData')
 

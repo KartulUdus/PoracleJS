@@ -155,10 +155,16 @@ class Monster extends Controller {
 					weatherCellData['weatherFromBoost'] = weatherCellData['weatherFromBoost'].map(function(value, index) { if (index == data.weather) return value += 1 ; return value -= 1})
 					if(weatherCellData['weatherFromBoost'].filter(x => x > 4).length) {
 						if (weatherCellData['weatherFromBoost'].indexOf(5) == -1) weatherCellData['weatherFromBoost'] = [0,0,0,0,0,0,0,0]
-this.log.error(`[DEBUG MONSTER] Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${data.weather} [${tracer}]`)
+						this.log.info(`Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${data.weather}`)
 						if (data.weather != weatherCellData[currentHourTimestamp]) weatherCellData['forecastTimeout'] = null
 						weatherCellData[currentHourTimestamp] = data.weather
 						currentCellWeather = data.weather
+						// Delete old weather information
+						Object.entries(weatherCellData).forEach(([timestamp]) => {
+							if (timestamp < (currentHourTimestamp - 3600)) {
+								delete weatherCellData[timestamp]
+							}
+						})
 						// Remove users not caring about anything anymore
 						if(weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter(caring => caring.caresUntil > nowTimestamp)
 						if(!weatherCellData.cares || !weatherCellData[previousHourTimestamp] || weatherCellData[previousHourTimestamp] && currentCellWeather == weatherCellData[previousHourTimestamp]) weatherCellData['lastCurrentWeatherCheck'] = currentHourTimestamp
@@ -167,9 +173,9 @@ this.log.error(`[DEBUG MONSTER] Boosted Pokémon! Force update of weather in cel
 			}
 
 			let weatherChangeAlertJobs = []
-			if (this.config.weather.weatherChangeAlert && weatherCellData.cares && (data.testing || weatherCellData['lastCurrentWeatherCheck'] < currentHourTimestamp) && weatherCellData[previousHourTimestamp] > 0 && currentCellWeather > 0 && weatherCellData[previousHourTimestamp] != currentCellWeather) {
-this.log.error(`[DEBUG MONSTER] Start of handle tracing : [${tracer}]`)
-this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather change in cell '+weatherCellId)
+			if (this.config.weather.weatherChangeAlert && weatherCellData.cares && weatherCellData['lastCurrentWeatherCheck'] < currentHourTimestamp && weatherCellData[previousHourTimestamp] > 0 && currentCellWeather > 0 && weatherCellData[previousHourTimestamp] != currentCellWeather) {
+//this.log.error(`[DEBUG MONSTER] Start of handle tracing : [${tracer}]`)
+//this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather change in cell '+weatherCellId)
 				const weatherDataPayload = {
 					longitude: data.longitude,
 					latitude: data.latitude,
@@ -180,7 +186,7 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather 
 					trace: tracer
 				}
 				weatherChangeAlertJobs = await this.weatherController.handle(weatherDataPayload) || null
-this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
+//this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
 			}
 
 			if (this.config.weather.weatherChangeAlert && this.config.weather.showAlteredPokemon && weatherCellData.cares) {
@@ -413,10 +419,10 @@ this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change i
 								break
 							}
 						}
-						if (!exists) weatherCellData.cares.push({id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time})
+						if (!exists) weatherCellData.cares.push({id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template})
 					} else {
 						weatherCellData.cares = []
-						weatherCellData.cares.push({id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time})
+						weatherCellData.cares.push({id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template})
 					}
 					if (this.config.weather.showAlteredPokemon && encountered) {
 						for (const caring of weatherCellData.cares) {
