@@ -10,7 +10,7 @@ exports.run = async (client, msg, args) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		const translator = translatorFactory.Translator(language)
+		const translator = client.translatorFactory.Translator(language)
 
 		const monsters = await client.query.selectAllQuery('monsters', { id: target.id })
 		const raids = await client.query.selectAllQuery('raid', { id: target.id })

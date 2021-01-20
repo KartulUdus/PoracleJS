@@ -45,7 +45,7 @@ exports.run = async (client, msg, args) => {
 
 		// Check for monsters or forms
 		const formArgs = args.filter((arg) => arg.match(client.re.formRe))
-		const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg[2]), true).toLowerCase()) : []
+		const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg[2], true).toLowerCase()) : []
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
 		const gen = genCommand.length ? client.utilData.genData[+genCommand[2]] : 0
