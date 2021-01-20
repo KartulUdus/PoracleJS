@@ -21,9 +21,9 @@ class TranslatorFactory {
 		return this.commandTranslators
 	}
 
-	reverseTranslateCommand(key) {
+	reverseTranslateCommand(key, toLowerCase = false) {
 		for (const t of this.CommandTranslators) {
-			const reverse = t.reverse(key)
+			const reverse = t.reverse(key, toLowerCase)
 			if (reverse !== key) {
 				return reverse
 			}
