@@ -1,12 +1,24 @@
 function createCommandRegex(translatorFactory, commandName, paramMatch, flags = 'i') {
-	const translatedCommands = translatorFactory.translateCommand(commandName)
-	let expr = `^(${commandName}`
+	let translatedCommands = translatorFactory.translateCommand(commandName)
+	// sort longest name first to avoid matching partials
+	translatedCommands.sort((a, b) => {
+		// ASC  -> a.length - b.length
+		// DESC -> b.length - a.length
+		return b.length - a.length;
+	})
+
+	let first = true
+	let expr = '^('
 	for (const translatedCommand of translatedCommands) {
-		if (translatedCommand !== commandName) {
-			expr += `|${translatedCommand}`
+		if (first) {
+			first = false
+		} else {
+			expr += '|'
 		}
+
+		expr += translatedCommand
 	}
-	expr += `)(${paramMatch})$`
+	expr += `):?(${paramMatch})`
 
 	return new RegExp(expr, flags)
 }
