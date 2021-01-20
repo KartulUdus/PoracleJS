@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target,
+			canContinue, target, language
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -12,7 +12,15 @@ exports.run = async (client, msg, args) => {
 		let platform = target.type.split(':')[0]
 		if (platform == 'webhook') platform = 'discord'
 
-		const message = (client.dts.find((template) => template.type === 'greeting' && template.platform === platform)).template
+		let dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language = language)
+		if (!dts) {
+			dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform)
+		}
+		if (!dts) {
+			await msg.react('🙅')
+			return
+		}
+		const message = dts.template
 
 		if (message.embed) {
 			if (message.embed.title) message.embed.title = ''
