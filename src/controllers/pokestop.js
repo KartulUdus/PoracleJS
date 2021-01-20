@@ -126,6 +126,20 @@ class Pokestop extends Controller {
 			data.gruntRewards = ''
 			data.gruntRewardsList = {}
 
+			// Only enough to match for query
+
+			if (data.gruntTypeId) {
+				data.gender = 0
+				data.gruntName = 'Grunt'
+				data.gruntType = 'Mixed'
+				data.gruntRewards = ''
+				if (data.gruntTypeId in this.utilData.gruntTypes) {
+					const gruntType = this.utilData.gruntTypes[data.gruntTypeId]
+					data.gruntName = gruntType.grunt
+					data.gender = gruntType.gender
+					data.gruntType = gruntType.type
+				}
+			}
 
 			const whoCares = await this.invasionWhoCares(data)
 
@@ -152,6 +166,7 @@ class Pokestop extends Controller {
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
 
+				// full build
 				if (data.gruntTypeId) {
 					data.gender = 0
 					data.gruntName = 'Grunt'

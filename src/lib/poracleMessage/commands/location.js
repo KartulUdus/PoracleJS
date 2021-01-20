@@ -4,10 +4,11 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target,
+			canContinue, target, language
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		const translator = client.translatorFactory.Translator(language)
 
 		// Remove arguments that we don't want to keep for area processing
 		for (let i = 0; i < args.length; i++) {
@@ -28,12 +29,12 @@ exports.run = async (client, msg, args) => {
 			lon = parseFloat(matches[2])
 		} else {
 			if (args.length == 1) {
-				await msg.react(client.translator.translate('🙅'))
-				return await msg.reply(`${client.translator.translate('Oops, you need to specify more than just a city name to locate accurately your position')}`)
+				await msg.react(translator.translate('🙅'))
+				return await msg.reply(`${translator.translate('Oops, you need to specify more than just a city name to locate accurately your position')}`)
 			}
 			const locations = await client.query.geolocate(search)
 			if (locations === undefined || locations.length == 0) {
-				return await msg.react(client.translator.translate('🙅'))
+				return await msg.react(translator.translate('🙅'))
 			}
 			lat = locations[0].latitude
 			lon = locations[0].longitude
@@ -42,7 +43,7 @@ exports.run = async (client, msg, args) => {
 
 		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
-		await msg.reply(`👋, ${client.translator.translate('I set ')}${target.name}${client.translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`)
+		await msg.reply(`👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`)
 		await msg.react('✅')
 	} catch (err) {
 		client.log.error(`location command ${msg.content} unhappy:`, err)

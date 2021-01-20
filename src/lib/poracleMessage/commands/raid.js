@@ -4,10 +4,11 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea,
+			canContinue, target, userHasLocation, userHasArea, language
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		const translator = client.translatorFactory.Translator(language)
 
 		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 
@@ -23,7 +24,7 @@ exports.run = async (client, msg, args) => {
 		let clean = false
 		let levels = []
 		const pings = msg.getPings()
-		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => arg.replace(client.translator.translate('form'), ''))
+		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => arg.match(client.re.formRe)[2])
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
 		if (formNames.length) {
@@ -43,9 +44,9 @@ exports.run = async (client, msg, args) => {
 
 		args.forEach((element) => {
 			if (element === 'ex') exclusive = 1
-			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
-			else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
-			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
+			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[2])
+			else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[2]
+			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[2]
 			else if (element === 'instinct') team = 3
 			else if (element === 'valor') team = 2
 			else if (element === 'mystic') team = 1
@@ -56,15 +57,15 @@ exports.run = async (client, msg, args) => {
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (!levels.length && !monsters.length) {
-			return await msg.reply(client.translator.translate('404 no valid tracks found'))
+			return await msg.reply(translator.translate('404 no valid tracks found'))
 		}
 
 		if (!remove) {

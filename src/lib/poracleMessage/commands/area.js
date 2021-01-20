@@ -4,10 +4,11 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target,
+			canContinue, target, language
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		const translator = client.translatorFactory.Translator(language)
 
 		// Check target
 		const confAreas = client.geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
@@ -30,12 +31,12 @@ exports.run = async (client, msg, args) => {
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
 				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`${client.translator.translate('no valid areas there, please use one of')} \`\`\`\n${confUse}\`\`\` `)
+					return await msg.reply(`${translator.translate('no valid areas there, please use one of')} \`\`\`\n${confUse}\`\`\` `)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
 				if (addAreas.length) {
-					await msg.reply(`${client.translator.translate('Added areas:')} ${addAreas}`)
+					await msg.reply(`${translator.translate('Added areas:')} ${addAreas}`)
 				} else {
 					await msg.react('👌')
 				}
@@ -49,12 +50,12 @@ exports.run = async (client, msg, args) => {
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
 				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`${client.translator.translate('no valid areas there, please use one of')} \`\`\`\n${confUse}\`\`\` `)
+					return await msg.reply(`${translator.translate('no valid areas there, please use one of')} \`\`\`\n${confUse}\`\`\` `)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
 				if (removeAreas.length) {
-					await msg.reply(`${client.translator.translate('Removed areas:')} ${removeAreas}`)
+					await msg.reply(`${translator.translate('Removed areas:')} ${removeAreas}`)
 				} else {
 					await msg.react('👌')
 				}

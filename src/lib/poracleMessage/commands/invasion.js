@@ -4,10 +4,11 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea,
+			canContinue, target, userHasLocation, userHasArea, language
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		const translator = client.translatorFactory.Translator(language)
 
 		const typeArray = Object.values(client.utilData.gruntTypes).map((grunt) => grunt.type.toLowerCase())
 
@@ -24,8 +25,8 @@ exports.run = async (client, msg, args) => {
 		const pings = msg.getPings()
 
 		for (const element of args) {
-			if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
-			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
+			if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[2]
+			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[2]
 			else if (element === 'female') gender = 2
 			else if (element === 'male') gender = 1
 			else if (element === 'clean') clean = true
@@ -34,15 +35,15 @@ exports.run = async (client, msg, args) => {
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (!types.length) {
-			return await msg.reply(client.translator.translate('404 No valid invasion types found'))
+			return await msg.reply(translator.translate('404 No valid invasion types found'))
 		}
 
 		if (!remove) {
