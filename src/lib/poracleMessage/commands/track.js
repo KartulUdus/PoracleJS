@@ -79,26 +79,26 @@ exports.run = async (client, msg, args) => {
 		}
 		// Parse command elements to stuff
 		args.forEach((element) => {
-			if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[2]
-			else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[2]
-			else if (element.match(client.re.greatLeagueRe)) greatLeague = element.match(client.re.greatLeagueRe)[2]
-			else if (element.match(client.re.greatLeagueCPRe)) greatLeagueCP = element.match(client.re.greatLeagueCPRe)[2]
-			else if (element.match(client.re.ultraLeagueRe)) ultraLeague = element.match(client.re.ultraLeagueRe)[2]
-			else if (element.match(client.re.ultraLeagueCPRe)) ultraLeagueCP = element.match(client.re.ultraLeagueCPRe)[2]
-			else if (element.match(client.re.maxcpRe)) maxcp = element.match(client.re.maxcpRe)[2]
-			else if (element.match(client.re.maxivRe)) maxiv = element.match(client.re.maxivRe)[2]
-			else if (element.match(client.re.maxweightRe)) maxweight = element.match(client.re.maxweightRe)[2]
-			else if (element.match(client.re.maxatkRe)) maxAtk = element.match(client.re.maxatkRe)[2]
-			else if (element.match(client.re.maxdefRe)) maxDef = element.match(client.re.maxdefRe)[2]
-			else if (element.match(client.re.maxstaRe)) maxSta = element.match(client.re.maxstaRe)[2]
-			else if (element.match(client.re.cpRe)) cp = element.match(client.re.cpRe)[2]
-			else if (element.match(client.re.levelRe)) level = element.match(client.re.levelRe)[2]
-			else if (element.match(client.re.ivRe)) iv = element.match(client.re.ivRe)[2]
-			else if (element.match(client.re.atkRe)) atk = element.match(client.re.atkRe)[2]
-			else if (element.match(client.re.defRe)) def = element.match(client.re.defRe)[2]
-			else if (element.match(client.re.staRe)) sta = element.match(client.re.staRe)[2]
-			else if (element.match(client.re.weightRe)) weight = element.match(client.re.weightRe)[2]
-			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[2]
+			if (element.match(client.re.maxlevelRe)) [,, maxlevel] = element.match(client.re.maxlevelRe)
+			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
+			else if (element.match(client.re.greatLeagueRe)) [,, greatLeague] = element.match(client.re.greatLeagueRe)
+			else if (element.match(client.re.greatLeagueCPRe)) [,, greatLeagueCP] = element.match(client.re.greatLeagueCPRe)
+			else if (element.match(client.re.ultraLeagueRe)) [,, ultraLeague] = element.match(client.re.ultraLeagueRe)
+			else if (element.match(client.re.ultraLeagueCPRe)) [,, ultraLeagueCP] = element.match(client.re.ultraLeagueCPRe)
+			else if (element.match(client.re.maxcpRe)) [,, maxcp] = element.match(client.re.maxcpRe)
+			else if (element.match(client.re.maxivRe)) [,, maxiv] = element.match(client.re.maxivRe)
+			else if (element.match(client.re.maxweightRe)) [,, maxweight] = element.match(client.re.maxweightRe)
+			else if (element.match(client.re.maxatkRe)) [,, maxAtk] = element.match(client.re.maxatkRe)
+			else if (element.match(client.re.maxdefRe)) [,, maxDef] = element.match(client.re.maxdefRe)
+			else if (element.match(client.re.maxstaRe)) [,, maxSta] = element.match(client.re.maxstaRe)
+			else if (element.match(client.re.cpRe)) [,, cp] = element.match(client.re.cpRe)
+			else if (element.match(client.re.levelRe)) [,, level] = element.match(client.re.levelRe)
+			else if (element.match(client.re.ivRe)) [,, iv] = element.match(client.re.ivRe)
+			else if (element.match(client.re.atkRe)) [,, atk] = element.match(client.re.atkRe)
+			else if (element.match(client.re.defRe)) [,, def] = element.match(client.re.defRe)
+			else if (element.match(client.re.staRe)) [,, sta] = element.match(client.re.staRe)
+			else if (element.match(client.re.weightRe)) [,, weight] = element.match(client.re.weightRe)
+			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'female') gender = 2
 			else if (element === 'clean') clean = true
 			else if (element === 'male') gender = 1

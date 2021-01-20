@@ -93,7 +93,8 @@
         "checkRoleInterval": 6,
         "token": "",
         "admins": [""],
-        "channels": [""]
+        "channels": [""],
+        "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
       },
       "geocoding": {
         "provider": "poracle",

@@ -1,11 +1,9 @@
 function createCommandRegex(translatorFactory, commandName, paramMatch, flags = 'i') {
-	let translatedCommands = translatorFactory.translateCommand(commandName)
+	const translatedCommands = translatorFactory.translateCommand(commandName)
 	// sort longest name first to avoid matching partials
-	translatedCommands.sort((a, b) => {
-		// ASC  -> a.length - b.length
-		// DESC -> b.length - a.length
-		return b.length - a.length;
-	})
+	translatedCommands.sort((a, b) => b.length - a.length)
+	// ASC  -> a.length - b.length
+	// DESC -> b.length - a.length
 
 	let first = true
 	let expr = '^('

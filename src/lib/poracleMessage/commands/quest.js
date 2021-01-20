@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language
+			canContinue, target, userHasLocation, userHasArea, language,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -49,16 +49,16 @@ exports.run = async (client, msg, args) => {
 			commandEverything = 1
 		}
 		args.forEach((element) => {
-			if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[2]
+			if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.stardustRe)) {
 				minDust = +element.match(client.re.stardustRe)[2]
 				stardustTracking = -1
-			} else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[2]
+			} else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'stardust') {
 				minDust = 0
 				stardustTracking = -1
 			} else if (element.match(client.re.energyRe)) {
-				energyMonster = element.match(client.re.energyRe)[2]
+				[,, energyMonster] = element.match(client.re.energyRe)
 				energyMonster = translator.reverse(energyMonster.toLowerCase(), true).toLowerCase()
 				energyMonster = Object.values(client.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
 				energyMonster = energyMonster.map((mon) => mon.id)

@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language
+			canContinue, target, userHasLocation, userHasArea, language,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -25,8 +25,8 @@ exports.run = async (client, msg, args) => {
 		const pings = msg.getPings()
 
 		for (const element of args) {
-			if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[2]
-			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[2]
+			if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
+			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'female') gender = 2
 			else if (element === 'male') gender = 1
 			else if (element === 'clean') clean = true

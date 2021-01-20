@@ -188,7 +188,6 @@ class Quest extends Controller {
 				data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
 				data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => translator.translate(this.utilData.items[i])).join(', ')
 
-
 				const view = {
 					...geoResult,
 					...data,
@@ -212,7 +211,7 @@ class Quest extends Controller {
 
 				const mustache = this.getDts('quest', platform, cares.template, language)
 				if (mustache) {
-					const message = JSON.parse(mustache(view, {data: {language}}))
+					const message = JSON.parse(mustache(view, { data: { language } }))
 
 					if (cares.ping) {
 						if (!message.content) {
@@ -225,7 +224,7 @@ class Quest extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,

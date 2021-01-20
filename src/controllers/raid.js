@@ -236,8 +236,8 @@ class Raid extends Controller {
 					data.name = translator.translate(monster.name)
 					data.quickMove = this.utilData.moves[data.move_1] ? translator.translate(this.utilData.moves[data.move_1].name) : ''
 					data.chargeMove = this.utilData.moves[data.move_2] ? translator.translate(this.utilData.moves[data.move_2].name) : ''
-					data.move1emoji = this.utilData.moves[data.move_1] && utilData.moves[data.move_1].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
-					data.move2emoji = this.utilData.moves[data.move_2] && utilData.moves[data.move_2].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
+					data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
+					data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
 
 					const view = {
 						...geoResult,
@@ -258,13 +258,12 @@ class Raid extends Controller {
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
-
 					let [platform] = cares.type.split(':')
 					if (platform == 'webhook') platform = 'discord'
 
 					const mustache = this.getDts('raid', platform, cares.template, language)
 					if (mustache) {
-						const message = JSON.parse(mustache(view, {data: {language}}))
+						const message = JSON.parse(mustache(view, { data: { language } }))
 
 						if (cares.ping) {
 							if (!message.content) {
@@ -276,7 +275,7 @@ class Raid extends Controller {
 						const work = {
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
-							message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+							message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
 							target: cares.id,
 							type: cares.type,
 							name: cares.name,
@@ -349,6 +348,7 @@ class Raid extends Controller {
 				const caresCache = this.getDiscordCache(cares.id).count
 
 				const language = cares.language || this.config.general.locale
+				// eslint-disable-next-line no-unused-vars
 				const translator = this.translatorFactory.Translator(language)
 
 				const view = {
@@ -374,8 +374,7 @@ class Raid extends Controller {
 
 				const mustache = this.getDts('egg', platform, cares.template, language)
 				if (mustache) {
-					const message = JSON.parse(mustache(view, {data: {language}}))
-
+					const message = JSON.parse(mustache(view, { data: { language } }))
 
 					if (cares.ping) {
 						if (!message.content) {
@@ -388,7 +387,7 @@ class Raid extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? {content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds`} : message,
+						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
