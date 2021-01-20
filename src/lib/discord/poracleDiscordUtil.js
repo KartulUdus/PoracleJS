@@ -68,7 +68,7 @@ class PoracleDiscordUtil {
 		}
 
 		if (!status.isRegistered && this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
-			await this.msg.reply(`${this.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
+			await this.msg.reply(`${this.msg.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
 			return { canContinue: false }
 		}
 
