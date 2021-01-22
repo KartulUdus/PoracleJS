@@ -12,7 +12,7 @@ exports.run = async (client, msg, args) => {
 		let platform = target.type.split(':')[0]
 		if (platform == 'webhook') platform = 'discord'
 
-		let dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language = language)
+		let dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language == language)
 		if (!dts) {
 			dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform)
 		}
