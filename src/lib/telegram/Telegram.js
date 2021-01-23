@@ -30,9 +30,10 @@ class Telegram {
 
 				const translatedCommands = this.translatorFactory.translateCommand(commandName)
 				for (const translatedCommand of translatedCommands) {
-					if (translatedCommand != commandName) {
-						this.enabledCommands.push(translatedCommand)
-						this.bot.command(translatedCommand, this.tempProps)
+					const normalisedCommand = translatedCommand.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+					if (normalisedCommand != commandName) {
+						this.enabledCommands.push(normalisedCommand)
+						this.bot.command(normalisedCommand, this.tempProps)
 					}
 				}
 			}
