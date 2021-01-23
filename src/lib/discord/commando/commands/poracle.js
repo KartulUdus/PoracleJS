@@ -8,7 +8,7 @@ exports.run = async (client, msg) => {
 		let language = ''
 
 		if (client.config.general.availableLanguages) {
-			for (const l in client.config.general.availableLanguages) {
+			for (const l in Object.keys(client.config.general.availableLanguages)) {
 				if (client.config.general.availableLanguages[l].poracle == command) {
 					language = l
 				}

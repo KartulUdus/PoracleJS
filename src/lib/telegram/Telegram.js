@@ -38,10 +38,10 @@ class Telegram {
 			}
 		})
 
-		if (this.config.general.registrationLanguages && !this.config.general.disabledCommands.includes('poracle')) {
-			for (const l in this.config.general.registrationLanguages) {
-				if ({}.hasOwnProperty.call(this.config.general.registrationLanguages, l)) {
-					const commandName = this.config.general.registrationLanguages[l].poracle
+		if (this.config.general.availableLanguages && !this.config.general.disabledCommands.includes('poracle')) {
+			for (const l in this.config.general.availableLanguages) {
+				if ({}.hasOwnProperty.call(this.config.general.availableLanguages, l)) {
+					const commandName = this.config.general.availableLanguages[l].poracle
 					if (!this.enabledCommands.includes(commandName)) {
 						const props = require(`${__dirname}/commands/poracle`)
 						this.enabledCommands.push(commandName)
