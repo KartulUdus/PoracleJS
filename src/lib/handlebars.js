@@ -91,6 +91,7 @@ module.exports = () => {
 		let stardustCost = 0
 		let candyCost = 0
 		let xlCandyCost = 0
+		let returnString = ''
 		for (const level in powerUpCost) {
 			if (level >= levelStart && level < levelEnd) {
 				stardustCost = stardustCost + powerUpCost[level].stardust
@@ -98,7 +99,7 @@ module.exports = () => {
 				if (powerUpCost[level].xlCandy) xlCandyCost = xlCandyCost + powerUpCost[level].xlCandy
 			}
 		}
-		let returnString = `${stardustCost} ${translator.translate('Stardust')}`
+		if (stardustCost) returnString = `${stardustCost.toLocaleString(config.locale.timeformat)} ${translator.translate('Stardust')}`
 		if (candyCost) returnString = returnString.concat(` and ${candyCost} ${translator.translate('Candies')}`)
 		if (xlCandyCost) returnString = returnString.concat(` and ${xlCandyCost} ${translator.translate('XL Candies')}`)
 		return returnString
