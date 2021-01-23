@@ -174,6 +174,8 @@ class Raid extends Controller {
 				if (data.name) data.gymName = data.name ? data.name : ''
 				data.name = this.translator.translate(monster.name)
 				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
+				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
+
 				const e = []
 				monster.types.forEach((type) => {
 					e.push(this.utilData.types[type.name].emoji)
@@ -251,9 +253,17 @@ class Raid extends Controller {
 						// pokemoji: emojiData.pokemon[data.pokemon_id],
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
+					let platform = cares.type.split(':')[0]
+					if (platform == 'webhook') platform = 'discord'
 
-					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template.toString() && template.platform === 'discord'))
-					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === 'discord')
+					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template.toString() && template.platform === platform))
+					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === platform)
+					if (!raidDts) {
+						this.log.error(`Cannot find DTS template ${platform} raid ${cares.template}`)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+
 					const template = JSON.stringify(raidDts.template)
 					const mustache = this.mustache.compile(template)
 					const message = JSON.parse(mustache(view))
@@ -289,6 +299,8 @@ class Raid extends Controller {
 			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
+
 			data.staticSprite = encodeURI(JSON.stringify([
 				{
 					url: data.imgUrl,
@@ -353,8 +365,16 @@ class Raid extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id.toString() === cares.template.toString() && template.platform === 'discord'))
-				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === 'discord')
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
+				let eggDts = this.dts.find((template) => (template.type === 'egg' && template.id.toString() === cares.template.toString() && template.platform === platform))
+				if (!eggDts) eggDts = this.dts.find((template) => template.type === 'egg' && template.default && template.platform === platform)
+				if (!eggDts) {
+					this.log.error(`Cannot find DTS template ${platform} egg ${cares.template}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
 
 				const template = JSON.stringify(eggDts.template)
 				const mustache = this.mustache.compile(template)

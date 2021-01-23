@@ -312,12 +312,18 @@ class Weather extends Controller {
 					id: data.s2_cell_id,
 					now: new Date(),
 				}
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
 				let weatherDts
-				if (cares.template) {
-					weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.platform === 'discord' && template.id.toString() == cares.template.toString())
+				if (cares.template) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.id.toString() == cares.template.toString() && template.platform === platform)
+				if (!weatherDts) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.default && template.platform === platform)
+				if (!weatherDts) {
+					this.log.error(`Cannot find DTS template weatherchange ${cares.template}`)
+					// eslint-disable-next-line no-continue
+					continue
 				}
-				if (!weatherDts) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.platform === 'discord' && template.default)
-				const template = JSON.stringify(weatherDts.template)
+        const template = JSON.stringify(weatherDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 

@@ -15,6 +15,7 @@ const path = require('path')
 const pcache = require('flat-cache')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
+const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
@@ -26,6 +27,7 @@ const {
 const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
+const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false })
 
@@ -78,7 +80,8 @@ log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let roleWorker
 let telegram
-let workingOnHooks = false
+let telegramChannel
+const workingOnHooks = false
 
 if (config.discord.enabled) {
 	for (const key in config.discord.token) {
@@ -86,23 +89,67 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
 		}
 	}
+
+	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+		roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
+	}
 }
 
+let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker(config, log, dts, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
+	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
+
+	if (telegrafChannel) {
+		telegramChannel = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegrafChannel, translator, telegramCommandParser, re)
+	}
+
+	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
+		telegramUtil = new TelegramUtil(config, log, telegraf)
+	}
 }
 
-// todo remove lint passing log
-log.debug(telegram)
-
-if (config.discord.enabled && config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-	roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
+async function removeInvalidUser(user) {
+	await fastify.monsterController.deleteQuery('egg', { id: user.id })
+	await fastify.monsterController.deleteQuery('monsters', { id: user.id })
+	await fastify.monsterController.deleteQuery('raid', { id: user.id })
+	await fastify.monsterController.deleteQuery('quest', { id: user.id })
+	await fastify.monsterController.deleteQuery('humans', { id: user.id })
 }
 
-async function syncRole() {
+async function syncTelegramMembership() {
 	try {
-		log.info('Verification of Poracle user\'s roles starting...')
+		log.info('Verification of Telegram group membership for Poracle users starting...')
+
+		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'telegram:user' })
+		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
+		let invalidUsers = []
+		for (const channel of config.telegram.channels) {
+			invalidUsers = await telegramUtil.checkMembership(usersToCheck, channel)
+			usersToCheck = invalidUsers
+		}
+
+		if (invalidUsers[0]) {
+			log.info('Invalid users found, removing from dB...')
+			for (const user of invalidUsers) {
+				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
+				if (config.general.roleCheckDeletionsAllowed) {
+					await removeInvalidUser(user)
+				}
+			}
+		} else {
+			log.info('No invalid users found, all good!')
+		}
+	} catch (err) {
+		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
+	}
+	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
+}
+
+async function syncDiscordRole() {
+	try {
+		log.info('Verification of Discord role membership to Poracle users starting...')
 		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
+		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
 		let invalidUsers = []
 		for (const guild of config.discord.guilds) {
 			invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
@@ -110,21 +157,19 @@ async function syncRole() {
 		}
 		if (invalidUsers[0]) {
 			log.info('Invalid users found, removing from dB...')
-			invalidUsers.forEach(async (user) => {
+			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				await fastify.monsterController.deleteQuery('egg', { id: user.id })
-				await fastify.monsterController.deleteQuery('monsters', { id: user.id })
-				await fastify.monsterController.deleteQuery('raid', { id: user.id })
-				await fastify.monsterController.deleteQuery('quest', { id: user.id })
-				await fastify.monsterController.deleteQuery('humans', { id: user.id })
-			})
+				if (config.general.roleCheckDeletionsAllowed) {
+					await removeInvalidUser(user)
+				}
+			}
 		} else {
 			log.info('No invalid users found, all good!')
 		}
 	} catch (err) {
 		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
 	}
-	setTimeout(syncRole, config.discord.checkRoleInterval * 3600000)
+	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
 async function run() {
@@ -153,36 +198,46 @@ async function run() {
 			}
 			if (!worker.busy) worker.work(fastify.discordQueue.shift())
 		}, 10)
+
+		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+			setTimeout(syncDiscordRole, 10000)
+		}
 	}
 
-	if (config.discord.enabled && config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-		setTimeout(syncRole, 10000)
-	}
+	if (config.telegram.enabled) {
+		setInterval(() => {
+			if (!fastify.telegramQueue.length) {
+				return
+			}
+			if ((Math.random() * 100) > 80) fastify.logger.debug(`TelegramQueue is currently ${fastify.telegramQueue.length}`)
 
-	// if (config.telegram.enabled) {
-	// 	setInterval(() => {
-	// 		if (!fastify.telegramQueue.length) {
-	// 			return
-	// 		}
-	// 		const { target } = fastify.telegramQueue[0]
-	// 		// see if target has dedicated worker
-	// 		let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
-	// 		if (!worker) {
-	// 			let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-	// 			let laziestWorkerId
-	// 			Object.keys(discordWorkers).map((i) => {
-	// 				if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
-	// 					busyestWorkerHumanCount = discordWorkers[i].userCount
-	// 					laziestWorkerId = i
-	// 				}
-	// 			})
-	// 			busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-	// 			worker = discordWorkers[laziestWorkerId]
-	// 			worker.addUser(target)
-	// 		}
-	// 		if (!worker.busy) worker.work(fastify.discordQueue.shift())
-	// 	}, 10)
-	// }
+			let worker = telegram
+			if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
+				worker = telegramChannel
+			}
+			// const { target } = fastify.telegramQueue[0]
+			// // see if target has dedicated worker
+			// let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
+			// if (!worker) {
+			// 	let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+			// 	let laziestWorkerId
+			// 	Object.keys(telegramWorkers).map((i) => {
+			// 		if (telegramWorkers[i].userCount < busyestWorkerHumanCount) {
+			// 			busyestWorkerHumanCount = telegramWorkers[i].userCount
+			// 			laziestWorkerId = i
+			// 		}
+			// 	})
+			// 	busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+			// 	worker = telegramWorkers[laziestWorkerId]
+			// 	worker.addUser(target)
+			// }
+			if (!worker.busy) worker.work(fastify.telegramQueue.shift())
+		}, 10)
+
+		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
+			setTimeout(syncTelegramMembership, 30000)
+		}
+	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
 	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
@@ -192,86 +247,86 @@ async function run() {
 	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 }
 
-async function handleAlarms() {
-	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
-		if ((Math.random() * 100) > 80) fastify.logger.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
+const PromiseQueue = require('./lib/PromiseQueue')
 
-		const hook = fastify.hookQueue.shift()
-		switch (hook.type) {
-			case 'pokemon': {
-				if (config.general.disablePokemon) break
-				fastify.webhooks.info('pokemon', hook.message)
-				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
-					fastify.logger.debug(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
-					break
-				}
+const alarmProcessor = new PromiseQueue(fastify.hookQueue, 10)
 
-				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached')
-
-				const result = await fastify.monsterController.handle(hook.message)
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
-
+async function processOne(hook) {
+	switch (hook.type) {
+		case 'pokemon': {
+			if (config.general.disablePokemon) break
+			fastify.webhooks.info('pokemon', hook.message)
+			if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
+				fastify.logger.debug(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
 				break
 			}
-			case 'raid': {
-				if (config.general.disableRaid) break
-				fastify.webhooks.info('raid', hook.message)
-				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
-					fastify.logger.debug(`Raid ${hook.message.gym_id} was sent again too soon, ignoring`)
-					break
-				}
 
-				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
+			fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached')
 
-				const result = await fastify.raidController.handle(hook.message)
-				if (!result) break
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
+			const result = await fastify.monsterController.handle(hook.message)
+			result.forEach((job) => {
+				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+			})
+
+			break
+		}
+		case 'raid': {
+			if (config.general.disableRaid) break
+			fastify.webhooks.info('raid', hook.message)
+			if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
+				fastify.logger.debug(`Raid ${hook.message.gym_id} was sent again too soon, ignoring`)
 				break
 			}
-			case 'invasion':
-			case 'pokestop': {
-				if (config.general.disablePokestop) break
-				fastify.webhooks.info('pokestop', hook.message)
-				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
-				if (!incidentExpiration) break
-				if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
-					fastify.logger.debug(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
-					break
-				}
-				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
 
-				const result = await fastify.pokestopController.handle(hook.message)
-				if (!result) break
+			fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
 
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
-
+			const result = await fastify.raidController.handle(hook.message)
+			if (!result) break
+			result.forEach((job) => {
+				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+			})
+			break
+		}
+		case 'invasion':
+		case 'pokestop': {
+			if (config.general.disablePokestop) break
+			fastify.webhooks.info('pokestop', hook.message)
+			const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
+			if (!incidentExpiration) break
+			if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+				fastify.logger.debug(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
 				break
 			}
-			case 'quest': {
-				if (config.general.disableQuest) break
-				fastify.webhooks.info('quest', hook.message)
-				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
-					fastify.logger.debug(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
-					break
-				}
-				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
-				const q = hook.message
+			fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
 
-				const result = await fastify.questController.handle(q)
-				if (!result) break
+			const result = await fastify.pokestopController.handle(hook.message)
+			if (!result) break
+
+			result.forEach((job) => {
+				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+			})
+
+			break
+		}
+		case 'quest': {
+			if (config.general.disableQuest) break
+			fastify.webhooks.info('quest', hook.message)
+			if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
+				fastify.logger.debug(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
+				break
+			}
+			fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
+			const q = hook.message
+
+			const result = await fastify.questController.handle(q)
+			if (!result) break
 
 				result.forEach((job) => {
 					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 				})
 				break
 			}
@@ -296,11 +351,25 @@ async function handleAlarms() {
 				})
 				break
 			}
-			default:
+			fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
+			const result = await fastify.weatherController.handle(hook.message)
+			result.forEach((job) => {
+				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+			})
+			break
 		}
-		workingOnHooks = false
+		default:
+	}
+}
+
+async function handleAlarms() {
+	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
+		if ((Math.random() * 100) > 80) fastify.logger.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
+
+		alarmProcessor.run(processOne)
 	}
 }
 
 run()
-setInterval(handleAlarms, 1)
+setInterval(handleAlarms, 100)

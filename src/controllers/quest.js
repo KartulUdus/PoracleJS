@@ -101,6 +101,8 @@ class Quest extends Controller {
 			data.disTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day')
 			data.tth = moment.preciseDiff(Date.now(), data.disTime.clone().utc(), true)
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
+
 			if (!data.team_id) data.team_id = 0
 			if (data.name) data.gymName = data.name
 			data.teamname = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
@@ -126,15 +128,23 @@ class Quest extends Controller {
 				? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
 				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
 
+			data.stickerUrl = data.rewardData.monsters[1]
+				? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
+				: ''
+
 			if (data.rewardData.items[1]) {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
+				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
 			}
 			if (data.dustAmount) {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
+				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
 				data.dustAmount = data.rewards[0].info.amount
 			}
 			if (data.energyAmount) {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.png`
+				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.webp`
+
 				data.energyAmount = data.rewards[0].info.amount
 			}
 			data.staticSprite = encodeURI(JSON.stringify([
@@ -190,8 +200,17 @@ class Quest extends Controller {
 					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
-				let questDts = this.dts.find((template) => template.type === 'quest' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
-				if (!questDts) questDts = this.dts.find((template) => template.type === 'quest' && template.default && template.platform === 'discord')
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
+				let questDts = this.dts.find((template) => template.type === 'quest' && template.id.toString() === cares.template.toString() && template.platform === platform)
+				if (!questDts) questDts = this.dts.find((template) => template.type === 'quest' && template.default && template.platform === platform)
+				if (!questDts) {
+					this.log.error(`Cannot find DTS template ${platform} quest ${cares.template}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+
 				const template = JSON.stringify(questDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))

@@ -1,7 +1,9 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const monsters = require('../util/monsters')
-const { cpMultipliers, moves, types } = require('../util/util')
+const {
+	cpMultipliers, moves, types, powerUpCost,
+} = require('../util/util')
 
 const Translator = require(`${__dirname}/../util/translate`)
 const translator = new Translator(config.general.locale)
@@ -84,6 +86,25 @@ module.exports = () => {
               * cpMulti ** 2
               / 10,
 		))
+	})
+
+	handlebars.registerHelper('getPowerUpCost', (levelStart, levelEnd) => {
+		if (!levelStart || !levelEnd) return ''
+		let stardustCost = 0
+		let candyCost = 0
+		let xlCandyCost = 0
+		let returnString = ''
+		for (const level in powerUpCost) {
+			if (level >= levelStart && level < levelEnd) {
+				stardustCost += powerUpCost[level].stardust
+				if (powerUpCost[level].candy) candyCost += powerUpCost[level].candy
+				if (powerUpCost[level].xlCandy) xlCandyCost += powerUpCost[level].xlCandy
+			}
+		}
+		if (stardustCost) returnString = `${stardustCost.toLocaleString(config.locale.timeformat)} ${translator.translate('Stardust')}`
+		if (candyCost) returnString = returnString.concat(` and ${candyCost} ${translator.translate('Candies')}`)
+		if (xlCandyCost) returnString = returnString.concat(` and ${xlCandyCost} ${translator.translate('XL Candies')}`)
+		return returnString
 	})
 
 	return handlebars

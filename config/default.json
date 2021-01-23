@@ -9,6 +9,7 @@
         "environment": "production",
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
+        "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
         "locale": "en",
         "disabledCommands": [],
         "disablePokemon": false,
@@ -16,7 +17,8 @@
         "disableInvasion": false,
         "disablePokestop": false,
         "disableQuest": false,
-        "disableWeather": false
+        "disableWeather": false,
+        "roleCheckDeletionsAllowed": false
     },
     "logger": {
         "level": "info",
@@ -97,6 +99,8 @@
       },
       "telegram": {
         "enabled": false,
+        "checkRole": false,
+        "checkRoleInterval": 6,
         "token": "",
         "admins": [""],
         "channels": [""]
