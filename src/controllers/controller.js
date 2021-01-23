@@ -89,8 +89,8 @@ class Controller {
 			return null
 		}
 
-		if (Array.isArray(template.description)) {
-			template.description = template.description.join('')
+		if (Array.isArray(findDts.template.description)) {
+			findDts.template.description = findDts.template.description.join('')
 		}
 
 		const template = JSON.stringify(findDts.template)
