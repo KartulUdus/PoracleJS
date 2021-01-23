@@ -1,7 +1,9 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const monsters = require('../util/monsters')
-const { cpMultipliers, moves, types, powerUpCost } = require('../util/util')
+const {
+	cpMultipliers, moves, types, powerUpCost,
+} = require('../util/util')
 
 const Translator = require(`${__dirname}/../util/translate`)
 const translator = new Translator(config.general.locale)
@@ -94,9 +96,9 @@ module.exports = () => {
 		let returnString = ''
 		for (const level in powerUpCost) {
 			if (level >= levelStart && level < levelEnd) {
-				stardustCost = stardustCost + powerUpCost[level].stardust
-				if (powerUpCost[level].candy) candyCost = candyCost + powerUpCost[level].candy
-				if (powerUpCost[level].xlCandy) xlCandyCost = xlCandyCost + powerUpCost[level].xlCandy
+				stardustCost += powerUpCost[level].stardust
+				if (powerUpCost[level].candy) candyCost += powerUpCost[level].candy
+				if (powerUpCost[level].xlCandy) xlCandyCost += powerUpCost[level].xlCandy
 			}
 		}
 		if (stardustCost) returnString = `${stardustCost.toLocaleString(config.locale.timeformat)} ${translator.translate('Stardust')}`
