@@ -24,6 +24,7 @@ const {
 const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
+const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false })
 
@@ -73,6 +74,7 @@ log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let roleWorker
 let telegram
+let telegramChannel
 const workingOnHooks = false
 
 if (config.discord.enabled) {
@@ -90,6 +92,10 @@ if (config.discord.enabled) {
 let telegramUtil
 if (config.telegram.enabled) {
 	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re)
+
+	if (telegrafChannel) {
+		telegramChannel = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegrafChannel, translator, telegramCommandParser, re)
+	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 		telegramUtil = new TelegramUtil(config, log, telegraf)
@@ -199,7 +205,10 @@ async function run() {
 			}
 			if ((Math.random() * 100) > 80) fastify.logger.debug(`TelegramQueue is currently ${fastify.telegramQueue.length}`)
 
-			const worker = telegram
+			let worker = telegram
+			if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
+				worker = telegramChannel
+			}
 			// const { target } = fastify.telegramQueue[0]
 			// // see if target has dedicated worker
 			// let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))

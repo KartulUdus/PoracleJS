@@ -60,13 +60,15 @@ exports.run = async (client, msg, args) => {
 			client.log.info(`${target.name} started tracking ${types.join(', ')} invasions`)
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		} else {
+			let result = 0
 			if (commandEverything) {
-				const remQuery = `delete from invasion WHERE id=${target.id}`
-				const result = await client.query.misteryQuery(remQuery)
-				reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+				result = await client.query.deleteQuery('invasion', { id: target.id })
+				client.log.info(`${target.name} stopped tracking all invasions`)
 			} else {
-				client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
+				result = client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
+				client.log.info(`${target.name} stopped tracking ${types.join(', ')} invasions`)
 			}
+			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
 		}
 		//		}
