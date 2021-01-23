@@ -89,6 +89,10 @@ class Controller {
 			return null
 		}
 
+		if (Array.isArray(template.description)) {
+			template.description = template.description.join('')
+		}
+
 		const template = JSON.stringify(findDts.template)
 		const mustache = this.mustache.compile(template)
 
