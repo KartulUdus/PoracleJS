@@ -11,6 +11,7 @@ exports.run = async (client, msg, args) => {
 		let reaction = '👌'
 
 		const remove = !!args.find((arg) => arg === 'remove')
+		const commandEverything = !!args.find((arg) => arg === 'everything')
 
 		let exclusive = 0
 		let distance = 0
@@ -61,6 +62,7 @@ exports.run = async (client, msg, args) => {
 
 			const result = await client.query.insertOrUpdateQuery('egg', insert)
 			client.log.info(`${target.name} started tracking level ${levels.join(', ')} eggs`)
+
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		} else {
 			let result = 0
@@ -68,6 +70,11 @@ exports.run = async (client, msg, args) => {
 				const lvlResult = await client.query.deleteWhereInQuery('egg', target.id, levels, 'level')
 				client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} eggs`)
 				result += lvlResult
+			}
+			if (commandEverything) {
+				const everythingResult = await client.query.deleteQuery('egg', { id: target.id })
+				client.log.info(`${target.name} stopped tracking all eggs`)
+				result += everythingResult
 			}
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
