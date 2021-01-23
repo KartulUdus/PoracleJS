@@ -324,34 +324,26 @@ async function processOne(hook) {
 			const result = await fastify.questController.handle(q)
 			if (!result) break
 
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+			result.forEach((job) => {
+				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
+			})
+			break
+		}
+		case 'weather': {
+			if (config.general.disableWeather) break
+			fastify.webhooks.info('weather', hook.message)
+			if (hook.message.updated) {
+				const weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
+				hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
+			}
+			const updateTimestamp = hook.message.time_changed || hook.message.updated
+			const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
+			if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
+				fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
 				break
 			}
-			case 'weather': {
-				if (config.general.disableWeather) break
-				fastify.webhooks.info('weather', hook.message)
-				if (hook.message.updated) {
-					const weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
-					hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
-				}
-				const updateTimestamp = hook.message.time_changed || hook.message.updated
-				const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
-				if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
-					fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
-					break
-				}
-				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
-				const result = await fastify.weatherController.handle(hook.message)
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
-				break
-			}
-			fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
+			fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
 			const result = await fastify.weatherController.handle(hook.message)
 			result.forEach((job) => {
 				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
