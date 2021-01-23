@@ -101,8 +101,7 @@ exports.run = async (client, msg, command) => {
 					result += lvlResult
 				}
 				if (commandEverything) {
-					const remQuery = `delete from egg WHERE id=${target.id}`
-					const everythingResult = await client.query.misteryQuery(remQuery)
+					const everythingResult = await client.query.deleteQuery('egg', { id: target.id })
 					client.log.info(`${target.name} stopped tracking all eggs`)
 					result += everythingResult
 				}

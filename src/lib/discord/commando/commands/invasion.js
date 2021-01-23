@@ -87,8 +87,7 @@ exports.run = async (client, msg, command) => {
 			} else {
 				let result = 0
 				if (commandEverything) {
-					const remQuery = `delete from invasion WHERE id=${target.id}`
-					result = await client.query.misteryQuery(remQuery)
+					result = await client.query.deleteQuery('invasion', { id: target.id })
 					client.log.info(`${target.name} stopped tracking all invasions`)
 				}else{
 					result = await client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')

@@ -141,8 +141,7 @@ exports.run = async (client, msg, command) => {
 					result += lvlResult
 				}
 				if (commandEverything) {
-					const remQuery = `delete from raid WHERE id=${target.id}`
-					const everythingResult = await client.query.misteryQuery(remQuery)
+					const everythingResult = await client.query.deleteQuery('raid', { id: target.id })
 					client.log.info(`${target.name} stopped tracking all raids`)
 					result += everythingResult
 				}
