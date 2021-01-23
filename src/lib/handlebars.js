@@ -98,7 +98,7 @@ module.exports = () => {
 
 	handlebars.registerHelper('getPowerUpCost', (levelStart, levelEnd, options) => {
 		const translator = userTranslator(options)
-		
+
 		if (!levelStart || !levelEnd) return ''
 		let stardustCost = 0
 		let candyCost = 0
