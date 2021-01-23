@@ -71,6 +71,16 @@ class DiscordCommando {
 
 				this.log.log({ level: 'debug', message: `Loading discord commands: (${enabledCommands.join(' ')})`, event: 'discord:commandsAdded' })
 			})
+
+			if (this.client.config.language.activation) {
+				for (const l of this.client.config.language.activation) {
+					if (!enabledCommands.includes(l.command)) {
+						const props = require(`${__dirname}/commands/poracle`)
+						this.client.commands.set(l.command, props)
+					}
+				}
+			}
+
 			this.client.login(this.config.discord.token[0])
 		} catch (err) {
 			this.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)

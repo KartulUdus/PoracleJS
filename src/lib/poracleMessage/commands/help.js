@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, language
+			canContinue, target, language,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -14,7 +14,7 @@ exports.run = async (client, msg, args) => {
 
 		let dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language == language)
 		if (!dts) {
-			dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform)
+			dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.default)
 		}
 		if (!dts) {
 			await msg.react('🙅')

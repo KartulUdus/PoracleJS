@@ -22,6 +22,12 @@
         "disableWeather": false,
         "roleCheckDeletionsAllowed": false
     },
+    "language": {
+        "commandLanguages": ["en" ],
+        "activation": [
+          { "language": "en", "command": "poracle" }
+        ]
+    },
     "logger": {
         "level": "info",
         "logSize": 25
