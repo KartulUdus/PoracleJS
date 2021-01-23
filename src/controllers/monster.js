@@ -69,7 +69,10 @@ class Monster extends Controller {
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
+			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({
+				lat: res.latitude,
+				lon: res.longitude,
+			}, { lat: data.latitude, lon: data.longitude }))
 		}
 		result = this.returnByDatabaseType(result)
 		// remove any duplicates
@@ -136,8 +139,8 @@ class Monster extends Controller {
 			}
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-					|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-					|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			data.name = this.translator.translate(monster.name)
 			data.formname = this.translator.translate(monster.form.name)
@@ -168,6 +171,8 @@ class Monster extends Controller {
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.gif = pokemonGif(Number(data.pokemon_id))
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
+
 			const e = []
 			monster.types.forEach((type) => {
 				e.push(this.translator.translate(this.utilData.types[type.name].emoji))
@@ -192,12 +197,22 @@ class Monster extends Controller {
 					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterGreatMinCP) {
 						if (data.pvpEvolutionData[stats.pokemon]) {
 							data.pvpEvolutionData[stats.pokemon].greatLeague = {
-								rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+								rank: stats.rank,
+								percentage: stats.percentage,
+								pokemon: stats.pokemon,
+								form: stats.form,
+								level: stats.level,
+								cp: stats.cp,
 							}
 						} else {
 							data.pvpEvolutionData[stats.pokemon] = {
 								greatLeague: {
-									rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+									rank: stats.rank,
+									percentage: stats.percentage,
+									pokemon: stats.pokemon,
+									form: stats.form,
+									level: stats.level,
+									cp: stats.cp,
 								},
 							}
 						}
@@ -218,12 +233,22 @@ class Monster extends Controller {
 					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon != data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterUltraMinCP) {
 						if (data.pvpEvolutionData[stats.pokemon]) {
 							data.pvpEvolutionData[stats.pokemon].ultraLeague = {
-								rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+								rank: stats.rank,
+								percentage: stats.percentage,
+								pokemon: stats.pokemon,
+								form: stats.form,
+								level: stats.level,
+								cp: stats.cp,
 							}
 						} else {
 							data.pvpEvolutionData[stats.pokemon] = {
 								ultraLeague: {
-									rank: stats.rank, percentage: stats.percentage, pokemon: stats.pokemon, form: stats.form, level: stats.level, cp: stats.cp,
+									rank: stats.rank,
+									percentage: stats.percentage,
+									pokemon: stats.pokemon,
+									form: stats.form,
+									level: stats.level,
+									cp: stats.cp,
 								},
 							}
 						}
@@ -351,13 +376,17 @@ class Monster extends Controller {
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
 				}
+				let platform = cares.type.split(':')[0]
+				if (platform == 'webhook') platform = 'discord'
+
 				let monsterDts
-				if (data.iv === -1) {
-					monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
-					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monsterNoIv' && template.default && template.platform === 'discord')
-				} else {
-					monsterDts = this.dts.find((template) => template.type === 'monster' && template.id.toString() === cares.template.toString() && template.platform === 'discord')
-					if (!monsterDts) monsterDts = this.dts.find((template) => template.type === 'monster' && template.default && template.platform === 'discord')
+				const templateName = (data.iv === -1) ? 'monsterNoIv' : 'monster'
+				monsterDts = this.dts.find((template) => template.type === templateName && template.id.toString() === cares.template.toString() && template.platform === platform)
+				if (!monsterDts) monsterDts = this.dts.find((template) => template.type === templateName && template.default && template.platform === platform)
+				if (!monsterDts) {
+					this.log.error(`Cannot find DTS template ${platform} ${templateName} ${cares.template}`)
+					// eslint-disable-next-line no-continue
+					continue
 				}
 				const template = JSON.stringify(monsterDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
