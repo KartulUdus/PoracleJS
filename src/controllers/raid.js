@@ -257,6 +257,16 @@ class Raid extends Controller {
 						// pokemoji: emojiData.pokemon[data.pokemon_id],
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
+					let platform = cares.type.split(':')[0]
+					if (platform == 'webhook') platform = 'discord'
+
+					let raidDts = this.dts.find((template) => (template.type === 'raid' && template.id.toString() === cares.template.toString() && template.platform === platform))
+					if (!raidDts) raidDts = this.dts.find((template) => template.type === 'raid' && template.default && template.platform === platform)
+					if (!raidDts) {
+						this.log.error(`Cannot find DTS template ${platform} raid ${cares.template}`)
+						// eslint-disable-next-line no-continue
+						continue
+					}
 
 					let [platform] = cares.type.split(':')
 					if (platform == 'webhook') platform = 'discord'
