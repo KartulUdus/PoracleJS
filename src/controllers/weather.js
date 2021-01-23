@@ -279,7 +279,7 @@ class Weather extends Controller {
 
 			const jobs = []
 			const now = moment.now()
-			const weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
+			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
 			for (const cares of whoCares) {
 				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares', cares)
@@ -305,6 +305,7 @@ class Weather extends Controller {
 					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
 					// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
 				}
+				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)
 
 				const view = {
 					...data,
