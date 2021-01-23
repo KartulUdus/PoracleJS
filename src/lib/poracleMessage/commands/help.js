@@ -24,7 +24,7 @@ exports.run = async (client, msg, args) => {
 		const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 		if (human && !human.language) {
-			await client.query.updateQuery('humans', {language: helpLanguage}, {id: target.id})
+			await client.query.updateQuery('humans', { language: helpLanguage }, { id: target.id })
 		}
 
 		let platform = target.type.split(':')[0]

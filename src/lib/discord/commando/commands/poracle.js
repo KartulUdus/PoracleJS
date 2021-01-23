@@ -7,9 +7,9 @@ exports.run = async (client, msg) => {
 
 		let language = ''
 
-		if (client.config.general.registrationLanguages) {
-			for (const l in client.config.general.registrationLanguages) {
-				if (client.config.general.registrationLanguages[l].poracle == command) {
+		if (client.config.general.availableLanguages) {
+			for (const l in client.config.general.availableLanguages) {
+				if (client.config.general.availableLanguages[l].poracle == command) {
 					language = l
 				}
 			}
@@ -18,10 +18,10 @@ exports.run = async (client, msg) => {
 		const isRegistered = await client.query.countQuery('humans', { id: msg.author.id })
 		if (isRegistered) {
 			await msg.react('👌')
-//			await client.query.updateQuery('humans', { language: language }, { id: msg.author.id })
+			//			await client.query.updateQuery('humans', { language: language }, { id: msg.author.id })
 		} else {
 			await client.query.insertQuery('humans', {
-				id: msg.author.id, type: 'discord:user', name: client.emojiStrip(msg.author.username), area: '[]', language: language
+				id: msg.author.id, type: 'discord:user', name: client.emojiStrip(msg.author.username), area: '[]', language,
 			})
 			await msg.react('✅')
 		}
@@ -32,7 +32,7 @@ exports.run = async (client, msg) => {
 		}
 
 		if (greetingDts) {
-			const view = {prefix: client.config.discord.prefix}
+			const view = { prefix: client.config.discord.prefix }
 			const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
 			await msg.author.send(JSON.parse(greeting(view)))
 		}

@@ -940,5 +940,6 @@
 	"location": "standort",
 	"egg": "ei",
 	"level": "stufe",
-	"remove": "löschen"
+	"remove": "löschen",
+	"help": "hilfe"
 }

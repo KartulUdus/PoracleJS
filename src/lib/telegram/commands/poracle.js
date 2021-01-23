@@ -41,8 +41,11 @@ module.exports = async (ctx) => {
 			await ctx.reply('👌')
 		} else {
 			await controller.query.insertQuery('humans', {
-				id: user.id, type: 'telegram:user', name: userName || '', area: '[]',
-				language: language
+				id: user.id,
+				type: 'telegram:user',
+				name: userName || '',
+				area: '[]',
+				language,
 			})
 			await ctx.reply('✅')
 		}

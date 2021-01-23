@@ -20,13 +20,12 @@
         "disablePokestop": false,
         "disableQuest": false,
         "disableWeather": false,
-        "roleCheckDeletionsAllowed": false
-    },
-    "language": {
-        "commandLanguages": ["en" ],
-        "activation": [
-          { "language": "en", "command": "poracle" }
-        ]
+        "roleCheckDeletionsAllowed": false,
+        "availableLanguages": {
+          "en": {"poracle": "poracle", "help": "help" },
+          "fr": {"poracle": "leporacle", "help": "aide" },
+          "de": {"poracle": "dasporacle", "help": "hilfe" }
+        }
     },
     "logger": {
         "level": "info",
