@@ -72,11 +72,14 @@ class DiscordCommando {
 				this.log.log({ level: 'debug', message: `Loading discord commands: (${enabledCommands.join(' ')})`, event: 'discord:commandsAdded' })
 			})
 
-			if (this.client.config.language.activation) {
-				for (const l of this.client.config.language.activation) {
-					if (!enabledCommands.includes(l.command)) {
-						const props = require(`${__dirname}/commands/poracle`)
-						this.client.commands.set(l.command, props)
+			if (this.client.config.general.registrationLanguages && !this.client.config.general.disabledCommands.includes("poracle")) {
+				for (const l in this.client.config.general.registrationLanguages) {
+					if ({}.hasOwnProperty.call(this.client.config.general.registrationLanguages, l)) {
+						const commandName = this.client.config.general.registrationLanguages[l].poracle
+						if (!enabledCommands.includes(`${this.config.discord.prefix}${commandName}`)) {
+							const props = require(`${__dirname}/commands/poracle`)
+							this.client.commands.set(commandName, props)
+						}
 					}
 				}
 			}

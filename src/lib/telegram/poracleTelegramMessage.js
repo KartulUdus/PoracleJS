@@ -10,6 +10,7 @@ class PoracleTelegramMessage {
 		this.userName = this.user.username
 
 		this.prefix = '/'
+		this.command = ctx.state.command.command
 	}
 
 	// eslint-disable-next-line class-methods-use-this

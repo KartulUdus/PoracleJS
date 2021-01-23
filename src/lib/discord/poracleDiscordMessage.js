@@ -8,6 +8,7 @@ class PoracleDiscordMessage {
 
 		this.discord = msg
 		this.userId = msg.author.id
+		this.command = msg.content.split(' ')[0].substring(1)
 	}
 
 	getPings() {

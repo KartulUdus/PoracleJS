@@ -26,12 +26,23 @@ module.exports = async (ctx) => {
 	//	}
 
 	try {
+		let language = ''
+
+		if (ctx.state.controller.config.general.registrationLanguages) {
+			for (const l in ctx.state.controller.config.general.registrationLanguages) {
+				if (ctx.state.controller.config.general.registrationLanguages[l].poracle == ctx.state.command.command) {
+					language = l
+				}
+			}
+		}
+
 		const isRegistered = await controller.query.countQuery('humans', { id: user.id })
 		if (isRegistered) {
 			await ctx.reply('👌')
 		} else {
 			await controller.query.insertQuery('humans', {
 				id: user.id, type: 'telegram:user', name: userName || '', area: '[]',
+				language: language
 			})
 			await ctx.reply('✅')
 		}

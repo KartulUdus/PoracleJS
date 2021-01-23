@@ -9,10 +9,28 @@ exports.run = async (client, msg, args) => {
 
 		if (!canContinue) return
 
+		let helpLanguage = language
+		if (client.config.general.registrationLanguages) {
+			for (const l in client.config.general.registrationLanguages) {
+				if ({}.hasOwnProperty.call(client.config.general.registrationLanguages, l)) {
+					const commandName = client.config.general.registrationLanguages[l].help
+					if (msg.command == commandName) {
+						helpLanguage = l
+					}
+				}
+			}
+		}
+
+		const human = await client.query.selectOneQuery('humans', { id: target.id })
+
+		if (human && !human.language) {
+			await client.query.updateQuery('humans', {language: helpLanguage}, {id: target.id})
+		}
+
 		let platform = target.type.split(':')[0]
 		if (platform == 'webhook') platform = 'discord'
 
-		let dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language == language)
+		let dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language == helpLanguage)
 		if (!dts) {
 			dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.default)
 		}

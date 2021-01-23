@@ -16,8 +16,8 @@ exports.run = async (client, msg, args) => {
 
 		const newLanguage = args[0]
 
-		if (!client.config.language.commandLanguages.includes(newLanguage)) {
-			return msg.reply(`${translator.translate('I only recognise the following languages')}: ${client.config.language.commandLanguages}`)
+		if (!client.config.general.commandLanguages.includes(newLanguage)) {
+			return msg.reply(`${translator.translate('I only recognise the following languages')}: ${client.config.general.commandLanguages}`)
 		}
 
 		const newTranslator = client.translatorFactory.Translator(newLanguage)

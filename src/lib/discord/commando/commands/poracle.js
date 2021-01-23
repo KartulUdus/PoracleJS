@@ -7,10 +7,10 @@ exports.run = async (client, msg) => {
 
 		let language = ''
 
-		if (client.config.language.activation) {
-			for (const l of client.config.language.activation) {
-				if (l.command == command && l.language) {
-					language = l.language
+		if (client.config.general.registrationLanguages) {
+			for (const l in client.config.general.registrationLanguages) {
+				if (client.config.general.registrationLanguages[l].poracle == command) {
+					language = l
 				}
 			}
 		}
@@ -18,7 +18,7 @@ exports.run = async (client, msg) => {
 		const isRegistered = await client.query.countQuery('humans', { id: msg.author.id })
 		if (isRegistered) {
 			await msg.react('👌')
-			await client.query.updateQuery('humans', { language: language }, { id: msg.author.id })
+//			await client.query.updateQuery('humans', { language: language }, { id: msg.author.id })
 		} else {
 			await client.query.insertQuery('humans', {
 				id: msg.author.id, type: 'discord:user', name: client.emojiStrip(msg.author.username), area: '[]', language: language
