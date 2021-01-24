@@ -57,7 +57,6 @@ function getKnex(conf) {
 	}
 }
 
-
 module.exports = {
 	Config: () => {
 		config = importFresh('config')
