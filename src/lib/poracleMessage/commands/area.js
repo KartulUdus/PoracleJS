@@ -63,7 +63,7 @@ exports.run = async (client, msg, args) => {
 				break
 			}
 			case 'list': {
-				await msg.reply(`**${client.translator.translate('Current configured areas are:')}**\n\`\`\`${confUse}\`\`\` `)
+				await msg.reply(`**${translator.translate('Current configured areas are:')}**\`\`\`\n${confUse}\`\`\` `)
 				break
 			}
 			default:

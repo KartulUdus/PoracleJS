@@ -397,6 +397,10 @@
 		"en": "english",
 		"fr": "french",
 		"es": "spanish",
+		"it": "italian",
+		"de": "german",
+		"ja": "japanese",
+		"ko": "korean",
 		"pl": "polish"
 	},
 	"cpMultipliers": {
