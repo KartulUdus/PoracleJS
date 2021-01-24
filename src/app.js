@@ -351,5 +351,10 @@ async function handleAlarms() {
 	}
 }
 
+const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
+if (NODE_MAJOR_VERSION < 12) {
+	throw new Error('Requires Node 12 (or higher)')
+}
+
 run()
 setInterval(handleAlarms, 100)

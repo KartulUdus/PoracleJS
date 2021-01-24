@@ -14,7 +14,12 @@ exports.run = async (client, msg, args) => {
 			return msg.reply(`${translator.translate('Current language is set to')}: ${language}`)
 		}
 
-		const newLanguage = args[0]
+		let newLanguage = args[0]
+
+		const languageMatchByName = Object.keys(client.utilData.languageNames).find((x) => client.utilData.languageNames[x] == args[0])
+		if (languageMatchByName) {
+			newLanguage = languageMatchByName
+		}
 
 		if (!Object.keys(client.config.general.availableLanguages).includes(newLanguage)) {
 			return msg.reply(`${translator.translate('I only recognise the following languages')}: ${Object.keys(client.config.general.availableLanguages)}`)

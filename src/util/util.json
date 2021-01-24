@@ -393,6 +393,12 @@
 			"xlCandy":20
 		}
 	},
+	"languageNames": {
+		"en": "english",
+		"fr": "french",
+		"es": "spanish",
+		"pl": "polish"
+	},
 	"cpMultipliers": {
 		"1": 0.0939999967813492,
 		"2": 0.166397869586945,
