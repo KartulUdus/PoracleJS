@@ -31,7 +31,7 @@ exports.run = async (client, msg, args) => {
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
 				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`${translator.translate('no valid areas there, please use one of')} \`\`\`\n${confUse}\`\`\` `)
+					return await msg.reply(`${translator.translate('no valid areas there, please use one of')}\n\`\`\`\n${confUse}\`\`\` `)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
@@ -50,7 +50,7 @@ exports.run = async (client, msg, args) => {
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
 				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area))
 				if (!validAreas.length) {
-					return await msg.reply(`${translator.translate('no valid areas there, please use one of')} \`\`\`\n${confUse}\`\`\` `)
+					return await msg.reply(`${translator.translate('no valid areas there, please use one of')}\n\`\`\`\n${confUse}\`\`\` `)
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
 
@@ -63,7 +63,7 @@ exports.run = async (client, msg, args) => {
 				break
 			}
 			case 'list': {
-				await msg.reply(`**${translator.translate('Current configured areas are:')}**\`\`\`\n${confUse}\`\`\` `)
+				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `)
 				break
 			}
 			default:
