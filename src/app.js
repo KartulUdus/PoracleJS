@@ -94,7 +94,7 @@ if (config.telegram.enabled) {
 	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegrafChannel, translator, telegramCommandParser, re)
+		telegramChannel = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re)
 	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
