@@ -89,8 +89,8 @@ class Controller {
 			return null
 		}
 
-		if (Array.isArray(findDts.template.description)) {
-			findDts.template.description = findDts.template.description.join('')
+		if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
+			findDts.template.embed.description = findDts.template.embed.description.join('')
 		}
 
 		if (Array.isArray(findDts.template.content)) {
