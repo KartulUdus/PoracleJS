@@ -15,6 +15,7 @@ class PoracleDiscordState {
 		this.translatorFactory = client.translatorFactory
 		this.translator = client.translator
 		this.config = client.config
+		this.hastebin = client.hastebin
 	}
 
 	createMessage(msg) {
