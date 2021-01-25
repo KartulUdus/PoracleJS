@@ -93,6 +93,10 @@ class Controller {
 			findDts.template.description = findDts.template.description.join('')
 		}
 
+		if (Array.isArray(findDts.template.content)) {
+			findDts.template.content = findDts.template.content.join('')
+		}
+
 		const template = JSON.stringify(findDts.template)
 		const mustache = this.mustache.compile(template)
 
