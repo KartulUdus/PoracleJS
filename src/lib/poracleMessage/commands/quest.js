@@ -32,8 +32,9 @@ exports.run = async (client, msg, args) => {
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
 		const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
 
-		fullMonsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
-			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
+		fullMonsters = Object.values(client.monsters).filter((mon) => (
+			(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 			|| args.includes('all pokemon')) && !mon.form.id)
 		if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		monsters = fullMonsters.map((mon) => mon.id)
@@ -68,15 +69,15 @@ exports.run = async (client, msg, args) => {
 			else if (element === 'remove') remove = true
 			else if (element === 'clean') clean = true
 		})
-		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
-		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
+		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 
 		if (+minDust < 10000000) {

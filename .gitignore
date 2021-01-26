@@ -3,7 +3,7 @@ config/*.json
 config/locale/*.json
 docker-compose.yml
 .idea
-.vscode 
+.vscode
 
 !config/locale/fr.json
 !config/locale/de.json
@@ -27,3 +27,4 @@ src/lib/db/poracle.sqlite
 .geoCache
 /.cache/cache/
 backups/*.json
+.weather*
