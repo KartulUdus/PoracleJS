@@ -169,20 +169,20 @@ class Pokestop extends Controller {
 				// full build
 				if (data.gruntTypeId) {
 					data.gender = 0
-					data.gruntName = 'Grunt'
-					data.gruntType = 'Mixed'
+					data.gruntName = translator.translate('Grunt')
+					data.gruntType = translator.translate('Mixed')
 					data.gruntRewards = ''
 					if (data.gruntTypeId in this.utilData.gruntTypes) {
 						const gruntType = this.utilData.gruntTypes[data.gruntTypeId]
-						data.gruntName = gruntType.grunt
-						data.gender = gruntType.gender
+						data.gruntName = translator.translate(gruntType.grunt)
+						data.gender = translator.translate(gruntType.gender)
 						if (this.utilData.types[gruntType.type]) {
 							data.gruntTypeEmoji = translator.translate(this.utilData.types[gruntType.type].emoji)
 						}
 						if (gruntType.type in this.utilData.types) {
 							data.gruntTypeColor = this.utilData.types[gruntType.type].color
 						}
-						data.gruntType = gruntType.type
+						data.gruntType = translator.translate(gruntType.type)
 
 						let gruntRewards = ''
 						const gruntRewardsList = {}
@@ -199,8 +199,8 @@ class Pokestop extends Controller {
 
 									const firstReward = +fr
 									const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
-									gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
-									gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
+									gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
+									gruntRewardsList.first.monsters.push({ id: firstReward, name: translator.translate(firstRewardMonster.name) })
 								})
 								gruntRewards += '\\n15%: '
 								gruntRewardsList.second = { chance: 15, monsters: [] }
@@ -212,8 +212,8 @@ class Pokestop extends Controller {
 									const secondReward = +sr
 									const secondRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === secondReward && !mon.form.id)
 
-									gruntRewards += secondRewardMonster ? secondRewardMonster.name : ''
-									gruntRewardsList.second.monsters.push({ id: secondReward, name: secondRewardMonster.name })
+									gruntRewards += secondRewardMonster ? translator.translate(secondRewardMonster.name) : ''
+									gruntRewardsList.second.monsters.push({ id: secondReward, name: translator.translate(secondRewardMonster.name) })
 								})
 							} else {
 								// Single Reward 100% of encounter (might vary based on actual fight).
@@ -224,8 +224,8 @@ class Pokestop extends Controller {
 
 									const firstReward = +fr
 									const firstRewardMonster = Object.values(this.monsterData).find((mon) => mon.id === firstReward && !mon.form.id)
-									gruntRewards += firstRewardMonster ? firstRewardMonster.name : ''
-									gruntRewardsList.first.monsters.push({ id: firstReward, name: firstRewardMonster.name })
+									gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
+									gruntRewardsList.first.monsters.push({ id: firstReward, name: translator.translate(firstRewardMonster.name) })
 								})
 							}
 							data.gruntRewards = gruntRewards
