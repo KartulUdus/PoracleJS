@@ -461,8 +461,8 @@ class Monster extends Controller {
 				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
 				data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
 				data.boostemoji = this.utilData.weather[data.weather] ? translator.translate(this.utilData.weather[data.weather].emoji) : ''
-				data.gameweather = this.utilData.weather[weather] ? this.utilData.weather[weather].name : ''
-				data.gameweatheremoji = this.utilData.weather[weather] ? translator.translate(this.utilData.weather[weather].emoji) : ''
+				data.gameweather = this.utilData.weather[currentCellWeather] ? this.utilData.weather[currentCellWeather].name : ''
+				data.gameweatheremoji = this.utilData.weather[currentCellWeather] ? this.translator.translate(this.utilData.weather[currentCellWeather].emoji) : ''
 
 				const e = []
 				monster.types.forEach((type) => {
