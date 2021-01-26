@@ -3,6 +3,7 @@ require('dotenv').config()
 
 const fs = require('fs')
 const util = require('util')
+const { S2 } = require('s2-geometry')
 
 const NodeCache = require('node-cache')
 const fastify = require('fastify')({
@@ -10,6 +11,8 @@ const fastify = require('fastify')({
 })
 const Telegraf = require('telegraf')
 
+const path = require('path')
+const pcache = require('flat-cache')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 const TelegramUtil = require('./lib/telegram/telegramUtil.js')
@@ -30,6 +33,9 @@ const cache = new NodeCache({ stdTTL: 5400, useClones: false })
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
+const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../`))
+const weatherCacheData = weatherCache.getKey('weatherCacheData')
+
 const DiscordWorker = require('./lib/discord/discordWorker')
 const DiscordCommando = require('./lib/discord/commando')
 
@@ -46,11 +52,11 @@ const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
 const WeatherController = require('./controllers/weather')
 
-const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null)
-const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
-const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController)
+const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null, weatherCacheData)
+const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
+const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
+const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
+const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
 
 fastify.decorate('logger', log)
 fastify.decorate('webhooks', webhooks)
@@ -327,11 +333,17 @@ async function processOne(hook) {
 		case 'weather': {
 			if (config.general.disableWeather) break
 			fastify.webhooks.info('weather', hook.message)
-			if (fastify.cache.has(`${hook.message.s2_cell_id}_${hook.message.time_changed}`)) {
+			if (hook.message.updated) {
+				const weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
+				hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
+			}
+			const updateTimestamp = hook.message.time_changed || hook.message.updated
+			const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
+			if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
 				fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
 				break
 			}
-			fastify.cache.set(`${hook.message.s2_cell_id}_${hook.message.time_changed}`, 'cached')
+			fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
 			const result = await fastify.weatherController.handle(hook.message)
 			result.forEach((job) => {
 				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)

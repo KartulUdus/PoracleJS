@@ -1,4 +1,13 @@
 {
+	"sunny":"Sonnig",
+	"rain":"Regen",
+	"partly cloudy":"Teilweise Bewölkt",
+	"cloudy":"Bewölkt",
+	"windy":"Windig",
+	"snow":"Schneefall",
+	"fog":"Nebel",
+	"Possible weather change at":"Möglicher Wetterwechsel um",
+	"unknown":"unbekannt",
 	"Bulbasaur":"Bisasam",
 	"Ivysaur":"Bisaknosp",
 	"Venusaur":"Bisaflor",
