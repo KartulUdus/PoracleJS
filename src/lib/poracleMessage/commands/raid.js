@@ -31,12 +31,12 @@ exports.run = async (client, msg, args) => {
 			monsters = Object.values(client.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
-				|| args.includes('template'))	&& formNames.includes(mon.form.name.toLowerCase()))
+				|| args.includes('template')) && formNames.includes(mon.form.name.toLowerCase()))
 		} else {
 			monsters = Object.values(client.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
-				|| args.includes('template'))	&& !mon.form.id)
+				|| args.includes('template')) && !mon.form.id)
 		}
 
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
