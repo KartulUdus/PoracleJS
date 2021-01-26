@@ -68,7 +68,7 @@ exports.run = async (client, msg, args) => {
 		} else {
 			monsters = Object.values(client.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
-					|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))) && !mon.form.id)
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))) && !mon.form.id)
 			if (args.includes('everything') && !client.config.tracking.disableEverythingTracking || args.includes('everything') && msg.isFromAdmin) {
 				monsters.push({
 					id: 0,
