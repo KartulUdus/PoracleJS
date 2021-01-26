@@ -175,7 +175,8 @@ class Pokestop extends Controller {
 					if (data.gruntTypeId in this.utilData.gruntTypes) {
 						const gruntType = this.utilData.gruntTypes[data.gruntTypeId]
 						data.gruntName = translator.translate(gruntType.grunt)
-						data.gender = translator.translate(gruntType.gender)
+						data.gender = gruntType.gender
+						data.genderDataEng = this.utilData.genders[data.gender]
 						if (this.utilData.types[gruntType.type]) {
 							data.gruntTypeEmoji = translator.translate(this.utilData.types[gruntType.type].emoji)
 						}
@@ -243,7 +244,7 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: this.utilData.genders[data.gender],
+					genderData: {name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji)},
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
