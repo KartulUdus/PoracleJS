@@ -27,7 +27,7 @@ exports.run = async (client, msg, args) => {
 			lat = parseFloat(matches[1])
 			lon = parseFloat(matches[2])
 		} else {
-			if (args.length == 1) {
+			if (args.length == 1 && search.match(/^\d{1,5}$/) == null) {
 				await msg.react(client.translator.translate('🙅'))
 				return await msg.reply(`${client.translator.translate('Oops, you need to specify more than just a city name to locate accurately your position')}`)
 			}
