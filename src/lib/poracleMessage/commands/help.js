@@ -11,12 +11,9 @@ exports.run = async (client, msg, args) => {
 
 		let helpLanguage = language
 		if (client.config.general.availableLanguages) {
-			for (const l in client.config.general.availableLanguages) {
-				if ({}.hasOwnProperty.call(client.config.general.availableLanguages, l)) {
-					const commandName = client.config.general.availableLanguages[l].help
-					if (msg.command == commandName) {
-						helpLanguage = l
-					}
+			for (const [key, availableLanguage] of Object.entries(client.config.general.availableLanguages)) {
+				if (availableLanguage.help == msg.command) {
+					helpLanguage = key
 				}
 			}
 		}

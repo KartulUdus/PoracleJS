@@ -267,21 +267,19 @@ class Weather extends Controller {
 				// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
 			}
 
-			if (previousWeather > -1) {
-				data.oldweather = this.utilData.weather[previousWeather] ? this.translator.translate(this.utilData.weather[previousWeather].name) : ''
-				data.oldweatheremoji = this.utilData.weather[previousWeather] ? this.translator.translate(this.utilData.weather[previousWeather].emoji) : ''
-			} else {
-				data.oldweather = ''
-				data.oldweatheremoji = ''
-			}
-			data.weather = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].name) : ''
-			data.weatheremoji = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].emoji) : ''
+			data.oldWeather = (previousWeather > -1) ? previousWeather : ''
+			data.oldWeatherNameEng = data.oldWeather ? this.utilData.weather[data.oldweather].name : ''
+			data.oldWeatherEmojiEng = data.oldWeather ? this.utilData.weather[data.oldweather].emoji : ''
+			data.weather = data.condition ? data.condition : ''
+			data.weatherNameEng = data.weather ? this.utilData.weather[data.weather].name : ''
+			data.weatherEmojiEng = data.weather ? this.utilData.weather[data.weather].emoji : ''
 
 			const jobs = []
 			const now = moment.now()
 			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
 			for (const cares of whoCares) {
+				const caresCache = this.getDiscordCache(cares.id).count
 				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares', cares)
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.info(`last tracked pokemon despawned before weather changed in ${data.s2_cell_id}`)
@@ -307,41 +305,45 @@ class Weather extends Controller {
 				}
 				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)
 
+				const language = cares.language || this.config.general.locale
+				const translator = this.translatorFactory.Translator(language)
+
+				data.oldWeatherName = data.oldWeather ? translator.translate(data.oldWeatherNameEng) : ''
+				data.oldWeatherEmoji = data.oldWeather ? translator.translate(data.oldWeatherEmojiEng) : ''
+				data.weatherName = data.weather ? translator.translate(data.weatherNameEng) : ''
+				data.weatherEmoji = data.weather ? translator.translate(data.weatherEmojiEng) : ''
+
 				const view = {
 					...data,
 					...geoResult,
 					id: data.s2_cell_id,
 					now: new Date(),
 				}
-				let platform = cares.type.split(':')[0]
+
+				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				let weatherDts
-				if (cares.template) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.id.toString() == cares.template.toString() && template.platform === platform)
-				if (!weatherDts) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.default && template.platform === platform)
-				if (!weatherDts) {
-					this.log.error(`Cannot find DTS template weatherchange ${cares.template}`)
-					// eslint-disable-next-line no-continue
-					continue
-				}
-				const template = JSON.stringify(weatherDts.template)
-				const mustache = this.mustache.compile(this.translator.translate(template))
-				const message = JSON.parse(mustache(view))
+				const mustache = this.getDts('weatherchange', platform, cares.template, language)
+				if (mustache) {
+					const message = JSON.parse(mustache(view, { data: { language } }))
 
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: weatherTth,
-					clean: cares.clean,
-					tracing: data.trace,
-					emoji: [],
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: weatherTth,
+						clean: cares.clean,
+						tracing: data.trace,
+						emoji: [],
+					}
+					if (caresCache <= this.config.discord.limitAmount + 1) {
+						jobs.push(work)
+						this.addDiscordCache(cares.id)
+					}
 				}
-				jobs.push(work)
-				this.addDiscordCache(cares.id)
 			}
 
 			return jobs

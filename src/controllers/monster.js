@@ -394,20 +394,12 @@ class Monster extends Controller {
 						weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current
 						if (pokemonShouldBeBoosted && data.weather == 0) {
 							// this.log.error(`[DEBUG MONSTER] something wrong with current weather info : ${weatherForecast.current} in cache`)
-							data.weatherChange = `⚠️ ${this.translator.translate('Possible weather change at')} ${weatherChangeTime} : ➡️ ${this.translator.translate(this.utilData.weather[weatherForecast.next].name)} ${this.translator.translate(this.utilData.weather[weatherForecast.next].emoji)}`
 							data.weatherCurrent = 0
-							data.weatherCurrentName = this.translator.translate('unknown')
-							data.weatherCurrentEmoji = '❓'
 						} else {
-							data.weatherChange = `⚠️ ${this.translator.translate('Possible weather change at')} ${weatherChangeTime} : ${this.translator.translate(this.utilData.weather[weatherForecast.current].name)} ${this.translator.translate(this.utilData.weather[weatherForecast.current].emoji)} ➡️ ${this.translator.translate(this.utilData.weather[weatherForecast.next].name)} ${this.translator.translate(this.utilData.weather[weatherForecast.next].emoji)}`
 							data.weatherCurrent = weatherForecast.current
-							data.weatherCurrentName = this.translator.translate(this.utilData.weather[weatherForecast.current].name)
-							data.weatherCurrentEmoji = this.translator.translate(this.utilData.weather[weatherForecast.current].emoji)
 						}
 						data.weatherChangeTime = weatherChangeTime
 						data.weatherNext = weatherForecast.next
-						data.weatherNextName = this.translator.translate(this.utilData.weather[weatherForecast.next].name)
-						data.weatherNextEmoji = this.translator.translate(this.utilData.weather[weatherForecast.next].emoji)
 					}
 				}
 			}
@@ -429,13 +421,13 @@ class Monster extends Controller {
 						}
 						if (!exists) {
 							weatherCellData.cares.push({
-								id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template,
+								id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
 							})
 						}
 					} else {
 						weatherCellData.cares = []
 						weatherCellData.cares.push({
-							id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template,
+							id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
 						})
 					}
 					if (this.config.weather.showAlteredPokemon && encountered) {
@@ -462,7 +454,20 @@ class Monster extends Controller {
 				data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
 				data.boostemoji = this.utilData.weather[data.weather] ? translator.translate(this.utilData.weather[data.weather].emoji) : ''
 				data.gameweather = this.utilData.weather[currentCellWeather] ? this.utilData.weather[currentCellWeather].name : ''
-				data.gameweatheremoji = this.utilData.weather[currentCellWeather] ? this.translator.translate(this.utilData.weather[currentCellWeather].emoji) : ''
+				data.gameweatheremoji = this.utilData.weather[currentCellWeather] ? translator.translate(this.utilData.weather[currentCellWeather].emoji) : ''
+				if (data.weatherNext) {
+					if (!data.weatherCurrent) {
+						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.utilData.weather[data.weatherNext].name)} ${translator.translate(this.utilData.weather[data.weatherNext].emoji)}`
+						data.weatherCurrentName = translator.translate('unknown')
+						data.weatherCurrentEmoji = '❓'
+					} else {
+						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(this.utilData.weather[data.weatherCurrent].name)} ${translator.translate(this.utilData.weather[data.weatherCurrent].emoji)} ➡️ ${translator.translate(this.utilData.weather[data.weatherNext].name)} ${translator.translate(this.utilData.weather[data.weatherNext].emoji)}`
+						data.weatherCurrentName = translator.translate(this.utilData.weather[data.weatherCurrent].name)
+						data.weatherCurrentEmoji = translator.translate(this.utilData.weather[data.weatherCurrent].emoji)
+					}
+					data.weatherNextName = translator.translate(this.utilData.weather[data.weatherNext].name)
+					data.weatherNextEmoji = translator.translate(this.utilData.weather[data.weatherNext].emoji)
+				}
 
 				const e = []
 				monster.types.forEach((type) => {

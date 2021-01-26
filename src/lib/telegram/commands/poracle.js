@@ -29,9 +29,9 @@ module.exports = async (ctx) => {
 		let language = ''
 
 		if (ctx.state.controller.config.general.availableLanguages) {
-			for (const l in Object.keys(ctx.state.controller.config.general.availableLanguages)) {
-				if (ctx.state.controller.config.general.availableLanguages[l].poracle == ctx.state.command.command) {
-					language = l
+			for (const [key, availableLanguage] of Object.entries(ctx.state.controller.config.general.availableLanguages)) {
+				if (availableLanguage.poracle == ctx.state.command.command) {
+					language = key
 				}
 			}
 		}
