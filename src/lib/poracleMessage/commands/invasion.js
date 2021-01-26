@@ -35,11 +35,11 @@ exports.run = async (client, msg, args) => {
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (!types.length) {
 			return await msg.reply(client.translator.translate('404 No valid invasion types found'))

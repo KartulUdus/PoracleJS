@@ -29,14 +29,13 @@ exports.run = async (client, msg, args) => {
 
 		if (formNames.length) {
 			monsters = Object.values(client.monsters).filter((mon) => (
-					(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
-					|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
-					|| args.includes('template'))	&& formNames.includes(mon.form.name.toLowerCase()))
+				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
+				|| args.includes('everything')) && formNames.includes(mon.form.name.toLowerCase()))
 		} else {
 			monsters = Object.values(client.monsters).filter((mon) => (
-					(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
-					|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
-					|| args.includes('template'))	&& !mon.form.id)
+				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))) && !mon.form.id)
 		}
 
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
@@ -53,18 +52,18 @@ exports.run = async (client, msg, args) => {
 			else if (element === 'valor') team = 2
 			else if (element === 'mystic') team = 1
 			else if (element === 'harmony') team = 0
-			else if (element === 'everything') levels = [1, 2, 3, 4, 5, 6]
+			else if (element === 'everything' && !formNames.length) levels = [1, 2, 3, 4, 5, 6]
 			else if (element === 'clean') clean = true
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
 			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${client.config.discord.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
 		}
 		if (!levels.length && !monsters.length) {
 			return await msg.reply(client.translator.translate('404 no valid tracks found'))
