@@ -85,9 +85,6 @@ class DiscordCommando {
 				this.log.info(`Discord commando loaded ${enabledCommands.join(', ')} commands`)
 			})
 
-
-
-
 			this.client.login(this.config.discord.token[0])
 		} catch (err) {
 			this.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)
