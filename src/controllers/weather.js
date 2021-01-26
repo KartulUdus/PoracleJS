@@ -324,7 +324,7 @@ class Weather extends Controller {
 					// eslint-disable-next-line no-continue
 					continue
 				}
-        const template = JSON.stringify(weatherDts.template)
+				const template = JSON.stringify(weatherDts.template)
 				const mustache = this.mustache.compile(this.translator.translate(template))
 				const message = JSON.parse(mustache(view))
 
