@@ -114,45 +114,7 @@ class Quest extends Controller {
 			}
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
-			data.dustAmount = data.rewardData.dustAmount
-			data.isShiny = data.rewardData.isShiny
-			data.energyAmount = data.rewardData.energyAmount
-			data.energyMonsters = data.rewardData.energyMonsters
 
-			data.imgUrl = data.rewardData.monsters[1]
-				? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
-				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
-
-			data.stickerUrl = data.rewardData.monsters[1]
-				? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
-				: ''
-
-			if (data.rewardData.items[1]) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
-			}
-			if (data.dustAmount) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
-				data.dustAmount = data.rewards[0].info.amount
-			}
-			if (data.energyAmount) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.webp`
-
-				data.energyAmount = data.rewards[0].info.amount
-			}
-			data.staticSprite = encodeURI(JSON.stringify([
-				{
-					url: data.imgUrl,
-					height: this.config.geocoding.spriteHeight,
-					width: this.config.geocoding.spriteWidth,
-					x_offset: 0,
-					y_offset: 0,
-					latitude: +data.latitude.toFixed(5),
-					longitude: +data.longitude.toFixed(5),
-				},
-			]))
 			if (this.config.geocoding.staticProvider === 'poracle') {
 				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
 			}
@@ -184,6 +146,45 @@ class Quest extends Controller {
 
 				data.questType = await this.getQuestTypeString(data, translator)
 				data.rewardData = await this.getRewardString(data, translator)
+				data.dustAmount = data.rewardData.dustAmount
+				data.isShiny = data.rewardData.isShiny
+				data.energyAmount = data.rewardData.energyAmount
+				data.energyMonsters = data.rewardData.energyMonsters
+
+				data.imgUrl = data.rewardData.monsters[1]
+					? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
+					: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
+
+				data.stickerUrl = data.rewardData.monsters[1]
+					? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
+					: ''
+
+				if (data.rewardData.items[1]) {
+					data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
+					data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
+				}
+				if (data.dustAmount) {
+					data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
+					data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
+					data.dustAmount = data.rewards[0].info.amount
+				}
+				if (data.energyAmount) {
+					data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.png`
+					data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.webp`
+
+					data.energyAmount = data.rewards[0].info.amount
+				}
+				data.staticSprite = encodeURI(JSON.stringify([
+					{
+						url: data.imgUrl,
+						height: this.config.geocoding.spriteHeight,
+						width: this.config.geocoding.spriteWidth,
+						x_offset: 0,
+						y_offset: 0,
+						latitude: +data.latitude.toFixed(5),
+						longitude: +data.longitude.toFixed(5),
+					},
+				]))
 
 				data.monsterNames = Object.values(this.monsterData).filter((mon) => data.rewardData.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
 				data.itemNames = Object.keys(this.utilData.items).filter((item) => data.rewardData.items.includes(this.utilData.items[item])).map((i) => translator.translate(this.utilData.items[i])).join(', ')
