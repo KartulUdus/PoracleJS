@@ -115,8 +115,8 @@ exports.run = async (client, msg, args) => {
 		if (ultraLeague <= pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
 		if (greatLeagueCP >= pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = pvpFilterMaxRank
 		if (ultraLeagueCP >= pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
-		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
-		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !client.config.discord.admins.includes(msg.author.id)) distance = client.config.tracking.defaultDistance
+		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !client.config.discord.admins.includes(msg.author.id)) distance = client.config.tracking.maxDistance
 
 		if (distance > 0 && !userHasLocation && !target.webhook) {
 			await msg.react(client.translator.translate('🙅'))
