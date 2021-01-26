@@ -12,9 +12,7 @@ exports.run = async (client, msg, args) => {
 
 		const typeArray = Object.values(client.utilData.gruntTypes).map((grunt) => grunt.type.toLowerCase())
 
-		//		let validTracks = 0
 		let reaction = '👌'
-		//		for (const args of command) {
 		const remove = !!args.find((arg) => arg === 'remove')
 		const commandEverything = !!args.find((arg) => arg === 'everything')
 		let distance = 0
@@ -32,15 +30,15 @@ exports.run = async (client, msg, args) => {
 			else if (element === 'clean') clean = true
 			else if (typeArray.includes(element) || element === 'everything') types.push(element)
 		}
-		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
-		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
+		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
 			await msg.react(translator.translate('🙅'))
-			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
-			await msg.react(translator.translate('🙅'))
-			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(client.translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (!types.length) {
 			return await msg.reply(translator.translate('404 No valid invasion types found'))
@@ -71,7 +69,6 @@ exports.run = async (client, msg, args) => {
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 			client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
 		}
-		//		}
 
 		await msg.react(reaction)
 	} catch (err) {

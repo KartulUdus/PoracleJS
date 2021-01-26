@@ -12,8 +12,6 @@ exports.run = async (client, msg, args) => {
 		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
 
 		let reaction = '👌'
-		// const validTracks = 0
-		// for (const args of command) {
 		// Set defaults
 		let monsters
 		let distance = 0
@@ -51,23 +49,26 @@ exports.run = async (client, msg, args) => {
 		const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
 
 		if (formNames.length) {
-			monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && formNames.includes(mon.form.name.toLowerCase())
-					|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && formNames.includes(mon.form.name.toLowerCase())
-					|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
-					|| args.includes('everything') && msg.isFromAdmin) && formNames.includes(mon.form.name.toLowerCase()))
+			monsters = Object.values(client.monsters).filter((mon) => (
+				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
+				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && msg.isFromAdmin) && formNames.includes(mon.form.name.toLowerCase()))
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		} else if (gen || args.includes('individually') || client.config.tracking.forceEverythingSeparately) {
-			monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
-					|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
-					|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
-					|| args.includes('everything') && msg.isFromAdmin) && !mon.form.id)
+			monsters = Object.values(client.monsters).filter((mon) => (
+				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
+				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && msg.isFromAdmin) && !mon.form.id)
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		} else {
-			monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
-					|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
-			) && !mon.form.id)
+			monsters = Object.values(client.monsters).filter((mon) => (
+				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))) && !mon.form.id)
+
 			if (args.includes('everything') && !client.config.tracking.disableEverythingTracking || args.includes('everything') && msg.isFromAdmin) {
 				monsters.push({
 					id: 0,
@@ -116,8 +117,8 @@ exports.run = async (client, msg, args) => {
 		if (ultraLeague <= pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
 		if (greatLeagueCP >= pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = pvpFilterMaxRank
 		if (ultraLeagueCP >= pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
-		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
-		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
+		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 
 		if (distance > 0 && !userHasLocation && !target.webhook) {
 			await msg.react(translator.translate('🙅'))

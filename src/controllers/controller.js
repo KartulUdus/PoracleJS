@@ -12,7 +12,7 @@ const { log } = require('../lib/logger')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
-	constructor(db, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController) {
+	constructor(db, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController, weatherCacheData) {
 		this.db = db
 		this.cp = cp
 		this.config = config
@@ -27,7 +27,7 @@ class Controller {
 		this.mustache = mustache
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherController = weatherController
-		this.controllerData = {}
+		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen()
 		this.dtsCache = {}
 	}
@@ -334,6 +334,19 @@ class Controller {
 		else if (iv < 100) colorIdx = 4 // purple epic
 
 		return this.config.discord.ivColors[colorIdx]
+	}
+
+	getPokemonTypes(pokemonId, formId) {
+		if (!+pokemonId) return ''
+		const monsterFamily = Object.values(this.monsterData).filter((m) => m.id === +pokemonId)
+		const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
+		let types = ''
+		if (monster) {
+			types = monster.types.map((type) => type.id)
+		} else {
+			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map((type) => type.id)
+		}
+		return types
 	}
 
 	execPromise(command) {

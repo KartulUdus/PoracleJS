@@ -33,14 +33,15 @@ exports.run = async (client, msg, args) => {
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
 		const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
 
-		fullMonsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString())) && !mon.form.id
-			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) && !mon.form.id
+		fullMonsters = Object.values(client.monsters).filter((mon) => (
+			(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 			|| args.includes('all pokemon')) && !mon.form.id)
 		if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		monsters = fullMonsters.map((mon) => mon.id)
 		items = Object.keys(client.utilData.items).filter((key) => args.includes(translator.translate(client.utilData.items[key].toLowerCase())) || args.includes('all items'))
 		if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
-			|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
+			|| args.includes('everything') && msg.isFromAdmin) {
 			monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
 			items = Object.keys(client.utilData.items)
 			minDust = 0
@@ -69,8 +70,8 @@ exports.run = async (client, msg, args) => {
 			else if (element === 'remove') remove = true
 			else if (element === 'clean') clean = true
 		})
-		if (client.config.tracking.defaultDistance !== 0 && distance === 0) distance = client.config.tracking.defaultDistance
-		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance) distance = client.config.tracking.maxDistance
+		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
+		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
