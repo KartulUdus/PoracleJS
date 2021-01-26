@@ -416,6 +416,9 @@ class Monster extends Controller {
 								if (caring.caresUntil < data.disappear_time) {
 									caring.caresUntil = data.disappear_time
 								}
+								caring.clean = cares.clean
+								caring.language = cares.language
+								caring.template = cares.template
 								exists = true
 								break
 							}
