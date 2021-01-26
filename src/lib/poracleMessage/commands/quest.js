@@ -39,7 +39,7 @@ exports.run = async (client, msg, args) => {
 		monsters = fullMonsters.map((mon) => mon.id)
 		items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes('all items'))
 		if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
-			|| args.includes('everything') && client.config.discord.admins.includes(msg.author.id)) {
+			|| args.includes('everything') && msg.isFromAdmin) {
 			monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
 			items = Object.keys(client.utilData.items)
 			minDust = 0
