@@ -225,7 +225,8 @@ class Monster extends Controller {
 			data.gif = pokemonGif(Number(data.pokemon_id))
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
-
+			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
+			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
 			data.pvp_pokemon_id = data.pokemon_id
 			data.pvp_form = data.form
 			data.pvpEvolutionData = {}
@@ -350,7 +351,7 @@ class Monster extends Controller {
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
-			this.log.info(`${monster.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			this.log.info(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0] && !weatherChangeAlertJobs[0]) return []
 
@@ -537,7 +538,7 @@ class Monster extends Controller {
 			}
 			hrend = process.hrtime(hrstart)
 			const hrendprocessing = hrend[1] / 1000000
-			this.log.info(`${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
+			this.log.info(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
 
 			// this.log.error(`[DEBUG MONSTER] Tracing : [${tracer}]`)
 			// this.log.error('[DEBUG MONSTER] users caring about weather :', weatherChangeAlertJobs)
