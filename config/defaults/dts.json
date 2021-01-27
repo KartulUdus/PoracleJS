@@ -212,7 +212,7 @@
       "embed": {
         "title": "{{questType}}\nPokestop Name: {{{pokestop_name}}}",
         "url": "{{{mapurl}}}",
-        "description": "{{#if conditionString}}Conditions: {{conditionString}}\n{{/if}}Reward: {{#if monsterNames}}{{monsterNames}}{{else}}{{rewardString}}{{/if}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "description": "Quest: {{{questString}}}\nReward: {{{rewardString}}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -229,7 +229,7 @@
       "embed": {
         "title": "{{questType}}\nNom du Pokéstop: {{{pokestop_name}}}",
         "url": "{{{mapurl}}}",
-        "description": "{{#if conditionString}}Conditions: {{conditionString}}\n{{/if}}Récompense: {{#if monsterNames}}{{monsterNames}}{{else}}{{rewardString}}{{/if}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "description": "Quête : {{{questString}}}\nRécompense : {{{rewardString}}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -243,7 +243,7 @@
     "default": true,
     "platform": "telegram",
     "template": {
-      "content": "{{questType}} \n Pokestop: {{pokestop_name}}\nConditions: {{conditionString}} \n Reward: {{rewardString}} {{monsterNames}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "content": "Pokestop: {{pokestop_name}}\nQuest: {{{questString}}}\nReward: {{{rewardString}}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
       "sticker": "{{{stickerUrl}}}",
       "location": true,
       "webpage_preview": true
