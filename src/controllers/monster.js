@@ -94,7 +94,6 @@ class Monster extends Controller {
 	}
 
 	async handle(obj) {
-		const tracer = Math.floor((Math.random() * 100) * 1000)
 		let pregenerateTile = false
 		const data = obj
 		try {
@@ -177,8 +176,6 @@ class Monster extends Controller {
 
 			let weatherChangeAlertJobs = []
 			if (this.config.weather.weatherChangeAlert && weatherCellData.cares && weatherCellData.lastCurrentWeatherCheck < currentHourTimestamp && weatherCellData[previousHourTimestamp] > 0 && currentCellWeather > 0 && weatherCellData[previousHourTimestamp] != currentCellWeather) {
-				// this.log.error(`[DEBUG MONSTER] Start of handle tracing : [${tracer}]`)
-				// this.log.error('[DEBUG MONSTER] ['+tracer+'] conditions met to alert on weather change in cell '+weatherCellId)
 				const weatherDataPayload = {
 					longitude: data.longitude,
 					latitude: data.latitude,
@@ -186,10 +183,8 @@ class Monster extends Controller {
 					gameplay_condition: data.weather,
 					updated: nowTimestamp,
 					source: 'fromMonster',
-					trace: tracer,
 				}
 				weatherChangeAlertJobs = await this.weatherController.handle(weatherDataPayload) || null
-				// this.log.error('[DEBUG MONSTER] ['+tracer+'] users caring about weather change in that cell :', weatherChangeAlertJobs)
 			}
 
 			if (this.config.weather.weatherChangeAlert && this.config.weather.showAlteredPokemon && weatherCellData.cares) {
@@ -317,11 +312,10 @@ class Monster extends Controller {
 			if (this.config.geocoding.staticProvider === 'poracle') {
 				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
 			}
-			// Stop handling if it already disappeared or is about to go away
 
+			// Stop handling if it already disappeared or is about to go away
 			if ((data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) && !weatherChangeAlertJobs[0]) {
 				log.debug(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
-
 				return []
 			}
 
@@ -380,21 +374,12 @@ class Monster extends Controller {
 				const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
 				let pokemonShouldBeBoosted = false
 				if (weatherForecast.current > 0 && this.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
-				// this.log.error(`[DEBUG MONSTER] Tracing : [${tracer}]`)
-				// this.log.error(`[DEBUG MONSTER] pokemon : ${data.name} (iv ${data.iv})`)
-				// this.log.error(`[DEBUG MONSTER] pokemon types : ${data.types}`)
-				// this.log.error(`[DEBUG MONSTER] weather forecast : ${weatherForecast.current} to ${weatherForecast.next}`)
-				// this.log.error(`[DEBUG MONSTER] pokemonShouldBeBoosted : ${pokemonShouldBeBoosted}`)
-				// this.log.error(`[DEBUG MONSTER] hasBoost : ${data.weather}`)
 				if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather == 0))) {
 					const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time).slice(0, -3)
 					const pokemonWillBeBoosted = this.utilData.weatherTypeBoost[weatherForecast.next].filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
-					// this.log.error(`[DEBUG MONSTER] pokemonWillBeBoosted : ${pokemonWillBeBoosted}`)
 					if (data.weather > 0 && !pokemonWillBeBoosted || data.weather == 0 && pokemonWillBeBoosted) {
-						// this.log.error(`[DEBUG MONSTER] conditions met for wheater change altering boost`)
 						weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current
 						if (pokemonShouldBeBoosted && data.weather == 0) {
-							// this.log.error(`[DEBUG MONSTER] something wrong with current weather info : ${weatherForecast.current} in cache`)
 							data.weatherCurrent = 0
 						} else {
 							data.weatherCurrent = weatherForecast.current
@@ -439,7 +424,7 @@ class Monster extends Controller {
 							if (caring.id === cares.id) {
 								if (!caring.caredPokemons) caring.caredPokemons = []
 								caring.caredPokemons.push({
-									pokemon_id: data.pokemon_id, form: data.form, name: data.name, formname: data.formname, iv: data.iv, cp: data.cp, latitude: data.latitude, longitude: data.longitude, disappear_time: data.disappear_time, alteringWeathers: data.alteringWeathers,
+									pokemon_id: data.pokemon_id, form: data.form, name: monster.name, formname: monster.form.name, iv: data.iv, cp: data.cp, latitude: data.latitude, longitude: data.longitude, disappear_time: data.disappear_time, alteringWeathers: data.alteringWeathers,
 								})
 							}
 						}
@@ -500,7 +485,6 @@ class Monster extends Controller {
 					imgUrl: data.imgUrl,
 					greatleagueranking: cares.great_league_ranking === 4096 ? 0 : cares.great_league_ranking,
 					ultraleagueranking: cares.ultra_league_ranking === 4096 ? 0 : cares.ultra_league_ranking,
-					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
@@ -543,11 +527,7 @@ class Monster extends Controller {
 			const hrendprocessing = hrend[1] / 1000000
 			this.log.info(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
 
-			// this.log.error(`[DEBUG MONSTER] Tracing : [${tracer}]`)
-			// this.log.error('[DEBUG MONSTER] users caring about weather :', weatherChangeAlertJobs)
-			// this.log.error('[DEBUG MONSTER] users caring about pokemon :', jobs)
 			if (weatherChangeAlertJobs[0]) weatherChangeAlertJobs.forEach((weatherJob) => jobs.push(weatherJob))
-			// this.log.error('[DEBUG MONSTER] user alerts :', jobs)
 
 			return jobs
 		} catch (e) {
