@@ -15,10 +15,12 @@ exports.run = async (client, msg, args) => {
 		}
 
 		let newLanguage = args[0]
+		let newLanguageName = client.utilData.languageNames[args[0]]
 
 		const languageMatchByName = Object.keys(client.utilData.languageNames).find((x) => client.utilData.languageNames[x] == args[0])
 		if (languageMatchByName) {
 			newLanguage = languageMatchByName
+			newLanguageName = client.utilData.languageNames[newLanguage]
 		}
 
 		if (!Object.keys(client.config.general.availableLanguages).includes(newLanguage)) {
@@ -29,7 +31,7 @@ exports.run = async (client, msg, args) => {
 
 		await client.query.updateQuery('humans', { language: newLanguage }, { id: target.id })
 
-		await msg.reply(`${newTranslator.translate('I have changed your language setting to')}: ${newLanguage}`)
+		await msg.reply(`${newTranslator.translate('I have changed your language setting to')}: ${newTranslator.translate(newLanguageName)}`)
 		await msg.react('✅')
 	} catch (err) {
 		client.log.error(`location command ${msg.content} unhappy:`, err)

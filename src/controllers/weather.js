@@ -307,7 +307,7 @@ class Weather extends Controller {
 				data.weatherName = data.weather ? translator.translate(data.weatherNameEng) : ''
 				data.weatherEmoji = data.weather ? translator.translate(data.weatherEmojiEng) : ''
 				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
-					data.activePokemons.map(function(pok) { pok.name = translator.translate(pok.name); pok.formname = translator.translate(pok.formname)})
+					data.activePokemons.map((pok) => { pok.name = translator.translate(pok.name); pok.formname = translator.translate(pok.formname) })
 				}
 
 				const view = {
