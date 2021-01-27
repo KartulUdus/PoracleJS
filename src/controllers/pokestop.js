@@ -166,7 +166,7 @@ class Pokestop extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('pokestop', data)
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('pokestop', data, this.geocoding.multistaticmaps.disablePokestop)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated

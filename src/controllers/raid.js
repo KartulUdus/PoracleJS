@@ -255,7 +255,7 @@ class Raid extends Controller {
 				const jobs = []
 
 				if (pregenerateTile) {
-					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data, this.geocoding.multistaticmaps.disableRaid)
 					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
@@ -387,7 +387,7 @@ class Raid extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data, this.geocoding.multistaticmaps.disableRaid)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated

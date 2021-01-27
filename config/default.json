@@ -125,6 +125,14 @@
         "staticProviderURL": "Your TileServerCache Server Address",
         "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
         "staticKey":["Your MapQuest or Google Key"],
+        "multistaticmaps": {
+            "disablePokemon": false,
+            "disableRaid": true,
+            "disableInvasion": true,
+            "disablePokestop": true,
+            "disableQuest": true,
+            "disableWeather": true
+        }
         "width": 320,
         "height": 200,
         "zoom": 15,
