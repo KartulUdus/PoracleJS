@@ -268,8 +268,8 @@ class Weather extends Controller {
 			}
 
 			data.oldWeather = (previousWeather > -1) ? previousWeather : ''
-			data.oldWeatherNameEng = data.oldWeather ? this.utilData.weather[data.oldweather].name : ''
-			data.oldWeatherEmojiEng = data.oldWeather ? this.utilData.weather[data.oldweather].emoji : ''
+			data.oldWeatherNameEng = data.oldWeather ? this.utilData.weather[data.oldWeather].name : ''
+			data.oldWeatherEmojiEng = data.oldWeather ? this.utilData.weather[data.oldWeather].emoji : ''
 			data.weather = data.condition ? data.condition : ''
 			data.weatherNameEng = data.weather ? this.utilData.weather[data.weather].name : ''
 			data.weatherEmojiEng = data.weather ? this.utilData.weather[data.weather].emoji : ''
