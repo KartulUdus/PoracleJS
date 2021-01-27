@@ -199,13 +199,11 @@ class Weather extends Controller {
 			}
 
 			let whoCares = []
-			// this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
 			if (data.updated && data.gameplay_condition) {
 				data.time_changed = data.updated
 				data.condition = data.gameplay_condition
 				data.coords = data.polygon
 			}
-			// this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
 			const currentInGameWeather = data.condition
 			const nowTimestamp = Math.floor(Date.now() / 1000)
 			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
@@ -264,12 +262,11 @@ class Weather extends Controller {
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-				// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
 			}
 
 			data.oldWeather = (previousWeather > -1) ? previousWeather : ''
-			data.oldWeatherNameEng = data.oldWeather ? this.utilData.weather[data.oldweather].name : ''
-			data.oldWeatherEmojiEng = data.oldWeather ? this.utilData.weather[data.oldweather].emoji : ''
+			data.oldWeatherNameEng = data.oldWeather ? this.utilData.weather[data.oldWeather].name : ''
+			data.oldWeatherEmojiEng = data.oldWeather ? this.utilData.weather[data.oldWeather].emoji : ''
 			data.weather = data.condition ? data.condition : ''
 			data.weatherNameEng = data.weather ? this.utilData.weather[data.weather].name : ''
 			data.weatherEmojiEng = data.weather ? this.utilData.weather[data.weather].emoji : ''
@@ -280,22 +277,18 @@ class Weather extends Controller {
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count
-				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares', cares)
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.info(`last tracked pokemon despawned before weather changed in ${data.s2_cell_id}`)
 					weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.id != cares.id)
-					// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current weatherCellData.cares', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				if (cares.lastChangeAlert == currentHourTimestamp) {
 					this.log.info(`user already alerted for this weather change in ${data.s2_cell_id}`)
-					// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares.lastChangeAlert == currentHourTimestamp', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
-				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current lastChangeAlert = currentHourTimestamp', weatherCellData.cares)
 
 				if (this.config.weather.showAlteredPokemon) {
 					const activePokemons = weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
@@ -303,7 +296,6 @@ class Weather extends Controller {
 				}
 				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
 					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-					// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
 				}
 				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)
 
@@ -314,6 +306,9 @@ class Weather extends Controller {
 				data.oldWeatherEmoji = data.oldWeather ? translator.translate(data.oldWeatherEmojiEng) : ''
 				data.weatherName = data.weather ? translator.translate(data.weatherNameEng) : ''
 				data.weatherEmoji = data.weather ? translator.translate(data.weatherEmojiEng) : ''
+				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
+					data.activePokemons.map(function(pok) { pok.name = translator.translate(pok.name); pok.formname = translator.translate(pok.formname)})
+				}
 
 				const view = {
 					...data,
@@ -338,7 +333,6 @@ class Weather extends Controller {
 						name: cares.name,
 						tth: weatherTth,
 						clean: cares.clean,
-						tracing: data.trace,
 						emoji: [],
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {

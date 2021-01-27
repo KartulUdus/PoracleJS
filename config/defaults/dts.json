@@ -8,7 +8,24 @@
     "embed": {
       "color": "{{ivcolor}}",
       "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
-      "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{addr}} \n quick: {{quickMove}}, charge {{chargeMove}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{addr}} \n quick: {{quickMove}}, charge: {{chargeMove}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "fr",
+  "type": "monster",
+  "default": false,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "color": "{{ivcolor}}",
+      "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} PC:{{cp}} Niv:{{level}} {{atk}}/{{def}}/{{sta}} {{boostemoji}}",
+      "description": "Fin: {{time}}, Temps restant: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{addr}} \n rapide: {{quickMove}}, chargée: {{chargeMove}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**League Super:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}PC (Niv. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**League Hyper:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}PC (Niv. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
       }
@@ -39,6 +56,23 @@
         "color": "{{color}}",
         "title": "?% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} {{boostemoji}}",
         "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "language": "fr",
+    "type": "monsterNoIv",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "color": "{{color}}",
+        "title": "?% {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} {{boostemoji}}",
+        "description": "Fin: {{time}}, Temps restant: {{tthm}}m {{tths}}s \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -81,6 +115,27 @@
   },
   {
     "id": 1,
+    "language": "fr",
+    "type": "raid",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Un Raid contre {{name}}{{#if form}}{{#isnt formname 'Normal'}} {{formname}}{{/isnt}}{{/if}} a commencé sur {{gymName}}! {{#ex}}(Ex){{/ex}}",
+        "description": "PC: {{cp}}, rapide: {{quickMove}}, chargée: {{chargeMove}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "author": {
+          "name": "{{name}} niv {{level}}. Fin: {{time}} dans {{tthm}}m {{tths}}s",
+          "icon_url": "{{{detailsurl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
     "language": "en",
     "type": "raid",
     "default": true,
@@ -115,6 +170,27 @@
   },
   {
     "id": 1,
+    "language": "fr",
+    "type": "egg",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Oeuf de raid niveau {{level}} sur {{gymName}} {{#ex}}(Ex){{/ex}}",
+        "description": "Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{detailsurl}}}"
+        },
+        "author": {
+          "name": "Eclot à: {{time}} dans {{tthm}}m {{tths}}s",
+          "icon_url": "{{{imgUrl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
     "language": "en",
     "type": "egg",
     "default": true,
@@ -137,6 +213,23 @@
         "title": "{{questType}}\nPokestop Name: {{{pokestop_name}}}",
         "url": "{{{mapurl}}}",
         "description": "{{#if conditionString}}Conditions: {{conditionString}}\n{{/if}}Reward: {{#if monsterNames}}{{monsterNames}}{{else}}{{rewardString}}{{/if}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "language": "fr",
+    "type": "quest",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "{{questType}}\nNom du Pokéstop: {{{pokestop_name}}}",
+        "url": "{{{mapurl}}}",
+        "description": "{{#if conditionString}}Conditions: {{conditionString}}\n{{/if}}Récompense: {{#if monsterNames}}{{monsterNames}}{{else}}{{rewardString}}{{/if}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         }
@@ -176,6 +269,24 @@
   },
   {
     "id": 1,
+    "language": "fr",
+    "type": "invasion",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Team Rocket sur {{name}}",
+        "url": "{{{mapurl}}}",
+        "color": "{{gruntTypeColor}}",
+        "description": "Type: {{gruntType}} {{gruntTypeEmoji}}\nGenre: {{genderData.name}}{{genderData.emoji}}\nRécompenses possibles: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Fin: {{time}}, dans ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAdresse: {{addr}}\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
     "language": "en",
     "type": "invasion",
     "default": true,
@@ -196,7 +307,23 @@
     "template": {
       "embed": {
         "title": "⚠️ Weather change ⚠️",
-        "description": "The weather for some active Pokémon you are tracking has changed!\n{{#if oldweather}}It went from {{oldweather}} {{oldweatheremoji}} to {{else}}It is now {{/if}}{{weather}} {{weatheremoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formname 'Normal'}} {{this.formname}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
+        "description": "The weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{oldWeatherEmoji}} to {{else}}It is now {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formname 'Normal'}} {{this.formname}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
+        "image": {
+          "url": "{{{staticmap}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "language": "fr",
+    "type": "weatherchange",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "⚠️ Changement Météo ⚠️",
+        "description": "La météo a changé pour certains Pokémon que vous suivez!\n{{#if oldWeatherName}}Elle est passée de {{oldWeatherName}} {{oldWeatherEmoji}} à {{else}}C'est maintenant {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Les Pokémon suivants ont maintenant changé et auront des stats et IV différents:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formname 'Normal'}} {{this.formname}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}PC\n{{/each}}{{else}}Cela peut avoir altéré les stats et IV annoncés...{{/if}}",
         "image": {
           "url": "{{{staticmap}}}"
         }
@@ -210,7 +337,7 @@
     "default": true,
     "platform": "telegram",
     "template": {
-      "content": "[\u200A]({{{staticmap}}})⚠️ Weather change ⚠️\nThe weather for some active Pokémon you are tracking has changed!\n{{#if oldweather}}It went from {{oldweather}} {{oldweatheremoji}} to {{else}}It is now {{/if}}{{weather}} {{weatheremoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formname 'Normal'}} {{this.formname}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
+      "content": "[\u200A]({{{staticmap}}})⚠️ Weather change ⚠️\nThe weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{oldWeatherEmoji}} to {{else}}It is now {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formname 'Normal'}} {{this.formname}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
       "webpage_preview": true,
       "sticker": "",
       "location": false
