@@ -1,3 +1,8 @@
+//
+// Quest controller getReward and getQuest function inspired from PMSF
+//
+// ....because it is smartly done there!!
+//
 // const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
@@ -117,17 +122,12 @@ class Quest extends Controller {
 			}
 
 			data.questString = await this.getQuest(data)
-			log.error(`[DEBUG] Quest : questString: ${data.questString}`)
-
 			data.rewardData = await this.getReward(data)
-			log.error('[DEBUG] Quest : rewardData', data.rewardData)
-
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
 			data.itemAmount = data.rewardData.itemAmount
 			data.monsters = data.rewardData.monsters
 			data.items = data.rewardData.items
-			log.error(`[DEBUG] Quest : data.items: ${data.items}`)
 			data.energyAmount = data.rewardData.energyAmount
 			data.energyMonsters = data.rewardData.energyMonsters
 
@@ -256,7 +256,6 @@ class Quest extends Controller {
 	}
 
 	async getQuest(item) {
-		this.log.error('[DEBUG] Quest : raw data: ', item)
 		let str
 		let tstr = ''
 		let pstr = ''
