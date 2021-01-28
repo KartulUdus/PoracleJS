@@ -7,7 +7,7 @@ module.exports = async (client, msg) => {
 	// Log all DM messages to dmLogChannelID
 	if (msg.channel.type === 'dm' && client.config.discord.dmLogChannelID !== '') {
 		let message = `${msg.author} > ${msg.cleanContent}`
-		if (client.config.discord.guilds.length > 1) {
+		if (client.config.discord.guilds && client.config.discord.guilds.length > 1) {
 			message = `${msg.author.username} ${msg.author} > ${msg.cleanContent}`
 		}
 		if (client.config.discord.admins.includes(msg.author.id)) {
