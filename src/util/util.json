@@ -401,7 +401,8 @@
 		"de": "german",
 		"ja": "japanese",
 		"ko": "korean",
-		"pl": "polish"
+		"pl": "polish",
+		"ru": "russian"
 	},
 	"cpMultipliers": {
 		"1": 0.0939999967813492,
