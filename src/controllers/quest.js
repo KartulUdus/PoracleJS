@@ -123,6 +123,8 @@ class Quest extends Controller {
 
 			data.questString = await this.getQuest(data)
 			data.rewardData = await this.getReward(data)
+this.log.error('[DEBUG] Quest : data.questString: '+data.questString)
+this.log.error('[DEBUG] Quest : data.rewardData: ', data.rewardData)
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
 			data.itemAmount = data.rewardData.itemAmount
@@ -256,7 +258,7 @@ class Quest extends Controller {
 	}
 
 	async getQuest(item) {
-this.log.error('[DEBUG] Quest : item ', item)
+//this.log.error('[DEBUG] Quest : item ', item)
 		let str
 		let tstr = ''
 		let pstr = ''
@@ -293,7 +295,7 @@ this.log.error('[DEBUG] Quest : item ', item)
 					str = str.replace('Snapshot(s)', `Snapshot(s) of ${tstr}-type Pokémon`)
 					break
 					case 2:
-					if (questinfo.character_category_ids.length > 1) {
+					if (questinfo.pokemon_ids.length > 1) {
 						let first = true
 						for (const [index, id] of Object.entries(questinfo.pokemon_ids)) {
 							if (first) {
