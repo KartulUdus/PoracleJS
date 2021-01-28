@@ -210,7 +210,7 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "{{questType}}\nPokestop Name: {{{pokestop_name}}}",
+        "title": "Pokestop Name: {{{pokestopName}}}",
         "url": "{{{mapurl}}}",
         "description": "Quest: {{{questString}}}\nReward: {{{rewardString}}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
@@ -227,7 +227,7 @@
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "{{questType}}\nNom du Pokéstop: {{{pokestop_name}}}",
+        "title": "Nom du Pokéstop: {{{pokestopName}}}",
         "url": "{{{mapurl}}}",
         "description": "Quête : {{{questString}}}\nRécompense : {{{rewardString}}}\n{{{addr}}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
         "thumbnail": {
@@ -243,7 +243,7 @@
     "default": true,
     "platform": "telegram",
     "template": {
-      "content": "Pokestop: {{pokestop_name}}\nQuest: {{{questString}}}\nReward: {{{rewardString}}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+      "content": "Pokestop: {{pokestopName}}\nQuest: {{{questString}}}\nReward: {{{rewardString}}} \n {{addr}} \n Maps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
       "sticker": "{{{stickerUrl}}}",
       "location": true,
       "webpage_preview": true

@@ -256,6 +256,7 @@ class Quest extends Controller {
 	}
 
 	async getQuest(item) {
+this.log.error('[DEBUG] Quest : item ', item)
 		let str
 		let tstr = ''
 		let pstr = ''
@@ -272,126 +273,130 @@ class Quest extends Controller {
 			if (item.conditions[0] && item.conditions[0].type > 0) {
 				switch (item.conditions[0].type) {
 					case 1:
-						if (questinfo.pokemon_type_ids.length > 1) {
-							questinfo.pokemon_type_ids.forEach((index, typeId) => {
-								if (index === questinfo.pokemon_type_ids.length - 2) {
-									tstr += `${pokemonTypes[typeId]} or `
-								} else if (index === questinfo.pokemon_type_ids.length - 1) {
-									tstr += pokemonTypes[typeId]
-								} else {
-									tstr += `${pokemonTypes[typeId]}, `
-								}
-							})
-						} else {
-							tstr = pokemonTypes[questinfo.pokemon_type_ids]
+					if (questinfo.pokemon_type_ids.length > 1) {
+						let first = true
+						for (const [index, typeId] of Object.entries(questinfo.pokemon_type_ids)) {
+							if (first) {
+								tstr += `${pokemonTypes[typeId]}`
+							} else {
+								tstr += (index == questinfo.pokemon_type_ids.length - 1) ? ` or ${pokemonTypes[typeId]}` : `, ${pokemonTypes[typeId]}`
+							}
+							first = false
 						}
-						if (item.quest_condition_type_1 === 21) {
-							str = str.replace('Catch {0}', 'Catch {0} different species of')
-						}
-						str = str.replace('pokémon', `${tstr}-type Pokémon`)
-						str = str.replace('Snapshot(s)', `Snapshot(s) of ${tstr}-type Pokémon`)
-						break
+					}else{
+						tstr += `${pokemonTypes[questinfo.pokemon_type_ids]}`
+					}
+					if (item.conditions[1] && item.conditions[1].type === 21) {
+						str = str.replace('Catch {0}', 'Catch {0} different species of')
+					}
+					str = str.replace('pokémon', `${tstr}-type Pokémon`)
+					str = str.replace('Snapshot(s)', `Snapshot(s) of ${tstr}-type Pokémon`)
+					break
 					case 2:
-						if (questinfo.pokemon_ids.length > 1) {
-							questinfo.pokemon_ids.forEach(function (index, id) {
-								if (index === questinfo.pokemon_ids.length - 2) {
-									pstr += `${this.monsterData[`${id}_0`].name} or `
-								} else if (index === questinfo.pokemon_ids.length - 1) {
-									pstr += this.monsterData[`${id}_0`].name
-								} else {
-									pstr += `${this.monsterData[`${id}_0`].name}, `
-								}
-							})
-						} else {
-							pstr = this.monsterData[`${questinfo.pokemon_ids}_0`].name
+					if (questinfo.character_category_ids.length > 1) {
+						let first = true
+						for (const [index, id] of Object.entries(questinfo.pokemon_ids)) {
+							if (first) {
+								pstr += `${this.monsterData[id].name}`
+							} else {
+								pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.monsterData[`${id}_0`].name}` : `, ${this.monsterData[`${id}_0`].name}`
+							}
+							first = false
 						}
-						str = str.replace('pokémon', pstr)
-						str = str.replace('Snapshot(s)', `Snapshot(s) of ${pstr}`)
-						break
+					}else{
+						pstr += `${this.monsterData[`${questinfo.pokemon_ids}_0`].name}`
+					}
+					str = str.replace('pokémon', pstr)
+					str = str.replace('Snapshot(s)', `Snapshot(s) of ${pstr}`)
+					break
 					case 3:
-						str = str.replace('pokémon', 'Pokémon with weather boost')
-						break
+					str = str.replace('pokémon', 'Pokémon with weather boost')
+					break
 					case 6:
-						str = str.replace('Complete', 'Win')
-						break
+					str = str.replace('Complete', 'Win')
+					break
 					case 7:
-						raidLevel = Math.min.apply(null, questinfo.raid_levels)
-						if (raidLevel > 1) {
-							str = str.replace('raid battle(s)', `level ${raidLevel} or higher raid`)
-						}
-						if (item.quest_condition_type_1 === 6) {
-							str = str.replace('Complete', 'Win')
-						}
-						break
-					case 8:
-						str = str.replace('Land', 'Make')
-						str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s)`)
-						if (item.conditions[1] && item.conditions[1].type === 15) {
-							str = str.replace('Throw(s)', 'Curveball Throw(s)')
-						}
-						break
-					case 9:
+					raidLevel = Math.min.apply(null, questinfo.raid_levels)
+					if (raidLevel > 1) {
+						str = str.replace('raid battle(s)', `level ${raidLevel} or higher raid`)
+					}
+					if (item.conditions[1] && item.conditions[1].type === 6) {
 						str = str.replace('Complete', 'Win')
-						break
+					}
+					break
+					case 8:
+					str = str.replace('Land', 'Make')
+					str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s)`)
+					if (item.conditions[1] && item.conditions[1].type === 15) {
+						str = str.replace('Throw(s)', 'Curveball Throw(s)')
+					}
+					break
+					case 9:
+					str = str.replace('Complete', 'Win')
+					break
 					case 10:
-						str = str.replace('Complete', 'Use a super effective charged attack in')
-						break
+					str = str.replace('Complete', 'Use a super effective charged attack in')
+					break
 					case 11:
-						if (item.quest_type === 13) {
-							str = str.replace('Catch', 'Use').replace('pokémon with berrie(s)', 'berrie(s) to help catch Pokémon')
-						}
-						if (questinfo !== null) {
+					if (item.quest_type === 13) {
+						str = str.replace('Catch', 'Use').replace('pokémon with berrie(s)', 'berrie(s) to help catch Pokémon')
+					}
+					if (questinfo !== null) {
 						//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
 						//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
-							str = str.replace('berrie(s)', this.utilData.items[questinfo.item_id])
-							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.utilData.items[questinfo.item_id]}`)
-						} else {
-							str = str.replace('Evolve', 'Use a item to evolve')
-						}
-						break
+						str = str.replace('berrie(s)', this.utilData.items[questinfo.item_id])
+						str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.utilData.items[questinfo.item_id]}`)
+					} else {
+						str = str.replace('Evolve', 'Use a item to evolve')
+					}
+					break
 					case 12:
-						str = str.replace('pokéstop(s)', "pokéstop(s) you haven't visited before")
-						break
+					str = str.replace('pokéstop(s)', "pokéstop(s) you haven't visited before")
+					break
 					case 14:
-						str = str.replace('Land', 'Make')
-						if (typeof questinfo.throw_type_id === 'undefined') {
-							str = str.replace('throw(s)', 'Throw(s) in a row')
-						} else {
-							str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s) in a row`)
-						}
-						if (item.conditions[1] && item.conditions[1].type === 15) {
-							str = str.replace('Throw(s)', 'Curveball Throw(s)')
-						}
-						break
+					str = str.replace('Land', 'Make')
+					if (typeof questinfo.throw_type_id === 'undefined') {
+						str = str.replace('throw(s)', 'Throw(s) in a row')
+					} else {
+						str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s) in a row`)
+					}
+					if (item.conditions[1] && item.conditions[1].type === 15) {
+						str = str.replace('Throw(s)', 'Curveball Throw(s)')
+					}
+					break
 					case 22:
-						str = str.replace('Win', 'Battle a Team Leader').replace('pvp battle(s)', 'times')
-						break
+					str = str.replace('Win', 'Battle a Team Leader').replace('pvp battle(s)', 'times')
+					break
 					case 23:
-						str = str.replace('Win', 'Battle Another Trainer').replace('pvp battle(s)', 'times')
-						break
+					str = str.replace('Win', 'Battle Another Trainer').replace('pvp battle(s)', 'times')
+					break
 					case 25:
-						str = str.replace('{0} pokémon', `pokémon caught ${questinfo.distance}km apart`)
-						break
+					str = str.replace('{0} pokémon', `pokémon caught ${questinfo.distance}km apart`)
+					break
 					case 27:
-						questinfo.character_category_ids.forEach((index, charId) => {
-							if (index === (questinfo.character_category_ids.length - 2)) {
-								gstr += `${gruntCharacterTypes[charId]} or `
-							} else if (index === (questinfo.character_category_ids.length - 1)) {
-								gstr += gruntCharacterTypes[charId]
+					if (questinfo.character_category_ids.length > 1) {
+						let first = true
+						for (const [index, charId] of Object.entries(questinfo.character_category_ids)) {
+							if (first) {
+								gstr += `${gruntCharacterTypes[charId]}`
 							} else {
-								gstr += `${gruntCharacterTypes[charId]}, `
+								gstr += (index == questinfo.character_category_ids.length - 1) ? ` or ${gruntCharacterTypes[charId]}` : `, ${gruntCharacterTypes[charId]}`
 							}
-						})
-						str = str.replace('Team GO Rocket Grunt(s)', gstr)
-						if (item.quest_condition_type_1 === 18) {
-							str = str.replace('Battle against', 'Defeat')
+							first = false
 						}
-						break
+					}else{
+						gstr += `${gruntCharacterTypes[questinfo.character_category_ids]}`
+					}
+					str = str.replace('Team GO Rocket Grunt(s)', gstr)
+					if (item.conditions[1] && item.conditions[1].type === 18) {
+						str = str.replace('Battle against', 'Defeat')
+					}
+					break
 					case 28:
-						if (item.quest_type === 28) {
-							str = str.replace('Snapshot(s)', 'Snapshot(s) of your Buddy')
-						}
-						break
+					if (item.quest_type === 28) {
+						str = str.replace('Snapshot(s)', 'Snapshot(s) of your Buddy')
+					}
+					break
 					default:
 				}
 			} else if (item.type > 0) {
