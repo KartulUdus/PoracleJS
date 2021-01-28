@@ -293,7 +293,7 @@ this.log.error('[DEBUG] Quest : item ', item)
 					str = str.replace('Snapshot(s)', `Snapshot(s) of ${tstr}-type Pokémon`)
 					break
 					case 2:
-					if (questinfo.character_category_ids.length > 1) {
+					if (questinfo.pokemon_ids.length > 1) {
 						let first = true
 						for (const [index, id] of Object.entries(questinfo.pokemon_ids)) {
 							if (first) {
