@@ -123,8 +123,8 @@ class Quest extends Controller {
 
 			data.questString = await this.getQuest(data)
 			data.rewardData = await this.getReward(data)
-			this.log.error(`[DEBUG] Quest : data.questString: ${data.questString}`)
-			this.log.error('[DEBUG] Quest : data.rewardData: ', data.rewardData)
+			// this.log.error('[DEBUG] Quest : data.questString: '+data.questString)
+			// this.log.error('[DEBUG] Quest : data.rewardData: ', data.rewardData)
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.isShiny
 			data.itemAmount = data.rewardData.itemAmount
@@ -268,8 +268,8 @@ class Quest extends Controller {
 			str = item.quest_task
 		} else {
 			const questinfo = item.conditions[0] ? item.conditions[0].info : ''
-			this.log.error('[DEBUG] Quest : item[conditions]: ', item.conditions)
-			this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
+			// this.log.error('[DEBUG] Quest : item[conditions]: ', item.conditions)
+			// this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
 			const questStr = questTypeList[item.type]
 			str = questStr.text
 			if (item.conditions[0] && item.conditions[0].type > 0) {
