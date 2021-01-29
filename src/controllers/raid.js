@@ -386,8 +386,8 @@ class Raid extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile && this.geocoding.map.raid) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data, this.geocoding.map.raid)
+			if (pregenerateTile && this.config.geocoding.map.raid) {
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data, this.config.geocoding.map.raid)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
