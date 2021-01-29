@@ -178,8 +178,8 @@ class Quest extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('quest', data, this.geocoding.multistaticmaps.disableQuest)
+			if (pregenerateTile && this.geocoding.map.quest) {
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('quest', data, this.geocoding.map.quest)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 

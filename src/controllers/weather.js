@@ -294,10 +294,10 @@ class Weather extends Controller {
 				}
 				weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
 
-				if (this.config.weather.showAlteredPokemon) {
+				if (pregenerateTile && this.geocoding.map.weather && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
 					const activePokemons = weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
-					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data, this.geocoding.multistaticmaps.disableWeather)
+					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data, this.geocoding.map.weather)
 					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {

@@ -9,8 +9,7 @@ class TileserverPregen {
 		this.config = config
 	}
 
-	async getPregeneratedTileURL(type, data, disableMultistaticmap) {
-		let mapType = disableMultistaticmap ? "staticmap" : "multistaticmap"
+	async getPregeneratedTileURL(type, data, mapType) {
 		const url = `${this.config.geocoding.staticProviderURL}/${mapType}/${mapType}-poracle-${type}?pregenerate=true&regeneratable=true`
 		try {
 			const result = await axios.post(url, data)
