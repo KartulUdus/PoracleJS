@@ -207,6 +207,12 @@ class Monster extends Controller {
 			data.atk = encountered ? data.individual_attack : 0
 			data.def = encountered ? data.individual_defense : 0
 			data.sta = encountered ? data.individual_stamina : 0
+			if (data.base_catch) data.capture_1 = data.base_catch
+			if (data.great_catch) data.capture_2 = data.great_catch
+			if (data.ultra_catch) data.capture_3 = data.ultra_catch
+			data.catchBase = encountered ? (data.capture_1 * 100).toFixed(2) : 0
+			data.catchGreat = encountered ? (data.capture_2 * 100).toFixed(2) : 0
+			data.catchUltra = encountered ? (data.capture_3 * 100).toFixed(2) : 0
 			data.cp = encountered ? data.cp : 0
 			data.level = encountered ? data.pokemon_level : 0
 			data.quickMove = encountered ? data.move_1 : 0

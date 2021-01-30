@@ -193,11 +193,16 @@ class Raid extends Controller {
 				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 
 				const e = []
+				const t = []
+				const n = []
 				monster.types.forEach((type) => {
 					e.push(this.GameData.utilData.types[type.name].emoji)
+					t.push(type.id)
+					n.push(type.name)
 				})
+				data.types = t
+				data.typeNameEng = n
 				data.emoji = e
-				data.emojiString = e.join('')
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -235,6 +240,8 @@ class Raid extends Controller {
 					data.name = translator.translate(data.nameEng)
 					data.formName = translator.translate(data.formNameEng)
 					data.evolutionName = translator.translate(data.evolutionNameEng)
+					data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
+					data.typeEmoji = data.emoji.map((emoji) => translator.translate(emoji)).join('')
 					data.name = translator.translate(monster.name) // deprecated
 					data.quickMove = data.move_1 ? data.move_1 : ''
 					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
