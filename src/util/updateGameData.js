@@ -19,12 +19,14 @@ function Fetch_Json(url) {
   });
 }
 
+console.error('test')
+
 async function getLanguageData(language) {
 	try {
 		const rawData = await Fetch_Json(sourceRepo+'i18n_'+language+'.json')
 		return rawData.data
 	} catch (e) {
-		console.log.error('Unable to fetch game data for '+language, e, data)
+		console.error('Unable to fetch game data for '+language, e, data)
 	}
 }
 
@@ -55,16 +57,15 @@ function ensure_pokemon(pokemon_id, englishDataPokemonsAndMoves) {
     GameMaster.pokemon[defaultId] = {};
   }
   if (!GameMaster.pokemon[defaultId].name) {
-//    GameMaster.pokemon[defaultId].name = pokemonId === 29 ? "Nidoran♀" : pokemonId === 32 ? "Nidoran♂" : capitalize(Pokemon_List[pokemonId]);
-    GameMaster.pokemon[defaultId].name = englishDataPokemonsAndMoves[pokemon_name_id_4];
-//console.log(englishDataPokemonsAndMoves[pokemon_name_id_4])
+    GameMaster.pokemon[defaultId].name = pokemonId === 29 ? "Nidoran♀" : pokemonId === 32 ? "Nidoran♂" : capitalize(Pokemon_List[pokemonId]);
+    if (englishDataPokemonsAndMoves[pokemon_name_id_4]) GameMaster.pokemon[defaultId].name = englishDataPokemonsAndMoves[pokemon_name_id_4];
   }
   if (!GameMaster.pokemon[pokemon_id]) {
     GameMaster.pokemon[pokemon_id] = {};
   }
   if (!GameMaster.pokemon[pokemon_id].name) {
-//    GameMaster.pokemon[pokemon_id].name = pokemonId === 29 ? "Nidoran♀" : pokemonId === 32 ? "Nidoran♂" : capitalize(Pokemon_List[pokemonId]);
-    GameMaster.pokemon[pokemon_id].name = englishDataPokemonsAndMoves[pokemon_name_id_4];
+    GameMaster.pokemon[pokemon_id].name = pokemonId === 29 ? "Nidoran♀" : pokemonId === 32 ? "Nidoran♂" : capitalize(Pokemon_List[pokemonId]);
+    if (englishDataPokemonsAndMoves[pokemon_name_id_4]) GameMaster.pokemon[pokemon_id].name = englishDataPokemonsAndMoves[pokemon_name_id_4];
   }
 }
 
@@ -124,7 +125,7 @@ function Generate_Forms(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
                     GameMaster.pokemon[pokemon_form_id_default].form.proto = object.data.formSettings.forms[f].form;
                   }
                   if (!GameMaster.pokemon[pokemon_form_id_default].form.id) {
-                    GameMaster.pokemon[pokemon_form_id_default].form.id = id;
+                    GameMaster.pokemon[pokemon_form_id_default].form.id = 0;
                   }
                 }
                 if (!GameMaster.pokemon[pokemon_form_id].form) {
@@ -227,7 +228,7 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
             GameMaster.moves[move_id] = {}
           }
           let Move = GameMaster.moves[move_id];
-//          Move.name = capitalize(object.data.combatMove.uniqueId.replace("_FAST", ""));
+          Move.name = capitalize(object.data.combatMove.uniqueId.replace("_FAST", ""));
           Move.name = englishDataPokemonsAndMoves[move_name_id_4];
           Move.proto = object.templateId.substr(18);
           Move.type = capitalize(object.data.combatMove.type.replace("POKEMON_TYPE_", ""));
@@ -244,6 +245,32 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
   });
 }
 
+function Add_Missing_Pokemon() {
+  // add missing data for Unown forms
+  for (let i = 1; i < 29; i++) {
+    const currentUnown = '201_'+i
+    GameMaster.pokemon[currentUnown].id = GameMaster.pokemon['201_0'].id
+    GameMaster.pokemon[currentUnown].stats = GameMaster.pokemon['201_0'].stats
+    GameMaster.pokemon[currentUnown].types = GameMaster.pokemon['201_0'].types
+  }
+  // add missing data for Spinda forms
+  for (let i = 37; i < 45; i++) {
+    const currentSpinda = '327_'+i
+    GameMaster.pokemon[currentSpinda].id = GameMaster.pokemon['327_0'].id
+    GameMaster.pokemon[currentSpinda].stats = GameMaster.pokemon['327_0'].stats
+    GameMaster.pokemon[currentSpinda].types = GameMaster.pokemon['327_0'].types
+  }
+  for (let i = 121; i < 133; i++) {
+    const currentSpinda = '327_'+i
+    GameMaster.pokemon[currentSpinda].id = GameMaster.pokemon['327_0'].id
+    GameMaster.pokemon[currentSpinda].stats = GameMaster.pokemon['327_0'].stats
+    GameMaster.pokemon[currentSpinda].types = GameMaster.pokemon['327_0'].types
+  }
+  // Remove missing Diancie and Volcanion
+  delete GameMaster.pokemon['719_0']
+  delete GameMaster.pokemon['721_0']
+}
+
 (async function () {
   const englishDataPokemonsAndMoves = {}
 	const englishData = await getLanguageData('english')
@@ -252,6 +279,8 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
 			englishDataPokemonsAndMoves[englishData[item]] = englishData[parseInt(index, 10)+1]
 		}
 	})
+  // Force Sirfetchd
+  englishDataPokemonsAndMoves['pokemon_name_0865'] = 'Sirfetchd'
 	const supportedLanguages = utilData.languageNames
 	for (const lang of Object.keys(supportedLanguages)) {
 		const currentLanguage = supportedLanguages[lang]
@@ -320,6 +349,7 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
   GameMaster.items = {};
   GameMaster = await Generate_Forms(GameMaster, MasterArray, englishDataPokemonsAndMoves);
   GameMaster = await Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves);
+  Add_Missing_Pokemon();
   Fs.writeJSONSync("newMonsters.json", GameMaster.pokemon, {
     spaces: "\t",
     EOL: "\n"

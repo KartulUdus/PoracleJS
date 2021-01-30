@@ -12,16 +12,15 @@ const { log } = require('../lib/logger')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
-	constructor(db, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController, weatherCacheData) {
+	constructor(db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, weatherCacheData) {
 		this.db = db
 		this.cp = cp
 		this.config = config
 		this.log = log
 		this.dts = dts
 		this.geofence = geofence
-		this.monsterData = monsterData
+		this.GameData = GameData
 		this.discordCache = discordCache
-		this.utilData = require(path.join(__dirname, '../util/util'))
 		this.translatorFactory = translatorFactory
 		this.translator = translatorFactory ? this.translatorFactory.default : null
 		this.mustache = mustache
@@ -338,7 +337,7 @@ class Controller {
 
 	getPokemonTypes(pokemonId, formId) {
 		if (!+pokemonId) return ''
-		const monsterFamily = Object.values(this.monsterData).filter((m) => m.id === +pokemonId)
+		const monsterFamily = Object.values(this.GameData.monsters).filter((m) => m.id === +pokemonId)
 		const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
 		let types = ''
 		if (monster) {

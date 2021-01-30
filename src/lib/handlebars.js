@@ -2,8 +2,9 @@ const handlebars = require('handlebars')
 const config = require('config')
 const monsters = require('../util/monsters')
 const {
-	cpMultipliers, moves, types, powerUpCost,
+	cpMultipliers, types, powerUpCost,
 } = require('../util/util')
+const moves = require('../util/moves')
 
 const TranslatorFactory = require('../util/translatorFactory')
 

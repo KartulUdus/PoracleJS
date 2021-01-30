@@ -8,7 +8,7 @@ require('moment-precise-range-plugin')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
-		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.utilData.weatherTypeBoost).find((key) => this.utilData.weatherTypeBoost[key].includes(type)), 10))
+		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
 		const nonBoostingWeathers = [1, 2, 3, 4, 5, 6, 7].filter((weather) => !boostingWeathers.includes(weather))
 		if (boostStatus > 0) return nonBoostingWeathers
 		return boostingWeathers
@@ -128,7 +128,7 @@ class Monster extends Controller {
 				}
 			}
 			if (data.form === undefined || data.form === null) data.form = 0
-			const monster = this.monsterData[`${data.pokemon_id}_${data.form}`] ? this.monsterData[`${data.pokemon_id}_${data.form}`] : this.monsterData[`${data.pokemon_id}_0`]
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
 				log.warn('Couldn\'t find monster in:', data)
@@ -373,10 +373,10 @@ class Monster extends Controller {
 			if (this.config.weather.enableWeatherForecast && data.disappear_time > nextHourTimestamp) {
 				const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
 				let pokemonShouldBeBoosted = false
-				if (weatherForecast.current > 0 && this.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
+				if (weatherForecast.current > 0 && this.GameData.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 				if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather == 0))) {
 					const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time).slice(0, -3)
-					const pokemonWillBeBoosted = this.utilData.weatherTypeBoost[weatherForecast.next].filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
+					const pokemonWillBeBoosted = this.GameData.utilData.weatherTypeBoost[weatherForecast.next].filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
 					if (data.weather > 0 && !pokemonWillBeBoosted || data.weather == 0 && pokemonWillBeBoosted) {
 						weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current
 						if (pokemonShouldBeBoosted && data.weather == 0) {
@@ -436,31 +436,31 @@ class Monster extends Controller {
 
 				data.name = translator.translate(monster.name)
 				data.formname = translator.translate(monster.form.name)
-				data.quickMove = data.weight && this.utilData.moves[data.move_1] ? translator.translate(this.utilData.moves[data.move_1].name) : ''
-				data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? translator.translate(this.utilData.moves[data.move_2].name) : ''
-				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
-				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
-				data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
-				data.boostemoji = this.utilData.weather[data.weather] ? translator.translate(this.utilData.weather[data.weather].emoji) : ''
-				data.gameweather = this.utilData.weather[currentCellWeather] ? this.utilData.weather[currentCellWeather].name : ''
-				data.gameweatheremoji = this.utilData.weather[currentCellWeather] ? translator.translate(this.utilData.weather[currentCellWeather].emoji) : ''
+				data.quickMove = data.weight && this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
+				data.chargeMove = data.weight && this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
+				data.move1emoji = this.GameData.moves[data.move_1] && this.GameData.utilData.types[this.GameData.moves[data.move_1].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : ''
+				data.move2emoji = this.GameData.moves[data.move_2] && this.GameData.utilData.types[this.GameData.moves[data.move_2].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
+				data.boost = this.GameData.utilData.weather[data.weather] ? this.GameData.utilData.weather[data.weather].name : ''
+				data.boostemoji = this.GameData.utilData.weather[data.weather] ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
+				data.gameweather = this.GameData.utilData.weather[currentCellWeather] ? this.GameData.utilData.weather[currentCellWeather].name : ''
+				data.gameweatheremoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].emoji) : ''
 				if (data.weatherNext) {
 					if (!data.weatherCurrent) {
-						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.utilData.weather[data.weatherNext].name)} ${translator.translate(this.utilData.weather[data.weatherNext].emoji)}`
+						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.GameData.utilData.weather[data.weatherNext].emoji)}`
 						data.weatherCurrentName = translator.translate('unknown')
 						data.weatherCurrentEmoji = '❓'
 					} else {
-						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(this.utilData.weather[data.weatherCurrent].name)} ${translator.translate(this.utilData.weather[data.weatherCurrent].emoji)} ➡️ ${translator.translate(this.utilData.weather[data.weatherNext].name)} ${translator.translate(this.utilData.weather[data.weatherNext].emoji)}`
-						data.weatherCurrentName = translator.translate(this.utilData.weather[data.weatherCurrent].name)
-						data.weatherCurrentEmoji = translator.translate(this.utilData.weather[data.weatherCurrent].emoji)
+						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(this.GameData.utilData.weather[data.weatherCurrent].name)} ${translator.translate(this.GameData.utilData.weather[data.weatherCurrent].emoji)} ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.GameData.utilData.weather[data.weatherNext].emoji)}`
+						data.weatherCurrentName = translator.translate(this.GameData.utilData.weather[data.weatherCurrent].name)
+						data.weatherCurrentEmoji = translator.translate(this.GameData.utilData.weather[data.weatherCurrent].emoji)
 					}
-					data.weatherNextName = translator.translate(this.utilData.weather[data.weatherNext].name)
-					data.weatherNextEmoji = translator.translate(this.utilData.weather[data.weatherNext].emoji)
+					data.weatherNextName = translator.translate(this.GameData.utilData.weather[data.weatherNext].name)
+					data.weatherNextEmoji = translator.translate(this.GameData.utilData.weather[data.weatherNext].emoji)
 				}
 
 				const e = []
 				monster.types.forEach((type) => {
-					e.push(translator.translate(this.utilData.types[type.name].emoji))
+					e.push(translator.translate(this.GameData.utilData.types[type.name].emoji))
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
@@ -477,7 +477,7 @@ class Monster extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					name: data.name,
 					now: new Date(),
-					genderData: this.utilData.genders[data.gender],
+					genderData: this.GameData.utilData.genders[data.gender],
 					level: Math.round(data.pokemon_level),
 					atk: data.individual_attack,
 					def: data.individual_defense,

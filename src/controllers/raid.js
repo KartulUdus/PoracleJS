@@ -158,7 +158,7 @@ class Raid extends Controller {
 
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
-				const monster = this.monsterData[`${data.pokemon_id}_${data.form}`] ? this.monsterData[`${data.pokemon_id}_${data.form}`] : this.monsterData[`${data.pokemon_id}_0`]
+				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 				if (!monster) {
 					this.log.warn('Couldn\'t find monster in:', data)
 					return
@@ -177,7 +177,7 @@ class Raid extends Controller {
 
 				const e = []
 				monster.types.forEach((type) => {
-					e.push(this.utilData.types[type.name].emoji)
+					e.push(this.GameData.utilData.types[type.name].emoji)
 				})
 				data.staticSprite = encodeURI(JSON.stringify([
 					{
@@ -196,10 +196,10 @@ class Raid extends Controller {
 				data.emoji = e
 				data.emojiString = e.join('')
 
-				data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
-				data.color = data.team_id ? this.utilData.teams[data.team_id].color : 'BABABA'
+				data.teamName = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+				data.color = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 
-				data.evolutionname = data.evolution ? this.utilData.evolution[data.evolution].name : ''
+				data.evolutionname = data.evolution ? this.GameData.utilData.evolution[data.evolution].name : ''
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 					log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -234,10 +234,10 @@ class Raid extends Controller {
 					const translator = this.translatorFactory.Translator(language)
 
 					data.name = translator.translate(monster.name)
-					data.quickMove = this.utilData.moves[data.move_1] ? translator.translate(this.utilData.moves[data.move_1].name) : ''
-					data.chargeMove = this.utilData.moves[data.move_2] ? translator.translate(this.utilData.moves[data.move_2].name) : ''
-					data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
-					data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
+					data.quickMove = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
+					data.chargeMove = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
+					data.move1emoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : ''
+					data.move2emoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
 
 					const view = {
 						...geoResult,
@@ -250,7 +250,7 @@ class Raid extends Controller {
 						tths: data.tth.seconds,
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
-						genderData: this.utilData.genders[data.gender],
+						genderData: this.GameData.utilData.genders[data.gender],
 						move1: data.quickMove,
 						move2: data.chargeMove,
 						imgUrl: data.imgUrl,
@@ -316,8 +316,8 @@ class Raid extends Controller {
 			}
 			if (!data.team_id) data.team_id = 0
 			if (data.name) data.gymName = data.name
-			data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
-			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 'BABABA'
+			data.teamName = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+			data.color = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				this.log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -361,7 +361,7 @@ class Raid extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: this.utilData.genders[data.gender],
+					genderData: this.GameData.utilData.genders[data.gender],
 					move1: data.quickMove,
 					move2: data.chargeMove,
 					imgUrl: data.imgUrl,

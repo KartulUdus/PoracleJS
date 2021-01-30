@@ -1,11 +1,10 @@
 const fs = require('fs')
 
 class Telegram {
-	constructor(config, log, monsterData, utilData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
+	constructor(config, log, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
 		this.config = config
 		this.log = log
-		this.monsterData = monsterData
-		this.utilData = utilData
+		this.GameData = GameData
 		this.geofence = geofence
 		this.translatorFactory = translatorFactory
 		this.translator = translatorFactory.default
@@ -19,7 +18,7 @@ class Telegram {
 		this.bot = telegraf
 		this.bot
 			.use(commandParser(this.translatorFactory))
-			.use(controller(query, dts, log, monsterData, utilData, geofence, config, re, translatorFactory))
+			.use(controller(query, dts, log, GameData, geofence, config, re, translatorFactory))
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require

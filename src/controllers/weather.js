@@ -265,11 +265,11 @@ class Weather extends Controller {
 			}
 
 			data.oldWeather = (previousWeather > -1) ? previousWeather : ''
-			data.oldWeatherNameEng = data.oldWeather ? this.utilData.weather[data.oldWeather].name : ''
-			data.oldWeatherEmojiEng = data.oldWeather ? this.utilData.weather[data.oldWeather].emoji : ''
+			data.oldWeatherNameEng = data.oldWeather ? this.GameData.utilData.weather[data.oldWeather].name : ''
+			data.oldWeatherEmojiEng = data.oldWeather ? this.GameData.utilData.weather[data.oldWeather].emoji : ''
 			data.weather = data.condition ? data.condition : ''
-			data.weatherNameEng = data.weather ? this.utilData.weather[data.weather].name : ''
-			data.weatherEmojiEng = data.weather ? this.utilData.weather[data.weather].emoji : ''
+			data.weatherNameEng = data.weather ? this.GameData.utilData.weather[data.weather].name : ''
+			data.weatherEmojiEng = data.weather ? this.GameData.utilData.weather[data.weather].emoji : ''
 
 			const jobs = []
 			const now = moment.now()

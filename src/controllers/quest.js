@@ -195,9 +195,9 @@ class Quest extends Controller {
 				const translator = this.translatorFactory.Translator(language)
 
 				data.questString = translator.translate(data.questString)
-				data.monsterNames = Object.values(this.monsterData).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
-				data.itemNames = Object.keys(this.utilData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.utilData.items[i])).join(', ')
-				data.energyMonstersNames = Object.values(this.monsterData).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
+				data.monsterNames = Object.values(this.GameData.monsters).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
+				data.itemNames = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.GameData.items[i])).join(', ')
+				data.energyMonstersNames = Object.values(this.GameData.monsters).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
 				data.rewardString = data.monsterNames
 				data.rewardString = data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : data.rewardString
 				data.rewardString = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNames}` : data.rewardString
@@ -299,14 +299,14 @@ class Quest extends Controller {
 							let first = true
 							for (const [index, id] of Object.entries(questinfo.pokemon_ids)) {
 								if (first) {
-									pstr += `${this.monsterData[id].name}`
+									pstr += `${this.GameData.monsters[id].name}`
 								} else {
-									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.monsterData[`${id}_0`].name}` : `, ${this.monsterData[`${id}_0`].name}`
+									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
 								}
 								first = false
 							}
 						} else {
-							pstr += `${this.monsterData[`${questinfo.pokemon_ids}_0`].name}`
+							pstr += `${this.GameData.monsters[`${questinfo.pokemon_ids}_0`].name}`
 						}
 						str = str.replace('pokémon', pstr)
 						str = str.replace('Snapshot(s)', `Snapshot(s) of ${pstr}`)
@@ -328,7 +328,7 @@ class Quest extends Controller {
 						break
 					case 8:
 						str = str.replace('Land', 'Make')
-						str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s)`)
+						str = str.replace('throw(s)', `${this.GameData.utilData.throwType[questinfo.throw_type_id]} Throw(s)`)
 						if (item.conditions[1] && item.conditions[1].type === 15) {
 							str = str.replace('Throw(s)', 'Curveball Throw(s)')
 						}
@@ -346,8 +346,8 @@ class Quest extends Controller {
 						if (questinfo !== null) {
 						//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
 						//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
-							str = str.replace('berrie(s)', this.utilData.items[questinfo.item_id])
-							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.utilData.items[questinfo.item_id]}`)
+							str = str.replace('berrie(s)', this.GameData.items[questinfo.item_id])
+							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.GameData.items[questinfo.item_id]}`)
 						} else {
 							str = str.replace('Evolve', 'Use a item to evolve')
 						}
@@ -360,7 +360,7 @@ class Quest extends Controller {
 						if (typeof questinfo.throw_type_id === 'undefined') {
 							str = str.replace('throw(s)', 'Throw(s) in a row')
 						} else {
-							str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s) in a row`)
+							str = str.replace('throw(s)', `${this.GameData.utilData.throwType[questinfo.throw_type_id]} Throw(s) in a row`)
 						}
 						if (item.conditions[1] && item.conditions[1].type === 15) {
 							str = str.replace('Throw(s)', 'Curveball Throw(s)')

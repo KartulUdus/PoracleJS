@@ -9,7 +9,7 @@ exports.run = async (client, msg, args) => {
 		if (!canContinue) return
 		const translator = client.translatorFactory.Translator(language)
 
-		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
+		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 
 		let reaction = '👌'
 		// Set defaults
@@ -46,10 +46,9 @@ exports.run = async (client, msg, args) => {
 		const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
-		const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
-
+		const gen = genCommand.length ? client.GameData.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
 		if (formNames.length) {
-			monsters = Object.values(client.monsters).filter((mon) => (
+			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
@@ -57,7 +56,7 @@ exports.run = async (client, msg, args) => {
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		} else if (gen || args.includes('individually') || client.config.tracking.forceEverythingSeparately) {
-			monsters = Object.values(client.monsters).filter((mon) => (
+			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
@@ -65,7 +64,7 @@ exports.run = async (client, msg, args) => {
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		} else {
-			monsters = Object.values(client.monsters).filter((mon) => (
+			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))) && !mon.form.id)
 

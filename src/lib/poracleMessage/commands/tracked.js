@@ -52,7 +52,7 @@ exports.run = async (client, msg, args) => {
 					monsterName = translator.translate('Everything')
 					formName = ''
 				} else {
-					const mon = Object.values(client.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
+					const mon = Object.values(client.GameData.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
 					monsterName = mon.name
 					formName = mon.form.name
 					if (formName === undefined) formName = ''
@@ -62,7 +62,7 @@ exports.run = async (client, msg, args) => {
 
 				const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
 				const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-				message = message.concat(`\n**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${translator.translate('gender')}: ${client.utilData.genders[monster.gender].emoji}` : ''}`)
+				message = message.concat(`\n**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${translator.translate('gender')}: ${client.GameData.utilData.genders[monster.gender].emoji}` : ''}`)
 			})
 		}
 
@@ -71,9 +71,9 @@ exports.run = async (client, msg, args) => {
 				message = message.concat('\n\n', translator.translate('You\'re tracking the following raids:'), '\n')
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any raids'))
 			raids.forEach((raid) => {
-				const mon = Object.values(client.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
+				const mon = Object.values(client.GameData.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 				const monsterName = mon ? translator.translate(mon.name) : 'levelMon'
-				const raidTeam = translator.translate(client.utilData.teams[raid.team].name)
+				const raidTeam = translator.translate(client.GameData.utilData.teams[raid.team].name)
 				const formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
 
 				if (+raid.pokemon_id === 9000) {
@@ -83,7 +83,7 @@ exports.run = async (client, msg, args) => {
 				}
 			})
 			eggs.forEach((egg) => {
-				const raidTeam = translator.translate(client.utilData.teams[egg.team].name)
+				const raidTeam = translator.translate(client.GameData.utilData.teams[egg.team].name)
 				message = message.concat(`\n**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`)
 			})
 		}
@@ -96,16 +96,16 @@ exports.run = async (client, msg, args) => {
 			quests.forEach((quest) => {
 				let rewardThing = ''
 				if (quest.reward_type === 7) {
-					rewardThing = Object.values(client.monsters).find((m) => m.id === quest.reward).name
+					rewardThing = Object.values(client.GameData.monsters).find((m) => m.id === quest.reward).name
 					rewardThing = translator.translate(rewardThing)
 				}
 				if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${translator.translate('or more stardust')}` : `${translator.translate('stardust')}`}`
-				if (quest.reward_type === 2) rewardThing = translator.translate(client.utilData.items[quest.reward])
+				if (quest.reward_type === 2) rewardThing = translator.translate(client.GameData.items[quest.reward].name)
 				if (quest.reward_type === 12) {
 					if (quest.reward == 0) {
 						rewardThing = `${translator.translate('mega energy')}`
 					} else {
-						const mon = Object.values(client.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
+						const mon = Object.values(client.GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
 						const monsterName = mon ? translator.translate(mon.name) : 'energyMon'
 						rewardThing = `${translator.translate('mega energy')} ${monsterName}`
 					}
