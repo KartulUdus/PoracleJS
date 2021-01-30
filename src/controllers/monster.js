@@ -402,6 +402,7 @@ class Monster extends Controller {
 									caring.caresUntil = data.disappear_time
 								}
 								caring.clean = cares.clean
+								caring.ping = cares.ping
 								caring.language = cares.language
 								caring.template = cares.template
 								exists = true
@@ -410,13 +411,13 @@ class Monster extends Controller {
 						}
 						if (!exists) {
 							weatherCellData.cares.push({
-								id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
+								id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, ping: cares.ping, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
 							})
 						}
 					} else {
 						weatherCellData.cares = []
 						weatherCellData.cares.push({
-							id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
+							id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, ping: cares.ping, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
 						})
 					}
 					if (this.config.weather.showAlteredPokemon && encountered) {
