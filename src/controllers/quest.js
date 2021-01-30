@@ -196,7 +196,7 @@ class Quest extends Controller {
 
 				data.questString = translator.translate(data.questString)
 				data.monsterNames = Object.values(this.GameData.monsters).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
-				data.itemNames = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.GameData.items[i])).join(', ')
+				data.itemNames = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.GameData.items[i].name)).join(', ')
 				data.energyMonstersNames = Object.values(this.GameData.monsters).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
 				data.rewardString = data.monsterNames
 				data.rewardString = data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : data.rewardString
@@ -346,8 +346,8 @@ class Quest extends Controller {
 						if (questinfo !== null) {
 						//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
 						//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
-							str = str.replace('berrie(s)', this.GameData.items[questinfo.item_id])
-							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.GameData.items[questinfo.item_id]}`)
+							str = str.replace('berrie(s)', this.GameData.items[questinfo.item_id].name)
+							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.GameData.items[questinfo.item_id].name}`)
 						} else {
 							str = str.replace('Evolve', 'Use a item to evolve')
 						}
