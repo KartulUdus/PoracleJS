@@ -112,9 +112,9 @@
         "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
       },
       "geocoding": {
-        "provider": "poracle",
+        "provider": "none",
         "providerURL": "Your Nominatim Server Address",
-        "staticProvider": "poracle",
+        "staticProvider": "none",
         "staticProviderURL": "Your TileServerCache Server Address",
         "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
         "staticKey":["Your MapQuest or Google Key"],
