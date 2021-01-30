@@ -1,4 +1,4 @@
-const pokemonGif = require('pokemon-gif')
+//const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const { S2 } = require('s2-geometry')
@@ -219,21 +219,21 @@ class Monster extends Controller {
 			data.move_2 = encountered ? data.move_2 : 0 // deprecated
 			data.height = encountered ? data.height.toFixed(2) : 0
 			data.weight = encountered ? data.weight.toFixed(2) : 0
-			data.genderData = this.GameData.utilData.genders[data.gender]
+			data.genderDataEng = this.GameData.utilData.genders[data.gender]
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-//			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}` // deprecated
-//			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}` // deprecated
+			//			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}` // deprecated
+			//			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}` // deprecated
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivcolor = this.findIvColor(data.iv) // deprecated
 			data.ivColor = this.findIvColor(data.iv)
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
-			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
+//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
@@ -427,7 +427,7 @@ class Monster extends Controller {
 							if (caring.id === cares.id) {
 								if (!caring.caredPokemons) caring.caredPokemons = []
 								caring.caredPokemons.push({
-									pokemon_id: data.pokemon_id, form: data.form, name: monster.name, formname: monster.form.name, iv: data.iv, cp: data.cp, latitude: data.latitude, longitude: data.longitude, disappear_time: data.disappear_time, alteringWeathers: data.alteringWeathers,
+									pokemon_id: data.pokemon_id, form: data.form, name: monster.name, formName: monster.form.name, iv: data.iv, cp: data.cp, latitude: data.latitude, longitude: data.longitude, disappear_time: data.disappear_time, alteringWeathers: data.alteringWeathers,
 								})
 							}
 						}
@@ -447,7 +447,7 @@ class Monster extends Controller {
 				data.move1emoji = this.GameData.moves[data.move_1] && this.GameData.utilData.types[this.GameData.moves[data.move_1].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : '' // deprecated
 				data.move2emoji = this.GameData.moves[data.move_2] && this.GameData.utilData.types[this.GameData.moves[data.move_2].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : '' // deprecated
 				data.boost = this.GameData.utilData.weather[data.weather] ? this.GameData.utilData.weather[data.weather].name : '' // deprecated
-				data.boosted = data.weather ? true : false
+				data.boosted = !!data.weather
 				data.boostWeather = data.weather ? data.weather : ''
 				data.boostWeatherName = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
 				data.boostWeatherEmoji = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
@@ -522,6 +522,7 @@ class Monster extends Controller {
 						tth: data.tth,
 						clean: cares.clean,
 						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)

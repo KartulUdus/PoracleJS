@@ -7,7 +7,9 @@ class Translator {
 		const pokemonNames = fs.existsSync(path.join(__dirname, `locale/pokemonNames_${region}.json`)) ? require(path.join(__dirname, `locale/pokemonNames_${region}.json`)) : {}
 		const defaultData = fs.existsSync(path.join(__dirname, `../../config/locale/${region}.json`)) ? require(path.join(__dirname, `../../config/locale/${region}.json`)) : {}
 		const dataAddition = fs.existsSync(path.join(__dirname, `../../config/custom.${region}.json`)) ? require(path.join(__dirname, `../../config/custom.${region}.json`)) : {}
-		this.data = { ...moveNames, ...pokemonNames, ...defaultData, ...dataAddition }
+		this.data = {
+			...moveNames, ...pokemonNames, ...defaultData, ...dataAddition,
+		}
 	}
 
 	translate(bit, lowercase = false) {
