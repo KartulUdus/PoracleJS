@@ -15,12 +15,12 @@ exports.run = async (client, msg, args) => {
 		}
 
 		let newLanguage = args[0]
-		let newLanguageName = client.utilData.languageNames[args[0]]
+		let newLanguageName = client.GameData.utilData.languageNames[args[0]]
 
-		const languageMatchByName = Object.keys(client.utilData.languageNames).find((x) => client.utilData.languageNames[x] == args[0])
+		const languageMatchByName = Object.keys(client.GameData.utilData.languageNames).find((x) => client.GameData.utilData.languageNames[x] == args[0])
 		if (languageMatchByName) {
 			newLanguage = languageMatchByName
-			newLanguageName = client.utilData.languageNames[newLanguage]
+			newLanguageName = client.GameData.utilData.languageNames[newLanguage]
 		}
 
 		if (!Object.keys(client.config.general.availableLanguages).includes(newLanguage)) {

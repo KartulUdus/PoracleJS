@@ -1,4 +1,4 @@
-//const pokemonGif = require('pokemon-gif')
+// const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
@@ -188,7 +188,7 @@ class Raid extends Controller {
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.formname = monster.form.name // deprecated
 				data.evolutionname = data.evolution ? this.GameData.utilData.evolution[data.evolution].name : '' // deprecated
-//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
+				//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 

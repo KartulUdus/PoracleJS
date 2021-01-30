@@ -1,4 +1,4 @@
-//const pokemonGif = require('pokemon-gif')
+// const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const { S2 } = require('s2-geometry')
@@ -233,7 +233,7 @@ class Monster extends Controller {
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
-//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
+			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
