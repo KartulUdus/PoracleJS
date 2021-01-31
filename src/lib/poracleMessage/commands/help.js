@@ -53,7 +53,7 @@ exports.run = async (client, msg, args) => {
 			const { fields } = greeting.embed
 
 			for (const field of fields) {
-				let fieldLine = messageText.concat(`\n\n${field.name}\n\n${field.value}`)
+				let fieldLine = `\n\n${field.name}\n\n${field.value}`
 				if (messageText.length + fieldLine.length > 1024) {
 					await msg.reply(messageText, {style: 'markdown'})
 					messageText = ''
