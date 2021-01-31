@@ -1,5 +1,7 @@
 require('./lib/configFileCreator')()
 require('dotenv').config()
+// eslint-disable-next-line no-underscore-dangle
+require('events').EventEmitter.prototype._maxListeners = 100
 
 const fs = require('fs')
 const util = require('util')
@@ -24,6 +26,13 @@ const {
 	config, knex, dts, geofence, translator, translatorFactory,
 } = Config()
 
+const GameData = {
+	monsters: require('./util/monsters'),
+	utilData: require('./util/util'),
+	moves: require('./util/moves'),
+	items: require('./util/items'),
+}
+
 const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
@@ -42,8 +51,7 @@ const DiscordCommando = require('./lib/discord/commando')
 const TelegramWorker = require('./lib/telegram/Telegram')
 
 const { log, webhooks } = require('./lib/logger')
-const monsterData = require('./util/monsters')
-const utilData = require('./util/util')
+
 const re = require('./util/regex')(translatorFactory)
 
 const MonsterController = require('./controllers/monster')
@@ -52,11 +60,11 @@ const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
 const WeatherController = require('./controllers/weather')
 
-const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, null, weatherCacheData)
-const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController, null)
-const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController, null)
-const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController, null)
-const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translatorFactory, mustache, weatherController, null)
+const weatherController = new WeatherController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, weatherCacheData)
+const monsterController = new MonsterController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const raidController = new RaidController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const questController = new QuestController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const pokestopController = new PokestopController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 
 fastify.decorate('logger', log)
 fastify.decorate('webhooks', webhooks)
@@ -75,7 +83,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translatorFactory) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, GameData, dts, geofence, translatorFactory) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let roleWorker
@@ -97,10 +105,10 @@ if (config.discord.enabled) {
 
 let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re)
+	telegram = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re)
+		telegramChannel = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re)
 	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {

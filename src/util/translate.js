@@ -3,13 +3,13 @@ const path = require('path')
 
 class Translator {
 	constructor(region) {
+		const moveNames = fs.existsSync(path.join(__dirname, `locale/moveNames_${region}.json`)) ? require(path.join(__dirname, `locale/moveNames_${region}.json`)) : {}
+		const pokemonNames = fs.existsSync(path.join(__dirname, `locale/pokemonNames_${region}.json`)) ? require(path.join(__dirname, `locale/pokemonNames_${region}.json`)) : {}
 		const defaultData = fs.existsSync(path.join(__dirname, `../../config/locale/${region}.json`)) ? require(path.join(__dirname, `../../config/locale/${region}.json`)) : {}
 		const dataAddition = fs.existsSync(path.join(__dirname, `../../config/custom.${region}.json`)) ? require(path.join(__dirname, `../../config/custom.${region}.json`)) : {}
-
-		const pokemonNames = fs.existsSync(path.join(__dirname, `locale/pokemonNames.${region}.json`)) ? require(path.join(__dirname, `locale/pokemonNames.${region}.json.${region}.json`)) : {}
-		const formNames = fs.existsSync(path.join(__dirname, `locale/formNames.${region}.json`)) ? require(path.join(__dirname, `locale/formNames.${region}.json.${region}.json`)) : {}
-
-		this.data = { ...formNames, ...pokemonNames, ...defaultData, ...dataAddition }
+		this.data = {
+			...moveNames, ...pokemonNames, ...defaultData, ...dataAddition,
+		}
 	}
 
 	translate(bit, lowercase = false) {

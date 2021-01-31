@@ -29,7 +29,7 @@ exports.run = async (client, msg, args) => {
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
 				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
-				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area))
+				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area)).map((area) => area.replace(/_/g, ' '))
 				if (!validAreas.length) {
 					return await msg.reply(`${translator.translate('no valid areas there, please use one of')}\n\`\`\`\n${confUse}\`\`\` `)
 				}
@@ -48,7 +48,7 @@ exports.run = async (client, msg, args) => {
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
 				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
-				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area))
+				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area)).map((area) => area.replace(/_/g, ' '))
 				if (!validAreas.length) {
 					return await msg.reply(`${translator.translate('no valid areas there, please use one of')}\n\`\`\`\n${confUse}\`\`\` `)
 				}

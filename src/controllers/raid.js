@@ -1,4 +1,4 @@
-const pokemonGif = require('pokemon-gif')
+// const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
@@ -131,85 +131,88 @@ class Raid extends Controller {
 
 		try {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'poracle': {
-					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
-					break
-				}
 				case 'tileservercache': {
 					pregenerateTile = true
 					break
 				}
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				case 'osm': {
-					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				case 'mapbox': {
-					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				default: {
-					data.staticmap = ''
+					data.staticMap = ''
 				}
 			}
 
+			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+
+			if (!data.team_id) data.team_id = 0
+			if (data.gym_name) data.gymName = data.gym_name ? data.gym_name : ''
+			data.teamId = data.team_id ? data.team_id : 0
+			data.teamName = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
+			data.color = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA' // deprecated
+			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
+			data.gymUrl = data.gym_url ? data.gym_url : ''
+			data.disappearTime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
+
+			data.matched = await this.pointInArea([data.latitude, data.longitude])
+
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
-				const monster = this.monsterData[`${data.pokemon_id}_${data.form}`] ? this.monsterData[`${data.pokemon_id}_${data.form}`] : this.monsterData[`${data.pokemon_id}_0`]
+				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 				if (!monster) {
 					this.log.warn('Couldn\'t find monster in:', data)
 					return
 				}
-				data.formname = monster.form.name
-				data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
-				data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+				data.pokemonId = data.pokemon_id
+				data.nameEng = monster.name
+				data.formId = monster.form.id
+				data.formNameEng = monster.form.name
+				data.genderDataEng = this.GameData.utilData.genders[data.gender]
+				data.evolutionNameEng = data.evolution ? this.GameData.utilData.evolution[data.evolution].name : ''
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
-				data.gif = pokemonGif(Number(data.pokemon_id))
-				data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-				if (!data.team_id) data.team_id = 0
-				if (!data.evolution) data.evolution = 0
-				if (data.name) data.gymName = data.name ? data.name : ''
+				data.formname = monster.form.name // deprecated
+				data.evolutionname = data.evolution ? this.GameData.utilData.evolution[data.evolution].name : '' // deprecated
+				//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 
 				const e = []
+				const t = []
+				const n = []
 				monster.types.forEach((type) => {
-					e.push(this.utilData.types[type.name].emoji)
+					e.push(this.GameData.utilData.types[type.name].emoji)
+					t.push(type.id)
+					n.push(type.name)
 				})
-				data.staticSprite = encodeURI(JSON.stringify([
-					{
-						url: data.imgUrl,
-						height: this.config.geocoding.spriteHeight,
-						width: this.config.geocoding.spriteWidth,
-						x_offset: 0,
-						y_offset: 0,
-						latitude: +data.latitude.toFixed(5),
-						longitude: +data.longitude.toFixed(5),
-					},
-				]))
-				if (this.config.geocoding.staticProvider === 'poracle') {
-					data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
-				}
+				data.types = t
+				data.typeNameEng = n
 				data.emoji = e
-				data.emojiString = e.join('')
 
-				data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
-				data.color = data.team_id ? this.utilData.teams[data.team_id].color : 'BABABA'
-
-				data.evolutionname = data.evolution ? this.utilData.evolution[data.evolution].name : ''
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-					log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+					log.debug(`Raid on ${data.gym_name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 					return []
 				}
 
-				data.matched = await this.pointInArea([data.latitude, data.longitude])
 				const whoCares = await this.raidWhoCares(data)
 
-				this.log.info(`Raid against ${data.name} appeared and ${whoCares.length} humans cared.`)
+				this.log.info(`Raid on ${data.gym_name} appeared and ${whoCares.length} humans cared.`)
 
 				if (!whoCares[0]) return []
 
@@ -224,7 +227,8 @@ class Raid extends Controller {
 				const jobs = []
 
 				if (pregenerateTile) {
-					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data) // deprecated
 				}
 
 				for (const cares of whoCares) {
@@ -233,28 +237,36 @@ class Raid extends Controller {
 					const language = cares.language || this.config.general.locale
 					const translator = this.translatorFactory.Translator(language)
 
-					data.name = translator.translate(monster.name)
-					data.quickMove = this.utilData.moves[data.move_1] ? translator.translate(this.utilData.moves[data.move_1].name) : ''
-					data.chargeMove = this.utilData.moves[data.move_2] ? translator.translate(this.utilData.moves[data.move_2].name) : ''
-					data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.moves[data.move_1].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
-					data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.moves[data.move_2].type ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
+					data.name = translator.translate(data.nameEng)
+					data.formName = translator.translate(data.formNameEng)
+					data.evolutionName = translator.translate(data.evolutionNameEng)
+					data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
+					data.typeEmoji = data.emoji.map((emoji) => translator.translate(emoji)).join('')
+					data.name = translator.translate(monster.name) // deprecated
+					data.quickMove = data.move_1 ? data.move_1 : ''
+					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
+					data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : ''
+					data.chargeMove = data.move_2 ? data.move_2 : ''
+					data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
+					data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
+					data.move1emoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : '' // deprecated
+					data.move2emoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : '' // deprecated
 
 					const view = {
 						...geoResult,
 						...data,
+						pokemonName: data.pokemonName,
 						id: data.pokemon_id,
 						baseStats: monster.stats,
-						time: data.distime,
+						time: data.disappearTime,
 						tthh: data.tth.hours,
 						tthm: data.tth.minutes,
 						tths: data.tth.seconds,
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
-						genderData: this.utilData.genders[data.gender],
-						move1: data.quickMove,
-						move2: data.chargeMove,
-						imgUrl: data.imgUrl,
-						// pokemoji: emojiData.pokemon[data.pokemon_id],
+						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
+						move1: data.quickMove, // deprecated
+						move2: data.chargeMove, // deprecated
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
@@ -292,39 +304,17 @@ class Raid extends Controller {
 				return jobs
 			}
 
-			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
-			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.hatchTime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
-			data.staticSprite = encodeURI(JSON.stringify([
-				{
-					url: data.imgUrl,
-					height: this.config.geocoding.spriteHeight,
-					width: this.config.geocoding.spriteWidth,
-					x_offset: 0,
-					y_offset: 0,
-					latitude: +data.latitude.toFixed(5),
-					longitude: +data.longitude.toFixed(5),
-				},
-			]))
-			if (this.config.geocoding.staticProvider === 'poracle') {
-				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
-			}
-			if (!data.team_id) data.team_id = 0
-			if (data.name) data.gymName = data.name
-			data.teamName = data.team_id ? this.utilData.teams[data.team_id].name : 'Harmony'
-			data.color = data.team_id ? this.utilData.teams[data.team_id].color : 'BABABA'
-			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				this.log.debug(`Raid against ${data.name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`Raid on ${data.gym_name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
 			const whoCares = await this.eggWhoCares(data)
 			this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
 
@@ -341,7 +331,8 @@ class Raid extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data) // deprecated
 			}
 
 			for (const cares of whoCares) {
@@ -361,11 +352,6 @@ class Raid extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: this.utilData.genders[data.gender],
-					move1: data.quickMove,
-					move2: data.chargeMove,
-					imgUrl: data.imgUrl,
-					// pokemoji: emojiData.pokemon[data.pokemon_id],
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 

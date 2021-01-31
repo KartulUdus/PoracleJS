@@ -81,39 +81,39 @@ class Quest extends Controller {
 
 		try {
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'poracle': {
-					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
-					break
-				}
 				case 'tileservercache': {
 					pregenerateTile = true
 					break
 				}
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				case 'osm': {
-					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				case 'mapbox': {
-					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				default: {
-					data.staticmap = ''
+					data.staticMap = ''
 				}
 			}
 
-			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
-			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			data.disTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day')
-			data.tth = moment.preciseDiff(Date.now(), data.disTime.clone().utc(), true)
+			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			data.disappearTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day')
+			data.disTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day') // deprecated
+			data.tth = moment.preciseDiff(Date.now(), data.disappearTime.clone().utc(), true)
 			data.imgUrl = ''
 			data.stickerUrl = ''
 
-			if (!data.team_id) data.team_id = 0
 			if (data.pokestop_name) data.pokestopName = data.pokestop_name
 			if (data.pokestop_url) data.pokestopUrl = data.pokestop_url
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -153,21 +153,6 @@ class Quest extends Controller {
 				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.png`
 				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.webp`
 			}
-			data.staticSprite = encodeURI(JSON.stringify([
-				{
-					url: data.imgUrl,
-					height: this.config.geocoding.spriteHeight,
-					width: this.config.geocoding.spriteWidth,
-					x_offset: 0,
-					y_offset: 0,
-					latitude: +data.latitude.toFixed(5),
-					longitude: +data.longitude.toFixed(5),
-				},
-			]))
-
-			if (this.config.geocoding.staticProvider === 'poracle') {
-				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
-			}
 
 			const whoCares = await this.questWhoCares(data)
 
@@ -185,7 +170,8 @@ class Quest extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('quest', data) // deprecated
 			}
 
 			for (const cares of whoCares) {
@@ -195,9 +181,9 @@ class Quest extends Controller {
 				const translator = this.translatorFactory.Translator(language)
 
 				data.questString = translator.translate(data.questString)
-				data.monsterNames = Object.values(this.monsterData).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
-				data.itemNames = Object.keys(this.utilData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.utilData.items[i])).join(', ')
-				data.energyMonstersNames = Object.values(this.monsterData).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
+				data.monsterNames = Object.values(this.GameData.monsters).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
+				data.itemNames = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.GameData.items[i].name)).join(', ')
+				data.energyMonstersNames = Object.values(this.GameData.monsters).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
 				data.rewardString = data.monsterNames
 				data.rewardString = data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : data.rewardString
 				data.rewardString = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNames}` : data.rewardString
@@ -210,7 +196,7 @@ class Quest extends Controller {
 					id: data.pokemon_id,
 					lat: +data.latitude.toFixed(4),
 					lon: +data.longitude.toFixed(4),
-					time: data.distime,
+					time: data.disappearTime,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
@@ -299,14 +285,14 @@ class Quest extends Controller {
 							let first = true
 							for (const [index, id] of Object.entries(questinfo.pokemon_ids)) {
 								if (first) {
-									pstr += `${this.monsterData[id].name}`
+									pstr += `${this.GameData.monsters[id].name}`
 								} else {
-									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.monsterData[`${id}_0`].name}` : `, ${this.monsterData[`${id}_0`].name}`
+									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
 								}
 								first = false
 							}
 						} else {
-							pstr += `${this.monsterData[`${questinfo.pokemon_ids}_0`].name}`
+							pstr += `${this.GameData.monsters[`${questinfo.pokemon_ids}_0`].name}`
 						}
 						str = str.replace('pokémon', pstr)
 						str = str.replace('Snapshot(s)', `Snapshot(s) of ${pstr}`)
@@ -328,7 +314,7 @@ class Quest extends Controller {
 						break
 					case 8:
 						str = str.replace('Land', 'Make')
-						str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s)`)
+						str = str.replace('throw(s)', `${this.GameData.utilData.throwType[questinfo.throw_type_id]} Throw(s)`)
 						if (item.conditions[1] && item.conditions[1].type === 15) {
 							str = str.replace('Throw(s)', 'Curveball Throw(s)')
 						}
@@ -346,8 +332,8 @@ class Quest extends Controller {
 						if (questinfo !== null) {
 						//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
 						//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
-							str = str.replace('berrie(s)', this.utilData.items[questinfo.item_id])
-							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.utilData.items[questinfo.item_id]}`)
+							str = str.replace('berrie(s)', this.GameData.items[questinfo.item_id].name)
+							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.GameData.items[questinfo.item_id].name}`)
 						} else {
 							str = str.replace('Evolve', 'Use a item to evolve')
 						}
@@ -360,7 +346,7 @@ class Quest extends Controller {
 						if (typeof questinfo.throw_type_id === 'undefined') {
 							str = str.replace('throw(s)', 'Throw(s) in a row')
 						} else {
-							str = str.replace('throw(s)', `${this.utilData.throwType[questinfo.throw_type_id]} Throw(s) in a row`)
+							str = str.replace('throw(s)', `${this.GameData.utilData.throwType[questinfo.throw_type_id]} Throw(s) in a row`)
 						}
 						if (item.conditions[1] && item.conditions[1].type === 15) {
 							str = str.replace('Throw(s)', 'Curveball Throw(s)')

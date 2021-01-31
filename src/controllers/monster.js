@@ -1,4 +1,4 @@
-const pokemonGif = require('pokemon-gif')
+//const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const { S2 } = require('s2-geometry')
@@ -8,7 +8,7 @@ require('moment-precise-range-plugin')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
-		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.utilData.weatherTypeBoost).find((key) => this.utilData.weatherTypeBoost[key].includes(type)), 10))
+		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
 		const nonBoostingWeathers = [1, 2, 3, 4, 5, 6, 7].filter((weather) => !boostingWeathers.includes(weather))
 		if (boostStatus > 0) return nonBoostingWeathers
 		return boostingWeathers
@@ -20,7 +20,7 @@ class Monster extends Controller {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
 		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
-		if (data.pvpEvoLookup) pokemonQueryString = `(pokemon_id=${data.pvp_pokemon_id} and (form = 0 or form = ${data.pvp_form}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
+		if (data.pvpEvoLookup) pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and (form = 0 or form = ${data.pvpFormId}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
 		let pvpQueryString = `great_league_ranking>=${data.bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and ultra_league_ranking>=${data.bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}`
 		if (data.pvpEvoLookup) pvpQueryString = `great_league_ranking>=${data.pvp_bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.pvp_bestGreatLeagueRankCP} and ultra_league_ranking>=${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.pvp_bestUltraLeagueRankCP}`
 		let query = `
@@ -103,32 +103,32 @@ class Monster extends Controller {
 			const minTth = this.config.general.alertMinimumTime || 0
 
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'poracle': {
-					data.staticmap = `https://tiles.poracle.world/static/${this.config.geocoding.type}/${+data.latitude.toFixed(5)}/${+data.longitude.toFixed(5)}/${this.config.geocoding.zoom}/${this.config.geocoding.width}/${this.config.geocoding.height}/${this.config.geocoding.scale}/png`
-					break
-				}
 				case 'tileservercache': {
 					pregenerateTile = true
 					break
 				}
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
+					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				case 'osm': {
-					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
+					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				case 'mapbox': {
-					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
+					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				default: {
-					data.staticmap = ''
+					data.staticmap = '' // deprecated
+					data.staticMap = ''
 				}
 			}
 			if (data.form === undefined || data.form === null) data.form = 0
-			const monster = this.monsterData[`${data.pokemon_id}_${data.form}`] ? this.monsterData[`${data.pokemon_id}_${data.form}`] : this.monsterData[`${data.pokemon_id}_0`]
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
 				log.warn('Couldn\'t find monster in:', data)
@@ -200,30 +200,54 @@ class Monster extends Controller {
 				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
 				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
+			data.pokemonId = data.pokemon_id
+			data.encounterId = data.encounter_id
+			data.nameEng = monster.name
+			data.formNameEng = monster.form.name
+			data.formId = data.form
 			data.iv = encountered ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
-			data.individual_attack = encountered ? data.individual_attack : 0
-			data.individual_defense = encountered ? data.individual_defense : 0
-			data.individual_stamina = encountered ? data.individual_stamina : 0
+			data.atk = encountered ? data.individual_attack : 0
+			data.def = encountered ? data.individual_defense : 0
+			data.sta = encountered ? data.individual_stamina : 0
+			if (data.base_catch) data.capture_1 = data.base_catch
+			if (data.great_catch) data.capture_2 = data.great_catch
+			if (data.ultra_catch) data.capture_3 = data.ultra_catch
+			data.catchBase = encountered ? (data.capture_1 * 100).toFixed(2) : 0
+			data.catchGreat = encountered ? (data.capture_2 * 100).toFixed(2) : 0
+			data.catchUltra = encountered ? (data.capture_3 * 100).toFixed(2) : 0
 			data.cp = encountered ? data.cp : 0
-			data.pokemon_level = encountered ? data.pokemon_level : 0
-			data.move_1 = encountered ? data.move_1 : 0
-			data.move_2 = encountered ? data.move_2 : 0
-			data.weight = encountered ? data.weight.toFixed(1) : 0
+			data.level = encountered ? data.pokemon_level : 0
+			data.quickMove = encountered ? data.move_1 : 0
+			data.chargeMove = encountered ? data.move_2 : 0
+			data.individual_attack = encountered ? data.individual_attack : 0 // deprecated
+			data.individual_defense = encountered ? data.individual_defense : 0 // deprecated
+			data.individual_stamina = encountered ? data.individual_stamina : 0 // deprecated
+			data.pokemon_level = encountered ? data.pokemon_level : 0 // deprecated
+			data.move_1 = encountered ? data.move_1 : 0 // deprecated
+			data.move_2 = encountered ? data.move_2 : 0 // deprecated
+			data.height = encountered ? data.height.toFixed(2) : 0
+			data.weight = encountered ? data.weight.toFixed(2) : 0
+			data.genderDataEng = this.GameData.utilData.genders[data.gender]
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
-			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
-			data.color = monster.types[0].color
-			data.ivcolor = this.findIvColor(data.iv)
+			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			//			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}` // deprecated
+			//			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}` // deprecated
+			data.color = this.GameData.utilData.types[monster.types[0].name].color
+			data.ivcolor = this.findIvColor(data.iv) // deprecated
+			data.ivColor = this.findIvColor(data.iv)
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
-			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.gif = pokemonGif(Number(data.pokemon_id))
+			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
+			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
+//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
-			data.pvp_pokemon_id = data.pokemon_id
-			data.pvp_form = data.form
+			data.pvpPokemonId = data.pokemon_id
+			data.pvpFormId = data.form
 			data.pvpEvolutionData = {}
 
 			data.bestGreatLeagueRank = 4096
@@ -298,21 +322,6 @@ class Monster extends Controller {
 				}
 			}
 
-			data.staticSprite = encodeURI(JSON.stringify([
-				{
-					url: data.imgUrl,
-					height: this.config.geocoding.spriteHeight,
-					width: this.config.geocoding.spriteWidth,
-					x_offset: 0,
-					y_offset: 0,
-					latitude: +data.latitude,
-					longitude: +data.longitude,
-				},
-			]))
-			if (this.config.geocoding.staticProvider === 'poracle') {
-				data.staticmap = `${data.staticmap}?markers=${data.staticSprite}`
-			}
-
 			// Stop handling if it already disappeared or is about to go away
 			if ((data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) && !weatherChangeAlertJobs[0]) {
 				log.debug(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -328,8 +337,8 @@ class Monster extends Controller {
 				const pvpEvoData = data
 				if (Object.keys(data.pvpEvolutionData).length !== 0) {
 					for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
-						pvpEvoData.pvp_pokemon_id = key
-						pvpEvoData.pvp_form = pvpMon.greatLeague ? pvpMon.greatLeague.form : pvpMon.ultraLeague.form
+						pvpEvoData.pvpPokemonId = key
+						pvpEvoData.pvpFormId = pvpMon.greatLeague ? pvpMon.greatLeague.form : pvpMon.ultraLeague.form
 						pvpEvoData.pvp_bestGreatLeagueRank = pvpMon.greatLeague ? pvpMon.greatLeague.rank : 4096
 						pvpEvoData.pvp_bestGreatLeagueRankCP = pvpMon.greatLeague ? pvpMon.greatLeague.cp : 0
 						pvpEvoData.pvp_bestUltraLeagueRank = pvpMon.ultraLeague ? pvpMon.ultraLeague.rank : 4096
@@ -367,16 +376,17 @@ class Monster extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
+				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('monster', data) // deprecated
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data) // deprecated
 			}
 
 			if (this.config.weather.enableWeatherForecast && data.disappear_time > nextHourTimestamp) {
 				const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
 				let pokemonShouldBeBoosted = false
-				if (weatherForecast.current > 0 && this.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
+				if (weatherForecast.current > 0 && this.GameData.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 				if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather == 0))) {
 					const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time).slice(0, -3)
-					const pokemonWillBeBoosted = this.utilData.weatherTypeBoost[weatherForecast.next].filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
+					const pokemonWillBeBoosted = this.GameData.utilData.weatherTypeBoost[weatherForecast.next].filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
 					if (data.weather > 0 && !pokemonWillBeBoosted || data.weather == 0 && pokemonWillBeBoosted) {
 						weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current
 						if (pokemonShouldBeBoosted && data.weather == 0) {
@@ -402,6 +412,7 @@ class Monster extends Controller {
 									caring.caresUntil = data.disappear_time
 								}
 								caring.clean = cares.clean
+								caring.ping = cares.ping
 								caring.language = cares.language
 								caring.template = cares.template
 								exists = true
@@ -410,13 +421,13 @@ class Monster extends Controller {
 						}
 						if (!exists) {
 							weatherCellData.cares.push({
-								id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
+								id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, ping: cares.ping, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
 							})
 						}
 					} else {
 						weatherCellData.cares = []
 						weatherCellData.cares.push({
-							id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
+							id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, ping: cares.ping, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
 						})
 					}
 					if (this.config.weather.showAlteredPokemon && encountered) {
@@ -424,7 +435,7 @@ class Monster extends Controller {
 							if (caring.id === cares.id) {
 								if (!caring.caredPokemons) caring.caredPokemons = []
 								caring.caredPokemons.push({
-									pokemon_id: data.pokemon_id, form: data.form, name: monster.name, formname: monster.form.name, iv: data.iv, cp: data.cp, latitude: data.latitude, longitude: data.longitude, disappear_time: data.disappear_time, alteringWeathers: data.alteringWeathers,
+									pokemon_id: data.pokemon_id, form: data.form, name: monster.name, formName: monster.form.name, iv: data.iv, cp: data.cp, latitude: data.latitude, longitude: data.longitude, disappear_time: data.disappear_time, alteringWeathers: data.alteringWeathers,
 								})
 							}
 						}
@@ -435,32 +446,42 @@ class Monster extends Controller {
 				const translator = this.translatorFactory.Translator(language)
 
 				data.name = translator.translate(monster.name)
-				data.formname = translator.translate(monster.form.name)
-				data.quickMove = data.weight && this.utilData.moves[data.move_1] ? translator.translate(this.utilData.moves[data.move_1].name) : ''
-				data.chargeMove = data.weight && this.utilData.moves[data.move_2] ? translator.translate(this.utilData.moves[data.move_2].name) : ''
-				data.move1emoji = this.utilData.moves[data.move_1] && this.utilData.types[this.utilData.moves[data.move_1].type] ? translator.translate(this.utilData.types[this.utilData.moves[data.move_1].type].emoji) : ''
-				data.move2emoji = this.utilData.moves[data.move_2] && this.utilData.types[this.utilData.moves[data.move_2].type] ? translator.translate(this.utilData.types[this.utilData.moves[data.move_2].type].emoji) : ''
-				data.boost = this.utilData.weather[data.weather] ? this.utilData.weather[data.weather].name : ''
-				data.boostemoji = this.utilData.weather[data.weather] ? translator.translate(this.utilData.weather[data.weather].emoji) : ''
-				data.gameweather = this.utilData.weather[currentCellWeather] ? this.utilData.weather[currentCellWeather].name : ''
-				data.gameweatheremoji = this.utilData.weather[currentCellWeather] ? translator.translate(this.utilData.weather[currentCellWeather].emoji) : ''
+				data.formName = translator.translate(monster.form.name)
+				data.formname = translator.translate(monster.form.name) // deprecated
+				data.quickMoveName = data.weight && this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
+				data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.utilData.types[this.GameData.moves[data.move_1].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : ''
+				data.chargeMoveName = data.weight && this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
+				data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.utilData.types[this.GameData.moves[data.move_2].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
+				data.move1emoji = this.GameData.moves[data.move_1] && this.GameData.utilData.types[this.GameData.moves[data.move_1].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : '' // deprecated
+				data.move2emoji = this.GameData.moves[data.move_2] && this.GameData.utilData.types[this.GameData.moves[data.move_2].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : '' // deprecated
+				data.boost = this.GameData.utilData.weather[data.weather] ? this.GameData.utilData.weather[data.weather].name : '' // deprecated
+				data.boosted = !!data.weather
+				data.boostWeather = data.weather ? data.weather : ''
+				data.boostWeatherName = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
+				data.boostWeatherEmoji = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
+				data.gameWeather = this.GameData.utilData.weather[currentCellWeather] ? currentCellWeather : ''
+				data.gameWeatherName = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].name) : ''
+				data.gameWeatherEmoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].emoji) : ''
+				data.boostemoji = this.GameData.utilData.weather[data.weather] ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : '' // deprecated
+				data.gameweather = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].name) : '' // deprecated
+				data.gameweatheremoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].emoji) : '' // deprecated
 				if (data.weatherNext) {
 					if (!data.weatherCurrent) {
-						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.utilData.weather[data.weatherNext].name)} ${translator.translate(this.utilData.weather[data.weatherNext].emoji)}`
+						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.GameData.utilData.weather[data.weatherNext].emoji)}`
 						data.weatherCurrentName = translator.translate('unknown')
 						data.weatherCurrentEmoji = '❓'
 					} else {
-						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(this.utilData.weather[data.weatherCurrent].name)} ${translator.translate(this.utilData.weather[data.weatherCurrent].emoji)} ➡️ ${translator.translate(this.utilData.weather[data.weatherNext].name)} ${translator.translate(this.utilData.weather[data.weatherNext].emoji)}`
-						data.weatherCurrentName = translator.translate(this.utilData.weather[data.weatherCurrent].name)
-						data.weatherCurrentEmoji = translator.translate(this.utilData.weather[data.weatherCurrent].emoji)
+						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(this.GameData.utilData.weather[data.weatherCurrent].name)} ${translator.translate(this.GameData.utilData.weather[data.weatherCurrent].emoji)} ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.GameData.utilData.weather[data.weatherNext].emoji)}`
+						data.weatherCurrentName = translator.translate(this.GameData.utilData.weather[data.weatherCurrent].name)
+						data.weatherCurrentEmoji = translator.translate(this.GameData.utilData.weather[data.weatherCurrent].emoji)
 					}
-					data.weatherNextName = translator.translate(this.utilData.weather[data.weatherNext].name)
-					data.weatherNextEmoji = translator.translate(this.utilData.weather[data.weatherNext].emoji)
+					data.weatherNextName = translator.translate(this.GameData.utilData.weather[data.weatherNext].name)
+					data.weatherNextEmoji = translator.translate(this.GameData.utilData.weather[data.weatherNext].emoji)
 				}
 
 				const e = []
 				monster.types.forEach((type) => {
-					e.push(translator.translate(this.utilData.types[type.name].emoji))
+					e.push(translator.translate(this.GameData.utilData.types[type.name].emoji))
 				})
 				data.emoji = e
 				data.emojiString = e.join('')
@@ -470,19 +491,12 @@ class Monster extends Controller {
 					...data,
 					id: data.pokemon_id,
 					baseStats: monster.stats,
-					time: data.distime,
+					time: data.disappearTime,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
-					name: data.name,
 					now: new Date(),
-					genderData: this.utilData.genders[data.gender],
-					level: Math.round(data.pokemon_level),
-					atk: data.individual_attack,
-					def: data.individual_defense,
-					sta: data.individual_stamina,
-					imgUrl: data.imgUrl,
 					greatleagueranking: cares.great_league_ranking === 4096 ? 0 : cares.great_league_ranking,
 					ultraleagueranking: cares.ultra_league_ranking === 4096 ? 0 : cares.ultra_league_ranking,
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
@@ -516,6 +530,7 @@ class Monster extends Controller {
 						tth: data.tth,
 						clean: cares.clean,
 						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)

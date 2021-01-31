@@ -10,7 +10,7 @@ exports.run = async (client, msg, args) => {
 		if (!canContinue) return
 		const translator = client.translatorFactory.Translator(language)
 
-		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
+		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 		let reaction = '👌'
 
 		const pings = msg.getPings()
@@ -31,19 +31,19 @@ exports.run = async (client, msg, args) => {
 
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
-		const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
+		const gen = genCommand.length ? client.GameData.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
 
-		fullMonsters = Object.values(client.monsters).filter((mon) => (
+		fullMonsters = Object.values(client.GameData.monsters).filter((mon) => (
 			(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 			|| args.includes('all pokemon')) && !mon.form.id)
 		if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		monsters = fullMonsters.map((mon) => mon.id)
-		items = Object.keys(client.utilData.items).filter((key) => args.includes(translator.translate(client.utilData.items[key].toLowerCase())) || args.includes('all items'))
+		items = Object.keys(client.GameData.items).filter((key) => args.includes(translator.translate(client.GameData.items[key].name.toLowerCase())) || args.includes('all items'))
 		if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
 			|| args.includes('everything') && msg.isFromAdmin) {
-			monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
-			items = Object.keys(client.utilData.items)
+			monsters = Object.values(client.GameData.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
+			items = Object.keys(client.GameData.items)
 			minDust = 0
 			stardustTracking = -1
 			energyMonsters.push('0')
@@ -61,7 +61,7 @@ exports.run = async (client, msg, args) => {
 			} else if (element.match(client.re.energyRe)) {
 				[,, energyMonster] = element.match(client.re.energyRe)
 				energyMonster = translator.reverse(energyMonster.toLowerCase(), true).toLowerCase()
-				energyMonster = Object.values(client.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
+				energyMonster = Object.values(client.GameData.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
 				energyMonster = energyMonster.map((mon) => mon.id)
 				if (+energyMonster > 0) energyMonsters.push(energyMonster)
 			} else if (element === 'energy') {

@@ -10,7 +10,7 @@ exports.run = async (client, msg, args) => {
 		if (!canContinue) return
 		const translator = client.translatorFactory.Translator(language)
 
-		const typeArray = Object.values(client.utilData.gruntTypes).map((grunt) => grunt.type.toLowerCase())
+		const typeArray = Object.values(client.GameData.utilData.gruntTypes).map((grunt) => grunt.type.toLowerCase())
 
 		let reaction = '👌'
 		const remove = !!args.find((arg) => arg === 'remove')

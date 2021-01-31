@@ -8,12 +8,12 @@ exports.run = async (client, msg, args) => {
 
 		if (!canContinue) return
 
-		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
+		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
 		let monsters = []
-		monsters = Object.values(client.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+		monsters = Object.values(client.GameData.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) || args.includes('everything'))
 			&& !mon.form.id)
 

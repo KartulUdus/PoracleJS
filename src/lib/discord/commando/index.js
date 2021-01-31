@@ -8,12 +8,11 @@ const hastebin = require('hastebin-gen')
 const Controller = require('../../../controllers/controller')
 
 class DiscordCommando {
-	constructor(knex, config, log, monsterData, utilData, dts, geofence, translatorFactory) {
+	constructor(knex, config, log, GameData, dts, geofence, translatorFactory) {
 		this.config = config
 		this.query = new Controller(knex, config)
 		this.log = log
-		this.monsterData = monsterData
-		this.utilData = utilData
+		this.GameData = GameData
 		this.dts = dts
 		this.geofence = geofence
 		this.translatorFactory = translatorFactory
@@ -40,8 +39,7 @@ class DiscordCommando {
 			this.client.dts = this.dts
 			this.client.re = this.re
 			this.client.geofence = this.geofence
-			this.client.monsters = this.monsterData
-			this.client.utilData = this.utilData
+			this.client.GameData = this.GameData
 			this.client.mustache = mustache
 			this.client.hastebin = hastebin
 			this.client.translatorFactory = this.translatorFactory
