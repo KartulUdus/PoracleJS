@@ -13,8 +13,9 @@ class PoracleTelegramMessage {
 		this.command = ctx.state.command.command
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	convertSafe(message) {
-		return message.replace('_', '\\_').replace('*', '\\*').replace('[', '\\[').replace('`', '\\`')
+		return message.replace(/[_\*\[`]/g, ((m) => `\\${m}`))
 	}
 
 	// eslint-disable-next-line class-methods-use-this

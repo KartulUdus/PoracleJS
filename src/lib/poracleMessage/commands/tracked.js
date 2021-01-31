@@ -31,7 +31,7 @@ exports.run = async (client, msg, args) => {
 		} else {
 			locationText = `\n${translator.translate('You have not set a location yet')}`
 		}
-		await msg.reply(`${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`)
+		await msg.reply(`${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown'})
 
 		if (human.area != '[]') {
 			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
@@ -139,7 +139,7 @@ exports.run = async (client, msg, args) => {
 		}
 
 		if (message.length < 4000) {
-			return await msg.reply(message)
+			return await msg.reply(message, { style: 'markdown'} )
 		}
 
 		try {
