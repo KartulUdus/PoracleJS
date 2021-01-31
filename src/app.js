@@ -38,7 +38,8 @@ const readDir = util.promisify(fs.readdir)
 const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
 const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
 
-const cache = new NodeCache({ stdTTL: 5400, useClones: false })
+const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
+const invasionCache = new NodeCache({ stdTTL: 23040, useClones: false }) // 16 hours
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
@@ -71,6 +72,7 @@ fastify.decorate('webhooks', webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
+fastify.decorate('invasionCache', invasionCache)
 fastify.decorate('monsterController', monsterController)
 fastify.decorate('raidController', raidController)
 fastify.decorate('questController', questController)
@@ -303,11 +305,11 @@ async function processOne(hook) {
 			fastify.webhooks.info('pokestop', hook.message)
 			const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 			if (!incidentExpiration) break
-			if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+			if (fastify.invasionCache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
 				fastify.logger.debug(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
 				break
 			}
-			fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
+			fastify.invasionCache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
 
 			const result = await fastify.pokestopController.handle(hook.message)
 			if (!result) break
