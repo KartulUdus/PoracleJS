@@ -154,8 +154,6 @@ class Raid extends Controller {
 
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			data.applemap = data.appleMapUrl // deprecated
-			data.mapurl = data.googleMapUrl // deprecated
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 
 			if (!data.team_id) data.team_id = 0
@@ -163,11 +161,13 @@ class Raid extends Controller {
 			data.teamId = data.team_id ? data.team_id : 0
 			data.teamName = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
-			data.color = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA' // deprecated
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url ? data.gym_url : ''
 			data.disappearTime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.distime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
+			data.applemap = data.appleMapUrl // deprecated
+			data.mapurl = data.googleMapUrl // deprecated
+			data.color = data.gymColor // deprecated
+			data.distime = data.disappearTime // deprecated
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
@@ -185,8 +185,8 @@ class Raid extends Controller {
 				data.genderDataEng = this.GameData.utilData.genders[data.gender]
 				data.evolutionNameEng = data.evolution ? this.GameData.utilData.evolution[data.evolution].name : ''
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
-				data.formname = monster.form.name // deprecated
-				data.evolutionname = data.evolution ? this.GameData.utilData.evolution[data.evolution].name : '' // deprecated
+				data.formname = data.formNameEng // deprecated
+				data.evolutionname = data.evolutionNameEng // deprecated
 				//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
@@ -241,15 +241,16 @@ class Raid extends Controller {
 					data.evolutionName = translator.translate(data.evolutionNameEng)
 					data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
 					data.typeEmoji = data.emoji.map((emoji) => translator.translate(emoji)).join('')
-					data.name = translator.translate(monster.name) // deprecated
-					data.quickMove = data.move_1 ? data.move_1 : ''
+					data.quickMoveId = data.move_1 ? data.move_1 : ''
 					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
 					data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : ''
-					data.chargeMove = data.move_2 ? data.move_2 : ''
+					data.chargeMoveId = data.move_2 ? data.move_2 : ''
 					data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
 					data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
-					data.move1emoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : '' // deprecated
-					data.move2emoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : '' // deprecated
+					data.quickMove = data.quickMoveName // deprecated
+					data.chargeMove = data.chargeMoveName // deprecated
+					data.move1emoji = data.quickMoveEmoji // deprecated
+					data.move2emoji = data.chargeMoveEmoji // deprecated
 
 					const view = {
 						...geoResult,
@@ -264,8 +265,8 @@ class Raid extends Controller {
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
 						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
-						move1: data.quickMove, // deprecated
-						move2: data.chargeMove, // deprecated
+						move1: data.quickMoveId, // deprecated
+						move2: data.chargeMoveId, // deprecated
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
@@ -305,7 +306,7 @@ class Raid extends Controller {
 
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 			data.hatchTime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.hatchtime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
+			data.hatchtime = data.hatchTime // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 

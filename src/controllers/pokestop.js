@@ -92,17 +92,17 @@ class Pokestop extends Controller {
 
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			data.applemap = data.appleMapUrl // deprecated
-			data.mapurl = data.googleMapUrl // deprecated
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
-			data.imgUrl = data.url // deprecated
 
 			const incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp
 			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
 			data.disappearTime = moment(incidentExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.distime = moment(incidentExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
+			data.applemap = data.appleMapUrl // deprecated
+			data.mapurl = data.googleMapUrl // deprecated
+			data.imgUrl = data.pokestopUrl // deprecated
+			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {

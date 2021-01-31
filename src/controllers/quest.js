@@ -104,11 +104,11 @@ class Quest extends Controller {
 
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
-			data.applemap = data.appleMapUrl // deprecated
-			data.mapurl = data.googleMapUrl // deprecated
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			data.disappearTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day')
-			data.disTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day') // deprecated
+			data.applemap = data.appleMapUrl // deprecated
+			data.mapurl = data.googleMapUrl // deprecated
+			data.disTime = data.disappearTime // deprecated
 			data.tth = moment.preciseDiff(Date.now(), data.disappearTime.clone().utc(), true)
 			data.imgUrl = ''
 			data.stickerUrl = ''
