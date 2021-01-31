@@ -39,7 +39,7 @@ const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
 const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
-const invasionCache = new NodeCache({ stdTTL: 23040, useClones: false }) // 16 hours
+const invasionCache = new NodeCache({ stdTTL: 59400, useClones: false }) // 16.5 hours to cover 06:00-22:00
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
