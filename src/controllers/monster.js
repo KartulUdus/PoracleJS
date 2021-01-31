@@ -33,14 +33,14 @@ class Monster extends Controller {
 		min_cp<=${data.cp} and
 		max_cp>=${data.cp} and
 		(gender = ${data.gender} or gender = 0) and
-		min_level<=${data.pokemon_level} and
-		max_level>=${data.pokemon_level} and
-		atk<=${data.individual_attack} and
-		def<=${data.individual_defense} and
-		sta<=${data.individual_stamina} and
-		max_atk>=${data.individual_attack} and
-		max_def>=${data.individual_defense} and
-		max_sta>=${data.individual_stamina} and
+		min_level<=${data.level} and
+		max_level>=${data.level} and
+		atk<=${data.atk} and
+		def<=${data.def} and
+		sta<=${data.sta} and
+		max_atk>=${data.atk} and
+		max_def>=${data.def} and
+		max_sta>=${data.sta} and
 		min_weight<=${data.weight} * 1000 and
 		max_weight>=${data.weight} * 1000 and
 		(${pvpQueryString})
@@ -213,14 +213,8 @@ class Monster extends Controller {
 			data.catchUltra = encountered ? (data.capture_3 * 100).toFixed(2) : 0
 			data.cp = encountered ? data.cp : 0
 			data.level = encountered ? data.pokemon_level : 0
-			data.quickMove = encountered ? data.move_1 : 0
-			data.chargeMove = encountered ? data.move_2 : 0
-			data.individual_attack = encountered ? data.individual_attack : 0 // deprecated
-			data.individual_defense = encountered ? data.individual_defense : 0 // deprecated
-			data.individual_stamina = encountered ? data.individual_stamina : 0 // deprecated
-			data.pokemon_level = encountered ? data.pokemon_level : 0 // deprecated
-			data.move_1 = encountered ? data.move_1 : 0 // deprecated
-			data.move_2 = encountered ? data.move_2 : 0 // deprecated
+			data.quickMoveId = encountered ? data.move_1 : 0
+			data.chargeMoveId = encountered ? data.move_2 : 0
 			data.height = encountered ? data.height.toFixed(2) : 0
 			data.weight = encountered ? data.weight.toFixed(2) : 0
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
@@ -229,14 +223,20 @@ class Monster extends Controller {
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			data.applemap = data.appleMapUrl // deprecated
-			data.mapurl = data.googleMapUrl // deprecated
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
-			data.ivcolor = this.findIvColor(data.iv) // deprecated
 			data.ivColor = this.findIvColor(data.iv)
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
-			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
-			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
+			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.distime = data.disappearTime // deprecated
+			data.individual_attack = data.atk // deprecated
+			data.individual_defense = data.def // deprecated
+			data.individual_stamina = data.sta // deprecated
+			data.pokemon_level = data.level // deprecated
+			data.move_1 = data.quickMoveId // deprecated
+			data.move_2 = data.chargeMoveId // deprecated
+			data.applemap = data.appleMapUrl // deprecated
+			data.mapurl = data.googleMapUrl // deprecated
+			data.ivcolor = data.ivColor // deprecated
 			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
@@ -443,24 +443,26 @@ class Monster extends Controller {
 
 				data.name = translator.translate(monster.name)
 				data.formName = translator.translate(monster.form.name)
-				data.formname = translator.translate(monster.form.name) // deprecated
-				data.quickMoveName = data.weight && this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
-				data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.utilData.types[this.GameData.moves[data.move_1].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : ''
-				data.chargeMoveName = data.weight && this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
-				data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.utilData.types[this.GameData.moves[data.move_2].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
-				data.move1emoji = this.GameData.moves[data.move_1] && this.GameData.utilData.types[this.GameData.moves[data.move_1].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : '' // deprecated
-				data.move2emoji = this.GameData.moves[data.move_2] && this.GameData.utilData.types[this.GameData.moves[data.move_2].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : '' // deprecated
-				data.boost = this.GameData.utilData.weather[data.weather] ? this.GameData.utilData.weather[data.weather].name : '' // deprecated
+				data.quickMoveName = data.weight && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
+				data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji) : ''
+				data.chargeMoveName = data.weight && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
+				data.chargeMoveEmoji = this.GameData.moves[data.chargeMoveId] && this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type].emoji) : ''
 				data.boosted = !!data.weather
-				data.boostWeather = data.weather ? data.weather : ''
+				data.boostWeatherId = data.weather ? data.weather : ''
 				data.boostWeatherName = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
 				data.boostWeatherEmoji = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
-				data.gameWeather = this.GameData.utilData.weather[currentCellWeather] ? currentCellWeather : ''
+				data.gameWeatherId = this.GameData.utilData.weather[currentCellWeather] ? currentCellWeather : ''
 				data.gameWeatherName = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].name) : ''
 				data.gameWeatherEmoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].emoji) : ''
-				data.boostemoji = this.GameData.utilData.weather[data.weather] ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : '' // deprecated
-				data.gameweather = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].name) : '' // deprecated
-				data.gameweatheremoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].emoji) : '' // deprecated
+				data.formname = data.formName // deprecated
+				data.quickMove = data.quickMoveName // deprecated
+				data.chargeMove = data.chargeMoveName // deprecated
+				data.move1emoji = data.quickMoveEmoji // deprecated
+				data.move2emoji = data.chargeMoveEmoji // deprecated
+				data.boost = data.boostWeatherName // deprecated
+				data.boostemoji = data.boostWeatherEmoji // deprecated
+				data.gameweather = data.gameWeatherName // deprecated
+				data.gameweatheremoji = data.gameWeatherEmoji // deprecated
 				if (data.weatherNext) {
 					if (!data.weatherCurrent) {
 						data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.GameData.utilData.weather[data.weatherNext].emoji)}`
