@@ -137,17 +137,14 @@ class Raid extends Controller {
 				}
 				case 'google': {
 					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				case 'osm': {
 					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				case 'mapbox': {
 					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					break
 				}
 				default: {
@@ -157,6 +154,8 @@ class Raid extends Controller {
 
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.applemap = data.appleMapUrl // deprecated
+			data.mapurl = data.googleMapUrl // deprecated
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 
 			if (!data.team_id) data.team_id = 0
@@ -228,8 +227,8 @@ class Raid extends Controller {
 
 				if (pregenerateTile) {
 					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
-					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data) // deprecated
 				}
+				data.staticmap = data.staticMap // deprecated
 
 				for (const cares of whoCares) {
 					const caresCache = this.getDiscordCache(cares.id).count
@@ -332,8 +331,8 @@ class Raid extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('raid', data) // deprecated
 			}
+			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
 				const caresCache = this.getDiscordCache(cares.id).count

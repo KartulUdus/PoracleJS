@@ -1,4 +1,4 @@
-//const pokemonGif = require('pokemon-gif')
+// const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const { S2 } = require('s2-geometry')
@@ -108,22 +108,18 @@ class Monster extends Controller {
 					break
 				}
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				case 'osm': {
-					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				case 'mapbox': {
-					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}` // deprecated
 					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				default: {
-					data.staticmap = '' // deprecated
 					data.staticMap = ''
 				}
 			}
@@ -233,15 +229,15 @@ class Monster extends Controller {
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			//			data.applemap = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}` // deprecated
-			//			data.mapurl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}` // deprecated
+			data.applemap = data.appleMapUrl // deprecated
+			data.mapurl = data.googleMapUrl // deprecated
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivcolor = this.findIvColor(data.iv) // deprecated
 			data.ivColor = this.findIvColor(data.iv)
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
 			data.distime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time) // deprecated
-//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
+			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
@@ -376,9 +372,9 @@ class Monster extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('monster', data) // deprecated
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data) // deprecated
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
 			}
+			data.staticmap = data.staticMap // deprecated
 
 			if (this.config.weather.enableWeatherForecast && data.disappear_time > nextHourTimestamp) {
 				const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
