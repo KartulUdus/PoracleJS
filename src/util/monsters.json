@@ -2,8 +2,7 @@
 	"1_0": {
 		"name": "Bulbasaur",
 		"form": {
-			"name": "Normal",
-			"proto": "BULBASAUR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 1,
@@ -123,8 +122,7 @@
 	"2_0": {
 		"name": "Ivysaur",
 		"form": {
-			"name": "Normal",
-			"proto": "IVYSAUR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 2,
@@ -220,8 +218,7 @@
 	"3_0": {
 		"name": "Venusaur",
 		"form": {
-			"name": "Normal",
-			"proto": "VENUSAUR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 3,
@@ -341,8 +338,7 @@
 	"4_0": {
 		"name": "Charmander",
 		"form": {
-			"name": "Normal",
-			"proto": "CHARMANDER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 4,
@@ -442,8 +438,7 @@
 	"5_0": {
 		"name": "Charmeleon",
 		"form": {
-			"name": "Normal",
-			"proto": "CHARMELEON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 5,
@@ -523,8 +518,7 @@
 	"6_0": {
 		"name": "Charizard",
 		"form": {
-			"name": "Normal",
-			"proto": "CHARIZARD_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 6,
@@ -644,8 +638,7 @@
 	"7_0": {
 		"name": "Squirtle",
 		"form": {
-			"name": "Normal",
-			"proto": "SQUIRTLE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 7,
@@ -745,8 +738,7 @@
 	"8_0": {
 		"name": "Wartortle",
 		"form": {
-			"name": "Normal",
-			"proto": "WARTORTLE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 8,
@@ -826,8 +818,7 @@
 	"9_0": {
 		"name": "Blastoise",
 		"form": {
-			"name": "Normal",
-			"proto": "BLASTOISE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 9,
@@ -991,8 +982,7 @@
 	"13_0": {
 		"name": "Weedle",
 		"form": {
-			"name": "Normal",
-			"proto": "WEEDLE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 13,
@@ -1088,8 +1078,7 @@
 	"14_0": {
 		"name": "Kakuna",
 		"form": {
-			"name": "Normal",
-			"proto": "KAKUNA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 14,
@@ -1185,8 +1174,7 @@
 	"15_0": {
 		"name": "Beedrill",
 		"form": {
-			"name": "Normal",
-			"proto": "BEEDRILL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 15,
@@ -1354,8 +1342,7 @@
 	"19_0": {
 		"name": "Rattata",
 		"form": {
-			"name": "Normal",
-			"proto": "RATTATA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 19,
@@ -1459,8 +1446,7 @@
 	"20_0": {
 		"name": "Raticate",
 		"form": {
-			"name": "Normal",
-			"proto": "RATICATE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 20,
@@ -1612,8 +1598,7 @@
 	"23_0": {
 		"name": "Ekans",
 		"form": {
-			"name": "Normal",
-			"proto": "EKANS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 23,
@@ -1693,8 +1678,7 @@
 	"24_0": {
 		"name": "Arbok",
 		"form": {
-			"name": "Normal",
-			"proto": "ARBOK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 24,
@@ -1774,8 +1758,7 @@
 	"25_0": {
 		"name": "Pikachu",
 		"form": {
-			"name": "Normal",
-			"proto": "PIKACHU_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 25,
@@ -1935,8 +1918,7 @@
 	"26_0": {
 		"name": "Raichu",
 		"form": {
-			"name": "Normal",
-			"proto": "RAICHU_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 26,
@@ -2000,8 +1982,7 @@
 	"27_0": {
 		"name": "Sandshrew",
 		"form": {
-			"name": "Normal",
-			"proto": "SANDSHREW_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 27,
@@ -2105,8 +2086,7 @@
 	"28_0": {
 		"name": "Sandslash",
 		"form": {
-			"name": "Normal",
-			"proto": "SANDSLASH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 28,
@@ -2210,8 +2190,7 @@
 	"29_0": {
 		"name": "Nidoran♀",
 		"form": {
-			"name": "Normal",
-			"proto": "NIDORAN_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 29,
@@ -2291,8 +2270,7 @@
 	"30_0": {
 		"name": "Nidorina",
 		"form": {
-			"name": "Normal",
-			"proto": "NIDORINA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 30,
@@ -2372,8 +2350,7 @@
 	"31_0": {
 		"name": "Nidoqueen",
 		"form": {
-			"name": "Normal",
-			"proto": "NIDOQUEEN_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 31,
@@ -2469,8 +2446,7 @@
 	"32_0": {
 		"name": "Nidoran♂",
 		"form": {
-			"name": "Normal",
-			"proto": "NIDORAN_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 32,
@@ -2550,8 +2526,7 @@
 	"33_0": {
 		"name": "Nidorino",
 		"form": {
-			"name": "Normal",
-			"proto": "NIDORINO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 33,
@@ -2631,8 +2606,7 @@
 	"34_0": {
 		"name": "Nidoking",
 		"form": {
-			"name": "Normal",
-			"proto": "NIDOKING_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 34,
@@ -2768,8 +2742,7 @@
 	"37_0": {
 		"name": "Vulpix",
 		"form": {
-			"name": "Normal",
-			"proto": "VULPIX_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 37,
@@ -2869,8 +2842,7 @@
 	"38_0": {
 		"name": "Ninetales",
 		"form": {
-			"name": "Normal",
-			"proto": "NINETALES_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 38,
@@ -3022,8 +2994,7 @@
 	"41_0": {
 		"name": "Zubat",
 		"form": {
-			"name": "Normal",
-			"proto": "ZUBAT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 41,
@@ -3119,8 +3090,7 @@
 	"42_0": {
 		"name": "Golbat",
 		"form": {
-			"name": "Normal",
-			"proto": "GOLBAT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 42,
@@ -3216,8 +3186,7 @@
 	"43_0": {
 		"name": "Oddish",
 		"form": {
-			"name": "Normal",
-			"proto": "ODDISH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 43,
@@ -3313,8 +3282,7 @@
 	"44_0": {
 		"name": "Gloom",
 		"form": {
-			"name": "Normal",
-			"proto": "GLOOM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 44,
@@ -3410,8 +3378,7 @@
 	"45_0": {
 		"name": "Vileplume",
 		"form": {
-			"name": "Normal",
-			"proto": "VILEPLUME_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 45,
@@ -3555,8 +3522,7 @@
 	"48_0": {
 		"name": "Venonat",
 		"form": {
-			"name": "Normal",
-			"proto": "VENONAT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 48,
@@ -3652,8 +3618,7 @@
 	"49_0": {
 		"name": "Venomoth",
 		"form": {
-			"name": "Normal",
-			"proto": "VENOMOTH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 49,
@@ -3749,8 +3714,7 @@
 	"50_0": {
 		"name": "Diglett",
 		"form": {
-			"name": "Normal",
-			"proto": "DIGLETT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 50,
@@ -3854,8 +3818,7 @@
 	"51_0": {
 		"name": "Dugtrio",
 		"form": {
-			"name": "Normal",
-			"proto": "DUGTRIO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 51,
@@ -3959,8 +3922,7 @@
 	"52_0": {
 		"name": "Meowth",
 		"form": {
-			"name": "Normal",
-			"proto": "MEOWTH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 52,
@@ -4080,8 +4042,7 @@
 	"53_0": {
 		"name": "Persian",
 		"form": {
-			"name": "Normal",
-			"proto": "PERSIAN_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 53,
@@ -4181,8 +4142,7 @@
 	"54_0": {
 		"name": "Psyduck",
 		"form": {
-			"name": "Normal",
-			"proto": "PSYDUCK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 54,
@@ -4262,8 +4222,7 @@
 	"55_0": {
 		"name": "Golduck",
 		"form": {
-			"name": "Normal",
-			"proto": "GOLDUCK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 55,
@@ -4383,8 +4342,7 @@
 	"58_0": {
 		"name": "Growlithe",
 		"form": {
-			"name": "Normal",
-			"proto": "GROWLITHE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 58,
@@ -4464,8 +4422,7 @@
 	"59_0": {
 		"name": "Arcanine",
 		"form": {
-			"name": "Normal",
-			"proto": "ARCANINE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 59,
@@ -4545,8 +4502,7 @@
 	"60_0": {
 		"name": "Poliwag",
 		"form": {
-			"name": "Normal",
-			"proto": "POLIWAG_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 60,
@@ -4626,8 +4582,7 @@
 	"61_0": {
 		"name": "Poliwhirl",
 		"form": {
-			"name": "Normal",
-			"proto": "POLIWHIRL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 61,
@@ -4707,8 +4662,7 @@
 	"62_0": {
 		"name": "Poliwrath",
 		"form": {
-			"name": "Normal",
-			"proto": "POLIWRATH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 62,
@@ -4804,8 +4758,7 @@
 	"63_0": {
 		"name": "Abra",
 		"form": {
-			"name": "Normal",
-			"proto": "ABRA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 63,
@@ -4885,8 +4838,7 @@
 	"64_0": {
 		"name": "Kadabra",
 		"form": {
-			"name": "Normal",
-			"proto": "KADABRA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 64,
@@ -4966,8 +4918,7 @@
 	"65_0": {
 		"name": "Alakazam",
 		"form": {
-			"name": "Normal",
-			"proto": "ALAKAZAM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 65,
@@ -5047,8 +4998,7 @@
 	"66_0": {
 		"name": "Machop",
 		"form": {
-			"name": "Normal",
-			"proto": "MACHOP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 66,
@@ -5128,8 +5078,7 @@
 	"67_0": {
 		"name": "Machoke",
 		"form": {
-			"name": "Normal",
-			"proto": "MACHOKE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 67,
@@ -5209,8 +5158,7 @@
 	"68_0": {
 		"name": "Machamp",
 		"form": {
-			"name": "Normal",
-			"proto": "MACHAMP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 68,
@@ -5290,8 +5238,7 @@
 	"69_0": {
 		"name": "Bellsprout",
 		"form": {
-			"name": "Normal",
-			"proto": "BELLSPROUT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 69,
@@ -5387,8 +5334,7 @@
 	"70_0": {
 		"name": "Weepinbell",
 		"form": {
-			"name": "Normal",
-			"proto": "WEEPINBELL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 70,
@@ -5484,8 +5430,7 @@
 	"71_0": {
 		"name": "Victreebel",
 		"form": {
-			"name": "Normal",
-			"proto": "VICTREEBEL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 71,
@@ -5629,8 +5574,7 @@
 	"74_0": {
 		"name": "Geodude",
 		"form": {
-			"name": "Normal",
-			"proto": "GEODUDE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 74,
@@ -5750,8 +5694,7 @@
 	"75_0": {
 		"name": "Graveler",
 		"form": {
-			"name": "Normal",
-			"proto": "GRAVELER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 75,
@@ -5871,8 +5814,7 @@
 	"76_0": {
 		"name": "Golem",
 		"form": {
-			"name": "Normal",
-			"proto": "GOLEM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 76,
@@ -5992,8 +5934,7 @@
 	"77_0": {
 		"name": "Ponyta",
 		"form": {
-			"name": "Normal",
-			"proto": "PONYTA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 77,
@@ -6093,8 +6034,7 @@
 	"78_0": {
 		"name": "Rapidash",
 		"form": {
-			"name": "Normal",
-			"proto": "RAPIDASH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 78,
@@ -6198,8 +6138,7 @@
 	"79_0": {
 		"name": "Slowpoke",
 		"form": {
-			"name": "Normal",
-			"proto": "SLOWPOKE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 79,
@@ -6319,8 +6258,7 @@
 	"80_0": {
 		"name": "Slowbro",
 		"form": {
-			"name": "Normal",
-			"proto": "SLOWBRO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 80,
@@ -6440,8 +6378,7 @@
 	"81_0": {
 		"name": "Magnemite",
 		"form": {
-			"name": "Normal",
-			"proto": "MAGNEMITE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 81,
@@ -6537,8 +6474,7 @@
 	"82_0": {
 		"name": "Magneton",
 		"form": {
-			"name": "Normal",
-			"proto": "MAGNETON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 82,
@@ -6634,8 +6570,7 @@
 	"83_0": {
 		"name": "Farfetch'd",
 		"form": {
-			"name": "Normal",
-			"proto": "FARFETCHD_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 83,
@@ -6843,8 +6778,7 @@
 	"88_0": {
 		"name": "Grimer",
 		"form": {
-			"name": "Normal",
-			"proto": "GRIMER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 88,
@@ -6948,8 +6882,7 @@
 	"89_0": {
 		"name": "Muk",
 		"form": {
-			"name": "Normal",
-			"proto": "MUK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 89,
@@ -7053,8 +6986,7 @@
 	"90_0": {
 		"name": "Shellder",
 		"form": {
-			"name": "Normal",
-			"proto": "SHELLDER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 90,
@@ -7134,8 +7066,7 @@
 	"91_0": {
 		"name": "Cloyster",
 		"form": {
-			"name": "Normal",
-			"proto": "CLOYSTER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 91,
@@ -7279,8 +7210,7 @@
 	"94_0": {
 		"name": "Gengar",
 		"form": {
-			"name": "Normal",
-			"proto": "GENGAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 94,
@@ -7352,8 +7282,7 @@
 	"95_0": {
 		"name": "Onix",
 		"form": {
-			"name": "Normal",
-			"proto": "ONIX_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 95,
@@ -7449,8 +7378,7 @@
 	"96_0": {
 		"name": "Drowzee",
 		"form": {
-			"name": "Normal",
-			"proto": "DROWZEE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 96,
@@ -7530,8 +7458,7 @@
 	"97_0": {
 		"name": "Hypno",
 		"form": {
-			"name": "Normal",
-			"proto": "HYPNO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 97,
@@ -7611,8 +7538,7 @@
 	"98_0": {
 		"name": "Krabby",
 		"form": {
-			"name": "Normal",
-			"proto": "KRABBY_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 98,
@@ -7692,8 +7618,7 @@
 	"99_0": {
 		"name": "Kingler",
 		"form": {
-			"name": "Normal",
-			"proto": "KINGLER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 99,
@@ -7813,8 +7738,7 @@
 	"102_0": {
 		"name": "Exeggcute",
 		"form": {
-			"name": "Normal",
-			"proto": "EXEGGCUTE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 102,
@@ -7910,8 +7834,7 @@
 	"103_0": {
 		"name": "Exeggutor",
 		"form": {
-			"name": "Normal",
-			"proto": "EXEGGUTOR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 103,
@@ -8031,8 +7954,7 @@
 	"104_0": {
 		"name": "Cubone",
 		"form": {
-			"name": "Normal",
-			"proto": "CUBONE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 104,
@@ -8112,8 +8034,7 @@
 	"105_0": {
 		"name": "Marowak",
 		"form": {
-			"name": "Normal",
-			"proto": "MAROWAK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 105,
@@ -8217,8 +8138,7 @@
 	"106_0": {
 		"name": "Hitmonlee",
 		"form": {
-			"name": "Normal",
-			"proto": "HITMONLEE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 106,
@@ -8298,8 +8218,7 @@
 	"107_0": {
 		"name": "Hitmonchan",
 		"form": {
-			"name": "Normal",
-			"proto": "HITMONCHAN_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 107,
@@ -8399,8 +8318,7 @@
 	"109_0": {
 		"name": "Koffing",
 		"form": {
-			"name": "Normal",
-			"proto": "KOFFING_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 109,
@@ -8480,8 +8398,7 @@
 	"110_0": {
 		"name": "Weezing",
 		"form": {
-			"name": "Normal",
-			"proto": "WEEZING_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 110,
@@ -8585,8 +8502,7 @@
 	"111_0": {
 		"name": "Rhyhorn",
 		"form": {
-			"name": "Normal",
-			"proto": "RHYHORN_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 111,
@@ -8682,8 +8598,7 @@
 	"112_0": {
 		"name": "Rhydon",
 		"form": {
-			"name": "Normal",
-			"proto": "RHYDON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 112,
@@ -8819,8 +8734,7 @@
 	"115_0": {
 		"name": "Kangaskhan",
 		"form": {
-			"name": "Normal",
-			"proto": "KANGASKHAN_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 115,
@@ -9024,8 +8938,7 @@
 	"122_0": {
 		"name": "Mr. Mime",
 		"form": {
-			"name": "Normal",
-			"proto": "MR_MIME_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 122,
@@ -9145,8 +9058,7 @@
 	"123_0": {
 		"name": "Scyther",
 		"form": {
-			"name": "Normal",
-			"proto": "SCYTHER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 123,
@@ -9266,8 +9178,7 @@
 	"125_0": {
 		"name": "Electabuzz",
 		"form": {
-			"name": "Normal",
-			"proto": "ELECTABUZZ_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 125,
@@ -9347,8 +9258,7 @@
 	"126_0": {
 		"name": "Magmar",
 		"form": {
-			"name": "Normal",
-			"proto": "MAGMAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 126,
@@ -9428,8 +9338,7 @@
 	"127_0": {
 		"name": "Pinsir",
 		"form": {
-			"name": "Normal",
-			"proto": "PINSIR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 127,
@@ -9529,8 +9438,7 @@
 	"129_0": {
 		"name": "Magikarp",
 		"form": {
-			"name": "Normal",
-			"proto": "MAGIKARP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 129,
@@ -9610,8 +9518,7 @@
 	"130_0": {
 		"name": "Gyarados",
 		"form": {
-			"name": "Normal",
-			"proto": "GYARADOS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 130,
@@ -9707,8 +9614,7 @@
 	"131_0": {
 		"name": "Lapras",
 		"form": {
-			"name": "Normal",
-			"proto": "LAPRAS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 131,
@@ -9904,8 +9810,7 @@
 	"137_0": {
 		"name": "Porygon",
 		"form": {
-			"name": "Normal",
-			"proto": "PORYGON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 137,
@@ -9985,8 +9890,7 @@
 	"138_0": {
 		"name": "Omanyte",
 		"form": {
-			"name": "Normal",
-			"proto": "OMANYTE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 138,
@@ -10082,8 +9986,7 @@
 	"139_0": {
 		"name": "Omastar",
 		"form": {
-			"name": "Normal",
-			"proto": "OMASTAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 139,
@@ -10179,8 +10082,7 @@
 	"140_0": {
 		"name": "Kabuto",
 		"form": {
-			"name": "Normal",
-			"proto": "KABUTO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 140,
@@ -10276,8 +10178,7 @@
 	"141_0": {
 		"name": "Kabutops",
 		"form": {
-			"name": "Normal",
-			"proto": "KABUTOPS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 141,
@@ -10373,8 +10274,7 @@
 	"142_0": {
 		"name": "Aerodactyl",
 		"form": {
-			"name": "Normal",
-			"proto": "AERODACTYL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 142,
@@ -10470,8 +10370,7 @@
 	"143_0": {
 		"name": "Snorlax",
 		"form": {
-			"name": "Normal",
-			"proto": "SNORLAX_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 143,
@@ -10551,8 +10450,7 @@
 	"144_0": {
 		"name": "Articuno",
 		"form": {
-			"name": "Normal",
-			"proto": "ARTICUNO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 144,
@@ -10648,8 +10546,7 @@
 	"145_0": {
 		"name": "Zapdos",
 		"form": {
-			"name": "Normal",
-			"proto": "ZAPDOS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 145,
@@ -10745,8 +10642,7 @@
 	"146_0": {
 		"name": "Moltres",
 		"form": {
-			"name": "Normal",
-			"proto": "MOLTRES_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 146,
@@ -10842,8 +10738,7 @@
 	"147_0": {
 		"name": "Dratini",
 		"form": {
-			"name": "Normal",
-			"proto": "DRATINI_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 147,
@@ -10923,8 +10818,7 @@
 	"148_0": {
 		"name": "Dragonair",
 		"form": {
-			"name": "Normal",
-			"proto": "DRAGONAIR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 148,
@@ -11004,8 +10898,7 @@
 	"149_0": {
 		"name": "Dragonite",
 		"form": {
-			"name": "Normal",
-			"proto": "DRAGONITE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 149,
@@ -11101,8 +10994,7 @@
 	"150_0": {
 		"name": "Mewtwo",
 		"form": {
-			"name": "Normal",
-			"proto": "MEWTWO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 150,
@@ -11586,8 +11478,7 @@
 	"169_0": {
 		"name": "Crobat",
 		"form": {
-			"name": "Normal",
-			"proto": "CROBAT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 169,
@@ -11887,8 +11778,7 @@
 	"179_0": {
 		"name": "Mareep",
 		"form": {
-			"name": "Normal",
-			"proto": "MAREEP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 179,
@@ -11968,8 +11858,7 @@
 	"180_0": {
 		"name": "Flaaffy",
 		"form": {
-			"name": "Normal",
-			"proto": "FLAAFFY_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 180,
@@ -12049,8 +11938,7 @@
 	"181_0": {
 		"name": "Ampharos",
 		"form": {
-			"name": "Normal",
-			"proto": "AMPHAROS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 181,
@@ -12130,8 +12018,7 @@
 	"182_0": {
 		"name": "Bellossom",
 		"form": {
-			"name": "Normal",
-			"proto": "BELLOSSOM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 182,
@@ -12279,8 +12166,7 @@
 	"186_0": {
 		"name": "Politoed",
 		"form": {
-			"name": "Normal",
-			"proto": "POLITOED_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 186,
@@ -12360,8 +12246,7 @@
 	"187_0": {
 		"name": "Hoppip",
 		"form": {
-			"name": "Normal",
-			"proto": "HOPPIP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 187,
@@ -12457,8 +12342,7 @@
 	"188_0": {
 		"name": "Skiploom",
 		"form": {
-			"name": "Normal",
-			"proto": "SKIPLOOM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 188,
@@ -12554,8 +12438,7 @@
 	"189_0": {
 		"name": "Jumpluff",
 		"form": {
-			"name": "Normal",
-			"proto": "JUMPLUFF_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 189,
@@ -12651,8 +12534,7 @@
 	"190_0": {
 		"name": "Aipom",
 		"form": {
-			"name": "Normal",
-			"proto": "AIPOM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 190,
@@ -12796,8 +12678,7 @@
 	"194_0": {
 		"name": "Wooper",
 		"form": {
-			"name": "Normal",
-			"proto": "WOOPER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 194,
@@ -12893,8 +12774,7 @@
 	"195_0": {
 		"name": "Quagsire",
 		"form": {
-			"name": "Normal",
-			"proto": "QUAGSIRE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 195,
@@ -13030,8 +12910,7 @@
 	"198_0": {
 		"name": "Murkrow",
 		"form": {
-			"name": "Normal",
-			"proto": "MURKROW_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 198,
@@ -13127,8 +13006,7 @@
 	"199_0": {
 		"name": "Slowking",
 		"form": {
-			"name": "Normal",
-			"proto": "SLOWKING_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 199,
@@ -13224,8 +13102,7 @@
 	"200_0": {
 		"name": "Misdreavus",
 		"form": {
-			"name": "Normal",
-			"proto": "MISDREAVUS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 200,
@@ -13305,8 +13182,7 @@
 	"201_0": {
 		"name": "Unown",
 		"form": {
-			"name": "F",
-			"proto": "UNOWN_F",
+			"name": "",
 			"id": 0
 		},
 		"id": 201,
@@ -13886,8 +13762,7 @@
 	"202_0": {
 		"name": "Wobbuffet",
 		"form": {
-			"name": "Normal",
-			"proto": "WOBBUFFET_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 202,
@@ -13991,8 +13866,7 @@
 	"204_0": {
 		"name": "Pineco",
 		"form": {
-			"name": "Normal",
-			"proto": "PINECO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 204,
@@ -14072,8 +13946,7 @@
 	"205_0": {
 		"name": "Forretress",
 		"form": {
-			"name": "Normal",
-			"proto": "FORRETRESS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 205,
@@ -14189,8 +14062,7 @@
 	"207_0": {
 		"name": "Gligar",
 		"form": {
-			"name": "Normal",
-			"proto": "GLIGAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 207,
@@ -14286,8 +14158,7 @@
 	"208_0": {
 		"name": "Steelix",
 		"form": {
-			"name": "Normal",
-			"proto": "STEELIX_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 208,
@@ -14447,8 +14318,7 @@
 	"212_0": {
 		"name": "Scizor",
 		"form": {
-			"name": "Normal",
-			"proto": "SCIZOR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 212,
@@ -14544,8 +14414,7 @@
 	"213_0": {
 		"name": "Shuckle",
 		"form": {
-			"name": "Normal",
-			"proto": "SHUCKLE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 213,
@@ -14665,8 +14534,7 @@
 	"215_0": {
 		"name": "Sneasel",
 		"form": {
-			"name": "Normal",
-			"proto": "SNEASEL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 215,
@@ -14762,8 +14630,7 @@
 	"216_0": {
 		"name": "Teddiursa",
 		"form": {
-			"name": "Normal",
-			"proto": "TEDDIURSA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 216,
@@ -14843,8 +14710,7 @@
 	"217_0": {
 		"name": "Ursaring",
 		"form": {
-			"name": "Normal",
-			"proto": "URSARING_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 217,
@@ -14968,9 +14834,81 @@
 	"220_0": {
 		"name": "Swinub",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 220,
+		"stats": {
+			"baseAttack": 90,
+			"baseDefense": 69,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"220_1277": {
+		"name": "Swinub",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "SWINUB_NORMAL",
+			"id": 1277
+		},
+		"id": 220,
+		"stats": {
+			"baseAttack": 90,
+			"baseDefense": 69,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"220_1278": {
+		"name": "Swinub",
+		"form": {
+			"name": "Shadow",
+			"proto": "SWINUB_SHADOW",
+			"id": 1278
+		},
+		"id": 220,
+		"stats": {
+			"baseAttack": 90,
+			"baseDefense": 69,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"220_1279": {
+		"name": "Swinub",
+		"form": {
+			"name": "Purified",
+			"proto": "SWINUB_PURIFIED",
+			"id": 1279
 		},
 		"id": 220,
 		"stats": {
@@ -14992,9 +14930,81 @@
 	"221_0": {
 		"name": "Piloswine",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 221,
+		"stats": {
+			"baseAttack": 181,
+			"baseDefense": 138,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"221_1280": {
+		"name": "Piloswine",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "PILOSWINE_NORMAL",
+			"id": 1280
+		},
+		"id": 221,
+		"stats": {
+			"baseAttack": 181,
+			"baseDefense": 138,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"221_1281": {
+		"name": "Piloswine",
+		"form": {
+			"name": "Shadow",
+			"proto": "PILOSWINE_SHADOW",
+			"id": 1281
+		},
+		"id": 221,
+		"stats": {
+			"baseAttack": 181,
+			"baseDefense": 138,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"221_1282": {
+		"name": "Piloswine",
+		"form": {
+			"name": "Purified",
+			"proto": "PILOSWINE_PURIFIED",
+			"id": 1282
 		},
 		"id": 221,
 		"stats": {
@@ -15080,8 +15090,7 @@
 	"225_0": {
 		"name": "Delibird",
 		"form": {
-			"name": "Normal",
-			"proto": "DELIBIRD_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 225,
@@ -15225,8 +15234,7 @@
 	"227_0": {
 		"name": "Skarmory",
 		"form": {
-			"name": "Normal",
-			"proto": "SKARMORY_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 227,
@@ -15322,8 +15330,7 @@
 	"228_0": {
 		"name": "Houndour",
 		"form": {
-			"name": "Normal",
-			"proto": "HOUNDOUR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 228,
@@ -15419,8 +15426,7 @@
 	"229_0": {
 		"name": "Houndoom",
 		"form": {
-			"name": "Normal",
-			"proto": "HOUNDOOM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 229,
@@ -15580,8 +15586,7 @@
 	"233_0": {
 		"name": "Porygon2",
 		"form": {
-			"name": "Normal",
-			"proto": "PORYGON2_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 233,
@@ -15661,8 +15666,7 @@
 	"234_0": {
 		"name": "Stantler",
 		"form": {
-			"name": "Normal",
-			"proto": "STANTLER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 234,
@@ -15906,8 +15910,7 @@
 	"243_0": {
 		"name": "Raikou",
 		"form": {
-			"name": "Normal",
-			"proto": "RAIKOU_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 243,
@@ -15987,8 +15990,7 @@
 	"244_0": {
 		"name": "Entei",
 		"form": {
-			"name": "Normal",
-			"proto": "ENTEI_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 244,
@@ -16068,8 +16070,7 @@
 	"245_0": {
 		"name": "Suicune",
 		"form": {
-			"name": "Normal",
-			"proto": "SUICUNE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 245,
@@ -16149,8 +16150,7 @@
 	"246_0": {
 		"name": "Larvitar",
 		"form": {
-			"name": "Normal",
-			"proto": "LARVITAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 246,
@@ -16246,8 +16246,7 @@
 	"247_0": {
 		"name": "Pupitar",
 		"form": {
-			"name": "Normal",
-			"proto": "PUPITAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 247,
@@ -16343,8 +16342,7 @@
 	"248_0": {
 		"name": "Tyranitar",
 		"form": {
-			"name": "Normal",
-			"proto": "TYRANITAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 248,
@@ -16640,8 +16638,7 @@
 	"258_0": {
 		"name": "Mudkip",
 		"form": {
-			"name": "Normal",
-			"proto": "MUDKIP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 258,
@@ -16721,8 +16718,7 @@
 	"259_0": {
 		"name": "Marshtomp",
 		"form": {
-			"name": "Normal",
-			"proto": "MARSHTOMP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 259,
@@ -16818,8 +16814,7 @@
 	"260_0": {
 		"name": "Swampert",
 		"form": {
-			"name": "Normal",
-			"proto": "SWAMPERT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 260,
@@ -16955,8 +16950,7 @@
 	"263_0": {
 		"name": "Zigzagoon",
 		"form": {
-			"name": "Normal",
-			"proto": "ZIGZAGOON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 263,
@@ -17060,8 +17054,7 @@
 	"264_0": {
 		"name": "Linoone",
 		"form": {
-			"name": "Normal",
-			"proto": "LINOONE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 264,
@@ -17345,8 +17338,7 @@
 	"273_0": {
 		"name": "Seedot",
 		"form": {
-			"name": "Normal",
-			"proto": "SEEDOT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 273,
@@ -17426,8 +17418,7 @@
 	"274_0": {
 		"name": "Nuzleaf",
 		"form": {
-			"name": "Normal",
-			"proto": "NUZLEAF_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 274,
@@ -17523,8 +17514,7 @@
 	"275_0": {
 		"name": "Shiftry",
 		"form": {
-			"name": "Normal",
-			"proto": "SHIFTRY_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 275,
@@ -17716,8 +17706,7 @@
 	"280_0": {
 		"name": "Ralts",
 		"form": {
-			"name": "Normal",
-			"proto": "RALTS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 280,
@@ -17813,8 +17802,7 @@
 	"281_0": {
 		"name": "Kirlia",
 		"form": {
-			"name": "Normal",
-			"proto": "KIRLIA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 281,
@@ -17910,8 +17898,7 @@
 	"282_0": {
 		"name": "Gardevoir",
 		"form": {
-			"name": "Normal",
-			"proto": "GARDEVOIR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 282,
@@ -18355,9 +18342,69 @@
 	"299_0": {
 		"name": "Nosepass",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 299,
+		"stats": {
+			"baseAttack": 82,
+			"baseDefense": 215,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"299_1460": {
+		"name": "Nosepass",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "NOSEPASS_NORMAL",
+			"id": 1460
+		},
+		"id": 299,
+		"stats": {
+			"baseAttack": 82,
+			"baseDefense": 215,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"299_1461": {
+		"name": "Nosepass",
+		"form": {
+			"name": "Shadow",
+			"proto": "NOSEPASS_SHADOW",
+			"id": 1461
+		},
+		"id": 299,
+		"stats": {
+			"baseAttack": 82,
+			"baseDefense": 215,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"299_1462": {
+		"name": "Nosepass",
+		"form": {
+			"name": "Purified",
+			"proto": "NOSEPASS_PURIFIED",
+			"id": 1462
 		},
 		"id": 299,
 		"stats": {
@@ -18415,8 +18462,7 @@
 	"302_0": {
 		"name": "Sableye",
 		"form": {
-			"name": "Normal",
-			"proto": "SABLEYE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 302,
@@ -18536,8 +18582,7 @@
 	"303_0": {
 		"name": "Mawile",
 		"form": {
-			"name": "Normal",
-			"proto": "MAWILE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 303,
@@ -18633,9 +18678,81 @@
 	"304_0": {
 		"name": "Aron",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 304,
+		"stats": {
+			"baseAttack": 121,
+			"baseDefense": 141,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"304_1469": {
+		"name": "Aron",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "ARON_NORMAL",
+			"id": 1469
+		},
+		"id": 304,
+		"stats": {
+			"baseAttack": 121,
+			"baseDefense": 141,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"304_1470": {
+		"name": "Aron",
+		"form": {
+			"name": "Shadow",
+			"proto": "ARON_SHADOW",
+			"id": 1470
+		},
+		"id": 304,
+		"stats": {
+			"baseAttack": 121,
+			"baseDefense": 141,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"304_1471": {
+		"name": "Aron",
+		"form": {
+			"name": "Purified",
+			"proto": "ARON_PURIFIED",
+			"id": 1471
 		},
 		"id": 304,
 		"stats": {
@@ -18657,9 +18774,81 @@
 	"305_0": {
 		"name": "Lairon",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 305,
+		"stats": {
+			"baseAttack": 158,
+			"baseDefense": 198,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"305_1472": {
+		"name": "Lairon",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "LAIRON_NORMAL",
+			"id": 1472
+		},
+		"id": 305,
+		"stats": {
+			"baseAttack": 158,
+			"baseDefense": 198,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"305_1473": {
+		"name": "Lairon",
+		"form": {
+			"name": "Shadow",
+			"proto": "LAIRON_SHADOW",
+			"id": 1473
+		},
+		"id": 305,
+		"stats": {
+			"baseAttack": 158,
+			"baseDefense": 198,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"305_1474": {
+		"name": "Lairon",
+		"form": {
+			"name": "Purified",
+			"proto": "LAIRON_PURIFIED",
+			"id": 1474
 		},
 		"id": 305,
 		"stats": {
@@ -18681,9 +18870,81 @@
 	"306_0": {
 		"name": "Aggron",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 306,
+		"stats": {
+			"baseAttack": 198,
+			"baseDefense": 257,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"306_1475": {
+		"name": "Aggron",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "AGGRON_NORMAL",
+			"id": 1475
+		},
+		"id": 306,
+		"stats": {
+			"baseAttack": 198,
+			"baseDefense": 257,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"306_1476": {
+		"name": "Aggron",
+		"form": {
+			"name": "Shadow",
+			"proto": "AGGRON_SHADOW",
+			"id": 1476
+		},
+		"id": 306,
+		"stats": {
+			"baseAttack": 198,
+			"baseDefense": 257,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"306_1477": {
+		"name": "Aggron",
+		"form": {
+			"name": "Purified",
+			"proto": "AGGRON_PURIFIED",
+			"id": 1477
 		},
 		"id": 306,
 		"stats": {
@@ -18937,8 +19198,7 @@
 	"318_0": {
 		"name": "Carvanha",
 		"form": {
-			"name": "Normal",
-			"proto": "CARVANHA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 318,
@@ -19034,8 +19294,7 @@
 	"319_0": {
 		"name": "Sharpedo",
 		"form": {
-			"name": "Normal",
-			"proto": "SHARPEDO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 319,
@@ -19279,8 +19538,7 @@
 	"327_0": {
 		"name": "Spinda",
 		"form": {
-			"name": "00",
-			"proto": "SPINDA_00",
+			"name": "",
 			"id": 0
 		},
 		"id": 327,
@@ -19700,8 +19958,7 @@
 	"328_0": {
 		"name": "Trapinch",
 		"form": {
-			"name": "Normal",
-			"proto": "TRAPINCH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 328,
@@ -19781,8 +20038,7 @@
 	"329_0": {
 		"name": "Vibrava",
 		"form": {
-			"name": "Normal",
-			"proto": "VIBRAVA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 329,
@@ -19878,8 +20134,7 @@
 	"330_0": {
 		"name": "Flygon",
 		"form": {
-			"name": "Normal",
-			"proto": "FLYGON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 330,
@@ -19975,8 +20230,7 @@
 	"331_0": {
 		"name": "Cacnea",
 		"form": {
-			"name": "Normal",
-			"proto": "CACNEA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 331,
@@ -20056,8 +20310,7 @@
 	"332_0": {
 		"name": "Cacturne",
 		"form": {
-			"name": "Normal",
-			"proto": "CACTURNE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 332,
@@ -20429,9 +20682,81 @@
 	"345_0": {
 		"name": "Lileep",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 345,
+		"stats": {
+			"baseAttack": 105,
+			"baseDefense": 150,
+			"baseStamina": 165
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"345_1568": {
+		"name": "Lileep",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "LILEEP_NORMAL",
+			"id": 1568
+		},
+		"id": 345,
+		"stats": {
+			"baseAttack": 105,
+			"baseDefense": 150,
+			"baseStamina": 165
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"345_1569": {
+		"name": "Lileep",
+		"form": {
+			"name": "Shadow",
+			"proto": "LILEEP_SHADOW",
+			"id": 1569
+		},
+		"id": 345,
+		"stats": {
+			"baseAttack": 105,
+			"baseDefense": 150,
+			"baseStamina": 165
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"345_1570": {
+		"name": "Lileep",
+		"form": {
+			"name": "Purified",
+			"proto": "LILEEP_PURIFIED",
+			"id": 1570
 		},
 		"id": 345,
 		"stats": {
@@ -20453,9 +20778,81 @@
 	"346_0": {
 		"name": "Cradily",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 346,
+		"stats": {
+			"baseAttack": 152,
+			"baseDefense": 194,
+			"baseStamina": 200
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"346_1571": {
+		"name": "Cradily",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "CRADILY_NORMAL",
+			"id": 1571
+		},
+		"id": 346,
+		"stats": {
+			"baseAttack": 152,
+			"baseDefense": 194,
+			"baseStamina": 200
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"346_1572": {
+		"name": "Cradily",
+		"form": {
+			"name": "Shadow",
+			"proto": "CRADILY_SHADOW",
+			"id": 1572
+		},
+		"id": 346,
+		"stats": {
+			"baseAttack": 152,
+			"baseDefense": 194,
+			"baseStamina": 200
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"346_1573": {
+		"name": "Cradily",
+		"form": {
+			"name": "Purified",
+			"proto": "CRADILY_PURIFIED",
+			"id": 1573
 		},
 		"id": 346,
 		"stats": {
@@ -20477,9 +20874,81 @@
 	"347_0": {
 		"name": "Anorith",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 347,
+		"stats": {
+			"baseAttack": 176,
+			"baseDefense": 100,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"347_1574": {
+		"name": "Anorith",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "ANORITH_NORMAL",
+			"id": 1574
+		},
+		"id": 347,
+		"stats": {
+			"baseAttack": 176,
+			"baseDefense": 100,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"347_1575": {
+		"name": "Anorith",
+		"form": {
+			"name": "Shadow",
+			"proto": "ANORITH_SHADOW",
+			"id": 1575
+		},
+		"id": 347,
+		"stats": {
+			"baseAttack": 176,
+			"baseDefense": 100,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"347_1576": {
+		"name": "Anorith",
+		"form": {
+			"name": "Purified",
+			"proto": "ANORITH_PURIFIED",
+			"id": 1576
 		},
 		"id": 347,
 		"stats": {
@@ -20501,9 +20970,81 @@
 	"348_0": {
 		"name": "Armaldo",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 348,
+		"stats": {
+			"baseAttack": 222,
+			"baseDefense": 174,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"348_1577": {
+		"name": "Armaldo",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "ARMALDO_NORMAL",
+			"id": 1577
+		},
+		"id": 348,
+		"stats": {
+			"baseAttack": 222,
+			"baseDefense": 174,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"348_1578": {
+		"name": "Armaldo",
+		"form": {
+			"name": "Shadow",
+			"proto": "ARMALDO_SHADOW",
+			"id": 1578
+		},
+		"id": 348,
+		"stats": {
+			"baseAttack": 222,
+			"baseDefense": 174,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"348_1579": {
+		"name": "Armaldo",
+		"form": {
+			"name": "Purified",
+			"proto": "ARMALDO_PURIFIED",
+			"id": 1579
 		},
 		"id": 348,
 		"stats": {
@@ -20565,8 +21106,7 @@
 	"351_0": {
 		"name": "Castform",
 		"form": {
-			"name": "Normal",
-			"proto": "CASTFORM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 351,
@@ -20686,8 +21226,7 @@
 	"353_0": {
 		"name": "Shuppet",
 		"form": {
-			"name": "Normal",
-			"proto": "SHUPPET_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 353,
@@ -20767,8 +21306,7 @@
 	"354_0": {
 		"name": "Banette",
 		"form": {
-			"name": "Normal",
-			"proto": "BANETTE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 354,
@@ -20848,8 +21386,7 @@
 	"355_0": {
 		"name": "Duskull",
 		"form": {
-			"name": "Normal",
-			"proto": "DUSKULL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 355,
@@ -20929,8 +21466,7 @@
 	"356_0": {
 		"name": "Dusclops",
 		"form": {
-			"name": "Normal",
-			"proto": "DUSCLOPS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 356,
@@ -21054,8 +21590,7 @@
 	"359_0": {
 		"name": "Absol",
 		"form": {
-			"name": "Normal",
-			"proto": "ABSOL_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 359,
@@ -21195,9 +21730,81 @@
 	"363_0": {
 		"name": "Spheal",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 363,
+		"stats": {
+			"baseAttack": 95,
+			"baseDefense": 90,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"363_1598": {
+		"name": "Spheal",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "SPHEAL_NORMAL",
+			"id": 1598
+		},
+		"id": 363,
+		"stats": {
+			"baseAttack": 95,
+			"baseDefense": 90,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"363_1599": {
+		"name": "Spheal",
+		"form": {
+			"name": "Shadow",
+			"proto": "SPHEAL_SHADOW",
+			"id": 1599
+		},
+		"id": 363,
+		"stats": {
+			"baseAttack": 95,
+			"baseDefense": 90,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"363_1600": {
+		"name": "Spheal",
+		"form": {
+			"name": "Purified",
+			"proto": "SPHEAL_PURIFIED",
+			"id": 1600
 		},
 		"id": 363,
 		"stats": {
@@ -21219,9 +21826,81 @@
 	"364_0": {
 		"name": "Sealeo",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 364,
+		"stats": {
+			"baseAttack": 137,
+			"baseDefense": 132,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"364_1601": {
+		"name": "Sealeo",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "SEALEO_NORMAL",
+			"id": 1601
+		},
+		"id": 364,
+		"stats": {
+			"baseAttack": 137,
+			"baseDefense": 132,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"364_1602": {
+		"name": "Sealeo",
+		"form": {
+			"name": "Shadow",
+			"proto": "SEALEO_SHADOW",
+			"id": 1602
+		},
+		"id": 364,
+		"stats": {
+			"baseAttack": 137,
+			"baseDefense": 132,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"364_1603": {
+		"name": "Sealeo",
+		"form": {
+			"name": "Purified",
+			"proto": "SEALEO_PURIFIED",
+			"id": 1603
 		},
 		"id": 364,
 		"stats": {
@@ -21243,9 +21922,81 @@
 	"365_0": {
 		"name": "Walrein",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 365,
+		"stats": {
+			"baseAttack": 182,
+			"baseDefense": 176,
+			"baseStamina": 242
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"365_1604": {
+		"name": "Walrein",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "WALREIN_NORMAL",
+			"id": 1604
+		},
+		"id": 365,
+		"stats": {
+			"baseAttack": 182,
+			"baseDefense": 176,
+			"baseStamina": 242
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"365_1605": {
+		"name": "Walrein",
+		"form": {
+			"name": "Shadow",
+			"proto": "WALREIN_SHADOW",
+			"id": 1605
+		},
+		"id": 365,
+		"stats": {
+			"baseAttack": 182,
+			"baseDefense": 176,
+			"baseStamina": 242
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"365_1606": {
+		"name": "Walrein",
+		"form": {
+			"name": "Purified",
+			"proto": "WALREIN_PURIFIED",
+			"id": 1606
 		},
 		"id": 365,
 		"stats": {
@@ -21371,8 +22122,7 @@
 	"371_0": {
 		"name": "Bagon",
 		"form": {
-			"name": "Normal",
-			"proto": "BAGON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 371,
@@ -21452,8 +22202,7 @@
 	"372_0": {
 		"name": "Shelgon",
 		"form": {
-			"name": "Normal",
-			"proto": "SHELGON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 372,
@@ -21533,8 +22282,7 @@
 	"373_0": {
 		"name": "Salamence",
 		"form": {
-			"name": "Normal",
-			"proto": "SALAMENCE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 373,
@@ -21630,8 +22378,7 @@
 	"374_0": {
 		"name": "Beldum",
 		"form": {
-			"name": "Normal",
-			"proto": "BELDUM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 374,
@@ -21727,8 +22474,7 @@
 	"375_0": {
 		"name": "Metang",
 		"form": {
-			"name": "Normal",
-			"proto": "METANG_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 375,
@@ -21824,8 +22570,7 @@
 	"376_0": {
 		"name": "Metagross",
 		"form": {
-			"name": "Normal",
-			"proto": "METAGROSS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 376,
@@ -22117,8 +22862,7 @@
 	"386_0": {
 		"name": "Deoxys",
 		"form": {
-			"name": "Normal",
-			"proto": "DEOXYS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 386,
@@ -22218,8 +22962,7 @@
 	"387_0": {
 		"name": "Turtwig",
 		"form": {
-			"name": "Normal",
-			"proto": "TURTWIG_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 387,
@@ -22299,8 +23042,7 @@
 	"388_0": {
 		"name": "Grotle",
 		"form": {
-			"name": "Normal",
-			"proto": "GROTLE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 388,
@@ -22380,8 +23122,7 @@
 	"389_0": {
 		"name": "Torterra",
 		"form": {
-			"name": "Normal",
-			"proto": "TORTERRA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 389,
@@ -22477,8 +23218,7 @@
 	"390_0": {
 		"name": "Chimchar",
 		"form": {
-			"name": "Normal",
-			"proto": "CHIMCHAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 390,
@@ -22558,8 +23298,7 @@
 	"391_0": {
 		"name": "Monferno",
 		"form": {
-			"name": "Normal",
-			"proto": "MONFERNO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 391,
@@ -22655,8 +23394,7 @@
 	"392_0": {
 		"name": "Infernape",
 		"form": {
-			"name": "Normal",
-			"proto": "INFERNAPE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 392,
@@ -23168,8 +23906,7 @@
 	"412_0": {
 		"name": "Burmy",
 		"form": {
-			"name": "Plant",
-			"proto": "BURMY_PLANT",
+			"name": "",
 			"id": 0
 		},
 		"id": 412,
@@ -23249,8 +23986,7 @@
 	"413_0": {
 		"name": "Wormadam",
 		"form": {
-			"name": "Plant",
-			"proto": "WORMADAM_PLANT",
+			"name": "",
 			"id": 0
 		},
 		"id": 413,
@@ -23498,8 +24234,7 @@
 	"421_0": {
 		"name": "Cherrim",
 		"form": {
-			"name": "Overcast",
-			"proto": "CHERRIM_OVERCAST",
+			"name": "",
 			"id": 0
 		},
 		"id": 421,
@@ -23559,8 +24294,7 @@
 	"422_0": {
 		"name": "Shellos",
 		"form": {
-			"name": "West Sea",
-			"proto": "SHELLOS_WEST_SEA",
+			"name": "",
 			"id": 0
 		},
 		"id": 422,
@@ -23620,8 +24354,7 @@
 	"423_0": {
 		"name": "Gastrodon",
 		"form": {
-			"name": "West Sea",
-			"proto": "GASTRODON_WEST_SEA",
+			"name": "",
 			"id": 0
 		},
 		"id": 423,
@@ -23693,8 +24426,7 @@
 	"424_0": {
 		"name": "Ambipom",
 		"form": {
-			"name": "Normal",
-			"proto": "AMBIPOM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 424,
@@ -23862,8 +24594,7 @@
 	"429_0": {
 		"name": "Mismagius",
 		"form": {
-			"name": "Normal",
-			"proto": "MISMAGIUS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 429,
@@ -23943,8 +24674,7 @@
 	"430_0": {
 		"name": "Honchkrow",
 		"form": {
-			"name": "Normal",
-			"proto": "HONCHKROW_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 430,
@@ -24100,8 +24830,7 @@
 	"434_0": {
 		"name": "Stunky",
 		"form": {
-			"name": "Normal",
-			"proto": "STUNKY_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 434,
@@ -24197,8 +24926,7 @@
 	"435_0": {
 		"name": "Skuntank",
 		"form": {
-			"name": "Normal",
-			"proto": "SKUNTANK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 435,
@@ -24454,8 +25182,7 @@
 	"443_0": {
 		"name": "Gible",
 		"form": {
-			"name": "Normal",
-			"proto": "GIBLE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 443,
@@ -24551,8 +25278,7 @@
 	"444_0": {
 		"name": "Gabite",
 		"form": {
-			"name": "Normal",
-			"proto": "GABITE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 444,
@@ -24648,8 +25374,7 @@
 	"445_0": {
 		"name": "Garchomp",
 		"form": {
-			"name": "Normal",
-			"proto": "GARCHOMP_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 445,
@@ -24809,8 +25534,7 @@
 	"449_0": {
 		"name": "Hippopotas",
 		"form": {
-			"name": "Normal",
-			"proto": "HIPPOPOTAS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 449,
@@ -24890,8 +25614,7 @@
 	"450_0": {
 		"name": "Hippowdon",
 		"form": {
-			"name": "Normal",
-			"proto": "HIPPOWDON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 450,
@@ -25151,8 +25874,7 @@
 	"459_0": {
 		"name": "Snover",
 		"form": {
-			"name": "Normal",
-			"proto": "SNOVER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 459,
@@ -25248,8 +25970,7 @@
 	"460_0": {
 		"name": "Abomasnow",
 		"form": {
-			"name": "Normal",
-			"proto": "ABOMASNOW_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 460,
@@ -25345,8 +26066,7 @@
 	"461_0": {
 		"name": "Weavile",
 		"form": {
-			"name": "Normal",
-			"proto": "WEAVILE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 461,
@@ -25442,8 +26162,7 @@
 	"462_0": {
 		"name": "Magnezone",
 		"form": {
-			"name": "Normal",
-			"proto": "MAGNEZONE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 462,
@@ -25559,8 +26278,7 @@
 	"464_0": {
 		"name": "Rhyperior",
 		"form": {
-			"name": "Normal",
-			"proto": "RHYPERIOR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 464,
@@ -25676,8 +26394,7 @@
 	"466_0": {
 		"name": "Electivire",
 		"form": {
-			"name": "Normal",
-			"proto": "ELECTIVIRE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 466,
@@ -25757,8 +26474,7 @@
 	"467_0": {
 		"name": "Magmortar",
 		"form": {
-			"name": "Normal",
-			"proto": "MAGMORTAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 467,
@@ -25926,8 +26642,7 @@
 	"472_0": {
 		"name": "Gliscor",
 		"form": {
-			"name": "Normal",
-			"proto": "GLISCOR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 472,
@@ -26023,9 +26738,81 @@
 	"473_0": {
 		"name": "Mamoswine",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 473,
+		"stats": {
+			"baseAttack": 247,
+			"baseDefense": 146,
+			"baseStamina": 242
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"473_1838": {
+		"name": "Mamoswine",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "MAMOSWINE_NORMAL",
+			"id": 1838
+		},
+		"id": 473,
+		"stats": {
+			"baseAttack": 247,
+			"baseDefense": 146,
+			"baseStamina": 242
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"473_1839": {
+		"name": "Mamoswine",
+		"form": {
+			"name": "Shadow",
+			"proto": "MAMOSWINE_SHADOW",
+			"id": 1839
+		},
+		"id": 473,
+		"stats": {
+			"baseAttack": 247,
+			"baseDefense": 146,
+			"baseStamina": 242
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"473_1840": {
+		"name": "Mamoswine",
+		"form": {
+			"name": "Purified",
+			"proto": "MAMOSWINE_PURIFIED",
+			"id": 1840
 		},
 		"id": 473,
 		"stats": {
@@ -26047,8 +26834,7 @@
 	"474_0": {
 		"name": "Porygon-Z",
 		"form": {
-			"name": "Normal",
-			"proto": "PORYGON_Z_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 474,
@@ -26128,8 +26914,7 @@
 	"475_0": {
 		"name": "Gallade",
 		"form": {
-			"name": "Normal",
-			"proto": "GALLADE_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 475,
@@ -26225,9 +27010,81 @@
 	"476_0": {
 		"name": "Probopass",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 476,
+		"stats": {
+			"baseAttack": 135,
+			"baseDefense": 275,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"476_1841": {
+		"name": "Probopass",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "PROBOPASS_NORMAL",
+			"id": 1841
+		},
+		"id": 476,
+		"stats": {
+			"baseAttack": 135,
+			"baseDefense": 275,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"476_1842": {
+		"name": "Probopass",
+		"form": {
+			"name": "Shadow",
+			"proto": "PROBOPASS_SHADOW",
+			"id": 1842
+		},
+		"id": 476,
+		"stats": {
+			"baseAttack": 135,
+			"baseDefense": 275,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"476_1843": {
+		"name": "Probopass",
+		"form": {
+			"name": "Purified",
+			"proto": "PROBOPASS_PURIFIED",
+			"id": 1843
 		},
 		"id": 476,
 		"stats": {
@@ -26249,8 +27106,7 @@
 	"477_0": {
 		"name": "Dusknoir",
 		"form": {
-			"name": "Normal",
-			"proto": "DUSKNOIR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 477,
@@ -26354,8 +27210,7 @@
 	"479_0": {
 		"name": "Rotom",
 		"form": {
-			"name": "Normal",
-			"proto": "ROTOM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 479,
@@ -26675,8 +27530,7 @@
 	"487_0": {
 		"name": "Giratina",
 		"form": {
-			"name": "Altered",
-			"proto": "GIRATINA_ALTERED",
+			"name": "",
 			"id": 0
 		},
 		"id": 487,
@@ -26828,8 +27682,7 @@
 	"492_0": {
 		"name": "Shaymin",
 		"form": {
-			"name": "Land",
-			"proto": "SHAYMIN_LAND",
+			"name": "",
 			"id": 0
 		},
 		"id": 492,
@@ -26893,8 +27746,7 @@
 	"493_0": {
 		"name": "Arceus",
 		"form": {
-			"name": "Normal",
-			"proto": "ARCEUS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 493,
@@ -28470,8 +29322,7 @@
 	"550_0": {
 		"name": "Basculin",
 		"form": {
-			"name": "Red Striped",
-			"proto": "BASCULIN_RED_STRIPED",
+			"name": "",
 			"id": 0
 		},
 		"id": 550,
@@ -28603,8 +29454,7 @@
 	"554_0": {
 		"name": "Darumaka",
 		"form": {
-			"name": "Normal",
-			"proto": "DARUMAKA_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 554,
@@ -28704,8 +29554,7 @@
 	"555_0": {
 		"name": "Darmanitan",
 		"form": {
-			"name": "Standard",
-			"proto": "DARMANITAN_STANDARD",
+			"name": "",
 			"id": 0
 		},
 		"id": 555,
@@ -28953,8 +29802,7 @@
 	"562_0": {
 		"name": "Yamask",
 		"form": {
-			"name": "Normal",
-			"proto": "YAMASK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 562,
@@ -29058,8 +29906,7 @@
 	"563_0": {
 		"name": "Cofagrigus",
 		"form": {
-			"name": "Normal",
-			"proto": "COFAGRIGUS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 563,
@@ -29583,8 +30430,7 @@
 	"585_0": {
 		"name": "Deerling",
 		"form": {
-			"name": "Spring",
-			"proto": "DEERLING_SPRING",
+			"name": "",
 			"id": 0
 		},
 		"id": 585,
@@ -29704,8 +30550,7 @@
 	"586_0": {
 		"name": "Sawsbuck",
 		"form": {
-			"name": "Spring",
-			"proto": "SAWSBUCK_SPRING",
+			"name": "",
 			"id": 0
 		},
 		"id": 586,
@@ -29941,8 +30786,7 @@
 	"592_0": {
 		"name": "Frillish",
 		"form": {
-			"name": "Normal",
-			"proto": "FRILLISH_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 592,
@@ -30014,8 +30858,7 @@
 	"593_0": {
 		"name": "Jellicent",
 		"form": {
-			"name": "Normal",
-			"proto": "JELLICENT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 593,
@@ -30495,8 +31338,7 @@
 	"613_0": {
 		"name": "Cubchoo",
 		"form": {
-			"name": "Normal",
-			"proto": "CUBCHOO_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 613,
@@ -30636,8 +31478,7 @@
 	"618_0": {
 		"name": "Stunfisk",
 		"form": {
-			"name": "Normal",
-			"proto": "STUNFISK_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 618,
@@ -31265,8 +32106,7 @@
 	"641_0": {
 		"name": "Tornadus",
 		"form": {
-			"name": "Incarnate",
-			"proto": "TORNADUS_INCARNATE",
+			"name": "",
 			"id": 0
 		},
 		"id": 641,
@@ -31326,8 +32166,7 @@
 	"642_0": {
 		"name": "Thundurus",
 		"form": {
-			"name": "Incarnate",
-			"proto": "THUNDURUS_INCARNATE",
+			"name": "",
 			"id": 0
 		},
 		"id": 642,
@@ -31447,8 +32286,7 @@
 	"645_0": {
 		"name": "Landorus",
 		"form": {
-			"name": "Incarnate",
-			"proto": "LANDORUS_INCARNATE",
+			"name": "",
 			"id": 0
 		},
 		"id": 645,
@@ -31520,8 +32358,7 @@
 	"646_0": {
 		"name": "Kyurem",
 		"form": {
-			"name": "Normal",
-			"proto": "KYUREM_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 646,
@@ -31617,8 +32454,7 @@
 	"647_0": {
 		"name": "Keldeo",
 		"form": {
-			"name": "Ordinary",
-			"proto": "KELDEO_ORDINARY",
+			"name": "",
 			"id": 0
 		},
 		"id": 647,
@@ -31690,8 +32526,7 @@
 	"648_0": {
 		"name": "Meloetta",
 		"form": {
-			"name": "Aria",
-			"proto": "MELOETTA_ARIA",
+			"name": "",
 			"id": 0
 		},
 		"id": 648,
@@ -31763,8 +32598,7 @@
 	"649_0": {
 		"name": "Genesect",
 		"form": {
-			"name": "Normal",
-			"proto": "GENESECT_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 649,
@@ -32304,8 +33138,7 @@
 	"668_0": {
 		"name": "Pyroar",
 		"form": {
-			"name": "Normal",
-			"proto": "PYROAR_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 668,
@@ -32561,8 +33394,7 @@
 	"678_0": {
 		"name": "Meowstic",
 		"form": {
-			"name": "Normal",
-			"proto": "MEOWSTIC_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 678,
@@ -33546,8 +34378,7 @@
 	"862_0": {
 		"name": "Obstagoon",
 		"form": {
-			"name": "Normal",
-			"proto": "OBSTAGOON_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 862,
@@ -33643,8 +34474,7 @@
 	"863_0": {
 		"name": "Perrserker",
 		"form": {
-			"name": "Normal",
-			"proto": "PERRSERKER_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 863,
@@ -33724,8 +34554,7 @@
 	"865_0": {
 		"name": "Sirfetchd",
 		"form": {
-			"name": "Normal",
-			"proto": "SIRFETCHD_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 865,
@@ -33805,8 +34634,7 @@
 	"866_0": {
 		"name": "Mr Rime",
 		"form": {
-			"name": "Normal",
-			"proto": "MR_RIME_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 866,
@@ -33902,8 +34730,7 @@
 	"867_0": {
 		"name": "Runerigus",
 		"form": {
-			"name": "Normal",
-			"proto": "RUNERIGUS_NORMAL",
+			"name": "",
 			"id": 0
 		},
 		"id": 867,

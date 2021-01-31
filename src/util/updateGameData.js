@@ -19,8 +19,6 @@ function Fetch_Json(url) {
   });
 }
 
-console.error('test')
-
 async function getLanguageData(language) {
 	try {
 		const rawData = await Fetch_Json(sourceRepo+'i18n_'+language+'.json')
@@ -118,11 +116,7 @@ function Generate_Forms(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
                 if (f === 0) {
                   GameMaster.pokemon[pokemon_form_id].default_form = true;
                   if (!GameMaster.pokemon[pokemon_form_id_default].form) {
-                    GameMaster.pokemon[pokemon_form_id_default].form = {};
-                  }
-                  ensure_form_name(GameMaster.pokemon[pokemon_form_id_default].form, pokemon_id, forms[f].form);
-                  if (!GameMaster.pokemon[pokemon_form_id_default].form.proto) {
-                    GameMaster.pokemon[pokemon_form_id_default].form.proto = object.data.formSettings.forms[f].form;
+                    GameMaster.pokemon[pokemon_form_id_default].form = {name: ''};
                   }
                   if (!GameMaster.pokemon[pokemon_form_id_default].form.id) {
                     GameMaster.pokemon[pokemon_form_id_default].form.id = 0;
