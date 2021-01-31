@@ -39,7 +39,6 @@ const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
 const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
-const invasionCache = new NodeCache({ stdTTL: 59400, useClones: false }) // 16.5 hours to cover 06:00-22:00
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
@@ -72,7 +71,6 @@ fastify.decorate('webhooks', webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
-fastify.decorate('invasionCache', invasionCache)
 fastify.decorate('monsterController', monsterController)
 fastify.decorate('raidController', raidController)
 fastify.decorate('questController', questController)
@@ -262,6 +260,8 @@ const PromiseQueue = require('./lib/PromiseQueue')
 const alarmProcessor = new PromiseQueue(fastify.hookQueue, 10)
 
 async function processOne(hook) {
+	const pokestopExpiryTime = 59400 // 16.5 hours
+
 	switch (hook.type) {
 		case 'pokemon': {
 			if (config.general.disablePokemon) break
@@ -271,7 +271,10 @@ async function processOne(hook) {
 				break
 			}
 
-			fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached')
+			// Set cache expiry to calculated pokemon expiry + 5 minutes to cope with near misses
+			const secondsRemaining = Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300
+
+			fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached', secondsRemaining)
 
 			const result = await fastify.monsterController.handle(hook.message)
 			result.forEach((job) => {
@@ -305,11 +308,15 @@ async function processOne(hook) {
 			fastify.webhooks.info('pokestop', hook.message)
 			const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 			if (!incidentExpiration) break
-			if (fastify.invasionCache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+			if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
 				fastify.logger.debug(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
 				break
 			}
-			fastify.invasionCache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
+
+			// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+			const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
+
+			fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
 
 			const result = await fastify.pokestopController.handle(hook.message)
 			if (!result) break
