@@ -73,9 +73,20 @@ class Controller {
 		// Exact match
 		let findDts = this.dts.find((template) => template.type === templateType && template.id.toString() === templateName && template.platform === platform && template.language == language)
 
+
+		// First right template and platform and no language (likely backward compatible choice)
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.id.toString() === templateName && template.platform === platform && !template.language)
+		}
+
 		// Default of right template type, platform and language
 		if (!findDts) {
 			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language == language)
+		}
+
+		// First default of right template type and platform with empty language
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && !template.language)
 		}
 
 		// First default of right template type and platform
