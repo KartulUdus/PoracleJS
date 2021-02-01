@@ -264,12 +264,13 @@ class Weather extends Controller {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
 			}
 
-			data.oldWeather = (previousWeather > -1) ? previousWeather : ''
-			data.oldWeatherNameEng = data.oldWeather ? this.GameData.utilData.weather[data.oldWeather].name : ''
-			data.oldWeatherEmojiEng = data.oldWeather ? this.GameData.utilData.weather[data.oldWeather].emoji : ''
-			data.weather = data.condition ? data.condition : ''
-			data.weatherNameEng = data.weather ? this.GameData.utilData.weather[data.weather].name : ''
-			data.weatherEmojiEng = data.weather ? this.GameData.utilData.weather[data.weather].emoji : ''
+			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
+			data.oldWeatherNameEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].name : ''
+			data.oldWeatherEmojiEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].emoji : ''
+			data.weatherId = data.condition ? data.condition : ''
+			data.weatherNameEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].name : ''
+			data.weatherEmojiEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].emoji : ''
+
 
 			const jobs = []
 			const now = moment.now()
@@ -303,13 +304,18 @@ class Weather extends Controller {
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
 
-				data.oldWeatherName = data.oldWeather ? translator.translate(data.oldWeatherNameEng) : ''
-				data.oldWeatherEmoji = data.oldWeather ? translator.translate(data.oldWeatherEmojiEng) : ''
-				data.weatherName = data.weather ? translator.translate(data.weatherNameEng) : ''
-				data.weatherEmoji = data.weather ? translator.translate(data.weatherEmojiEng) : ''
+				data.oldWeatherName = data.oldWeatherNameEng ? translator.translate(data.oldWeatherNameEng) : ''
+				data.oldWeatherEmoji = data.oldWeatherNameEng ? translator.translate(data.oldWeatherEmojiEng) : ''
+				data.weatherName = data.weatherNameEng ? translator.translate(data.weatherNameEng) : ''
+				data.weatherEmoji = data.weatherEmojiEng ? translator.translate(data.weatherEmojiEng) : ''
 				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
 					data.activePokemons.map((pok) => { pok.name = translator.translate(pok.name); pok.formName = translator.translate(pok.formName) })
 				}
+
+				data.weather = data.weatherName // deprecated
+				data.oldweather = data.oldWeatherName // deprecated
+				data.oldweatheremoji = data.oldWeatherEmoji // deprecated
+				data.weatheremoji = data.weatherEmoji // deprecated
 
 				const view = {
 					...data,
