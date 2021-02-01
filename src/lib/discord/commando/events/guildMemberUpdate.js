@@ -12,10 +12,12 @@ module.exports = async (client, oldPresence, newPresence) => {
 				await client.query.insertOrUpdateQuery('humans', [{
 					id: oldPresence.user.id, type: 'discord:user', name: client.emojiStrip(oldPresence.user.username), area: '[]',
 				}])
-				const greetingDts = client.dts.find((template) => template.type === 'greeting' && template.default)
-				const view = { prefix: client.config.discord.prefix }
-				const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
-				await oldPresence.user.send(JSON.parse(greeting(view)))
+				if (!client.config.discord.disableAutoGreetings) {
+					const greetingDts = client.dts.find((template) => template.type === 'greeting' && template.default)
+					const view = { prefix: client.config.discord.prefix }
+					const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
+					await oldPresence.user.send(JSON.parse(greeting(view)))
+				}
 
 				client.log.log({ level: 'info', message: `registered ${oldPresence.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
 			}

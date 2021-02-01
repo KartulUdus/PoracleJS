@@ -79,6 +79,7 @@
     },
     "discord": {
         "enabled": true,
+        "disableAutoGreetings": false,
         "checkRole": false,
         "checkRoleInterval": 6,
         "unknownResponse": false,
