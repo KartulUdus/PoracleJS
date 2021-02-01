@@ -1,6 +1,7 @@
 // const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
 
@@ -172,6 +173,19 @@ class Raid extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
+			const weatherCellKey = S2.latLngToKey(data.latitude, data.longitude, 10)
+			const weatherCellId = S2.keyToId(weatherCellKey)
+			const nowTimestamp = Math.floor(Date.now() / 1000)
+			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
+			let currentCellWeather = null
+			if (weatherCellId in this.weatherController.controllerData) {
+				const weatherCellData = this.weatherController.controllerData[weatherCellId]
+				if (weatherCellData) {
+					if (!currentCellWeather && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
+				}
+			}
+			data.weather = currentCellWeather || 0
+
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
 				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
@@ -203,6 +217,8 @@ class Raid extends Controller {
 				data.types = t
 				data.typeNameEng = n
 				data.emoji = e
+				data.boostingWeathers = data.types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
+				data.boosted = !!data.boostingWeathers.includes(data.weather)
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -248,6 +264,9 @@ class Raid extends Controller {
 					data.chargeMoveId = data.move_2 ? data.move_2 : ''
 					data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
 					data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
+					data.boostWeatherId = data.boosted ? data.weather : ''
+					data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
+					data.boostWeatherEmoji = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
 					data.quickMove = data.quickMoveName // deprecated
 					data.chargeMove = data.chargeMoveName // deprecated
 					data.move1emoji = data.quickMoveEmoji // deprecated

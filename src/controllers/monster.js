@@ -215,6 +215,8 @@ class Monster extends Controller {
 			data.level = encountered ? data.pokemon_level : 0
 			data.quickMoveId = encountered ? data.move_1 : 0
 			data.chargeMoveId = encountered ? data.move_2 : 0
+			data.quickMoveNameEng = encountered && this.GameData.moves[data.quickMoveId] ? this.GameData.moves[data.quickMoveId].name : ''
+			data.chargeMoveNameEng = encountered && this.GameData.moves[data.chargeMoveId] ? this.GameData.moves[data.chargeMoveId].name : ''
 			data.height = encountered ? data.height.toFixed(2) : 0
 			data.weight = encountered ? data.weight.toFixed(2) : 0
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
