@@ -10,6 +10,13 @@ exports.run = async (client, msg, args) => {
 		if (!canContinue) return
 		const translator = client.translatorFactory.Translator(language)
 
+		// Remove arguments that we don't want to keep for processing
+		for (let i = 0; i < args.length; i++) {
+			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
+			else if (args[i].match(client.re.channelRe)) args.splice(i, 1)
+			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
+		}
+
 		if (args.length == 0) {
 			return msg.reply(`${translator.translate('Current language is set to')}: ${language}`)
 		}
