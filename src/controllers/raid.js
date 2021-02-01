@@ -288,7 +288,7 @@ class Raid extends Controller {
 						const work = {
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
-							message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
+							message: caresCache === this.config.discord.limitAmount + 1 ? { content: `${translator.translate('You have reached the limit of')} ${this.config.discord.limitAmount} ${translator.translate('messages over')} ${this.config.discord.limitSec} ${translator.translate('seconds')}` } : message,
 							target: cares.id,
 							type: cares.type,
 							name: cares.name,
