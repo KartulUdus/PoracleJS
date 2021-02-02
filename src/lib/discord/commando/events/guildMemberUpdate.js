@@ -13,7 +13,7 @@ module.exports = async (client, oldPresence, newPresence) => {
 					id: oldPresence.user.id, type: 'discord:user', name: client.emojiStrip(oldPresence.user.username), area: '[]',
 				}])
 				if (!client.config.discord.disableAutoGreetings) {
-					const greetingDts = client.dts.find((template) => template.type === 'greeting' && template.default)
+					const greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.default)
 					const view = { prefix: client.config.discord.prefix }
 					const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
 					await oldPresence.user.send(JSON.parse(greeting(view)))

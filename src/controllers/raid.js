@@ -158,7 +158,7 @@ class Raid extends Controller {
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 
 			if (!data.team_id) data.team_id = 0
-			data.gymName = data.name
+			if (data.name) data.gymName = data.name ? data.name : ''
 			if (data.gym_name) data.gymName = data.gym_name ? data.gym_name : ''
 			data.teamId = data.team_id ? data.team_id : 0
 			data.teamName = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
