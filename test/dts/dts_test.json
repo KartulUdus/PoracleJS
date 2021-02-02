@@ -1,0 +1,111 @@
+[
+  {
+    "id": "test",
+    "language": "fr",
+    "type": "weatherchange",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Weather DTS",
+        "description": "oldWeatherId: {{oldWeatherId}}\n oldWeatherName: {{oldWeatherName}}\n oldWeatherEmoji: {{oldWeatherEmoji}}\n weatherId: {{weatherId}}\n weatherName: {{weatherName}}\n weatherEmoji: {{weatherEmoji}}\n activePokemons {name, formName, id, iv, cp}: {{activePokemons}}",
+        "image": {
+          "url": "{{{staticMap}}}"
+        }
+      }
+    }
+  },
+  {
+		"id": "test",
+    "language": "fr",
+		"type": "raid",
+		"default": false,
+		"platform": "discord",
+		"template": {
+			"avatar_url": "{{{imgUrl}}}",
+			"embed": {
+				"title": "Raid/egg DTS",
+				"description": "**Raid**\n pokemonId (=id): {{pokemonId}}\n name: {{name}}\n formId: {{formId}}\n formName: {{formName}}\n typeName: {{typeName}}\n typeEmoji: {{typeEmoji}}\n evolutionName: {{evolutionName}}\n quickMoveId: {{quickMoveId}}\n quickMoveName: {{quickMoveName}}\n quickMoveEmoji: {{quickMoveEmoji}}\n chargeMoveId: {{chargeMoveId}}\n chargeMoveName: {{chargeMoveName}}\n chargeMoveEmoji: {{chargeMoveEmoji}}\n baseStats {baseAttack, baseDefense, baseStamina}: {{baseStats.baseAttack}} {{baseStats.baseDefense}} {{baseStats.baseStamina}}\n genderData {genderData.name, genderData.emoji}: {{genderData.name}} {{genderData.emoji}}\n boosted: {{boosted}}\n boostWeatherId: {{boostWeatherId}}\n boostWeatherName: {{boostWeatherName}}\n boostWeatherEmoji: {{boostWeatherEmoji}}\n **Egg**\n hatchTime: {{hatchTime}}\n **Common**:\n level: {{level}}\n disappearTime (=time): {{disappearTime}}\n teamId: {{teamId}}\n teamName: {{teamName}}\n gymName: {{gymName}}\n gymColor: {{gymColor}}\n gymUrl: {{gymUrl}}\n ex: {{ex}}\n areas (=matched): {{areas}}\n addr: {{addr}}\n [googleMapUrl:]({{{googleMapUrl}}})\n [appleMapUrl:]({{{appleMapUrl}}})\n [wazeMapUrl:]({{wazeMapUrl}})",
+				"color": "{{gymColor}}",
+				"thumbnail": {
+					"url": "{{{imgUrl}}}"
+				}
+			}
+		}
+	},
+  {
+		"id": "test",
+    "language": "fr",
+		"type": "egg",
+		"default": false,
+		"platform": "discord",
+		"template": {
+			"avatar_url": "{{{imgUrl}}}",
+			"embed": {
+				"title": "Raid/egg DTS",
+				"description": "**Raid**\n pokemonId (=id): {{pokemonId}}\n name: {{name}}\n formId: {{formId}}\n formName: {{formName}}\n typeName: {{typeName}}\n typeEmoji: {{typeEmoji}}\n evolutionName: {{evolutionName}}\n quickMoveId: {{quickMoveId}}\n quickMoveName: {{quickMoveName}}\n quickMoveEmoji: {{quickMoveEmoji}}\n chargeMoveId: {{chargeMoveId}}\n chargeMoveName: {{chargeMoveName}}\n chargeMoveEmoji: {{chargeMoveEmoji}}\n baseStats {baseAttack, baseDefense, baseStamina}: {{baseStats.baseAttack}} {{baseStats.baseDefense}} {{baseStats.baseStamina}}\n genderData {genderData.name, genderData.emoji}: {{genderData.name}} {{genderData.emoji}}\n **Egg**\n hatchTime: {{hatchTime}}\n **Common**:\n level: {{level}}\n disappearTime (=time): {{disappearTime}}\n teamId: {{teamId}}\n teamName: {{teamName}}\n gymName: {{gymName}}\n gymColor: {{gymColor}}\n gymUrl: {{gymUrl}}\n ex: {{ex}}\n areas (=matched): {{areas}}\n addr: {{addr}}\n [googleMapUrl:]({{{googleMapUrl}}})\n [appleMapUrl:]({{{appleMapUrl}}})\n [wazeMapUrl:]({{wazeMapUrl}})",
+				"color": "{{gymColor}}",
+				"thumbnail": {
+					"url": "{{{imgUrl}}}"
+				}
+			}
+		}
+	},
+  {
+    "id": "test",
+    "language": "fr",
+    "type": "quest",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Quest DTS",
+        "url": "{{{googleMapUrl}}}",
+        "description": "pokestopName: {{pokestopName}}\n pokestopUrl: {{pokestopUrl}}\n questString: {{{questString}}}\n rewardString: {{{rewardString}}}\n dustAmount: {{dustAmount}}\n isShiny: {{isShiny}}\n itemAmount: {{itemAmount}}\n monsters: {{monsters}}\n monsterNames: {{monsterNames}}\n items: {{items}}\n itemNames: {{itemNames}}\n energyAmount: {{energyAmount}}\n energyMonsters: {{energyMonsters}}\n energyMonstersNames: {{energyMonstersNames}}\n disappearTime: {{disappearTime}}\n areas (=matched): {{matched}}\n addr: {{{addr}}}\n imgUrl: {{imgUrl}}\n stickerUrl: {{stickerUrl}}\n [googleMapUrl:]({{{googleMapUrl}}})\n [appleMapUrl:]({{{appleMapUrl}}})\n [wazeMapUrl:]({{wazeMapUrl}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": "test",
+    "language": "fr",
+    "type": "invasion",
+    "default": false,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Invasion DTS",
+        "url": "{{{googleMapUrl}}}",
+        "color": "{{gruntTypeColor}}",
+        "description": "pokestopName: {{pokestopName}}\n pokestopUrl: {{pokestopUrl}}\n gruntType: {{gruntType}}\n gruntTypeEmoji: {{gruntTypeEmoji}}\n genderData {genderData.name, genderData.emoji}: {{genderData.name}} {{genderData.emoji}}\n gruntRewardsList: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n disappearTime (=time): {{disappearTime}}\n tthh: {{tthh}}\n tthm: {{tthm}}\n tths: {{tths}}\n areas (=matched): {{areas}}\n addr: {{addr}}\n [googleMapUrl:]({{{googleMapUrl}}})\n [appleMapUrl:]({{{appleMapUrl}}})\n [wazeMapUrl:]({{wazeMapUrl}})",
+        "thumbnail": {
+          "url": "{{{pokestopUrl}}}"
+        }
+      }
+    }
+  },
+  {
+		"id": "test",
+    "language": "fr",
+		"type": "monster",
+		"default": false,
+		"platform": "discord",
+		"template": {
+			"avatar_url": "{{{imgUrl}}}",
+			"embed": {
+				"color": "{{ivColor}}",
+				"title": "Monster DTS",
+				"url": "{{{mapurl}}}",
+				"description": "pokemonId (=id): {{pokemonId}}\n nameEng: {{nameEng}}\n name: {{name}}\n encounterId: {{encounterId}}\n formId: {{formId}}\n formNameEng: {{formNameEng}}\n formName: {{formName}}\n iv: {{iv}}\n atk: {{atk}}\n def: {{def}}\n sta: {{sta}}\n cp: {{cp}}\n level: {{level}}\n quickMoveId: {{quickMoveId}}\n quickMoveNameEng: {{quickMoveNameEng}}\n quickMoveName: {{quickMoveName}}\n quickMoveEmoji: {{quickMoveEmoji}}\n chargeMoveId: {{chargeMoveId}}\n chargeMoveNameEng: {{chargeMoveNameEng}}\n chargeMoveName: {{chargeMoveName}}\n chargeMoveEmoji: {{chargeMoveEmoji}}\n catchBase: {{catchBase}}\n catchGreat: {{catchGreat}}\n catchUltra: {{catchUltra}}\n height: {{height}}\n weight: {{weight}}\n genderData {genderData.name, genderData.emoji}: {{genderData.name}} {{genderData.emoji}}\n color: {{color}}\n ivColor: {{ivColor}}\n types: {{types}}\n baseStats {baseAttack, baseDefense, baseStamina}: {{baseStats.baseAttack}} {{baseStats.baseDefense}} {{baseStats.baseStamina}}\n confirmedTime: {{confirmedTime}}\n disappearTime (=time): {{disappearTime}}\n tthh: {{tthh}}\n tthm: {{tthm}}\n tths: {{tths}}\n now: {{now}}\n alteringWeathers: {{alteringWeathers}}\n weatherCurrent: {{weatherCurrent}}\n weatherChangeTime: {{weatherChangeTime}}\n weatherNext: {{weatherNext}}\n boosted: {{boosted}}\n boostWeather: {{boostWeather}}\n boostWeatherName: {{boostWeatherName}}\n boostWeatherEmoji: {{boostWeatherEmoji}}\n gameWeather: {{gameWeather}}\n gameWeatherName: {{gameWeatherName}}\n gameWeatherEmoji: {{gameWeatherEmoji}}\n weatherChange: {{weatherChange}}\n weatherCurrentName: {{weatherCurrentName}}\n weatherCurrentEmoji: {{weatherCurrentEmoji}}\n weatherNextName: {{weatherNextName}}\n weatherNextEmoji: {{weatherNextEmoji}}\n bestGreatLeagueRank: {{bestGreatLeagueRank}}\n bestGreatLeagueRankCP: {{bestGreatLeagueRankCP}}\n bestUltraLeagueRank: {{bestUltraLeagueRank}}\n bestUltraLeagueRankCP: {{bestUltraLeagueRankCP}}\n greatleagueranking: {{greatleagueranking}}\n ultraleagueranking: {{ultraleagueranking}}\n pvpDisplayMaxRank: {{pvpDisplayMaxRank}}\n pvpDisplayGreatMinCP: {{pvpDisplayGreatMinCP}}\n pvpDisplayUltraMinCP: {{pvpDisplayUltraMinCP}}\n areas (=matched): {{areas}}\n [googleMapUrl:]({{{googleMapUrl}}})\n [appleMapUrl:]({{{appleMapUrl}}})\n [wazeMapUrl:]({{wazeMapUrl}})\n imgUrl: {{imgUrl}}\n stickerUrl: {{stickerUrl}}\n",
+				"thumbnail": {
+					"url": "{{{imgUrl}}}"
+				},
+				"image": {
+          "url": "{{{staticMap}}}"
+ 				}
+			}
+		}
+	}
+]
