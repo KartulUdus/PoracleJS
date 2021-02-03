@@ -402,7 +402,7 @@ function Add_Missing_Pokemon() {
 		let type = gruntData[gruntId].character.type.name ? gruntData[gruntId].character.type.name : gruntData[gruntId].character.template.replace('CHARACTER_', '')
 		updatedGruntData[gruntId] = {
 			type: capitalize(type),
-			gender: gruntData[gruntId].character.gender,
+			gender: gruntData[gruntId].character.gender === 0 ? 2 : gruntData[gruntId].character.gender === 1 ? 1 : '',
 			grunt: capitalize(gruntData[gruntId].character.template.replace('CHARACTER_', '')
 				.replace('_MALE', '')
 				.replace('_FEMALE', '')),
