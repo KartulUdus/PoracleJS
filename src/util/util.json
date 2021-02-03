@@ -3046,12 +3046,12 @@
 			"grunt": "Spark"
 		},
 		"4": {
-			"type": "Grunt Male",
+			"type": "Grunt",
 			"gender": 1,
 			"grunt": "Grunt"
 		},
 		"5": {
-			"type": "Grunt Female",
+			"type": "Grunt",
 			"gender": 2,
 			"grunt": "Grunt"
 		},
@@ -3303,12 +3303,12 @@
 			"grunt": "Ice Grunt"
 		},
 		"28": {
-			"type": "Metal Grunt Female",
+			"type": "Metal",
 			"gender": 2,
 			"grunt": "Metal Grunt"
 		},
 		"29": {
-			"type": "Metal Grunt Male",
+			"type": "Metal",
 			"gender": 1,
 			"grunt": "Metal Grunt"
 		},
@@ -3456,7 +3456,7 @@
 			}
 		},
 		"41": {
-			"type": "Executive Cliff",
+			"type": "Cliff",
 			"gender": 1,
 			"grunt": "Executive Cliff",
 			"second_reward": false,
@@ -3477,7 +3477,7 @@
 			}
 		},
 		"42": {
-			"type": "Executive Arlo",
+			"type": "Arlo",
 			"gender": 1,
 			"grunt": "Executive Arlo",
 			"second_reward": false,
@@ -3498,7 +3498,7 @@
 			}
 		},
 		"43": {
-			"type": "Executive Sierra",
+			"type": "Sierra",
 			"gender": 2,
 			"grunt": "Executive Sierra",
 			"second_reward": false,
@@ -3538,12 +3538,12 @@
 			}
 		},
 		"45": {
-			"type": "Decoy Grunt Male",
+			"type": "Decoy",
 			"gender": 1,
 			"grunt": "Decoy Grunt"
 		},
 		"46": {
-			"type": "Decoy Grunt Female",
+			"type": "Decoy",
 			"gender": 2,
 			"grunt": "Decoy Grunt",
 			"second_reward": true,
@@ -3616,7 +3616,7 @@
 			"grunt": "Electric Grunt"
 		},
 		"53": {
-			"type": "Gruntb Female",
+			"type": "Gruntb",
 			"gender": 2,
 			"grunt": "Gruntb",
 			"second_reward": false,
@@ -3633,7 +3633,7 @@
 			}
 		},
 		"54": {
-			"type": "Gruntb Male",
+			"type": "Gruntb",
 			"gender": 1,
 			"grunt": "Gruntb",
 			"second_reward": false,
