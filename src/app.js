@@ -31,6 +31,7 @@ const GameData = {
 	utilData: require('./util/util'),
 	moves: require('./util/moves'),
 	items: require('./util/items'),
+	grunts: require('./util/grunts'),
 }
 
 const readDir = util.promisify(fs.readdir)

@@ -135,8 +135,8 @@ class Pokestop extends Controller {
 				data.gruntName = 'Grunt'
 				data.gruntType = 'Mixed'
 				data.gruntRewards = ''
-				if (data.gruntTypeId in this.GameData.utilData.gruntTypes) {
-					const gruntType = this.GameData.utilData.gruntTypes[data.gruntTypeId]
+				if (data.gruntTypeId in this.GameData.grunts) {
+					const gruntType = this.GameData.grunts[data.gruntTypeId]
 					data.gruntName = gruntType.grunt
 					data.gender = gruntType.gender
 					data.gruntType = gruntType.type
@@ -175,8 +175,8 @@ class Pokestop extends Controller {
 					data.gruntName = translator.translate('Grunt')
 					data.gruntType = translator.translate('Mixed')
 					data.gruntRewards = ''
-					if (data.gruntTypeId in this.GameData.utilData.gruntTypes) {
-						const gruntType = this.GameData.utilData.gruntTypes[data.gruntTypeId]
+					if (data.gruntTypeId in this.GameData.grunts) {
+						const gruntType = this.GameData.grunts[data.gruntTypeId]
 						data.gruntName = translator.translate(gruntType.grunt)
 						data.gender = gruntType.gender
 						data.genderDataEng = this.GameData.utilData.genders[data.gender]
@@ -252,7 +252,7 @@ class Pokestop extends Controller {
 				}
 
 				let [platform] = cares.type.split(':')
-				if (platform == 'webhook') platform = 'discord'
+				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts('invasion', platform, cares.template, language)
 				if (mustache) {

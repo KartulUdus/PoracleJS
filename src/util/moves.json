@@ -1347,26 +1347,31 @@
 		"power": 170
 	},
 	"336": {
+		"name": "Techno Blast",
 		"proto": "TECHNO_BLAST_NORMAL",
 		"type": "Normal",
 		"power": 120
 	},
 	"337": {
+		"name": "Techno Blast",
 		"proto": "TECHNO_BLAST_BURN",
 		"type": "Fire",
 		"power": 120
 	},
 	"338": {
+		"name": "Techno Blast",
 		"proto": "TECHNO_BLAST_CHILL",
 		"type": "Ice",
 		"power": 120
 	},
 	"339": {
+		"name": "Techno Blast",
 		"proto": "TECHNO_BLAST_WATER",
 		"type": "Water",
 		"power": 120
 	},
 	"340": {
+		"name": "Techno Blast",
 		"proto": "TECHNO_BLAST_SHOCK",
 		"type": "Electric",
 		"power": 120
