@@ -3032,12 +3032,12 @@
 	"gruntTypes": {
 		"1": {
 			"type": "Blanche",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Blanche"
 		},
 		"2": {
 			"type": "Candela",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Candela"
 		},
 		"3": {
@@ -3052,12 +3052,12 @@
 		},
 		"5": {
 			"type": "Grunt Female",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Grunt"
 		},
 		"6": {
 			"type": "Bug",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Bug Grunt"
 		},
 		"7": {
@@ -3085,7 +3085,7 @@
 		},
 		"10": {
 			"type": "Dark",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Dark Grunt",
 			"second_reward": false,
 			"encounters": {
@@ -3110,7 +3110,7 @@
 		},
 		"12": {
 			"type": "Dragon",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Dragon Grunt",
 			"second_reward": false,
 			"encounters": {
@@ -3133,7 +3133,7 @@
 		},
 		"14": {
 			"type": "Fairy",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Fairy Grunt"
 		},
 		"15": {
@@ -3143,7 +3143,7 @@
 		},
 		"16": {
 			"type": "Fighting",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Fighting Grunt",
 			"second_reward": false,
 			"encounters": {
@@ -3168,7 +3168,7 @@
 		},
 		"18": {
 			"type": "Fire",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Fire Grunt",
 			"second_reward": true,
 			"encounters": {
@@ -3195,7 +3195,7 @@
 		},
 		"20": {
 			"type": "Flying",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Flying Grunt",
 			"second_reward": false,
 			"encounters": {
@@ -3223,7 +3223,7 @@
 		},
 		"22": {
 			"type": "Grass",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Grass Grunt"
 		},
 		"23": {
@@ -3251,7 +3251,7 @@
 		},
 		"24": {
 			"type": "Ground",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Ground Grunt"
 		},
 		"25": {
@@ -3277,7 +3277,7 @@
 		},
 		"26": {
 			"type": "Ice",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Ice Grunt",
 			"second_reward": true,
 			"encounters": {
@@ -3304,7 +3304,7 @@
 		},
 		"28": {
 			"type": "Metal Grunt Female",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Metal Grunt"
 		},
 		"29": {
@@ -3314,7 +3314,7 @@
 		},
 		"30": {
 			"type": "Normal",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Normal Grunt"
 		},
 		"31": {
@@ -3338,7 +3338,7 @@
 		},
 		"32": {
 			"type": "Poison",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Poison Grunt",
 			"second_reward": false,
 			"encounters": {
@@ -3363,7 +3363,7 @@
 		},
 		"34": {
 			"type": "Psychic",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Psychic Grunt"
 		},
 		"35": {
@@ -3391,7 +3391,7 @@
 		},
 		"36": {
 			"type": "Rock",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Rock Grunt"
 		},
 		"37": {
@@ -3417,7 +3417,7 @@
 		},
 		"38": {
 			"type": "Water",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Water Grunt",
 			"second_reward": false,
 			"encounters": {
@@ -3499,7 +3499,7 @@
 		},
 		"43": {
 			"type": "Executive Sierra",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Executive Sierra",
 			"second_reward": false,
 			"encounters": {
@@ -3544,7 +3544,7 @@
 		},
 		"46": {
 			"type": "Decoy Grunt Female",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Decoy Grunt",
 			"second_reward": true,
 			"encounters": {
@@ -3563,7 +3563,7 @@
 		},
 		"47": {
 			"type": "Ghost",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Ghost Grunt"
 		},
 		"48": {
@@ -3590,7 +3590,7 @@
 		},
 		"49": {
 			"type": "Electric",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Electric Grunt",
 			"second_reward": false,
 			"encounters": {
@@ -3617,7 +3617,7 @@
 		},
 		"53": {
 			"type": "Gruntb Female",
-			"gender": 0,
+			"gender": 2,
 			"grunt": "Gruntb",
 			"second_reward": false,
 			"encounters": {
