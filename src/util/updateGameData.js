@@ -399,9 +399,10 @@ function Add_Missing_Pokemon() {
 	const gruntData = await Fetch_Json(gruntSource)
 	const updatedGruntData = {}
 	for (const gruntId of Object.keys(gruntData)) {
-		let type = gruntData[gruntId].character.type.name ? gruntData[gruntId].character.type.name : gruntData[gruntId].character.template.replace('CHARACTER_', '')
+		let type = gruntData[gruntId].character.type.name ? gruntData[gruntId].character.type.name : gruntData[gruntId].character.template
 		updatedGruntData[gruntId] = {
-			type: capitalize(type),
+			type: capitalize(type.replace('CHARACTER_', '').replace('EXECUTIVE_', '').replace('_MALE', '')
+				.replace('_FEMALE', '').replace('_GRUNT', '')),
 			gender: gruntData[gruntId].character.gender === 0 ? 2 : gruntData[gruntId].character.gender === 1 ? 1 : '',
 			grunt: capitalize(gruntData[gruntId].character.template.replace('CHARACTER_', '')
 				.replace('_MALE', '')
