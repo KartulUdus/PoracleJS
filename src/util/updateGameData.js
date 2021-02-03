@@ -7,6 +7,7 @@ const utilData = require('./util')
 const gameMasterFile = 'https://raw.githubusercontent.com/PokeMiners/game_masters/master/latest/latest.json'
 const sourceAPK = 'https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Texts/Latest%20APK/JSON/'
 const sourceRemote = 'https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Texts/Latest%20Remote/'
+const gruntSource = 'https://raw.githubusercontent.com/ccev/pogoinfo/v2/active/grunts.json'
 const gameLanguages = ['brazilianportuguese', 'chinesetraditional', 'english', 'french', 'german', 'italian', 'japanese', 'korean', 'russian', 'spanish', 'thai']
 var GameMaster,
 	Form_List,
@@ -393,6 +394,36 @@ function Add_Missing_Pokemon() {
 		})
 		console.log('English Game Pokemon and move names file saved')
 	}
+
+	console.log('Getting Grunt list update')
+	const gruntData = await Fetch_Json(gruntSource)
+	const updatedGruntData = {}
+	for (const gruntId of Object.keys(gruntData)) {
+		let type = gruntData[gruntId].character.type.name ? gruntData[gruntId].character.type.name : gruntData[gruntId].character.template.replace('CHARACTER_', '')
+		updatedGruntData[gruntId] = {
+			type: capitalize(type),
+			gender: gruntData[gruntId].character.gender,
+			grunt: capitalize(gruntData[gruntId].character.template.replace('CHARACTER_', '')
+				.replace('_MALE', '')
+				.replace('_FEMALE', '')),
+		}
+		if (gruntData[gruntId].lineup) {
+			updatedGruntData[gruntId].second_reward = !!(gruntData[gruntId].lineup && gruntData[gruntId].lineup.rewards.length > 1)
+			updatedGruntData[gruntId].encounters = {
+				first: Object.keys(gruntData[gruntId].lineup.team[0])
+					.map((pok) => gruntData[gruntId].lineup.team[0][pok].id).filter((e) => e != null),
+				second: Object.keys(gruntData[gruntId].lineup.team[1])
+					.map((pok) => gruntData[gruntId].lineup.team[1][pok].id).filter((e) => e != null),
+				third: Object.keys(gruntData[gruntId].lineup.team[2])
+					.map((pok) => gruntData[gruntId].lineup.team[2][pok].id).filter((e) => e != null),
+			}
+		}
+	}
+	Fs.writeJSONSync('./newGrunts.json', updatedGruntData, {
+		spaces: '\t',
+		EOL: '\n'
+	})
+	console.log('Updated grunt list file saved')
 
 	Move_List = rpc.Rpc.HoloPokemonMove
 	Form_List = rpc.Rpc.PokemonDisplayProto.Form
