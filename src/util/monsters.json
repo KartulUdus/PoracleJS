@@ -34632,7 +34632,7 @@
 		]
 	},
 	"866_0": {
-		"name": "Mr Rime",
+		"name": "Mr. Rime",
 		"form": {
 			"name": "",
 			"id": 0
@@ -34655,7 +34655,7 @@
 		]
 	},
 	"866_2513": {
-		"name": "Mr Rime",
+		"name": "Mr. Rime",
 		"default_form": true,
 		"form": {
 			"name": "Normal",
@@ -34680,7 +34680,7 @@
 		]
 	},
 	"866_2514": {
-		"name": "Mr Rime",
+		"name": "Mr. Rime",
 		"form": {
 			"name": "Shadow",
 			"proto": "MR_RIME_SHADOW",
@@ -34704,7 +34704,7 @@
 		]
 	},
 	"866_2515": {
-		"name": "Mr Rime",
+		"name": "Mr. Rime",
 		"form": {
 			"name": "Purified",
 			"proto": "MR_RIME_PURIFIED",

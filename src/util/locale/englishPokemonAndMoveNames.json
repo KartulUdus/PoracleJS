@@ -272,6 +272,11 @@
 	"move_name_0333": "Payback",
 	"move_name_0334": "Rock Wrecker",
 	"move_name_0335": "Aeroblast",
+	"move_name_0336": "Techno Blast",
+	"move_name_0337": "Techno Blast",
+	"move_name_0338": "Techno Blast",
+	"move_name_0339": "Techno Blast",
+	"move_name_0340": "Techno Blast",
 	"move_name_0341": "Fly",
 	"move_name_0342": "V-create",
 	"move_name_0344": "Tri Attack",
@@ -1055,5 +1060,6 @@
 	"pokemon_name_0862": "Obstagoon",
 	"pokemon_name_0863": "Perrserker",
 	"pokemon_name_0865": "Sirfetchd",
+	"pokemon_name_0866": "Mr. Rime",
 	"pokemon_name_0867": "Runerigus"
 }
