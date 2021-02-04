@@ -277,10 +277,12 @@ async function processOne(hook) {
 				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached', secondsRemaining)
 
 				const result = await fastify.monsterController.handle(hook.message)
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				}
 
 				break
 			}
@@ -295,11 +297,12 @@ async function processOne(hook) {
 				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
 
 				const result = await fastify.raidController.handle(hook.message)
-				if (!result) break
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				}
 				break
 			}
 			case 'invasion':
@@ -319,12 +322,12 @@ async function processOne(hook) {
 				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
 
 				const result = await fastify.pokestopController.handle(hook.message)
-				if (!result) break
-
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				}
 
 				break
 			}
@@ -339,12 +342,12 @@ async function processOne(hook) {
 				const q = hook.message
 
 				const result = await fastify.questController.handle(q)
-				if (!result) break
-
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				}
 				break
 			}
 			case 'weather': {
@@ -362,10 +365,12 @@ async function processOne(hook) {
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
 				const result = await fastify.weatherController.handle(hook.message)
-				result.forEach((job) => {
-					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-					if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-				})
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				}
 				break
 			}
 			default:
