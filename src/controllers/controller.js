@@ -73,7 +73,6 @@ class Controller {
 		// Exact match
 		let findDts = this.dts.find((template) => template.type === templateType && template.id.toString() === templateName && template.platform === platform && template.language == language)
 
-
 		// First right template and platform and no language (likely backward compatible choice)
 		if (!findDts) {
 			findDts = this.dts.find((template) => template.type === templateType && template.id.toString() === templateName && template.platform === platform && !template.language)

@@ -45,15 +45,10 @@ const weather = {
 
 }
 
-const test = 'hello gameweather there {{f}} {{{move2emoji}}} {{staticmap}} {{#if gameweather}} {{/if}} {{ivcolor gameweatheremoji chargeMove}} {{g h}} {{i j k}} {{{z}}}'
-
 function checkreplace(s, entry) {
 	const replacement = entry[s]
 	return replacement || s
 }
-
-const filename = process.argv.slice(2)
-const path = require('path')
 
 const dts = require('../../config/dts.json')
 
@@ -125,4 +120,5 @@ for (const entry of dts) {
 	}
 }
 
+// eslint-disable-next-line no-console
 console.log(JSON.stringify(dts, null, '  '))

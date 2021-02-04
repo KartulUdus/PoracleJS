@@ -492,15 +492,15 @@
 		},
 		"1": {
 			"name": "male",
-			"emoji": "♂️"
+			"emoji": "\u2642"
 		},
 		"2": {
 			"name": "female",
-			"emoji": "♀️"
+			"emoji": "\u2640"
 		},
 		"3": {
 			"name": "genderless",
-			"emoji": "⚧"
+			"emoji": "\u26aa"
 		}
 	},
 	"evolution": {

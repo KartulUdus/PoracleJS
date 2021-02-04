@@ -53,14 +53,14 @@ exports.run = async (client, msg, args) => {
 			const { fields } = greeting.embed
 
 			for (const field of fields) {
-				let fieldLine = `\n\n${field.name}\n\n${field.value}`
+				const fieldLine = `\n\n${field.name}\n\n${field.value}`
 				if (messageText.length + fieldLine.length > 1024) {
-					await msg.reply(messageText, {style: 'markdown'})
+					await msg.reply(messageText, { style: 'markdown' })
 					messageText = ''
 				}
 				messageText = messageText.concat(fieldLine)
 			}
-			await msg.reply(messageText, {style: 'markdown'})
+			await msg.reply(messageText, { style: 'markdown' })
 		}
 	} catch (err) {
 		client.log.error('help command unhappy:', err)
