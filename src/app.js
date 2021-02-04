@@ -282,6 +282,8 @@ async function processOne(hook) {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
 				}
 
 				break
@@ -302,6 +304,8 @@ async function processOne(hook) {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
 				}
 				break
 			}
@@ -327,8 +331,9 @@ async function processOne(hook) {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
 				}
-
 				break
 			}
 			case 'quest': {
@@ -347,6 +352,8 @@ async function processOne(hook) {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
 				}
 				break
 			}
@@ -370,6 +377,8 @@ async function processOne(hook) {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
 				}
 				break
 			}
