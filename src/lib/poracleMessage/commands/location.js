@@ -10,6 +10,9 @@ exports.run = async (client, msg, args) => {
 		if (!canContinue) return
 		const translator = client.translatorFactory.Translator(language)
 
+		let platform = target.type.split(':')[0]
+		if (platform === 'webhook') platform = 'discord'
+
 		// Remove arguments that we don't want to keep for area processing
 		for (let i = 0; i < args.length; i++) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
@@ -46,7 +49,7 @@ exports.run = async (client, msg, args) => {
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
 		message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
 
-		if (client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+		if (platform === 'discord' && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
 			staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', { latitude: lat, longitude: lon })
 			message = {
 				embed: {
