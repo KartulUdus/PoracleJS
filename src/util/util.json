@@ -3343,6 +3343,8 @@
 			"second_reward": false,
 			"encounters": {
 				"first": [
+					29,
+					32,
 					41
 				],
 				"second": [
