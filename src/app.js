@@ -283,7 +283,7 @@ async function processOne(hook) {
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
 				} else {
-					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
 				}
 
 				break
@@ -305,7 +305,7 @@ async function processOne(hook) {
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
 				} else {
-					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
 				}
 				break
 			}
@@ -332,7 +332,7 @@ async function processOne(hook) {
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
 				} else {
-					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
 				}
 				break
 			}
@@ -353,7 +353,7 @@ async function processOne(hook) {
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
 				} else {
-					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
 				}
 				break
 			}
@@ -378,7 +378,7 @@ async function processOne(hook) {
 						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
 					})
 				} else {
-					log.error(`Missing result from ${hook.type} processor: ${hook.message}`)
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
 				}
 				break
 			}
