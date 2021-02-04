@@ -22,6 +22,8 @@ exports.run = async (client, msg, args) => {
 		let lat
 		let lon
 		let placeConfirmation = ''
+		let staticMap
+		let message
 
 		const matches = search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
 		if (matches != null && matches.length >= 2) {
@@ -41,9 +43,26 @@ exports.run = async (client, msg, args) => {
 			placeConfirmation = locations[0].city ? ` **${locations[0].city} - ${locations[0].country}** ` : ` **${locations[0].country}** `
 		}
 
-		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
-		await msg.reply(`👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`)
+		message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
+
+		if (client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+			staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', { latitude: lat, longitude: lon })
+			message = {
+				embed: {
+					color: 0x00ff00,
+					title: translator.translate('New location'),
+					description: `${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}`,
+					image: {
+						url: staticMap,
+					},
+					url: maplink,
+				},
+			}
+		}
+
+		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })
+		await msg.reply(message)
 		await msg.react('✅')
 	} catch (err) {
 		client.log.error(`location command ${msg.content} unhappy:`, err)
