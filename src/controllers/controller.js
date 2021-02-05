@@ -171,6 +171,18 @@ class Controller {
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	escapeJsonString(s) {
+		if (!s) return s
+		return s.replace('"', '\\"')
+	}
+
+	// di
+	escapeAddress(a) {
+		a.streetName = this.escapeJsonString(a.streetName)
+		a.addr = this.escapeJsonString(a.addr)
+	}
+
 	async getAddress(locationObject) {
 		if (this.config.geocoding.provider.toLowerCase() == 'none') {
 			return { addr: 'Unknown', flag: '' }
@@ -178,18 +190,21 @@ class Controller {
 
 		const cacheKey = `${String(+locationObject.lat.toFixed(3))}-${String(+locationObject.lon.toFixed(3))}`
 		const cachedResult = geoCache.getKey(cacheKey)
-		if (cachedResult) return cachedResult
+		if (cachedResult) return this.escapeAddress(cachedResult)
 
 		try {
 			const geocoder = this.getGeocoder()
 			const [result] = await geocoder.reverse(locationObject)
 			const flag = emojiFlags[result.countryCode]
-			const addressDts = this.mustache.compile(this.config.locale.addressFormat)
-			result.addr = addressDts(result)
+			if (!this.addressDts) {
+				this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
+			}
+			result.addr = this.addressDts(result)
 			result.flag = flag ? flag.emoji : ''
 			geoCache.setKey(cacheKey, result)
 			geoCache.save(true)
-			return result
+
+			return this.escapeAddress(result)
 		} catch (err) {
 			this.log.error('getAddress: failed to fetch data', err)
 			return { addr: 'Unknown', flag: '' }
