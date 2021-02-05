@@ -14,6 +14,7 @@ exports.run = async (client, msg, args) => {
 			for (const [key, availableLanguage] of Object.entries(client.config.general.availableLanguages)) {
 				if (availableLanguage.help == msg.command) {
 					helpLanguage = key
+					break
 				}
 			}
 		}

@@ -11,6 +11,7 @@ exports.run = async (client, msg) => {
 			for (const [key, availableLanguage] of Object.entries(client.config.general.availableLanguages)) {
 				if (availableLanguage.poracle == command) {
 					language = key
+					break
 				}
 			}
 		}

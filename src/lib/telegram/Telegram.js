@@ -41,7 +41,7 @@ class Telegram {
 		if (this.config.general.availableLanguages && !this.config.general.disabledCommands.includes('poracle')) {
 			for (const [, availableLanguage] of Object.entries(this.config.general.availableLanguages)) {
 				const commandName = availableLanguage.poracle
-				if (!this.enabledCommands.includes(commandName)) {
+				if (commandName && !this.enabledCommands.includes(commandName)) {
 					const props = require(`${__dirname}/commands/poracle`)
 					this.enabledCommands.push(commandName)
 					this.bot.command(commandName, props)

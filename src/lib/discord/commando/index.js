@@ -70,7 +70,7 @@ class DiscordCommando {
 				if (this.client.config.general.availableLanguages && !this.client.config.general.disabledCommands.includes('poracle')) {
 					for (const [, availableLanguage] of Object.entries(this.client.config.general.availableLanguages)) {
 						const commandName = availableLanguage.poracle
-						if (!enabledCommands.includes(`${this.config.discord.prefix}${commandName}`)) {
+						if (commandName && !enabledCommands.includes(`${this.config.discord.prefix}${commandName}`)) {
 							const props = require(`${__dirname}/commands/poracle`)
 							enabledCommands.push(`${this.config.discord.prefix}${commandName}`)
 							this.client.commands.set(commandName, props)
