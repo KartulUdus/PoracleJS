@@ -177,7 +177,6 @@ class Controller {
 		return s.replace('"', '\\"')
 	}
 
-	// di
 	escapeAddress(a) {
 		a.streetName = this.escapeJsonString(a.streetName)
 		a.addr = this.escapeJsonString(a.addr)
