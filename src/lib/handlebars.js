@@ -33,7 +33,7 @@ module.exports = () => {
 		return Number((+value + +add - +remove) * multiply / divide).toFixed(+decimals)
 	})
 
-	handlebars.registerHelper('pad0', (value) => (value.toString().padStart(3, '0')))
+	handlebars.registerHelper('pad0', (value, padTo = 3) => (value.toString().padStart(padTo, '0')))
 
 	handlebars.registerHelper('moveName', (value, options) => (moves[value] ? userTranslator(options).translate(moves[value].name) : ''))
 	handlebars.registerHelper('moveNameAlt', (value) => (moves[value] ? translatorAlt().translate(moves[value].name) : ''))
