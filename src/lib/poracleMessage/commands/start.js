@@ -11,10 +11,16 @@ exports.run = async (client, msg, args) => {
 
 		if (!canContinue) return
 
+		let platform = target.type.split(':')[0]
+		if (platform === 'webhook') platform = 'discord'
+
 		await client.query.updateQuery('humans', { enabled: 1 }, { id: target.id })
 		await msg.react('✅')
 
-		return helpCommand.run(client, msg, args)
+		if (platform == 'telegram') {
+			// Telegram client auto sends start on bot initialisation, give the user some help
+			return helpCommand.run(client, msg, args)
+		}
 	} catch (err) {
 		client.log.error(`start command ${msg.content} unhappy:`, err)
 	}
