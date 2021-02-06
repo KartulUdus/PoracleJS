@@ -445,6 +445,7 @@ class Monster extends Controller {
 
 				data.name = translator.translate(monster.name)
 				data.formName = translator.translate(monster.form.name)
+				data.genderData = { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) }
 				data.quickMoveName = data.weight && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
 				data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji) : ''
 				data.chargeMoveName = data.weight && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
@@ -530,7 +531,6 @@ class Monster extends Controller {
 						tth: data.tth,
 						clean: cares.clean,
 						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
-						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)
