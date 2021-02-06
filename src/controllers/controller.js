@@ -180,6 +180,7 @@ class Controller {
 	escapeAddress(a) {
 		a.streetName = this.escapeJsonString(a.streetName)
 		a.addr = this.escapeJsonString(a.addr)
+		return a
 	}
 
 	async getAddress(locationObject) {
