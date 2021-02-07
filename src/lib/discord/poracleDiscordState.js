@@ -6,14 +6,15 @@ class PoracleDiscordState {
 		this.query = client.query
 		this.dts = client.dts
 		this.log = client.log
-		this.monsters = client.monsters
+		this.GameData = client.GameData
 		this.query = client.query
 		this.geofence = client.geofence
-		this.utilData = client.utilData
 		this.mustache = client.mustache
 		this.re = client.re
+		this.translatorFactory = client.translatorFactory
 		this.translator = client.translator
 		this.config = client.config
+		this.hastebin = client.hastebin
 	}
 
 	createMessage(msg) {

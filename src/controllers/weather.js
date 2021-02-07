@@ -182,30 +182,28 @@ class Weather extends Controller {
 					break
 				}
 				case 'google': {
-					data.staticmap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				case 'osm': {
-					data.staticmap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				case 'mapbox': {
-					data.staticmap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
 					break
 				}
 				default: {
-					data.staticmap = ''
+					data.staticMap = ''
 				}
 			}
 
 			let whoCares = []
-			// this.log.error('[DEBUG WEATHER] ['+data.trace+'] data payload :', data)
 			if (data.updated && data.gameplay_condition) {
 				data.time_changed = data.updated
 				data.condition = data.gameplay_condition
 				data.coords = data.polygon
 			}
-			// this.log.error(`[DEBUG WEATHER] [${data.trace}] s2_cell_id ${data.s2_cell_id} | time_changed ${data.time_changed} | condition ${data.condition}`)
 			const currentInGameWeather = data.condition
 			const nowTimestamp = Math.floor(Date.now() / 1000)
 			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
@@ -263,49 +261,60 @@ class Weather extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
-				data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-				// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated common staticMap : ${data.staticmap}`)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
 			}
 
-			if (previousWeather > -1) {
-				data.oldweather = this.utilData.weather[previousWeather] ? this.translator.translate(this.utilData.weather[previousWeather].name) : ''
-				data.oldweatheremoji = this.utilData.weather[previousWeather] ? this.translator.translate(this.utilData.weather[previousWeather].emoji) : ''
-			} else {
-				data.oldweather = ''
-				data.oldweatheremoji = ''
-			}
-			data.weather = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].name) : ''
-			data.weatheremoji = this.utilData.weather[data.condition] ? this.translator.translate(this.utilData.weather[data.condition].emoji) : ''
+			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
+			data.oldWeatherNameEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].name : ''
+			data.oldWeatherEmojiEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].emoji : ''
+			data.weatherId = data.condition ? data.condition : ''
+			data.weatherNameEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].name : ''
+			data.weatherEmojiEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].emoji : ''
 
 			const jobs = []
 			const now = moment.now()
 			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
 			for (const cares of whoCares) {
-				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares', cares)
+				const caresCache = this.getDiscordCache(cares.id).count
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.info(`last tracked pokemon despawned before weather changed in ${data.s2_cell_id}`)
 					weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.id != cares.id)
-					// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current weatherCellData.cares', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				if (cares.lastChangeAlert == currentHourTimestamp) {
 					this.log.info(`user already alerted for this weather change in ${data.s2_cell_id}`)
-					// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current cares.lastChangeAlert == currentHourTimestamp', weatherCellData.cares)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
-				// this.log.error('[DEBUG WEATHER] ['+data.trace+'] current lastChangeAlert = currentHourTimestamp', weatherCellData.cares)
 
-				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
+				if (this.config.weather.showAlteredPokemon) {
 					const activePokemons = weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
-					data.staticmap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
-					// this.log.error(`[DEBUG WEATHER] [${data.trace}] pregenerated custom staticMap : ${data.staticmap}`)
 				}
+				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
+					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
+				}
+				data.staticmap = data.staticMap // deprecated
 				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)
+
+				const language = cares.language || this.config.general.locale
+				const translator = this.translatorFactory.Translator(language)
+
+				data.oldWeatherName = data.oldWeatherNameEng ? translator.translate(data.oldWeatherNameEng) : ''
+				data.oldWeatherEmoji = data.oldWeatherNameEng ? translator.translate(data.oldWeatherEmojiEng) : ''
+				data.weatherName = data.weatherNameEng ? translator.translate(data.weatherNameEng) : ''
+				data.weatherEmoji = data.weatherEmojiEng ? translator.translate(data.weatherEmojiEng) : ''
+				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
+					data.activePokemons.map((pok) => { pok.name = translator.translate(pok.name); pok.formName = translator.translate(pok.formName) })
+				}
+
+				data.weather = data.weatherName // deprecated
+				data.oldweather = data.oldWeatherName // deprecated
+				data.oldweatheremoji = data.oldWeatherEmoji // deprecated
+				data.weatheremoji = data.weatherEmoji // deprecated
 
 				const view = {
 					...data,
@@ -313,35 +322,30 @@ class Weather extends Controller {
 					id: data.s2_cell_id,
 					now: new Date(),
 				}
-				let platform = cares.type.split(':')[0]
+
+				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				let weatherDts
-				if (cares.template) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.id.toString() == cares.template.toString() && template.platform === platform)
-				if (!weatherDts) weatherDts = this.dts.find((template) => template.type === 'weatherchange' && template.default && template.platform === platform)
-				if (!weatherDts) {
-					this.log.error(`Cannot find DTS template weatherchange ${cares.template}`)
-					// eslint-disable-next-line no-continue
-					continue
-				}
-				const template = JSON.stringify(weatherDts.template)
-				const mustache = this.mustache.compile(this.translator.translate(template))
-				const message = JSON.parse(mustache(view))
+				const mustache = this.getDts('weatherchange', platform, cares.template, language)
+				if (mustache) {
+					const message = JSON.parse(mustache(view, { data: { language } }))
 
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: weatherTth,
-					clean: cares.clean,
-					tracing: data.trace,
-					emoji: [],
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `${translator.translate('You have reached the limit of')} ${this.config.discord.limitAmount} ${translator.translate('messages over')} ${this.config.discord.limitSec} ${translator.translate('seconds')}` } : message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: weatherTth,
+						clean: cares.clean,
+						emoji: [],
+					}
+					if (caresCache <= this.config.discord.limitAmount + 1) {
+						jobs.push(work)
+						this.addDiscordCache(cares.id)
+					}
 				}
-				jobs.push(work)
-				this.addDiscordCache(cares.id)
 			}
 
 			return jobs

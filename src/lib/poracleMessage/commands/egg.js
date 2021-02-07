@@ -3,10 +3,11 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea,
+			canContinue, target, userHasLocation, userHasArea, language,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		const translator = client.translatorFactory.Translator(language)
 
 		let reaction = '👌'
 
@@ -23,9 +24,9 @@ exports.run = async (client, msg, args) => {
 
 		args.forEach((element) => {
 			if (element === 'ex') exclusive = 1
-			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), ''))
-			else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
-			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
+			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[2])
+			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
+			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'instinct') team = 3
 			else if (element === 'valor') team = 2
 			else if (element === 'mystic') team = 1
@@ -36,16 +37,16 @@ exports.run = async (client, msg, args) => {
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 
 		if (!levels.length) {
-			return await msg.reply(client.translator.translate('404 No raid egg levels found'))
+			return await msg.reply(translator.translate('404 No raid egg levels found'))
 		}
 
 		if (!remove) {
@@ -81,6 +82,6 @@ exports.run = async (client, msg, args) => {
 
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error('raid command unhappy:', err)
+		client.log.error('egg command unhappy:', err)
 	}
 }

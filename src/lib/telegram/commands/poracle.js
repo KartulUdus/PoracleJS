@@ -26,12 +26,27 @@ module.exports = async (ctx) => {
 	//	}
 
 	try {
+		let language = ''
+
+		if (ctx.state.controller.config.general.availableLanguages) {
+			for (const [key, availableLanguage] of Object.entries(ctx.state.controller.config.general.availableLanguages)) {
+				if (availableLanguage.poracle == ctx.state.command.command) {
+					language = key
+					break
+				}
+			}
+		}
+
 		const isRegistered = await controller.query.countQuery('humans', { id: user.id })
 		if (isRegistered) {
 			await ctx.reply('👌')
 		} else {
 			await controller.query.insertQuery('humans', {
-				id: user.id, type: 'telegram:user', name: userName || '', area: '[]',
+				id: user.id,
+				type: 'telegram:user',
+				name: userName || '',
+				area: '[]',
+				language,
 			})
 			await ctx.reply('✅')
 		}

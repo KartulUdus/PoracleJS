@@ -1,13 +1,13 @@
 const fs = require('fs')
 
 class Telegram {
-	constructor(config, log, monsterData, utilData, dts, geofence, controller, query, telegraf, translator, commandParser, re) {
+	constructor(config, log, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
 		this.config = config
 		this.log = log
-		this.monsterData = monsterData
-		this.utilData = utilData
+		this.GameData = GameData
 		this.geofence = geofence
-		this.translator = translator
+		this.translatorFactory = translatorFactory
+		this.translator = translatorFactory.default
 		this.commandParser = commandParser
 		this.tempProps = {}
 		this.controller = controller
@@ -17,22 +17,37 @@ class Telegram {
 		this.commandFiles = fs.readdirSync(`${__dirname}/commands`)
 		this.bot = telegraf
 		this.bot
-			.use(commandParser(translator))
-			.use(controller(query, dts, log, monsterData, utilData, geofence, config, re, translator))
+			.use(commandParser(this.translatorFactory))
+			.use(controller(query, dts, log, GameData, geofence, config, re, translatorFactory))
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 			const commandName = file.split('.')[0]
 			if (!this.config.general.disabledCommands.includes(commandName)) {
-				const translatedCommand = this.translator.translate(commandName)
 				this.enabledCommands.push(commandName)
 				this.bot.command(commandName, this.tempProps)
-				if (translatedCommand != commandName) {
-					this.enabledCommands.push(translatedCommand)
-					this.bot.command(translatedCommand, this.tempProps)
+
+				const translatedCommands = this.translatorFactory.translateCommand(commandName)
+				for (const translatedCommand of translatedCommands) {
+					const normalisedCommand = translatedCommand.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
+					if (normalisedCommand != commandName) {
+						this.enabledCommands.push(normalisedCommand)
+						this.bot.command(normalisedCommand, this.tempProps)
+					}
 				}
 			}
 		})
+
+		if (this.config.general.availableLanguages && !this.config.general.disabledCommands.includes('poracle')) {
+			for (const [, availableLanguage] of Object.entries(this.config.general.availableLanguages)) {
+				const commandName = availableLanguage.poracle
+				if (commandName && !this.enabledCommands.includes(commandName)) {
+					const props = require(`${__dirname}/commands/poracle`)
+					this.enabledCommands.push(commandName)
+					this.bot.command(commandName, props)
+				}
+			}
+		}
 		this.bot.catch((err, ctx) => {
 			log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)
 		})

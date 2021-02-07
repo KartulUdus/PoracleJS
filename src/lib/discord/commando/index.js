@@ -8,16 +8,16 @@ const hastebin = require('hastebin-gen')
 const Controller = require('../../../controllers/controller')
 
 class DiscordCommando {
-	constructor(knex, config, log, monsterData, utilData, dts, geofence, translator) {
+	constructor(knex, config, log, GameData, dts, geofence, translatorFactory) {
 		this.config = config
 		this.query = new Controller(knex, config)
 		this.log = log
-		this.monsterData = monsterData
-		this.utilData = utilData
+		this.GameData = GameData
 		this.dts = dts
 		this.geofence = geofence
-		this.translator = translator
-		this.re = require('../../../util/regex')(translator)
+		this.translatorFactory = translatorFactory
+		this.translator = translatorFactory.default
+		this.re = require('../../../util/regex')(this.translatorFactory)
 		this.bounceWorker()
 	}
 
@@ -39,10 +39,10 @@ class DiscordCommando {
 			this.client.dts = this.dts
 			this.client.re = this.re
 			this.client.geofence = this.geofence
-			this.client.monsters = this.monsterData
-			this.client.utilData = this.utilData
+			this.client.GameData = this.GameData
 			this.client.mustache = mustache
 			this.client.hastebin = hastebin
+			this.client.translatorFactory = this.translatorFactory
 			this.client.translator = this.translator
 			this.client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
@@ -67,8 +67,20 @@ class DiscordCommando {
 					this.client.commands.set(commandName, props)
 				})
 
-				this.log.log({ level: 'debug', message: `Loading discord commands: (${enabledCommands.join(' ')})`, event: 'discord:commandsAdded' })
+				if (this.client.config.general.availableLanguages && !this.client.config.general.disabledCommands.includes('poracle')) {
+					for (const [, availableLanguage] of Object.entries(this.client.config.general.availableLanguages)) {
+						const commandName = availableLanguage.poracle
+						if (commandName && !enabledCommands.includes(`${this.config.discord.prefix}${commandName}`)) {
+							const props = require(`${__dirname}/commands/poracle`)
+							enabledCommands.push(`${this.config.discord.prefix}${commandName}`)
+							this.client.commands.set(commandName, props)
+						}
+					}
+				}
+
+				this.log.info(`Discord commando loaded ${enabledCommands.join(', ')} commands`)
 			})
+
 			this.client.login(this.config.discord.token[0])
 		} catch (err) {
 			this.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)

@@ -12,7 +12,7 @@ class PoracleTelegramUtil {
 		let userHasArea = false
 		let isRegistered = false
 		let id
-		const language = null
+		let language = null
 
 		const human = target.channel
 			? await this.client.query.selectOneQuery('humans', { name: target.name, type: 'telegram:channel' })
@@ -21,7 +21,7 @@ class PoracleTelegramUtil {
 		if (human) {
 			isRegistered = true
 			id = human.id
-			// const human = await this.query.selectOneQuery('humans', { id: this.target.id })
+			language = human.language || this.client.config.general.locale
 			if (+human.latitude !== 0 && +human.longitude !== 0) userHasLocation = true
 			if (human.area.length > 2) userHasArea = true
 		}
@@ -80,34 +80,9 @@ class PoracleTelegramUtil {
 			isRegistered: status.isRegistered,
 			userHasLocation: status.userHasLocation,
 			userHasArea: status.userHasArea,
+			language: status.language,
 		}
 	}
-
-	// async buildTarget(client, msg) {
-	// 	const target = { id: msg.userId, name: msg.userName, channel: false }
-	//
-	// 	// if admin started command, look for a mentioned channel
-	// 	if (msg.fromAdmin()) {
-	// 		this.command.splitArgsArray.map((splitArgs) => {
-	// 			splitArgs.map(async (arg) => {
-	// 				if (arg.match(this.re.channelRe)) {
-	// 					target.id = arg.replace(this.translator.translate('channel'), '')
-	// 					target.channel = true
-	// 					let targetChannel
-	// 					try {
-	// 						targetChannel = await this.ctx.telegram.getChat(target.id)
-	// 						target.name = targetChannel.title
-	// 					} catch (e) {
-	// 						this.controller.log.warn(`${arg} unhappy `, e)
-	// 						return this.ctx.reply(`${arg} unhappy`)
-	// 					}
-	// 				}
-	// 			})
-	// 		})
-	// 	}
-	//
-	// 	return target
-	// }
 }
 
 module.exports = PoracleTelegramUtil

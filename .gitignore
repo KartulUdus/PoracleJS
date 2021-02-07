@@ -1,5 +1,6 @@
 logs/*.json
 config/*.json
+config/dts/*.json
 config/locale/*.json
 docker-compose.yml
 .idea

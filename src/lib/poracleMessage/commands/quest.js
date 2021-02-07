@@ -4,12 +4,13 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea,
+			canContinue, target, userHasLocation, userHasArea, language,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		const translator = client.translatorFactory.Translator(language)
 
-		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
+		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 		let reaction = '👌'
 
 		const pings = msg.getPings()
@@ -30,37 +31,37 @@ exports.run = async (client, msg, args) => {
 
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
-		const gen = genCommand.length ? client.utilData.genData[+genCommand[0].replace(client.translator.translate('gen'), '')] : 0
+		const gen = genCommand.length ? client.GameData.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
 
-		fullMonsters = Object.values(client.monsters).filter((mon) => (
+		fullMonsters = Object.values(client.GameData.monsters).filter((mon) => (
 			(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 			|| args.includes('all pokemon')) && !mon.form.id)
 		if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		monsters = fullMonsters.map((mon) => mon.id)
-		items = Object.keys(client.utilData.items).filter((key) => args.includes(client.translator.translate(client.utilData.items[key].toLowerCase())) || args.includes('all items'))
+		items = Object.keys(client.GameData.items).filter((key) => args.includes(translator.translate(client.GameData.items[key].name.toLowerCase())) || args.includes('all items'))
 		if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
 			|| args.includes('everything') && msg.isFromAdmin) {
-			monsters = Object.values(client.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
-			items = Object.keys(client.utilData.items)
+			monsters = Object.values(client.GameData.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
+			items = Object.keys(client.GameData.items)
 			minDust = 0
 			stardustTracking = -1
 			energyMonsters.push('0')
 			commandEverything = 1
 		}
 		args.forEach((element) => {
-			if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
+			if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.stardustRe)) {
-				minDust = +element.match(client.re.stardustRe)[0].replace(client.translator.translate('stardust'), '')
+				minDust = +element.match(client.re.stardustRe)[2]
 				stardustTracking = -1
-			} else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
+			} else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'stardust') {
 				minDust = 0
 				stardustTracking = -1
 			} else if (element.match(client.re.energyRe)) {
-				energyMonster = element.match(client.re.energyRe)[0].replace(client.translator.translate('energy'), '')
-				energyMonster = client.translator.reverse(energyMonster.toLowerCase(), true).toLowerCase()
-				energyMonster = Object.values(client.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
+				[,, energyMonster] = element.match(client.re.energyRe)
+				energyMonster = translator.reverse(energyMonster.toLowerCase(), true).toLowerCase()
+				energyMonster = Object.values(client.GameData.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
 				energyMonster = energyMonster.map((mon) => mon.id)
 				if (+energyMonster > 0) energyMonsters.push(energyMonster)
 			} else if (element === 'energy') {
@@ -72,12 +73,12 @@ exports.run = async (client, msg, args) => {
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 
 		if (+minDust < 10000000) {
@@ -133,7 +134,7 @@ exports.run = async (client, msg, args) => {
 		})
 
 		if (!questTracks.length) {
-			return await msg.reply(client.translator.translate('404 No valid quests found'))
+			return await msg.reply(translator.translate('404 No valid quests found'))
 		}
 
 		if (!remove) {

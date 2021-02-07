@@ -3,16 +3,15 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea,
+			canContinue, target, userHasLocation, userHasArea, language,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		const translator = client.translatorFactory.Translator(language)
 
-		const typeArray = Object.keys(client.utilData.types).map((o) => o.toLowerCase())
+		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 
 		let reaction = '👌'
-		// const validTracks = 0
-		// for (const args of command) {
 		// Set defaults
 		let monsters
 		let distance = 0
@@ -44,13 +43,12 @@ exports.run = async (client, msg, args) => {
 
 		// Check for monsters or forms
 		const formArgs = args.filter((arg) => arg.match(client.re.formRe))
-		const formNames = formArgs ? formArgs.map((arg) => client.translator.reverse(arg.replace(client.translator.translate('form'), ''), true).toLowerCase()) : []
+		const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
-		const gen = genCommand.length ? client.utilData.genData[+(genCommand[0].replace(client.translator.translate('gen'), ''))] : 0
-
+		const gen = genCommand.length ? client.GameData.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
 		if (formNames.length) {
-			monsters = Object.values(client.monsters).filter((mon) => (
+			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
@@ -58,7 +56,7 @@ exports.run = async (client, msg, args) => {
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		} else if (gen || args.includes('individually') || client.config.tracking.forceEverythingSeparately) {
-			monsters = Object.values(client.monsters).filter((mon) => (
+			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
 				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
@@ -66,9 +64,10 @@ exports.run = async (client, msg, args) => {
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		} else {
-			monsters = Object.values(client.monsters).filter((mon) => (
+			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))) && !mon.form.id)
+
 			if (args.includes('everything') && !client.config.tracking.disableEverythingTracking || args.includes('everything') && msg.isFromAdmin) {
 				monsters.push({
 					id: 0,
@@ -80,34 +79,34 @@ exports.run = async (client, msg, args) => {
 		}
 		// Parse command elements to stuff
 		args.forEach((element) => {
-			if (element.match(client.re.maxlevelRe)) maxlevel = element.match(client.re.maxlevelRe)[0].replace(client.translator.translate('maxlevel'), '')
-			else if (element.match(client.re.templateRe)) template = element.match(client.re.templateRe)[0].replace(client.translator.translate('template'), '')
-			else if (element.match(client.re.greatLeagueRe)) greatLeague = element.match(client.re.greatLeagueRe)[0].replace(client.translator.translate('great'), '')
-			else if (element.match(client.re.greatLeagueCPRe)) greatLeagueCP = element.match(client.re.greatLeagueCPRe)[0].replace(client.translator.translate('greatcp'), '')
-			else if (element.match(client.re.ultraLeagueRe)) ultraLeague = element.match(client.re.ultraLeagueRe)[0].replace(client.translator.translate('ultra'), '')
-			else if (element.match(client.re.ultraLeagueCPRe)) ultraLeagueCP = element.match(client.re.ultraLeagueCPRe)[0].replace(client.translator.translate('ultracp'), '')
-			else if (element.match(client.re.maxcpRe)) maxcp = element.match(client.re.maxcpRe)[0].replace(client.translator.translate('maxcp'), '')
-			else if (element.match(client.re.maxivRe)) maxiv = element.match(client.re.maxivRe)[0].replace(client.translator.translate('maxiv'), '')
-			else if (element.match(client.re.maxweightRe)) maxweight = element.match(client.re.maxweightRe)[0].replace(client.translator.translate('maxweight'), '')
-			else if (element.match(client.re.maxatkRe)) maxAtk = element.match(client.re.maxatkRe)[0].replace(client.translator.translate('maxatk'), '')
-			else if (element.match(client.re.maxdefRe)) maxDef = element.match(client.re.maxdefRe)[0].replace(client.translator.translate('maxdef'), '')
-			else if (element.match(client.re.maxstaRe)) maxSta = element.match(client.re.maxstaRe)[0].replace(client.translator.translate('maxsta'), '')
-			else if (element.match(client.re.cpRe)) cp = element.match(client.re.cpRe)[0].replace(client.translator.translate('cp'), '')
-			else if (element.match(client.re.levelRe)) level = element.match(client.re.levelRe)[0].replace(client.translator.translate('level'), '')
-			else if (element.match(client.re.ivRe)) iv = element.match(client.re.ivRe)[0].replace(client.translator.translate('iv'), '')
-			else if (element.match(client.re.atkRe)) atk = element.match(client.re.atkRe)[0].replace(client.translator.translate('atk'), '')
-			else if (element.match(client.re.defRe)) def = element.match(client.re.defRe)[0].replace(client.translator.translate('def'), '')
-			else if (element.match(client.re.staRe)) sta = element.match(client.re.staRe)[0].replace(client.translator.translate('sta'), '')
-			else if (element.match(client.re.weightRe)) weight = element.match(client.re.weightRe)[0].replace(client.translator.translate('weight'), '')
-			else if (element.match(client.re.dRe)) distance = element.match(client.re.dRe)[0].replace(client.translator.translate('d'), '')
+			if (element.match(client.re.maxlevelRe)) [,, maxlevel] = element.match(client.re.maxlevelRe)
+			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
+			else if (element.match(client.re.greatLeagueRe)) [,, greatLeague] = element.match(client.re.greatLeagueRe)
+			else if (element.match(client.re.greatLeagueCPRe)) [,, greatLeagueCP] = element.match(client.re.greatLeagueCPRe)
+			else if (element.match(client.re.ultraLeagueRe)) [,, ultraLeague] = element.match(client.re.ultraLeagueRe)
+			else if (element.match(client.re.ultraLeagueCPRe)) [,, ultraLeagueCP] = element.match(client.re.ultraLeagueCPRe)
+			else if (element.match(client.re.maxcpRe)) [,, maxcp] = element.match(client.re.maxcpRe)
+			else if (element.match(client.re.maxivRe)) [,, maxiv] = element.match(client.re.maxivRe)
+			else if (element.match(client.re.maxweightRe)) [,, maxweight] = element.match(client.re.maxweightRe)
+			else if (element.match(client.re.maxatkRe)) [,, maxAtk] = element.match(client.re.maxatkRe)
+			else if (element.match(client.re.maxdefRe)) [,, maxDef] = element.match(client.re.maxdefRe)
+			else if (element.match(client.re.maxstaRe)) [,, maxSta] = element.match(client.re.maxstaRe)
+			else if (element.match(client.re.cpRe)) [,, cp] = element.match(client.re.cpRe)
+			else if (element.match(client.re.levelRe)) [,, level] = element.match(client.re.levelRe)
+			else if (element.match(client.re.ivRe)) [,, iv] = element.match(client.re.ivRe)
+			else if (element.match(client.re.atkRe)) [,, atk] = element.match(client.re.atkRe)
+			else if (element.match(client.re.defRe)) [,, def] = element.match(client.re.defRe)
+			else if (element.match(client.re.staRe)) [,, sta] = element.match(client.re.staRe)
+			else if (element.match(client.re.weightRe)) [,, weight] = element.match(client.re.weightRe)
+			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'female') gender = 2
 			else if (element === 'clean') clean = true
 			else if (element === 'male') gender = 1
 			else if (element === 'genderless') gender = 3
 		})
 		if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (greatLeague < 4096 && greatLeague > pvpFilterMaxRank) greatLeague = pvpFilterMaxRank
 		if (ultraLeague < 4096 && ultraLeague > pvpFilterMaxRank) ultraLeague = pvpFilterMaxRank
@@ -121,12 +120,12 @@ exports.run = async (client, msg, args) => {
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 
 		if (distance > 0 && !userHasLocation && !target.webhook) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !target.webhook) {
-			await msg.react(client.translator.translate('🙅'))
-			return await msg.reply(`${client.translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${client.translator.translate('help')}\``)
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		const insert = monsters.map((mon) => ({
 			id: target.id,
@@ -157,7 +156,7 @@ exports.run = async (client, msg, args) => {
 			ultra_league_ranking_min_cp: ultraLeagueCP,
 		}))
 		if (!insert.length) {
-			return await msg.reply(client.translator.translate('404 No monsters found'))
+			return await msg.reply(translator.translate('404 No monsters found'))
 		}
 		const result = await client.query.insertOrUpdateQuery('monsters', insert)
 		reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction

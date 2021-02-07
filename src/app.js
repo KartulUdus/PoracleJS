@@ -1,5 +1,7 @@
 require('./lib/configFileCreator')()
 require('dotenv').config()
+// eslint-disable-next-line no-underscore-dangle
+require('events').EventEmitter.prototype._maxListeners = 100
 
 const fs = require('fs')
 const util = require('util')
@@ -21,15 +23,23 @@ const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 
 const {
-	config, knex, dts, geofence, translator,
+	config, knex, dts, geofence, translator, translatorFactory,
 } = Config()
+
+const GameData = {
+	monsters: require('./util/monsters'),
+	utilData: require('./util/util'),
+	moves: require('./util/moves'),
+	items: require('./util/items'),
+	grunts: require('./util/grunts'),
+}
 
 const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
 const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
 
-const cache = new NodeCache({ stdTTL: 5400, useClones: false })
+const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
@@ -42,9 +52,8 @@ const DiscordCommando = require('./lib/discord/commando')
 const TelegramWorker = require('./lib/telegram/Telegram')
 
 const { log, webhooks } = require('./lib/logger')
-const monsterData = require('./util/monsters')
-const utilData = require('./util/util')
-const re = require('./util/regex')(translator)
+
+const re = require('./util/regex')(translatorFactory)
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
@@ -52,11 +61,11 @@ const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
 const WeatherController = require('./controllers/weather')
 
-const weatherController = new WeatherController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, null, weatherCacheData)
-const monsterController = new MonsterController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
-const raidController = new RaidController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
-const questController = new QuestController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
-const pokestopController = new PokestopController(knex, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController, null)
+const weatherController = new WeatherController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, weatherCacheData)
+const monsterController = new MonsterController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const raidController = new RaidController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const questController = new QuestController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const pokestopController = new PokestopController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 
 fastify.decorate('logger', log)
 fastify.decorate('webhooks', webhooks)
@@ -75,7 +84,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, monsterData, utilData, dts, geofence, translator) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, log, GameData, dts, geofence, translatorFactory) : null
 log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let roleWorker
@@ -97,10 +106,10 @@ if (config.discord.enabled) {
 
 let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegraf, translator, telegramCommandParser, re)
+	telegram = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker(config, log, monsterData, utilData, dts, geofence, telegramController, monsterController, telegrafChannel, translator, telegramCommandParser, re)
+		telegramChannel = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re)
 	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
@@ -252,106 +261,131 @@ const PromiseQueue = require('./lib/PromiseQueue')
 const alarmProcessor = new PromiseQueue(fastify.hookQueue, 10)
 
 async function processOne(hook) {
-	switch (hook.type) {
-		case 'pokemon': {
-			if (config.general.disablePokemon) break
-			fastify.webhooks.info('pokemon', hook.message)
-			if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
-				fastify.logger.debug(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
+	try {
+		switch (hook.type) {
+			case 'pokemon': {
+				if (config.general.disablePokemon) break
+				fastify.webhooks.info('pokemon', hook.message)
+				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
+					fastify.logger.debug(`Wild encounter ${hook.message.encounter_id} was sent again too soon, ignoring`)
+					break
+				}
+
+				// Set cache expiry to calculated pokemon expiry + 5 minutes to cope with near misses
+				const secondsRemaining = Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300
+
+				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached', secondsRemaining)
+
+				const result = await fastify.monsterController.handle(hook.message)
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
+				}
+
 				break
 			}
+			case 'raid': {
+				if (config.general.disableRaid) break
+				fastify.webhooks.info('raid', hook.message)
+				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
+					fastify.logger.debug(`Raid ${hook.message.gym_id} was sent again too soon, ignoring`)
+					break
+				}
 
-			fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached')
+				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
 
-			const result = await fastify.monsterController.handle(hook.message)
-			result.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
-
-			break
-		}
-		case 'raid': {
-			if (config.general.disableRaid) break
-			fastify.webhooks.info('raid', hook.message)
-			if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
-				fastify.logger.debug(`Raid ${hook.message.gym_id} was sent again too soon, ignoring`)
+				const result = await fastify.raidController.handle(hook.message)
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
+				}
 				break
 			}
+			case 'invasion':
+			case 'pokestop': {
+				if (config.general.disablePokestop) break
+				fastify.webhooks.info('pokestop', hook.message)
+				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
+				if (!incidentExpiration) break
+				if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+					fastify.logger.debug(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
+					break
+				}
 
-			fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
+				// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+				const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-			const result = await fastify.raidController.handle(hook.message)
-			if (!result) break
-			result.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
-			break
-		}
-		case 'invasion':
-		case 'pokestop': {
-			if (config.general.disablePokestop) break
-			fastify.webhooks.info('pokestop', hook.message)
-			const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
-			if (!incidentExpiration) break
-			if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
-				fastify.logger.debug(`Invasion at ${hook.message.pokestop_id} was sent again too soon, ignoring`)
+				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
+
+				const result = await fastify.pokestopController.handle(hook.message)
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
+				}
 				break
 			}
-			fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached')
+			case 'quest': {
+				if (config.general.disableQuest) break
+				fastify.webhooks.info('quest', hook.message)
+				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
+					fastify.logger.debug(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
+					break
+				}
+				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
+				const q = hook.message
 
-			const result = await fastify.pokestopController.handle(hook.message)
-			if (!result) break
-
-			result.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
-
-			break
-		}
-		case 'quest': {
-			if (config.general.disableQuest) break
-			fastify.webhooks.info('quest', hook.message)
-			if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
-				fastify.logger.debug(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
+				const result = await fastify.questController.handle(q)
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
+				}
 				break
 			}
-			fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
-			const q = hook.message
-
-			const result = await fastify.questController.handle(q)
-			if (!result) break
-
-			result.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
-			break
-		}
-		case 'weather': {
-			if (config.general.disableWeather) break
-			fastify.webhooks.info('weather', hook.message)
-			if (hook.message.updated) {
-				const weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
-				hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
-			}
-			const updateTimestamp = hook.message.time_changed || hook.message.updated
-			const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
-			if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
-				fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
+			case 'weather': {
+				if (config.general.disableWeather) break
+				fastify.webhooks.info('weather', hook.message)
+				if (hook.message.updated) {
+					const weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
+					hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
+				}
+				const updateTimestamp = hook.message.time_changed || hook.message.updated
+				const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
+				if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
+					fastify.logger.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
+					break
+				}
+				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
+				const result = await fastify.weatherController.handle(hook.message)
+				if (result) {
+					result.forEach((job) => {
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+					})
+				} else {
+					log.error(`Missing result from ${hook.type} processor: ${JSON.stringify(hook.message)}`)
+				}
 				break
 			}
-			fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
-			const result = await fastify.weatherController.handle(hook.message)
-			result.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
-			break
+			default:
 		}
-		default:
+	} catch (err) {
+		log.error(`Hook processor error (something wasn't caught higher), ${err.message}`)
 	}
 }
 
@@ -361,6 +395,11 @@ async function handleAlarms() {
 
 		alarmProcessor.run(processOne)
 	}
+}
+
+const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
+if (NODE_MAJOR_VERSION < 12) {
+	throw new Error('Requires Node 12 (or higher)')
 }
 
 run()

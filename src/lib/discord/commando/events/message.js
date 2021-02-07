@@ -7,7 +7,7 @@ module.exports = async (client, msg) => {
 	// Log all DM messages to dmLogChannelID
 	if (msg.channel.type === 'dm' && client.config.discord.dmLogChannelID !== '') {
 		let message = `${msg.author} > ${msg.cleanContent}`
-		if (client.config.discord.guilds.length > 1) {
+		if (client.config.discord.guilds && client.config.discord.guilds.length > 1) {
 			message = `${msg.author.username} ${msg.author} > ${msg.cleanContent}`
 		}
 		if (client.config.discord.admins.includes(msg.author.id)) {
@@ -33,8 +33,9 @@ module.exports = async (client, msg) => {
 	if (msg.content.indexOf(client.config.discord.prefix) !== 0) return
 
 	let args = msg.content.slice(client.config.discord.prefix.length).trim().split(/ +/g)
-	args = args.map((arg) => client.translator.reverse(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
-	const command = client.translator.reverse(args.shift().toLowerCase())
+
+	args = args.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
+	const command = args.shift()
 
 	if (client.config.general.disabledCommands.includes(command)) return
 
