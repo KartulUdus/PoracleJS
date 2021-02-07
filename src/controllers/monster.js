@@ -352,7 +352,7 @@ class Monster extends Controller {
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
-			this.log.info(`${data.encounter_id}: ${monster.name} appeared in areas (${matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			this.log.info(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0] && !weatherChangeAlertJobs[0]) return []
 
