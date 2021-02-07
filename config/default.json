@@ -27,7 +27,7 @@
     },
     "logger": {
         "level": "info",
-        "logSize": 25
+        "logSize": 250
     },
     "database": {
         "client": "sqlite",
@@ -42,7 +42,7 @@
     "locale": {
         "timeformat": "en-gb",
         "time": "LTS",
-        "addressFormat": "{{ streetName}} {{ streetNumber }}:",
+        "addressFormat": "{{{streetName}}} {{streetNumber}}",
         "language": "en"
     },
     "geofence": {
@@ -84,11 +84,11 @@
         "checkRoleInterval": 6,
         "unknownResponse": false,
         "invite": "",
-        "token": [],
-        "guilds": ["358180805031493634"],
-        "channels": ["533927791096233984"],
-        "userRole": ["roleId1", "358207117951369217"],
-        "admins": ["222742859059560458"],
+        "token": ["discord bot token"],
+        "guilds": ["guilds your bot will operate on"],
+        "channels": ["channels to listen for poracle activation commands"],
+        "userRole": ["roles to grant access for"],
+        "admins": ["ids of admin accounts"],
         "prefix": "!",
         "limitSec": 240,
         "limitAmount": 20,
@@ -107,9 +107,9 @@
         "enabled": false,
         "checkRole": false,
         "checkRoleInterval": 6,
-        "token": "",
-        "admins": [""],
-        "channels": [""],
+        "token": "telegram bot token",
+        "admins": ["admin ids"],
+        "channels": ["channels to listen for /poracle"],
         "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
       },
       "geocoding": {
