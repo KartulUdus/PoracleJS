@@ -215,9 +215,11 @@ async function loadEventCache() {
 	}
 }
 
-process.on('SIGINT', () => {
+function handleShutdown() {
 	const workerSaves = []
-	if (discordWorkers[0]) workerSaves.push(discordWorkers[0].saveTimeouts())
+	for (const worker of discordWorkers) {
+		workerSaves.push(worker.saveTimeouts())
+	}
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
 	workerSaves.push(saveEventCache())
@@ -229,7 +231,10 @@ process.on('SIGINT', () => {
 			log.error(`Error saving files ${err}`)
 			process.exit()
 		})
-})
+}
+
+process.on('SIGINT', handleShutdown)
+process.on('SIGTERM', handleShutdown)
 
 async function run() {
 	await loadEventCache()
