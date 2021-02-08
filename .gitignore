@@ -1,4 +1,4 @@
-logs/*.json
+logs/*
 config/*.json
 config/dts/*.json
 config/locale/*.json

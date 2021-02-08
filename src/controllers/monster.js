@@ -98,6 +98,7 @@ class Monster extends Controller {
 		const data = obj
 		try {
 			let hrstart = process.hrtime()
+			this.logReference = data.encounter_id
 
 			moment.locale(this.config.locale.timeformat)
 			const minTth = this.config.general.alertMinimumTime || 0
@@ -127,7 +128,7 @@ class Monster extends Controller {
 			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
-				log.warn('Couldn\'t find monster in:', data)
+				log.warn(`${data.encounter_id}: Couldn't find monster in:`, data)
 				return
 			}
 
@@ -153,7 +154,7 @@ class Monster extends Controller {
 					weatherCellData.weatherFromBoost = weatherCellData.weatherFromBoost.map((value, index) => { if (index == data.weather) return value += 1; return value -= 1 })
 					if (weatherCellData.weatherFromBoost.filter((x) => x > 4).length) {
 						if (weatherCellData.weatherFromBoost.indexOf(5) == -1) weatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0]
-						this.log.info(`Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${data.weather}`)
+						this.log.info(`${data.encouter_id}: Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${data.weather}`)
 						if (data.weather != weatherCellData[currentHourTimestamp]) weatherCellData.forecastTimeout = null
 						weatherCellData[currentHourTimestamp] = data.weather
 						currentCellWeather = data.weather
@@ -322,7 +323,7 @@ class Monster extends Controller {
 
 			// Stop handling if it already disappeared or is about to go away
 			if ((data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) && !weatherChangeAlertJobs[0]) {
-				log.debug(`${data.encounter_id}: ${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.verbose(`${data.encounter_id}: ${monster.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -352,7 +353,11 @@ class Monster extends Controller {
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
-			this.log.info(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			if (whoCares.length) {
+				this.log.info(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			} else {
+				this.log.verbose(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			}
 
 			if (!whoCares[0] && !weatherChangeAlertJobs[0]) return []
 
@@ -399,6 +404,8 @@ class Monster extends Controller {
 			}
 
 			for (const cares of whoCares) {
+				this.log.debug(`${data.encounter_id}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
 				const caresCache = this.getDiscordCache(cares.id).count
 
 				if (this.config.weather.weatherChangeAlert && weatherCellData) {
@@ -540,13 +547,13 @@ class Monster extends Controller {
 			}
 			hrend = process.hrtime(hrstart)
 			const hrendprocessing = hrend[1] / 1000000
-			this.log.info(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
+			this.log.debug(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
 
 			if (weatherChangeAlertJobs[0]) weatherChangeAlertJobs.forEach((weatherJob) => jobs.push(weatherJob))
 
 			return jobs
 		} catch (e) {
-			this.log.error('Can\'t seem to handle monster: ', e, data)
+			this.log.error(`${data.encounter_id} Can't seem to handle monster: `, e, data)
 		}
 	}
 }

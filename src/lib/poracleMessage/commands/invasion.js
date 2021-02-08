@@ -8,6 +8,8 @@ exports.run = async (client, msg, args) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+
 		const translator = client.translatorFactory.Translator(language)
 
 		const typeArray = Object.values(client.GameData.grunts).map((grunt) => grunt.type.toLowerCase())

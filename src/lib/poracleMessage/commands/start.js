@@ -10,6 +10,7 @@ exports.run = async (client, msg, args) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 
 		let platform = target.type.split(':')[0]
 		if (platform === 'webhook') platform = 'discord'

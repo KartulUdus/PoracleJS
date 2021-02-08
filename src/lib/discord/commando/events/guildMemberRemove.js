@@ -7,9 +7,9 @@ module.exports = async (client, member) => {
 			await client.query.deleteQuery('raid', { id: member.id })
 			await client.query.deleteQuery('quest', { id: member.id })
 			await client.query.deleteQuery('humans', { id: member.id })
-			client.log.log({ level: 'debug', message: `user ${member.tag} left the server and was auto-unregistered`, event: 'discord:registerCheck' })
+			client.logs.discord.log({ level: 'debug', message: `user ${member.tag} left the server and was auto-unregistered`, event: 'discord:registerCheck' })
 		}
 	} catch (e) {
-		client.log.error(`Was unable to remove human : ${e}`)
+		client.logs.discord.error(`Was unable to remove human : ${e}`)
 	}
 }

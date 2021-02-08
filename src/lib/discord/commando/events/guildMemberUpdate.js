@@ -19,7 +19,7 @@ module.exports = async (client, oldPresence, newPresence) => {
 					await oldPresence.user.send(JSON.parse(greeting(view)))
 				}
 
-				client.log.log({ level: 'info', message: `registered ${oldPresence.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
+				client.logs.discord.log({ level: 'info', message: `registered ${oldPresence.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
 			}
 		}
 		if (before && !after) {
@@ -30,10 +30,10 @@ module.exports = async (client, oldPresence, newPresence) => {
 				await client.query.deleteQuery('raid', { id: oldPresence.user.id })
 				await client.query.deleteQuery('quest', { id: oldPresence.user.id })
 				await client.query.deleteQuery('humans', { id: oldPresence.user.id })
-				client.log.log({ level: 'info', message: `unregistered ${oldPresence.user.username} because ${roleBefore.name} role removed`, event: 'discord:roleCheck' })
+				client.logs.discord.log({ level: 'info', message: `unregistered ${oldPresence.user.username} because ${roleBefore.name} role removed`, event: 'discord:roleCheck' })
 			}
 		}
 	} catch (e) {
-		client.log.error(`Role based registration errored : ${e}`)
+		client.logs.discord.error(`Role based registration errored : ${e}`)
 	}
 }

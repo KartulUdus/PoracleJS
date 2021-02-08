@@ -8,7 +8,7 @@ const pcache = require('flat-cache')
 const geoCache = pcache.load('.geoCache', path.resolve(`${__dirname}../../../`))
 const emojiFlags = require('emoji-flags')
 
-const { log } = require('../lib/logger')
+const logs = require('../lib/logger')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
@@ -16,7 +16,8 @@ class Controller {
 		this.db = db
 		this.cp = cp
 		this.config = config
-		this.log = log
+		this.log = logs.controller
+		this.logReference = ''
 		this.dts = dts
 		this.geofence = geofence
 		this.GameData = GameData
@@ -94,9 +95,11 @@ class Controller {
 		}
 
 		if (!findDts) {
-			this.log.error(`Cannot find DTS template or matching default ${key}`)
+			this.log.warn(`${this.logReference} Cannot find DTS template or matching default ${key}`)
 			return null
 		}
+
+		this.log.debug(`${this.logReference} Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
 
 		if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
 			findDts.template.embed.description = findDts.template.embed.description.join('')

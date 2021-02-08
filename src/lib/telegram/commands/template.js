@@ -32,6 +32,6 @@ module.exports = async (ctx) => {
 		}
 		// PUT CODE HERE
 	} catch (err) {
-		controller.log.error('TEMPLATE command unhappy:', err)
+		controller.logs.telegram.error('TEMPLATE command unhappy:', err)
 	}
 }

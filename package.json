@@ -67,7 +67,8 @@
     "telegraf": "^3.33.3",
     "telegraf-inline-menu": "^3.6.3",
     "telegraf-ratelimit": "^2.0.0",
-    "winston": "^3.2.1"
+    "winston": "^3.2.1",
+    "winston-daily-rotate-file": "^4.5.0"
   },
   "devDependencies": {
     "ajv": "^6.12.0",

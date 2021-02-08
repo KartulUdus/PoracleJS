@@ -77,8 +77,8 @@ module.exports = async (ctx) => {
 		}
 		await ctx.telegram.sendMessage(user.id, 'You are now registered with Poracle', { parse_mode: 'Markdown' })
 
-		controller.log.info(`${userName} Registered!`)
+		controller.logs.telegram.info(`${userName} Registered!`)
 	} catch (err) {
-		controller.log.error('!poracle command errored with:', err)
+		controller.logs.telegram.error('!poracle command errored with:', err)
 	}
 }
