@@ -114,7 +114,7 @@ class Telegram {
 			} catch (err) {
 				this.telegram.error(`Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
 			}
-			this.logs.telegram.debug(`${data.name} ${data.target} Content`, data.message.content)
+			this.logs.telegram.debug(`${data.name} ${data.target} Content`, data.message)
 
 			const msg = await this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
 				parse_mode: 'Markdown',

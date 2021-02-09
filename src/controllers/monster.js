@@ -73,6 +73,8 @@ class Monster extends Controller {
 					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 					`)
 		}
+		this.log.silly(`${this.logReference}: Query ${query}`)
+
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -380,6 +382,7 @@ class Monster extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
+				this.log.debug(`${data.encounter_id}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
