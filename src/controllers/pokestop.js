@@ -44,6 +44,7 @@ class Pokestop extends Controller {
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
+		this.log.silly(`${this.logReference}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -68,6 +69,7 @@ class Pokestop extends Controller {
 		// const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
+			this.logReference = data.pokestop_id
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'tileservercache': {
 					pregenerateTile = true
@@ -107,7 +109,7 @@ class Pokestop extends Controller {
 
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				this.log.debug(`${data.name} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`${data.pokestop_id} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -146,7 +148,11 @@ class Pokestop extends Controller {
 
 			const whoCares = await this.invasionWhoCares(data)
 
-			this.log.info(`Invasion against ${data.gruntType} appeared and ${whoCares.length} humans cared.`)
+			if (whoCares.length) {
+				this.log.info(`${this.logReference}: Invasion against ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+			} else {
+				this.log.verbose(`${this.logReference}: Invasion against ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+			}
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
@@ -161,10 +167,13 @@ class Pokestop extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('pokestop', data)
+				this.log.debug(`${this.logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
+				this.log.debug(`${this.logReference}: Creating invasion alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
 				const caresCache = this.getDiscordCache(cares.id).count
 
 				const language = cares.language || this.config.general.locale
@@ -286,7 +295,7 @@ class Pokestop extends Controller {
 
 			return jobs
 		} catch (e) {
-			this.log.error('Can\'t seem to handle pokestop: ', e, data)
+			this.log.error(`${data.pokestop_id}: Can't seem to handle pokestop: `, e, data)
 		}
 	}
 }

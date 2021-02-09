@@ -266,7 +266,10 @@ async function processOne(hook) {
 	try {
 		switch (hook.type) {
 			case 'pokemon': {
-				if (config.general.disablePokemon) break
+				if (config.general.disablePokemon) {
+					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was received but set to be ignored in config`)
+					break
+				}
 				fastify.webhooks.info('pokemon', hook.message)
 				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
@@ -291,10 +294,14 @@ async function processOne(hook) {
 				break
 			}
 			case 'raid': {
-				if (config.general.disableRaid) break
+				if (config.general.disableRaid) {
+					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was received but set to be ignored in config`)
+
+					break
+				}
 				fastify.webhooks.info('raid', hook.message)
 				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
-					fastify.controllerLog.debug(`Raid ${hook.message.gym_id} was sent again too soon, ignoring`)
+					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 					break
 				}
 
@@ -313,7 +320,10 @@ async function processOne(hook) {
 			}
 			case 'invasion':
 			case 'pokestop': {
-				if (config.general.disablePokestop) break
+				if (config.general.disablePokestop) {
+					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was received but set to be ignored in config`)
+					break
+				}
 				fastify.webhooks.info('pokestop', hook.message)
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 				if (!incidentExpiration) break
@@ -339,10 +349,13 @@ async function processOne(hook) {
 				break
 			}
 			case 'quest': {
-				if (config.general.disableQuest) break
+				if (config.general.disableQuest) {
+					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was received but set to be ignored in config`)
+					break
+				}
 				fastify.webhooks.info('quest', hook.message)
 				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
-					fastify.controllerLog.debug(`Quest at ${hook.message.pokestop_name} was sent again too soon, ignoring`)
+					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
 					break
 				}
 				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
@@ -369,7 +382,7 @@ async function processOne(hook) {
 				const updateTimestamp = hook.message.time_changed || hook.message.updated
 				const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
 				if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
-					fastify.controllerLog.debug(`Weather for ${hook.message.s2_cell_id} was sent again too soon, ignoring`)
+					fastify.controllerLog.debug(`${hook.message.s2_cell_id}: Weather for this cell was sent again too soon, ignoring`)
 					break
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')

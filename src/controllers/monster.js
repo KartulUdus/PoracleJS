@@ -382,7 +382,7 @@ class Monster extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
-				this.log.debug(`${data.encounter_id}: Tile generated ${data.staticMap}`)
+				this.log.debug(`${this.logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
@@ -407,7 +407,7 @@ class Monster extends Controller {
 			}
 
 			for (const cares of whoCares) {
-				this.log.debug(`${data.encounter_id}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+				this.log.debug(`${this.logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
 				const caresCache = this.getDiscordCache(cares.id).count
 
@@ -556,7 +556,7 @@ class Monster extends Controller {
 
 			return jobs
 		} catch (e) {
-			this.log.error(`${data.encounter_id} Can't seem to handle monster: `, e, data)
+			this.log.error(`${data.encounter_id}: Can't seem to handle monster: `, e, data)
 		}
 	}
 }

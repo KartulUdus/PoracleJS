@@ -28,11 +28,11 @@
     "logger": {
         "consoleLogLevel": "verbose",
         "logLevel": "debug",
-      "enableLogs": {
-        "webhooks": true,
-        "discord": true,
-        "telegram": true
-      }
+        "enableLogs": {
+          "webhooks": true,
+          "discord": true,
+          "telegram": true
+        }
     },
     "database": {
         "client": "sqlite",

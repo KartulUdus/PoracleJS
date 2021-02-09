@@ -92,7 +92,7 @@ const dataStoreLog = new winston.transports.DailyRotateFile({
 	//	maxSize: `${config.logger.logSize}m`,
 	frequency: '1h',
 	maxFiles: 12,
-	level: config.logger.enableLogs['webhooks'] ? config.logger.logLevel : 'warn',
+	level: config.logger.enableLogs.webhooks ? config.logger.logLevel : 'warn',
 })
 
 const discordLog = new winston.transports.DailyRotateFile({
@@ -101,10 +101,10 @@ const discordLog = new winston.transports.DailyRotateFile({
 	format: poracleFormat,
 	createSymlink: true,
 	datePattern: 'YYYY-MM-DD-HH',
-	//maxSize: `${config.logger.logSize}m`,
+	// maxSize: `${config.logger.logSize}m`,
 	frequency: '1h',
 	maxFiles: 12,
-	level: config.logger.enableLogs['discord'] ? config.logger.logLevel : 'warn',
+	level: config.logger.enableLogs.discord ? config.logger.logLevel : 'warn',
 })
 
 const commandLog = new winston.transports.DailyRotateFile({
@@ -143,7 +143,7 @@ const telegramLog = new winston.transports.DailyRotateFile({
 	frequency: '1h',
 	handleExceptions: true,
 	maxFiles: 12,
-	level: config.logger.enableLogs['telegram'] ? config.logger.logLevel : 'warn',
+	level: config.logger.enableLogs.telegram ? config.logger.logLevel : 'warn',
 })
 
 const consoleLog = new (winston.transports.Console)({
@@ -154,7 +154,7 @@ const consoleLog = new (winston.transports.Console)({
 		winston.format.errors({ stack: true }),
 	),
 	handleExceptions: true,
-	level: `${config.logger.consoleLogLevel}`,
+	level: config.logger.consoleLogLevel,
 })
 
 module.exports.log = winston.createLogger({
