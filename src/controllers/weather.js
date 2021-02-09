@@ -282,13 +282,13 @@ class Weather extends Controller {
 
 				const caresCache = this.getDiscordCache(cares.id).count
 				if (cares.caresUntil < nowTimestamp) {
-					this.log.info(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)
+					this.log.debug(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)
 					weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.id != cares.id)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				if (cares.lastChangeAlert == currentHourTimestamp) {
-					this.log.info(`${data.s2_cell_id}: user already alerted for this weather change`)
+					this.log.debug(`${data.s2_cell_id}: user already alerted for this weather change`)
 					// eslint-disable-next-line no-continue
 					continue
 				}

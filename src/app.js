@@ -129,7 +129,7 @@ async function removeInvalidUser(user) {
 
 async function syncTelegramMembership() {
 	try {
-		log.info('Verification of Telegram group membership for Poracle users starting...')
+		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
 		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'telegram:user' })
 		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
@@ -148,17 +148,17 @@ async function syncTelegramMembership() {
 				}
 			}
 		} else {
-			log.info('No invalid users found, all good!')
+			log.verbose('No invalid users found, all good!')
 		}
 	} catch (err) {
-		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
+		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
 	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
 }
 
 async function syncDiscordRole() {
 	try {
-		log.info('Verification of Discord role membership to Poracle users starting...')
+		log.verbose('Verification of Discord role membership to Poracle users starting...')
 		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
 		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
 		let invalidUsers = []
@@ -175,10 +175,10 @@ async function syncDiscordRole() {
 				}
 			}
 		} else {
-			log.info('No invalid users found, all good!')
+			log.verbose('No invalid users found, all good!')
 		}
 	} catch (err) {
-		log.error(`Verification of Poracle user's roles failed with, ${err.message}`)
+		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
 	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }

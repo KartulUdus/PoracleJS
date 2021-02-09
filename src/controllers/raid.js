@@ -230,16 +230,16 @@ class Raid extends Controller {
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-					this.log.debug(`${this.logReference}: Raid on ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+					this.log.debug(`${this.logReference}: Raid against ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 					return []
 				}
 
 				const whoCares = await this.raidWhoCares(data)
 
 				if (whoCares.length) {
-					this.log.info(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+					this.log.info(`${logReference}: Raid against ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 				} else {
-					this.log.verbose(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+					this.log.verbose(`${logReference}: Raid against ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 				}
 
 				if (!whoCares[0]) return []
@@ -368,9 +368,9 @@ class Raid extends Controller {
 			const whoCares = await this.eggWhoCares(data)
 
 			if (whoCares.length) {
-				this.log.info(`${logReference}: Raid egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${logReference}: Raid egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			if (!whoCares[0]) return []
