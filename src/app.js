@@ -145,6 +145,8 @@ async function syncTelegramMembership() {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
 				if (config.general.roleCheckDeletionsAllowed) {
 					await removeInvalidUser(user)
+				} else {
+					log.info('config.general.roleCheckDeletionAllowed not set, not removing')
 				}
 			}
 		} else {
@@ -172,6 +174,8 @@ async function syncDiscordRole() {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
 				if (config.general.roleCheckDeletionsAllowed) {
 					await removeInvalidUser(user)
+				} else {
+					log.info('config.general.roleCheckDeletionAllowed not set, not removing')
 				}
 			}
 		} else {
@@ -183,6 +187,8 @@ async function syncDiscordRole() {
 	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
+let discordBigQueue = { count: 0, lastSize: 0 }
+
 async function run() {
 	if (config.discord.enabled) {
 		setInterval(() => {
@@ -190,6 +196,17 @@ async function run() {
 				return
 			}
 			if ((Math.random() * 100) > 80) fastify.logger.debug(`DiscordQueue is currently ${fastify.discordQueue.length}`)
+
+			if (fastify.discordQueue.length > 500) {
+				discordBigQueue.count++
+				discordBigQueue.lastSize = fastify.discordQueue.length
+				if ((discordBigQueue.count % 6000) == 0) { // Approx once per minute 10ms per call
+					fastify.logger.warn(`DiscordQueue is big, remained big for ${discordBigQueue.count} calls currently ${discordBigQueue.lastSize}`)
+				}
+			} else {
+				discordBigQueue.lastSize = 0
+				discordBigQueue.count = 0
+			}
 
 			const { target } = fastify.discordQueue[0]
 			// see if target has dedicated worker
@@ -404,9 +421,22 @@ async function processOne(hook) {
 	}
 }
 
+let bigQueue = { count: 0, lastSize: 0 }
+
 async function handleAlarms() {
 	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
 		if ((Math.random() * 100) > 80) fastify.logger.debug(`WebhookQueue is currently ${fastify.hookQueue.length}`)
+
+		if (fastify.hookQueue.length > 5000) {
+			bigQueue.count++
+			bigQueue.lastSize = fastify.hookQueue.length
+			if ((bigQueue.count % 600) == 0) { // Approx once a minute warning with 100ms interval
+				fastify.logger.warn(`WebhookQueue is big, remained big for ${bigQueue.count} calls currently ${bigQueue.lastSize}`)
+			}
+		} else {
+			bigQueue.lastSize = 0
+			bigQueue.count = 0
+		}
 
 		alarmProcessor.run(processOne)
 	}

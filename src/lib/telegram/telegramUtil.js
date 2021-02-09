@@ -10,12 +10,12 @@ class TelegramUtil {
 		const invalidUsers = []
 
 		for (const user of allUsers) {
-			this.log.info(`Checking role for: ${user.name} - ${user.id}`)
+			this.log.debug(`Checking role for: ${user.name} - ${user.id}`)
 			const telegramUser = await this.telegraf.telegram.getChatMember(group, user.id)
 			if (telegramUser) {
 				const { status } = telegramUser
 				if (['left', 'kicked'].includes(status)) {
-					this.log.info(`User ${user.name} - ${user.id} has status ${status}`)
+					this.log.debug(`User ${user.name} - ${user.id} has status ${status}`)
 					invalidUsers.push(user)
 				}
 			}

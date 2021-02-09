@@ -236,7 +236,7 @@ class Weather extends Controller {
 			weatherCache.save(true)
 
 			if (!this.config.weather.weatherChangeAlert) {
-				this.log.verbose('{data.s2_cell_id}: weather change alerts are disabled, nobody cares.')
+				this.log.verbose(`${data.s2_cell_id}: weather change alerts are disabled, nobody cares.`)
 				return []
 			}
 
