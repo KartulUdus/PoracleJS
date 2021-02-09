@@ -24,10 +24,10 @@ function createCommandRegex(translatorFactory, commandName, paramMatch, flags = 
 module.exports = (translatorFactory) => ({
 	nameRe: createCommandRegex(translatorFactory, 'name', '\\S+'),
 	userRe: createCommandRegex(translatorFactory, 'user', '\\S+'),
-	formRe: createCommandRegex(translatorFactory, 'form', '\\S+'),
+	formRe: createCommandRegex(translatorFactory, 'form', '.+'),
 	genRe: createCommandRegex(translatorFactory, 'gen', '[1-7]+'),
 	maxlevelRe: createCommandRegex(translatorFactory, 'maxlevel', '\\d{1,2}'),
-	templateRe: createCommandRegex(translatorFactory, 'template', '\\S+'),
+	templateRe: createCommandRegex(translatorFactory, 'template', '.+'),
 	maxcpRe: createCommandRegex(translatorFactory, 'maxcp', '\\d{1,5}'),
 	maxivRe: createCommandRegex(translatorFactory, 'maxiv', '\\d{1,3}'),
 	maxweightRe: createCommandRegex(translatorFactory, 'maxweight', '\\d{1,6}'),

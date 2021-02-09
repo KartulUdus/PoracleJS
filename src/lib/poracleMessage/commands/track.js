@@ -34,7 +34,7 @@ exports.run = async (client, msg, args) => {
 		let greatLeagueCP = 0
 		let ultraLeague = 4096
 		let ultraLeagueCP = 0
-		const { pvpFilterMaxRank } = client.config.pvp
+		const { pvpFilterMaxRank } = Math.min(client.config.pvp, 4096)
 		const { pvpFilterGreatMinCP } = client.config.pvp
 		const { pvpFilterUltraMinCP } = client.config.pvp
 		let template = 1

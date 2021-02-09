@@ -275,6 +275,8 @@ class Raid extends Controller {
 					data.boostWeatherEmoji = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
 					data.quickMove = data.quickMoveName // deprecated
 					data.chargeMove = data.chargeMoveName // deprecated
+					data.move1 = data.quickMoveName // deprecated
+					data.move2 = data.chargeMoveName // deprecated
 					data.move1emoji = data.quickMoveEmoji // deprecated
 					data.move2emoji = data.chargeMoveEmoji // deprecated
 
@@ -291,8 +293,6 @@ class Raid extends Controller {
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
 						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
-						move1: data.quickMoveId, // deprecated
-						move2: data.chargeMoveId, // deprecated
 						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					}
 
@@ -313,7 +313,7 @@ class Raid extends Controller {
 						const work = {
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
-							message: caresCache === this.config.discord.limitAmount + 1 ? { content: `${translator.translate('You have reached the limit of')} ${this.config.discord.limitAmount} ${translator.translate('messages over')} ${this.config.discord.limitSec} ${translator.translate('seconds')}` } : message,
+							message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
 							target: cares.id,
 							type: cares.type,
 							name: cares.name,

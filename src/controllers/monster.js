@@ -322,7 +322,7 @@ class Monster extends Controller {
 
 			// Stop handling if it already disappeared or is about to go away
 			if ((data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) && !weatherChangeAlertJobs[0]) {
-				log.debug(`${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				log.debug(`${data.encounter_id}: ${data.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -352,7 +352,7 @@ class Monster extends Controller {
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
-			this.log.info(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			this.log.info(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 
 			if (!whoCares[0] && !weatherChangeAlertJobs[0]) return []
 
@@ -524,7 +524,7 @@ class Monster extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `${translator.translate('You have reached the limit of')} ${this.config.discord.limitAmount} ${translator.translate('messages over')} ${this.config.discord.limitSec} ${translator.translate('seconds')}` } : message,
+						message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
