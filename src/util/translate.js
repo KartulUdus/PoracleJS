@@ -12,6 +12,20 @@ class Translator {
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	format(str, ...args) {
+		let newStr = str
+		let i = args.length
+		while (i--) {
+			newStr = newStr.replace(new RegExp(`\\{${i}\\}`, 'gm'), args[i])
+		}
+		return newStr
+	}
+
+	translateFormat(bit, ...args) {
+		return this.format(this.data[bit] ? this.data[bit] : bit, ...args)
+	}
+
 	translate(bit, lowercase = false) {
 		let word = bit
 		if (lowercase) {
