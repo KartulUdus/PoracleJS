@@ -333,7 +333,7 @@ class Weather extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `${translator.translate('You have reached the limit of')} ${this.config.discord.limitAmount} ${translator.translate('messages over')} ${this.config.discord.limitSec} ${translator.translate('seconds')}` } : message,
+						message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
