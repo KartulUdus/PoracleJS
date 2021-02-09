@@ -3,7 +3,6 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
-const { log } = require('../lib/logger')
 require('moment-precise-range-plugin')
 
 class Monster extends Controller {
@@ -73,7 +72,7 @@ class Monster extends Controller {
 					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 					`)
 		}
-		this.log.silly(`${this.logReference}: Query ${query}`)
+		this.log.silly(`${data.encounter_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 
@@ -100,7 +99,7 @@ class Monster extends Controller {
 		const data = obj
 		try {
 			let hrstart = process.hrtime()
-			this.logReference = data.encounter_id
+			const logReference = data.encounter_id
 
 			moment.locale(this.config.locale.timeformat)
 			const minTth = this.config.general.alertMinimumTime || 0
@@ -130,7 +129,7 @@ class Monster extends Controller {
 			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
-				log.warn(`${data.encounter_id}: Couldn't find monster in:`, data)
+				this.log.warn(`${data.encounter_id}: Couldn't find monster in:`, data)
 				return
 			}
 
@@ -382,7 +381,7 @@ class Monster extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
-				this.log.debug(`${this.logReference}: Tile generated ${data.staticMap}`)
+				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
@@ -407,7 +406,7 @@ class Monster extends Controller {
 			}
 
 			for (const cares of whoCares) {
-				this.log.debug(`${this.logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+				this.log.debug(`${logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
 				const caresCache = this.getDiscordCache(cares.id).count
 
@@ -519,7 +518,7 @@ class Monster extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				const mustache = this.getDts((data.iv === -1) ? 'monsterNoIv' : 'monster', platform, cares.template, language)
+				const mustache = this.getDts(logReference, (data.iv === -1) ? 'monsterNoIv' : 'monster', platform, cares.template, language)
 				if (mustache) {
 					const message = JSON.parse(mustache(view, { data: { language } }))
 

@@ -44,7 +44,7 @@ class Pokestop extends Controller {
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
-		this.log.silly(`${this.logReference}: Query ${query}`)
+		this.log.silly(`${data.pokestop_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -69,7 +69,7 @@ class Pokestop extends Controller {
 		// const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
-			this.logReference = data.pokestop_id
+			const logReference = data.pokestop_id
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'tileservercache': {
 					pregenerateTile = true
@@ -149,9 +149,9 @@ class Pokestop extends Controller {
 			const whoCares = await this.invasionWhoCares(data)
 
 			if (whoCares.length) {
-				this.log.info(`${this.logReference}: Invasion against ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Invasion against ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${this.logReference}: Invasion against ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Invasion against ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			let discordCacheBad = true // assume the worst
@@ -167,12 +167,12 @@ class Pokestop extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('pokestop', data)
-				this.log.debug(`${this.logReference}: Tile generated ${data.staticMap}`)
+				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
-				this.log.debug(`${this.logReference}: Creating invasion alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+				this.log.debug(`${logReference}: Creating invasion alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
 				const caresCache = this.getDiscordCache(cares.id).count
 
@@ -264,7 +264,7 @@ class Pokestop extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 
-				const mustache = this.getDts('invasion', platform, cares.template, language)
+				const mustache = this.getDts(logReference, 'invasion', platform, cares.template, language)
 				if (mustache) {
 					const message = JSON.parse(mustache(view, { data: { language } }))
 

@@ -58,7 +58,7 @@ class Quest extends Controller {
 			`)
 		}
 
-		this.log.silly(`${this.logReference}: Query ${query}`)
+		this.log.silly(`${data.pokestop_id}: Query ${query}`)
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
 			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
@@ -81,7 +81,7 @@ class Quest extends Controller {
 		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
-			this.logReference = data.pokestop_id
+			const logReference = data.pokestop_id
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'tileservercache': {
 					pregenerateTile = true
@@ -160,9 +160,9 @@ class Quest extends Controller {
 
 			const whoCares = await this.questWhoCares(data)
 			if (whoCares.length) {
-				this.log.info(`${this.logReference}: Quest appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Quest appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${this.logReference}: Quest appeared against ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Quest appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			if (!whoCares[0]) return []
@@ -180,13 +180,13 @@ class Quest extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
-				this.log.debug(`${this.logReference}: Tile generated ${data.staticMap}`)
+				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
-				this.log.debug(`${this.logReference}: Creating quest alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+				this.log.debug(`${logReference}: Creating quest alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
 				const caresCache = this.getDiscordCache(cares.id).count
 
@@ -221,7 +221,7 @@ class Quest extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				const mustache = this.getDts('quest', platform, cares.template, language)
+				const mustache = this.getDts(logReference, 'quest', platform, cares.template, language)
 				if (mustache) {
 					const message = JSON.parse(mustache(view, { data: { language } }))
 

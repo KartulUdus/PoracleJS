@@ -17,7 +17,6 @@ class Controller {
 		this.cp = cp
 		this.config = config
 		this.log = logs.controller
-		this.logReference = ''
 		this.dts = dts
 		this.geofence = geofence
 		this.GameData = GameData
@@ -65,7 +64,7 @@ class Controller {
 		}
 	}
 
-	getDts(templateType, platform, templateName, language) {
+	getDts(logReference, templateType, platform, templateName, language) {
 		const key = `${templateType} ${platform} ${templateName} ${language}`
 		if (this.dtsCache[key]) {
 			return this.dtsCache[key]
@@ -95,11 +94,11 @@ class Controller {
 		}
 
 		if (!findDts) {
-			this.log.warn(`${this.logReference} Cannot find DTS template or matching default ${key}`)
+			this.log.warn(`${logReference}: Cannot find DTS template or matching default ${key}`)
 			return null
 		}
 
-		this.log.debug(`${this.logReference} Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
+		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
 
 		if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
 			findDts.template.embed.description = findDts.template.embed.description.join('')
