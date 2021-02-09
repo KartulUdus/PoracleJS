@@ -31,6 +31,20 @@ exports.run = async (client, msg, args) => {
 		let commandEverything = 0
 		let clean = false
 
+		let disableEverythingTracking
+		switch (client.config.tracking.everythingFlagPermissions.toLowerCase()) {
+			case 'allow-any':
+			case 'allow-and-always-individually':
+			case 'allow-and-ignore-individually': {
+				disableEverythingTracking = false
+				break
+			}
+			case 'deny':
+			default: {
+				disableEverythingTracking = true
+			}
+		}
+
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
 		const gen = genCommand.length ? client.GameData.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
@@ -42,7 +56,7 @@ exports.run = async (client, msg, args) => {
 		if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		monsters = fullMonsters.map((mon) => mon.id)
 		items = Object.keys(client.GameData.items).filter((key) => args.includes(translator.translate(client.GameData.items[key].name.toLowerCase())) || args.includes('all items'))
-		if (args.includes('everything') && !client.config.tracking.disableEverythingTracking
+		if (args.includes('everything') && !disableEverythingTracking
 			|| args.includes('everything') && msg.isFromAdmin) {
 			monsters = Object.values(client.GameData.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
 			items = Object.keys(client.GameData.items)
