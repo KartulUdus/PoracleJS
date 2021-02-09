@@ -21,7 +21,8 @@
         "roleCheckDeletionsAllowed": false,
         "availableLanguages": {
           "en": {"poracle": "poracle", "help": "help" }
-        }
+        },
+        "defaultTemplateName": 1
     },
     "logger": {
         "level": "info",
