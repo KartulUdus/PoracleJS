@@ -11,7 +11,7 @@ module.exports = () => {
 	if (!fs.existsSync(path.join(__dirname, '../../config/dts.json'))) {
 		const defaultDtsConfig = fs.readFileSync(path.join(__dirname, '../../config/defaults/dts.json'), 'utf8')
 		fs.writeFileSync(path.join(__dirname, '../../config/dts.json'), defaultDtsConfig)
-	} else {
+	} /*else {
 		const defaultDtsConfig = require(path.join(__dirname, '../../config/defaults/dts.json'))
 		const existingDtsConfig = dtsLoader.readDtsFiles()
 		let writeNewFile = false
@@ -84,7 +84,7 @@ module.exports = () => {
 			}
 		}
 		if (writeNewFile) fs.writeFileSync(path.join(__dirname, '../../config/dts.json'), JSON.stringify(existingDtsConfig, null, '\t'))
-	}
+	} */
 	if (!fs.existsSync(path.join(__dirname, '../../config/geofence.json'))) {
 		const defaultGeofConfig = fs.readFileSync(path.join(__dirname, '../../config/defaults/geofence.json'), 'utf8')
 		fs.writeFileSync(path.join(__dirname, '../../config/geofence.json'), defaultGeofConfig)

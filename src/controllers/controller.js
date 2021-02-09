@@ -176,7 +176,7 @@ class Controller {
 	// eslint-disable-next-line class-methods-use-this
 	escapeJsonString(s) {
 		if (!s) return s
-		return s.replace('"', '\\"')
+		return s.replace(/"/g, '\\"')
 	}
 
 	escapeAddress(a) {
