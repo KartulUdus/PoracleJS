@@ -12,22 +12,23 @@ const { log } = require('../lib/logger')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
-	constructor(db, config, dts, geofence, monsterData, discordCache, translator, mustache, weatherController) {
+	constructor(db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, weatherCacheData) {
 		this.db = db
 		this.cp = cp
 		this.config = config
 		this.log = log
 		this.dts = dts
 		this.geofence = geofence
-		this.monsterData = monsterData
+		this.GameData = GameData
 		this.discordCache = discordCache
-		this.utilData = require(path.join(__dirname, '../util/util'))
-		this.translator = translator
+		this.translatorFactory = translatorFactory
+		this.translator = translatorFactory ? this.translatorFactory.default : null
 		this.mustache = mustache
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherController = weatherController
-		this.controllerData = {}
+		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen()
+		this.dtsCache = {}
 	}
 
 	getGeocoder() {
@@ -61,6 +62,55 @@ class Controller {
 				})
 			}
 		}
+	}
+
+	getDts(templateType, platform, templateName, language) {
+		const key = `${templateType} ${platform} ${templateName} ${language}`
+		if (this.dtsCache[key]) {
+			return this.dtsCache[key]
+		}
+
+		// Exact match
+		let findDts = this.dts.find((template) => template.type === templateType && template.id.toString() === templateName && template.platform === platform && template.language == language)
+
+		// First right template and platform and no language (likely backward compatible choice)
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.id.toString() === templateName && template.platform === platform && !template.language)
+		}
+
+		// Default of right template type, platform and language
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language == language)
+		}
+
+		// First default of right template type and platform with empty language
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && !template.language)
+		}
+
+		// First default of right template type and platform
+		if (!findDts) {
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform)
+		}
+
+		if (!findDts) {
+			this.log.error(`Cannot find DTS template or matching default ${key}`)
+			return null
+		}
+
+		if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
+			findDts.template.embed.description = findDts.template.embed.description.join('')
+		}
+
+		if (Array.isArray(findDts.template.content)) {
+			findDts.template.content = findDts.template.content.join('')
+		}
+
+		const template = JSON.stringify(findDts.template)
+		const mustache = this.mustache.compile(template)
+
+		this.dtsCache[key] = mustache
+		return mustache
 	}
 
 	getDistance(start, end) {
@@ -121,6 +171,18 @@ class Controller {
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	escapeJsonString(s) {
+		if (!s) return s
+		return s.replace(/"/g, '\\"')
+	}
+
+	escapeAddress(a) {
+		a.streetName = this.escapeJsonString(a.streetName)
+		a.addr = this.escapeJsonString(a.addr)
+		return a
+	}
+
 	async getAddress(locationObject) {
 		if (this.config.geocoding.provider.toLowerCase() == 'none') {
 			return { addr: 'Unknown', flag: '' }
@@ -128,18 +190,21 @@ class Controller {
 
 		const cacheKey = `${String(+locationObject.lat.toFixed(3))}-${String(+locationObject.lon.toFixed(3))}`
 		const cachedResult = geoCache.getKey(cacheKey)
-		if (cachedResult) return cachedResult
+		if (cachedResult) return this.escapeAddress(cachedResult)
 
 		try {
 			const geocoder = this.getGeocoder()
 			const [result] = await geocoder.reverse(locationObject)
 			const flag = emojiFlags[result.countryCode]
-			const addressDts = this.mustache.compile(this.config.locale.addressFormat)
-			result.addr = addressDts(result)
+			if (!this.addressDts) {
+				this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
+			}
+			result.addr = this.addressDts(result)
 			result.flag = flag ? flag.emoji : ''
 			geoCache.setKey(cacheKey, result)
 			geoCache.save(true)
-			return result
+
+			return this.escapeAddress(result)
 		} catch (err) {
 			this.log.error('getAddress: failed to fetch data', err)
 			return { addr: 'Unknown', flag: '' }
@@ -293,6 +358,19 @@ class Controller {
 		else if (iv < 100) colorIdx = 4 // purple epic
 
 		return this.config.discord.ivColors[colorIdx]
+	}
+
+	getPokemonTypes(pokemonId, formId) {
+		if (!+pokemonId) return ''
+		const monsterFamily = Object.values(this.GameData.monsters).filter((m) => m.id === +pokemonId)
+		const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
+		let types = ''
+		if (monster) {
+			types = monster.types.map((type) => type.id)
+		} else {
+			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map((type) => type.id)
+		}
+		return types
 	}
 
 	execPromise(command) {

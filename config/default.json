@@ -9,19 +9,25 @@
         "environment": "production",
         "alertMinimumTime" : 120,
         "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
+        "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
         "locale": "en",
-        "weatherChangeAlert": false,
         "disabledCommands": [],
         "disablePokemon": false,
         "disableRaid": false,
         "disableInvasion": false,
         "disablePokestop": false,
         "disableQuest": false,
-        "disableWeather": false
+        "disableWeather": false,
+        "roleCheckDeletionsAllowed": false,
+        "availableLanguages": {
+          "en": {"poracle": "poracle", "help": "help" },
+          "fr": {"poracle": "leporacle", "help": "aide" },
+          "de": {"poracle": "dasporacle", "help": "hilfe" }
+        }
     },
     "logger": {
         "level": "info",
-        "logSize": 25
+        "logSize": 250
     },
     "database": {
         "client": "sqlite",
@@ -36,13 +42,25 @@
     "locale": {
         "timeformat": "en-gb",
         "time": "LTS",
-        "addressFormat": "{{ streetName}} {{ streetNumber }}:",
+        "addressFormat": "{{{streetName}}} {{streetNumber}}",
         "language": "en"
     },
     "geofence": {
         "path": "./config/geofence.json",
         "defaultGeofenceName": "city",
         "defaultGeofenceColor": "#3399ff"
+    },
+    "weather": {
+        "weatherChangeAlert": false,
+        "showAlteredPokemon": false,
+        "showAlteredPokemonStaticMap": false,
+        "showAlteredPokemonMaxCount": 10,
+        "enableWeatherForecast": false,
+        "apiKeyAccuWeather": ["key1", "key2", "key3"],
+        "apiKeyDayQuota": 50,
+        "smartForecast": false,
+        "localFirstFetchHOD": 3,
+        "forecastRefreshInterval": 8
     },
     "pvp": {
         "pvpEvolutionDirectTracking": false,
@@ -61,15 +79,16 @@
     },
     "discord": {
         "enabled": true,
+        "disableAutoGreetings": false,
         "checkRole": false,
         "checkRoleInterval": 6,
         "unknownResponse": false,
         "invite": "",
-        "token": [],
-        "guilds": ["358180805031493634"],
-        "channels": ["533927791096233984"],
-        "userRole": ["roleId1", "358207117951369217"],
-        "admins": ["222742859059560458"],
+        "token": ["discord bot token"],
+        "guilds": ["guilds your bot will operate on"],
+        "channels": ["channels to listen for poracle activation commands"],
+        "userRole": ["roles to grant access for"],
+        "admins": ["ids of admin accounts"],
         "prefix": "!",
         "limitSec": 240,
         "limitAmount": 20,
@@ -86,14 +105,17 @@
       },
       "telegram": {
         "enabled": false,
-        "token": "",
-        "admins": [""],
-        "channels": [""]
+        "checkRole": false,
+        "checkRoleInterval": 6,
+        "token": "telegram bot token",
+        "admins": ["admin ids"],
+        "channels": ["channels to listen for /poracle"],
+        "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
       },
       "geocoding": {
-        "provider": "poracle",
+        "provider": "none",
         "providerURL": "Your Nominatim Server Address",
-        "staticProvider": "poracle",
+        "staticProvider": "none",
         "staticProviderURL": "Your TileServerCache Server Address",
         "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
         "staticKey":["Your MapQuest or Google Key"],

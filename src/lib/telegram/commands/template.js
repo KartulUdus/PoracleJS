@@ -1,7 +1,7 @@
 module.exports = async (ctx) => {
 	const { controller, command } = ctx.state
 
-	// channel message authors aren't identifieable, ignore all commands sent in channels
+	// channel message authors aren't identifiable, ignore all commands sent in channels
 	if (Object.keys(ctx.update).includes('channel_post')) return
 
 	try {

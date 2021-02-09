@@ -1,13 +1,15 @@
 const importFresh = require('import-fresh')
 const path = require('path')
 const Knex = require('knex')
-const Translator = require('../util/translate')
+const TranslatorFactory = require('../util/translatorFactory')
+const dtsLoader = require('./dtsloader')
 
 let config
 let knex
 let dts
 let geofence
 let translator
+let translatorFactory
 
 function getGeofenceFromGEOjson(file) {
 	const rawdata = importFresh(file)
@@ -26,7 +28,6 @@ function getGeofenceFromGEOjson(file) {
 	}
 	return outGeofence
 }
-
 function getKnex(conf) {
 	switch (conf.database.client) {
 		case 'mysql': {
@@ -59,7 +60,7 @@ function getKnex(conf) {
 module.exports = {
 	Config: () => {
 		config = importFresh('config')
-		dts = importFresh(path.join(__dirname, '../../config/dts.json'))
+		dts = dtsLoader.readDtsFiles()
 		geofence = importFresh(path.join(__dirname, `../../${config.geofence.path}`))
 		if (geofence.type === 'FeatureCollection') geofence = getGeofenceFromGEOjson(path.join(__dirname, `../../${config.geofence.path}`))
 		knex = getKnex(config)
@@ -67,11 +68,12 @@ module.exports = {
 			directory: path.join(__dirname, './db/migrations'),
 			tableName: 'migrations',
 		})
-		translator = new Translator(config.general.locale)
+		translatorFactory = new TranslatorFactory(config)
+		translator = translatorFactory.default
+
 		return {
-			config, knex, dts, geofence, translator,
+			config, knex, dts, geofence, translator, translatorFactory,
 		}
 	},
 	getKnex,
-
 }
