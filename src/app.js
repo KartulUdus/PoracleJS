@@ -187,7 +187,7 @@ async function syncDiscordRole() {
 	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
-let discordBigQueue = { count: 0, lastSize: 0 }
+const discordBigQueue = { count: 0, lastSize: 0 }
 
 async function run() {
 	if (config.discord.enabled) {
@@ -421,7 +421,7 @@ async function processOne(hook) {
 	}
 }
 
-let bigQueue = { count: 0, lastSize: 0 }
+const bigQueue = { count: 0, lastSize: 0 }
 
 async function handleAlarms() {
 	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {

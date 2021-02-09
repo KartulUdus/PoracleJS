@@ -13,17 +13,17 @@ function checkDts(dts, config) {
 		for (const language of Object.keys(config.general.availableLanguages)) {
 			for (const type of ['monster', 'monsterNoIv', 'raid', 'egg', 'quest', 'invasion', 'weatherchange', 'greeting']) {
 				if (!dts.find((x) => x.platform === platform && x.type === type && x.language == language && x.default)) {
-					logs.log.warn(`Config Check: DTS - No default entry found for platform ${platform} ${language} ${type}`)
+					logs.log.warn(`Config Check: DTS - No default entry found for platform:${platform} language:${language} type:${type}`)
 				}
 				if (!dts.find((x) => x.platform === platform && x.type === type && x.language == language && x.id.toString() == '1')) {
-					logs.log.warn(`Config Check: DTS - No entry found for template '1' platform ${platform} ${language} ${type}`)
+					logs.log.warn(`Config Check: DTS - No entry found for template '1' platform:${platform} language:${language} type:${type} - this is the one that users will get if no template override`)
 				}
 
 				for (const dtsEntry of dts.filter((x) => x.platform === platform && x.type === type && x.language == language)) {
 					if (!dtsEntry.id) {
-						logs.log.warn(`Config Check: DTS - Template name blank in ${platform} ${language} ${type}`)
+						logs.log.warn(`Config Check: DTS - Template name blank in platform:${platform} language:${language} type:${type}`)
 					} else if (dtsEntry.id.toString().includes('_')) {
-						logs.log.warn(`Config Check: DTS - Template name includes underscore in ${platform} ${language} ${type} ${dtsEntry.template}`)
+						logs.log.warn(`Config Check: DTS - Template name includes underscore in platform:${platform} language:${language} type:${type} id:${dtsEntry.template}`)
 					}
 				}
 			}
