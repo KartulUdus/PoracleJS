@@ -18,7 +18,7 @@ class Telegram {
 		this.bot = telegraf
 		this.bot
 			.use(commandParser(this.translatorFactory))
-			.use(controller(query, dts, logs.log, GameData, geofence, config, re, translatorFactory))
+			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory))
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
