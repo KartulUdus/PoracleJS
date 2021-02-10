@@ -112,7 +112,7 @@ class Telegram {
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
-				this.telegram.error(`Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
+				this.logs.telegram.error(`Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
 			}
 			this.logs.telegram.debug(`${data.name} ${data.target} Content`, data.message)
 
@@ -125,9 +125,13 @@ class Telegram {
 			if (data.message.location) {
 				this.logs.telegram.debug(`${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
 
-				// eslint-disable-next-line no-shadow
-				const msg = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
-				messageIds.push(msg.message_id)
+				try {
+					// eslint-disable-next-line no-shadow
+					const msg = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, {disable_notification: true})
+					messageIds.push(msg.message_id)
+				} catch (err) {
+					this.logs.telegram.error(`Failed to send Telegram location ${data.lat} ${data.lat} to ${data.name}/${data.target}`, err)
+				}
 			}
 
 			if (data.clean) {
@@ -140,7 +144,7 @@ class Telegram {
 			}
 			return true
 		} catch (err) {
-			this.telegram.error(`Failed to send Telegram alert to ${data.name}/${data.target}`, err)
+			this.logs.telegram.error(`Failed to send Telegram alert to ${data.name}/${data.target}`, err)
 			return false
 		}
 	}
@@ -152,7 +156,7 @@ class Telegram {
 	}
 
 	async groupAlert(data) {
-		this.logs.telegram.info(`${data.name} ${data.target} CHANNEL Sending telegram message${data.clean ? ' (clean)' : ''}`)
+		this.logs.telegram.info(`${data.name} ${data.target} GROUP Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
 	}

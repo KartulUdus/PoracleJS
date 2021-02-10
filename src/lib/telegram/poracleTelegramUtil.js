@@ -39,7 +39,10 @@ class PoracleTelegramUtil {
 		}
 
 		let target = {
-			id: this.msg.userId, name: this.msg.userName, type: 'telegram:user', channel: false,
+			id: this.msg.userId,
+			name: this.msg.fullName,
+			type: 'telegram:user',
+			channel: false,
 		}
 
 		let channelName = args.find((arg) => arg.match(this.client.re.nameRe))

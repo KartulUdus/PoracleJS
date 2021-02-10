@@ -32,7 +32,9 @@
           "webhooks": true,
           "discord": true,
           "telegram": true
-        }
+        },
+        "dailyLogLimit": 7,
+        "webhookLogLimit": 12
     },
     "database": {
         "client": "sqlite",

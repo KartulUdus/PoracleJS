@@ -64,10 +64,10 @@ const debugLog = new winston.transports.DailyRotateFile({
 	symlinkName: 'general.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD-HH',
-	maxSize: `${config.logger.logSize}m`,
-	frequency: '1h',
-	maxFiles: 12,
+	datePattern: 'YYYY-MM-DD',
+	//maxSize: `${config.logger.logSize}m`,
+	frequency: '1d',
+	maxFiles: config.logger.dailyLogLimit,
 	level: config.logger.logLevel,
 })
 
@@ -79,7 +79,9 @@ const errorLog = new winston.transports.DailyRotateFile({
 	datePattern: 'YYYY-MM-DD',
 	//	maxSize: `${config.logger.logSize}m`,
 	frequency: '1d',
+	maxFiles: config.logger.dailyLogLimit,
 	handleExceptions: true,
+	handleRejections: true,
 	level: 'warn',
 })
 
@@ -91,7 +93,7 @@ const dataStoreLog = new winston.transports.DailyRotateFile({
 	datePattern: 'YYYY-MM-DD-HH',
 	//	maxSize: `${config.logger.logSize}m`,
 	frequency: '1h',
-	maxFiles: 12,
+	maxFiles: config.logger.webhookLogLimit,
 	level: config.logger.enableLogs.webhooks ? config.logger.logLevel : 'warn',
 })
 
@@ -102,8 +104,8 @@ const discordLog = new winston.transports.DailyRotateFile({
 	createSymlink: true,
 	datePattern: 'YYYY-MM-DD-HH',
 	// maxSize: `${config.logger.logSize}m`,
-	frequency: '1h',
-	maxFiles: 12,
+	frequency: '1d',
+	maxFiles: config.logger.dailyLogLimit,
 	level: config.logger.enableLogs.discord ? config.logger.logLevel : 'warn',
 })
 
@@ -116,7 +118,7 @@ const commandLog = new winston.transports.DailyRotateFile({
 	//	maxSize: `${config.logger.logSize}m`,
 	frequency: '1d',
 	handleExceptions: true,
-	maxFiles: 12,
+	maxFiles: config.logger.dailyLogLimit,
 	level: `${config.logger.logLevel}`,
 })
 
@@ -125,11 +127,11 @@ const processorLog = new winston.transports.DailyRotateFile({
 	symlinkName: 'controller.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD-HH',
+	datePattern: 'YYYY-MM-DD',
 	//	maxSize: `${config.logger.logSize}m`,
-	frequency: '1h',
+	frequency: '1d',
 	handleExceptions: true,
-	maxFiles: 12,
+	maxFiles: config.logger.dailyLogLimit,
 	level: `${config.logger.logLevel}`,
 })
 
@@ -138,11 +140,11 @@ const telegramLog = new winston.transports.DailyRotateFile({
 	symlinkName: 'telegram.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD-HH',
+	datePattern: 'YYYY-MM-DD',
 	//	maxSize: `${config.logger.logSize}m`,
-	frequency: '1h',
+	frequency: '1d',
 	handleExceptions: true,
-	maxFiles: 12,
+	maxFiles: config.logger.dailyLogLimit,
 	level: config.logger.enableLogs.telegram ? config.logger.logLevel : 'warn',
 })
 
