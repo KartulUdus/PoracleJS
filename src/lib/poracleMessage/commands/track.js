@@ -87,7 +87,7 @@ exports.run = async (client, msg, args) => {
 				|| args.includes('everything') && msg.isFromAdmin) && formNames.includes(mon.form.name.toLowerCase()))
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
-		} else if (gen || (args.includes('individually') && individuallyAllowed) || forceEverythingSeparately) {
+		} else if (gen || (args.includes('individually') && (individuallyAllowed || msg.isFromAdmin)) || forceEverythingSeparately) {
 			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
