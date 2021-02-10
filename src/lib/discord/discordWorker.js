@@ -1,5 +1,6 @@
 const { Client } = require('discord.js')
 const axios = require('axios')
+const logs = require('../logger')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
@@ -8,12 +9,12 @@ class Worker {
 		this.id = id
 		this.token = token
 		this.config = config
-		this.logs = logs
 		this.busy = true
 		this.users = []
 		this.userCount = 0
 		this.client = {}
-		this.axios = axios
+		this.discordQueue = []
+		this.queueProcessor = new PromiseQueue(this.discordQueue, 1)
 		this.bounceWorker()
 	}
 
@@ -25,7 +26,7 @@ class Worker {
 		this.userCount += 1
 	}
 
-	async setLitseners() {
+	async setListeners() {
 		this.client.on('error', (err) => {
 			this.busy = true
 			this.logs.discord.error(`Discord worker #${this.id} \n bouncing`, err)
@@ -38,16 +39,13 @@ class Worker {
 			this.logs.log.info(`discord worker #${this.id} ${this.client.user.tag} ready for action`)
 			this.busy = false
 		})
-		this.client.on('rateLimit', (info) => {
-			this.logs.discord.warn(`#${this.id} Discord worker [${this.client.user.tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
-		})
 	}
 
 	async bounceWorker() {
 		delete this.client
 		this.client = new Client()
 		try {
-			await this.setLitseners()
+			await this.setListeners()
 			await this.client.login(this.token)
 			await this.client.user.setStatus('invisible')
 		} catch (err) {
@@ -57,22 +55,23 @@ class Worker {
 		}
 	}
 
-	async work(data) {
-		this.busy = true
+	work(data) {
+		this.discordQueue.push(data)
+		if (!this.busy) {
+			this.queueProcessor.run((work) => (this.sendAlert(work)))
+		}
+	}
+
+	async sendAlert(data) {
+		if ((Math.random() * 100) > 80) this.logs.log.info(`#${this.id} DiscordQueue is currently ${this.discordQueue.length}`) // todo: per minute
+
 		switch (data.type) {
 			case 'discord:user': {
 				await this.userAlert(data)
-				this.busy = false
 				break
 			}
 			case 'discord:channel': {
 				await this.channelAlert(data)
-				this.busy = false
-				break
-			}
-			case 'webhook': {
-				await this.webhookAlert(data)
-				this.busy = false
 				break
 			}
 			default:
@@ -125,31 +124,6 @@ class Worker {
 		} catch (err) {
 			this.logs.discord.error(`${data.logReference}: ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
 			this.logs.discord.error(JSON.stringify(data))
-		}
-		return true
-	}
-
-	async webhookAlert(firstData) {
-		const data = firstData
-		if (!data.target.match(hookRegex)) return this.logs.discord.warn(`Webhook, ${data.name} does not look like a link, exiting`)
-		if (data.message.embed && data.message.embed.color) {
-			data.message.embed.color = parseInt(data.message.embed.color.replace(/^#/, ''), 16)
-		}
-
-		if (data.message.embed) data.message.embeds = [data.message.embed]
-		try {
-			const logReference = data.logReference ? data.logReference : 'Unknown'
-
-			this.logs.discord.info(`${logReference}: ${data.name} WEBHOOK Sending discord message`)
-			this.logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
-
-			await this.axios({
-				method: 'post',
-				url: data.target,
-				data: data.message,
-			})
-		} catch (err) {
-			this.logs.discord.error(`${data.logReference}: ${data.name} WEBHOOK failed`, err)
 		}
 		return true
 	}

@@ -11,9 +11,7 @@ class PromiseQueue {
 
 	run(fn) {
 		while (this.runNext()) {
-			const promise = fn(this.todo.shift())
-
-			promise.then(() => {
+			const promise = fn(this.todo.shift()).then(() => {
 				this.running.shift()
 				this.run(fn)
 			})

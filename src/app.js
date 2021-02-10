@@ -47,6 +47,7 @@ const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../.
 const weatherCacheData = weatherCache.getKey('weatherCacheData')
 
 const DiscordWorker = require('./lib/discord/discordWorker')
+const DiscordWebhookWorker = require('./lib/discord/discordWebhookWorker')
 const DiscordCommando = require('./lib/discord/commando')
 
 const TelegramWorker = require('./lib/telegram/Telegram')
@@ -89,6 +90,7 @@ fastify.decorate('hookQueue', [])
 const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, logs, GameData, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
+let discordWebhookWorker
 let roleWorker
 let telegram
 let telegramChannel
@@ -100,6 +102,7 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config, logs))
 		}
 	}
+	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
 
 	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
 		roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
@@ -208,24 +211,33 @@ async function run() {
 				discordBigQueue.count = 0
 			}
 
-			const { target } = fastify.discordQueue[0]
-			// see if target has dedicated worker
-			let worker = discordWorkers.find((workerr) => workerr.users.includes(target))
-			if (!worker) {
-				let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-				let laziestWorkerId
-				Object.keys(discordWorkers).map((i) => {
-					if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
-						busyestWorkerHumanCount = discordWorkers[i].userCount
-						laziestWorkerId = i
+			// Dequeue onto individual queues as fast as possible
+			while (fastify.discordQueue.length) {
+				const { target, type } = fastify.discordQueue[0]
+				let worker
+				if (type == 'webhook') {
+					worker = discordWebhookWorker
+				} else {
+					// see if target has dedicated worker
+					worker = discordWorkers.find((workerr) => workerr.users.includes(target))
+					if (!worker) {
+						let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						let laziestWorkerId
+						Object.keys(discordWorkers).map((i) => {
+							if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
+								busyestWorkerHumanCount = discordWorkers[i].userCount
+								laziestWorkerId = i
+							}
+						})
+						busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						worker = discordWorkers[laziestWorkerId]
+						worker.addUser(target)
 					}
-				})
-				busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-				worker = discordWorkers[laziestWorkerId]
-				worker.addUser(target)
+				}
+
+				worker.work(fastify.discordQueue.shift())
 			}
-			if (!worker.busy) worker.work(fastify.discordQueue.shift())
-		}, 10)
+		}, 100)
 
 		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
 			setTimeout(syncDiscordRole, 10000)
