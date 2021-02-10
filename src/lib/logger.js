@@ -65,7 +65,7 @@ const debugLog = new winston.transports.DailyRotateFile({
 	format: poracleFormat,
 	createSymlink: true,
 	datePattern: 'YYYY-MM-DD',
-	//maxSize: `${config.logger.logSize}m`,
+	// maxSize: `${config.logger.logSize}m`,
 	frequency: '1d',
 	maxFiles: config.logger.dailyLogLimit,
 	level: config.logger.logLevel,

@@ -127,7 +127,7 @@ class Telegram {
 
 				try {
 					// eslint-disable-next-line no-shadow
-					const msg = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, {disable_notification: true})
+					const msg = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
 					messageIds.push(msg.message_id)
 				} catch (err) {
 					this.logs.telegram.error(`Failed to send Telegram location ${data.lat} ${data.lat} to ${data.name}/${data.target}`, err)
