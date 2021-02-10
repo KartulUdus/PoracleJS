@@ -61,7 +61,7 @@ class DiscordWebhookWorker {
 					//					const resetAfter = res.headers["x-ratelimit-reset-after"]
 
 					const retryAfterMs = res.headers['retry-after']
-					if (!res.headers["via"]) {
+					if (!res.headers.via) {
 						this.logs.discord.error(`${logReference}: ${data.name} WEBHOOK 429 TELL @JABES ON DISCORD THIS COULD BE FROM CLOUDFLARE: ${retryAfterMs}`)
 					}
 					await this.sleep(retryAfterMs)
