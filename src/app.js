@@ -190,25 +190,11 @@ async function syncDiscordRole() {
 	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
-const discordBigQueue = { count: 0, lastSize: 0 }
-
 async function run() {
 	if (config.discord.enabled) {
 		setInterval(() => {
 			if (!fastify.discordQueue.length) {
 				return
-			}
-			if ((Math.random() * 100) > 80) fastify.logger.debug(`DiscordQueue is currently ${fastify.discordQueue.length}`)
-
-			if (fastify.discordQueue.length > 500) {
-				discordBigQueue.count++
-				discordBigQueue.lastSize = fastify.discordQueue.length
-				if ((discordBigQueue.count % 6000) == 0) { // Approx once per minute 10ms per call
-					fastify.logger.warn(`DiscordQueue is big, remained big for ${discordBigQueue.count} calls currently ${discordBigQueue.lastSize}`)
-				}
-			} else {
-				discordBigQueue.lastSize = 0
-				discordBigQueue.count = 0
 			}
 
 			// Dequeue onto individual queues as fast as possible
@@ -249,30 +235,16 @@ async function run() {
 			if (!fastify.telegramQueue.length) {
 				return
 			}
-			if ((Math.random() * 100) > 80) fastify.logger.debug(`TelegramQueue is currently ${fastify.telegramQueue.length}`)
 
-			let worker = telegram
-			if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
-				worker = telegramChannel
+			while (fastify.telegramQueue.length) {
+				let worker = telegram
+				if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
+					worker = telegramChannel
+				}
+
+				worker.work(fastify.telegramQueue.shift())
 			}
-			// const { target } = fastify.telegramQueue[0]
-			// // see if target has dedicated worker
-			// let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
-			// if (!worker) {
-			// 	let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			// 	let laziestWorkerId
-			// 	Object.keys(telegramWorkers).map((i) => {
-			// 		if (telegramWorkers[i].userCount < busyestWorkerHumanCount) {
-			// 			busyestWorkerHumanCount = telegramWorkers[i].userCount
-			// 			laziestWorkerId = i
-			// 		}
-			// 	})
-			// 	busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			// 	worker = telegramWorkers[laziestWorkerId]
-			// 	worker.addUser(target)
-			// }
-			if (!worker.busy) worker.work(fastify.telegramQueue.shift())
-		}, 10)
+		}, 100)
 
 		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 			setTimeout(syncTelegramMembership, 30000)

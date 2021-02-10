@@ -1,5 +1,5 @@
 const axios = require('axios')
-const PromiseQueue = require('../PromiseQueue')
+const FairPromiseQueue = require('../FairPromiseQueue')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
@@ -13,7 +13,7 @@ class DiscordWebhookWorker {
 		this.client = {}
 		this.axios = axios
 		this.webhookQueue = []
-		this.queueProcessor = new PromiseQueue(this.webhookQueue, 5)
+		this.queueProcessor = new FairPromiseQueue(this.webhookQueue, 10, ((t) => t.target))
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -53,13 +53,13 @@ class DiscordWebhookWorker {
 					method: 'post',
 					url: data.target,
 					data: data.message,
-					validateStatus: ((status) => status < 500)
+					validateStatus: ((status) => status < 500),
 				})
 
 				if (res.status === 429) {
-					this.logs.discord.info(`${logReference}: ${data.name} WEBHOOK discord rate limit x-ratelimit-bucket ${res.headers["x-ratelimit-bucket"]} retry after ${res.headers["retry-after"]} limit ${res.headers["x-ratelimit-limit"]} global ${res.headers["x-ratelimit-global"]} reset after ${res.headers["x-ratelimit-reset-after"]} `)
-//					const resetAfter = res.headers["x-ratelimit-reset-after"]
-					const retryAfterMs = res.headers["retry-after"]
+					this.logs.discord.info(`${logReference}: ${data.name} WEBHOOK 429 discord rate limit x-ratelimit-bucket ${res.headers['x-ratelimit-bucket']} retry after ${res.headers['retry-after']} limit ${res.headers['x-ratelimit-limit']} global ${res.headers['x-ratelimit-global']} reset after ${res.headers['x-ratelimit-reset-after']} `)
+					//					const resetAfter = res.headers["x-ratelimit-reset-after"]
+					const retryAfterMs = res.headers['retry-after']
 					await this.sleep(retryAfterMs)
 					shouldRetry = true
 				}
@@ -78,7 +78,6 @@ class DiscordWebhookWorker {
 		this.webhookQueue.push(data)
 		this.queueProcessor.run((work) => (this.sendAlert(work)))
 	}
-
 }
 
 module.exports = DiscordWebhookWorker

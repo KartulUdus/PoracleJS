@@ -1,20 +1,18 @@
 const { Client } = require('discord.js')
-const axios = require('axios')
-const logs = require('../logger')
-
-const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
+const PromiseQueue = require('../PromiseQueue')
 
 class Worker {
 	constructor(token, id, config, logs) {
 		this.id = id
 		this.token = token
 		this.config = config
+		this.logs = logs
 		this.busy = true
 		this.users = []
 		this.userCount = 0
 		this.client = {}
 		this.discordQueue = []
-		this.queueProcessor = new PromiseQueue(this.discordQueue, 1)
+		this.queueProcessor = new FairPromiseQueue(this.discordQueue, 5, ((entry) => entry.target))
 		this.bounceWorker()
 	}
 
@@ -38,6 +36,9 @@ class Worker {
 		this.client.on('ready', () => {
 			this.logs.log.info(`discord worker #${this.id} ${this.client.user.tag} ready for action`)
 			this.busy = false
+		})
+		this.client.on('rateLimit', (info) => {
+			this.logs.general.warn(`#${this.id} Discord worker [${this.client.user.tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
 		})
 	}
 
@@ -122,7 +123,7 @@ class Worker {
 			}
 			return true
 		} catch (err) {
-			this.logs.discord.error(`${data.logReference}: ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
+			this.logs.discord.error(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
 			this.logs.discord.error(JSON.stringify(data))
 		}
 		return true
