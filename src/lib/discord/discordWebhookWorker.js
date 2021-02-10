@@ -59,7 +59,11 @@ class DiscordWebhookWorker {
 				if (res.status === 429) {
 					this.logs.discord.info(`${logReference}: ${data.name} WEBHOOK 429 discord rate limit x-ratelimit-bucket ${res.headers['x-ratelimit-bucket']} retry after ${res.headers['retry-after']} limit ${res.headers['x-ratelimit-limit']} global ${res.headers['x-ratelimit-global']} reset after ${res.headers['x-ratelimit-reset-after']} `)
 					//					const resetAfter = res.headers["x-ratelimit-reset-after"]
+
 					const retryAfterMs = res.headers['retry-after']
+					if (!res.headers["via"]) {
+						this.logs.discord.error(`${logReference}: ${data.name} WEBHOOK 429 TELL @JABES ON DISCORD THIS COULD BE FROM CLOUDFLARE: ${retryAfterMs}`)
+					}
 					await this.sleep(retryAfterMs)
 					shouldRetry = true
 				}
