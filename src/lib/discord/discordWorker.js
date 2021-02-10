@@ -38,7 +38,7 @@ class Worker {
 			this.busy = false
 		})
 		this.client.on('rateLimit', (info) => {
-			this.logs.general.warn(`#${this.id} Discord worker [${this.client.user.tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
+			this.logs.discord.warn(`#${this.id} Discord worker [${this.client.user.tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
 		})
 	}
 
