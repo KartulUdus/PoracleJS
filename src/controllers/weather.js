@@ -8,8 +8,8 @@ const Controller = require('./controller')
 
 require('moment-precise-range-plugin')
 
-const weatherKeyCache = pcache.load('.weatherKeyCache', path.resolve(`${__dirname}../../../`))
-const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../../`))
+const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname}../../../.cache/`))
+const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
 
 class Weather extends Controller {
 	async getLaziestWeatherKey() {
