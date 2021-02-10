@@ -102,7 +102,7 @@ const discordLog = new winston.transports.DailyRotateFile({
 	symlinkName: 'discord.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD-HH',
+	datePattern: 'YYYY-MM-DD',
 	// maxSize: `${config.logger.logSize}m`,
 	frequency: '1d',
 	maxFiles: config.logger.dailyLogLimit,
