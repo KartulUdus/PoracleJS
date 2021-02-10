@@ -19,7 +19,7 @@ exports.run = async (client, msg, args) => {
 		let items = []
 		let distance = 0
 		const questTracks = []
-		let template = 1
+		let template = client.config.general.defaultTemplateName
 		let mustShiny = 0
 		let remove = false
 		let minDust = 10000000

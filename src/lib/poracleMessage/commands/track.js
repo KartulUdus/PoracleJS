@@ -37,7 +37,7 @@ exports.run = async (client, msg, args) => {
 		const { pvpFilterMaxRank } = Math.min(client.config.pvp, 4096)
 		const { pvpFilterGreatMinCP } = client.config.pvp
 		const { pvpFilterUltraMinCP } = client.config.pvp
-		let template = 1
+		let template = client.config.general.defaultTemplateName
 		let clean = false
 		const pings = msg.getPings()
 
