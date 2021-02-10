@@ -344,6 +344,7 @@ class Raid extends Controller {
 							tth: data.tth,
 							clean: cares.clean,
 							emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+							logReference,
 						}
 						if (caresCache <= this.config.discord.limitAmount + 1) {
 							jobs.push(work)

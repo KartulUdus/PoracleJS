@@ -79,13 +79,16 @@ class Worker {
 	async userAlert(data) {
 		let user = this.client.users.cache.get(data.target)
 		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
+
 		try {
-			logs.discord.info(`${data.name} ${data.target} USER Sending discord message${data.clean ? ' (clean)' : ''}`)
+			const logReference = data.logReference ? data.logReference : 'Unknown'
+
+			logs.discord.info(`${logReference}: ${data.name} ${data.target} USER Sending discord message${data.clean ? ' (clean)' : ''}`)
 			if (!user) {
 				user = await this.client.users.fetch(data.target)
 				await user.createDM()
 			}
-			logs.discord.debug(`${data.name} ${data.target} USER Sending discord message`, data.message)
+			logs.discord.debug(`${logReference}: ${data.name} ${data.target} USER Sending discord message`, data.message)
 
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
@@ -93,7 +96,7 @@ class Worker {
 			}
 			return true
 		} catch (err) {
-			logs.discord.error(`Failed to send Discord alert to ${data.name}`, err, data)
+			logs.discord.error(`${data.logReference}: Failed to send Discord alert to ${data.name}`, err, data)
 			logs.discord.error(JSON.stringify(data))
 		}
 		return true
@@ -101,11 +104,13 @@ class Worker {
 
 	async channelAlert(data) {
 		try {
-			logs.discord.info(`${data.name} ${data.target} CHANNEL Sending discord message${data.clean ? ' (clean)' : ''}`)
+			const logReference = data.logReference ? data.logReference : 'Unknown'
+
+			logs.discord.info(`${logReference}: ${data.name} ${data.target} CHANNEL Sending discord message${data.clean ? ' (clean)' : ''}`)
 			const channel = await this.client.channels.fetch(data.target)
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 			if (!channel) return logs.discord.warn(`${data.name} ${data.target} CHANNEL not found`)
-			logs.discord.debug(`${data.name} ${data.target} CHANNEL Sending discord message`, data.message)
+			logs.discord.debug(`${logReference}: ${data.name} ${data.target} CHANNEL Sending discord message`, data.message)
 
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
@@ -113,7 +118,7 @@ class Worker {
 			}
 			return true
 		} catch (err) {
-			logs.discord.error(`${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
+			logs.discord.error(`${data.logReference}: ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
 			logs.discord.error(JSON.stringify(data))
 		}
 		return true
@@ -128,8 +133,10 @@ class Worker {
 
 		if (data.message.embed) data.message.embeds = [data.message.embed]
 		try {
-			logs.discord.info(`${data.name} WEBHOOK Sending discord message`)
-			logs.discord.debug(`${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
+			const logReference = data.logReference ? data.logReference : 'Unknown'
+
+			logs.discord.info(`${logReference}: ${data.name} WEBHOOK Sending discord message`)
+			logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
 
 			await this.axios({
 				method: 'post',
@@ -137,7 +144,7 @@ class Worker {
 				data: data.message,
 			})
 		} catch (err) {
-			logs.discord.error(`${data.name} WEBHOOK failed`, err)
+			logs.discord.error(`${data.logReference}: ${data.name} WEBHOOK failed`, err)
 		}
 		return true
 	}

@@ -94,27 +94,29 @@ class Telegram {
 		try {
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 			const messageIds = []
+			const logReference = data.logReference ? data.logReference : 'Unknown'
+
 			try {
 				if (data.message.sticker && data.message.sticker.length > 0) {
-					this.logs.telegram.debug(`${data.name} ${data.target} Sticker ${data.message.sticker}`)
+					this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
 					const msg = await this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true })
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
-				this.logs.telegram.warn(`Failed to send Telegram sticker ${data.message.sticker} to ${data.name}/${data.target}`, err)
+				this.logs.telegram.warn(`${logReference}: ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`, err)
 			}
 			try {
 				if (data.message.photo && data.message.photo.length > 0) {
-					this.logs.telegram.debug(`${data.name} ${data.target} Photo ${data.message.photo}`)
+					this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Photo ${data.message.photo}`)
 
 					const msg = await this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true })
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
-				this.logs.telegram.error(`Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
+				this.logs.telegram.error(`${logReference}: Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
 			}
-			this.logs.telegram.debug(`${data.name} ${data.target} Content`, data.message)
+			this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Content`, data.message)
 
 			const msg = await this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
 				parse_mode: 'Markdown',
@@ -123,14 +125,14 @@ class Telegram {
 			messageIds.push(msg.message_id)
 
 			if (data.message.location) {
-				this.logs.telegram.debug(`${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
+				this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
 
 				try {
 					// eslint-disable-next-line no-shadow
 					const msg = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
 					messageIds.push(msg.message_id)
 				} catch (err) {
-					this.logs.telegram.error(`Failed to send Telegram location ${data.lat} ${data.lat} to ${data.name}/${data.target}`, err)
+					this.logs.telegram.error(`${logReference}: ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
 				}
 			}
 
@@ -144,25 +146,25 @@ class Telegram {
 			}
 			return true
 		} catch (err) {
-			this.logs.telegram.error(`Failed to send Telegram alert to ${data.name}/${data.target}`, err)
+			this.logs.telegram.error(`${data.logReference}: ${data.name} ${data.target}  Failed to send Telegram alert`, err)
 			return false
 		}
 	}
 
 	async userAlert(data) {
-		this.logs.telegram.info(`${data.name} ${data.target} USER Sending telegram message${data.clean ? ' (clean)' : ''}`)
+		this.logs.telegram.info(`${data.logReference}: ${data.name} ${data.target} USER Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
 	}
 
 	async groupAlert(data) {
-		this.logs.telegram.info(`${data.name} ${data.target} GROUP Sending telegram message${data.clean ? ' (clean)' : ''}`)
+		this.logs.telegram.info(`${data.logReference}: ${data.name} ${data.target} GROUP Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
 	}
 
 	async channelAlert(data) {
-		this.logs.telegram.info(`${data.name} ${data.target} CHANNEL Sending telegram message${data.clean ? ' (clean)' : ''}`)
+		this.logs.telegram.info(`${data.logReference}: ${data.name} ${data.target} CHANNEL Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
 	}

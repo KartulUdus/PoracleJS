@@ -242,6 +242,7 @@ class Quest extends Controller {
 						name: cares.name,
 						tth: data.tth,
 						clean: cares.clean,
+						logReference,
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)

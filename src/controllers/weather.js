@@ -345,6 +345,7 @@ class Weather extends Controller {
 						tth: weatherTth,
 						clean: cares.clean,
 						emoji: [],
+						logReference,
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)
