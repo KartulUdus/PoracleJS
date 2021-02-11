@@ -1,14 +1,14 @@
 const { Client } = require('discord.js')
 const axios = require('axios')
-const logs = require('../logger')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
 class Worker {
-	constructor(token, id, config) {
+	constructor(token, id, config, logs) {
 		this.id = id
 		this.token = token
 		this.config = config
+		this.logs = logs
 		this.busy = true
 		this.users = []
 		this.userCount = 0
@@ -28,15 +28,18 @@ class Worker {
 	async setLitseners() {
 		this.client.on('error', (err) => {
 			this.busy = true
-			logs.log.error(`Discord worker #${this.id} \n bouncing`, err)
+			this.logs.discord.error(`Discord worker #${this.id} \n bouncing`, err)
 			this.bounceWorker()
 		})
 		this.client.on('warn', (err) => {
-			logs.log.error(`Discord worker #${this.id} \n bouncing`, err)
+			this.logs.discord.error(`Discord worker #${this.id} \n bouncing`, err)
 		})
 		this.client.on('ready', () => {
-			logs.log.info(`discord worker #${this.id} ${this.client.user.tag} ready for action`)
+			this.logs.log.info(`discord worker #${this.id} ${this.client.user.tag} ready for action`)
 			this.busy = false
+		})
+		this.client.on('rateLimit', (info) => {
+			this.logs.discord.warn(`#${this.id} Discord worker [${this.client.user.tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
 		})
 	}
 
@@ -48,8 +51,8 @@ class Worker {
 			await this.client.login(this.token)
 			await this.client.user.setStatus('invisible')
 		} catch (err) {
-			logs.log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
-			this.sleep(2000)
+			this.logs.log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
+			await this.sleep(2000)
 			return this.bounceWorker()
 		}
 	}
@@ -83,12 +86,14 @@ class Worker {
 		try {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
-			logs.discord.info(`${logReference}: ${data.name} ${data.target} USER Sending discord message${data.clean ? ' (clean)' : ''}`)
+			this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message${data.clean ? ' (clean)' : ''}`)
+
 			if (!user) {
 				user = await this.client.users.fetch(data.target)
 				await user.createDM()
 			}
-			logs.discord.debug(`${logReference}: ${data.name} ${data.target} USER Sending discord message`, data.message)
+
+			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message`, data.message)
 
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
@@ -96,8 +101,8 @@ class Worker {
 			}
 			return true
 		} catch (err) {
-			logs.discord.error(`${data.logReference}: Failed to send Discord alert to ${data.name}`, err, data)
-			logs.discord.error(JSON.stringify(data))
+			this.logs.discord.error(`${data.logReference}: #${this.id} Failed to send Discord alert to ${data.name}`, err, data)
+			this.logs.discord.error(JSON.stringify(data))
 		}
 		return true
 	}
@@ -106,11 +111,11 @@ class Worker {
 		try {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
-			logs.discord.info(`${logReference}: ${data.name} ${data.target} CHANNEL Sending discord message${data.clean ? ' (clean)' : ''}`)
+			this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending discord message${data.clean ? ' (clean)' : ''}`)
 			const channel = await this.client.channels.fetch(data.target)
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
-			if (!channel) return logs.discord.warn(`${data.name} ${data.target} CHANNEL not found`)
-			logs.discord.debug(`${logReference}: ${data.name} ${data.target} CHANNEL Sending discord message`, data.message)
+			if (!channel) return this.logs.discord.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL not found`)
+			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending discord message`, data.message)
 
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
@@ -118,15 +123,15 @@ class Worker {
 			}
 			return true
 		} catch (err) {
-			logs.discord.error(`${data.logReference}: ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
-			logs.discord.error(JSON.stringify(data))
+			this.logs.discord.error(`${data.logReference}: ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
+			this.logs.discord.error(JSON.stringify(data))
 		}
 		return true
 	}
 
 	async webhookAlert(firstData) {
 		const data = firstData
-		if (!data.target.match(hookRegex)) return logs.discord.warn(`Webhook, ${data.name} does not look like a link, exiting`)
+		if (!data.target.match(hookRegex)) return this.logs.discord.warn(`Webhook, ${data.name} does not look like a link, exiting`)
 		if (data.message.embed && data.message.embed.color) {
 			data.message.embed.color = parseInt(data.message.embed.color.replace(/^#/, ''), 16)
 		}
@@ -135,8 +140,8 @@ class Worker {
 		try {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
-			logs.discord.info(`${logReference}: ${data.name} WEBHOOK Sending discord message`)
-			logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
+			this.logs.discord.info(`${logReference}: ${data.name} WEBHOOK Sending discord message`)
+			this.logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
 
 			await this.axios({
 				method: 'post',
@@ -144,7 +149,7 @@ class Worker {
 				data: data.message,
 			})
 		} catch (err) {
-			logs.discord.error(`${data.logReference}: ${data.name} WEBHOOK failed`, err)
+			this.logs.discord.error(`${data.logReference}: ${data.name} WEBHOOK failed`, err)
 		}
 		return true
 	}
@@ -155,12 +160,12 @@ class Worker {
 		const invalidUsers = []
 		const guild = await this.client.guilds.fetch(guildID)
 		for (const user of allUsers) {
-			logs.log.debug(`Checking role for: ${user.name} - ${user.id}`)
+			this.logs.log.debug(`Checking role for: ${user.name} - ${user.id}`)
 			const discorduser = await guild.members.fetch(user.id)
 			if (discorduser.roles.cache.find((r) => validRoles.includes(r.id))) {
-				logs.log.debug(`${discorduser.user.username} has a valid role`)
+				this.logs.log.debug(`${discorduser.user.username} has a valid role`)
 			} else {
-				logs.log.debug(`${discorduser.user.username} doesn't have a valid role`)
+				this.logs.log.debug(`${discorduser.user.username} doesn't have a valid role`)
 				invalidUsers.push(user)
 			}
 		}

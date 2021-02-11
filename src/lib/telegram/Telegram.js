@@ -1,7 +1,7 @@
 const fs = require('fs')
 
 class Telegram {
-	constructor(config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
+	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
 		this.config = config
 		this.logs = logs
 		this.GameData = GameData
@@ -16,6 +16,7 @@ class Telegram {
 		this.client = {}
 		this.commandFiles = fs.readdirSync(`${__dirname}/commands`)
 		this.bot = telegraf
+		this.id = id
 		this.bot
 			.use(commandParser(this.translatorFactory))
 			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory))
@@ -59,7 +60,8 @@ class Telegram {
 		this.init()
 	}
 
-	static sleep(n) {
+	// eslint-disable-next-line class-methods-use-this
+	async sleep(n) {
 		return new Promise((resolve) => setTimeout(resolve, n))
 	}
 
@@ -98,17 +100,17 @@ class Telegram {
 
 			try {
 				if (data.message.sticker && data.message.sticker.length > 0) {
-					this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Sticker ${data.message.sticker}`)
+					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
 					const msg = await this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true })
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
-				this.logs.telegram.warn(`${logReference}: ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`, err)
+				this.logs.telegram.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`, err)
 			}
 			try {
 				if (data.message.photo && data.message.photo.length > 0) {
-					this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Photo ${data.message.photo}`)
+					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Photo ${data.message.photo}`)
 
 					const msg = await this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true })
 					messageIds.push(msg.message_id)
@@ -116,7 +118,7 @@ class Telegram {
 			} catch (err) {
 				this.logs.telegram.error(`${logReference}: Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
 			}
-			this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Content`, data.message)
+			this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
 
 			const msg = await this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
 				parse_mode: 'Markdown',
@@ -125,19 +127,18 @@ class Telegram {
 			messageIds.push(msg.message_id)
 
 			if (data.message.location) {
-				this.logs.telegram.debug(`${logReference}: ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
+				this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
 
 				try {
 					// eslint-disable-next-line no-shadow
 					const msg = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
 					messageIds.push(msg.message_id)
 				} catch (err) {
-					this.logs.telegram.error(`${logReference}: ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
+					this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
 				}
 			}
 
 			if (data.clean) {
-				//				this.log.warn(`Telegram setting to clean in ${msgDeletionMs}ms`)
 				setTimeout(() => {
 					for (const id of messageIds) {
 						this.bot.telegram.deleteMessage(data.target, id)
@@ -146,25 +147,25 @@ class Telegram {
 			}
 			return true
 		} catch (err) {
-			this.logs.telegram.error(`${data.logReference}: ${data.name} ${data.target}  Failed to send Telegram alert`, err)
+			this.logs.telegram.error(`${data.logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram alert`, err)
 			return false
 		}
 	}
 
 	async userAlert(data) {
-		this.logs.telegram.info(`${data.logReference}: ${data.name} ${data.target} USER Sending telegram message${data.clean ? ' (clean)' : ''}`)
+		this.logs.telegram.info(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
 	}
 
 	async groupAlert(data) {
-		this.logs.telegram.info(`${data.logReference}: ${data.name} ${data.target} GROUP Sending telegram message${data.clean ? ' (clean)' : ''}`)
+		this.logs.telegram.info(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} GROUP Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
 	}
 
 	async channelAlert(data) {
-		this.logs.telegram.info(`${data.logReference}: ${data.name} ${data.target} CHANNEL Sending telegram message${data.clean ? ' (clean)' : ''}`)
+		this.logs.telegram.info(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
 	}

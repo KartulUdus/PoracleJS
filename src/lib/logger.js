@@ -60,25 +60,27 @@ const poracleFormat = winston.format.combine(
 )
 
 const debugLog = new winston.transports.DailyRotateFile({
-	filename: path.join(__dirname, '../../logs/general-%DATE%.log'),
+	filename: 'general-%DATE%.log',
+	dirname: path.join(__dirname, '../../logs'),
 	symlinkName: 'general.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD',
+	// datePattern: 'YYYY-MM-DD',
 	// maxSize: `${config.logger.logSize}m`,
-	frequency: '1d',
+	// frequency: '1d',
 	maxFiles: config.logger.dailyLogLimit,
 	level: config.logger.logLevel,
 })
 
 const errorLog = new winston.transports.DailyRotateFile({
-	filename: path.join(__dirname, '../../logs/errors-%DATE%.log'),
+	filename: 'errors-%DATE%.log',
+	dirname: path.join(__dirname, '../../logs'),
 	symlinkName: 'errors.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD',
+	// datePattern: 'YYYY-MM-DD',
 	//	maxSize: `${config.logger.logSize}m`,
-	frequency: '1d',
+	// frequency: '1d',
 	maxFiles: config.logger.dailyLogLimit,
 	handleExceptions: true,
 	handleRejections: true,
@@ -86,63 +88,68 @@ const errorLog = new winston.transports.DailyRotateFile({
 })
 
 const dataStoreLog = new winston.transports.DailyRotateFile({
-	filename: path.join(__dirname, '../../logs/webhooks-%DATE%.log'),
+	filename: 'webhooks-%DATE%.log',
+	dirname: path.join(__dirname, '../../logs'),
 	symlinkName: 'webhooks.log',
 	format: poracleFormat,
 	createSymlink: true,
 	datePattern: 'YYYY-MM-DD-HH',
 	//	maxSize: `${config.logger.logSize}m`,
-	frequency: '1h',
+	// frequency: '1h',
 	maxFiles: config.logger.webhookLogLimit,
 	level: config.logger.enableLogs.webhooks ? config.logger.logLevel : 'warn',
 })
 
 const discordLog = new winston.transports.DailyRotateFile({
-	filename: path.join(__dirname, '../../logs/discord-%DATE%.log'),
+	filename: 'discord-%DATE%.log',
+	dirname: path.join(__dirname, '../../logs'),
 	symlinkName: 'discord.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD',
+	// datePattern: 'YYYY-MM-DD',
 	// maxSize: `${config.logger.logSize}m`,
-	frequency: '1d',
+	// frequency: '1d',
 	maxFiles: config.logger.dailyLogLimit,
 	level: config.logger.enableLogs.discord ? config.logger.logLevel : 'warn',
 })
 
 const commandLog = new winston.transports.DailyRotateFile({
-	filename: path.join(__dirname, '../../logs/commands-%DATE%.log'),
+	filename: 'commands-%DATE%.log',
+	dirname: path.join(__dirname, '../../logs'),
 	symlinkName: 'commands.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD',
+	// datePattern: 'YYYY-MM-DD',
 	//	maxSize: `${config.logger.logSize}m`,
-	frequency: '1d',
+	// frequency: '1d',
 	handleExceptions: true,
 	maxFiles: config.logger.dailyLogLimit,
 	level: `${config.logger.logLevel}`,
 })
 
 const processorLog = new winston.transports.DailyRotateFile({
-	filename: path.join(__dirname, '../../logs/controller-%DATE%.log'),
+	filename: 'controller-%DATE%.log',
+	dirname: path.join(__dirname, '../../logs'),
 	symlinkName: 'controller.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD',
+	// datePattern: 'YYYY-MM-DD',
 	//	maxSize: `${config.logger.logSize}m`,
-	frequency: '1d',
+	// frequency: '1d',
 	handleExceptions: true,
 	maxFiles: config.logger.dailyLogLimit,
 	level: `${config.logger.logLevel}`,
 })
 
 const telegramLog = new winston.transports.DailyRotateFile({
-	filename: path.join(__dirname, '../../logs/telegram-%DATE%.log'),
+	filename: 'telegram-%DATE%.log',
+	dirname: path.join(__dirname, '../../logs'),
 	symlinkName: 'telegram.log',
 	format: poracleFormat,
 	createSymlink: true,
-	datePattern: 'YYYY-MM-DD',
+	// datePattern: 'YYYY-MM-DD',
 	//	maxSize: `${config.logger.logSize}m`,
-	frequency: '1d',
+	// frequency: '1d',
 	handleExceptions: true,
 	maxFiles: config.logger.dailyLogLimit,
 	level: config.logger.enableLogs.telegram ? config.logger.logLevel : 'warn',
