@@ -3,7 +3,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language,
+			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -137,6 +137,7 @@ exports.run = async (client, msg, args) => {
 		}
 		const insert = monsters.map((mon) => ({
 			id: target.id,
+			profile_no: currentProfileNo,
 			pokemon_id: mon.id,
 			ping: pings,
 			distance,

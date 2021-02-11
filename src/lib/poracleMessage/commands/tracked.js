@@ -6,7 +6,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, language,
+			canContinue, target, language, currentProfileNo
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -14,12 +14,14 @@ exports.run = async (client, msg, args) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
-		const monsters = await client.query.selectAllQuery('monsters', { id: target.id })
-		const raids = await client.query.selectAllQuery('raid', { id: target.id })
-		const eggs = await client.query.selectAllQuery('egg', { id: target.id })
+		const monsters = await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo })
+		const raids = await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo })
+		const eggs = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
 		const human = (await client.query.selectAllQuery('humans', { id: target.id }))[0]
-		const quests = await client.query.selectAllQuery('quest', { id: target.id })
-		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
+		const quests = await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo })
+		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
+		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
+
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		if (args.includes('area')) {
 			return msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
@@ -39,6 +41,10 @@ exports.run = async (client, msg, args) => {
 			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 		} else {
 			message = message.concat('\n\n', translator.translate('You have not selected any area yet'))
+		}
+
+		if (profile) {
+			message = message.concat('\n\n', `${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 		}
 
 		if (!client.config.general.disablePokemon) {

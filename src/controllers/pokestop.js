@@ -12,8 +12,8 @@ class Pokestop extends Controller {
 		if (!data.gender) data.gender = -1
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
-		join humans on humans.id = invasion.id
-		where humans.enabled = 1 and
+		join humans on (humans.id = invasion.id and humans.current_profile_no = invasion.profile_no)
+		where humans.enabled = 1 and humans.admin_disable = false and
 		(invasion.grunt_type='${String(data.gruntType).toLowerCase()}' or invasion.grunt_type = 'everything') and
 		(invasion.gender = ${data.gender} or invasion.gender = 0)`
 

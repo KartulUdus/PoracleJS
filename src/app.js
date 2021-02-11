@@ -508,5 +508,37 @@ if (NODE_MAJOR_VERSION < 12) {
 	throw new Error('Requires Node 12 (or higher)')
 }
 
+const schedule = require('node-schedule')
+
+const job = schedule.scheduleJob({ minute: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55] }, async () => {
+	const now = new Date()
+	const dow = now.getDay()
+	const hour = now.getHours()
+	// sunday = 0
+
+	log.info('Profile Check: Checking for active profile changes')
+	const profilesToCheck = await fastify.monsterController.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
+
+	let last_id
+	for (const profile of profilesToCheck) {
+		if (profile.id != last_id) {
+			const timings = JSON.parse(profile.active_hours)
+			const active = timings.some((row) => row.day == dow && row.start <= hour && hour < row.end)
+			if (active) {
+				log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
+
+				last_id = profile.id
+				await fastify.monsterController.updateQuery('humans',
+					{
+						current_profile_no: profile.profile_no,
+						area: profile.area,
+						latitude: profile.latitude,
+						longitude: profile.longitude,
+					}, { id: profile.id })
+			}
+		}
+	}
+})
+
 run()
 setInterval(handleAlarms, 100)

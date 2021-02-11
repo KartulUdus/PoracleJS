@@ -13,6 +13,7 @@ class PoracleDiscordUtil {
 		let isRegistered = false
 		let id
 		let language = null
+		let currentProfileNo = 1
 
 		const human = target.webhook
 			? await this.client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
@@ -22,12 +23,13 @@ class PoracleDiscordUtil {
 			isRegistered = true
 			id = human.id
 			language = human.language || this.client.config.general.locale
+			currentProfileNo = human.current_profile_no
 			if (+human.latitude !== 0 && +human.longitude !== 0) userHasLocation = true
 			if (human.area.length > 2) userHasArea = true
 		}
 
 		return {
-			isRegistered, userHasLocation, userHasArea, language, id,
+			isRegistered, userHasLocation, userHasArea, language, id, currentProfileNo
 		}
 	}
 
@@ -86,6 +88,7 @@ class PoracleDiscordUtil {
 			userHasLocation: status.userHasLocation,
 			userHasArea: status.userHasArea,
 			language: status.language,
+			currentProfileNo: status.currentProfileNo
 		}
 	}
 }

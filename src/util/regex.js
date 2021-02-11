@@ -49,5 +49,12 @@ module.exports = (translatorFactory) => ({
 	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),
 	energyRe: createCommandRegex(translatorFactory, 'energy', '\\S+'),
 	channelRe: createCommandRegex(translatorFactory, 'channel', '\\d{1,20}'),
+	monRe: createCommandRegex(translatorFactory, 'mon', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	tueRe: createCommandRegex(translatorFactory, 'tue', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	wedRe: createCommandRegex(translatorFactory, 'wed', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	thuRe: createCommandRegex(translatorFactory, 'thu', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	friRe: createCommandRegex(translatorFactory, 'fri', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	satRe: createCommandRegex(translatorFactory, 'sat', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	sunRe: createCommandRegex(translatorFactory, 'sun', '(\\d\\d?)?(-?)(\\d\\d?)?'),
 }
 )

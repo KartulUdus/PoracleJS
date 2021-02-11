@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language,
+			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -49,6 +49,7 @@ exports.run = async (client, msg, args) => {
 		if (!remove) {
 			const insertData = types.map((o) => ({
 				id: target.id,
+				profile_no: currentProfileNo,
 				ping: pings,
 				template,
 				distance,
@@ -62,10 +63,13 @@ exports.run = async (client, msg, args) => {
 		} else {
 			let result = 0
 			if (commandEverything) {
-				result = await client.query.deleteQuery('invasion', { id: target.id })
+				result = await client.query.deleteQuery('invasion', { id: target.id, profile_no: currentProfileNo })
 				client.log.info(`${target.name} stopped tracking all invasions`)
 			} else {
-				result = client.query.deleteWhereInQuery('invasion', target.id, types, 'grunt_type')
+				result = client.query.deleteWhereInQuery('invasion', {
+					id: target.id,
+					profile_no: currentProfileNo
+				}, types, 'grunt_type')
 				client.log.info(`${target.name} stopped tracking ${types.join(', ')} invasions`)
 			}
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction

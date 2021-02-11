@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, language,
+			canContinue, target, language, currentProfileNo
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -67,6 +67,8 @@ exports.run = async (client, msg, args) => {
 		}
 
 		await client.query.updateQuery('humans', { latitude: lat, longitude: lon }, { id: target.id })
+		await client.query.updateQuery('profiles', { latitude: lat, longitude: lon }, { id: target.id, profile_no: currentProfileNo })
+
 		await msg.reply(message)
 		await msg.react('✅')
 	} catch (err) {
