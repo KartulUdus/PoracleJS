@@ -1,5 +1,5 @@
 const { Client } = require('discord.js')
-const PromiseQueue = require('../PromiseQueue')
+const FairPromiseQueue = require('../FairPromiseQueue')
 
 class Worker {
 	constructor(token, id, config, logs) {

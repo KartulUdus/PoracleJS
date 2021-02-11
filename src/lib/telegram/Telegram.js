@@ -1,4 +1,5 @@
 const fs = require('fs')
+const FairPromiseQueue = require('../FairPromiseQueue')
 
 class Telegram {
 	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
