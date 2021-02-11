@@ -179,7 +179,7 @@ class Telegram {
 			if (data.clean) {
 				setTimeout(() => {
 					for (const id of messageIds) {
-						this.retrySender(`${senderId} (clean)`, this.bot.telegram.deleteMessage(data.target, id))
+						this.retrySender(`${senderId} (clean)`, async () => this.bot.telegram.deleteMessage(data.target, id))
 					}
 				}, msgDeletionMs)
 			}
