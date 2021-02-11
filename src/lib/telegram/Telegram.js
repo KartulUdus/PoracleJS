@@ -81,7 +81,7 @@ class Telegram {
 	}
 
 	async sendAlert(data) {
-		if ((Math.random() * 100) > 80) this.logs.log.info(`#${this.id} TelegramQueue is currently ${this.telegramQueue.length}`) // todo: per minute
+		if ((Math.random() * 100) > 95) this.logs.log.info(`#${this.id} TelegramQueue is currently ${this.telegramQueue.length}`) // todo: per minute
 
 		switch (data.type) {
 			case 'telegram:user': {
@@ -114,7 +114,7 @@ class Telegram {
 				res = await fn()
 			} catch (err) {
 				if (err.code == 429) {
-					this.logs.telegram.info(`${senderId} 429 Rate limit - wait for ${err.retry_after}`)
+					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${err.retry_after}`)
 					await this.sleep(err.retry_after * 1000)
 					retry = true
 				} else {
@@ -141,7 +141,7 @@ class Telegram {
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
-				this.logs.telegram.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`, err)
+				this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`, err)
 			}
 			try {
 				if (data.message.photo && data.message.photo.length > 0) {

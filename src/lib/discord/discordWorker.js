@@ -38,7 +38,7 @@ class Worker {
 			this.busy = false
 		})
 		this.client.on('rateLimit', (info) => {
-			this.logs.discord.warn(`#${this.id} Discord worker [${this.client.user.tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
+			this.logs.discord.warn(`#${this.id} Discord worker [${this.client.user.tag}] 429 Rate limit [Discord API] hit - must wait ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
 		})
 	}
 
@@ -64,7 +64,7 @@ class Worker {
 	}
 
 	async sendAlert(data) {
-		if ((Math.random() * 100) > 80) this.logs.log.info(`#${this.id} DiscordQueue is currently ${this.discordQueue.length}`) // todo: per minute
+		if ((Math.random() * 100) > 95) this.logs.log.info(`#${this.id} DiscordQueue is currently ${this.discordQueue.length}`) // todo: per minute
 
 		switch (data.type) {
 			case 'discord:user': {
