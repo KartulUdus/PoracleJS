@@ -56,8 +56,7 @@ exports.run = async (client, msg, args) => {
 		if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 		monsters = fullMonsters.map((mon) => mon.id)
 		items = Object.keys(client.GameData.items).filter((key) => args.includes(translator.translate(client.GameData.items[key].name.toLowerCase())) || args.includes('all items'))
-		if (args.includes('everything') && !disableEverythingTracking
-			|| args.includes('everything') && msg.isFromAdmin) {
+		if (args.includes('everything') && (!disableEverythingTracking || args.includes('remove') || msg.isFromAdmin)) {
 			monsters = Object.values(client.GameData.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
 			items = Object.keys(client.GameData.items)
 			minDust = 0
