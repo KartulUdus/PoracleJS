@@ -4,6 +4,7 @@ require('dotenv').config()
 require('events').EventEmitter.prototype._maxListeners = 100
 
 const fs = require('fs')
+const fsp = require('fs').promises
 const util = require('util')
 const { S2 } = require('s2-geometry')
 
@@ -95,7 +96,7 @@ const workingOnHooks = false
 if (config.discord.enabled) {
 	for (const key in config.discord.token) {
 		if (config.discord.token[key]) {
-			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config))
+			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config, true))
 		}
 	}
 
@@ -106,10 +107,10 @@ if (config.discord.enabled) {
 
 let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re)
+	telegram = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re)
+		telegramChannel = new TelegramWorker(config, log, GameData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
@@ -181,7 +182,63 @@ async function syncDiscordRole() {
 	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
+async function saveEventCache() {
+	// eslint-disable-next-line no-underscore-dangle
+	fastify.cache._checkData(false)
+	return fsp.writeFile('.cache/cleancache-webhook-events.json', JSON.stringify(fastify.cache.data), 'utf8')
+}
+
+async function loadEventCache() {
+	let loaddatatxt
+
+	try {
+		loaddatatxt = await fsp.readFile('.cache/cleancache-webhook-events.json', 'utf8')
+	} catch {
+		return
+	}
+
+	const now = Date.now()
+
+	try {
+		const data = JSON.parse(loaddatatxt)
+		for (const key of Object.keys(data)) {
+			const msgData = data[key]
+
+			if (msgData.t > now) {
+				const newTtlms = Math.max(msgData.t - now, 2000)
+				const newTtl = Math.floor(newTtlms / 1000)
+				fastify.cache.set(key, msgData.v, newTtl)
+			}
+		}
+	} catch (err) {
+		this.log.info(`Error processing historic cache ${err}`)
+	}
+}
+
+function handleShutdown() {
+	const workerSaves = []
+	for (const worker of discordWorkers) {
+		workerSaves.push(worker.saveTimeouts())
+	}
+	if (telegram) workerSaves.push(telegram.saveTimeouts())
+	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
+	workerSaves.push(saveEventCache())
+
+	Promise.all(workerSaves)
+		.then(() => {
+			process.exit()
+		}).catch((err) => {
+			log.error(`Error saving files ${err}`)
+			process.exit()
+		})
+}
+
+process.on('SIGINT', handleShutdown)
+process.on('SIGTERM', handleShutdown)
+
 async function run() {
+	await loadEventCache()
+
 	if (config.discord.enabled) {
 		setInterval(() => {
 			if (!fastify.discordQueue.length) {

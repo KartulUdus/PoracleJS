@@ -5,7 +5,7 @@ const cp = require('child_process')
 
 const pcache = require('flat-cache')
 
-const geoCache = pcache.load('.geoCache', path.resolve(`${__dirname}../../../`))
+const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
 const emojiFlags = require('emoji-flags')
 
 const { log } = require('../lib/logger')
