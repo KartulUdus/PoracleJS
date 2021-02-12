@@ -84,6 +84,11 @@
         "defaultDistance": 0,
         "maxDistance": 0
     },
+    "alertLimits": {
+        "timingPeriod": 240,
+        "dmLimit": 20,
+        "channelLimit": 40
+    },
     "discord": {
         "enabled": true,
         "disableAutoGreetings": false,

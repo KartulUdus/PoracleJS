@@ -41,7 +41,7 @@ const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.teleg
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
-const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
+const discordCache = new NodeCache({ stdTTL: config.alertLimits.timingPeriod })
 
 const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../`))
 const weatherCacheData = weatherCache.getKey('weatherCacheData')
