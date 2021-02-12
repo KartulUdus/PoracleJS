@@ -228,7 +228,9 @@ function handleShutdown() {
 	}
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
-	workerSaves.push(saveEventCache())
+	if (config.general.persistDuplicateCache) {
+		workerSaves.push(saveEventCache())
+	}
 
 	Promise.all(workerSaves)
 		.then(() => {
@@ -245,7 +247,9 @@ process.on('SIGTERM', handleShutdown)
 const discordBigQueue = { count: 0, lastSize: 0 }
 
 async function run() {
-	await loadEventCache()
+	if (config.general.persistDuplicateCache) {
+		await loadEventCache()
+	}
 
 	if (config.discord.enabled) {
 		setInterval(() => {
