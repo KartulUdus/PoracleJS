@@ -15,6 +15,6 @@ module.exports = async (ctx) => {
 
 		await commandLogic.run(pts, ptm, command.splitArgsArray[0])
 	} catch (err) {
-		controller.log.error('Track command unhappy:', err)
+		controller.logs.telegram.error('Track command unhappy:', err)
 	}
 }

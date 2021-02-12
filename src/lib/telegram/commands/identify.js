@@ -9,6 +9,6 @@ module.exports = async (ctx) => {
 			ctx.reply(`This channel is id: [ ${ctx.update.message.chat.id} ] and your id is: [ ${ctx.update.message.from.id} ]`)
 		}
 	} catch (err) {
-		controller.log.error('TEMPLATE command unhappy:', err)
+		controller.logs.telegram.error('TEMPLATE command unhappy:', err)
 	}
 }

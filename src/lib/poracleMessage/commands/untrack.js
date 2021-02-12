@@ -8,6 +8,7 @@ exports.run = async (client, msg, args) => {
 
 		if (!canContinue) return
 
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 
 		const argTypes = args.filter((arg) => typeArray.includes(arg))

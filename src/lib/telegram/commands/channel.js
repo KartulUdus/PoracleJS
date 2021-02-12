@@ -46,6 +46,6 @@ module.exports = async (ctx) => {
 			}
 		}
 	} catch (err) {
-		controller.log.error('Group command "-" unhappy:', err)
+		controller.logs.telegram.error('Group command "-" unhappy:', err)
 	}
 }

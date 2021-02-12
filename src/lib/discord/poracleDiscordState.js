@@ -5,7 +5,7 @@ class PoracleDiscordState {
 	constructor(client) {
 		this.query = client.query
 		this.dts = client.dts
-		this.log = client.log
+		this.log = client.logs.command
 		this.GameData = client.GameData
 		this.query = client.query
 		this.geofence = client.geofence

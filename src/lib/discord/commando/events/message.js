@@ -2,6 +2,8 @@ const { log } = require('../../../logger')
 
 module.exports = async (client, msg) => {
 	// Ignore all bots
+	client.logs.discord.debug(`Received message ${msg.author.username} ${msg.content}`)
+
 	if (msg.author.bot) return
 
 	// Log all DM messages to dmLogChannelID

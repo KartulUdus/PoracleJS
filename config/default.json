@@ -25,8 +25,15 @@
         "defaultTemplateName": 1
     },
     "logger": {
-        "level": "info",
-        "logSize": 250
+        "consoleLogLevel": "verbose",
+        "logLevel": "debug",
+        "enableLogs": {
+          "webhooks": true,
+          "discord": true,
+          "telegram": true
+        },
+        "dailyLogLimit": 7,
+        "webhookLogLimit": 12
     },
     "database": {
         "client": "sqlite",

@@ -8,7 +8,7 @@ const pcache = require('flat-cache')
 const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
 const emojiFlags = require('emoji-flags')
 
-const { log } = require('../lib/logger')
+const logs = require('../lib/logger')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
@@ -16,7 +16,7 @@ class Controller {
 		this.db = db
 		this.cp = cp
 		this.config = config
-		this.log = log
+		this.log = logs.controller
 		this.dts = dts
 		this.geofence = geofence
 		this.GameData = GameData
@@ -64,7 +64,7 @@ class Controller {
 		}
 	}
 
-	getDts(templateType, platform, templateName, language) {
+	getDts(logReference, templateType, platform, templateName, language) {
 		const key = `${templateType} ${platform} ${templateName} ${language}`
 		if (this.dtsCache[key]) {
 			return this.dtsCache[key]
@@ -94,9 +94,11 @@ class Controller {
 		}
 
 		if (!findDts) {
-			this.log.error(`Cannot find DTS template or matching default ${key}`)
+			this.log.warn(`${logReference}: Cannot find DTS template or matching default ${key}`)
 			return null
 		}
+
+		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
 
 		if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
 			findDts.template.embed.description = findDts.template.embed.description.join('')
@@ -174,7 +176,7 @@ class Controller {
 	// eslint-disable-next-line class-methods-use-this
 	escapeJsonString(s) {
 		if (!s) return s
-		return s.replace(/"/g, '\\"')
+		return s.replace(/"/g, '\'\'').replace(/\n/g, ' ')
 	}
 
 	escapeAddress(a) {

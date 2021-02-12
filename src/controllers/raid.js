@@ -3,7 +3,6 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
-const { log } = require('../lib/logger')
 
 class Raid extends Controller {
 	async raidWhoCares(data) {
@@ -47,7 +46,7 @@ class Raid extends Controller {
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		}
-
+		this.log.silly(`${data.gym_id}: Raid query ${query}`)
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -107,6 +106,8 @@ class Raid extends Controller {
 			`)
 		}
 
+		this.log.silly(`${data.gym_id}: Egg query ${query}`)
+
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -131,6 +132,7 @@ class Raid extends Controller {
 		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
+			const logReference = data.gym_id
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'tileservercache': {
 					pregenerateTile = true
@@ -196,7 +198,7 @@ class Raid extends Controller {
 				if (data.form === undefined || data.form === null) data.form = 0
 				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 				if (!monster) {
-					this.log.warn('Couldn\'t find monster in:', data)
+					this.log.warn(`${logReference}: Couldn't find monster in:`, data)
 					return
 				}
 				data.pokemonId = data.pokemon_id
@@ -228,13 +230,17 @@ class Raid extends Controller {
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-					log.debug(`Raid on ${data.gym_name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+					this.log.debug(`${this.logReference}: Raid against ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 					return []
 				}
 
 				const whoCares = await this.raidWhoCares(data)
 
-				this.log.info(`Raid on ${data.gym_name} appeared and ${whoCares.length} humans cared.`)
+				if (whoCares.length) {
+					this.log.info(`${logReference}: Raid against ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				} else {
+					this.log.verbose(`${logReference}: Raid against ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				}
 
 				if (!whoCares[0]) return []
 
@@ -250,10 +256,13 @@ class Raid extends Controller {
 
 				if (pregenerateTile) {
 					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
 
 				for (const cares of whoCares) {
+					this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
 					const caresCache = this.getDiscordCache(cares.id).count
 
 					const language = cares.language || this.config.general.locale
@@ -299,9 +308,24 @@ class Raid extends Controller {
 					let [platform] = cares.type.split(':')
 					if (platform == 'webhook') platform = 'discord'
 
-					const mustache = this.getDts('raid', platform, cares.template, language)
+					const mustache = this.getDts(logReference, 'raid', platform, cares.template, language)
 					if (mustache) {
-						const message = JSON.parse(mustache(view, { data: { language } }))
+						let mustacheResult
+						let message
+						try {
+							mustacheResult = mustache(view, { data: { language } })
+						} catch (err) {
+							this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
+							// eslint-disable-next-line no-continue
+							continue
+						}
+						try {
+							message = JSON.parse(mustacheResult)
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+							// eslint-disable-next-line no-continue
+							continue
+						}
 
 						if (cares.ping) {
 							if (!message.content) {
@@ -320,6 +344,7 @@ class Raid extends Controller {
 							tth: data.tth,
 							clean: cares.clean,
 							emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+							logReference,
 						}
 						if (caresCache <= this.config.discord.limitAmount + 1) {
 							jobs.push(work)
@@ -337,12 +362,17 @@ class Raid extends Controller {
 			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				this.log.debug(`Raid on ${data.gym_name} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`${logReference}: Raid on ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
 			const whoCares = await this.eggWhoCares(data)
-			this.log.info(`Raid egg level ${data.level} appeared and ${whoCares.length} humans cared.`)
+
+			if (whoCares.length) {
+				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+			} else {
+				this.log.verbose(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+			}
 
 			if (!whoCares[0]) return []
 
@@ -358,10 +388,12 @@ class Raid extends Controller {
 
 			if (pregenerateTile) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
+				this.log.debug(`${logReference}: Creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 				const caresCache = this.getDiscordCache(cares.id).count
 
 				const language = cares.language || this.config.general.locale
@@ -384,9 +416,24 @@ class Raid extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				const mustache = this.getDts('egg', platform, cares.template, language)
+				const mustache = this.getDts(logReference, 'egg', platform, cares.template, language)
 				if (mustache) {
-					const message = JSON.parse(mustache(view, { data: { language } }))
+					let mustacheResult
+					let message
+					try {
+						mustacheResult = mustache(view, { data: { language } })
+					} catch (err) {
+						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+					try {
+						message = JSON.parse(mustacheResult)
+					} catch (err) {
+						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+						// eslint-disable-next-line no-continue
+						continue
+					}
 
 					if (cares.ping) {
 						if (!message.content) {
@@ -406,6 +453,7 @@ class Raid extends Controller {
 						tth: data.tth,
 						clean: cares.clean,
 						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						logReference,
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)
@@ -415,7 +463,7 @@ class Raid extends Controller {
 			}
 			return jobs
 		} catch (e) {
-			this.log.error('Can\'t seem to handle raid: ', e, data)
+			this.log.error(`${data.gym_id}: Can't seem to handle raid: `, e, data)
 		}
 	}
 }

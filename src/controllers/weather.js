@@ -175,6 +175,7 @@ class Weather extends Controller {
 		const data = obj
 		try {
 			moment.locale(this.config.locale.timeformat)
+			const logReference = data.s2_cell_id
 
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
 				case 'tileservercache': {
@@ -235,16 +236,16 @@ class Weather extends Controller {
 			weatherCache.save(true)
 
 			if (!this.config.weather.weatherChangeAlert) {
-				this.log.info('weather change alerts are disabled, nobody cares.')
+				this.log.verbose(`${data.s2_cell_id}: weather change alerts are disabled, nobody cares.`)
 				return []
 			}
 
 			if (previousWeather === data.condition || whoCares.length === 0) {
-				this.log.info(`weather has not changed in ${data.s2_cell_id} or nobody cares.`)
+				this.log.verbose(`${data.s2_cell_id}: weather has not changed or nobody cares.`)
 				return []
 			}
 
-			this.log.info(`weather has changed to ${data.condition} in ${data.s2_cell_id} and someone might care`)
+			this.log.info(`${data.s2_cell_id}: weather has changed to ${data.condition} and someone might care`)
 
 			if (data.source == 'fromMonster') {
 				const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(data.s2_cell_id))
@@ -262,6 +263,7 @@ class Weather extends Controller {
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
+				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
 			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
@@ -276,15 +278,17 @@ class Weather extends Controller {
 			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
 			for (const cares of whoCares) {
+				this.log.debug(`${logReference}: Weather alert being generated for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
 				const caresCache = this.getDiscordCache(cares.id).count
 				if (cares.caresUntil < nowTimestamp) {
-					this.log.info(`last tracked pokemon despawned before weather changed in ${data.s2_cell_id}`)
+					this.log.debug(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)
 					weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.id != cares.id)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 				if (cares.lastChangeAlert == currentHourTimestamp) {
-					this.log.info(`user already alerted for this weather change in ${data.s2_cell_id}`)
+					this.log.debug(`${data.s2_cell_id}: user already alerted for this weather change`)
 					// eslint-disable-next-line no-continue
 					continue
 				}
@@ -296,6 +300,7 @@ class Weather extends Controller {
 				}
 				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
 					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('weather', data)
+					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
 				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)
@@ -326,7 +331,7 @@ class Weather extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform == 'webhook') platform = 'discord'
 
-				const mustache = this.getDts('weatherchange', platform, cares.template, language)
+				const mustache = this.getDts(logReference, 'weatherchange', platform, cares.template, language)
 				if (mustache) {
 					const message = JSON.parse(mustache(view, { data: { language } }))
 
@@ -340,6 +345,7 @@ class Weather extends Controller {
 						tth: weatherTth,
 						clean: cares.clean,
 						emoji: [],
+						logReference,
 					}
 					if (caresCache <= this.config.discord.limitAmount + 1) {
 						jobs.push(work)
@@ -350,7 +356,7 @@ class Weather extends Controller {
 
 			return jobs
 		} catch (e) {
-			this.log.error('Can\'t seem to handle weather: ', e, data)
+			this.log.error(`${data.s2_cell_id}: Can't seem to handle weather: `, e, data)
 		}
 	}
 }

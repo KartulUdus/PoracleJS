@@ -3,6 +3,7 @@ const path = require('path')
 const Knex = require('knex')
 const TranslatorFactory = require('../util/translatorFactory')
 const dtsLoader = require('./dtsloader')
+const configChecker = require('./configChecker')
 
 let config
 let knex
@@ -71,6 +72,9 @@ module.exports = {
 		translatorFactory = new TranslatorFactory(config)
 		translator = translatorFactory.default
 
+		configChecker.checkConfig(config)
+		configChecker.checkDts(dts, config)
+		configChecker.checkGeofence(geofence)
 		return {
 			config, knex, dts, geofence, translator, translatorFactory,
 		}
