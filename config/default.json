@@ -26,7 +26,7 @@
     },
     "logger": {
         "consoleLogLevel": "verbose",
-        "logLevel": "debug",
+        "logLevel": "verbose",
         "enableLogs": {
           "webhooks": true,
           "discord": true,
