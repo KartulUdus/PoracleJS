@@ -45,6 +45,11 @@ function checkConfig(config) {
 	if (config.geocoding.staticProvider != 'none' && !config.geocoding.staticProviderURL.startsWith('http')) {
 		logs.log.warn('Config Check: geocoding/staticProviderURL does not start with http')
 	}
+
+	// check whether tracking.everythingFlagPermissions has a valid value
+	if (!['allow-any', 'allow-and-always-individually', 'allow-and-ignore-individually', 'deny'].includes(config.tracking.everythingFlagPermissions)) {
+		logs.log.warn('Config Check: everything flag permissions is not one of allow-any,allow-and-always-individually,allow-and-ignore-individually,deny')
+	}
 }
 
 function checkGeofence(geofence) {
