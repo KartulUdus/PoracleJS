@@ -37,6 +37,6 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 	} catch (err) {
-		client.log.error(`Channel command "${msg.content}" unhappy:`, err)
+		client.logs.log.error(`Channel command "${msg.content}" unhappy:`, err)
 	}
 }
