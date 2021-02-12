@@ -361,7 +361,6 @@ class Monster extends Controller {
 			}
 
 			if (!whoCares[0] && !weatherChangeAlertJobs[0]) {
-
 				return []
 			}
 

@@ -157,7 +157,9 @@ class Pokestop extends Controller {
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
 				const { count } = this.getDiscordCache(cares.id)
-				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+				const limit = cares.type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
+
+				if (count <= limit) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
 			})
 
 			if (discordCacheBad) {

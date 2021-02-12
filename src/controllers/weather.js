@@ -278,9 +278,16 @@ class Weather extends Controller {
 			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
 			for (const cares of whoCares) {
-				this.log.debug(`${logReference}: Weather alert being generated for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
-
 				const caresCache = this.getDiscordCache(cares.id).count
+
+				const rateLimit = cares.type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
+				if (caresCache > rateLimit + 1) {
+					this.log.verbose(`${logReference}: Not creating weather alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+				this.log.verbose(`${logReference}: Creating weather alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.debug(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)
 					weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.id != cares.id)
@@ -338,7 +345,7 @@ class Weather extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
+						message: caresCache === rateLimit + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', rateLimit, this.config.alertLimits.timingPeriod) } : message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
@@ -347,7 +354,12 @@ class Weather extends Controller {
 						emoji: [],
 						logReference,
 					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
+
+					if (caresCache === rateLimit + 1) {
+						this.log.info(`${logReference}: Stopping alerts (Rate limit) for ${cares.type} ${cares.id} ${cares.name}`)
+					}
+
+					if (caresCache <= rateLimit + 1) {
 						jobs.push(work)
 						this.addDiscordCache(cares.id)
 					}
