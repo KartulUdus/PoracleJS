@@ -191,14 +191,14 @@ async function syncDiscordRole() {
 async function saveEventCache() {
 	// eslint-disable-next-line no-underscore-dangle
 	fastify.cache._checkData(false)
-	return fsp.writeFile('.cache/cleancache-webhook-events.json', JSON.stringify(fastify.cache.data), 'utf8')
+	return fsp.writeFile('.cache/webhook-events.json', JSON.stringify(fastify.cache.data), 'utf8')
 }
 
 async function loadEventCache() {
 	let loaddatatxt
 
 	try {
-		loaddatatxt = await fsp.readFile('.cache/cleancache-webhook-events.json', 'utf8')
+		loaddatatxt = await fsp.readFile('.cache/webhook-events.json', 'utf8')
 	} catch {
 		return
 	}
