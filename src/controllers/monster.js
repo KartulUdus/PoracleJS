@@ -577,7 +577,7 @@ class Monster extends Controller {
 						logReference,
 					}
 					if (caresCache === rateLimit + 1) {
-						this.log.info(`${logReference}: Stopping alerts (Rate limit) for ${cares.type} ${cares.id} ${cares.name}`)
+						this.log.info(`${logReference}: Stopping alerts (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${caresCacheDetails.ttl}`)
 					}
 					if (caresCache <= rateLimit + 1) {
 						jobs.push(work)
