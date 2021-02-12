@@ -121,14 +121,18 @@ class Telegram {
 				res = await fn()
 			} catch (err) {
 				if (err.code == 429) {
-					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${err.retry_after}`)
-					await this.sleep(err.retry_after * 1000)
+					const retryAfter = (err.response && err.response.parameters) ? err.response.parameters.retry_after : 30
+					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${retryAfter}`)
+					await this.sleep(retryAfter * 1000)
 					retry = true
+					if (retryCount++ == 5) {
+						throw err
+					}
 				} else {
 					throw err
 				}
 			}
-		} while (retry === true && retryCount++ < 5)
+		} while (retry === true)
 		return res
 	}
 
