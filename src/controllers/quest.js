@@ -201,7 +201,7 @@ class Quest extends Controller {
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				this.log.verbose(`${logReference}: Creating quest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				this.log.verbose(`${logReference}: Creating quest alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)

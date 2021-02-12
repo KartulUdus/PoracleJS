@@ -272,11 +272,11 @@ class Raid extends Controller {
 					const caresCache = this.getDiscordCache(cares.id).count
 					const rateLimit = cares.type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
 					if (caresCache > rateLimit + 1) {
-						this.log.verbose(`${logReference}: Not creating quest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 						// eslint-disable-next-line no-continue
 						continue
 					}
-					this.log.verbose(`${logReference}: Creating quest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+					this.log.verbose(`${logReference}: Creating raid alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 					const language = cares.language || this.config.general.locale
 					const translator = this.translatorFactory.Translator(language)
@@ -426,7 +426,7 @@ class Raid extends Controller {
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				this.log.verbose(`${logReference}: Creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				this.log.verbose(`${logReference}: Creating egg alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
 				// eslint-disable-next-line no-unused-vars
