@@ -146,7 +146,7 @@ class Controller {
 			ch = { count: 1, ttl: 0 }
 		}
 		const ttl = this.discordCache.getTtl(id)
-		ch.ttl = ttl
+		ch.ttl = Math.floor((ttl - Date.now()) / 1000)
 		return ch
 	}
 
