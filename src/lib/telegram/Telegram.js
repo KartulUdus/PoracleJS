@@ -152,7 +152,7 @@ class Telegram {
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
-				this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`, err)
+				this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`)
 			}
 			try {
 				if (data.message.photo && data.message.photo.length > 0) {
