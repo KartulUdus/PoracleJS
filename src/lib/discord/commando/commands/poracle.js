@@ -1,6 +1,6 @@
 exports.run = async (client, msg) => {
 	if (!client.config.discord.channels.includes(msg.channel.id)) {
-		return client.log.info(`${msg.author.tag} tried to register in ${msg.channel.name}`)
+		return client.logs.log.info(`${msg.author.tag} tried to register in ${msg.channel.name}`)
 	}
 	try {
 		const command = msg.content.split(' ')[0].substring(1)
@@ -37,8 +37,8 @@ exports.run = async (client, msg) => {
 			const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
 			await msg.author.send(JSON.parse(greeting(view)))
 		}
-		client.log.info(`${client.emojiStrip(msg.author.username)} Registered!`)
+		client.logs.log.info(`${client.emojiStrip(msg.author.username)} Registered!`)
 	} catch (err) {
-		client.log.error('!poracle command errored with:', err)
+		client.logs.log.error('!poracle command errored with:', err)
 	}
 }
