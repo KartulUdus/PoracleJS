@@ -97,7 +97,7 @@ class Worker {
 
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
 			}
 			return true
 		} catch (err) {
@@ -119,7 +119,7 @@ class Worker {
 
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
 			}
 			return true
 		} catch (err) {
