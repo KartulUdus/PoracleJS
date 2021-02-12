@@ -149,9 +149,9 @@ class Pokestop extends Controller {
 			const whoCares = await this.invasionWhoCares(data)
 
 			if (whoCares.length) {
-				this.log.info(`${logReference}: Invasion of type ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Invasion of type ${data.gruntType} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${logReference}: Invasion of type ${data.gruntType} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Invasion of type ${data.gruntType} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			let discordCacheBad = true // assume the worst

@@ -22,7 +22,8 @@
         "availableLanguages": {
           "en": {"poracle": "poracle", "help": "help" }
         },
-        "defaultTemplateName": 1
+        "defaultTemplateName": 1,
+        "persistDuplicateCache": false
     },
     "logger": {
         "consoleLogLevel": "verbose",

@@ -155,7 +155,7 @@ class Monster extends Controller {
 					weatherCellData.weatherFromBoost = weatherCellData.weatherFromBoost.map((value, index) => { if (index == data.weather) return value += 1; return value -= 1 })
 					if (weatherCellData.weatherFromBoost.filter((x) => x > 4).length) {
 						if (weatherCellData.weatherFromBoost.indexOf(5) == -1) weatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0]
-						this.log.info(`${data.encouter_id}: Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${data.weather}`)
+						this.log.info(`${data.encounter_id}: Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${data.weather}`)
 						if (data.weather != weatherCellData[currentHourTimestamp]) weatherCellData.forecastTimeout = null
 						weatherCellData[currentHourTimestamp] = data.weather
 						currentCellWeather = data.weather
