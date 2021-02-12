@@ -1,8 +1,10 @@
+const fsp = require('fs').promises
+const NodeCache = require('node-cache')
 const { Client } = require('discord.js')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
 class Worker {
-	constructor(token, id, config, logs) {
+	constructor(token, id, config, logs, rehydrateTimeouts = false) {
 		this.id = id
 		this.token = token
 		this.config = config
@@ -11,6 +13,8 @@ class Worker {
 		this.users = []
 		this.userCount = 0
 		this.client = {}
+		this.rehydrateTimeouts = rehydrateTimeouts
+		this.discordMessageTimeouts = new NodeCache()
 		this.discordQueue = []
 		this.queueProcessor = new FairPromiseQueue(this.discordQueue, 5, ((entry) => entry.target))
 		this.bounceWorker()
@@ -35,6 +39,9 @@ class Worker {
 		})
 		this.client.on('ready', () => {
 			this.logs.log.info(`discord worker #${this.id} ${this.client.user.tag} ready for action`)
+			if (this.rehydrateTimeouts) {
+				this.loadTimeouts()
+			}
 			this.busy = false
 		})
 		this.client.on('rateLimit', (info) => {
@@ -98,6 +105,7 @@ class Worker {
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
 				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+				this.discordMessageTimeouts.set(msg.id, { type: 'user', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true
 		} catch (err) {
@@ -120,6 +128,7 @@ class Worker {
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
 				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true
 		} catch (err) {
@@ -145,6 +154,54 @@ class Worker {
 			}
 		}
 		return invalidUsers
+	}
+
+	async saveTimeouts() {
+		if (!this.client || !this.client.user || !this.client.user.tag) return
+
+		// eslint-disable-next-line no-underscore-dangle
+		this.discordMessageTimeouts._checkData(false)
+		return fsp.writeFile(`.cache/cleancache-discord-${this.client.user.tag}.json`, JSON.stringify(this.discordMessageTimeouts.data), 'utf8')
+	}
+
+	async loadTimeouts() {
+		let loaddatatxt
+
+		try {
+			loaddatatxt = await fsp.readFile(`.cache/cleancache-discord-${this.client.user.tag}.json`, 'utf8')
+		} catch {
+			return
+		}
+
+		const now = Date.now()
+
+		const data = JSON.parse(loaddatatxt)
+		for (const key of Object.keys(data)) {
+			const msgData = data[key]
+			let channel = null
+			try {
+				if (msgData.v.type == 'user') {
+					const user = await this.client.users.fetch(msgData.v.id)
+					channel = await user.createDM()
+				}
+				if (msgData.v.type == 'channel') {
+					channel = await this.client.channels.fetch(msgData.v.id)
+				}
+				if (channel) {
+					const msg = await channel.messages.fetch(key)
+					if (msgData.t <= now) {
+						msg.delete().catch(() => {})
+					} else {
+						const newTtlms = Math.max(msgData.t - now, 2000)
+						const newTtl = Math.floor(newTtlms / 1000)
+						msg.delete({ timeout: newTtlms, reason: 'Historic message delete after restart' }).catch(() => {})
+						this.discordMessageTimeouts.set(key, msgData.v, newTtl)
+					}
+				}
+			} catch (err) {
+				this.logs.info(`Error processing historic deletes ${err}`)
+			}
+		}
 	}
 }
 

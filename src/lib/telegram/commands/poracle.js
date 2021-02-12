@@ -8,18 +8,18 @@ module.exports = async (ctx) => {
 
 	const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name ? ctx.update.message.from.last_name : ''} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`
 	if (ctx.update.message.chat.type === 'private') {
-		return controller.log.info({ level: 'info', message: `${userName} tried to register in direct message`, event: 'telegram:registerFail' })
+		return controller.logs.log.info(`${userName} tried to register in direct message`)
 	}
 
 	const user = ctx.update.message.from || ctx.update.message.chat
 
 	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
 	if (ctx.update.message.chat.type === 'private' && channelName.toLowerCase() !== ctx.state.controller.config.telegram.channel.toLowerCase()) {
-		return controller.log.info({ level: 'info', message: `${userName} tried to register in ${channelName}`, event: 'telegram:registerFail' })
+		return controller.logs.log.info(`${userName} tried to register in ${channelName}`)
 	}
 
 	if (!ctx.state.controller.config.telegram.channels.includes(ctx.update.message.chat.id.toString())) {
-		return controller.log.log({ level: 'info', message: `${userName} tried to register in other than prepared register channels ${ctx.update.message.chat.id}`, event: 'telegram:registerFail' })
+		return controller.logs.log.info(`${userName} tried to register in other than prepared register channels ${ctx.update.message.chat.id}`)
 	}
 	//	if (ctx.state.controller.config.telegram.register_chat !== '' && ctx.update.message.chat.id.toString() !== ctx.state.controller.config.telegram.register_chat) {
 	//		return controller.log.log({ level: 'info', message: `${ctx.update.message.from.username} tried to register in other than prepared (${ctx.state.controller.config.telegram.register_chat}) register channel ${ctx.update.message.chat.id}`, event: 'telegram:registerFail' })

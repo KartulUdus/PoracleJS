@@ -1,8 +1,10 @@
 const fs = require('fs')
+const fsp = require('fs').promises
+const NodeCache = require('node-cache')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
 class Telegram {
-	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re) {
+	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
 		this.config = config
 		this.logs = logs
 		this.GameData = GameData
@@ -15,6 +17,8 @@ class Telegram {
 		this.busy = true
 		this.enabledCommands = []
 		this.client = {}
+		this.rehydrateTimeouts = rehydrateTimeouts
+		this.telegramMessageTimeouts = new NodeCache()
 		this.commandFiles = fs.readdirSync(`${__dirname}/commands`)
 		this.bot = telegraf
 		this.id = id
@@ -53,7 +57,7 @@ class Telegram {
 			}
 		}
 		this.bot.catch((err, ctx) => {
-			logs.log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)
+			this.logs.log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)
 		})
 		this.bot.start(() => {
 			throw new Error('Telegraf error')
@@ -70,6 +74,9 @@ class Telegram {
 
 	init() {
 		this.bot.launch()
+		if (this.rehydrateTimeouts) {
+			this.loadTimeouts()
+		}
 		this.busy = false
 	}
 
@@ -177,6 +184,10 @@ class Telegram {
 			}
 
 			if (data.clean) {
+				//				this.log.warn(`Telegram setting to clean in ${msgDeletionMs}ms`)
+				for (const id of messageIds) {
+					this.telegramMessageTimeouts.set(`${id}:${data.target}`, data.target, Math.floor(msgDeletionMs / 1000) + 1)
+				}
 				setTimeout(() => {
 					for (const id of messageIds) {
 						this.retrySender(`${senderId} (clean)`, async () => this.bot.telegram.deleteMessage(data.target, id)).catch(() => {})
@@ -206,6 +217,47 @@ class Telegram {
 		this.logs.telegram.info(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
 		return this.sendFormattedMessage(data)
+	}
+
+	async saveTimeouts() {
+		// eslint-disable-next-line no-underscore-dangle
+		this.telegramMessageTimeouts._checkData(false)
+		return fsp.writeFile(`.cache/cleancache-telegram-${this.bot.token}.json`, JSON.stringify(this.telegramMessageTimeouts.data), 'utf8')
+	}
+
+	async loadTimeouts() {
+		let loaddatatxt
+
+		try {
+			loaddatatxt = await fsp.readFile(`.cache/cleancache-telegram-${this.bot.token}.json`, 'utf8')
+		} catch {
+			return
+		}
+
+		const now = Date.now()
+
+		const data = JSON.parse(loaddatatxt)
+		for (const key of Object.keys(data)) {
+			const msgData = data[key]
+
+			try {
+				const msgNo = parseInt(key.split(':')[0], 10)
+				const chatId = parseInt(msgData.v, 10)
+				if (msgData.t <= now) {
+					this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
+				} else {
+					const newTtlms = Math.max(msgData.t - now, 2000)
+					const newTtl = Math.floor(newTtlms / 1000)
+					setTimeout(() => {
+						this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
+					}, newTtlms)
+
+					this.telegramMessageTimeouts.set(key, msgData.v, newTtl)
+				}
+			} catch (err) {
+				this.log.info(`Error processing historic deletes ${err}`)
+			}
+		}
 	}
 }
 

@@ -194,6 +194,8 @@ class Quest extends Controller {
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
+				this.log.debug(`${logReference}: Creating quest alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
 				const caresCache = this.getDiscordCache(cares.id).count
 				const rateLimit = cares.type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
 				if (caresCache > rateLimit + 1) {

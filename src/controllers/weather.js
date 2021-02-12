@@ -8,8 +8,8 @@ const Controller = require('./controller')
 
 require('moment-precise-range-plugin')
 
-const weatherKeyCache = pcache.load('.weatherKeyCache', path.resolve(`${__dirname}../../../`))
-const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../../`))
+const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname}../../../.cache/`))
+const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
 
 class Weather extends Controller {
 	async getLaziestWeatherKey() {
@@ -278,6 +278,8 @@ class Weather extends Controller {
 			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
 			for (const cares of whoCares) {
+				this.log.debug(`${logReference}: Weather alert being generated for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
 				const caresCache = this.getDiscordCache(cares.id).count
 
 				const rateLimit = cares.type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit

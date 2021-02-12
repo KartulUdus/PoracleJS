@@ -417,6 +417,8 @@ class Monster extends Controller {
 			}
 
 			for (const cares of whoCares) {
+				this.log.debug(`${logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
 				const caresCache = this.getDiscordCache(cares.id).count
 				const rateLimit = cares.type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
 				if (caresCache > rateLimit + 1) {
