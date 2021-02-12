@@ -479,17 +479,6 @@ async function handleAlarms() {
 			bigQueue.count = 0
 		}
 
-		if (fastify.hookQueue.length > 5000) {
-			bigQueue.count++
-			bigQueue.lastSize = fastify.hookQueue.length
-			if ((bigQueue.count % 600) == 0) { // Approx once a minute warning with 100ms interval
-				fastify.logger.warn(`WebhookQueue is big, remained big for ${bigQueue.count} calls currently ${bigQueue.lastSize}`)
-			}
-		} else {
-			bigQueue.lastSize = 0
-			bigQueue.count = 0
-		}
-
 		alarmProcessor.run(processOne)
 	}
 }
