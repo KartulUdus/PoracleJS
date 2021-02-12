@@ -437,6 +437,5 @@ if (NODE_MAJOR_VERSION > 14) {
 	throw new Error('Requires Node 12 or 14')
 }
 
-
 run()
 setInterval(handleAlarms, 100)
