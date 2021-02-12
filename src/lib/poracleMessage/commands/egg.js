@@ -19,7 +19,7 @@ exports.run = async (client, msg, args) => {
 		let exclusive = 0
 		let distance = 0
 		let team = 4
-		let template = 1
+		let template = client.config.general.defaultTemplateName
 		let clean = false
 		let levels = []
 		const pings = msg.getPings()
@@ -29,10 +29,10 @@ exports.run = async (client, msg, args) => {
 			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[2])
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
-			else if (element === 'instinct') team = 3
-			else if (element === 'valor') team = 2
-			else if (element === 'mystic') team = 1
-			else if (element === 'harmony') team = 0
+			else if (element === 'instinct' || element === 'yellow') team = 3
+			else if (element === 'valor' || element === 'red') team = 2
+			else if (element === 'mystic' || element === 'blue') team = 1
+			else if (element === 'harmony' || element === 'gray') team = 0
 			else if (element === 'everything') levels = [1, 2, 3, 4, 5, 6]
 			else if (element === 'clean') clean = true
 		})

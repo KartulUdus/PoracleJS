@@ -20,10 +20,9 @@
         "disableWeather": false,
         "roleCheckDeletionsAllowed": false,
         "availableLanguages": {
-          "en": {"poracle": "poracle", "help": "help" },
-          "fr": {"poracle": "leporacle", "help": "aide" },
-          "de": {"poracle": "dasporacle", "help": "hilfe" }
-        }
+          "en": {"poracle": "poracle", "help": "help" }
+        },
+        "defaultTemplateName": 1
     },
     "logger": {
         "consoleLogLevel": "verbose",

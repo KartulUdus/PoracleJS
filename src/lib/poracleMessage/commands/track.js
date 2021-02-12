@@ -36,10 +36,10 @@ exports.run = async (client, msg, args) => {
 		let greatLeagueCP = 0
 		let ultraLeague = 4096
 		let ultraLeagueCP = 0
-		const { pvpFilterMaxRank } = Math.min(client.config.pvp, 4096)
+		const pvpFilterMaxRank = Math.min(client.config.pvp.pvpFilterMaxRank, 4096)
 		const { pvpFilterGreatMinCP } = client.config.pvp
 		const { pvpFilterUltraMinCP } = client.config.pvp
-		let template = 1
+		let template = client.config.general.defaultTemplateName
 		let clean = false
 		const pings = msg.getPings()
 
@@ -110,14 +110,20 @@ exports.run = async (client, msg, args) => {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
+
+		// if a value for great/ultra league rank was given, force it to be not greater than pvpFilterMaxRank
 		if (greatLeague < 4096 && greatLeague > pvpFilterMaxRank) greatLeague = pvpFilterMaxRank
 		if (ultraLeague < 4096 && ultraLeague > pvpFilterMaxRank) ultraLeague = pvpFilterMaxRank
-		if (greatLeagueCP > 0 && greatLeagueCP <= pvpFilterGreatMinCP) greatLeagueCP = pvpFilterGreatMinCP
-		if (ultraLeagueCP > 0 && ultraLeagueCP <= pvpFilterUltraMinCP) ultraLeagueCP = pvpFilterUltraMinCP
-		if (greatLeague <= pvpFilterMaxRank && greatLeagueCP === 0) greatLeagueCP = pvpFilterGreatMinCP
-		if (ultraLeague <= pvpFilterMaxRank && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
-		if (greatLeagueCP >= pvpFilterGreatMinCP && greatLeague === 4096) greatLeague = pvpFilterMaxRank
-		if (ultraLeagueCP >= pvpFilterUltraMinCP && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
+		// if a value for great/ultra league CP was given, force it to be not less than pvpFilterGreatMinCP/pvpFilterUltraMinCP
+		if (greatLeagueCP > 0 && greatLeagueCP < pvpFilterGreatMinCP) greatLeagueCP = pvpFilterGreatMinCP
+		if (ultraLeagueCP > 0 && ultraLeagueCP < pvpFilterUltraMinCP) ultraLeagueCP = pvpFilterUltraMinCP
+		// if a value for great/ultra league rank was given but none for great/ultra league CP, set the later implicitly to pvpFilterGreatMinCP/pvpFilterUltraMinCP
+		if (greatLeague < 4096 && greatLeagueCP === 0) greatLeagueCP = pvpFilterGreatMinCP
+		if (ultraLeague < 4096 && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
+		// if a value for great/ultra league CP was given but none for great/ultra league rank, set the later implicitly to pvpFilterMaxRank
+		if (greatLeagueCP > 0 && greatLeague === 4096) greatLeague = pvpFilterMaxRank
+		if (ultraLeagueCP > 0 && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
+
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 

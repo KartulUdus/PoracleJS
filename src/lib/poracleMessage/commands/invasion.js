@@ -18,7 +18,7 @@ exports.run = async (client, msg, args) => {
 		const remove = !!args.find((arg) => arg === 'remove')
 		const commandEverything = !!args.find((arg) => arg === 'everything')
 		let distance = 0
-		let template = 1
+		let template = client.config.general.defaultTemplateName
 		let gender = 0
 		let clean = false
 		const types = args.filter((arg) => typeArray.includes(arg))
