@@ -182,12 +182,12 @@ class Telegram {
 				const msgNo = parseInt(key.split(':')[0], 10)
 				const chatId = parseInt(msgData.v, 10)
 				if (msgData.t <= now) {
-					this.bot.telegram.deleteMessage(chatId, msgNo)
+					this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
 				} else {
 					const newTtlms = Math.max(msgData.t - now, 2000)
 					const newTtl = Math.floor(newTtlms / 1000)
 					setTimeout(() => {
-						this.bot.telegram.deleteMessage(chatId, msgNo)
+						this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
 					}, newTtlms)
 
 					this.telegramMessageTimeouts.set(key, msgData.v, newTtl)

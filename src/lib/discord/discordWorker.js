@@ -196,11 +196,11 @@ class Worker {
 				if (channel) {
 					const msg = await channel.messages.fetch(key)
 					if (msgData.t <= now) {
-						msg.delete()
+						msg.delete().catch(() => {})
 					} else {
 						const newTtlms = Math.max(msgData.t - now, 2000)
 						const newTtl = Math.floor(newTtlms / 1000)
-						msg.delete({ timeout: newTtlms, reason: 'Historic message delete after restart' })
+						msg.delete({ timeout: newTtlms, reason: 'Historic message delete after restart' }).catch(() => {})
 						this.discordMessageTimeouts.set(key, msgData.v, newTtl)
 					}
 				}
