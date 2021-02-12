@@ -25,7 +25,7 @@ class DiscordWebhookWorker {
 	}
 
 	async sendAlert(data) {
-		if ((Math.random() * 100) > 95) this.logs.log.info(`DiscordQueue[Webhook] is currently ${this.webhookQueue.length}`) // todo: per minute
+		if ((Math.random() * 100) > 95) this.logs.log.verbose(`DiscordQueue[Webhook] is currently ${this.webhookQueue.length}`) // todo: per minute
 
 		await this.webhookAlert(data)
 	}

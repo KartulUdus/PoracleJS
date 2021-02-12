@@ -466,7 +466,7 @@ const bigQueue = { count: 0, lastSize: 0 }
 
 async function handleAlarms() {
 	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
-		if ((Math.random() * 100) > 80) fastify.logger.info(`WebhookQueue is currently ${fastify.hookQueue.length}`)
+		if ((Math.random() * 100) > 98) fastify.logger.verbose(`WebhookQueue is currently ${fastify.hookQueue.length}`)
 
 		if (fastify.hookQueue.length > 5000) {
 			bigQueue.count++

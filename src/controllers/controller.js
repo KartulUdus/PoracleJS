@@ -143,8 +143,10 @@ class Controller {
 		let ch = this.discordCache.get(id)
 		if (ch === undefined) {
 			this.discordCache.set(id, { count: 1 })
-			ch = { count: 1 }
+			ch = { count: 1, ttl: 0 }
 		}
+		const ttl = this.discordCache.getTtl(id)
+		ch.ttl = ttl
 		return ch
 	}
 

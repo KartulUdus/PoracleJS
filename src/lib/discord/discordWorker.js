@@ -71,7 +71,7 @@ class Worker {
 	}
 
 	async sendAlert(data) {
-		if ((Math.random() * 100) > 95) this.logs.log.info(`#${this.id} DiscordQueue is currently ${this.discordQueue.length}`) // todo: per minute
+		if ((Math.random() * 100) > 95) this.logs.log.verbose(`#${this.id} DiscordQueue is currently ${this.discordQueue.length}`) // todo: per minute
 
 		switch (data.type) {
 			case 'discord:user': {

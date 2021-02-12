@@ -288,7 +288,7 @@ class Weather extends Controller {
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				this.log.verbose(`${logReference}: Creating weather alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				this.log.verbose(`${logReference}: Creating weather alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.debug(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)

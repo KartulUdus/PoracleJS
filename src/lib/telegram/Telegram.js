@@ -88,7 +88,7 @@ class Telegram {
 	}
 
 	async sendAlert(data) {
-		if ((Math.random() * 100) > 95) this.logs.log.info(`#${this.id} TelegramQueue is currently ${this.telegramQueue.length}`) // todo: per minute
+		if ((Math.random() * 100) > 95) this.logs.log.verbose(`#${this.id} TelegramQueue is currently ${this.telegramQueue.length}`) // todo: per minute
 
 		switch (data.type) {
 			case 'telegram:user': {

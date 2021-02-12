@@ -381,7 +381,7 @@ class Monster extends Controller {
 
 			if (discordCacheBad && !weatherChangeAlertJobs[0]) {
 				whoCares.forEach((cares) => {
-					this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`)
+					this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.id} ${cares.name} ${cares.type} Time to release: ${this.getDiscordCache(cares.id).ttl}`)
 				})
 
 				return []
@@ -419,10 +419,11 @@ class Monster extends Controller {
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-				const caresCache = this.getDiscordCache(cares.id).count
+				const caresCacheDetails = this.getDiscordCache(cares.id)
+				const caresCache = caresCacheDetails.count
 				const rateLimit = cares.type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
 				if (caresCache > rateLimit + 1) {
-					this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+					this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${caresCacheDetails.ttl}`)
 					// eslint-disable-next-line no-continue
 					continue
 				}
