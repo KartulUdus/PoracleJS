@@ -191,14 +191,14 @@ async function syncDiscordRole() {
 async function saveEventCache() {
 	// eslint-disable-next-line no-underscore-dangle
 	fastify.cache._checkData(false)
-	return fsp.writeFile('.cache/cleancache-webhook-events.json', JSON.stringify(fastify.cache.data), 'utf8')
+	return fsp.writeFile('.cache/webhook-events.json', JSON.stringify(fastify.cache.data), 'utf8')
 }
 
 async function loadEventCache() {
 	let loaddatatxt
 
 	try {
-		loaddatatxt = await fsp.readFile('.cache/cleancache-webhook-events.json', 'utf8')
+		loaddatatxt = await fsp.readFile('.cache/webhook-events.json', 'utf8')
 	} catch {
 		return
 	}
@@ -228,7 +228,9 @@ function handleShutdown() {
 	}
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
-	workerSaves.push(saveEventCache())
+	if (config.general.persistDuplicateCache) {
+		workerSaves.push(saveEventCache())
+	}
 
 	Promise.all(workerSaves)
 		.then(() => {
@@ -245,7 +247,9 @@ process.on('SIGTERM', handleShutdown)
 const discordBigQueue = { count: 0, lastSize: 0 }
 
 async function run() {
-	await loadEventCache()
+	if (config.general.persistDuplicateCache) {
+		await loadEventCache()
+	}
 
 	if (config.discord.enabled) {
 		setInterval(() => {
