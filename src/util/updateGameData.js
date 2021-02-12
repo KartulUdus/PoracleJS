@@ -410,6 +410,7 @@ function Add_Missing_Pokemon() {
 				.replace('_MALE', '')
 				.replace('_FEMALE', '')),
 		}
+		if (updatedGruntData[gruntId].type === "Grunt") updatedGruntData[gruntId].type = "Mixed"
 		if (gruntData[gruntId].lineup) {
 			updatedGruntData[gruntId].second_reward = !!(gruntData[gruntId].lineup && gruntData[gruntId].lineup.rewards.length > 1)
 			updatedGruntData[gruntId].encounters = {
