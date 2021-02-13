@@ -251,7 +251,6 @@ class Controller {
 		}
 	}
 
-
 	async updateQuery(table, values, conditions) {
 		try {
 			return this.db(table).update(values).where(conditions)
@@ -311,11 +310,12 @@ class Controller {
 			default: {
 				const constraints = {
 					humans: 'id',
-					monsters: 'monsters.id, monsters.profile_no, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.form, monsters.gender, monsters.min_weight, monsters.great_league_ranking, monsters.great_league_ranking_min_cp, monsters.ultra_league_ranking, monsters.ultra_league_ranking_min_cp',
+					monsters: 'monsters.id, monsters.profile_no, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.form, monsters.gender, monsters.min_weight, monsters.great_league_ranking, monsters.great_league_ranking_min_cp, monsters.ultra_league_ranking, monsters.ultra_league_ranking_min_cp, monsters.min_time',
 					raid: 'raid.id, raid.profile_no, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
 					egg: 'egg.id, egg.profile_no, egg.team, egg.exclusive, egg.level',
 					quest: 'quest.id, quest.profile_no, quest.reward_type, quest.reward',
 					invasion: 'invasion.id, invasion.profile_no, invasion.gender, invasion.grunt_type',
+					lures: 'lures.id, lures.profile_no, lures.lure_id',
 					weather: 'weather.id, weather.profile_no, weather.condition, weather.cell',
 				}
 

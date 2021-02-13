@@ -23,7 +23,7 @@ function createCommandRegex(translatorFactory, commandName, paramMatch, flags = 
 
 module.exports = (translatorFactory) => ({
 	nameRe: createCommandRegex(translatorFactory, 'name', '\\S+'),
-	userRe: createCommandRegex(translatorFactory, 'user', '\\S+'),
+	userRe: createCommandRegex(translatorFactory, 'user', '-?\\d{1,20}'),
 	formRe: createCommandRegex(translatorFactory, 'form', '.+'),
 	genRe: createCommandRegex(translatorFactory, 'gen', '[1-7]+'),
 	maxlevelRe: createCommandRegex(translatorFactory, 'maxlevel', '\\d{1,2}'),
@@ -46,6 +46,7 @@ module.exports = (translatorFactory) => ({
 	ultraLeagueRe: createCommandRegex(translatorFactory, 'ultra', '\\d{1,4}'),
 	ultraLeagueCPRe: createCommandRegex(translatorFactory, 'ultracp', '\\d{1,5}'),
 	dRe: createCommandRegex(translatorFactory, 'd', '[\\d.]{1,}'),
+	tRe: createCommandRegex(translatorFactory, 't', '\\d{1,4}'),
 	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),
 	energyRe: createCommandRegex(translatorFactory, 'energy', '\\S+'),
 	channelRe: createCommandRegex(translatorFactory, 'channel', '\\d{1,20}'),

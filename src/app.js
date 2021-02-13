@@ -16,6 +16,7 @@ const Telegraf = require('telegraf')
 
 const path = require('path')
 const pcache = require('flat-cache')
+const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 const TelegramUtil = require('./lib/telegram/telegramUtil.js')
@@ -61,6 +62,7 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const PokestopLureController = require('./controllers/pokestop_lure')
 const WeatherController = require('./controllers/weather')
 
 const weatherController = new WeatherController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, weatherCacheData)
@@ -68,6 +70,7 @@ const monsterController = new MonsterController(knex, config, dts, geofence, Gam
 const raidController = new RaidController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 const questController = new QuestController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 const pokestopController = new PokestopController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const pokestopLureController = new PokestopLureController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 
 fastify.decorate('logger', logs.log)
 fastify.decorate('controllerLog', logs.controller)
@@ -79,6 +82,7 @@ fastify.decorate('monsterController', monsterController)
 fastify.decorate('raidController', raidController)
 fastify.decorate('questController', questController)
 fastify.decorate('pokestopController', pokestopController)
+fastify.decorate('pokestopLureController', pokestopLureController)
 fastify.decorate('weatherController', weatherController)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
@@ -396,26 +400,45 @@ async function processOne(hook) {
 				}
 				break
 			}
-			case 'invasion':
+			//			case 'invasion':
 			case 'pokestop': {
 				if (config.general.disablePokestop) {
-					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was received but set to be ignored in config`)
+					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop was received but set to be ignored in config`)
 					break
 				}
 				fastify.webhooks.info('pokestop', hook.message)
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
-				if (!incidentExpiration) break
-				if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
-					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
+				const lureExpiration = hook.message.lure_expiration
+				if (!lureExpiration && !incidentExpiration) {
+					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
 				}
+				let result = 0
+				if (lureExpiration) {
+					if (fastify.cache.has(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
+						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
+						break
+					}
 
-				// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
-				const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
+					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+					const secondsRemaining = Math.max((lureExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
+					fastify.cache.set(`${hook.message.pokestop_id}_L${lureExpiration}`, 'cached', secondsRemaining)
 
-				const result = await fastify.pokestopController.handle(hook.message)
+					result = await fastify.pokestopLureController.handle(hook.message)
+				} else {
+					if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
+						break
+					}
+
+					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+					const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
+
+					fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
+
+					result = await fastify.pokestopController.handle(hook.message)
+				}
 				if (result) {
 					result.forEach((job) => {
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
@@ -508,9 +531,7 @@ if (NODE_MAJOR_VERSION < 12) {
 	throw new Error('Requires Node 12 (or higher)')
 }
 
-const schedule = require('node-schedule')
-
-const job = schedule.scheduleJob({ minute: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55] }, async () => {
+schedule.scheduleJob({ minute: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55] }, async () => {
 	const now = new Date()
 	const dow = now.getDay()
 	const hour = now.getHours()
@@ -519,15 +540,15 @@ const job = schedule.scheduleJob({ minute: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45
 	log.info('Profile Check: Checking for active profile changes')
 	const profilesToCheck = await fastify.monsterController.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
-	let last_id
+	let lastId
 	for (const profile of profilesToCheck) {
-		if (profile.id != last_id) {
+		if (profile.id != lastId) {
 			const timings = JSON.parse(profile.active_hours)
 			const active = timings.some((row) => row.day == dow && row.start <= hour && hour < row.end)
 			if (active) {
 				log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
 
-				last_id = profile.id
+				lastId = profile.id
 				await fastify.monsterController.updateQuery('humans',
 					{
 						current_profile_no: profile.profile_no,

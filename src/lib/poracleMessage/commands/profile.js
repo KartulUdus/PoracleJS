@@ -19,7 +19,6 @@ exports.run = async (client, msg, args) => {
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
 		}
 
-		const areaArgs = args.map((a) => a.replace(/ /g, '_'))
 		switch (args[0]) {
 			case 'add': {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
@@ -77,7 +76,7 @@ exports.run = async (client, msg, args) => {
 							name: args[1],
 						})
 				}
-				const reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+				const reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : '🙅'
 				await msg.react(reaction)
 
 				break

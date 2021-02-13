@@ -2,20 +2,18 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 
-class Pokestop extends Controller {
-	async invasionWhoCares(obj) {
+class PokestopLure extends Controller {
+	async lureWhoCares(obj) {
 		const data = obj
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
-		if (!data.gender) data.gender = -1
 		let query = `
-		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
-		join humans on (humans.id = invasion.id and humans.current_profile_no = invasion.profile_no)
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, lures.template, lures.distance, lures.clean, lures.ping from lures
+		join humans on (humans.id = lures.id and humans.current_profile_no = lures.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
-		(invasion.grunt_type='${String(data.gruntType).toLowerCase()}' or invasion.grunt_type = 'everything') and
-		(invasion.gender = ${data.gender} or invasion.gender = 0)`
+		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0) `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -30,19 +28,19 @@ class Pokestop extends Controller {
 						+ sin( radians(${data.latitude}) )
 						* sin( radians( humans.latitude ) )
 						)
-					) < invasion.distance and invasion.distance != 0)
+					) < lures.distance and lures.distance != 0)
 					or
 					(
-						invasion.distance = 0 and (${areastring})
+						lures.distance = 0 and (${areastring})
 					)
 			)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
+			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 		} else {
 			query = query.concat(`
-				and ((invasion.distance = 0 and (${areastring})) or invasion.distance > 0)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
+				and ((lures.distance = 0 and (${areastring})) or lures.distance > 0)
 			`)
+			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 		}
 		this.log.silly(`${data.pokestop_id}: Query ${query}`)
 
@@ -99,9 +97,9 @@ class Pokestop extends Controller {
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
 
-			const incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp
-			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
-			data.disappearTime = moment(incidentExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			const lureExpiration = data.lure_expiration
+			data.tth = moment.preciseDiff(Date.now(), lureExpiration * 1000, true)
+			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.imgUrl = data.pokestopUrl // deprecated
@@ -115,43 +113,21 @@ class Pokestop extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
-			data.gruntTypeId = 0
-			if (data.incident_grunt_type) {
-				data.gruntTypeId = data.incident_grunt_type
-			} else if (data.grunt_type) {
-				data.gruntTypeId = data.grunt_type
+			data.lureTypeId = 0
+			if (data.lure_id) {
+				data.lureTypeId = data.lure_id
 			}
 
-			data.gruntTypeEmoji = '❓'
-			data.gruntTypeColor = 'BABABA'
+			data.lureTypeEmoji = this.GameData.utilData.lures[data.lure_id].emoji
+			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
+			data.lureTypeNameEng = this.GameData.utilData.lures[data.lure_id].name
 
-			data.gender = 0
-			data.gruntName = ''
-			data.gruntTypeColor = 'BABABA'
-			data.gruntRewards = ''
-			data.gruntRewardsList = {}
-
-			// Only enough to match for query
-
-			if (data.gruntTypeId) {
-				data.gender = 0
-				data.gruntName = 'Grunt'
-				data.gruntType = 'Mixed'
-				data.gruntRewards = ''
-				if (data.gruntTypeId in this.GameData.grunts) {
-					const gruntType = this.GameData.grunts[data.gruntTypeId]
-					data.gruntName = gruntType.grunt
-					data.gender = gruntType.gender
-					data.gruntType = gruntType.type
-				}
-			}
-
-			const whoCares = await this.invasionWhoCares(data)
+			const whoCares = await this.lureWhoCares(data)
 
 			if (whoCares.length) {
-				this.log.info(`${logReference}: Invasion of type ${data.gruntType} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Lure of type ${data.lureTypeNameEng} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${logReference}: Invasion of type ${data.gruntType} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Lure of type ${data.lureTypeNameEng} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			let discordCacheBad = true // assume the worst
@@ -180,73 +156,8 @@ class Pokestop extends Controller {
 				const translator = this.translatorFactory.Translator(language)
 
 				// full build
-				if (data.gruntTypeId) {
-					data.gender = 0
-					data.gruntName = translator.translate('Grunt')
-					data.gruntType = translator.translate('Mixed')
-					data.gruntRewards = ''
-					if (data.gruntTypeId in this.GameData.grunts) {
-						const gruntType = this.GameData.grunts[data.gruntTypeId]
-						data.gruntName = translator.translate(gruntType.grunt)
-						data.gender = gruntType.gender
-						data.genderDataEng = this.GameData.utilData.genders[data.gender]
-						if (this.GameData.utilData.types[gruntType.type]) {
-							data.gruntTypeEmoji = translator.translate(this.GameData.utilData.types[gruntType.type].emoji)
-						}
-						if (gruntType.type in this.GameData.utilData.types) {
-							data.gruntTypeColor = this.GameData.utilData.types[gruntType.type].color
-						}
-						data.gruntType = translator.translate(gruntType.type)
-
-						let gruntRewards = ''
-						const gruntRewardsList = {}
-						gruntRewardsList.first = { chance: 100, monsters: [] }
-						if (gruntType.encounters) {
-							if (gruntType.second_reward && gruntType.encounters.second) {
-								// one out of two rewards
-								gruntRewards = '85%: '
-								gruntRewardsList.first = { chance: 85, monsters: [] }
-								let first = true
-								gruntType.encounters.first.forEach((fr) => {
-									if (!first) gruntRewards += ', '
-									else first = false
-
-									const firstReward = +fr
-									const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
-									gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
-									gruntRewardsList.first.monsters.push({ id: firstReward, name: translator.translate(firstRewardMonster.name) })
-								})
-								gruntRewards += '\\n15%: '
-								gruntRewardsList.second = { chance: 15, monsters: [] }
-								first = true
-								gruntType.encounters.second.forEach((sr) => {
-									if (!first) gruntRewards += ', '
-									else first = false
-
-									const secondReward = +sr
-									const secondRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === secondReward && !mon.form.id)
-
-									gruntRewards += secondRewardMonster ? translator.translate(secondRewardMonster.name) : ''
-									gruntRewardsList.second.monsters.push({ id: secondReward, name: translator.translate(secondRewardMonster.name) })
-								})
-							} else {
-								// Single Reward 100% of encounter (might vary based on actual fight).
-								let first = true
-								gruntType.encounters.first.forEach((fr) => {
-									if (!first) gruntRewards += ', '
-									else first = false
-
-									const firstReward = +fr
-									const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
-									gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
-									gruntRewardsList.first.monsters.push({ id: firstReward, name: translator.translate(firstRewardMonster.name) })
-								})
-							}
-							data.gruntRewards = gruntRewards
-							data.gruntRewardsList = gruntRewardsList
-						}
-					}
-				}
+				data.lureTypeName = translator.translate(data.lureTypeNameEng)
+				data.lureType = data.lureTypeName
 
 				const view = {
 					...geoResult,
@@ -255,16 +166,14 @@ class Pokestop extends Controller {
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
-					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 
-				const mustache = this.getDts(logReference, 'invasion', platform, cares.template, language)
+				const mustache = this.getDts(logReference, 'lure', platform, cares.template, language)
 				if (mustache) {
 					const message = JSON.parse(mustache(view, { data: { language } }))
 
@@ -296,9 +205,9 @@ class Pokestop extends Controller {
 
 			return jobs
 		} catch (e) {
-			this.log.error(`${data.pokestop_id}: Can't seem to handle pokestop: `, e, data)
+			this.log.error(`${data.pokestop_id}: Can't seem to handle pokestop(lure): `, e, data)
 		}
 	}
 }
 
-module.exports = Pokestop
+module.exports = PokestopLure

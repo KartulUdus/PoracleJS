@@ -3,7 +3,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo
+			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -73,7 +73,7 @@ exports.run = async (client, msg, args) => {
 			if (levels.length) {
 				const lvlResult = await client.query.deleteWhereInQuery('egg', {
 					id: target.id,
-					profile_no: currentProfileNo
+					profile_no: currentProfileNo,
 				}, levels, 'level')
 				client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} eggs`)
 				result += lvlResult
@@ -81,7 +81,8 @@ exports.run = async (client, msg, args) => {
 			if (commandEverything) {
 				const everythingResult = await client.query.deleteQuery('egg', {
 					id: target.id,
-					profile_no: currentProfileNo })
+					profile_no: currentProfileNo,
+				})
 				client.log.info(`${target.name} stopped tracking all eggs`)
 				result += everythingResult
 			}

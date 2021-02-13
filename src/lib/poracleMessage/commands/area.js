@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, language, currentProfileNo
+			canContinue, target, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -56,7 +56,6 @@ exports.run = async (client, msg, args) => {
 					return await msg.reply(`${translator.translate('no valid areas there, please use one of')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
 				}
 				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
-
 
 				if (removeAreas.length) {
 					await msg.reply(`${translator.translate('Removed areas:')} ${removeAreas}`)

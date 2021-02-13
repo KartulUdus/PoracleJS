@@ -485,6 +485,28 @@
 		"38.5": 0.781790050767666,
 		"39.5": 0.787473608513275
 	},
+	"lures": {
+		"501": {
+			"name": "Normal Lure",
+			"emoji": "",
+			"color": "D000C0"
+		},
+		"502": {
+			"name": "Glacial Lure",
+			"emoji": "",
+			"color": "2973DD"
+		},
+		"503": {
+			"name": "Mossy Lure",
+			"emoji": "",
+			"color": "86A630"
+		},
+		"504": {
+			"name": "Magnetic Lure",
+			"emoji": "",
+			"color": "9FA6C1"
+		}
+	},
 	"genders": {
 		"0": {
 			"name": "",

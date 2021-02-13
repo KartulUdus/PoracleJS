@@ -15,6 +15,14 @@ class PoracleDiscordMessage {
 		return [this.msg.mentions.users.array().map((u) => `<@!${u.id}>`), this.msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 	}
 
+	getMentions() {
+		const targets = []
+		this.msg.mentions.users.array().forEach((user) => targets.push({ id: user.id, name: user.tag, type: 'user' }))
+		this.msg.mentions.channels.array().forEach((channel) => targets.push({ id: channel.id, name: channel.name, type: 'channel' }))
+
+		return targets
+	}
+
 	get isFromAdmin() {
 		return (this.client.config.discord.admins.includes(this.msg.author.id))
 	}

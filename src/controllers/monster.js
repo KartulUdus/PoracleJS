@@ -29,6 +29,7 @@ class Monster extends Controller {
 		(${pokemonQueryString}) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
+		min_time<=${data.tthSeconds} and
 		min_cp<=${data.cp} and
 		max_cp>=${data.cp} and
 		(gender = ${data.gender} or gender = 0) and
@@ -64,13 +65,13 @@ class Monster extends Controller {
 						monsters.distance = 0 and (${areastring})
 					)
 				)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 				`)
+			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 		} else {
 			query = query.concat(`
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
-					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 					`)
+			//					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 		}
 		this.log.silly(`${data.encounter_id}: Query ${query}`)
 
@@ -229,6 +230,7 @@ class Monster extends Controller {
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivColor = this.findIvColor(data.iv)
+			data.tthSeconds = data.disappear_time * 1000 - Date.now()
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.distime = data.disappearTime // deprecated
@@ -323,7 +325,7 @@ class Monster extends Controller {
 			}
 
 			// Stop handling if it already disappeared or is about to go away
-			if ((data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) && !weatherChangeAlertJobs[0]) {
+			if ((data.tth.firstDateWasLater || data.tthSeconds < minTth) && !weatherChangeAlertJobs[0]) {
 				this.log.verbose(`${data.encounter_id}: ${monster.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
