@@ -43,7 +43,7 @@ class PoracleDiscordUtil {
 		}
 
 		let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
-		if (webhookName) webhookName = webhookName.replace(this.client.translator.translate('name'), '')
+		if (webhookName) [,, webhookName] = webhookName.match(this.client.re.nameRe)
 		if (this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
 			target = {
 				id: this.msg.msg.channel.id,
