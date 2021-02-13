@@ -16,7 +16,7 @@ class Worker {
 		this.rehydrateTimeouts = rehydrateTimeouts
 		this.discordMessageTimeouts = new NodeCache()
 		this.discordQueue = []
-		this.queueProcessor = new FairPromiseQueue(this.discordQueue, 5, ((entry) => entry.target))
+		this.queueProcessor = new FairPromiseQueue(this.discordQueue, this.config.tuning.concurrentDiscordDestinationsPerBot, ((entry) => entry.target))
 		this.bounceWorker()
 	}
 

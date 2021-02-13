@@ -322,7 +322,7 @@ async function run() {
 
 const PromiseQueue = require('./lib/PromiseQueue')
 
-const alarmProcessor = new PromiseQueue(fastify.hookQueue, 10)
+const alarmProcessor = new PromiseQueue(fastify.hookQueue, config.tuning.concurrentWebhookProcessors)
 
 async function processOne(hook) {
 	try {

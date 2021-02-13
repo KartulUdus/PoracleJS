@@ -13,7 +13,7 @@ class DiscordWebhookWorker {
 		this.client = {}
 		this.axios = axios
 		this.webhookQueue = []
-		this.queueProcessor = new FairPromiseQueue(this.webhookQueue, 10, ((t) => t.target))
+		this.queueProcessor = new FairPromiseQueue(this.webhookQueue, this.config.tuning.concurrentDiscordWebhookConnections, ((t) => t.target))
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -41,8 +41,8 @@ class DiscordWebhookWorker {
 		try {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
-			this.logs.discord.info(`${logReference}: ${data.name} WEBHOOK Sending discord message`)
-			this.logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
+			this.logs.discord.info(`${logReference}: http(s)> ${data.name} WEBHOOK Sending discord message`)
+			this.logs.discord.debug(`${logReference}: http(s)> ${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
 
 			let retryLimit = 5
 			let shouldRetry = true

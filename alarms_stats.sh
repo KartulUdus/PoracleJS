@@ -31,13 +31,13 @@ then
 
    echo -ne "\e[1;36m"
    echo -n "DISCORD ALARMS SENT : "
-   cat $working_dir/discord*$dt* | grep info | egrep "USER|CHANNEL|GROUP" | wc -l
+   cat $working_dir/discord*$dt* | grep info | egrep "USER|CHANNEL|WEBHOOK" | wc -l
    echo -n "DISCORD USERS       : "
-   cat $working_dir/discord*$dt* | grep info | egrep "USER|CHANNEL|GROUP" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | wc -l
+   cat $working_dir/discord*$dt* | grep info | egrep "USER|CHANNEL|WEBHOOK" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | wc -l
    echo ""
    echo -e "\e[4;35mTOP 10 Users / Channels"
    echo -e "\e[0m"
-   cat $working_dir/discord*$dt* | grep info | egrep "USER|CHANNEL|GROUP" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | sort -rn | head -10
+   cat $working_dir/discord*$dt* | grep info | egrep "USER|CHANNEL|WEBHOOK" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | sort -rn | head -10
    echo ""
 
 else

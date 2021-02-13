@@ -138,5 +138,12 @@
         "spriteWidth": 20,
         "scale": 2,
         "type": "klokantech-basic"
-      }
+      },
+    "tuning": {
+      "maxDatabaseConnections": 15,
+      "concurrentWebhookProcessors": 10,
+      "concurrentDiscordDestinationsPerBot": 5,
+      "concurrentTelegramDestinationsPerBot": 5,
+      "concurrentDiscordWebhookConnections": 10
+    }
 }

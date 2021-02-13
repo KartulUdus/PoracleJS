@@ -23,7 +23,7 @@ class Telegram {
 		this.bot = telegraf
 		this.id = id
 		this.telegramQueue = []
-		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, 5, ((entry) => entry.target))
+		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, this.config.tuning.concurrentTelegramDestinationsPerBot, ((entry) => entry.target))
 		this.bot
 			.use(commandParser(this.translatorFactory))
 			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory))
