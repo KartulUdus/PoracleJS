@@ -46,7 +46,7 @@ class PoracleTelegramUtil {
 		}
 
 		let channelName = args.find((arg) => arg.match(this.client.re.nameRe))
-		if (channelName) channelName = channelName.replace(this.client.translator.translate('name'), '')
+		if (channelName) [,, channelName] = channelName.match(this.client.re.nameRe)
 		if (this.msg.isFromAdmin && !this.msg.isDM) {
 			target = {
 				id: this.msg.ctx.update.message.chat.id.toString(),
