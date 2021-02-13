@@ -1,10 +1,21 @@
 {
-    "server": {
-        "host": "127.0.0.1",
-        "port": "3030",
-        "ipWhitelist": [],
-        "ipBlacklist": []
-    },
+  // This is the Poracle default configuration settings. Do not change this file,
+  // it is updated when new config parameters are added
+
+  // Copy any sections you wish to modify your local.json
+
+  // Server settings
+  //  -- host name to listen on 127.0.0.1 only localhost; 0.0.0.0 would be in all network interfaces
+  //  ipWhitelist, ipBlacklist - array of whitelisted or blacklisted  addresses
+
+  "server": {
+    "host": "127.0.0.1",
+    "port": "3030",
+    "ipWhitelist": [],
+    "ipBlacklist": []
+  },
+
+  // These are general parameters
     "general": {
         "environment": "production",
         "alertMinimumTime" : 120,
