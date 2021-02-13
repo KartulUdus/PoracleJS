@@ -29,7 +29,7 @@
         "consoleLogLevel": "verbose",
         "logLevel": "verbose",
         "enableLogs": {
-          "webhooks": true,
+          "webhooks": false,
           "discord": true,
           "telegram": true
         },
