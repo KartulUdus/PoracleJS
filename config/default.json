@@ -26,15 +26,15 @@
         "persistDuplicateCache": false
     },
     "logger": {
-        "consoleLogLevel": "verbose",
+        "consoleLogLevel": "warn",
         "logLevel": "verbose",
         "enableLogs": {
-          "webhooks": true,
+          "webhooks": false,
           "discord": true,
           "telegram": true
         },
         "dailyLogLimit": 7,
-        "webhookLogLimit": 12
+        "webhookLogLimit": 2
     },
     "database": {
         "client": "sqlite",
