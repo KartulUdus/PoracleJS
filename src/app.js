@@ -106,7 +106,7 @@ if (config.discord.enabled) {
 	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
 
 	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-		roleWorker = new DiscordWorker(config.discord.token[0], 999, config)
+		roleWorker = new DiscordWorker(config.discord.token[0], 999, config, logs)
 	}
 }
 
