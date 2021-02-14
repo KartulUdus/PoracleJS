@@ -57,5 +57,8 @@ module.exports = (translatorFactory) => ({
 	friRe: createCommandRegex(translatorFactory, 'fri', '(\\d\\d?)?(-?)(\\d\\d?)?'),
 	satRe: createCommandRegex(translatorFactory, 'sat', '(\\d\\d?)?(-?)(\\d\\d?)?'),
 	sunRe: createCommandRegex(translatorFactory, 'sun', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	weekdayRe: createCommandRegex(translatorFactory, 'weekday', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+	weekendRe: createCommandRegex(translatorFactory, 'weekend', '(\\d\\d?)?(-?)(\\d\\d?)?'),
+
 }
 )

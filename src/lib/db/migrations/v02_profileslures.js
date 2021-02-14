@@ -82,7 +82,7 @@ exports.up = async function migrationUp(knex) {
 		table.text('area').notNullable().defaultTo('[]')
 		table.float('latitude', 14, 10).notNullable().defaultTo(0)
 		table.float('longitude', 14, 10).notNullable().defaultTo(0)
-		table.string('active_hours').notNullable()
+		table.string('active_hours').notNullable().defaultTo('[]')
 		table.unique(['id', 'profile_no'], 'profile_unique')
 	})
 

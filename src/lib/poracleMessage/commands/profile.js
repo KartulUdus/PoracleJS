@@ -25,11 +25,11 @@ exports.run = async (client, msg, args) => {
 
 				const name = args[1]
 				if (!name) {
-					await msg.reply('Invalid profile name')
+					await msg.reply(translator.translate('That is not a valid profile name'))
 					return
 				}
 				if (profiles.some((x) => x.name == name)) {
-					await msg.reply('Profile name already exists')
+					await msg.reply(translator.translate('That profile name already exists'))
 					return
 				}
 				let newProfileNo = 1
@@ -76,7 +76,7 @@ exports.run = async (client, msg, args) => {
 							name: args[1],
 						})
 				}
-				const reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : '🙅'
+				const reaction = result.length || client.config.database.client === 'sqlite3' ? '✅' : '🙅'
 				await msg.react(reaction)
 
 				break
@@ -88,9 +88,19 @@ exports.run = async (client, msg, args) => {
 				} else {
 					let response = ''
 					for (const profile of profiles) {
-						response = response.concat(`${profile.profile_no}. ${profile.name} - areas: ${profile.area} - ${profile.latitude} ${profile.longitude} - ${profile.active_hours}\n`)
+						let timeString = ''
+						if (profile.active_hours.length > 3) {
+							const times = JSON.parse(profile.active_hours)
+							const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+							for (const t of times) {
+								timeString = timeString.concat(`    ${translator.translate(dayNames[t.day])} ${t.start} - ${t.end}\n`)
+							}
+						}
+
+						response = response.concat(`${profile.profile_no}. ${profile.name} - areas: ${profile.area} - ${profile.latitude} ${profile.longitude}\n${timeString}`)
 					}
-					await msg.reply(`${translator.translate('Current configured areas are:')}\n${response}`)
+					await msg.reply(`${translator.translate('Currently configured profiles are:')}\n${response}`)
 				}
 				break
 			}
@@ -98,10 +108,11 @@ exports.run = async (client, msg, args) => {
 				const timeArray = []
 				if (args[1]) {
 					const daysRe = [client.re.sunRe, client.re.monRe, client.re.tueRe,
-						client.re.wedRe, client.re.thuRe, client.re.friRe, client.re.satRe]
+						client.re.wedRe, client.re.thuRe, client.re.friRe, client.re.satRe,
+						client.re.weekdayRe, client.re.weekendRe]
 
 					for (const element of args) {
-						for (let day = 0; day < 7; day++) {
+						for (let day = 0; day < 9; day++) {
 							const match = element.match(daysRe[day])
 							if (match) {
 								let start = match[3]; let end = match[5]
@@ -119,11 +130,31 @@ exports.run = async (client, msg, args) => {
 								if (start && match[4] && !end) {
 									end = 24
 								}
-								timeArray.push({
-									day,
-									start,
-									end,
-								})
+								if (day < 7) {
+									timeArray.push({
+										day,
+										start,
+										end,
+									})
+								}
+								if (day == 7) {
+									for (const d of [1, 2, 3, 4, 5]) {
+										timeArray.push({
+											day: d,
+											start,
+											end,
+										})
+									}
+								}
+								if (day == 8) {
+									for (const d of [0, 6]) {
+										timeArray.push({
+											day: d,
+											start,
+											end,
+										})
+									}
+								}
 							}
 						}
 					}

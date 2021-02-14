@@ -530,8 +530,8 @@ const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
 if (NODE_MAJOR_VERSION < 12) {
 	throw new Error('Requires Node 12 (or higher)')
 }
-
-schedule.scheduleJob({ minute: [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55] }, async () => {
+// 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55
+schedule.scheduleJob({ minute: [0] }, async () => {
 	const now = new Date()
 	const dow = now.getDay()
 	const hour = now.getHours()
