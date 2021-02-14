@@ -18,10 +18,10 @@
   // These are general parameters
   //
   // alertMinimumTime - time inside which alerts will not be generated (120s - 2mins before expiration no alert)
-  // imgUrl
-  // stickerUrl
+  // imgUrl - base url for poracle creation of {{imgUrl}} reference
+  // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers
   // locale
-  // disabledCommands
+  // disabledCommands - array of commands to disable
   // disableXXX - disables individual hook processing for particular scanner webhook types
   // roleCheckDeletionsAllowed
   // availableLanguages
@@ -29,7 +29,9 @@
   // - Each language can have it's own call word which pre-sets that language, and you also define the help text
   // - command so that Poracle can always answer help in native language regardless of the users current settings
   // defaultTemplateName
-  // persistDuplicateCache
+  // persistDuplicateCache - whether to store the webhook duplicate cache on exit. If you have a busy system
+  //   this could be very large and slow down shutdown (many gigabytes) and startup. This is stored in the .cache
+  //   directory
 
   "general": {
       "environment": "production",
@@ -77,10 +79,11 @@
       "webhookLogLimit": 12
   },
   //
-  // Database connection strings.  client can be sqlite3 or mysql
+  // Database connection strings.  client can be mysql or sqlite3, but PoracleWeb only
+  //    works with mysql, so...
   //
   "database": {
-      "client": "sqlite3",
+      "client": "mysql",
       "conn": {
           "host": "127.0.0.1",
           "database": "poracle",
@@ -95,11 +98,33 @@
       "addressFormat": "{{{streetName}}} {{streetNumber}}",
       "language": "en"
   },
+
+  //
+  // Geofence - default format is that created here http://geo.jasparke.net/ - named fence
+  //   You can also use a geojson file if you would like to share with other tools but you
+  //   need to add the 'name' field. If a single
+  //   area you can use the default geofence name here
+  //
+
   "geofence": {
       "path": "./config/geofence.json",
       "defaultGeofenceName": "city",
       "defaultGeofenceColor": "#3399ff"
   },
+
+  //
+  // Weather support
+  // weatherChangeAlert - To enable or disable the weather change alerts
+  // showAlteredPokemon - Track weather changed pokémon to be able to be shown in DTS
+  // showAlteredPokemonStaticMap - Show weather changed on static map
+  // showAlteredPokemonMaxCount - Max number of changed pokémon allowed per alert
+  // enableWeatherForecast - To enable or disable weather forecast (using accuweather)
+  // apiKeyAccuWeather - AccuWeather API keys
+  // apiKeyDayQuota - Maximum API calls allowed per day
+  // smartForecast - use smart update of weather forecast (pull on demand if no weather data available for
+  //    a given cell, otherwise will wait for next standard refresh)
+  // localFirstFetchHOD - First hour of the day for the first API call (3am local seems best)
+  // forecastRefreshInterval - API call interval
 
   "weather": {
       "weatherChangeAlert": false,
@@ -114,7 +139,13 @@
       "forecastRefreshInterval": 8
   },
   //
-  //
+  // PVP tracking fine tuning
+  // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean
+  //   would match an eevee)
+  // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
+  //   a filtering calculation
+  // pvpFilter* - these filters are used as minimums on the track command to help users get
+  //   PVP tracking right and to eliminate unexpectedly large tracks
   //
   "pvp": {
       "pvpEvolutionDirectTracking": false,
@@ -125,6 +156,10 @@
       "pvpFilterGreatMinCP": 1450,
       "pvpFilterUltraMinCP": 2450
   },
+  // everything restrictions:
+  //   * tbc (change coming)
+  // defaultDistance - if you are doing distance tracking only, this is a default for users
+  // maxDistance - restrict users from having too large a tracking circle
   "tracking": {
       "disableEverythingTracking": false,
       "forceEverythingSeparately": false,
@@ -153,7 +188,6 @@
   // dmLogChannelID - an ID of a channel to use to log all poracle commands to (to watch
   //   users); dmLogChannelDeletion time - time to clean up after (seconds)
   //
-
   "discord": {
     "enabled": true,
     "disableAutoGreetings": false,
@@ -181,8 +215,17 @@
 
   //
   // Telegram settings
-  //
-  //
+  // checkRole - whether to check all telegram users for membership of a registration group
+  //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckDeletionsAllowed
+  //   must be true to actually carry out the deletions rather than just logging them)
+  // admins - admin user id
+  // channels - these are the groups that can be used for registration (it should really
+  //   be called groups...). Note if they don't start with -100 then they may not be
+  //   supergroups yet - google to find out how to make your group one.
+  //   You can get the current group (and your) ids with the /identify command
+  // groupWelcomeText - message text (in channel) when someone registers. Users have to
+  //   select the 'start' option on the bot in the telegram client before it can message
+  //   them and this can be used to remind them of that
 
   "telegram": {
     "enabled": false,
@@ -199,8 +242,15 @@
   //
   //  provider, providerURL - these are used for address lookups. Can be 'none',
   //   'nominatim' for a local nominatim installation (recommended),
-  //   ...
-  //  staticProvider -
+  //   https://github.com/mediagis/nominatim-docker
+  //   or google (geocoding key provides an array of google API keys)
+  //
+  //  staticProvider - this is your provider of map tiles; can be tileservercache
+  //   (swift tile server - https://github.com/123FLO321/SwiftTileserverCache)
+  //   or google,osm,mapbox - staticKey provides an array of keys to use
+  //   width/height/zoom/etc provide parameters for these while tileservercache
+  //   uses templates (examples provided in tileservercache_templates folder)
+
     "geocoding": {
       "provider": "none",
       "providerURL": "Your Nominatim Server Address",
