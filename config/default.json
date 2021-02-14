@@ -16,133 +16,206 @@
   },
 
   // These are general parameters
-    "general": {
-        "environment": "production",
-        "alertMinimumTime" : 120,
-        "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
-        "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
-        "locale": "en",
-        "disabledCommands": [],
-        "disablePokemon": false,
-        "disableRaid": false,
-        "disableInvasion": false,
-        "disablePokestop": false,
-        "disableQuest": false,
-        "disableWeather": false,
-        "roleCheckDeletionsAllowed": false,
-        "availableLanguages": {
-          "en": {"poracle": "poracle", "help": "help" }
-        },
-        "defaultTemplateName": 1,
-        "persistDuplicateCache": false
-    },
-    "logger": {
-        "consoleLogLevel": "verbose",
-        "logLevel": "verbose",
-        "enableLogs": {
-          "webhooks": false,
-          "discord": true,
-          "telegram": true
-        },
-        "dailyLogLimit": 7,
-        "webhookLogLimit": 12
-    },
-    "database": {
-        "client": "sqlite",
-        "conn": {
-            "host": "127.0.0.1",
-            "database": "poracle",
-            "user": "poracleuser",
-            "password": "poraclepassword",
-            "port": 3306
-        }
-    },
-    "locale": {
-        "timeformat": "en-gb",
-        "time": "LTS",
-        "addressFormat": "{{{streetName}}} {{streetNumber}}",
-        "language": "en"
-    },
-    "geofence": {
-        "path": "./config/geofence.json",
-        "defaultGeofenceName": "city",
-        "defaultGeofenceColor": "#3399ff"
-    },
-    "weather": {
-        "weatherChangeAlert": false,
-        "showAlteredPokemon": false,
-        "showAlteredPokemonStaticMap": false,
-        "showAlteredPokemonMaxCount": 10,
-        "enableWeatherForecast": false,
-        "apiKeyAccuWeather": ["key1", "key2", "key3"],
-        "apiKeyDayQuota": 50,
-        "smartForecast": false,
-        "localFirstFetchHOD": 3,
-        "forecastRefreshInterval": 8
-    },
-    "pvp": {
-        "pvpEvolutionDirectTracking": false,
-        "pvpDisplayMaxRank": 10,
-        "pvpDisplayGreatMinCP": 1450,
-        "pvpDisplayUltraMinCP": 2450,
-        "pvpFilterMaxRank": 10,
-        "pvpFilterGreatMinCP": 1450,
-        "pvpFilterUltraMinCP": 2450
-    },
-    "tracking": {
-        "disableEverythingTracking": false,
-        "forceEverythingSeparately": false,
-        "defaultDistance": 0,
-        "maxDistance": 0
-    },
-    "discord": {
-        "enabled": true,
-        "disableAutoGreetings": false,
-        "checkRole": false,
-        "checkRoleInterval": 6,
-        "unknownResponse": false,
-        "invite": "",
-        "token": ["discord bot token"],
-        "guilds": ["guilds your bot will operate on"],
-        "channels": ["channels to listen for poracle activation commands"],
-        "userRole": ["roles to grant access for"],
-        "admins": ["ids of admin accounts"],
-        "prefix": "!",
-        "limitSec": 240,
-        "limitAmount": 20,
-        "ivColors": [
-            "#9D9D9D",
-            "#FFFFFF",
-            "#1EFF00",
-            "#0070DD",
-            "#A335EE",
-            "#FF8000"
-        ],
-        "dmLogChannelID": "",
-        "dmLogChannelDeletionTime": 0
+  //
+  // alertMinimumTime - time inside which alerts will not be generated (120s - 2mins before expiration no alert)
+  // imgUrl
+  // stickerUrl
+  // locale
+  // disabledCommands
+  // disableXXX - disables individual hook processing for particular scanner webhook types
+  // roleCheckDeletionsAllowed
+  // availableLanguages
+  // - This is an array of available languages that users can swap between using the !language command
+  // - Each language can have it's own call word which pre-sets that language, and you also define the help text
+  // - command so that Poracle can always answer help in native language regardless of the users current settings
+  // defaultTemplateName
+  // persistDuplicateCache
+
+  "general": {
+      "environment": "production",
+      "alertMinimumTime" : 120,
+      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
+      "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
+      "locale": "en",
+      "disabledCommands": [],
+      "disablePokemon": false,
+      "disableRaid": false,
+      "disableInvasion": false,
+      "disablePokestop": false,
+      "disableQuest": false,
+      "disableWeather": false,
+      "roleCheckDeletionsAllowed": false,
+      "availableLanguages": {
+        "en": {"poracle": "poracle", "help": "help" }
       },
-      "telegram": {
-        "enabled": false,
-        "checkRole": false,
-        "checkRoleInterval": 6,
-        "token": "telegram bot token",
-        "admins": ["admin ids"],
-        "channels": ["channels to listen for /poracle"],
-        "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
+      "defaultTemplateName": 1,
+      "persistDuplicateCache": false
+  },
+
+  //
+  // Log levels - silly, debug, verbose, info, warn
+  //
+  // consoleLogLevel - this is the level displayed on the screen (and perhaps in pm2 or systemd logs if you run that
+  // way)
+  // logLevel - this is the log level on disk, affecting all logs
+  // enableLogs - can turn on/off three optional logs
+  // dailyLogLimit - the number of days to keep the daily logs (everything aside from webhooks)
+  // webhookLogLimit - the number of hours to keep the webhook logs, if enabled
+  //
+  // Suggestion - start at verbose, info will be a bit less logging. If you are trying to track down an issue
+  // debug has more detail.
+
+  "logger": {
+      "consoleLogLevel": "verbose",
+      "logLevel": "verbose",
+      "enableLogs": {
+        "webhooks": false,
+        "discord": true,
+        "telegram": true
       },
-      "geocoding": {
-        "provider": "none",
-        "providerURL": "Your Nominatim Server Address",
-        "staticProvider": "none",
-        "staticProviderURL": "Your TileServerCache Server Address",
-        "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
-        "staticKey":["Your MapQuest or Google Key"],
-        "width": 320,
-        "height": 200,
-        "zoom": 15,
-        "spriteHeight": 20,
-        "spriteWidth": 20,
-        "scale": 2,
-        "type": "klokantech-basic"
+      "dailyLogLimit": 7,
+      "webhookLogLimit": 12
+  },
+  //
+  // Database connection strings.  client can be sqlite3 or mysql
+  //
+  "database": {
+      "client": "sqlite3",
+      "conn": {
+          "host": "127.0.0.1",
+          "database": "poracle",
+          "user": "poracleuser",
+          "password": "poraclepassword",
+          "port": 3306
       }
+  },
+  "locale": {
+      "timeformat": "en-gb",
+      "time": "LTS",
+      "addressFormat": "{{{streetName}}} {{streetNumber}}",
+      "language": "en"
+  },
+  "geofence": {
+      "path": "./config/geofence.json",
+      "defaultGeofenceName": "city",
+      "defaultGeofenceColor": "#3399ff"
+  },
+
+  "weather": {
+      "weatherChangeAlert": false,
+      "showAlteredPokemon": false,
+      "showAlteredPokemonStaticMap": false,
+      "showAlteredPokemonMaxCount": 10,
+      "enableWeatherForecast": false,
+      "apiKeyAccuWeather": ["key1", "key2", "key3"],
+      "apiKeyDayQuota": 50,
+      "smartForecast": false,
+      "localFirstFetchHOD": 3,
+      "forecastRefreshInterval": 8
+  },
+  //
+  //
+  //
+  "pvp": {
+      "pvpEvolutionDirectTracking": false,
+      "pvpDisplayMaxRank": 10,
+      "pvpDisplayGreatMinCP": 1450,
+      "pvpDisplayUltraMinCP": 2450,
+      "pvpFilterMaxRank": 10,
+      "pvpFilterGreatMinCP": 1450,
+      "pvpFilterUltraMinCP": 2450
+  },
+  "tracking": {
+      "disableEverythingTracking": false,
+      "forceEverythingSeparately": false,
+      "defaultDistance": 0,
+      "maxDistance": 0
+  },
+  //
+  // Configure your discord bot(s)
+  //
+  // prefix - prefix for commands
+  // disableAutoGreetings - whether Poracle will greet users who are assigned a role and
+  //   get permission to use the bot
+  // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
+  //   hours, deleting them if not (note general.roleCheckDeletionsAllowed must be true to
+  //   actually carry out the deletions rather than just logging them)
+  // token - array of discord tokens - poracle can support any number of bots for transmitting
+  //   messages but the first will be used as the command controller
+  // guilds - the guilds (servers) that poracle will be on
+  // channels - the ids of channels that can be used for the !poracle registration
+  // userRoles - roles which will automatically grant poracle access (without registration
+  //   required. Can be empty
+  // admins - the ids of admins (those who can add channels using !channel add and
+  //   perform other admin functions)
+  // prefix - the prefix character for poracle commands, usually !
+  // ivColors - array of 6 color codes for pokemon IV rankings
+  // dmLogChannelID - an ID of a channel to use to log all poracle commands to (to watch
+  //   users); dmLogChannelDeletion time - time to clean up after (seconds)
+  //
+
+  "discord": {
+    "enabled": true,
+    "disableAutoGreetings": false,
+    "checkRole": false,
+    "checkRoleInterval": 6,
+    "token": ["discord bot token"],
+    "guilds": ["guilds your bot will operate on"],
+    "channels": ["channels to listen for poracle activation commands"],
+    "userRole": ["roles to grant access for"],
+    "admins": ["ids of admin accounts"],
+    "prefix": "!",
+    "limitSec": 240,
+    "limitAmount": 20,
+    "ivColors": [
+        "#9D9D9D",
+        "#FFFFFF",
+        "#1EFF00",
+        "#0070DD",
+        "#A335EE",
+        "#FF8000"
+    ],
+    "dmLogChannelID": "",
+    "dmLogChannelDeletionTime": 0
+  },
+
+  //
+  // Telegram settings
+  //
+  //
+
+  "telegram": {
+    "enabled": false,
+    "checkRole": false,
+    "checkRoleInterval": 6,
+    "token": "telegram bot token",
+    "admins": ["admin ids"],
+    "channels": ["groups to listen in /poracle"],
+    "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
+  },
+
+  //
+  // geocoding section
+  //
+  //  provider, providerURL - these are used for address lookups. Can be 'none',
+  //   'nominatim' for a local nominatim installation (recommended),
+  //   ...
+  //  staticProvider -
+    "geocoding": {
+      "provider": "none",
+      "providerURL": "Your Nominatim Server Address",
+      "staticProvider": "none",
+      "staticProviderURL": "Your TileServerCache Server Address",
+
+      "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
+
+      "staticKey":["Your MapQuest or Google Key"],
+      "width": 320,
+      "height": 200,
+      "zoom": 15,
+      "spriteHeight": 20,
+      "spriteWidth": 20,
+      "scale": 2,
+      "type": "klokantech-basic"
+    }
 }
