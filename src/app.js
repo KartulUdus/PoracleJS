@@ -339,25 +339,24 @@ async function run() {
 
 const PromiseQueue = require('./lib/PromiseQueue')
 
-const alarmProcessor = new PromiseQueue(fastify.hookQueue, 10)
+const alarmProcessor = new PromiseQueue(fastify.hookQueue, 1)
 
-const { Worker, MessageChannel } = require("worker_threads");
+const { Worker, MessageChannel } = require('worker_threads')
 
-const worker = new Worker(path.join(__dirname, "./controllerWorker.js"))
+const worker = new Worker(path.join(__dirname, './controllerWorker.js'))
 
-worker.on("message", (res) => {
-
+worker.on('message', (res) => {
 	fastify.discordQueue.push(...res.discordQueue)
 
 	fastify.telegramQueue.push(...res.telegramQueue)
 })
 
-worker.on("error", (error) => console.error("error", error))
-worker.on("exit", () => console.log("exit"))
+worker.on('error', (error) => console.error('error', error))
+worker.on('exit', () => console.log('exit'))
 
 async function processOne(hook) {
 	try {
-//		console.log('processOne')
+		//		console.log('processOne')
 		let processHook
 
 		switch (hook.type) {
@@ -471,9 +470,7 @@ async function handleAlarms() {
 	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
 		if ((Math.random() * 100) > 80) fastify.logger.info(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
 
-		while(fastify.hookQueue.length) {
-			await processOne(fastify.hookQueue.shift())
-		}
+		alarmProcessor.run(processOne)
 	}
 }
 
@@ -483,4 +480,4 @@ if (NODE_MAJOR_VERSION < 12) {
 }
 
 run()
-setInterval(handleAlarms, 10)
+setInterval(handleAlarms, 100)
