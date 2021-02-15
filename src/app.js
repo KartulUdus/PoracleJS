@@ -537,27 +537,54 @@ schedule.scheduleJob({ minute: [0] }, async () => {
 	const hour = now.getHours()
 	// sunday = 0
 
-	log.info('Profile Check: Checking for active profile changes')
-	const profilesToCheck = await fastify.monsterController.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
+	try {
+		log.info('Profile Check: Checking for active profile changes')
+		const humans = await fastify.monsterController.selectAllQuery('humans', {})
+		const profilesToCheck = await fastify.monsterController.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
-	let lastId
-	for (const profile of profilesToCheck) {
-		if (profile.id != lastId) {
-			const timings = JSON.parse(profile.active_hours)
-			const active = timings.some((row) => row.day == dow && row.start <= hour && hour < row.end)
-			if (active) {
-				log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
+		let lastId
+		for (const profile of profilesToCheck) {
+			if (profile.id != lastId) {
+				const timings = JSON.parse(profile.active_hours)
+				const active = timings.some((row) => row.day == dow && row.start <= hour && hour < row.end)
+				if (active) {
+					const human = humans.find((x) => x.id == profile.id)
 
-				lastId = profile.id
-				await fastify.monsterController.updateQuery('humans',
-					{
-						current_profile_no: profile.profile_no,
-						area: profile.area,
-						latitude: profile.latitude,
-						longitude: profile.longitude,
-					}, { id: profile.id })
+					if (human.current_profile_no != profile.profile_no) {
+
+						const userTranslator = translatorFactory.Translator(human.language)
+
+						const job = {
+							type: human.type,
+							target: human.id,
+							name: human.name,
+							ping: '',
+							clean: false,
+							message: { content: userTranslator.translateFormat('I have set your profile to: {0}', profile.name) },
+							logReference: '',
+							tth: { hours: 1, minutes: 0, seconds: 0}
+						}
+
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+
+						log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
+
+						lastId = profile.id
+						await fastify.monsterController.updateQuery('humans',
+							{
+								current_profile_no: profile.profile_no,
+								area: profile.area,
+								latitude: profile.latitude,
+								longitude: profile.longitude,
+							}, {id: profile.id})
+					}
+				}
 			}
 		}
+	}
+	catch (err) {
+		log.error('Error setting profiles', err)
 	}
 })
 
