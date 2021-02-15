@@ -343,18 +343,34 @@ const alarmProcessor = new PromiseQueue(fastify.hookQueue, 1)
 
 const { Worker, MessageChannel } = require('worker_threads')
 
-const worker = new Worker(path.join(__dirname, './controllerWorker.js'))
+const workers = []
 
-worker.on('message', (res) => {
-	fastify.discordQueue.push(...res.discordQueue)
+const maxWorkers = 1
 
-	fastify.telegramQueue.push(...res.telegramQueue)
-})
+for (let w = 0; w < maxWorkers; w++) {
+	const worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
+		workerData:
+			{
+				workerId: w,
+			},
+	})
+	worker.on('message', (res) => {
+		fastify.discordQueue.push(...res.discordQueue)
 
-worker.on('error', (error) => console.error('error', error))
-worker.on('exit', () => console.log('exit'))
+		fastify.telegramQueue.push(...res.telegramQueue)
+	})
+
+	worker.on('error', (error) => console.error('error', error))
+	worker.on('exit', () => console.log('exit'))
+
+	workers.push(worker)
+}
+
+let currentWorkerNo = 0
 
 async function processOne(hook) {
+	currentWorkerNo = (currentWorkerNo + 1) % maxWorkers
+
 	try {
 		//		console.log('processOne')
 		let processHook
@@ -457,7 +473,7 @@ async function processOne(hook) {
 			default:
 		}
 		if (processHook) {
-			worker.postMessage(processHook)
+			workers[currentWorkerNo].postMessage(processHook)
 		}
 	} catch (err) {
 		fastify.controllerLog.error('Hook processor error (something wasn\'t caught higher)', err)
