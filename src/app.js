@@ -551,7 +551,6 @@ schedule.scheduleJob({ minute: [0] }, async () => {
 					const human = humans.find((x) => x.id == profile.id)
 
 					if (human.current_profile_no != profile.profile_no) {
-
 						const userTranslator = translatorFactory.Translator(human.language)
 
 						const job = {
@@ -562,7 +561,7 @@ schedule.scheduleJob({ minute: [0] }, async () => {
 							clean: false,
 							message: { content: userTranslator.translateFormat('I have set your profile to: {0}', profile.name) },
 							logReference: '',
-							tth: { hours: 1, minutes: 0, seconds: 0}
+							tth: { hours: 1, minutes: 0, seconds: 0 },
 						}
 
 						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
@@ -577,13 +576,12 @@ schedule.scheduleJob({ minute: [0] }, async () => {
 								area: profile.area,
 								latitude: profile.latitude,
 								longitude: profile.longitude,
-							}, {id: profile.id})
+							}, { id: profile.id })
 					}
 				}
 			}
 		}
-	}
-	catch (err) {
+	} catch (err) {
 		log.error('Error setting profiles', err)
 	}
 })
