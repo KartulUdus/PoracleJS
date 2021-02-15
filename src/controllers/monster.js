@@ -230,7 +230,7 @@ class Monster extends Controller {
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivColor = this.findIvColor(data.iv)
-			data.tthSeconds = data.disappear_time - Date.now()/1000
+			data.tthSeconds = data.disappear_time - Date.now() / 1000
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.distime = data.disappearTime // deprecated
