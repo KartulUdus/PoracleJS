@@ -8,7 +8,6 @@ const pcache = require('flat-cache')
 const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
 const emojiFlags = require('emoji-flags')
 
-
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {

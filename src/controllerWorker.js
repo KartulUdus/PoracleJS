@@ -1,6 +1,8 @@
-const { parentPort, workerData, isMainThread } = require("worker_threads");
+const { parentPort, workerData, isMainThread } = require('worker_threads')
 
 const NodeCache = require('node-cache')
+const pcache = require('flat-cache')
+const path = require('path')
 const logs = require('./lib/logger')
 
 const { log } = logs
@@ -20,8 +22,6 @@ const GameData = {
 	items: require('./util/items'),
 	grunts: require('./util/grunts'),
 }
-const path = require('path')
-const pcache = require('flat-cache')
 const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../`))
 const weatherCacheData = weatherCache.getKey('weatherCacheData')
 
@@ -39,7 +39,6 @@ const monsterController = new MonsterController(logs.controller, knex, config, d
 const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-
 
 async function processOne(hook) {
 	const discordQueue = []
@@ -117,10 +116,9 @@ async function processOne(hook) {
 		if (discordQueue.length || telegramQueue.length) {
 			parentPort.postMessage({
 				discordQueue,
-				telegramQueue
+				telegramQueue,
 			})
 		}
-
 	} catch (err) {
 		console.log(err)
 		log.error('Hook processor error (something wasn\'t caught higher)', err)
@@ -134,16 +132,12 @@ const PromiseQueue = require('./lib/PromiseQueue')
 const alarmProcessor = new PromiseQueue(hookQueue, 10)
 
 if (!isMainThread) {
-
 	console.log('worker')
 	parentPort.on('message', (msg) => {
-//		console.log(`on worker thread received ${JSON.stringify(msg)}`)
+		//		console.log(`on worker thread received ${JSON.stringify(msg)}`)
 		if ((Math.random() * 100) > 80) console.log(`WebhookQueue is currently ${hookQueue.length}`)
 
 		hookQueue.push(msg)
 		alarmProcessor.run(processOne)
-
 	})
-
-
 }
