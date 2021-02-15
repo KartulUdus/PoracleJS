@@ -44,7 +44,7 @@ class Pokestop extends Controller {
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
-		//this.log.silly(`${data.pokestop_id}: Query ${query}`)
+		// this.log.silly(`${data.pokestop_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {

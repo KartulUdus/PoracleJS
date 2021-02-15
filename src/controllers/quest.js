@@ -58,7 +58,7 @@ class Quest extends Controller {
 			`)
 		}
 
-		//this.log.silly(`${data.pokestop_id}: Query ${query}`)
+		// this.log.silly(`${data.pokestop_id}: Query ${query}`)
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
 			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
