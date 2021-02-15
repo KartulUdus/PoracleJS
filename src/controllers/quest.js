@@ -177,7 +177,7 @@ class Quest extends Controller {
 
 			if (discordCacheBad) {
 				whoCares.forEach((cares) => {
-					this.log.verbose(`${logReference}: Not creating quest alert (Rate limit) for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`)
+					this.log.verbose(`${logReference}: Not creating quest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 				})
 
 				return []
@@ -187,7 +187,7 @@ class Quest extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 

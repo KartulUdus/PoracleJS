@@ -381,7 +381,7 @@ class Monster extends Controller {
 
 			if (discordCacheBad && !weatherChangeAlertJobs[0]) {
 				whoCares.forEach((cares) => {
-					this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.id} ${cares.name} ${cares.type} Time to release: ${this.getDiscordCache(cares.id).ttl}`)
+					this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${this.getDiscordCache(cares.id).ttl}`)
 				})
 
 				return []
@@ -391,7 +391,7 @@ class Monster extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated

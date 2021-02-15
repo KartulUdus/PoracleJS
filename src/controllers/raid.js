@@ -254,7 +254,7 @@ class Raid extends Controller {
 
 				if (discordCacheBad) {
 					whoCares.forEach((cares) => {
-						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`)
+						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 					})
 
 					return []
@@ -263,7 +263,7 @@ class Raid extends Controller {
 				const jobs = []
 
 				if (pregenerateTile) {
-					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data)
 					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
@@ -406,7 +406,7 @@ class Raid extends Controller {
 
 			if (discordCacheBad) {
 				whoCares.forEach((cares) => {
-					this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`)
+					this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 				})
 
 				return []
@@ -415,7 +415,7 @@ class Raid extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
