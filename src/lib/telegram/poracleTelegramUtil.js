@@ -94,7 +94,7 @@ class PoracleTelegramUtil {
 			return { canContinue: false }
 		}
 
-		if (userIdOverride) {
+		if (this.msg.isFromAdmin && userIdOverride) {
 			target.name = status.name
 			target.type = status.type
 			await this.msg.reply(`${this.client.translator.translate('This command is being executed as')} ${target.id} ${target.name}`)

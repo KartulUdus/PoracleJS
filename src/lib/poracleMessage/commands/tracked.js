@@ -61,9 +61,14 @@ exports.run = async (client, msg, args) => {
 					formName = ''
 				} else {
 					const mon = Object.values(client.GameData.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
-					monsterName = mon.name
-					formName = mon.form.name
-					if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
+					if (!mon) {
+						monsterName = `Unknown monster ${monster.pokemon_id}`
+						formName = `${monster.form}`
+					} else {
+						monsterName = mon.name
+						formName = mon.form.name
+						if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
+					}
 				}
 				let miniv = monster.min_iv
 				if (miniv === -1) miniv = 0
