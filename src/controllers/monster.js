@@ -72,7 +72,7 @@ class Monster extends Controller {
 					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 					`)
 		}
-		this.log.silly(`${data.encounter_id}: Query ${query}`)
+		//this.log.silly(`${data.encounter_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 

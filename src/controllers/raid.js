@@ -46,7 +46,7 @@ class Raid extends Controller {
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		}
-		this.log.silly(`${data.gym_id}: Raid query ${query}`)
+		//this.log.silly(`${data.gym_id}: Raid query ${query}`)
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
