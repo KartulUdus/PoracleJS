@@ -47,6 +47,9 @@ exports.run = async (client, msg, args) => {
 		if (profile) {
 			message = message.concat('\n\n', `${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 		}
+		await msg.reply(message)
+
+		message = ''
 
 		if (!client.config.general.disablePokemon) {
 			if (monsters.length) {
