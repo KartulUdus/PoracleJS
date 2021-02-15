@@ -49,6 +49,8 @@ async function processOne(hook) {
 	const telegramQueue = []
 
 	try {
+		if ((Math.random() * 100) > 80) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
+
 		switch (hook.type) {
 			case 'pokemon': {
 				const result = await monsterController.handle(hook.message)
@@ -139,7 +141,6 @@ if (!isMainThread) {
 	console.log('worker')
 	parentPort.on('message', (msg) => {
 		//		console.log(`on worker thread received ${JSON.stringify(msg)}`)
-		if ((Math.random() * 100) > 80) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
 
 		hookQueue.push(msg)
 		alarmProcessor.run(processOne)
