@@ -9,7 +9,7 @@ function readDtsFiles() {
 	const filesList = fs.readdirSync(dirpath).filter((e) => path.extname(e).toLowerCase() === '.json')
 
 	for (const filename of filesList) {
-		const dtsAddition = JSON.parse(stripJsonComments(fs.readFileSync(path.join(dirpath, filename, 'utf8'))))
+		const dtsAddition = JSON.parse(stripJsonComments(fs.readFileSync(path.join(dirpath, filename), 'utf8')))
 		localDts = localDts.concat(dtsAddition)
 	}
 

@@ -551,7 +551,7 @@ schedule.scheduleJob({ minute: [0] }, async () => {
 					const human = humans.find((x) => x.id == profile.id)
 
 					if (human.current_profile_no != profile.profile_no) {
-						const userTranslator = translatorFactory.Translator(human.language)
+						const userTranslator = translatorFactory.Translator(human.language || config.general.locale)
 
 						const job = {
 							type: human.type,
