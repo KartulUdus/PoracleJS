@@ -285,6 +285,7 @@ async function run() {
 				worker = discordWorkers[laziestWorkerId]
 				worker.addUser(target)
 			}
+
 			if (!worker.busy) worker.work(fastify.discordQueue.shift())
 		}, 10)
 
@@ -340,8 +341,25 @@ const PromiseQueue = require('./lib/PromiseQueue')
 
 const alarmProcessor = new PromiseQueue(fastify.hookQueue, 10)
 
+const { Worker, MessageChannel } = require("worker_threads");
+
+const worker = new Worker(path.join(__dirname, "./controllerWorker.js"))
+
+worker.on("message", (res) => {
+
+	fastify.discordQueue.push(...res.discordQueue)
+
+	fastify.telegramQueue.push(...res.telegramQueue)
+})
+
+worker.on("error", (error) => console.error("error", error))
+worker.on("exit", () => console.log("exit"))
+
 async function processOne(hook) {
 	try {
+//		console.log('processOne')
+		let processHook
+
 		switch (hook.type) {
 			case 'pokemon': {
 				if (config.general.disablePokemon) {
@@ -359,15 +377,7 @@ async function processOne(hook) {
 
 				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached', secondsRemaining)
 
-				const result = await fastify.monsterController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+				processHook = hook
 
 				break
 			}
@@ -385,15 +395,8 @@ async function processOne(hook) {
 
 				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
 
-				const result = await fastify.raidController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+				processHook = hook
+
 				break
 			}
 			case 'invasion':
@@ -415,15 +418,8 @@ async function processOne(hook) {
 
 				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
 
-				const result = await fastify.pokestopController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+				processHook = hook
+
 				break
 			}
 			case 'quest': {
@@ -437,17 +433,8 @@ async function processOne(hook) {
 					break
 				}
 				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
-				const q = hook.message
+				processHook = hook
 
-				const result = await fastify.questController.handle(q)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
 				break
 			}
 			case 'weather': {
@@ -464,18 +451,14 @@ async function processOne(hook) {
 					break
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
-				const result = await fastify.weatherController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+				processHook = hook
+
 				break
 			}
 			default:
+		}
+		if (processHook) {
+			worker.postMessage(processHook)
 		}
 	} catch (err) {
 		fastify.controllerLog.error('Hook processor error (something wasn\'t caught higher)', err)
@@ -486,20 +469,11 @@ const bigQueue = { count: 0, lastSize: 0 }
 
 async function handleAlarms() {
 	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
-		if ((Math.random() * 100) > 80) fastify.logger.info(`WebhookQueue is currently ${fastify.hookQueue.length}`)
+		if ((Math.random() * 100) > 80) fastify.logger.info(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
 
-		if (fastify.hookQueue.length > 5000) {
-			bigQueue.count++
-			bigQueue.lastSize = fastify.hookQueue.length
-			if ((bigQueue.count % 600) == 0) { // Approx once a minute warning with 100ms interval
-				fastify.logger.warn(`WebhookQueue is big, remained big for ${bigQueue.count} calls currently ${bigQueue.lastSize}`)
-			}
-		} else {
-			bigQueue.lastSize = 0
-			bigQueue.count = 0
+		while(fastify.hookQueue.length) {
+			await processOne(fastify.hookQueue.shift())
 		}
-
-		alarmProcessor.run(processOne)
 	}
 }
 
@@ -509,4 +483,4 @@ if (NODE_MAJOR_VERSION < 12) {
 }
 
 run()
-setInterval(handleAlarms, 100)
+setInterval(handleAlarms, 10)

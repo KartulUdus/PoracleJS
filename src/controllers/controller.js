@@ -8,15 +8,15 @@ const pcache = require('flat-cache')
 const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
 const emojiFlags = require('emoji-flags')
 
-const logs = require('../lib/logger')
+
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller {
-	constructor(db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, weatherCacheData) {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, weatherCacheData) {
 		this.db = db
 		this.cp = cp
 		this.config = config
-		this.log = logs.controller
+		this.log = log
 		this.dts = dts
 		this.geofence = geofence
 		this.GameData = GameData
