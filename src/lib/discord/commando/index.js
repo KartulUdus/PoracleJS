@@ -10,7 +10,7 @@ const Controller = require('../../../controllers/controller')
 class DiscordCommando {
 	constructor(knex, config, logs, GameData, dts, geofence, translatorFactory) {
 		this.config = config
-		this.query = new Controller(knex, config)
+		this.query = new Controller(logs.controller, knex, config)
 		this.logs = logs
 		this.GameData = GameData
 		this.dts = dts
