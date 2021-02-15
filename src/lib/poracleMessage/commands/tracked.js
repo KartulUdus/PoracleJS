@@ -20,6 +20,7 @@ exports.run = async (client, msg, args) => {
 		const human = (await client.query.selectAllQuery('humans', { id: target.id }))[0]
 		const quests = await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
+		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
@@ -148,6 +149,21 @@ exports.run = async (client, msg, args) => {
 					typeText = invasion.grunt_type
 				}
 				message = message.concat(`\n${translator.translate('grunt type').charAt(0).toUpperCase() + translator.translate('grunt type').slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`)
+			})
+
+			if (lures.length) {
+				message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
+			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
+
+			lures.forEach((lure) => {
+				let typeText = ''
+
+				if (lure.lure_id === 0) {
+					typeText = 'any'
+				} else {
+					typeText = client.GameData.utilData.lures[lure.lure_id].name
+				}
+				message = message.concat(`\n${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `)
 			})
 		}
 
