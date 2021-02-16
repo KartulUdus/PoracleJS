@@ -15,13 +15,12 @@ const fastify = require('fastify')({
 const Telegraf = require('telegraf')
 
 const path = require('path')
-const pcache = require('flat-cache')
+
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 
 const { Config } = require('./lib/configFetcher')
-const mustache = require('./lib/handlebars')()
 
 const {
 	config, knex, dts, geofence, translator, translatorFactory,
@@ -42,11 +41,6 @@ const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.teleg
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
-const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
-
-const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../`))
-const weatherCacheData = weatherCache.getKey('weatherCacheData')
-
 const DiscordWorker = require('./lib/discord/discordWorker')
 const DiscordCommando = require('./lib/discord/commando')
 
@@ -57,17 +51,9 @@ const logs = require('./lib/logger')
 const { log } = logs
 const re = require('./util/regex')(translatorFactory)
 
-const MonsterController = require('./controllers/monster')
-const RaidController = require('./controllers/raid')
-const QuestController = require('./controllers/quest')
-const PokestopController = require('./controllers/pokestop')
-const WeatherController = require('./controllers/weather')
+const Query = require('./controllers/query')
 
-const weatherController = new WeatherController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, weatherCacheData)
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const query = new Query(logs.controller, knex, config)
 
 fastify.decorate('logger', logs.log)
 fastify.decorate('controllerLog', logs.controller)
@@ -75,11 +61,6 @@ fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
-fastify.decorate('monsterController', monsterController)
-fastify.decorate('raidController', raidController)
-fastify.decorate('questController', questController)
-fastify.decorate('pokestopController', pokestopController)
-fastify.decorate('weatherController', weatherController)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)
@@ -87,13 +68,12 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, logs, GameData, dts, geofence, translatorFactory) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(query, config, logs, GameData, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let roleWorker
 let telegram
 let telegramChannel
-const workingOnHooks = false
 
 if (config.discord.enabled) {
 	for (const key in config.discord.token) {
@@ -109,10 +89,10 @@ if (config.discord.enabled) {
 
 let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker('0', config, logs, GameData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re, true)
+	telegram = new TelegramWorker('0', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
+		telegramChannel = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
@@ -121,18 +101,18 @@ if (config.telegram.enabled) {
 }
 
 async function removeInvalidUser(user) {
-	await fastify.monsterController.deleteQuery('egg', { id: user.id })
-	await fastify.monsterController.deleteQuery('monsters', { id: user.id })
-	await fastify.monsterController.deleteQuery('raid', { id: user.id })
-	await fastify.monsterController.deleteQuery('quest', { id: user.id })
-	await fastify.monsterController.deleteQuery('humans', { id: user.id })
+	await query.deleteQuery('egg', { id: user.id })
+	await query.deleteQuery('monsters', { id: user.id })
+	await query.deleteQuery('raid', { id: user.id })
+	await query.deleteQuery('quest', { id: user.id })
+	await query.deleteQuery('humans', { id: user.id })
 }
 
 async function syncTelegramMembership() {
 	try {
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'telegram:user' })
+		let usersToCheck = await query.selectAllQuery('humans', { type: 'telegram:user' })
 		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
 		let invalidUsers = []
 		for (const channel of config.telegram.channels) {
@@ -162,7 +142,7 @@ async function syncTelegramMembership() {
 async function syncDiscordRole() {
 	try {
 		log.verbose('Verification of Discord role membership to Poracle users starting...')
-		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
+		let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user' })
 		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
 		let invalidUsers = []
 		for (const guild of config.discord.guilds) {
@@ -337,15 +317,65 @@ async function run() {
 	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 }
 
-const PromiseQueue = require('./lib/PromiseQueue')
+const UserRateChecker = require('./userRateLimit')
 
-const alarmProcessor = new PromiseQueue(fastify.hookQueue, 1)
+const rateChecker = new UserRateChecker(config)
 
 const { Worker, MessageChannel } = require('worker_threads')
 
 const workers = []
 
-const maxWorkers = 1
+const maxWorkers = 2
+
+function processMessages(msgs) {
+	let newRateLimits = false
+
+	for (const msg of msgs) {
+		const rate = rateChecker.validateMessage(msg.target, msg.type)
+
+		let queueMessage
+
+		if (!rate.passMessage) {
+			if (rate.justBreached) {
+				const userTranslator = translatorFactory.Translator(msg.language || config.general.locale)
+				queueMessage = {
+					...msg,
+					message: { content: userTranslator.translateFormat('You have reached the limit of {0} messages over {1} seconds', rate.messageLimit, rate.messageTimeout) },
+					emoji: [],
+				}
+				log.info(`${msg.logReference}: Stopping alerts (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
+				newRateLimits = true
+			} else {
+				log.info(`${msg.logReference}: Intercepted and stopped message for user (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
+
+				queueMessage = null
+			}
+		} else {
+			queueMessage = msg
+		}
+
+		if (queueMessage) {
+			if (['discord:user', 'discord:channel', 'webhook'].includes(queueMessage.type)) fastify.discordQueue.push(queueMessage)
+			if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(queueMessage.type)) fastify.telegramQueue.push(queueMessage)
+		}
+	}
+
+	if (newRateLimits) {
+		// Publish new rate limits to controllers
+		const badguys = rateChecker.getBadBoys()
+
+		for (const worker of workers) {
+			worker.commandPort.postMessage({
+				type: 'badguys',
+				badguys,
+			})
+		}
+	}
+}
+
+const PromiseQueue = require('./lib/PromiseQueue')
+
+const alarmProcessor = new PromiseQueue(fastify.hookQueue, 1)
 
 for (let w = 0; w < maxWorkers; w++) {
 	const worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
@@ -354,16 +384,28 @@ for (let w = 0; w < maxWorkers; w++) {
 				workerId: w,
 			},
 	})
-	worker.on('message', (res) => {
-		fastify.discordQueue.push(...res.discordQueue)
 
-		fastify.telegramQueue.push(...res.telegramQueue)
+	const queueChannel = new MessageChannel()
+	const commandChannel = new MessageChannel()
+
+	worker.postMessage({
+		type: 'queuePort',
+		queuePort: queueChannel.port2,
+		commandPort: commandChannel.port2,
+	}, [queueChannel.port2, commandChannel.port2])
+
+	queueChannel.port1.on('message', (res) => {
+		processMessages(res.queue)
 	})
 
 	worker.on('error', (error) => console.error('error', error))
 	worker.on('exit', () => console.log('exit'))
 
-	workers.push(worker)
+	workers.push({
+		worker,
+		commandPort: commandChannel.port1,
+		queuePort: queueChannel.port1,
+	})
 }
 
 let currentWorkerNo = 0
@@ -473,7 +515,7 @@ async function processOne(hook) {
 			default:
 		}
 		if (processHook) {
-			workers[currentWorkerNo].postMessage(processHook)
+			await workers[currentWorkerNo].queuePort.postMessage(processHook)
 		}
 	} catch (err) {
 		fastify.controllerLog.error('Hook processor error (something wasn\'t caught higher)', err)
@@ -483,10 +525,12 @@ async function processOne(hook) {
 const bigQueue = { count: 0, lastSize: 0 }
 
 async function handleAlarms() {
-	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
-		if ((Math.random() * 100) > 80) fastify.logger.info(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
+	if (fastify.hookQueue.length) {
+		if ((Math.random() * 1000) > 995) fastify.logger.info(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
 
-		alarmProcessor.run(processOne)
+		await processOne(fastify.hookQueue.shift())
+		setImmediate(handleAlarms)
+		//		alarmProcessor.run(processOne)
 	}
 }
 

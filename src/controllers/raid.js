@@ -246,8 +246,7 @@ class Raid extends Controller {
 
 				let discordCacheBad = true // assume the worst
 				whoCares.forEach((cares) => {
-					const { count } = this.getDiscordCache(cares.id)
-					if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+					if (!this.isRateLimited(cares.id)) discordCacheBad = false
 				})
 
 				if (discordCacheBad) return []
@@ -263,7 +262,13 @@ class Raid extends Controller {
 				for (const cares of whoCares) {
 					this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-					const caresCache = this.getDiscordCache(cares.id).count
+					const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+					if (rateLimitTtr) {
+						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+					this.log.verbose(`${logReference}: Creating raid alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 					const language = cares.language || this.config.general.locale
 					const translator = this.translatorFactory.Translator(language)
@@ -337,19 +342,17 @@ class Raid extends Controller {
 						const work = {
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
-							message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
+							message,
 							target: cares.id,
 							type: cares.type,
 							name: cares.name,
 							tth: data.tth,
 							clean: cares.clean,
-							emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+							emoji: data.emoji,
 							logReference,
+							language,
 						}
-						if (caresCache <= this.config.discord.limitAmount + 1) {
-							jobs.push(work)
-							this.addDiscordCache(cares.id)
-						}
+						jobs.push(work)
 					}
 				}
 				return jobs
@@ -378,8 +381,7 @@ class Raid extends Controller {
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
-				const { count } = this.getDiscordCache(cares.id)
-				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+				if (!this.isRateLimited(cares.id)) discordCacheBad = false
 			})
 
 			if (discordCacheBad) return []
@@ -394,7 +396,13 @@ class Raid extends Controller {
 
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
-				const caresCache = this.getDiscordCache(cares.id).count
+				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+				if (rateLimitTtr) {
+					this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+				this.log.verbose(`${logReference}: Creating egg alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
 				// eslint-disable-next-line no-unused-vars
@@ -446,19 +454,17 @@ class Raid extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
+						message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
 						tth: data.tth,
 						clean: cares.clean,
-						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						emoji: data.emoji,
 						logReference,
+						language,
 					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
-						jobs.push(work)
-						this.addDiscordCache(cares.id)
-					}
+					jobs.push(work)
 				}
 			}
 			return jobs

@@ -156,8 +156,7 @@ class Pokestop extends Controller {
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
-				const { count } = this.getDiscordCache(cares.id)
-				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+				if (!this.isRateLimited(cares.id)) discordCacheBad = false
 			})
 
 			if (discordCacheBad) return []
@@ -174,7 +173,13 @@ class Pokestop extends Controller {
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating invasion alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-				const caresCache = this.getDiscordCache(cares.id).count
+				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+				if (rateLimitTtr) {
+					this.log.verbose(`${logReference}: Not creating invasion alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+				this.log.verbose(`${logReference}: Creating invasion alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
@@ -278,19 +283,17 @@ class Pokestop extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
+						message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
 						tth: data.tth,
 						clean: cares.clean,
-						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						emoji: data.emoji,
 						logReference,
+						language,
 					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
-						jobs.push(work)
-						this.addDiscordCache(cares.id)
-					}
+					jobs.push(work)
 				}
 			}
 

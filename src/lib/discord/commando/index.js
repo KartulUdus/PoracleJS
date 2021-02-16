@@ -5,12 +5,11 @@ const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
 const emojiStrip = require('emoji-strip')
 const hastebin = require('hastebin-gen')
-const Controller = require('../../../controllers/controller')
 
 class DiscordCommando {
-	constructor(knex, config, logs, GameData, dts, geofence, translatorFactory) {
+	constructor(query, config, logs, GameData, dts, geofence, translatorFactory) {
 		this.config = config
-		this.query = new Controller(logs.controller, knex, config)
+		this.query = query
 		this.logs = logs
 		this.GameData = GameData
 		this.dts = dts

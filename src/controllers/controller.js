@@ -138,25 +138,14 @@ class Controller {
 		return Math.ceil(d)
 	}
 
-	getDiscordCache(id) {
-		let ch = this.discordCache.get(id)
-		if (ch === undefined) {
-			this.discordCache.set(id, { count: 1 })
-			ch = { count: 1 }
-		}
-		return ch
+	isRateLimited(id) {
+		return !!this.discordCache.get(id)
 	}
 
-	addDiscordCache(id) {
-		let ch = this.discordCache.get(id)
-		if (ch === undefined) {
-			this.discordCache.set(id, { count: 1 })
-			ch = { count: 1 }
-		}
-		const ttl = this.discordCache.getTtl(id)
-		const newTtl = Math.floor((ttl - Date.now()) / 1000)
-		if (newTtl > 0) this.discordCache.set(id, { count: ch.count + 1 }, newTtl)
-		return true
+	getRateLimitTimeToRelease(id) {
+		const ttl = this.discordCache.get(id)
+		if (!ttl) return 0
+		return Math.max((ttl - Date.now()) / 1000, 0)
 	}
 
 	async geolocate(locationString) {

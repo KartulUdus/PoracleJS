@@ -44,21 +44,20 @@ const raidController = new RaidController(logs.controller, knex, config, dts, ge
 const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
 
+const hookQueue = []
+let queuePort
+
 async function processOne(hook) {
-	const discordQueue = []
-	const telegramQueue = []
+	let queueAddition = []
 
 	try {
-		if ((Math.random() * 100) > 80) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
+		if ((Math.random() * 1000) > 995) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
 
 		switch (hook.type) {
 			case 'pokemon': {
 				const result = await monsterController.handle(hook.message)
 				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) telegramQueue.push(job)
-					})
+					queueAddition = result
 				} else {
 					log.error(`Missing result from ${hook.type} processor`, hook.message)
 				}
@@ -68,10 +67,7 @@ async function processOne(hook) {
 			case 'raid': {
 				const result = await raidController.handle(hook.message)
 				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) telegramQueue.push(job)
-					})
+					queueAddition = result
 				} else {
 					log.error(`Missing result from ${hook.type} processor`, hook.message)
 				}
@@ -81,24 +77,16 @@ async function processOne(hook) {
 			case 'pokestop': {
 				const result = await pokestopController.handle(hook.message)
 				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) telegramQueue.push(job)
-					})
+					queueAddition = result
 				} else {
 					log.error(`Missing result from ${hook.type} processor`, hook.message)
 				}
 				break
 			}
 			case 'quest': {
-				const q = hook
-
-				const result = await questController.handle(q)
+				const result = await questController.handle(hook.message)
 				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) telegramQueue.push(job)
-					})
+					queueAddition = result
 				} else {
 					log.error(`Missing result from ${hook.type} processor`, hook.message)
 				}
@@ -107,10 +95,7 @@ async function processOne(hook) {
 			case 'weather': {
 				const result = await weatherController.handle(hook.message)
 				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) telegramQueue.push(job)
-					})
+					queueAddition = result
 				} else {
 					log.error(`Missing result from ${hook.type} processor`, hook.message)
 				}
@@ -119,10 +104,9 @@ async function processOne(hook) {
 			default:
 		}
 
-		if (discordQueue.length || telegramQueue.length) {
-			parentPort.postMessage({
-				discordQueue,
-				telegramQueue,
+		if (queueAddition && queueAddition.length) {
+			await queuePort.postMessage({
+				queue: queueAddition,
 			})
 		}
 	} catch (err) {
@@ -131,18 +115,47 @@ async function processOne(hook) {
 	}
 }
 
-const hookQueue = []
-
 const PromiseQueue = require('./lib/PromiseQueue')
 
 const alarmProcessor = new PromiseQueue(hookQueue, 10)
 
+function receiveQueue(msg) {
+	try {
+		hookQueue.push(msg)
+		alarmProcessor.run(processOne)
+	} catch (err) {
+		log.error('receiveCommand failed to add new queue entry', err)
+	}
+}
+
+function updateBadGuys(badguys) {
+	discordCache.flushAll()
+	for (const guy of badguys) {
+		discordCache.set(guy.key, guy.ttlTimeout, Math.max((guy.ttlTimeout - Date.now()) / 1000, 1))
+	}
+}
+
+function receiveCommand(cmd) {
+	try {
+		console.log('receiveCommand')
+		if (cmd.type == 'badguys') {
+			updateBadGuys(cmd.badguys)
+		}
+	} catch (err) {
+		log.error('receiveCommand failed to processs command', err)
+	}
+}
+
 if (!isMainThread) {
 	console.log('worker')
+
 	parentPort.on('message', (msg) => {
 		//		console.log(`on worker thread received ${JSON.stringify(msg)}`)
 
-		hookQueue.push(msg)
-		alarmProcessor.run(processOne)
+		if (msg.type == 'queuePort') {
+			queuePort = msg.queuePort
+			msg.commandPort.on('message', receiveCommand)
+			msg.queuePort.on('message', receiveQueue)
+		}
 	})
 }
