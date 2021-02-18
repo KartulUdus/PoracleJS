@@ -190,7 +190,7 @@ class ControllerWeatherManager extends EventEmitter {
 			if (data.lastForecastLoad !== currentHourTimestamp) {
 				this.emit('weatherForecastRequested', id)
 
-				let count = 40
+				let count = 100
 				do {
 					await this.sleep(50)
 					// force data to be refreshed

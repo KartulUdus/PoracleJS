@@ -18,7 +18,7 @@ class Weather extends Controller {
 		this.caresData = weatherCache.getKey('caredPokemon') || {}
 
 		this.forecastBusy = false
-		this.getWeatherMutex = new Mutex()
+		this.getWeatherMutex = {}
 	}
 
 	async getLaziestWeatherKey() {
@@ -111,7 +111,13 @@ class Weather extends Controller {
 		// const key = S2.latLngToKey(weatherObject.lat, weatherObject.lon, 10)
 		// const id = S2.keyToId(key)
 
-		return this.getWeatherMutex.runExclusive(async () => {
+
+		let weatherMutex = this.getWeatherMutex[id]
+		if (!weatherMutex) {
+			weatherMutex = new Mutex()
+			this.getWeatherMutex[id] = weatherMutex
+		}
+		return weatherMutex.runExclusive(async () => {
 			const nowTimestamp = Math.floor(Date.now() / 1000)
 			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
 			const nextHourTimestamp = currentHourTimestamp + 3600
