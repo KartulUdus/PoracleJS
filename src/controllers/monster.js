@@ -342,8 +342,9 @@ class Monster extends Controller {
 
 			// get Weather Forecast information
 
+			const { nextHourTimestamp } = this.controllerWeatherManager.getWeatherTimes()
 			if (this.config.weather.enableWeatherForecast && data.disappear_time > nextHourTimestamp) {
-				const weatherForecast = await this.controllerWeatherManager.getWeatherForecast({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
+				const weatherForecast = await this.controllerWeatherManager.getWeatherForecast(weatherCellId)
 
 				let pokemonShouldBeBoosted = false
 				if (weatherForecast.current > 0 && this.GameData.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true

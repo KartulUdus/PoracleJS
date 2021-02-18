@@ -141,6 +141,14 @@ class ControllerWeatherManager extends EventEmitter {
 		}
 	}
 
+	getWeatherTimes() {
+		const nowTimestamp = Math.floor(Date.now() / 1000)
+		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
+		const previousHourTimestamp = currentHourTimestamp - 3600
+		const nextHourTimestamp = currentHourTimestamp + 3600
+
+		return { nowTimestamp, currentHourTimestamp, previousHourTimestamp, nextHourTimestamp }
+	}
 	/**
 	 * Gets forecast data (current and next hour) for pokemon at lat, lon
 	 * @param lat
@@ -148,16 +156,61 @@ class ControllerWeatherManager extends EventEmitter {
 	 * @param disappearTime
 	 * @returns {null}
 	 */
-	getWeatherForecast(lat, lon, disappearTime) {
+	async getWeatherForecast(id)//, disappearTime)
+	{
+		const nowTimestamp = Math.floor(Date.now() / 1000)
+		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
+		const previousHourTimestamp = currentHourTimestamp - 3600
+		const nextHourTimestamp = currentHourTimestamp + 3600
+
 		// const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
 
-		// return .current in forecast
-		// return .next for forecast
-
-		return {
+		let res = {
 			current: 0,
 			next: 0,
 		}
+
+		// return .current in forecast
+		// return .next for forecast
+		// const key = S2.latLngToKey(lat, lon, 10)
+		// const id = S2.keyToId(key)
+
+		if (!this.controllerData[id]) this.controllerData[id] = {}
+		const data = this.controllerData[id]
+
+		if (!data[nextHourTimestamp]
+			|| !data.forecastTimeout
+			|| data.forecastTimeout <= currentHourTimestamp
+		) {
+			// We would like fresh data
+			this.log.info(`${id}: Requesting weather forecast`)
+
+			if (data.lastForecastLoad !== currentHourTimestamp) {
+				this.emit('weatherForecastRequested', id)
+
+				let count = 40
+				do {
+					await this.sleep(25)
+				} while (data.lastForecastLoad !== currentHourTimestamp && --count)
+				this.log.info(`${id}: Weather forecast counter: ${count}`)
+				if (!count) {
+					// timeout - avoid attempting this fetch again from this worker
+					data.lastForecastLoad = currentHourTimestamp
+				}
+			}
+		}
+
+		if (data.lastForecastLoad === currentHourTimestamp) {
+			res.current = data[currentHourTimestamp] || 0
+			res.next = data[nextHourTimestamp] || 0
+		}
+
+		return res
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	async sleep(n) {
+		return new Promise((resolve) => setTimeout(resolve, n))
 	}
 }
 

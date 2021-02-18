@@ -36,6 +36,7 @@ const weatherController = new WeatherController(logs.controller, knex, config, d
 const hookQueue = []
 const workerId = 'WEATHER'
 let queuePort
+let commandPort
 
 async function processOne(hook) {
 	let queueAddition = []
@@ -88,7 +89,7 @@ function updateBadGuys(badguys) {
 	}
 }
 
-function receiveCommand(cmd) {
+async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
 		if (cmd.type == 'badguys') {
@@ -106,7 +107,8 @@ function receiveCommand(cmd) {
 					})
 				}
 			}
-			if (cmd.weatherCommand == 'weatherChange') {
+			if (cmd.weatherCommand == 'weatherForecastRequested') {
+				await weatherController.getWeather(cmd.data)
 				//				weatherController.handleMonsterWeatherChange(cmd.data)
 			}
 		}

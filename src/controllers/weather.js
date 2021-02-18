@@ -4,8 +4,8 @@ const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
 const path = require('path')
 const pcache = require('flat-cache')
+const { Mutex } = require('async-mutex')
 const Controller = require('./controller')
-
 require('moment-precise-range-plugin')
 
 const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname}../../../.cache/`))
@@ -16,6 +16,9 @@ class Weather extends Controller {
 		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null)
 		this.controllerData = weatherCache.getKey('weatherCacheData') || {}
 		this.caresData = weatherCache.getKey('caredPokemon') || {}
+
+		this.forecastBusy = false
+		this.getWeatherMutex = new Mutex()
 	}
 
 	async getLaziestWeatherKey() {
@@ -91,98 +94,111 @@ class Weather extends Controller {
 	 * @param weatherObject
 	 * @returns {Promise<{next: number, current: number}>}
 	 */
-	async getWeather(weatherObject) {
-		const res = {
-			current: 0,
-			next: 0,
-		}
-		if (!this.config.weather.enableWeatherForecast
-			|| moment().hour() >= moment(weatherObject.disappear * 1000).hour()
-			&& !(moment().hour() == 23 && moment(weatherObject.disappear * 1000).hour() == 0)
-		) {
-			this.log.info('weather forecast target will disappear in current hour')
-			return res
-		}
+	async getWeather(id) {
+		// const res = {
+		// 	current: 0,
+		// 	next: 0,
+		// }
+		// // if (!this.config.weather.enableWeatherForecast
+		// 	|| moment().hour() >= moment(weatherObject.disappear * 1000).hour()
+		// 	&& !(moment().hour() == 23 && moment(weatherObject.disappear * 1000).hour() == 0)
+		// ) {
+		// 	this.log.info('weather forecast target will disappear in current hour')
+		// 	return res
+		// }
+		//
+		// const key = S2.latLngToKey(weatherObject.lat, weatherObject.lon, 10)
+		// const id = S2.keyToId(key)
 
-		const key = S2.latLngToKey(weatherObject.lat, weatherObject.lon, 10)
-		const id = S2.keyToId(key)
+		return this.getWeatherMutex.runExclusive(async () => {
+			const nowTimestamp = Math.floor(Date.now() / 1000)
+			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
+			const nextHourTimestamp = currentHourTimestamp + 3600
+			let forecastTimeout = nowTimestamp + this.config.weather.forecastRefreshInterval * 3600
 
-		const nowTimestamp = Math.floor(Date.now() / 1000)
-		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
-		const nextHourTimestamp = currentHourTimestamp + 3600
-		let forecastTimeout = nowTimestamp + this.config.weather.forecastRefreshInterval * 3600
-
-		if (this.config.weather.localFirstFetchHOD && !this.config.weather.smartForecast) {
-			const currentMoment = moment(currentHourTimestamp * 1000)
-			const currentHour = currentMoment.hour()
-			// Weather must be refreshed at the time set in config with the interval given
-			const localFirstFetchTOD = this.config.weather.localFirstFetchHOD
-			const { forecastRefreshInterval } = this.config.weather
-			// eslint-disable-next-line no-bitwise
-			const nextUpdateHour = (((currentHour + ((currentHour % forecastRefreshInterval) < localFirstFetchTOD ? 0 : (forecastRefreshInterval - 1))) & -forecastRefreshInterval) + localFirstFetchTOD) % 24
-			const nextUpdateInHours = (nextUpdateHour > currentHour ? nextUpdateHour : (24 + localFirstFetchTOD)) - currentHour
-			forecastTimeout = currentMoment.add(nextUpdateInHours, 'hours').unix()
-		}
-
-		if (!this.controllerData[id]) this.controllerData[id] = {}
-		const data = this.controllerData[id]
-
-		if (!Object.keys(data).length || !data.location) {
-			const latlng = S2.idToLatLng(id)
-			const apiKeyWeatherLocation = await this.getLaziestWeatherKey()
-			if (apiKeyWeatherLocation) {
-				try {
-					// Fetch location information
-					const weatherLocation = await axios.get(`https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${apiKeyWeatherLocation}&q=${latlng.lat}%2C${latlng.lng}`)
-					data.location = weatherLocation.data.Key
-				} catch (err) {
-					this.log.error(`Fetching AccuWeather location errored with: ${err}`)
-					return res
-				}
-			} else {
-				this.log.info('Couldn\'t fetch weather location - no API key available')
-				return res
+			if (this.config.weather.localFirstFetchHOD && !this.config.weather.smartForecast) {
+				const currentMoment = moment(currentHourTimestamp * 1000)
+				const currentHour = currentMoment.hour()
+				// Weather must be refreshed at the time set in config with the interval given
+				const localFirstFetchTOD = this.config.weather.localFirstFetchHOD
+				const { forecastRefreshInterval } = this.config.weather
+				// eslint-disable-next-line no-bitwise
+				const nextUpdateHour = (((currentHour + ((currentHour % forecastRefreshInterval) < localFirstFetchTOD ? 0 : (forecastRefreshInterval - 1))) & -forecastRefreshInterval) + localFirstFetchTOD) % 24
+				const nextUpdateInHours = (nextUpdateHour > currentHour ? nextUpdateHour : (24 + localFirstFetchTOD)) - currentHour
+				forecastTimeout = currentMoment.add(nextUpdateInHours, 'hours').unix()
 			}
-		}
-		if (!data[currentHourTimestamp]) {
-			// Nothing to say about current weather
-			data[currentHourTimestamp] = 0
-		}
-		if (!data[nextHourTimestamp]
-			|| !data.forecastTimeout
-			|| data.forecastTimeout <= currentHourTimestamp
-		) {
-			// Delete old weather information
-			this.expireWeatherCell(data, currentHourTimestamp)
 
-			const apiKeyWeatherInfo = await this.getLaziestWeatherKey()
-			if (apiKeyWeatherInfo) {
-				try {
-					// Fetch new weather information
-					const weatherInfo = await axios.get(`https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}`)
-					for (const forecast in Object.entries(weatherInfo.data)) {
-						if (weatherInfo.data[forecast].EpochDateTime > currentHourTimestamp) {
-							data[weatherInfo.data[forecast].EpochDateTime] = await this.mapPoGoWeather(weatherInfo.data[forecast].WeatherIcon)
-						}
+			if (!this.controllerData[id]) this.controllerData[id] = {}
+			const data = this.controllerData[id]
+
+			data.lastForecastLoad = currentHourTimestamp	// Indicate we have tried a forecast
+
+			if (!Object.keys(data).length || !data.location) {
+				const latlng = S2.idToLatLng(id)
+				const apiKeyWeatherLocation = await this.getLaziestWeatherKey()
+				if (apiKeyWeatherLocation) {
+					try {
+						// Fetch location information
+						const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${apiKeyWeatherLocation}&q=${latlng.lat}%2C${latlng.lng}`
+						this.log.debug(`${id}: Fetching AccuWeather location ${url}`)
+
+						const weatherLocation = await axios.get(url)
+						data.location = weatherLocation.data.Key
+					} catch (err) {
+						this.log.error(`${id}: Fetching AccuWeather location errored with: ${err}`)
+						this.broadcastWeather()
+						return
 					}
-					data.forecastTimeout = forecastTimeout
-					data.lastCurrentWeatherCheck = currentHourTimestamp
-				} catch (err) {
-					this.log.error(`Fetching AccuWeather weather info errored with: ${err}`)
-					return res
+				} else {
+					this.log.info(`${id}: Couldn't fetch weather location - no API key available`)
+					this.broadcastWeather()
+					return
 				}
-			} else {
-				this.log.info('Couldn\'t fetch weather forecast - no API key available')
-				return res
 			}
-		}
 
-		res.current = data[currentHourTimestamp]
-		res.next = data[nextHourTimestamp]
+			if (!data[currentHourTimestamp]) {
+				// Nothing to say about current weather
+				data[currentHourTimestamp] = 0
+			}
 
-		this.saveCache()
+			if (!data[nextHourTimestamp]
+					|| !data.forecastTimeout
+					|| data.forecastTimeout <= currentHourTimestamp
+			) {
+				// Delete old weather information
+				this.expireWeatherCell(data, currentHourTimestamp)
 
-		return res
+				const apiKeyWeatherInfo = await this.getLaziestWeatherKey()
+				if (apiKeyWeatherInfo) {
+					try {
+						// Fetch new weather information
+						const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}`
+						this.log.debug(`${id}: Fetching AccuWeather Forecast ${url}`)
+
+						const weatherInfo = await axios.get(url)
+						for (const forecast in Object.entries(weatherInfo.data)) {
+							if (weatherInfo.data[forecast].EpochDateTime > currentHourTimestamp) {
+								data[weatherInfo.data[forecast].EpochDateTime] = await this.mapPoGoWeather(weatherInfo.data[forecast].WeatherIcon)
+							}
+						}
+						data.forecastTimeout = forecastTimeout
+						data.lastCurrentWeatherCheck = currentHourTimestamp
+					} catch (err) {
+						this.log.error(`${id}: Fetching AccuWeather weather info errored with: ${err}`)
+					}
+				} else {
+					this.log.warn(`${id}: Couldn't fetch weather forecast - no API key available`)
+				}
+
+				this.broadcastWeather()
+				this.saveCache()
+			}
+		})
+
+		//		res.current = data[currentHourTimestamp]
+		//		res.next = data[nextHourTimestamp]
+
+		//		return res
 	}
 
 	saveCache() {
@@ -258,6 +274,7 @@ class Weather extends Controller {
 			// Remove users not caring about anything anymore
 			if (caresCellData.cares) {
 				caresCellData.cares = caresCellData.cares.filter((caring) => caring.caresUntil > nowTimestamp)
+
 				// Remove cared pokemon that have disappeared
 				caresCellData.cares.forEach((caring) => {
 					if (caring.caredPokemons) {
@@ -426,6 +443,9 @@ class Weather extends Controller {
 		// Was in monster controller
 		this.log.debug('Weather - notification from monster controller about user who cares', userCares)
 
+		if (!this.caresData[userCares.weatherCellId]) {
+			this.caresData[userCares.weatherCellId] = {}
+		}
 		const weatherCellData = this.caresData[userCares.weatherCellId]
 
 		const cares = userCares.target

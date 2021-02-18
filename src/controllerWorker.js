@@ -173,6 +173,7 @@ if (!isMainThread) {
 	})
 
 	controllerWeatherManager.on('weatherChanged', (data) => notifyWeatherController('weatherChanged', data))
+	controllerWeatherManager.on('weatherForecastRequested', (data) => notifyWeatherController('weatherForecastRequested', data))
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
 	// monsterController.on('executeWeatherCommand', notifyWeatherController)
