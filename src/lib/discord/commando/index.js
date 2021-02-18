@@ -83,7 +83,7 @@ class DiscordCommando {
 			this.client.login(this.config.discord.token[0])
 		} catch (err) {
 			this.logs.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)
-			this.sleep(2000)
+			await this.sleep(2000)
 			return this.bounceWorker()
 		}
 	}

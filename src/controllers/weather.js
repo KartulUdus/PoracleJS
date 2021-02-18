@@ -274,9 +274,7 @@ class Weather extends Controller {
 			const caresCellData = this.caresData[data.s2_cell_id] || {}
 
 			const previousWeather = weatherCellData[previousHourTimestamp] || -1
-			if ('cares' in caresCellData) {
-				whoCares = caresCellData.cares
-			}
+
 			// Remove users not caring about anything anymore
 			if (caresCellData.cares) {
 				caresCellData.cares = caresCellData.cares.filter((caring) => caring.caresUntil > nowTimestamp)
@@ -288,6 +286,8 @@ class Weather extends Controller {
 					}
 				})
 			}
+
+			whoCares = caresCellData.cares || []
 
 			if (this.config.weather.showAlteredPokemon) {
 				// Removing whoCares who don't have a Pokemon affected by this weather change
@@ -345,9 +345,11 @@ class Weather extends Controller {
 			const now = moment.now()
 			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
 
+			let count = 0
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Weather alert being generated for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
+				count++
 				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
 				if (rateLimitTtr) {
 					this.log.verbose(`${logReference}: Not creating weather alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
@@ -435,6 +437,8 @@ class Weather extends Controller {
 					jobs.push(work)
 				}
 			}
+
+			this.log.info(`${logReference}: Weather alert generated and ${count} humans cared.`)
 
 			return jobs
 		} catch (e) {

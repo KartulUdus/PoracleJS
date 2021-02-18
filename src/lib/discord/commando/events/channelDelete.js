@@ -14,6 +14,6 @@ module.exports = async (client, channel) => {
 			})
 		}
 	} catch (e) {
-		client.logs.discord.error(`Was unable to remove human : ${e}`)
+		client.logs.discord.error('Discord event channelDelete - Was unable to remove human', e)
 	}
 }
