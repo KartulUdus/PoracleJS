@@ -12,6 +12,12 @@ const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname
 const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
 
 class Weather extends Controller {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
+		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null)
+		this.controllerData = weatherCache.getKey('weatherCacheData') || {}
+		this.caresData = weatherCache.getKey('caredPokemon') || {}
+	}
+
 	async getLaziestWeatherKey() {
 		if (this.config.weather.apiKeyAccuWeather.length == 0) {
 			this.log.error('no AccuWeather API key provided in config')
@@ -72,6 +78,19 @@ class Weather extends Controller {
 		return 0
 	}
 
+	expireWeatherCell(weatherCell, currentHourTimestamp) {
+		Object.entries(weatherCell).forEach(([timestamp]) => {
+			if (timestamp < (currentHourTimestamp - 3600)) {
+				delete weatherCell[timestamp]
+			}
+		})
+	}
+
+	/**
+	 * Get weather forecast
+	 * @param weatherObject
+	 * @returns {Promise<{next: number, current: number}>}
+	 */
 	async getWeather(weatherObject) {
 		const res = {
 			current: 0,
@@ -134,11 +153,8 @@ class Weather extends Controller {
 			|| data.forecastTimeout <= currentHourTimestamp
 		) {
 			// Delete old weather information
-			Object.entries(data).forEach(([timestamp]) => {
-				if (timestamp < (currentHourTimestamp - 3600)) {
-					delete data[timestamp]
-				}
-			})
+			this.expireWeatherCell(data, currentHourTimestamp)
+
 			const apiKeyWeatherInfo = await this.getLaziestWeatherKey()
 			if (apiKeyWeatherInfo) {
 				try {
@@ -164,12 +180,27 @@ class Weather extends Controller {
 		res.current = data[currentHourTimestamp]
 		res.next = data[nextHourTimestamp]
 
-		weatherCache.setKey('weatherCacheData', this.controllerData)
-		weatherCache.save(true)
+		this.saveCache()
 
 		return res
 	}
 
+	saveCache() {
+		weatherCache.setKey('weatherCacheData', this.controllerData)
+		weatherCache.setKey('caredPokemon', this.caresData)
+
+		weatherCache.save(true)
+	}
+
+	broadcastWeather() {
+		this.emit('weatherChanged', this.controllerData)
+	}
+
+	/**
+	 * Handle weather incoming events
+	 * @param obj
+	 * @returns {Promise<[]|*[]>}
+	 */
 	async handle(obj) {
 		let pregenerateTile = false
 		const data = obj
@@ -212,15 +243,28 @@ class Weather extends Controller {
 			const updateHourTimestamp = data.time_changed - (data.time_changed % 3600)
 			const previousHourTimestamp = updateHourTimestamp - 3600
 
+			this.log.verbose(`${data.s2_cell_id}: weather received ${data.source == 'fromMonster' ? ' from Monster' : ''} - weather ${currentInGameWeather}`)
+
 			if (!this.controllerData[data.s2_cell_id]) this.controllerData[data.s2_cell_id] = {}
+			if (!this.caresData[data.s2_cell_id]) this.caresData[data.s2_cell_id] = {}
 
 			const weatherCellData = this.controllerData[data.s2_cell_id]
+			const caresCellData = this.caresData[data.s2_cell_id] || {}
+
 			const previousWeather = weatherCellData[previousHourTimestamp] || -1
-			if ('cares' in weatherCellData) {
-				whoCares = weatherCellData.cares
+			if ('cares' in caresCellData) {
+				whoCares = caresCellData.cares
 			}
 			// Remove users not caring about anything anymore
-			if (weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.caresUntil > nowTimestamp)
+			if (caresCellData.cares) {
+				caresCellData.cares = caresCellData.cares.filter((caring) => caring.caresUntil > nowTimestamp)
+				// Remove cared pokemon that have disappeared
+				caresCellData.cares.forEach((caring) => {
+					if (caring.caredPokemons) {
+						caring.caredPokemons = caring.caredPokemons.filter((mon) => mon.disappear_time > nowTimestamp)
+					}
+				})
+			}
 
 			if (this.config.weather.showAlteredPokemon) {
 				// Removing whoCares who don't have a Pokemon affected by this weather change
@@ -230,10 +274,11 @@ class Weather extends Controller {
 			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData.lastCurrentWeatherCheck < updateHourTimestamp) {
 				weatherCellData[updateHourTimestamp] = currentInGameWeather
 				weatherCellData.lastCurrentWeatherCheck = updateHourTimestamp
-			}
 
-			weatherCache.setKey('weatherCacheData', this.controllerData)
-			weatherCache.save(true)
+				this.expireWeatherCell(weatherCellData, currentHourTimestamp)
+				this.saveCache()
+				this.broadcastWeather()
+			}
 
 			if (!this.config.weather.weatherChangeAlert) {
 				this.log.verbose(`${data.s2_cell_id}: weather change alerts are disabled, nobody cares.`)
@@ -290,7 +335,7 @@ class Weather extends Controller {
 
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.debug(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)
-					weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.id != cares.id)
+					caresCellData.cares = caresCellData.cares.filter((caring) => caring.id != cares.id)
 					// eslint-disable-next-line no-continue
 					continue
 				}
@@ -299,10 +344,10 @@ class Weather extends Controller {
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
+				caresCellData.cares.filter((caring) => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
 
 				if (this.config.weather.showAlteredPokemon) {
-					const activePokemons = weatherCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
+					const activePokemons = caresCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
 				}
 				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
@@ -320,7 +365,10 @@ class Weather extends Controller {
 				data.weatherName = data.weatherNameEng ? translator.translate(data.weatherNameEng) : ''
 				data.weatherEmoji = data.weatherEmojiEng ? translator.translate(data.weatherEmojiEng) : ''
 				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
-					data.activePokemons.map((pok) => { pok.name = translator.translate(pok.name); pok.formName = translator.translate(pok.formName) })
+					data.activePokemons.map((pok) => {
+						pok.name = translator.translate(pok.name)
+						pok.formName = translator.translate(pok.formName)
+					})
 				}
 
 				data.weather = data.weatherName // deprecated
@@ -363,6 +411,87 @@ class Weather extends Controller {
 		} catch (e) {
 			this.log.error(`${data.s2_cell_id}: Can't seem to handle weather: `, e, data)
 		}
+	}
+
+	async handleMonsterWeatherChange(data) {
+		this.log.debug('Weather - received data from monster controller about weather change', data)
+		return this.handle(data)
+	}
+
+	/**
+	 * handle incoming information from monster controller telling us that a user cares about a particular
+	 * pokemon
+	 */
+	handleUserCares(userCares) {
+		// Was in monster controller
+		this.log.debug('Weather - notification from monster controller about user who cares', userCares)
+
+		const weatherCellData = this.caresData[userCares.weatherCellId]
+
+		const cares = userCares.target
+
+		if (weatherCellData.cares) {
+			let exists = false
+			for (const caring of weatherCellData.cares) {
+				if (caring.id === cares.id) {
+					if (caring.caresUntil < userCares.caresUntil) {
+						caring.caresUntil = userCares.caresUntil
+					}
+					caring.clean = cares.clean
+					caring.ping = cares.ping
+					caring.language = cares.language
+					caring.template = cares.template
+					exists = true
+					break
+				}
+			}
+			if (!exists) {
+				weatherCellData.cares.push({
+					id: cares.id,
+					name: cares.name,
+					type: cares.type,
+					clean: cares.clean,
+					ping: cares.ping,
+					caresUntil: userCares.caresUntil,
+					template: cares.template,
+					language: cares.language,
+				})
+			}
+		} else {
+			weatherCellData.cares = []
+			weatherCellData.cares.push({
+				id: cares.id,
+				name: cares.name,
+				type: cares.type,
+				clean: cares.clean,
+				ping: cares.ping,
+				caresUntil: cares.disappear_time,
+				template: cares.template,
+				language: cares.language,
+			})
+		}
+		if (this.config.weather.showAlteredPokemon && userCares.pokemon) {
+			const data = userCares.pokemon
+			for (const caring of weatherCellData.cares) {
+				if (caring.id === cares.id) {
+					if (!caring.caredPokemons) caring.caredPokemons = []
+					caring.caredPokemons.push({
+						pokemon_id: data.pokemon_id,
+						form: data.form,
+						name: data.name,
+						formName: data.formName,
+						iv: data.iv,
+						cp: data.cp,
+						latitude: data.latitude,
+						longitude: data.longitude,
+						disappear_time: data.disappear_time,
+						alteringWeathers: data.alteringWeathers,
+					})
+				}
+			}
+		}
+
+		this.saveCache()
 	}
 }
 

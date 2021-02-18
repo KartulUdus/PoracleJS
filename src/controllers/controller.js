@@ -2,6 +2,7 @@ const inside = require('point-in-polygon')
 const path = require('path')
 const NodeGeocoder = require('node-geocoder')
 const cp = require('child_process')
+const EventEmitter = require('events')
 
 const pcache = require('flat-cache')
 
@@ -10,8 +11,9 @@ const emojiFlags = require('emoji-flags')
 
 const TileserverPregen = require('../lib/tileserverPregen')
 
-class Controller {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, weatherCacheData) {
+class Controller extends EventEmitter {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager) {
+		super()
 		this.db = db
 		this.cp = cp
 		this.config = config
@@ -24,8 +26,8 @@ class Controller {
 		this.translator = translatorFactory ? this.translatorFactory.default : null
 		this.mustache = mustache
 		this.earthRadius = 6371 * 1000 // m
-		this.weatherController = weatherController
-		this.controllerData = weatherCacheData || {}
+		this.controllerWeatherManager = controllerWeatherManager
+		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen()
 		this.dtsCache = {}
 	}

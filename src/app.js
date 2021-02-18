@@ -236,7 +236,7 @@ async function run() {
 			if (!fastify.discordQueue.length) {
 				return
 			}
-			if ((Math.random() * 100) > 80) fastify.logger.debug(`DiscordQueue is currently ${fastify.discordQueue.length}`)
+			if ((Math.random() * 1000) > 995) fastify.logger.debug(`DiscordQueue is currently ${fastify.discordQueue.length}`)
 
 			if (fastify.discordQueue.length > 500) {
 				discordBigQueue.count++
@@ -373,20 +373,55 @@ function processMessages(msgs) {
 	}
 }
 
-const PromiseQueue = require('./lib/PromiseQueue')
+let worker = new Worker(path.join(__dirname, './weatherWorker.js'))
 
-const alarmProcessor = new PromiseQueue(fastify.hookQueue, 1)
+let queueChannel = new MessageChannel()
+let commandChannel = new MessageChannel()
+
+worker.postMessage({
+	type: 'queuePort',
+	queuePort: queueChannel.port2,
+	commandPort: commandChannel.port2,
+}, [queueChannel.port2, commandChannel.port2])
+
+const weatherWorker = {
+	worker,
+	commandPort: commandChannel.port1,
+	queuePort: queueChannel.port1,
+}
+
+function processMessageFromControllers(msg) {
+	// Relay commands of weather type to weather controller
+	if (msg.type == 'weather') {
+		weatherWorker.commandPort.postMessage(msg)
+	}
+}
+
+function processMessageFromWeather(msg) {
+	// Relay broadcasts from weather to all controllers
+
+	if (msg.type == 'weatherBroadcast') {
+		for (const worker of workers) {
+			worker.commandPort.postMessage(msg)
+		}
+	}
+}
+
+weatherWorker.commandPort.on('message', processMessageFromWeather)
+weatherWorker.queuePort.on('message', (res) => {
+	processMessages(res.queue)
+})
 
 for (let w = 0; w < maxWorkers; w++) {
-	const worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
+	worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
 		workerData:
 			{
 				workerId: w,
 			},
 	})
 
-	const queueChannel = new MessageChannel()
-	const commandChannel = new MessageChannel()
+	queueChannel = new MessageChannel()
+	commandChannel = new MessageChannel()
 
 	worker.postMessage({
 		type: 'queuePort',
@@ -397,6 +432,7 @@ for (let w = 0; w < maxWorkers; w++) {
 	queueChannel.port1.on('message', (res) => {
 		processMessages(res.queue)
 	})
+	commandChannel.port1.on('message', processMessageFromControllers)
 
 	worker.on('error', (error) => console.error('error', error))
 	worker.on('exit', () => console.log('exit'))
@@ -508,7 +544,10 @@ async function processOne(hook) {
 					break
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
-				processHook = hook
+
+				// post directly to weather controller
+				weatherWorker.queuePort.postMessage(hook)
+				//	processHook = hook
 
 				break
 			}

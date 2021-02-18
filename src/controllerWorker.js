@@ -17,7 +17,7 @@ console.log(workerId)
 
 const {
 	config, knex, dts, geofence, translator, translatorFactory,
-} = Config()
+} = Config(false)
 
 const GameData = {
 	monsters: require('./util/monsters'),
@@ -26,26 +26,28 @@ const GameData = {
 	items: require('./util/items'),
 	grunts: require('./util/grunts'),
 }
-const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../`))
-const weatherCacheData = weatherCache.getKey('weatherCacheData')
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
-const WeatherController = require('./controllers/weather')
-
-// problem, synchronisation
+const ControllerWeatherManager = require('./controllers/controllerWeatherManager')
+/**
+ * Contains currently rate limited users
+ * @type {NodeCache}
+ */
 const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
-const weatherController = new WeatherController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, weatherCacheData)
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const controllerWeatherManager = new ControllerWeatherManager(config, log)
+
+const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
+const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
+const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
+const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
 
 const hookQueue = []
 let queuePort
+let commandPort
 
 async function processOne(hook) {
 	let queueAddition = []
@@ -59,7 +61,7 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
 				}
 
 				break
@@ -69,7 +71,7 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
 				}
 				break
 			}
@@ -79,7 +81,7 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
 				}
 				break
 			}
@@ -88,20 +90,12 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
-				break
-			}
-			case 'weather': {
-				const result = await weatherController.handle(hook.message)
-				if (result) {
-					queueAddition = result
-				} else {
-					log.error(`Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
 				}
 				break
 			}
 			default:
+				log.error(`Worker ${workerId}: Unexpected hook type  ${hook.type} in general controller worker process`, hook.message)
 		}
 
 		if (queueAddition && queueAddition.length) {
@@ -111,7 +105,7 @@ async function processOne(hook) {
 		}
 	} catch (err) {
 		console.log(err)
-		log.error('Hook processor error (something wasn\'t caught higher)', err)
+		log.error(`Worker ${workerId}: Hook processor error (something wasn't caught higher)`, err)
 	}
 }
 
@@ -124,7 +118,7 @@ function receiveQueue(msg) {
 		hookQueue.push(msg)
 		alarmProcessor.run(processOne)
 	} catch (err) {
-		log.error('receiveCommand failed to add new queue entry', err)
+		log.error(`Worker ${workerId}: receiveCommand failed to add new queue entry`, err)
 	}
 }
 
@@ -139,11 +133,28 @@ function receiveCommand(cmd) {
 	try {
 		console.log('receiveCommand')
 		if (cmd.type == 'badguys') {
+			log.debug(`Worker ${workerId}: Received badguys`, cmd.badguys)
+
 			updateBadGuys(cmd.badguys)
 		}
+		if (cmd.type == 'weatherBroadcast') {
+			log.debug(`Worker ${workerId}: Received weather broadcast`, cmd.data)
+
+			controllerWeatherManager.receiveWeatherBroadcast(cmd.data)
+		}
 	} catch (err) {
-		log.error('receiveCommand failed to processs command', err)
+		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)
 	}
+}
+
+function notifyWeatherController(cmd, data) {
+	log.debug(`Worker ${workerId}: Sending notify weather controlled command: ${cmd}`, data)
+
+	commandPort.postMessage({
+		type: 'weather',
+		weatherCommand: cmd,
+		data,
+	})
 }
 
 if (!isMainThread) {
@@ -154,8 +165,15 @@ if (!isMainThread) {
 
 		if (msg.type == 'queuePort') {
 			queuePort = msg.queuePort
+			commandPort = msg.commandPort
+
 			msg.commandPort.on('message', receiveCommand)
 			msg.queuePort.on('message', receiveQueue)
 		}
 	})
+
+	controllerWeatherManager.on('weatherChanged', (data) => notifyWeatherController('weatherChanged', data))
+
+	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
+	// monsterController.on('executeWeatherCommand', notifyWeatherController)
 }

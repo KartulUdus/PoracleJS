@@ -1,0 +1,164 @@
+const { S2 } = require('s2-geometry')
+const EventEmitter = require('events')
+
+class ControllerWeatherManager extends EventEmitter {
+	constructor(config, log) {
+		super()
+		this.config = config
+		this.log = log
+		this.controllerData = {}
+		this.localWeatherData = {}
+	}
+
+	/**
+	 * Called on inbound weather broadcast from weather controller
+	 * @param data
+	 */
+	receiveWeatherBroadcast(data) {
+		this.controllerData = data
+	}
+
+	getWeatherCellId(lat, lon) {
+		const weatherCellKey = S2.latLngToKey(lat, lon, 10)
+		return S2.keyToId(weatherCellKey)
+	}
+
+	/**
+	 * Get the current weather for given lat, lon based on current
+	 * weather information held in local controller
+	 */
+
+	getCurrentWeatherInCellLatLon(lat, lon) {
+		return this.getCurrentWeatherInCell(this.getWeatherCellId(lat, lon))
+	}
+
+	getCurrentWeatherInCell(weatherCellId) {
+		const nowTimestamp = Math.floor(Date.now() / 1000)
+		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
+		let currentCellWeather = null
+
+		if (weatherCellId in this.controllerData) {
+		 	const weatherCellData = this.controllerData[weatherCellId]
+		 	if (weatherCellData) {
+		 		if (/*! currentCellWeather && */weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
+		 	}
+		}
+
+		return currentCellWeather
+	}
+
+	/**
+	 * Analyse an incoming pokemon's weather data to see if there is a discrepancy
+	 * to current weather known information, and if so notify weather controller of a weather
+	 * change
+	 * @param weatherCellId
+	 * @param latitude
+	 * @param longitude
+	 * @param monsterWeather
+	 */
+	checkWeatherOnMonster(weatherCellId, latitude, longitude, monsterWeather) {
+		const nowTimestamp = Math.floor(Date.now() / 1000)
+		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
+		const previousHourTimestamp = currentHourTimestamp - 3600
+		const nextHourTimestamp = currentHourTimestamp + 3600
+
+		// Should we reset??
+		if (!(weatherCellId in this.localWeatherData)) {
+			this.localWeatherData[weatherCellId] = {}
+		}
+
+		if (!(weatherCellId in this.controllerData)) {
+			this.controllerData[weatherCellId] = {} // provide safe access to weather information if weather controller did not give it to us
+		}
+
+		const localWeatherCellData = this.localWeatherData[weatherCellId] // local information about weather per cell
+		const weatherCellData = this.controllerData[weatherCellId] // weather information broadcast to us from weather controller
+
+		// let currentCellWeather = null
+		// JB - think we should always be monitoring weather regardless of whether we act upon it
+		if (nowTimestamp > (currentHourTimestamp + 30) && /* (this.config.weather.weatherChangeAlert || this.config.weather.enableWeatherForecast) && */ monsterWeather) {
+			if (!localWeatherCellData.weatherFromBoost) localWeatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0]
+			if (!weatherCellData.lastCurrentWeatherCheck) weatherCellData.lastCurrentWeatherCheck = previousHourTimestamp
+
+			// If the weather that we see agrees with latest up-to-date broadcast, reset counters
+			if (monsterWeather == weatherCellData[currentHourTimestamp] && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) {
+				localWeatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0]
+			}
+
+			if ((monsterWeather !== weatherCellData[currentHourTimestamp] || (monsterWeather == weatherCellData[currentHourTimestamp] && weatherCellData.lastCurrentWeatherCheck < currentHourTimestamp))) {
+				localWeatherCellData.weatherFromBoost = localWeatherCellData.weatherFromBoost.map((value, index) => {
+					if (index == monsterWeather) return value + 1
+					return value - 1
+				})
+				if (localWeatherCellData.weatherFromBoost.filter((x) => x > 4).length) { // could use any?
+					// if (localWeatherCellData.weatherFromBoost.indexOf(5) == -1) localWeatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0] // what is this checking? can't find any 5s so reset?
+					localWeatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0]
+					this.log.info(`Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${monsterWeather}`)
+
+					// we believe that weather has changed and we have been told about this, let weather controller know, if we haven't already
+
+					if (localWeatherCellData.currentHourTimestamp !== currentHourTimestamp
+						|| localWeatherCellData.monsterWeather !== monsterWeather) {
+						// save the weather locally
+						localWeatherCellData.currentHourTimestamp = currentHourTimestamp
+						localWeatherCellData.monsterWeather = monsterWeather
+
+						this.emit('weatherChanged', {
+							longitude,
+							latitude,
+							s2_cell_id: weatherCellId,
+							gameplay_condition: monsterWeather,
+							updated: nowTimestamp,
+							source: 'fromMonster',
+						})
+					}
+
+					// 			if (monsterWeather != weatherCellData[currentHourTimestamp]) weatherCellData.forecastTimeout = null
+					//
+					// 			// Changing local weather info... is this right? One tell and we're done
+
+					// 			weatherCellData[currentHourTimestamp] = monsterWeather
+					// 			currentCellWeather = monsterWeather
+
+					// 			// Delete old weather information
+					// 			// JB -- feels like this clean will happen with a rebroadcast of weather data, but we do need to tidy up local data --- perhaps actually when we get a message think about
+					// how we reset local data
+					//
+					// 			// Object.entries(weatherCellData).forEach(([timestamp]) => {
+					// 			// 	if (timestamp < (currentHourTimestamp - 3600)) {
+					// 			// 		delete weatherCellData[timestamp]
+					// 			// 	}
+					// 			// })
+					//
+					// 			// Remove users not caring about anything anymore
+					// 			// JB -- we shouldn't even have any of this going forward
+					//
+					// 			// if (weatherCellData.cares) weatherCellData.cares = weatherCellData.cares.filter((caring) => caring.caresUntil > nowTimestamp)
+					// 			// if (!weatherCellData.cares || !weatherCellData[previousHourTimestamp] || weatherCellData[previousHourTimestamp] && currentCellWeather == weatherCellData[previousHourTimestamp]) weatherCellData.lastCurrentWeatherCheck = currentHourTimestamp
+					// 		}
+				}
+			}
+		}
+	}
+
+	/**
+	 * Gets forecast data (current and next hour) for pokemon at lat, lon
+	 * @param lat
+	 * @param lon
+	 * @param disappearTime
+	 * @returns {null}
+	 */
+	getWeatherForecast(lat, lon, disappearTime) {
+		// const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
+
+		// return .current in forecast
+		// return .next for forecast
+
+		return {
+			current: 0,
+			next: 0,
+		}
+	}
+}
+
+module.exports = ControllerWeatherManager

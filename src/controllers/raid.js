@@ -181,18 +181,7 @@ class Raid extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
-			const weatherCellKey = S2.latLngToKey(data.latitude, data.longitude, 10)
-			const weatherCellId = S2.keyToId(weatherCellKey)
-			const nowTimestamp = Math.floor(Date.now() / 1000)
-			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
-			let currentCellWeather = null
-			if (weatherCellId in this.weatherController.controllerData) {
-				const weatherCellData = this.weatherController.controllerData[weatherCellId]
-				if (weatherCellData) {
-					if (!currentCellWeather && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
-				}
-			}
-			data.weather = currentCellWeather || 0
+			data.weather = this.controllerWeatherManager.getCurrentWeatherInCell(this.controllerWeatherManager.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
