@@ -46,7 +46,7 @@ async function processOne(hook) {
 
 		switch (hook.type) {
 			case 'weather': {
-				const result = []// await weatherController.handle(hook.message)
+				const result = await weatherController.handle(hook.message)
 				if (result) {
 					queueAddition = result
 				} else {
