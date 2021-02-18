@@ -7,7 +7,7 @@ const fs = require('fs')
 const fsp = require('fs').promises
 const util = require('util')
 const { S2 } = require('s2-geometry')
-
+const { Worker, MessageChannel } = require('worker_threads')
 const NodeCache = require('node-cache')
 const fastify = require('fastify')({
 	bodyLimit: 5242880,
@@ -221,12 +221,12 @@ function handleShutdown() {
 		})
 }
 
-process.on('SIGINT', handleShutdown)
-process.on('SIGTERM', handleShutdown)
-
 const discordBigQueue = { count: 0, lastSize: 0 }
 
 async function run() {
+	process.on('SIGINT', handleShutdown)
+	process.on('SIGTERM', handleShutdown)
+
 	if (config.general.persistDuplicateCache) {
 		await loadEventCache()
 	}
@@ -321,10 +321,7 @@ const UserRateChecker = require('./userRateLimit')
 
 const rateChecker = new UserRateChecker(config)
 
-const { Worker, MessageChannel } = require('worker_threads')
-
 const workers = []
-
 const maxWorkers = 2
 
 function processMessages(msgs) {
@@ -374,7 +371,6 @@ function processMessages(msgs) {
 }
 
 let worker = new Worker(path.join(__dirname, './weatherWorker.js'))
-
 let queueChannel = new MessageChannel()
 let commandChannel = new MessageChannel()
 
@@ -401,8 +397,8 @@ function processMessageFromWeather(msg) {
 	// Relay broadcasts from weather to all controllers
 
 	if (msg.type == 'weatherBroadcast') {
-		for (const worker of workers) {
-			worker.commandPort.postMessage(msg)
+		for (const relayWorker of workers) {
+			relayWorker.commandPort.postMessage(msg)
 		}
 	}
 }
@@ -450,7 +446,6 @@ async function processOne(hook) {
 	currentWorkerNo = (currentWorkerNo + 1) % maxWorkers
 
 	try {
-		//		console.log('processOne')
 		let processHook
 
 		switch (hook.type) {
@@ -560,8 +555,6 @@ async function processOne(hook) {
 		fastify.controllerLog.error('Hook processor error (something wasn\'t caught higher)', err)
 	}
 }
-
-const bigQueue = { count: 0, lastSize: 0 }
 
 async function handleAlarms() {
 	if (fastify.hookQueue.length) {

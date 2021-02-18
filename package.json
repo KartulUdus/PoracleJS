@@ -1,6 +1,6 @@
 {
   "name": "PoracleJs",
-  "version": "4.0.1",
+  "version": "4.0.2",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {

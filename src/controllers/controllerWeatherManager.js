@@ -147,8 +147,11 @@ class ControllerWeatherManager extends EventEmitter {
 		const previousHourTimestamp = currentHourTimestamp - 3600
 		const nextHourTimestamp = currentHourTimestamp + 3600
 
-		return { nowTimestamp, currentHourTimestamp, previousHourTimestamp, nextHourTimestamp }
+		return {
+			nowTimestamp, currentHourTimestamp, previousHourTimestamp, nextHourTimestamp,
+		}
 	}
+
 	/**
 	 * Gets forecast data (current and next hour) for pokemon at lat, lon
 	 * @param lat
@@ -156,7 +159,7 @@ class ControllerWeatherManager extends EventEmitter {
 	 * @param disappearTime
 	 * @returns {null}
 	 */
-	async getWeatherForecast(id)//, disappearTime)
+	async getWeatherForecast(id)// , disappearTime)
 	{
 		const nowTimestamp = Math.floor(Date.now() / 1000)
 		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
@@ -165,7 +168,7 @@ class ControllerWeatherManager extends EventEmitter {
 
 		// const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
 
-		let res = {
+		const res = {
 			current: 0,
 			next: 0,
 		}
@@ -176,7 +179,7 @@ class ControllerWeatherManager extends EventEmitter {
 		// const id = S2.keyToId(key)
 
 		if (!this.controllerData[id]) this.controllerData[id] = {}
-		const data = this.controllerData[id]
+		let data = this.controllerData[id]
 
 		if (!data[nextHourTimestamp]
 			|| !data.forecastTimeout
@@ -190,7 +193,9 @@ class ControllerWeatherManager extends EventEmitter {
 
 				let count = 40
 				do {
-					await this.sleep(25)
+					await this.sleep(50)
+					// force data to be refreshed
+					data = this.controllerData[id]
 				} while (data.lastForecastLoad !== currentHourTimestamp && --count)
 				this.log.info(`${id}: Weather forecast counter: ${count}`)
 				if (!count) {

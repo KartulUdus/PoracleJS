@@ -1,8 +1,7 @@
-const { parentPort, workerData, isMainThread } = require('worker_threads')
-
+const { parentPort, isMainThread } = require('worker_threads')
+// eslint-disable-next-line no-underscore-dangle
+require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const pcache = require('flat-cache')
-const path = require('path')
 const logs = require('./lib/logger')
 
 const { log } = logs
@@ -10,13 +9,8 @@ const { log } = logs
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 
-console.log('hi from worker')
-
-// const { workerId } = workerData
-// console.log(workerId)
-
 const {
-	config, knex, dts, geofence, translator, translatorFactory,
+	config, knex, dts, geofence, translatorFactory,
 } = Config(false)
 
 const GameData = {
@@ -28,10 +22,8 @@ const GameData = {
 }
 const WeatherController = require('./controllers/weather')
 
-// problem, synchronisation
-const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
-
-const weatherController = new WeatherController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache)
+const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
+const weatherController = new WeatherController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
 
 const hookQueue = []
 const workerId = 'WEATHER'
@@ -83,9 +75,9 @@ function receiveQueue(msg) {
 }
 
 function updateBadGuys(badguys) {
-	discordCache.flushAll()
+	rateLimitedUserCache.flushAll()
 	for (const guy of badguys) {
-		discordCache.set(guy.key, guy.ttlTimeout, Math.max((guy.ttlTimeout - Date.now()) / 1000, 1))
+		rateLimitedUserCache.set(guy.key, guy.ttlTimeout, Math.max((guy.ttlTimeout - Date.now()) / 1000, 1))
 	}
 }
 
@@ -113,7 +105,7 @@ async function receiveCommand(cmd) {
 			}
 		}
 	} catch (err) {
-		log.error('Worker ${workerId}: receiveCommand failed to processs command', err)
+		log.error(`Worker ${workerId}: receiveCommand failed to process command`, err)
 	}
 }
 

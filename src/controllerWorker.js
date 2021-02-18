@@ -1,8 +1,8 @@
 const { parentPort, workerData, isMainThread } = require('worker_threads')
-
+// eslint-disable-next-line no-underscore-dangle
+require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const pcache = require('flat-cache')
-const path = require('path')
+
 const logs = require('./lib/logger')
 
 const { log } = logs
@@ -10,13 +10,10 @@ const { log } = logs
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 
-console.log('hi from worker')
-
 const { workerId } = workerData
-console.log(workerId)
 
 const {
-	config, knex, dts, geofence, translator, translatorFactory,
+	config, knex, dts, geofence, translatorFactory,
 } = Config(false)
 
 const GameData = {
@@ -36,14 +33,14 @@ const ControllerWeatherManager = require('./controllers/controllerWeatherManager
  * Contains currently rate limited users
  * @type {NodeCache}
  */
-const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
+const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
 const controllerWeatherManager = new ControllerWeatherManager(config, log)
 
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager)
+const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
+const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
+const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
+const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
 
 const hookQueue = []
 let queuePort
@@ -104,7 +101,6 @@ async function processOne(hook) {
 			})
 		}
 	} catch (err) {
-		console.log(err)
 		log.error(`Worker ${workerId}: Hook processor error (something wasn't caught higher)`, err)
 	}
 }
@@ -123,15 +119,16 @@ function receiveQueue(msg) {
 }
 
 function updateBadGuys(badguys) {
-	discordCache.flushAll()
+	rateLimitedUserCache.flushAll()
 	for (const guy of badguys) {
-		discordCache.set(guy.key, guy.ttlTimeout, Math.max((guy.ttlTimeout - Date.now()) / 1000, 1))
+		rateLimitedUserCache.set(guy.key, guy.ttlTimeout, Math.max((guy.ttlTimeout - Date.now()) / 1000, 1))
 	}
 }
 
 function receiveCommand(cmd) {
 	try {
-		console.log('receiveCommand')
+		log.info(`Worker ${workerId}: receiveCommand ${cmd}`)
+
 		if (cmd.type == 'badguys') {
 			log.debug(`Worker ${workerId}: Received badguys`, cmd.badguys)
 
@@ -158,8 +155,6 @@ function notifyWeatherController(cmd, data) {
 }
 
 if (!isMainThread) {
-	console.log('worker')
-
 	parentPort.on('message', (msg) => {
 		//		console.log(`on worker thread received ${JSON.stringify(msg)}`)
 
@@ -176,5 +171,4 @@ if (!isMainThread) {
 	controllerWeatherManager.on('weatherForecastRequested', (data) => notifyWeatherController('weatherForecastRequested', data))
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
-	// monsterController.on('executeWeatherCommand', notifyWeatherController)
 }

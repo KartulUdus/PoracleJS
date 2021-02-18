@@ -1,4 +1,3 @@
-// const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 
@@ -381,20 +380,20 @@ class Monster extends Controller {
 					// ?? we haven't told it about the weather we current believe it is, is this missing info?
 
 					this.emit('userCares', {
-					 	target: {
-					 		id: cares.id,
+						target: {
+							id: cares.id,
 							name: cares.name,
 							type: cares.type,
 							clean: cares.clean,
 							ping: cares.ping,
-					 		template: cares.template,
+							template: cares.template,
 							language: cares.language,
-					 	},
-					 	weatherCellId,
-					 	caresUntil: data.disappear_time,
-					 	pokemon: encountered
+						},
+						weatherCellId,
+						caresUntil: data.disappear_time,
+						pokemon: encountered
 							? {
-					 		pokemon_id: data.pokemon_id,
+								pokemon_id: data.pokemon_id,
 								form: data.form,
 								name: monster.name,
 								formName: monster.form.name,
@@ -404,46 +403,9 @@ class Monster extends Controller {
 								longitude: data.longitude,
 								disappear_time: data.disappear_time,
 								alteringWeathers: data.alteringWeathers,
-					 	} : null,
+							} : null,
 
 					})
-
-					// if (weatherCellData.cares) {
-					// 	let exists = false
-					// 	for (const caring of weatherCellData.cares) {
-					// 		if (caring.id === cares.id) {
-					// 			if (caring.caresUntil < data.disappear_time) {
-					// 				caring.caresUntil = data.disappear_time
-					// 			}
-					// 			caring.clean = cares.clean
-					// 			caring.ping = cares.ping
-					// 			caring.language = cares.language
-					// 			caring.template = cares.template
-					// 			exists = true
-					// 			break
-					// 		}
-					// 	}
-					// 	if (!exists) {
-					// 		weatherCellData.cares.push({
-					// 			id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, ping: cares.ping, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
-					// 		})
-					// 	}
-					// } else {
-					// 	weatherCellData.cares = []
-					// 	weatherCellData.cares.push({
-					// 		id: cares.id, name: cares.name, type: cares.type, clean: cares.clean, ping: cares.ping, caresUntil: data.disappear_time, template: cares.template, language: cares.language,
-					// 	})
-					// }
-					// if (this.config.weather.showAlteredPokemon && encountered) {
-					// 	for (const caring of weatherCellData.cares) {
-					// 		if (caring.id === cares.id) {
-					// 			if (!caring.caredPokemons) caring.caredPokemons = []
-					// 			caring.caredPokemons.push({
-					// 				pokemon_id: data.pokemon_id, form: data.form, name: monster.name, formName: monster.form.name, iv: data.iv, cp: data.cp, latitude: data.latitude, longitude: data.longitude, disappear_time: data.disappear_time, alteringWeathers: data.alteringWeathers,
-					// 			})
-					// 		}
-					// 	}
-					// }
 				}
 
 				const language = cares.language || this.config.general.locale
@@ -451,7 +413,10 @@ class Monster extends Controller {
 
 				data.name = translator.translate(monster.name)
 				data.formName = translator.translate(monster.form.name)
-				data.genderData = { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) }
+				data.genderData = {
+					name: translator.translate(data.genderDataEng.name),
+					emoji: translator.translate(data.genderDataEng.emoji),
+				}
 				data.quickMoveName = data.weight && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
 				data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji) : ''
 				data.chargeMoveName = data.weight && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
