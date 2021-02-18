@@ -7,7 +7,8 @@ const emojiStrip = require('emoji-strip')
 const hastebin = require('hastebin-gen')
 
 class DiscordCommando {
-	constructor(query, config, logs, GameData, dts, geofence, translatorFactory) {
+	constructor(token, query, config, logs, GameData, dts, geofence, translatorFactory) {
+		this.token = token
 		this.config = config
 		this.query = query
 		this.logs = logs
@@ -83,7 +84,7 @@ class DiscordCommando {
 				this.logs.log.info(`Discord commando loaded ${enabledCommands.join(', ')} commands`)
 			})
 
-			this.client.login(this.config.discord.token[0])
+			this.client.login(this.token)
 		} catch (err) {
 			this.logs.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)
