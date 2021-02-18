@@ -1,5 +1,4 @@
 module.exports = async (client, oldPresence, newPresence) => {
-
 	try {
 		let before = false
 		let after = false

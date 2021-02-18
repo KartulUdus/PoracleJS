@@ -29,6 +29,9 @@ class DiscordCommando {
 				this.logs.log.error(`Discord worker #${this.id} \n bouncing`, err)
 				this.bounceWorker()
 			})
+			this.client.on('rateLimit', (info) => {
+				this.logs.log.error(`#${this.id} Discord commando worker - will not be responding to commands -  429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
+			})
 			// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
 			this.client.config = this.config
 			this.client.S2 = S2

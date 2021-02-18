@@ -1,4 +1,3 @@
-
 module.exports = async (client, msg) => {
 	try {
 		// Ignore all bots
@@ -23,7 +22,7 @@ module.exports = async (client, msg) => {
 				} else {
 					const logmsg = await channel.send(message)
 					if (msgDeletionMs > 0) {
-						logmsg.delete({timeout: msgDeletionMs, reason: 'Removing old stuff.'})
+						logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
 					}
 				}
 			} catch (err) {
