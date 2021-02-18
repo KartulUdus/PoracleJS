@@ -362,7 +362,11 @@ class Weather extends Controller {
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				caresCellData.cares.filter((caring) => caring.id == cares.id)[0].lastChangeAlert = currentHourTimestamp
+
+				const userStillCares = caresCellData.cares.find((caring) => caring.id == cares.id)
+				if (userStillCares) {
+					userStillCares.lastChangeAlert = currentHourTimestamp
+				}
 
 				if (this.config.weather.showAlteredPokemon) {
 					const activePokemons = caresCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
