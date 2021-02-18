@@ -374,7 +374,9 @@ class Weather extends Controller {
 				}
 
 				if (this.config.weather.showAlteredPokemon) {
-					const activePokemons = caresCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
+					//const activePokemons = caresCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
+					const activePokemons = cares.caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
+
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
 				}
 				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
