@@ -127,7 +127,7 @@ function updateBadGuys(badguys) {
 
 function receiveCommand(cmd) {
 	try {
-		log.info(`Worker ${workerId}: receiveCommand ${cmd}`)
+		log.info(`Worker ${workerId}: receiveCommand ${cmd.type}`)
 
 		if (cmd.type == 'badguys') {
 			log.debug(`Worker ${workerId}: Received badguys`, cmd.badguys)
