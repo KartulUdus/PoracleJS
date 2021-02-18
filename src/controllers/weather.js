@@ -111,7 +111,6 @@ class Weather extends Controller {
 		// const key = S2.latLngToKey(weatherObject.lat, weatherObject.lon, 10)
 		// const id = S2.keyToId(key)
 
-
 		let weatherMutex = this.getWeatherMutex[id]
 		if (!weatherMutex) {
 			weatherMutex = new Mutex()
