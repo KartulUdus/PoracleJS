@@ -56,7 +56,6 @@ async function processOne(hook) {
 			})
 		}
 	} catch (err) {
-		console.log(err)
 		log.error(`Worker ${workerId}: Hook processor error (something wasn't caught higher)`, err)
 	}
 }
@@ -118,11 +117,7 @@ function broadcastWeather(cmd) {
 }
 
 if (!isMainThread) {
-	console.log('worker')
-
 	parentPort.on('message', (msg) => {
-		//		console.log(`on worker thread received ${JSON.stringify(msg)}`)
-
 		if (msg.type == 'queuePort') {
 			queuePort = msg.queuePort
 			commandPort = msg.commandPort
@@ -132,5 +127,4 @@ if (!isMainThread) {
 	})
 
 	weatherController.on('weatherChanged', broadcastWeather)
-	// weatherController.on('weatherNotices', )
 }

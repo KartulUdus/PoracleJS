@@ -53,7 +53,7 @@ class UserRateChecker {
 	}
 
 	getBadBoys() {
-    	const badboys = []
+		const badboys = []
 		for (const key of this.discordCache.keys()) {
 			const ch = this.discordCache.get(key)
 

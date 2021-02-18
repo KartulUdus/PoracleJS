@@ -81,6 +81,7 @@ class Weather extends Controller {
 		return 0
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	expireWeatherCell(weatherCell, currentHourTimestamp) {
 		Object.entries(weatherCell).forEach(([timestamp]) => {
 			if (timestamp < (currentHourTimestamp - 3600)) {

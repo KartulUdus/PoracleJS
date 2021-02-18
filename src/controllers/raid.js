@@ -1,7 +1,6 @@
 // const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
 
 class Raid extends Controller {

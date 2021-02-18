@@ -18,6 +18,7 @@ class ControllerWeatherManager extends EventEmitter {
 		this.controllerData = data
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	getWeatherCellId(lat, lon) {
 		const weatherCellKey = S2.latLngToKey(lat, lon, 10)
 		return S2.keyToId(weatherCellKey)
@@ -38,10 +39,10 @@ class ControllerWeatherManager extends EventEmitter {
 		let currentCellWeather = null
 
 		if (weatherCellId in this.controllerData) {
-		 	const weatherCellData = this.controllerData[weatherCellId]
-		 	if (weatherCellData) {
-		 		if (/*! currentCellWeather && */weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
-		 	}
+			const weatherCellData = this.controllerData[weatherCellId]
+			if (weatherCellData) {
+				if (/*! currentCellWeather && */weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
+			}
 		}
 
 		return currentCellWeather
@@ -60,7 +61,7 @@ class ControllerWeatherManager extends EventEmitter {
 		const nowTimestamp = Math.floor(Date.now() / 1000)
 		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
 		const previousHourTimestamp = currentHourTimestamp - 3600
-		const nextHourTimestamp = currentHourTimestamp + 3600
+		// const nextHourTimestamp = currentHourTimestamp + 3600
 
 		// Should we reset??
 		if (!(weatherCellId in this.localWeatherData)) {
@@ -141,6 +142,7 @@ class ControllerWeatherManager extends EventEmitter {
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	getWeatherTimes() {
 		const nowTimestamp = Math.floor(Date.now() / 1000)
 		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
@@ -159,14 +161,11 @@ class ControllerWeatherManager extends EventEmitter {
 	 * @param disappearTime
 	 * @returns {null}
 	 */
-	async getWeatherForecast(id)// , disappearTime)
-	{
+	async getWeatherForecast(id) {
 		const nowTimestamp = Math.floor(Date.now() / 1000)
 		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
-		const previousHourTimestamp = currentHourTimestamp - 3600
+		// const previousHourTimestamp = currentHourTimestamp - 3600
 		const nextHourTimestamp = currentHourTimestamp + 3600
-
-		// const weatherForecast = await this.weatherController.getWeather({ lat: +data.latitude, lon: +data.longitude, disappear: data.disappear_time })
 
 		const res = {
 			current: 0,

@@ -156,8 +156,6 @@ function notifyWeatherController(cmd, data) {
 
 if (!isMainThread) {
 	parentPort.on('message', (msg) => {
-		//		console.log(`on worker thread received ${JSON.stringify(msg)}`)
-
 		if (msg.type == 'queuePort') {
 			queuePort = msg.queuePort
 			commandPort = msg.commandPort

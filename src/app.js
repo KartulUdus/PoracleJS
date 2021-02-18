@@ -430,8 +430,8 @@ for (let w = 0; w < maxWorkers; w++) {
 	})
 	commandChannel.port1.on('message', processMessageFromControllers)
 
-	worker.on('error', (error) => console.error('error', error))
-	worker.on('exit', () => console.log('exit'))
+	//	worker.on('error', (error) => console.error('error', error))
+	//	worker.on('exit', () => console.log('exit'))
 
 	workers.push({
 		worker,
