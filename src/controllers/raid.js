@@ -1,7 +1,19 @@
-// const pokemonGif = require('pokemon-gif')
+const io = require('@pm2/io')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
+
+const raidMeter = io.meter({
+	name: 'monster/min',
+	samples: 1,
+	timeframe: 60,
+})
+
+const eggMeter = io.meter({
+	name: 'monster/min',
+	samples: 1,
+	timeframe: 60,
+})
 
 class Raid extends Controller {
 	async raidWhoCares(data) {
@@ -183,6 +195,7 @@ class Raid extends Controller {
 			data.weather = this.controllerWeatherManager.getCurrentWeatherInCell(this.controllerWeatherManager.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 
 			if (data.pokemon_id) {
+				raidMeter.mark()
 				if (data.form === undefined || data.form === null) data.form = 0
 				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
 				if (!monster) {
@@ -229,6 +242,7 @@ class Raid extends Controller {
 				} else {
 					this.log.verbose(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 				}
+				this.markCares(whoCares.length)
 
 				if (!whoCares[0]) return []
 
@@ -352,6 +366,8 @@ class Raid extends Controller {
 				return jobs
 			}
 
+			eggMeter.mark()
+
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 			data.hatchTime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.hatchtime = data.hatchTime // deprecated
@@ -370,6 +386,7 @@ class Raid extends Controller {
 			} else {
 				this.log.verbose(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
+			this.markCares(whoCares.length)
 
 			if (!whoCares[0]) return []
 

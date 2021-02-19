@@ -1,3 +1,5 @@
+const io = require('@pm2/io')
+
 const inside = require('point-in-polygon')
 const path = require('path')
 const NodeGeocoder = require('node-geocoder')
@@ -10,6 +12,12 @@ const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cac
 const emojiFlags = require('emoji-flags')
 
 const TileserverPregen = require('../lib/tileserverPregen')
+
+const caresMeter = io.meter({
+	name: 'cares/min',
+	samples: 1,
+	timeframe: 60,
+})
 
 class Controller extends EventEmitter {
 	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, controllerWeatherManager) {
@@ -30,6 +38,10 @@ class Controller extends EventEmitter {
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.dtsCache = {}
+	}
+
+	markCares(val = 1) {
+		caresMeter.mark(val)
 	}
 
 	getGeocoder() {

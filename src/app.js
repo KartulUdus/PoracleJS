@@ -3,6 +3,7 @@ require('dotenv').config()
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 
+const io = require('@pm2/io')
 const fs = require('fs')
 const fsp = require('fs').promises
 const util = require('util')
@@ -539,6 +540,33 @@ async function processOne(hook) {
 	}
 }
 
+const agent = io.init({
+	metrics: {
+		network: false,
+	},
+})
+
+const webQueueMetric = io.metric({
+	name: 'Realtime inbound webqueue',
+	value() {
+		return fastify && fastify.hookQueue ? fastify.hookQueue.length : 0
+	},
+})
+
+const discordMetric = io.metric({
+	name: 'Realtime discord queue',
+	value() {
+		return fastify && fastify.discordQueue ? fastify.discordQueue.length : 0
+	},
+})
+
+const telegramMetric = io.metric({
+	name: 'Realtime telegram queue',
+	value() {
+		return fastify && fastify.telegram ? fastify.telegram.length : 0
+	},
+})
+
 async function handleAlarms() {
 	if (fastify.hookQueue.length) {
 		if ((Math.random() * 1000) > 995) fastify.logger.info(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
@@ -558,6 +586,12 @@ if (NODE_MAJOR_VERSION == 13) {
 if (NODE_MAJOR_VERSION > 14) {
 	throw new Error('Requires Node 12 or 14')
 }
+
+io.init({
+	metrics: {
+		network: false,
+	},
+})
 
 run()
 setInterval(handleAlarms, 100)

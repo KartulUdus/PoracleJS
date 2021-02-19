@@ -40,8 +40,10 @@ class ControllerWeatherManager extends EventEmitter {
 
 		if (weatherCellId in this.controllerData) {
 			const weatherCellData = this.controllerData[weatherCellId]
+			const localCellData = this.controllerData[weatherCellId]
 			if (weatherCellData) {
 				if (/*! currentCellWeather && */weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
+				if (localCellData && localCellData.currentHourTimestamp == currentHourTimestamp) currentCellWeather = localCellData.monsterWeather // We have discovered weather locally, use that
 			}
 		}
 
@@ -94,7 +96,6 @@ class ControllerWeatherManager extends EventEmitter {
 				if (localWeatherCellData.weatherFromBoost.filter((x) => x > 4).length) { // could use any?
 					// if (localWeatherCellData.weatherFromBoost.indexOf(5) == -1) localWeatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0] // what is this checking? can't find any 5s so reset?
 					localWeatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0]
-					this.log.info(`Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${monsterWeather}`)
 
 					// we believe that weather has changed and we have been told about this, let weather controller know, if we haven't already
 
@@ -103,6 +104,8 @@ class ControllerWeatherManager extends EventEmitter {
 						// save the weather locally
 						localWeatherCellData.currentHourTimestamp = currentHourTimestamp
 						localWeatherCellData.monsterWeather = monsterWeather
+
+						this.log.info(`Boosted Pokémon! Force update of weather in cell ${weatherCellId} with weather ${monsterWeather}`)
 
 						this.emit('weatherChanged', {
 							longitude,

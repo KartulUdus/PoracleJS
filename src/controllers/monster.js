@@ -1,9 +1,15 @@
-// const pokemonGif = require('pokemon-gif')
+const io = require('@pm2/io')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
+
+const monsterMeter = io.meter({
+	name: 'monster/min',
+	samples: 1,
+	timeframe: 60,
+})
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
@@ -98,6 +104,7 @@ class Monster extends Controller {
 		let pregenerateTile = false
 		const data = obj
 		try {
+			monsterMeter.mark()
 			let hrstart = process.hrtime()
 			const logReference = data.encounter_id
 
@@ -308,6 +315,8 @@ class Monster extends Controller {
 			} else {
 				this.log.verbose(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 			}
+
+			this.markCares(whoCares.length)
 
 			if (!whoCares.length) return []
 
