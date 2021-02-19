@@ -445,6 +445,90 @@ class Weather extends Controller {
 			this.log.error(`${data.s2_cell_id}: Can't seem to handle weather: `, e, data)
 		}
 	}
+
+	async handleMonsterWeatherChange(data) {
+		this.log.debug('Weather - received data from monster controller about weather change', data)
+		return this.handle(data)
+	}
+
+	/**
+	 * handle incoming information from monster controller telling us that a user cares about a particular
+	 * pokemon
+	 */
+	handleUserCares(userCares) {
+		// Was in monster controller
+		this.log.debug('Weather - notification from monster controller about user who cares', userCares)
+
+		if (!this.caresData[userCares.weatherCellId]) {
+			this.caresData[userCares.weatherCellId] = {}
+		}
+		const weatherCellData = this.caresData[userCares.weatherCellId]
+
+		const cares = userCares.target
+
+		if (weatherCellData.cares) {
+			let exists = false
+			for (const caring of weatherCellData.cares) {
+				if (caring.id === cares.id) {
+					if (caring.caresUntil < userCares.caresUntil) {
+						caring.caresUntil = userCares.caresUntil
+					}
+					caring.clean = cares.clean
+					caring.ping = cares.ping
+					caring.language = cares.language
+					caring.template = cares.template
+					exists = true
+					break
+				}
+			}
+			if (!exists) {
+				weatherCellData.cares.push({
+					id: cares.id,
+					name: cares.name,
+					type: cares.type,
+					clean: cares.clean,
+					ping: cares.ping,
+					caresUntil: userCares.caresUntil,
+					template: cares.template,
+					language: cares.language,
+				})
+			}
+		} else {
+			weatherCellData.cares = []
+			weatherCellData.cares.push({
+				id: cares.id,
+				name: cares.name,
+				type: cares.type,
+				clean: cares.clean,
+				ping: cares.ping,
+				caresUntil: cares.disappear_time,
+				template: cares.template,
+				language: cares.language,
+			})
+		}
+		if (this.config.weather.showAlteredPokemon && userCares.pokemon) {
+			const data = userCares.pokemon
+			for (const caring of weatherCellData.cares) {
+				if (caring.id === cares.id) {
+					if (!caring.caredPokemons) caring.caredPokemons = []
+					caring.caredPokemons.push({
+						pokemon_id: data.pokemon_id,
+						form: data.form,
+						name: data.name,
+						formName: data.formName,
+						iv: data.iv,
+						cp: data.cp,
+						latitude: data.latitude,
+						longitude: data.longitude,
+						disappear_time: data.disappear_time,
+						alteringWeathers: data.alteringWeathers,
+					})
+				}
+			}
+		}
+
+		this.saveCache()
+	}
 }
 
 module.exports = Weather
