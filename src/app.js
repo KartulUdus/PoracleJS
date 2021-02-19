@@ -547,28 +547,36 @@ const agent = io.init({
 })
 
 const webQueueMetric = io.metric({
-	name: 'Realtime inbound webqueue',
-	value() {
+	name: 'Poracle inbound webqueue',
+	value: () => {
 		return fastify && fastify.hookQueue ? fastify.hookQueue.length : 0
 	},
 })
 
 const discordMetric = io.metric({
-	name: 'Realtime discord queue',
-	value() {
+	name: 'Poracle discord queue',
+	value: () => {
 		return fastify && fastify.discordQueue ? fastify.discordQueue.length : 0
 	},
 })
 
 const telegramMetric = io.metric({
-	name: 'Realtime telegram queue',
-	value() {
+	name: 'Poracle telegram queue',
+	value: () => {
 		return fastify && fastify.telegram ? fastify.telegram.length : 0
 	},
 })
 
+const webhookMeter = io.meter({
+	name: 'Poracle inbound webhooks',
+	samples: 1,
+	timeframe: 60,
+})
+
+
 async function handleAlarms() {
 	if (fastify.hookQueue.length) {
+		webhookMeter.mark()
 		if ((Math.random() * 1000) > 995) fastify.logger.info(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
 
 		await processOne(fastify.hookQueue.shift())

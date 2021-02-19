@@ -1,4 +1,4 @@
-const io = require('@pm2/io')
+const io = require('@pm2/io').init()
 
 const inside = require('point-in-polygon')
 const path = require('path')

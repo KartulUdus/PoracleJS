@@ -2,7 +2,7 @@ const { parentPort, workerData, isMainThread } = require('worker_threads')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const io = require('@pm2/io')
+const io = require('@pm2/io').init()
 
 const logs = require('./lib/logger')
 
@@ -48,8 +48,8 @@ let queuePort
 let commandPort
 
 const workerMetric = io.metric({
-	name: `Realtime worker${workerId} webqueue`,
-	value() {
+	name: `Poracle worker${workerId} webqueue`,
+	value: () => {
 		return hookQueue.length
 	},
 })
