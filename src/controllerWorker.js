@@ -107,7 +107,7 @@ async function processOne(hook) {
 
 const PromiseQueue = require('./lib/PromiseQueue')
 
-const alarmProcessor = new PromiseQueue(hookQueue, 10)
+const alarmProcessor = new PromiseQueue(hookQueue, config.tuning.concurrentWebhookProcessorsPerWorker)
 
 function receiveQueue(msg) {
 	try {

@@ -237,12 +237,18 @@ class Raid extends Controller {
 					if (!this.isRateLimited(cares.id)) discordCacheBad = false
 				})
 
-				if (discordCacheBad) return []
+				if (discordCacheBad) {
+					whoCares.forEach((cares) => {
+						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+					})
+
+					return []
+				}
 				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 				const jobs = []
 
 				if (pregenerateTile) {
-					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data)
 					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
@@ -353,7 +359,7 @@ class Raid extends Controller {
 			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				this.log.debug(`${logReference}: Raid on ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`${logReference}: Egg at ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -372,7 +378,13 @@ class Raid extends Controller {
 				if (!this.isRateLimited(cares.id)) discordCacheBad = false
 			})
 
-			if (discordCacheBad) return []
+			if (discordCacheBad) {
+				whoCares.forEach((cares) => {
+					this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				})
+
+				return []
+			}
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 

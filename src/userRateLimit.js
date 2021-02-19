@@ -8,12 +8,14 @@ class UserRateChecker {
 
 	// eslint-disable-next-line no-unused-vars
 	getMessageTimeout(id, type) {
-		return this.config.discord.limitSec
+		return this.config.alertLimits.timingPeriod
 	}
 
 	// eslint-disable-next-line no-unused-vars
 	getMessageLimit(id, type) {
-		return this.config.discord.limitAmount
+		const limit = type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
+
+		return limit
 		// return type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
 	}
 

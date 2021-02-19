@@ -45,6 +45,8 @@ function checkConfig(config) {
 	if (config.geocoding.staticProvider != 'none' && !config.geocoding.staticProviderURL.startsWith('http')) {
 		logs.log.warn('Config Check: geocoding/staticProviderURL does not start with http')
 	}
+	if (typeof config.discord.limitSec != 'undefined') logs.log.warn('Config Check: legacy option “discord.limitSec” given and ignored, replace with “alertLimits.timingPeriod”')
+	if (typeof config.discord.limitAmount != 'undefined') logs.log.warn('Config Check: legacy option “discord.limitAmount” given and ignored, replace with “alertLimits.dmLimit/channelLimit”')
 }
 
 function checkGeofence(geofence) {

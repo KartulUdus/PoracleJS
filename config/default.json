@@ -84,6 +84,11 @@
         "defaultDistance": 0,
         "maxDistance": 0
     },
+    "alertLimits": {
+        "timingPeriod": 240,
+        "dmLimit": 20,
+        "channelLimit": 40
+    },
     "discord": {
         "enabled": true,
         "disableAutoGreetings": false,
@@ -133,5 +138,13 @@
         "spriteWidth": 20,
         "scale": 2,
         "type": "klokantech-basic"
-      }
+      },
+    "tuning": {
+      "maxDatabaseConnections": 15,
+      "webhookProcessingWorkers": 2,
+      "concurrentWebhookProcessorsPerWorker": 10,
+      "concurrentDiscordDestinationsPerBot": 5,
+      "concurrentTelegramDestinationsPerBot": 5,
+      "concurrentDiscordWebhookConnections": 10
+    }
 }

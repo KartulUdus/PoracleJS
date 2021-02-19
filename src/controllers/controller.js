@@ -28,7 +28,7 @@ class Controller extends EventEmitter {
 		this.earthRadius = 6371 * 1000 // m
 		this.controllerWeatherManager = controllerWeatherManager
 		//		this.controllerData = weatherCacheData || {}
-		this.tileserverPregen = new TileserverPregen()
+		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.dtsCache = {}
 	}
 

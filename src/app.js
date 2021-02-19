@@ -42,6 +42,7 @@ const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.teleg
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
 const DiscordWorker = require('./lib/discord/discordWorker')
+const DiscordWebhookWorker = require('./lib/discord/discordWebhookWorker')
 const DiscordCommando = require('./lib/discord/commando')
 
 const TelegramWorker = require('./lib/telegram/Telegram')
@@ -71,6 +72,7 @@ fastify.decorate('hookQueue', [])
 const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
+let discordWebhookWorker
 let roleWorker
 let telegram
 let telegramChannel
@@ -81,6 +83,7 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config, logs, true))
 		}
 	}
+	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
 
 	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
 		roleWorker = new DiscordWorker(config.discord.token[0], 999, config, logs)
@@ -221,8 +224,6 @@ function handleShutdown() {
 		})
 }
 
-const discordBigQueue = { count: 0, lastSize: 0 }
-
 async function run() {
 	process.on('SIGINT', handleShutdown)
 	process.on('SIGTERM', handleShutdown)
@@ -236,38 +237,34 @@ async function run() {
 			if (!fastify.discordQueue.length) {
 				return
 			}
-			if ((Math.random() * 1000) > 995) fastify.logger.debug(`DiscordQueue is currently ${fastify.discordQueue.length}`)
 
-			if (fastify.discordQueue.length > 500) {
-				discordBigQueue.count++
-				discordBigQueue.lastSize = fastify.discordQueue.length
-				if ((discordBigQueue.count % 6000) == 0) { // Approx once per minute 10ms per call
-					fastify.logger.warn(`DiscordQueue is big, remained big for ${discordBigQueue.count} calls currently ${discordBigQueue.lastSize}`)
-				}
-			} else {
-				discordBigQueue.lastSize = 0
-				discordBigQueue.count = 0
-			}
-
-			const { target } = fastify.discordQueue[0]
-			// see if target has dedicated worker
-			let worker = discordWorkers.find((workerr) => workerr.users.includes(target))
-			if (!worker) {
-				let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-				let laziestWorkerId
-				Object.keys(discordWorkers).map((i) => {
-					if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
-						busyestWorkerHumanCount = discordWorkers[i].userCount
-						laziestWorkerId = i
+			// Dequeue onto individual queues as fast as possible
+			while (fastify.discordQueue.length) {
+				const { target, type } = fastify.discordQueue[0]
+				let worker
+				if (type == 'webhook') {
+					worker = discordWebhookWorker
+				} else {
+					// see if target has dedicated worker
+					worker = discordWorkers.find((workerr) => workerr.users.includes(target))
+					if (!worker) {
+						let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						let laziestWorkerId
+						Object.keys(discordWorkers).map((i) => {
+							if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
+								busyestWorkerHumanCount = discordWorkers[i].userCount
+								laziestWorkerId = i
+							}
+						})
+						busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						worker = discordWorkers[laziestWorkerId]
+						worker.addUser(target)
 					}
-				})
-				busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-				worker = discordWorkers[laziestWorkerId]
-				worker.addUser(target)
-			}
+				}
 
-			if (!worker.busy) worker.work(fastify.discordQueue.shift())
-		}, 10)
+				worker.work(fastify.discordQueue.shift())
+			}
+		}, 100)
 
 		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
 			setTimeout(syncDiscordRole, 10000)
@@ -279,30 +276,16 @@ async function run() {
 			if (!fastify.telegramQueue.length) {
 				return
 			}
-			if ((Math.random() * 100) > 80) fastify.logger.debug(`TelegramQueue is currently ${fastify.telegramQueue.length}`)
 
-			let worker = telegram
-			if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
-				worker = telegramChannel
+			while (fastify.telegramQueue.length) {
+				let worker = telegram
+				if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
+					worker = telegramChannel
+				}
+
+				worker.work(fastify.telegramQueue.shift())
 			}
-			// const { target } = fastify.telegramQueue[0]
-			// // see if target has dedicated worker
-			// let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
-			// if (!worker) {
-			// 	let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			// 	let laziestWorkerId
-			// 	Object.keys(telegramWorkers).map((i) => {
-			// 		if (telegramWorkers[i].userCount < busyestWorkerHumanCount) {
-			// 			busyestWorkerHumanCount = telegramWorkers[i].userCount
-			// 			laziestWorkerId = i
-			// 		}
-			// 	})
-			// 	busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			// 	worker = telegramWorkers[laziestWorkerId]
-			// 	worker.addUser(target)
-			// }
-			if (!worker.busy) worker.work(fastify.telegramQueue.shift())
-		}, 10)
+		}, 100)
 
 		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 			setTimeout(syncTelegramMembership, 30000)
@@ -322,7 +305,7 @@ const UserRateChecker = require('./userRateLimit')
 const rateChecker = new UserRateChecker(config)
 
 const workers = []
-const maxWorkers = 2
+const maxWorkers = config.tuning.webhookProcessingWorkers
 
 function processMessages(msgs) {
 	let newRateLimits = false
@@ -562,13 +545,18 @@ async function handleAlarms() {
 
 		await processOne(fastify.hookQueue.shift())
 		setImmediate(handleAlarms)
-		//		alarmProcessor.run(processOne)
 	}
 }
 
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
 if (NODE_MAJOR_VERSION < 12) {
-	throw new Error('Requires Node 12 (or higher)')
+	throw new Error('Requires Node 12 or 14')
+}
+if (NODE_MAJOR_VERSION == 13) {
+	throw new Error('Requires Node 12 or 14')
+}
+if (NODE_MAJOR_VERSION > 14) {
+	throw new Error('Requires Node 12 or 14')
 }
 
 run()

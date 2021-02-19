@@ -1,3 +1,4 @@
+// const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 
@@ -334,7 +335,7 @@ class Monster extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('monster', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated

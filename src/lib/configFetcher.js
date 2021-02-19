@@ -35,7 +35,7 @@ function getKnex(conf) {
 			return Knex({
 				client: 'mysql2',
 				connection: conf.database.conn,
-				pool: { min: 2, max: 15 },
+				pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
 			})
 		}
 
@@ -43,7 +43,7 @@ function getKnex(conf) {
 			return Knex({
 				client: 'pg',
 				connection: conf.database.conn,
-				pool: { min: 2, max: 15 },
+				pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
 			})
 		}
 		default: {

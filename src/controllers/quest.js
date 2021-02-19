@@ -172,13 +172,19 @@ class Quest extends Controller {
 				if (!this.isRateLimited(cares.id)) discordCacheBad = false
 			})
 
-			if (discordCacheBad) return []
+			if (discordCacheBad) {
+				whoCares.forEach((cares) => {
+					this.log.verbose(`${logReference}: Not creating quest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				})
+
+				return []
+			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
