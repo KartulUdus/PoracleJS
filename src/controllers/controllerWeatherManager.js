@@ -1,12 +1,15 @@
 const { S2 } = require('s2-geometry')
 const EventEmitter = require('events')
 
+const pcache = require('flat-cache')
+const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
+
 class ControllerWeatherManager extends EventEmitter {
 	constructor(config, log) {
 		super()
 		this.config = config
 		this.log = log
-		this.controllerData = {}
+		this.controllerData = weatherCache.getKey('weatherCacheData') || {} // populate from cache on first load
 		this.localWeatherData = {}
 	}
 
