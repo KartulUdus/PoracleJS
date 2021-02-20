@@ -406,7 +406,7 @@ class Raid extends Controller {
 			const jobs = []
 
 			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference,'raid', data)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
