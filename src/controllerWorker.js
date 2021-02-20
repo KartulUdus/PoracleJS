@@ -49,9 +49,7 @@ let commandPort
 
 const workerMetric = io.metric({
 	name: `Poracle worker${workerId} webqueue`,
-	value: () => {
-		return hookQueue.length
-	},
+	value: () => hookQueue.length,
 })
 
 async function processOne(hook) {

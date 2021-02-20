@@ -111,12 +111,15 @@ class Weather extends Controller {
 		// const key = S2.latLngToKey(weatherObject.lat, weatherObject.lon, 10)
 		// const id = S2.keyToId(key)
 
+		this.log.debug(`Get weather ${id} before mutex`)
 		let weatherMutex = this.getWeatherMutex[id]
 		if (!weatherMutex) {
 			weatherMutex = new Mutex()
 			this.getWeatherMutex[id] = weatherMutex
 		}
 		return weatherMutex.runExclusive(async () => {
+			this.log.debug(`Get weather ${id} obtained mutex mutex`)
+
 			const nowTimestamp = Math.floor(Date.now() / 1000)
 			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
 			const nextHourTimestamp = currentHourTimestamp + 3600

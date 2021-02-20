@@ -87,6 +87,8 @@ async function receiveCommand(cmd) {
 			updateBadGuys(cmd.badguys)
 		}
 		if (cmd.type == 'weather') {
+			log.debug(`Worker ${workerId}: receiveCommand<weather> ${cmd.weatherCommand}`)
+
 			if (cmd.weatherCommand == 'userCares') {
 				weatherController.handleUserCares(cmd.data)
 			}

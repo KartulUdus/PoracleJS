@@ -548,23 +548,17 @@ const agent = io.init({
 
 const webQueueMetric = io.metric({
 	name: 'Poracle inbound webqueue',
-	value: () => {
-		return fastify && fastify.hookQueue ? fastify.hookQueue.length : 0
-	},
+	value: () => (fastify && fastify.hookQueue ? fastify.hookQueue.length : 0),
 })
 
 const discordMetric = io.metric({
 	name: 'Poracle discord queue',
-	value: () => {
-		return fastify && fastify.discordQueue ? fastify.discordQueue.length : 0
-	},
+	value: () => (fastify && fastify.discordQueue ? fastify.discordQueue.length : 0),
 })
 
 const telegramMetric = io.metric({
 	name: 'Poracle telegram queue',
-	value: () => {
-		return fastify && fastify.telegram ? fastify.telegram.length : 0
-	},
+	value: () => (fastify && fastify.telegram ? fastify.telegram.length : 0),
 })
 
 const webhookMeter = io.meter({
@@ -572,7 +566,6 @@ const webhookMeter = io.meter({
 	samples: 1,
 	timeframe: 60,
 })
-
 
 async function handleAlarms() {
 	if (fastify.hookQueue.length) {
@@ -582,6 +575,18 @@ async function handleAlarms() {
 		await processOne(fastify.hookQueue.shift())
 		setImmediate(handleAlarms)
 	}
+}
+
+async function currentStatus() {
+	let discordQueueLength = 0
+	for (const w of discordWorkers) {
+		discordQueueLength += w.discordQueue.length
+	}
+	const telegramQueueLength = (telegram ? telegram.telegramQueue.length : 0)
+		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
+
+	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue : 0
+	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} Discord: ${discordQueueLength} + ${webhookQueueLength} Telegram: ${telegramQueueLength}`)
 }
 
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
@@ -603,3 +608,4 @@ io.init({
 
 run()
 setInterval(handleAlarms, 100)
+setInterval(currentStatus, 60000)
