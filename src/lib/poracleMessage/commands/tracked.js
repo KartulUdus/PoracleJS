@@ -77,6 +77,7 @@ exports.run = async (client, msg, args) => {
 				const monsterName = mon ? translator.translate(mon.name) : 'levelMon'
 				const raidTeam = translator.translate(client.GameData.utilData.teams[raid.team].name)
 				const formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
+				if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
 
 				if (+raid.pokemon_id === 9000) {
 					message = message.concat(`\n**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`)
