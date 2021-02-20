@@ -7,7 +7,7 @@ class Query {
 		this.db = db
 		this.config = config
 		this.log = log
-		this.tileserverPregen = new TileserverPregen(config, logs)
+		this.tileserverPregen = new TileserverPregen(config, log)
 	}
 
 	getGeocoder() {
