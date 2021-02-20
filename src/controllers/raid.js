@@ -179,7 +179,7 @@ class Raid extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
-			data.weather = this.controllerWeatherManager.getCurrentWeatherInCell(this.controllerWeatherManager.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
+			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0

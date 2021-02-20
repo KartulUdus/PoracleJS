@@ -132,14 +132,14 @@ class Monster extends Controller {
 				return
 			}
 
-			const weatherCellId = this.controllerWeatherManager.getWeatherCellId(data.latitude, data.longitude)
+			const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
 
 			if (data.weather) {
-				this.controllerWeatherManager.checkWeatherOnMonster(weatherCellId, data.latitude, data.longitude, data.weather)
+				this.weatherData.checkWeatherOnMonster(weatherCellId, data.latitude, data.longitude, data.weather)
 			}
 
 			// Should this is getting currentCellWeather
-			const currentCellWeather = this.controllerWeatherManager.getCurrentWeatherInCell(weatherCellId)
+			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 			// if (!currentCellWeather && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
@@ -343,9 +343,9 @@ class Monster extends Controller {
 
 			// get Weather Forecast information
 
-			const { nextHourTimestamp } = this.controllerWeatherManager.getWeatherTimes()
+			const { nextHourTimestamp } = this.weatherData.getWeatherTimes()
 			if (this.config.weather.enableWeatherForecast && data.disappear_time > nextHourTimestamp) {
-				const weatherForecast = await this.controllerWeatherManager.getWeatherForecast(weatherCellId)
+				const weatherForecast = await this.weatherData.getWeatherForecast(weatherCellId)
 
 				let pokemonShouldBeBoosted = false
 				if (weatherForecast.current > 0 && this.GameData.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true

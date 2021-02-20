@@ -6,7 +6,7 @@ const pcache = require('flat-cache')
 
 const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
 
-class ControllerWeatherManager extends EventEmitter {
+class WeatherData extends EventEmitter {
 	constructor(config, log) {
 		super()
 		this.config = config
@@ -226,4 +226,4 @@ class ControllerWeatherManager extends EventEmitter {
 	}
 }
 
-module.exports = ControllerWeatherManager
+module.exports = WeatherData

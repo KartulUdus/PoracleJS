@@ -28,7 +28,7 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
-const ControllerWeatherManager = require('./controllers/controllerWeatherManager')
+const ControllerWeatherManager = require('./controllers/weatherData')
 /**
  * Contains currently rate limited users
  * @type {NodeCache}
