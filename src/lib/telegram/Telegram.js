@@ -24,6 +24,11 @@ class Telegram {
 		this.bot
 			.use(commandParser(this.translatorFactory))
 			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory))
+
+		/* install middleware for telegram location sharing function */
+		const locationHandler = require(`${__dirname}/commands/location`)
+		this.bot.on('location', locationHandler)
+
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
