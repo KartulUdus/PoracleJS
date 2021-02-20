@@ -25,10 +25,7 @@ class Telegram {
 			.use(commandParser(this.translatorFactory))
 			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory))
 
-		/* install middleware for telegram location sharing function */
-		const locationHandler = require(`${__dirname}/commands/location`)
-		this.bot.on('location', locationHandler)
-
+		/* set command middleware for each enabled command */
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
@@ -47,6 +44,11 @@ class Telegram {
 				}
 			}
 		})
+		/* install extra middleware for telegram location sharing function, because .command(...) only catch text type messages */
+		if (!this.config.general.disabledCommands.includes('location')){
+			const locationHandler = require(`${__dirname}/commands/location`)
+			this.bot.on('location', locationHandler)
+		}
 
 		if (this.config.general.availableLanguages && !this.config.general.disabledCommands.includes('poracle')) {
 			for (const [, availableLanguage] of Object.entries(this.config.general.availableLanguages)) {

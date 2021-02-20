@@ -4,18 +4,16 @@ module.exports = (translatorFactory) => mount(['text', 'location'], (ctx, next) 
 	const regex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]*)$/i
 	if (!ctx.message) return next()
 
-	var tempTextMsg = ""
-	/* if we have a location type message -> convert location data to text string to handle as text command */
-	if (ctx.message.location) {
-		tempTextMsg = `/location ${ctx.message.location.latitude} ${ctx.message.location.longitude}`
-	} else {
-		tempTextMsg = ctx.message.text
-	}
+	let commandText = ctx.message.text || ''
+    /* if we have a location type message -> convert location data to text string to handle as text command */
+    if (ctx.message.location) {
+        commandText = `/location ${ctx.message.location.latitude} ${ctx.message.location.longitude}`
+    }
 
-	const parts = regex.exec(tempTextMsg)
+	const parts = regex.exec(commandText)
 	if (!parts) return next()
 	const command = {
-		text: tempTextMsg,
+		text: commandText,
 		command: parts[1],
 		bot: parts[2],
 		args: parts[3],
