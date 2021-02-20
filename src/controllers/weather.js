@@ -201,6 +201,8 @@ class Weather extends Controller {
 
 				this.broadcastWeather()
 				this.saveCache()
+			} else {
+				this.log.debug(`${id}: getWeather: No weather fetch is required`)
 			}
 		})
 
