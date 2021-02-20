@@ -76,7 +76,7 @@ exports.run = async (client, msg, args) => {
 				const mon = Object.values(client.GameData.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 				const monsterName = mon ? translator.translate(mon.name) : 'levelMon'
 				const raidTeam = translator.translate(client.GameData.utilData.teams[raid.team].name)
-				const formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
+				let formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
 				if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
 
 				if (+raid.pokemon_id === 9000) {
