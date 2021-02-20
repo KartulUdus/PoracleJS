@@ -1,4 +1,3 @@
-const io = require('@pm2/io')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
@@ -148,7 +147,6 @@ class Pokestop extends Controller {
 			}
 
 			const whoCares = await this.invasionWhoCares(data)
-			this.markCares(whoCares.length)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Invasion of type ${data.gruntType} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
@@ -204,7 +202,7 @@ class Pokestop extends Controller {
 						data.gender = gruntType.gender
 						data.genderDataEng = this.GameData.utilData.genders[data.gender]
 						if (!data.genderDataEng) {
-							data.genderDataEng = { name: '', emoji: ''}
+							data.genderDataEng = { name: '', emoji: '' }
 						}
 						if (this.GameData.utilData.types[gruntType.type]) {
 							data.gruntTypeEmoji = translator.translate(this.GameData.utilData.types[gruntType.type].emoji)
@@ -273,7 +271,7 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: data.genderDataEng ? { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) } : {name: '',emoji:''},
+					genderData: data.genderDataEng ? { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) } : { name: '', emoji: '' },
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 

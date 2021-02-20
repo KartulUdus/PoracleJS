@@ -206,11 +206,6 @@ class Weather extends Controller {
 				this.broadcastWeather()
 			}
 		})
-
-		//		res.current = data[currentHourTimestamp]
-		//		res.next = data[nextHourTimestamp]
-
-		//		return res
 	}
 
 	saveCache() {

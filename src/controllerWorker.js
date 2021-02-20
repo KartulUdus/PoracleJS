@@ -2,7 +2,6 @@ const { parentPort, workerData, isMainThread } = require('worker_threads')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const io = require('@pm2/io').init()
 
 const logs = require('./lib/logger')
 
@@ -46,11 +45,6 @@ const pokestopController = new PokestopController(logs.controller, knex, config,
 const hookQueue = []
 let queuePort
 let commandPort
-
-const workerMetric = io.metric({
-	name: `Poracle worker${workerId} webqueue`,
-	value: () => hookQueue.length,
-})
 
 async function processOne(hook) {
 	let queueAddition = []

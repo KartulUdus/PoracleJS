@@ -1,5 +1,3 @@
-const io = require('@pm2/io')
-
 //
 // Quest controller getReward and getQuest function inspired from PMSF
 //
@@ -166,7 +164,6 @@ class Quest extends Controller {
 			} else {
 				this.log.verbose(`${logReference}: Quest appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
-			this.markCares(whoCares.length)
 
 			if (!whoCares[0]) return []
 

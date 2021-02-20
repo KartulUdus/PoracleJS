@@ -3,6 +3,7 @@ const EventEmitter = require('events')
 
 const path = require('path')
 const pcache = require('flat-cache')
+
 const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
 
 class ControllerWeatherManager extends EventEmitter {

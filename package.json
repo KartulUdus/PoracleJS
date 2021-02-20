@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/KartulUdus/reference#readme",
   "dependencies": {
-    "@pm2/io": "^4.3.5",
     "async-mutex": "^0.3.0",
     "axios": "^0.21.1",
     "commander": "^4.1.0",
