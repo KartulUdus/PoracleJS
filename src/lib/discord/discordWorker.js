@@ -1,4 +1,4 @@
-const { Client } = require('discord.js')
+const { Client, DiscordAPIError } = require('discord.js')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
 const FairPromiseQueue = require('../FairPromiseQueue')
@@ -143,10 +143,38 @@ class Worker {
 		const allUsers = users
 		const validRoles = roles
 		const invalidUsers = []
-		const guild = await this.client.guilds.fetch(guildID)
+		let guild
+		try {
+			guild = await this.client.guilds.fetch(guildID)
+		} catch (err) {
+			if (err instanceof DiscordAPIError) {
+				if (err.httpStatus === 403) {
+					this.logs.log.debug(`${guildID} no access`)
+
+					invalidUsers.push(...allUsers)
+					return invalidUsers
+				}
+			} else {
+				throw err
+			}
+		}
 		for (const user of allUsers) {
 			this.logs.log.debug(`Checking role for: ${user.name} - ${user.id}`)
-			const discorduser = await guild.members.fetch(user.id)
+			let discorduser
+			try {
+				discorduser = await guild.members.fetch(user.id)
+			} catch (err) {
+				if (err instanceof DiscordAPIError) {
+					if (err.httpStatus === 404) {
+						this.logs.log.debug(`${user.id} doesn't exist on guild ${guildID}`)
+						invalidUsers.push(user)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+				} else {
+					throw err
+				}
+			}
 			if (discorduser.roles.cache.find((r) => validRoles.includes(r.id))) {
 				this.logs.log.debug(`${discorduser.user.username} has a valid role`)
 			} else {
