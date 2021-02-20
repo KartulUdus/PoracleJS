@@ -50,7 +50,7 @@ async function processOne(hook) {
 	let queueAddition = []
 
 	try {
-		if ((Math.random() * 1000) > 995) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
+		if ((Math.random() * 1000) > 995) log.verbose(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
 
 		switch (hook.type) {
 			case 'pokemon': {
@@ -127,7 +127,7 @@ function updateBadGuys(badguys) {
 
 function receiveCommand(cmd) {
 	try {
-		log.info(`Worker ${workerId}: receiveCommand ${cmd.type}`)
+		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
 
 		if (cmd.type == 'badguys') {
 			log.debug(`Worker ${workerId}: Received badguys`, cmd.badguys)
@@ -154,6 +154,10 @@ function notifyWeatherController(cmd, data) {
 	})
 }
 
+async function currentStatus() {
+	log.info(`[Worker ${workerId}] Queues: WebhookQueue is currently ${hookQueue.length}`)
+}
+
 if (!isMainThread) {
 	parentPort.on('message', (msg) => {
 		if (msg.type == 'queuePort') {
@@ -169,4 +173,5 @@ if (!isMainThread) {
 	controllerWeatherManager.on('weatherForecastRequested', (data) => notifyWeatherController('weatherForecastRequested', data))
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
+	setInterval(currentStatus, 60000)
 }

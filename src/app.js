@@ -541,7 +541,7 @@ async function processOne(hook) {
 
 async function handleAlarms() {
 	if (fastify.hookQueue.length) {
-		if ((Math.random() * 1000) > 995) fastify.logger.info(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
+		if ((Math.random() * 1000) > 995) fastify.logger.verbose(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
 
 		await processOne(fastify.hookQueue.shift())
 		setImmediate(handleAlarms)
