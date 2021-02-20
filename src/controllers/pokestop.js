@@ -273,7 +273,7 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
+					genderData: data.genderDataEng ? { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) } : {name: '',emoji:''},
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
