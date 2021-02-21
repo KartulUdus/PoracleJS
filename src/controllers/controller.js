@@ -166,7 +166,7 @@ class Controller extends EventEmitter {
 	// eslint-disable-next-line class-methods-use-this
 	escapeJsonString(s) {
 		if (!s) return s
-		return s.replace(/"/g, '\'\'').replace(/\n/g, ' ')
+		return s.replace(/"/g, '\'\'').replace(/\n/g, ' ').replace(/\\/g, '?')
 	}
 
 	escapeAddress(a) {
