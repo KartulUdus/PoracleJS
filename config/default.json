@@ -102,8 +102,6 @@
         "userRole": ["roles to grant access for"],
         "admins": ["ids of admin accounts"],
         "prefix": "!",
-        "limitSec": 240,
-        "limitAmount": 20,
         "ivColors": [
             "#9D9D9D",
             "#FFFFFF",
