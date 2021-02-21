@@ -28,6 +28,12 @@
   // - This is an array of available languages that users can swap between using the !language command
   // - Each language can have it's own call word which pre-sets that language, and you also define the help text
   // - command so that Poracle can always answer help in native language regardless of the users current settings
+  // An example might be:
+  //         "availableLanguages": {
+  //            "en": {"poracle": "poracle", "help": "help" },
+  //            "de": {"poracle": "dasporacle", "help": "hilfe" },
+  //            "fr": {"poracle": "leporacle", "help": "aide" }
+  //        },
   // defaultTemplateName
   // persistDuplicateCache - whether to store the webhook duplicate cache on exit. If you have a busy system
   //   this could be very large and slow down shutdown (many gigabytes) and startup. This is stored in the .cache
@@ -48,7 +54,6 @@
       "disableWeather": false,
       "roleCheckDeletionsAllowed": false,
       "availableLanguages": {
-        "en": {"poracle": "poracle", "help": "help" }
       },
       "defaultTemplateName": 1,
       "persistDuplicateCache": false
