@@ -76,7 +76,7 @@ exports.run = async (client, msg, args) => {
 							name: args[1],
 						})
 				}
-				const reaction = result.length || client.config.database.client === 'sqlite3' ? '✅' : '🙅'
+				const reaction = result || client.config.database.client === 'sqlite3' ? '✅' : '🙅'
 				await msg.react(reaction)
 
 				break
