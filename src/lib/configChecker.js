@@ -45,6 +45,14 @@ function checkConfig(config) {
 	if (config.geocoding.staticProvider != 'none' && !config.geocoding.staticProviderURL.startsWith('http')) {
 		logs.log.warn('Config Check: geocoding/staticProviderURL does not start with http')
 	}
+
+	// check whether tracking.everythingFlagPermissions has a valid value
+	if (!['allow-any', 'allow-and-always-individually', 'allow-and-ignore-individually', 'deny'].includes(config.tracking.everythingFlagPermissions)) {
+		logs.log.warn('Config Check: everything flag permissions is not one of allow-any,allow-and-always-individually,allow-and-ignore-individually,deny')
+	}
+	// check for legacy options
+	if (typeof config.tracking.disableEverythingTracking != 'undefined') logs.log.warn('Config Check: legacy option “tracking.disableEverythingTracking” given and ignored, replace with “tracking.everythingFlagPermissions”')
+	if (typeof config.tracking.forceEverythingSeparately != 'undefined') logs.log.warn('Config Check: legacy option “tracking.forceEverythingSeparately” given and ignored, replace with “tracking.everythingFlagPermissions”')
 }
 
 function checkGeofence(geofence) {
