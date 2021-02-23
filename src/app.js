@@ -556,17 +556,17 @@ async function currentStatus() {
 	const telegramQueueLength = (telegram ? telegram.telegramQueue.length : 0)
 		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
 
-	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue : 0
-	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} Discord: ${discordQueueLength} + ${webhookQueueLength} Telegram: ${telegramQueueLength}`)
+	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
+	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`)
 }
 
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
 if (NODE_MAJOR_VERSION < 12) {
 	throw new Error('Requires Node 12 or 14')
 }
-if (NODE_MAJOR_VERSION == 13) {
-	throw new Error('Requires Node 12 or 14')
-}
+// if (NODE_MAJOR_VERSION == 13) {
+//	throw new Error('Requires Node 12 or 14')
+// }
 if (NODE_MAJOR_VERSION > 14) {
 	throw new Error('Requires Node 12 or 14')
 }
