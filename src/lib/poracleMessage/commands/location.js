@@ -52,7 +52,7 @@ exports.run = async (client, msg, args) => {
 		message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
 
 		if (platform === 'discord' && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
-			staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'location', { latitude: lat, longitude: lon }, this.config.geocoding.staticMapType.location)
+			staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'location', { latitude: lat, longitude: lon }, client.config.geocoding.staticMapType.location)
 			message = {
 				embed: {
 					color: 0x00ff00,
