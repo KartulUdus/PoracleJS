@@ -80,7 +80,7 @@ let telegramChannel
 if (config.discord.enabled) {
 	for (const key in config.discord.token) {
 		if (config.discord.token[key]) {
-			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config, logs, true))
+			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
 		}
 	}
 	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
@@ -92,10 +92,10 @@ if (config.discord.enabled) {
 
 let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker('0', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
+	telegram = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
+		telegramChannel = new TelegramWorker('2', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
@@ -395,7 +395,7 @@ for (let w = 0; w < maxWorkers; w++) {
 	worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
 		workerData:
 			{
-				workerId: w,
+				workerId: w + 1,
 			},
 	})
 

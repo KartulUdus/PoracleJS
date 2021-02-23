@@ -7,12 +7,12 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName = args.find((arg) => arg.match(client.re.nameRe))
-		if (webhookName) [,,webhookName] = webhookName.match(client.re.nameRe)
+		if (webhookName) [,, webhookName] = webhookName.match(client.re.nameRe)
 		const webhookLink = msg.content.match(client.hookRegex) ? msg.content.match(client.hookRegex)[0] : false
 
 		let areaName = args.find((arg) => arg.match(client.re.areaRe))
 		if (areaName) {
-			[,,areaName] = areaName.match(client.re.areaRe)
+			[,, areaName] = areaName.match(client.re.areaRe)
 			areaName = areaName.toLowerCase().replace(/ /g, '_')
 		}
 		const confAreas = client.geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
@@ -24,7 +24,7 @@ exports.run = async (client, msg, [args]) => {
 		let language = null
 		let languageName = args.find((arg) => arg.match(client.re.languageRe))
 		if (languageName) {
-			[,,languageName] = languageName.match(client.re.languageRe)
+			[,, languageName] = languageName.match(client.re.languageRe)
 			languageName = client.translatorFactory.reverseTranslateCommand(languageName, true)
 		}
 		let newLanguage = languageName
@@ -48,7 +48,7 @@ exports.run = async (client, msg, [args]) => {
 				type: target.webhook ? 'webhook' : 'discord:channel',
 				name: target.name,
 				area: areaName,
-				language: language,
+				language,
 			})
 			await msg.react('✅')
 			let reply = `${client.translator.translate('Channel added')}`
