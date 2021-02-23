@@ -127,6 +127,14 @@
         "providerURL": "Your Nominatim Server Address",
         "staticProvider": "none",
         "staticProviderURL": "Your TileServerCache Server Address",
+        "staticMapType": {
+          "pokemon": "staticMap",
+          "raid": "staticMap",
+          "pokestop": "staticMap",
+          "quest": "staticMap",
+          "weather": "staticMap",
+          "location": "staticMap"
+        },
         "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
         "staticKey":["Your MapQuest or Google Key"],
         "width": 320,

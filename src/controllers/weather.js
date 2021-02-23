@@ -330,8 +330,8 @@ class Weather extends Controller {
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
-			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data)
+			if (pregenerateTile && this.config.geocoding.staticMapType.weather && !this.config.weather.showAlteredPokemonStaticMap) {
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
@@ -382,8 +382,8 @@ class Weather extends Controller {
 
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
 				}
-				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
-					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data)
+				if (pregenerateTile && this.config.geocoding.staticMapType.weather && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
+					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
 					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated

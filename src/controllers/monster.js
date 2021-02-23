@@ -335,8 +335,8 @@ class Monster extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data)
+			if (pregenerateTile && this.config.geocoding.staticMapType.pokemon) {
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data, this.config.geocoding.staticMapType.pokemon)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated

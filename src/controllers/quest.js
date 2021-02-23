@@ -183,8 +183,8 @@ class Quest extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data)
+			if (pregenerateTile && this.config.geocoding.staticMapType.quest) {
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
