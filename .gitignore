@@ -1,5 +1,6 @@
 logs/*
 config/*.json
+config/customMaps/*
 config/dts/*.json
 config/locale/*.json
 docker-compose.yml

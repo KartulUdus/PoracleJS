@@ -10,7 +10,7 @@ class TileserverPregen {
 	async getPregeneratedTileURL(logReference, type, data, staticMapType) {
 		let mapType = 'staticmap'
 		let templateType = ''
-		if (staticMapType === 'multiStaticMap') {
+		if (staticMapType.toLowerCase() === 'multistaticmap') {
 			mapType = 'multistaticmap'
 			templateType = 'multi-'
 		}

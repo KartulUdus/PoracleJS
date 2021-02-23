@@ -128,7 +128,7 @@
         "staticProvider": "none",
         "staticProviderURL": "Your TileServerCache Server Address",
         "staticMapType": {
-          "pokemon": "staticMap",
+          "pokemon": "multiStaticMap",
           "raid": "staticMap",
           "pokestop": "staticMap",
           "quest": "staticMap",
