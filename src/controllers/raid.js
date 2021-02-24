@@ -163,6 +163,7 @@ class Raid extends Controller {
 			if (data.name) {
 				data.name = this.escapeJsonString(data.name)
 				data.gymName = data.name
+				data.gym_name = data.name
 			}
 			if (data.gym_name) {
 				data.gym_name = this.escapeJsonString(data.gym_name)
