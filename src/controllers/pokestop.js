@@ -1,5 +1,5 @@
 const geoTz = require('geo-tz')
-const moment = require('moment-timezone')
+const { DateTime, Interval } = require('luxon')
 const Controller = require('./controller')
 
 class Pokestop extends Controller {
@@ -100,8 +100,8 @@ class Pokestop extends Controller {
 			data.pokestopUrl = data.url
 
 			const incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp
-			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
-			data.disappearTime = moment(incidentExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.tth = Interval.fromDateTimes(DateTime.now(), DateTime.fromMillis(incidentExpiration * 1000)).toDuration(['hours', 'minutes', 'seconds', 'milliseconds']).toObject()
+			data.disappearTime = DateTime.fromMillis(incidentExpiration * 1000).setZone(geoTz(data.latitude, data.longitude).toString()).toLocaleString(this.config.locale.time24hr ? DateTime.TIME_24_WITH_SECONDS : DateTime.TIME_WITH_SECONDS)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.imgUrl = data.pokestopUrl // deprecated

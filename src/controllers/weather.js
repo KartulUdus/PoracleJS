@@ -1,12 +1,10 @@
-const moment = require('moment-timezone')
 const axios = require('axios')
 const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
 const path = require('path')
+const { DateTime, Interval } = require('luxon')
 const pcache = require('flat-cache')
 const Controller = require('./controller')
-
-require('moment-precise-range-plugin')
 
 const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname}../../../.cache/`))
 const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
@@ -18,7 +16,8 @@ class Weather extends Controller {
 			return ''
 		}
 
-		const cacheKey = `${moment().year()}-${moment().month() + 1}-${moment().date()}`
+		const now = DateTime.now()
+		const cacheKey = `${now.year}-${now.month}-${now.day}`
 		const cachedResult = weatherKeyCache.getKey(cacheKey)
 		let keyToUse
 
@@ -78,8 +77,8 @@ class Weather extends Controller {
 			next: 0,
 		}
 		if (!this.config.weather.enableWeatherForecast
-			|| moment().hour() >= moment(weatherObject.disappear * 1000).hour()
-			&& !(moment().hour() == 23 && moment(weatherObject.disappear * 1000).hour() == 0)
+			|| DateTime.now().hour >= DateTime.fromMillis(weatherObject.disappear * 1000).hour
+			&& !(DateTime.now().hour == 23 && DateTime.fromMillis(weatherObject.disappear * 1000).hour == 0)
 		) {
 			this.log.info('weather forecast target will disappear in current hour')
 			return res
@@ -94,15 +93,15 @@ class Weather extends Controller {
 		let forecastTimeout = nowTimestamp + this.config.weather.forecastRefreshInterval * 3600
 
 		if (this.config.weather.localFirstFetchHOD && !this.config.weather.smartForecast) {
-			const currentMoment = moment(currentHourTimestamp * 1000)
-			const currentHour = currentMoment.hour()
+			const currentMoment = DateTime.fromMillis(currentHourTimestamp * 1000)
+			const currentHour = currentMoment.hour
 			// Weather must be refreshed at the time set in config with the interval given
 			const localFirstFetchTOD = this.config.weather.localFirstFetchHOD
 			const { forecastRefreshInterval } = this.config.weather
 			// eslint-disable-next-line no-bitwise
 			const nextUpdateHour = (((currentHour + ((currentHour % forecastRefreshInterval) < localFirstFetchTOD ? 0 : (forecastRefreshInterval - 1))) & -forecastRefreshInterval) + localFirstFetchTOD) % 24
 			const nextUpdateInHours = (nextUpdateHour > currentHour ? nextUpdateHour : (24 + localFirstFetchTOD)) - currentHour
-			forecastTimeout = currentMoment.add(nextUpdateInHours, 'hours').unix()
+			forecastTimeout = currentMoment.plus({ hours: nextUpdateInHours }).toSeconds()
 		}
 
 		if (!this.controllerData[id]) this.controllerData[id] = {}
@@ -174,7 +173,6 @@ class Weather extends Controller {
 		let pregenerateTile = false
 		const data = obj
 		try {
-			moment.locale(this.config.locale.timeformat)
 			const logReference = data.s2_cell_id
 
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
@@ -274,8 +272,8 @@ class Weather extends Controller {
 			data.weatherEmojiEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].emoji : ''
 
 			const jobs = []
-			const now = moment.now()
-			let weatherTth = moment.preciseDiff(now, nextHourTimestamp * 1000, true)
+			//			const now = moment.now()
+			let weatherTth = Interval.fromDateTimes(DateTime.now(), DateTime.fromMillis(nextHourTimestamp * 1000)).toDuration(['hours', 'minutes', 'seconds', 'milliseconds']).toObject()
 
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Weather alert being generated for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
@@ -303,7 +301,7 @@ class Weather extends Controller {
 					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
-				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)
+				if (cares.caresUntil) weatherTth = Interval.fromDateTimes(DateTime.now(), DateTime.fromMillis(cares.caresUntil * 1000)).toDuration(['hours', 'minutes', 'seconds', 'milliseconds']).toObject()
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)

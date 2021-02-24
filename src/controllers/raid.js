@@ -1,6 +1,6 @@
 // const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
-const moment = require('moment-timezone')
+const { DateTime, Interval } = require('luxon')
 const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
 
@@ -173,7 +173,7 @@ class Raid extends Controller {
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url ? data.gym_url : ''
-			data.disappearTime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.disappearTime = DateTime.fromMillis(data.end * 1000).setZone(geoTz(data.latitude, data.longitude).toString()).toLocaleString(this.config.locale.time24hr ? DateTime.TIME_24_WITH_SECONDS : DateTime.TIME_WITH_SECONDS)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.color = data.gymColor // deprecated
@@ -207,7 +207,7 @@ class Raid extends Controller {
 				data.formNameEng = monster.form.name
 				data.genderDataEng = this.GameData.utilData.genders[data.gender]
 				data.evolutionNameEng = data.evolution ? this.GameData.utilData.evolution[data.evolution].name : ''
-				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
+				data.tth = Interval.fromDateTimes(DateTime.now(), DateTime.fromMillis(data.end * 1000)).toDuration(['hours', 'minutes', 'seconds', 'milliseconds']).toObject()
 				data.formname = data.formNameEng // deprecated
 				data.evolutionname = data.evolutionNameEng // deprecated
 				//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
@@ -355,8 +355,8 @@ class Raid extends Controller {
 				return jobs
 			}
 
-			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-			data.hatchTime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.tth = Interval.fromDateTimes(DateTime.now(), DateTime.fromMillis(data.start * 1000)).toDuration(['hours', 'minutes', 'seconds', 'milliseconds']).toObject()
+			data.hatchTime = DateTime.fromMillis(data.start * 1000).setZone(geoTz(data.latitude, data.longitude).toString()).toLocaleString(this.config.locale.time24hr ? DateTime.TIME_24_WITH_SECONDS : DateTime.TIME_WITH_SECONDS)
 			data.hatchtime = data.hatchTime // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`

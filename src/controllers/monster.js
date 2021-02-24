@@ -1,9 +1,8 @@
 // const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
-const moment = require('moment-timezone')
+const { DateTime, Interval } = require('luxon')
 const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
-require('moment-precise-range-plugin')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
@@ -101,7 +100,6 @@ class Monster extends Controller {
 			let hrstart = process.hrtime()
 			const logReference = data.encounter_id
 
-			moment.locale(this.config.locale.timeformat)
 			const minTth = this.config.general.alertMinimumTime || 0
 
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
@@ -230,8 +228,8 @@ class Monster extends Controller {
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivColor = this.findIvColor(data.iv)
-			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
-			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.tth = Interval.fromDateTimes(DateTime.now(), DateTime.fromMillis(data.disappear_time * 1000)).toDuration(['hours', 'minutes', 'seconds', 'milliseconds']).toObject()
+			data.disappearTime = DateTime.fromMillis(data.disappear_time * 1000).setZone(geoTz(data.latitude, data.longitude).toString()).toLocaleString(this.config.locale.time24hr ? DateTime.TIME_24_WITH_SECONDS : DateTime.TIME_WITH_SECONDS)
 			data.confirmedTime = data.disappear_time_verified
 			data.distime = data.disappearTime // deprecated
 			data.individual_attack = data.atk // deprecated
@@ -392,7 +390,7 @@ class Monster extends Controller {
 				let pokemonShouldBeBoosted = false
 				if (weatherForecast.current > 0 && this.GameData.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 				if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather == 0))) {
-					const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time).slice(0, -3)
+					const weatherChangeTime = DateTime.fromMillis((data.disappear_time - (data.disappear_time % 3600)) * 1000).setZone(geoTz(data.latitude, data.longitude).toString()).setLocale(this.config.locale.timeformat).toLocaleString(this.config.locale.time24hr ? DateTime.TIME_24_SIMPLE : DateTime.TIME_SIMPLE)
 					const pokemonWillBeBoosted = this.GameData.utilData.weatherTypeBoost[weatherForecast.next].filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
 					if (data.weather > 0 && !pokemonWillBeBoosted || data.weather == 0 && pokemonWillBeBoosted) {
 						weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current

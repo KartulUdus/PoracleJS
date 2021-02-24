@@ -49,6 +49,7 @@
     "locale": {
         "timeformat": "en-gb",
         "time": "LTS",
+      "time24hr": true,
         "addressFormat": "{{{streetName}}} {{streetNumber}}",
         "language": "en"
     },

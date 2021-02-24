@@ -5,7 +5,7 @@
 //
 // const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
-const moment = require('moment-timezone')
+const { DateTime, Interval } = require('luxon')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
 
@@ -107,11 +107,14 @@ class Quest extends Controller {
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			data.disappearTime = moment.tz(new Date(), this.config.locale.time, geoTz(data.latitude, data.longitude).toString()).endOf('day')
+
+			const endOfDay = DateTime.now().setZone(geoTz(data.latitude, data.longitude).toString()).endOf('day')
+			data.disappearTime = endOfDay.toLocaleString(this.config.locale.time24hr ? DateTime.TIME_24_WITH_SECONDS : DateTime.TIME_WITH_SECONDS)
+			data.tth = Interval.fromDateTimes(DateTime.now(), endOfDay).toDuration(['hours', 'minutes', 'seconds', 'milliseconds']).toObject()
+
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.disTime = data.disappearTime // deprecated
-			data.tth = moment.preciseDiff(Date.now(), data.disappearTime.clone().utc(), true)
 			data.imgUrl = ''
 			data.stickerUrl = ''
 
