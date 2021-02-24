@@ -94,7 +94,7 @@ exports.run = async (client, msg, args) => {
 							const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 							for (const t of times) {
-								timeString = timeString.concat(`    ${translator.translate(dayNames[t.day-1])} ${t.hours}:${t.mins}\n`)
+								timeString = timeString.concat(`    ${translator.translate(dayNames[t.day - 1])} ${t.hours}:${t.mins}\n`)
 							}
 						}
 

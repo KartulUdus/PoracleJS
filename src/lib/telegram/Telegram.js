@@ -45,7 +45,7 @@ class Telegram {
 			}
 		})
 		/* install extra middleware for telegram location sharing function, because .command(...) only catch text type messages */
-		if (!this.config.general.disabledCommands.includes('location')){
+		if (!this.config.general.disabledCommands.includes('location')) {
 			const locationHandler = require(`${__dirname}/commands/location`)
 			this.bot.on('location', locationHandler)
 		}
