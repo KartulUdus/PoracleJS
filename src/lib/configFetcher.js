@@ -1,6 +1,7 @@
 const importFresh = require('import-fresh')
 const path = require('path')
 const Knex = require('knex')
+const moment = require('moment-timezone')
 const TranslatorFactory = require('../util/translatorFactory')
 const dtsLoader = require('./dtsloader')
 const configChecker = require('./configChecker')
@@ -75,6 +76,8 @@ module.exports = {
 		configChecker.checkConfig(config)
 		configChecker.checkDts(dts, config)
 		configChecker.checkGeofence(geofence)
+
+		moment.locale(config.locale.timeformat)
 		return {
 			config, knex, dts, geofence, translator, translatorFactory,
 		}

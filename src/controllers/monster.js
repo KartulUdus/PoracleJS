@@ -102,7 +102,6 @@ class Monster extends Controller {
 			let hrstart = process.hrtime()
 			const logReference = data.encounter_id
 
-			moment.locale(this.config.locale.timeformat)
 			const minTth = this.config.general.alertMinimumTime || 0
 
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
