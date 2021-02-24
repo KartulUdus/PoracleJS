@@ -2,6 +2,10 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 
+/**
+ * Controller for processing pokestop webhooks
+ * Alerts on lures
+ */
 class PokestopLure extends Controller {
 	async lureWhoCares(obj) {
 		const data = obj
@@ -107,7 +111,7 @@ class PokestopLure extends Controller {
 
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				this.log.debug(`${data.pokestop_id} Invasion already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`${data.pokestop_id} Lure already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -148,7 +152,7 @@ class PokestopLure extends Controller {
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
-				this.log.debug(`${logReference}: Creating invasion alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+				this.log.debug(`${logReference}: Creating lure alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
 				const caresCache = this.getDiscordCache(cares.id).count
 

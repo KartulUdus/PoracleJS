@@ -16,6 +16,8 @@ const Telegraf = require('telegraf')
 
 const path = require('path')
 const pcache = require('flat-cache')
+const moment = require('moment-timezone')
+const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
@@ -400,7 +402,9 @@ async function processOne(hook) {
 				}
 				break
 			}
-			//			case 'invasion':
+			case 'invasion':
+				fastify.controllerLog.error(`${hook.message.pokestop_id}: Invasion hook was received but deprecated in code`)
+				break
 			case 'pokestop': {
 				if (config.general.disablePokestop) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop was received but set to be ignored in config`)
@@ -530,26 +534,36 @@ const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
 if (NODE_MAJOR_VERSION < 12) {
 	throw new Error('Requires Node 12 (or higher)')
 }
-// 0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55
-schedule.scheduleJob({ minute: [0] }, async () => {
-	const now = new Date()
-	const dow = now.getDay()
-	const hour = now.getHours()
-	// sunday = 0
 
+schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
 	try {
-		log.info('Profile Check: Checking for active profile changes')
+		log.verbose('Profile Check: Checking for active profile changes')
 		const humans = await fastify.monsterController.selectAllQuery('humans', {})
 		const profilesToCheck = await fastify.monsterController.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
 		let lastId
 		for (const profile of profilesToCheck) {
+			const human = humans.find((x) => x.id == profile.id)
+
+			let nowForHuman = moment()
+			if (human.latitude) {
+				nowForHuman = moment().tz(geoTz(human.latitude, human.longitude).toString())
+			}
+
 			if (profile.id != lastId) {
 				const timings = JSON.parse(profile.active_hours)
-				const active = timings.some((row) => row.day == dow && row.start <= hour && hour < row.end)
-				if (active) {
-					const human = humans.find((x) => x.id == profile.id)
+				const nowHour = nowForHuman.hour()
+				const nowMinutes = nowForHuman.minutes()
+				const nowDow = nowForHuman.isoWeekday()
+				const yesterdayDow = nowDow == 1 ? 7 : nowDow - 1
 
+				const active = timings.some((row) => (
+					(row.day == nowDow && row.hours == nowHour && nowMinutes > row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
+					|| (nowMinutes < 10 && row.day == nowDow && row.hours == nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
+					|| (nowHour == 0 && nowMinutes < 10 && row.day == yesterdayDow && row.hours == 23 && row.mins > 50) // first 10 minutes of day
+				))
+
+				if (active) {
 					if (human.current_profile_no != profile.profile_no) {
 						const userTranslator = translatorFactory.Translator(human.language || config.general.locale)
 

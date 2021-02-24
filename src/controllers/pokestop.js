@@ -65,7 +65,6 @@ class Pokestop extends Controller {
 	async handle(obj) {
 		let pregenerateTile = false
 		const data = obj
-		// const minTth = this.config.general.monsterMinimumTimeTillHidden || 0
 		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {

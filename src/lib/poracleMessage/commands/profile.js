@@ -91,10 +91,10 @@ exports.run = async (client, msg, args) => {
 						let timeString = ''
 						if (profile.active_hours.length > 3) {
 							const times = JSON.parse(profile.active_hours)
-							const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+							const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 							for (const t of times) {
-								timeString = timeString.concat(`    ${translator.translate(dayNames[t.day])} ${t.start} - ${t.end}\n`)
+								timeString = timeString.concat(`    ${translator.translate(dayNames[t.day-1])} ${t.hours}:${t.mins}\n`)
 							}
 						}
 
@@ -107,51 +107,45 @@ exports.run = async (client, msg, args) => {
 			case 'settime': {
 				const timeArray = []
 				if (args[1]) {
-					const daysRe = [client.re.sunRe, client.re.monRe, client.re.tueRe,
-						client.re.wedRe, client.re.thuRe, client.re.friRe, client.re.satRe,
+					// day number 1-7, Monday is 1, Sunday is 7, per ISO
+					const daysRe = [client.re.monRe, client.re.tueRe,
+						client.re.wedRe, client.re.thuRe, client.re.friRe, client.re.satRe, client.re.sunRe,
 						client.re.weekdayRe, client.re.weekendRe]
 
 					for (const element of args) {
 						for (let day = 0; day < 9; day++) {
 							const match = element.match(daysRe[day])
 							if (match) {
-								let start = match[3]; let end = match[5]
+								let hours = match[3]; let mins = match[5]
 
-								if (!start && !end) {
-									start = 0
-									end = 24
+								if (!hours) {
+									hours = 0
 								}
-								if (start && !match[4] && !end) {
-									end = start
-								}
-								if (!start && match[4] && end) {
-									start = 0
-								}
-								if (start && match[4] && !end) {
-									end = 24
+								if (!mins) {
+									mins = 0
 								}
 								if (day < 7) {
 									timeArray.push({
-										day,
-										start,
-										end,
+										day: day + 1,
+										hours,
+										mins,
 									})
 								}
 								if (day == 7) {
 									for (const d of [1, 2, 3, 4, 5]) {
 										timeArray.push({
 											day: d,
-											start,
-											end,
+											hours,
+											mins,
 										})
 									}
 								}
 								if (day == 8) {
-									for (const d of [0, 6]) {
+									for (const d of [6, 7]) {
 										timeArray.push({
 											day: d,
-											start,
-											end,
+											hours,
+											mins,
 										})
 									}
 								}
