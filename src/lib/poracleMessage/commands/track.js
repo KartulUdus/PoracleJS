@@ -44,6 +44,36 @@ exports.run = async (client, msg, args) => {
 		let clean = false
 		const pings = msg.getPings()
 
+		let disableEverythingTracking
+		let forceEverythingSeparately
+		let individuallyAllowed
+		switch (client.config.tracking.everythingFlagPermissions.toLowerCase()) {
+			case 'allow-any': {
+				disableEverythingTracking = false
+				forceEverythingSeparately = false
+				individuallyAllowed	= true
+				break
+			}
+			case 'allow-and-always-individually': {
+				disableEverythingTracking = false
+				forceEverythingSeparately = true
+				individuallyAllowed	= true
+				break
+			}
+			case 'allow-and-ignore-individually': {
+				disableEverythingTracking = false
+				forceEverythingSeparately = false
+				individuallyAllowed	= false
+				break
+			}
+			case 'deny':
+			default: {
+				disableEverythingTracking = true
+				forceEverythingSeparately = true
+				individuallyAllowed	= false
+			}
+		}
+
 		// Check for monsters or forms
 		const formArgs = args.filter((arg) => arg.match(client.re.formRe))
 		const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []
@@ -54,15 +84,15 @@ exports.run = async (client, msg, args) => {
 			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
-				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && !disableEverythingTracking
 				|| args.includes('everything') && msg.isFromAdmin) && formNames.includes(mon.form.name.toLowerCase()))
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
-		} else if (gen || args.includes('individually') || client.config.tracking.forceEverythingSeparately) {
+		} else if (gen || (args.includes('individually') && (individuallyAllowed || msg.isFromAdmin)) || forceEverythingSeparately) {
 			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
-				|| args.includes('everything') && !client.config.tracking.disableEverythingTracking
+				|| args.includes('everything') && !disableEverythingTracking
 				|| args.includes('everything') && msg.isFromAdmin) && !mon.form.id)
 
 			if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
@@ -71,7 +101,7 @@ exports.run = async (client, msg, args) => {
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))) && !mon.form.id)
 
-			if (args.includes('everything') && !client.config.tracking.disableEverythingTracking || args.includes('everything') && msg.isFromAdmin) {
+			if (args.includes('everything') && !disableEverythingTracking || args.includes('everything') && msg.isFromAdmin) {
 				monsters.push({
 					id: 0,
 					form: {

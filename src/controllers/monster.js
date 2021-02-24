@@ -211,6 +211,7 @@ class Monster extends Controller {
 			if (data.base_catch) data.capture_1 = data.base_catch
 			if (data.great_catch) data.capture_2 = data.great_catch
 			if (data.ultra_catch) data.capture_3 = data.ultra_catch
+			if (data.verified) data.disappear_time_verified = data.verified
 			data.catchBase = encountered ? (data.capture_1 * 100).toFixed(2) : 0
 			data.catchGreat = encountered ? (data.capture_2 * 100).toFixed(2) : 0
 			data.catchUltra = encountered ? (data.capture_3 * 100).toFixed(2) : 0
@@ -233,6 +234,7 @@ class Monster extends Controller {
 			data.tthSeconds = data.disappear_time - Date.now() / 1000
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.confirmedTime = data.disappear_time_verified
 			data.distime = data.disappearTime // deprecated
 			data.individual_attack = data.atk // deprecated
 			data.individual_defense = data.def // deprecated
@@ -507,7 +509,6 @@ class Monster extends Controller {
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
-					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					greatleagueranking: cares.great_league_ranking === 4096 ? 0 : cares.great_league_ranking,
 					ultraleagueranking: cares.ultra_league_ranking === 4096 ? 0 : cares.ultra_league_ranking,

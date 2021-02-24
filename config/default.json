@@ -166,8 +166,7 @@
   // defaultDistance - if you are doing distance tracking only, this is a default for users
   // maxDistance - restrict users from having too large a tracking circle
   "tracking": {
-      "disableEverythingTracking": false,
-      "forceEverythingSeparately": false,
+      "everythingFlagPermissions": "allow-any",
       "defaultDistance": 0,
       "maxDistance": 0
   },

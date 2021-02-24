@@ -27,7 +27,7 @@ exports.run = async (client, msg, args) => {
 		let clean = false
 		let levels = []
 		const pings = msg.getPings()
-		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => arg.match(client.re.formRe)[2])
+		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase())
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
 		if (formNames.length) {

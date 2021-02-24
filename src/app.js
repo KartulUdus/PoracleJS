@@ -223,7 +223,7 @@ async function loadEventCache() {
 			}
 		}
 	} catch (err) {
-		this.log.info(`Error processing historic cache ${err}`)
+		log.info(`Error processing historic cache ${err}`)
 	}
 }
 
