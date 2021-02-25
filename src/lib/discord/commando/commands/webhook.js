@@ -34,12 +34,16 @@ exports.run = async (client, msg, [args]) => {
 
 		if (args[0] == 'add') {
 			target = { id: webhookLink, name: webhookName, webhook: true }
-			const isRegistered = await client.query.countQuery('humans', { id: target.id })
-			if (isRegistered) return await msg.react('👌')
+			const isRegistered = await client.query.countQuery('humans', { name: webhookName })
+			if (isRegistered) {
+				await msg.author.send(`A webhook or channel with the name ${webhookName} already exists`)
+
+				return await msg.react('👌')
+			}
 
 			await client.query.insertQuery('humans', {
 				id: target.id,
-				type: target.webhook ? 'webhook' : 'discord:channel',
+				type: 'webhook',
 				name: target.name,
 				area: '[]',
 			})
