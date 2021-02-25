@@ -127,8 +127,9 @@
         "providerURL": "Your Nominatim Server Address",
         "staticProvider": "none",
         "staticProviderURL": "Your TileServerCache Server Address",
+        // Can be staticMap or multiStaticMap or false/empty to disable
         "staticMapType": {
-          "pokemon": "multiStaticMap",
+          "pokemon": "staticMap",
           "raid": "staticMap",
           "pokestop": "staticMap",
           "quest": "staticMap",
