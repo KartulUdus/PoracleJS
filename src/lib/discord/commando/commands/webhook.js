@@ -1,6 +1,4 @@
 exports.run = async (client, msg, [args]) => {
-	const target = { id: msg.author.id, name: msg.author.tag, webhook: false }
-
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
 
