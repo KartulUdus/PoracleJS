@@ -204,7 +204,7 @@ class WeatherData extends EventEmitter {
 					// force data to be refreshed
 					data = this.controllerData[id]
 				} while (data.lastForecastLoad !== currentHourTimestamp && --count)
-				this.log.info(`${id}: Weather forecast counter: ${count}`)
+				this.log.debug(`${id}: Weather forecast wait counter: ${count}`)
 				if (!count) {
 					// timeout - avoid attempting this fetch again from this worker
 					data.lastForecastLoad = currentHourTimestamp
@@ -216,6 +216,8 @@ class WeatherData extends EventEmitter {
 			res.current = data[currentHourTimestamp] || 0
 			res.next = data[nextHourTimestamp] || 0
 		}
+
+		this.log.debug(`${id}: Requesting weather forecast - current, returning ${res.current} ${res.next}`)
 
 		return res
 	}

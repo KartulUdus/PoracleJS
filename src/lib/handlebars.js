@@ -116,7 +116,7 @@ module.exports = () => {
 			return options.fn({
 				stardust: stardustCost,
 				candy: candyCost,
-				xlCandy: xlCandyCost
+				xlCandy: xlCandyCost,
 			})
 		}
 
@@ -137,9 +137,8 @@ module.exports = () => {
 		if (options.fn) {
 			return options.fn(f.map[value])
 		}
-		else {
-			return f.map[value]
-		}
+
+		return f.map[value]
 	})
 
 	return handlebars
