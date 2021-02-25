@@ -42,7 +42,7 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message} )
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
 				}
 				break
 			}
