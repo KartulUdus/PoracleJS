@@ -23,8 +23,21 @@ exports.run = async (client, msg, [args]) => {
 			return
 		}
 
-		const webhookName = msg.channel.name
+		let webhookName = args.find((arg) => arg.match(client.re.nameRe))
+		if (webhookName) [,, webhookName] = webhookName.match(client.re.nameRe)
+
+		if (!webhookName) webhookName = msg.channel.name
+
 		let webhookLink
+
+		if (args[0] == 'add') {
+			const isRegistered = await client.query.countQuery('humans', {name: webhookName})
+			if (isRegistered) {
+				await msg.author.send(`A webhook or channel with the name ${webhookName} already exists`)
+
+				return await msg.react('👌')
+			}
+		}
 
 		if (args[0] == 'create' || args[0] == 'add') {
 			const res = await msg.channel.createWebhook('Poracle')
@@ -33,7 +46,6 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		if (args[0] == 'add') {
-			target = { id: webhookLink, name: webhookName, webhook: true }
 			const isRegistered = await client.query.countQuery('humans', { name: webhookName })
 			if (isRegistered) {
 				await msg.author.send(`A webhook or channel with the name ${webhookName} already exists`)
@@ -42,9 +54,9 @@ exports.run = async (client, msg, [args]) => {
 			}
 
 			await client.query.insertQuery('humans', {
-				id: target.id,
+				id: webhookLink,
 				type: 'webhook',
-				name: target.name,
+				name: webhookName,
 				area: '[]',
 			})
 			await msg.react('✅')
