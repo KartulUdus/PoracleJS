@@ -1,5 +1,5 @@
 exports.run = async (client, msg, [args]) => {
-	let target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+	const target = { id: msg.author.id, name: msg.author.tag, webhook: false }
 
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
@@ -18,7 +18,7 @@ exports.run = async (client, msg, [args]) => {
 		if (args[0] == 'list') {
 			const hooks = await msg.channel.fetchWebhooks()
 			hooks.forEach((hook) => {
-				msg.author.send(`${hook.name} ${hook.id} ${hook.url}`)
+				msg.author.send(`${hook.name} | ${hook.url}`)
 			})
 			return
 		}
@@ -31,7 +31,7 @@ exports.run = async (client, msg, [args]) => {
 		let webhookLink
 
 		if (args[0] == 'add') {
-			const isRegistered = await client.query.countQuery('humans', {name: webhookName})
+			const isRegistered = await client.query.countQuery('humans', { name: webhookName })
 			if (isRegistered) {
 				await msg.author.send(`A webhook or channel with the name ${webhookName} already exists`)
 
@@ -40,9 +40,18 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		if (args[0] == 'create' || args[0] == 'add') {
-			const res = await msg.channel.createWebhook('Poracle')
-			await msg.author.send(`I created ${res.name} ${res.id} ${res.url}`)
-			webhookLink = res.url
+			const hooks = await msg.channel.fetchWebhooks()
+			hooks.forEach((hook) => {
+				if (hook.name == 'Poracle') webhookLink = hook.url
+			})
+
+			if (webhookLink) {
+				await msg.author.send(`There is an existing Poracle webhook ${webhookLink}`)
+			} else {
+				const res = await msg.channel.createWebhook('Poracle')
+				await msg.author.send(`I created a new webhook ${res.name} ${res.url}`)
+				webhookLink = res.url
+			}
 		}
 
 		if (args[0] == 'add') {
