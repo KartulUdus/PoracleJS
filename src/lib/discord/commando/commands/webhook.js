@@ -13,12 +13,12 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.reply('I have not been allowed to make webhooks!')
 		}
 
-		// await msg.reply(`This is ${msg.channel.type} Channel: ${msg.channel.name}`)
+		await msg.author.send(`This is ${msg.channel.type} Channel: ${msg.channel.name}`)
 
 		if (args[0] == 'list') {
 			const hooks = await msg.channel.fetchWebhooks()
 			hooks.forEach((hook) => {
-				msg.author.send.reply(`${hook.name} ${hook.id} ${hook.url}`)
+				msg.author.send(`${hook.name} ${hook.id} ${hook.url}`)
 			})
 			return
 		}
