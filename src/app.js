@@ -437,7 +437,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info('pokemon', hook.message)
+				fastify.webhooks.info('pokemon', { message: hook.message })
 				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
@@ -458,7 +458,7 @@ async function processOne(hook) {
 
 					break
 				}
-				fastify.webhooks.info('raid', hook.message)
+				fastify.webhooks.info('raid', { message: hook.message })
 				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
 					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 					break
@@ -476,7 +476,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info('pokestop', hook.message)
+				fastify.webhooks.info('pokestop', { message: hook.message })
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 				if (!incidentExpiration) break
 				if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
@@ -498,7 +498,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info('quest', hook.message)
+				fastify.webhooks.info('quest', { message: hook.message })
 				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
 					break
@@ -510,7 +510,7 @@ async function processOne(hook) {
 			}
 			case 'weather': {
 				if (config.general.disableWeather) break
-				fastify.webhooks.info('weather', hook.message)
+				fastify.webhooks.info('weather', { message: hook.message })
 				if (hook.message.updated) {
 					const weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
 					hook.message.s2_cell_id = S2.keyToId(weatherCellKey)

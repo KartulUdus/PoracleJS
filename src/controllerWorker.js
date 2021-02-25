@@ -58,7 +58,7 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
 				}
 
 				break
@@ -68,7 +68,7 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
 				}
 				break
 			}
@@ -78,7 +78,7 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
 				}
 				break
 			}
@@ -87,12 +87,12 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
 				}
 				break
 			}
 			default:
-				log.error(`Worker ${workerId}: Unexpected hook type  ${hook.type} in general controller worker process`, hook.message)
+				log.error(`Worker ${workerId}: Unexpected hook type  ${hook.type} in general controller worker process`, { data: hook.message })
 		}
 
 		if (queueAddition && queueAddition.length) {

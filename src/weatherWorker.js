@@ -42,12 +42,12 @@ async function processOne(hook) {
 				if (result) {
 					queueAddition = result
 				} else {
-					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, hook.message)
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message} )
 				}
 				break
 			}
 			default:
-				log.error(`Worker ${workerId}: Unexpected hook type ${hook.type} in weather controller worker process`, hook.message)
+				log.error(`Worker ${workerId}: Unexpected hook type ${hook.type} in weather controller worker process`, hook)
 		}
 
 		if (queueAddition && queueAddition.length) {
