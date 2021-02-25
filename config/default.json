@@ -79,8 +79,7 @@
         "pvpFilterUltraMinCP": 2450
     },
     "tracking": {
-        "disableEverythingTracking": false,
-        "forceEverythingSeparately": false,
+        "everythingFlagPermissions": "allow-any",
         "defaultDistance": 0,
         "maxDistance": 0
     },

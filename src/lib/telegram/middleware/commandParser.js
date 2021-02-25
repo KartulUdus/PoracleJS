@@ -1,12 +1,19 @@
 const { mount } = require('telegraf')
 /* eslint no-param-reassign: ["error", { "props": false }] */
-module.exports = (translatorFactory) => mount('text', (ctx, next) => {
+module.exports = (translatorFactory) => mount(['text', 'location'], (ctx, next) => {
 	const regex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]*)$/i
 	if (!ctx.message) return next()
-	const parts = regex.exec(ctx.message.text)
+
+	let commandText = ctx.message.text || ''
+    /* if we have a location type message -> convert location data to text string to handle as text command */
+    if (ctx.message.location) {
+        commandText = `/location ${ctx.message.location.latitude},${ctx.message.location.longitude}`
+    }
+
+	const parts = regex.exec(commandText)
 	if (!parts) return next()
 	const command = {
-		text: ctx.message.text,
+		text: commandText,
 		command: parts[1],
 		bot: parts[2],
 		args: parts[3],
