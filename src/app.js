@@ -437,7 +437,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info('pokemon',  hook)
+				fastify.webhooks.info('pokemon', { hook: hook.message })
 				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
