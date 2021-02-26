@@ -1,5 +1,7 @@
 #!/bin/bash
 
+display_top=10
+
 echo_color() { echo -e "\r\033[1A\033[0K$@"; }
 
 # Check Path to Script
@@ -38,13 +40,20 @@ do
         echo ""
         echo -ne "\e[1;36m"
         echo -n "${i^^} ALARMS SENT : "
-        cat $working_dir/$i*$dt* | grep info | egrep "USER|CHANNEL|GROUP" | wc -l
+        cat $working_dir/$i*$dt* | grep info | egrep "USER|CHANNEL|GROUP|WEBHOOK" | wc -l
         echo -n "${i^^} USERS       : "
-        cat $working_dir/$i*$dt* | grep info | egrep "USER|CHANNEL|GROUP" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | wc -l
+        cat $working_dir/$i*$dt* | grep info | egrep "USER|CHANNEL|GROUP|WEBHOOK" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | wc -l
+
+	for type in USER CHANNEL GROUP WEBHOOK
+	do
+		type_msg=$(cat $working_dir/$i*$dt* | grep info | grep $type | wc -l)
+		if [ $type_msg -gt 0 ]
+		then
+
         echo "" 
-        echo -e "\e[4;35mTOP 10 Users / Channels"
+        echo -e "  \e[1;4;35mTOP $display_top $type"
         echo -e "\e[0m"
-        cat $working_dir/$i*$dt* | grep info | egrep "USER|CHANNEL|GROUP" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | sort -rn | head -10 | while read line
+        cat $working_dir/$i*$dt* | grep info | grep $type | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | sort -rn | head -$display_top | while read line
         do
         	user=$(echo $line | sed s/-//g | rev | cut -d" " -f2 | rev)
         	stops=$(echo "$general" | grep $user | grep -ic "Stopping alerts")
@@ -69,6 +78,11 @@ do
         	fi
         	
         done
+
+        fi
+
+        done
+
    else
       echo -e "\e[1;36m"
       echo "NO ${i^^} ALARMS LOG FILE FOUND for $dt_full"
