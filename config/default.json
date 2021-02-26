@@ -110,7 +110,8 @@
             "#FF8000"
         ],
         "dmLogChannelID": "",
-        "dmLogChannelDeletionTime": 0
+        "dmLogChannelDeletionTime": 0,
+	"messageDeleteDelay": 0
       },
       "telegram": {
         "enabled": false,
