@@ -47,6 +47,8 @@ function getKnex(conf) {
 			})
 		}
 		default: {
+			throw new Error('Sqlite is not currently working, move to MYSQL or get latest which worked: git checkout 4350c45bf63ce1bc6c341f3a0b921238b106f1d6 - come to discord for help')
+
 			return Knex({
 				client: 'sqlite3',
 				useNullAsDefault: true,
