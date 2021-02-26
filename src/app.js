@@ -473,8 +473,6 @@ async function processOne(hook) {
 				break
 			}
 			case 'invasion':
-				fastify.controllerLog.error(`${hook.message.pokestop_id}: Invasion hook was received but deprecated in code`)
-				break
 			case 'pokestop': {
 				if (config.general.disablePokestop) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop was received but set to be ignored in config`)
