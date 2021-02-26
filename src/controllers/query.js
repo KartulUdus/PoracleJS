@@ -110,7 +110,7 @@ class Query {
 
 	async deleteWhereInQuery(table, id, values, valuesColumn) {
 		try {
-			return this.db.whereIn(valuesColumn, values).where({ id }).from(table).del()
+			return this.db.whereIn(valuesColumn, values).where(typeof id === 'object' ? id : { id }).from(table).del()
 		} catch (err) {
 			throw { source: 'deleteWhereInQuery unhappy', error: err }
 		}
