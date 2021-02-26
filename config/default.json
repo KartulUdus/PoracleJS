@@ -108,7 +108,7 @@
         ],
         "dmLogChannelID": "",
         "dmLogChannelDeletionTime": 0,
-	"massagedeleteDelay": 0
+	"messageDeleteDelay": 0
       },
       "telegram": {
         "enabled": false,
