@@ -25,7 +25,7 @@ general=$(grep "Stopping alerts" $working_dir/general*$dt*)
 controller=$(grep "Not creating" $working_dir/controller*$dt*)
 
 printf "\033c"
-echo "" 
+echo ""
 
 echo -ne "\e[1;4;91m"
 echo -n "ALARM STATS FOR $dt_full"
@@ -44,41 +44,41 @@ do
         echo -n "${i^^} USERS       : "
         cat $working_dir/$i*$dt* | grep info | egrep "USER|CHANNEL|GROUP|WEBHOOK" | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | wc -l
 
-	for type in USER CHANNEL GROUP WEBHOOK
-	do
-		type_msg=$(cat $working_dir/$i*$dt* | grep info | grep $type | wc -l)
-		if [ $type_msg -gt 0 ]
-		then
+        for type in USER CHANNEL GROUP WEBHOOK
+        do
+                type_msg=$(cat $working_dir/$i*$dt* | grep info | grep $type | wc -l)
+                if [ $type_msg -gt 0 ]
+                then
 
-                        echo "" 
+                        echo ""
                         echo -e "  \e[1;4;35mTOP $display_top $type"
                         echo -e "\e[0m"
                         cat $working_dir/$i*$dt* | grep info | grep $type | cut -d">" -f2 | sed s/Sending.*//g | sort | uniq -c | sort -rn | head -$display_top | while read line
                         do
-                        	user=$(echo $line | sed s/-//g | rev | cut -d" " -f2 | rev)
-                        	stops=$(echo "$general" | grep $user | grep -ic "Stopping alerts")
-                        	msg=$(echo "$controller" | grep $user | grep -ic "Not creating")
-                		rl_429=$(grep $user $working_dir/$i*$dt* | grep -ic "429 Rate limit")
-                		line=$(echo $line |  LC_ALL=C sed 's/[^\x00-\x7F]//g')
-                		printf '%-70s' "     $line"
-                        	if [ "$stops" -gt "0" ]; 
-                        	then 
-                        		echo -ne "\e[1;31m | "
-                        		printf '%-11s'  "RLR : $stops"
-                			printf " | "
-                        		printf '%-11s'  "MNC : $msg"
-                			if [ "$rl_429" -gt "0" ];
-                			then
-                				printf " | "
-                				printf '%-11s'  "429 : $rl_429"
-                			fi
-                        		echo -e "\e[0;39m"
-                        	else
-                        		echo ""
-                        	fi
-                        	
+                                user=$(echo $line | sed s/-//g | rev | cut -d" " -f2 | rev)
+                                stops=$(echo "$general" | grep $user | grep -ic "Stopping alerts")
+                                msg=$(echo "$controller" | grep $user | grep -ic "Not creating")
+                                rl_429=$(grep $user $working_dir/$i*$dt* | grep -ic "429 Rate limit")
+                                line=$(echo $line |  LC_ALL=C sed 's/[^\x00-\x7F]//g')
+                                printf '%-70s' "     $line"
+                                if [ "$stops" -gt "0" ];
+                                then
+                                        echo -ne "\e[1;31m | "
+                                        printf '%-11s'  "RLR : $stops"
+                                        printf " | "
+                                        printf '%-11s'  "MNC : $msg"
+                                        if [ "$rl_429" -gt "0" ];
+                                        then
+                                                printf " | "
+                                                printf '%-11s'  "429 : $rl_429"
+                                        fi
+                                        echo -e "\e[0;39m"
+                                else
+                                        echo ""
+                                fi
+
                         done
-                
+
                 fi
 
         done
@@ -94,10 +94,10 @@ done
 stops=$(echo "$general" | grep -c "Stopping alerts")
 if [ "$stops" -gt "0" ];
 then
-	echo ""
-        echo -e "\e[31m RLR : Rate Limit Reached" 
-        echo -e "\e[31m MNC : Messages Not Created" 
-        echo -e "\e[31m 429 : 429 Rate limit from Discord/Telegram" 
+        echo ""
+        echo -e "\e[31m RLR : Rate Limit Reached"
+        echo -e "\e[31m MNC : Messages Not Created"
+        echo -e "\e[31m 429 : 429 Rate limit from Discord/Telegram"
 fi
 
 echo -e "\e[39m"
