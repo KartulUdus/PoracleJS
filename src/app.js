@@ -369,11 +369,28 @@ const weatherWorker = {
 	queuePort: queueChannel.port1,
 }
 
+worker = new Worker(path.join(__dirname, './statsWorker.js'))
+queueChannel = new MessageChannel()
+commandChannel = new MessageChannel()
+
+worker.postMessage({
+	type: 'queuePort',
+	queuePort: queueChannel.port2,
+	commandPort: commandChannel.port2,
+}, [queueChannel.port2, commandChannel.port2])
+
+const statsWorker = {
+	worker,
+	commandPort: commandChannel.port1,
+	queuePort: queueChannel.port1,
+}
+
 function processMessageFromControllers(msg) {
 	// Relay commands of weather type to weather controller
 	if (msg.type == 'weather') {
 		weatherWorker.commandPort.postMessage(msg)
 	}
+	// No commands from controllers to stats, but would be relayed here
 }
 
 function processMessageFromWeather(msg) {
@@ -386,10 +403,27 @@ function processMessageFromWeather(msg) {
 	}
 }
 
+function processMessageFromStats(msg) {
+	// Relay broadcasts from stats to all controllers
+
+	if (msg.type == 'statsBroadcast') {
+		for (const relayWorker of workers) {
+			relayWorker.commandPort.postMessage(msg)
+		}
+	}
+}
+
+
 weatherWorker.commandPort.on('message', processMessageFromWeather)
 weatherWorker.queuePort.on('message', (res) => {
 	processMessages(res.queue)
 })
+
+statsWorker.commandPort.on('message', processMessageFromStats)
+statsWorker.queuePort.on('message', (res) => {
+	processMessages(res.queue)
+})
+
 
 for (let w = 0; w < maxWorkers; w++) {
 	worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
@@ -449,6 +483,9 @@ async function processOne(hook) {
 				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached', secondsRemaining)
 
 				processHook = hook
+
+				// also post directly to stats controller
+				statsWorker.queuePort.postMessage(hook)
 
 				break
 			}

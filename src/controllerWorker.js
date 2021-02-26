@@ -29,6 +29,8 @@ const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
 const ControllerWeatherManager = require('./controllers/weatherData')
+const StatsData = require('./controllers/statsData')
+
 /**
  * Contains currently rate limited users
  * @type {NodeCache}
@@ -36,6 +38,7 @@ const ControllerWeatherManager = require('./controllers/weatherData')
 const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
 
 const controllerWeatherManager = new ControllerWeatherManager(config, log)
+const statsData = new StatsData(config,log)
 
 const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
 const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
@@ -138,6 +141,11 @@ function receiveCommand(cmd) {
 			log.debug(`Worker ${workerId}: Received weather broadcast`, cmd.data)
 
 			controllerWeatherManager.receiveWeatherBroadcast(cmd.data)
+		}
+		if (cmd.type == 'statsBroadcast') {
+			log.debug(`Worker ${workerId}: Received stats broadcast`, cmd.data)
+
+			statsData.receiveStatsBroadcast(cmd.data)
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)

@@ -32,6 +32,7 @@
   },
   "homepage": "https://github.com/KartulUdus/reference#readme",
   "dependencies": {
+    "node-schedule": "^2.0.0",
     "async-mutex": "^0.3.0",
     "axios": "^0.21.1",
     "commander": "^4.1.0",
