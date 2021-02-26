@@ -142,7 +142,7 @@ module.exports = () => {
 	})
 
 	handlebars.registerHelper('shorten', (options) => {
-		const url = `@@SHTSTART@@${options.fn()}@@SHTEND@@`
+		const url = `@@SHTSTART@@${options.fn(this)}@@SHTEND@@`
 
 		return url
 	})
