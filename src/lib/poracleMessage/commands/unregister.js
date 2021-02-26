@@ -9,11 +9,14 @@ exports.run = async (client, msg, args) => {
 	if (!canContinue) return
 
 	const targets = []
-	if (msg.isFromAdmin()) {
+	if (msg.isFromAdmin) {
 		// Make list of ids
 		const mentions = msg.getMentions()
-		targets.push(mentions.map((x) => x.id))
-		targets.push(args.filter((x) => parseInt(x, 10)))
+		targets.push(...(mentions.map((x) => x.id)))
+		targets.push(...(args.filter((x) => parseInt(x, 10))))
+		if (!targets.length) {
+			return await msg.reply('No-one to unregistered, as an admin I won\'t let you unregister yourself')
+		}
 	} else {
 		targets.push(target.id)
 	}

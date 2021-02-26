@@ -16,7 +16,7 @@ exports.run = async (client, msg, args) => {
 		// Make list of ids
 		const mentions = msg.getMentions()
 		const targets = mentions.map((x) => x.id)
-		targets.push(args.filter((x) => parseInt(x, 10)))
+		targets.push(...(args.filter((x) => parseInt(x, 10))))
 
 		for (const id of targets) {
 			client.log.info(`Disable ${id}`)
