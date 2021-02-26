@@ -191,7 +191,7 @@
   // ivColors - array of 6 color codes for pokemon IV rankings
   // dmLogChannelID - an ID of a channel to use to log all poracle commands to (to watch
   //   users); dmLogChannelDeletion time - time to clean up after (seconds)
-  //
+  // messageDeleteDelay - extra time to add on to a message 'clean' to leave behind (in ms)
   "discord": {
     "enabled": true,
     "disableAutoGreetings": false,
@@ -214,7 +214,8 @@
         "#FF8000"
     ],
     "dmLogChannelID": "",
-    "dmLogChannelDeletionTime": 0
+    "dmLogChannelDeletionTime": 0,
+    "messageDeleteDelay": 0
   },
 
   //
