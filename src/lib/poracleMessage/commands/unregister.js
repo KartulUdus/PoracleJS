@@ -15,7 +15,7 @@ exports.run = async (client, msg, args) => {
 		targets.push(...(mentions.map((x) => x.id)))
 		targets.push(...(args.filter((x) => parseInt(x, 10))))
 		if (!targets.length) {
-			return await msg.reply('No-one to unregistered, as an admin I won\'t let you unregister yourself')
+			return msg.reply('No-one to unregister: as an admin I won\'t let you unregister yourself')
 		}
 	} else {
 		targets.push(target.id)

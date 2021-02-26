@@ -141,5 +141,10 @@ module.exports = () => {
 		return f.map[value]
 	})
 
+	handlebars.registerHelper('shorten', (options) => {
+		const url = `@@SHTSTART@@${options.fn()}@@SHTEND@@`
+
+		return url
+	})
 	return handlebars
 }
