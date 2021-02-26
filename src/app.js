@@ -7,7 +7,7 @@ const fs = require('fs')
 const fsp = require('fs').promises
 const util = require('util')
 const { S2 } = require('s2-geometry')
-
+const { Worker, MessageChannel } = require('worker_threads')
 const NodeCache = require('node-cache')
 const fastify = require('fastify')({
 	bodyLimit: 5242880,
@@ -15,13 +15,12 @@ const fastify = require('fastify')({
 const Telegraf = require('telegraf')
 
 const path = require('path')
-const pcache = require('flat-cache')
+
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 
 const { Config } = require('./lib/configFetcher')
-const mustache = require('./lib/handlebars')()
 
 const {
 	config, knex, dts, geofence, translator, translatorFactory,
@@ -42,12 +41,8 @@ const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.teleg
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
-const discordCache = new NodeCache({ stdTTL: config.discord.limitSec })
-
-const weatherCache = pcache.load('.weatherCache', path.resolve(`${__dirname}../../`))
-const weatherCacheData = weatherCache.getKey('weatherCacheData')
-
 const DiscordWorker = require('./lib/discord/discordWorker')
+const DiscordWebhookWorker = require('./lib/discord/discordWebhookWorker')
 const DiscordCommando = require('./lib/discord/commando')
 
 const TelegramWorker = require('./lib/telegram/Telegram')
@@ -57,17 +52,9 @@ const logs = require('./lib/logger')
 const { log } = logs
 const re = require('./util/regex')(translatorFactory)
 
-const MonsterController = require('./controllers/monster')
-const RaidController = require('./controllers/raid')
-const QuestController = require('./controllers/quest')
-const PokestopController = require('./controllers/pokestop')
-const WeatherController = require('./controllers/weather')
+const Query = require('./controllers/query')
 
-const weatherController = new WeatherController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, weatherCacheData)
-const monsterController = new MonsterController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const raidController = new RaidController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const questController = new QuestController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
-const pokestopController = new PokestopController(knex, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherController, null)
+const query = new Query(logs.controller, knex, config)
 
 fastify.decorate('logger', logs.log)
 fastify.decorate('controllerLog', logs.controller)
@@ -75,11 +62,6 @@ fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
-fastify.decorate('monsterController', monsterController)
-fastify.decorate('raidController', raidController)
-fastify.decorate('questController', questController)
-fastify.decorate('pokestopController', pokestopController)
-fastify.decorate('weatherController', weatherController)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)
@@ -87,20 +69,21 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(knex, config, logs, GameData, dts, geofence, translatorFactory) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
+let discordWebhookWorker
 let roleWorker
 let telegram
 let telegramChannel
-const workingOnHooks = false
 
 if (config.discord.enabled) {
 	for (const key in config.discord.token) {
 		if (config.discord.token[key]) {
-			discordWorkers.push(new DiscordWorker(config.discord.token[key], key, config, logs, true))
+			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
 		}
 	}
+	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
 
 	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
 		roleWorker = new DiscordWorker(config.discord.token[0], 999, config, logs)
@@ -109,10 +92,10 @@ if (config.discord.enabled) {
 
 let telegramUtil
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker('0', config, logs, GameData, dts, geofence, telegramController, monsterController, telegraf, translatorFactory, telegramCommandParser, re, true)
+	telegram = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, monsterController, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
+		telegramChannel = new TelegramWorker('2', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 
 	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
@@ -121,18 +104,18 @@ if (config.telegram.enabled) {
 }
 
 async function removeInvalidUser(user) {
-	await fastify.monsterController.deleteQuery('egg', { id: user.id })
-	await fastify.monsterController.deleteQuery('monsters', { id: user.id })
-	await fastify.monsterController.deleteQuery('raid', { id: user.id })
-	await fastify.monsterController.deleteQuery('quest', { id: user.id })
-	await fastify.monsterController.deleteQuery('humans', { id: user.id })
+	await query.deleteQuery('egg', { id: user.id })
+	await query.deleteQuery('monsters', { id: user.id })
+	await query.deleteQuery('raid', { id: user.id })
+	await query.deleteQuery('quest', { id: user.id })
+	await query.deleteQuery('humans', { id: user.id })
 }
 
 async function syncTelegramMembership() {
 	try {
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'telegram:user' })
+		let usersToCheck = await query.selectAllQuery('humans', { type: 'telegram:user' })
 		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
 		let invalidUsers = []
 		for (const channel of config.telegram.channels) {
@@ -162,7 +145,7 @@ async function syncTelegramMembership() {
 async function syncDiscordRole() {
 	try {
 		log.verbose('Verification of Discord role membership to Poracle users starting...')
-		let usersToCheck = await fastify.monsterController.selectAllQuery('humans', { type: 'discord:user' })
+		let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user' })
 		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
 		let invalidUsers = []
 		for (const guild of config.discord.guilds) {
@@ -241,12 +224,10 @@ function handleShutdown() {
 		})
 }
 
-process.on('SIGINT', handleShutdown)
-process.on('SIGTERM', handleShutdown)
-
-const discordBigQueue = { count: 0, lastSize: 0 }
-
 async function run() {
+	process.on('SIGINT', handleShutdown)
+	process.on('SIGTERM', handleShutdown)
+
 	if (config.general.persistDuplicateCache) {
 		await loadEventCache()
 	}
@@ -256,37 +237,34 @@ async function run() {
 			if (!fastify.discordQueue.length) {
 				return
 			}
-			if ((Math.random() * 100) > 80) fastify.logger.debug(`DiscordQueue is currently ${fastify.discordQueue.length}`)
 
-			if (fastify.discordQueue.length > 500) {
-				discordBigQueue.count++
-				discordBigQueue.lastSize = fastify.discordQueue.length
-				if ((discordBigQueue.count % 6000) == 0) { // Approx once per minute 10ms per call
-					fastify.logger.warn(`DiscordQueue is big, remained big for ${discordBigQueue.count} calls currently ${discordBigQueue.lastSize}`)
-				}
-			} else {
-				discordBigQueue.lastSize = 0
-				discordBigQueue.count = 0
-			}
-
-			const { target } = fastify.discordQueue[0]
-			// see if target has dedicated worker
-			let worker = discordWorkers.find((workerr) => workerr.users.includes(target))
-			if (!worker) {
-				let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-				let laziestWorkerId
-				Object.keys(discordWorkers).map((i) => {
-					if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
-						busyestWorkerHumanCount = discordWorkers[i].userCount
-						laziestWorkerId = i
+			// Dequeue onto individual queues as fast as possible
+			while (fastify.discordQueue.length) {
+				const { target, type } = fastify.discordQueue[0]
+				let worker
+				if (type == 'webhook') {
+					worker = discordWebhookWorker
+				} else {
+					// see if target has dedicated worker
+					worker = discordWorkers.find((workerr) => workerr.users.includes(target))
+					if (!worker) {
+						let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						let laziestWorkerId
+						Object.keys(discordWorkers).map((i) => {
+							if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
+								busyestWorkerHumanCount = discordWorkers[i].userCount
+								laziestWorkerId = i
+							}
+						})
+						busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						worker = discordWorkers[laziestWorkerId]
+						worker.addUser(target)
 					}
-				})
-				busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-				worker = discordWorkers[laziestWorkerId]
-				worker.addUser(target)
+				}
+
+				worker.work(fastify.discordQueue.shift())
 			}
-			if (!worker.busy) worker.work(fastify.discordQueue.shift())
-		}, 10)
+		}, 100)
 
 		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
 			setTimeout(syncDiscordRole, 10000)
@@ -298,30 +276,16 @@ async function run() {
 			if (!fastify.telegramQueue.length) {
 				return
 			}
-			if ((Math.random() * 100) > 80) fastify.logger.debug(`TelegramQueue is currently ${fastify.telegramQueue.length}`)
 
-			let worker = telegram
-			if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
-				worker = telegramChannel
+			while (fastify.telegramQueue.length) {
+				let worker = telegram
+				if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
+					worker = telegramChannel
+				}
+
+				worker.work(fastify.telegramQueue.shift())
 			}
-			// const { target } = fastify.telegramQueue[0]
-			// // see if target has dedicated worker
-			// let worker = telegramWorkers.find((workerr) => workerr.users.includes(target))
-			// if (!worker) {
-			// 	let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			// 	let laziestWorkerId
-			// 	Object.keys(telegramWorkers).map((i) => {
-			// 		if (telegramWorkers[i].userCount < busyestWorkerHumanCount) {
-			// 			busyestWorkerHumanCount = telegramWorkers[i].userCount
-			// 			laziestWorkerId = i
-			// 		}
-			// 	})
-			// 	busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-			// 	worker = telegramWorkers[laziestWorkerId]
-			// 	worker.addUser(target)
-			// }
-			if (!worker.busy) worker.work(fastify.telegramQueue.shift())
-		}, 10)
+		}, 100)
 
 		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 			setTimeout(syncTelegramMembership, 30000)
@@ -336,19 +300,144 @@ async function run() {
 	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 }
 
-const PromiseQueue = require('./lib/PromiseQueue')
+const UserRateChecker = require('./userRateLimit')
 
-const alarmProcessor = new PromiseQueue(fastify.hookQueue, 10)
+const rateChecker = new UserRateChecker(config)
+
+const workers = []
+const maxWorkers = config.tuning.webhookProcessingWorkers
+
+function processMessages(msgs) {
+	let newRateLimits = false
+
+	for (const msg of msgs) {
+		const rate = rateChecker.validateMessage(msg.target, msg.type)
+
+		let queueMessage
+
+		if (!rate.passMessage) {
+			if (rate.justBreached) {
+				const userTranslator = translatorFactory.Translator(msg.language || config.general.locale)
+				queueMessage = {
+					...msg,
+					message: { content: userTranslator.translateFormat('You have reached the limit of {0} messages over {1} seconds', rate.messageLimit, rate.messageTimeout) },
+					emoji: [],
+				}
+				log.info(`${msg.logReference}: Stopping alerts (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
+				newRateLimits = true
+			} else {
+				log.info(`${msg.logReference}: Intercepted and stopped message for user (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
+
+				queueMessage = null
+			}
+		} else {
+			queueMessage = msg
+		}
+
+		if (queueMessage) {
+			if (['discord:user', 'discord:channel', 'webhook'].includes(queueMessage.type)) fastify.discordQueue.push(queueMessage)
+			if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(queueMessage.type)) fastify.telegramQueue.push(queueMessage)
+		}
+	}
+
+	if (newRateLimits) {
+		// Publish new rate limits to controllers
+		const badguys = rateChecker.getBadBoys()
+
+		for (const worker of workers) {
+			worker.commandPort.postMessage({
+				type: 'badguys',
+				badguys,
+			})
+		}
+	}
+}
+
+let worker = new Worker(path.join(__dirname, './weatherWorker.js'))
+let queueChannel = new MessageChannel()
+let commandChannel = new MessageChannel()
+
+worker.postMessage({
+	type: 'queuePort',
+	queuePort: queueChannel.port2,
+	commandPort: commandChannel.port2,
+}, [queueChannel.port2, commandChannel.port2])
+
+const weatherWorker = {
+	worker,
+	commandPort: commandChannel.port1,
+	queuePort: queueChannel.port1,
+}
+
+function processMessageFromControllers(msg) {
+	// Relay commands of weather type to weather controller
+	if (msg.type == 'weather') {
+		weatherWorker.commandPort.postMessage(msg)
+	}
+}
+
+function processMessageFromWeather(msg) {
+	// Relay broadcasts from weather to all controllers
+
+	if (msg.type == 'weatherBroadcast') {
+		for (const relayWorker of workers) {
+			relayWorker.commandPort.postMessage(msg)
+		}
+	}
+}
+
+weatherWorker.commandPort.on('message', processMessageFromWeather)
+weatherWorker.queuePort.on('message', (res) => {
+	processMessages(res.queue)
+})
+
+for (let w = 0; w < maxWorkers; w++) {
+	worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
+		workerData:
+			{
+				workerId: w + 1,
+			},
+	})
+
+	queueChannel = new MessageChannel()
+	commandChannel = new MessageChannel()
+
+	worker.postMessage({
+		type: 'queuePort',
+		queuePort: queueChannel.port2,
+		commandPort: commandChannel.port2,
+	}, [queueChannel.port2, commandChannel.port2])
+
+	queueChannel.port1.on('message', (res) => {
+		processMessages(res.queue)
+	})
+	commandChannel.port1.on('message', processMessageFromControllers)
+
+	//	worker.on('error', (error) => console.error('error', error))
+	//	worker.on('exit', () => console.log('exit'))
+
+	workers.push({
+		worker,
+		commandPort: commandChannel.port1,
+		queuePort: queueChannel.port1,
+	})
+}
+
+let currentWorkerNo = 0
 
 async function processOne(hook) {
+	currentWorkerNo = (currentWorkerNo + 1) % maxWorkers
+
 	try {
+		let processHook
+
 		switch (hook.type) {
 			case 'pokemon': {
 				if (config.general.disablePokemon) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info('pokemon', hook.message)
+				fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
 				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
@@ -359,15 +448,7 @@ async function processOne(hook) {
 
 				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached', secondsRemaining)
 
-				const result = await fastify.monsterController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+				processHook = hook
 
 				break
 			}
@@ -377,7 +458,7 @@ async function processOne(hook) {
 
 					break
 				}
-				fastify.webhooks.info('raid', hook.message)
+				fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
 				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
 					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 					break
@@ -385,15 +466,8 @@ async function processOne(hook) {
 
 				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
 
-				const result = await fastify.raidController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+				processHook = hook
+
 				break
 			}
 			case 'invasion':
@@ -402,7 +476,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info('pokestop', hook.message)
+				fastify.webhooks.info(`pokestop ${JSON.stringify(hook.message)}`)
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 				if (!incidentExpiration) break
 				if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
@@ -415,15 +489,8 @@ async function processOne(hook) {
 
 				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
 
-				const result = await fastify.pokestopController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+				processHook = hook
+
 				break
 			}
 			case 'quest': {
@@ -431,28 +498,19 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info('quest', hook.message)
+				fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
 				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
 					break
 				}
 				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
-				const q = hook.message
+				processHook = hook
 
-				const result = await fastify.questController.handle(q)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
 				break
 			}
 			case 'weather': {
 				if (config.general.disableWeather) break
-				fastify.webhooks.info('weather', hook.message)
+				fastify.webhooks.info(`weather ${JSON.stringify(hook.message)}`)
 				if (hook.message.updated) {
 					const weatherCellKey = S2.latLngToKey(hook.message.latitude, hook.message.longitude, 10)
 					hook.message.s2_cell_id = S2.keyToId(weatherCellKey)
@@ -464,49 +522,55 @@ async function processOne(hook) {
 					break
 				}
 				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
-				const result = await fastify.weatherController.handle(hook.message)
-				if (result) {
-					result.forEach((job) => {
-						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
-					})
-				} else {
-					fastify.controllerLog.error(`Missing result from ${hook.type} processor`, hook.message)
-				}
+
+				// post directly to weather controller
+				weatherWorker.queuePort.postMessage(hook)
+				//	processHook = hook
+
 				break
 			}
 			default:
+		}
+		if (processHook) {
+			await workers[currentWorkerNo].queuePort.postMessage(processHook)
 		}
 	} catch (err) {
 		fastify.controllerLog.error('Hook processor error (something wasn\'t caught higher)', err)
 	}
 }
 
-const bigQueue = { count: 0, lastSize: 0 }
-
 async function handleAlarms() {
-	if (fastify.hookQueue.length && !workingOnHooks && fastify.monsterController && fastify.raidController && fastify.questController) {
-		if ((Math.random() * 100) > 80) fastify.logger.info(`WebhookQueue is currently ${fastify.hookQueue.length}`)
+	if (fastify.hookQueue.length) {
+		if ((Math.random() * 1000) > 995) fastify.logger.verbose(`Inbound WebhookQueue is currently ${fastify.hookQueue.length}`)
 
-		if (fastify.hookQueue.length > 5000) {
-			bigQueue.count++
-			bigQueue.lastSize = fastify.hookQueue.length
-			if ((bigQueue.count % 600) == 0) { // Approx once a minute warning with 100ms interval
-				fastify.logger.warn(`WebhookQueue is big, remained big for ${bigQueue.count} calls currently ${bigQueue.lastSize}`)
-			}
-		} else {
-			bigQueue.lastSize = 0
-			bigQueue.count = 0
-		}
-
-		alarmProcessor.run(processOne)
+		await processOne(fastify.hookQueue.shift())
+		setImmediate(handleAlarms)
 	}
+}
+
+async function currentStatus() {
+	let discordQueueLength = 0
+	for (const w of discordWorkers) {
+		discordQueueLength += w.discordQueue.length
+	}
+	const telegramQueueLength = (telegram ? telegram.telegramQueue.length : 0)
+		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
+
+	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
+	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`)
 }
 
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
 if (NODE_MAJOR_VERSION < 12) {
-	throw new Error('Requires Node 12 (or higher)')
+	throw new Error('Requires Node 12 or 14')
+}
+// if (NODE_MAJOR_VERSION == 13) {
+//	throw new Error('Requires Node 12 or 14')
+// }
+if (NODE_MAJOR_VERSION > 14) {
+	throw new Error('Requires Node 12 or 14')
 }
 
 run()
 setInterval(handleAlarms, 100)
+setInterval(currentStatus, 60000)

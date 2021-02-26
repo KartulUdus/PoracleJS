@@ -83,6 +83,11 @@
         "defaultDistance": 0,
         "maxDistance": 0
     },
+    "alertLimits": {
+        "timingPeriod": 240,
+        "dmLimit": 20,
+        "channelLimit": 40
+    },
     "discord": {
         "enabled": true,
         "disableAutoGreetings": false,
@@ -96,8 +101,6 @@
         "userRole": ["roles to grant access for"],
         "admins": ["ids of admin accounts"],
         "prefix": "!",
-        "limitSec": 240,
-        "limitAmount": 20,
         "ivColors": [
             "#9D9D9D",
             "#FFFFFF",
@@ -123,6 +126,15 @@
         "providerURL": "Your Nominatim Server Address",
         "staticProvider": "none",
         "staticProviderURL": "Your TileServerCache Server Address",
+        // Can be staticMap or multiStaticMap or false/empty to disable
+        "staticMapType": {
+          "pokemon": "staticMap",
+          "raid": "staticMap",
+          "pokestop": "staticMap",
+          "quest": "staticMap",
+          "weather": "staticMap",
+          "location": "staticMap"
+        },
         "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
         "staticKey":["Your MapQuest or Google Key"],
         "width": 320,
@@ -132,5 +144,13 @@
         "spriteWidth": 20,
         "scale": 2,
         "type": "klokantech-basic"
-      }
+      },
+    "tuning": {
+      "maxDatabaseConnections": 15,
+      "webhookProcessingWorkers": 2,
+      "concurrentWebhookProcessorsPerWorker": 10,
+      "concurrentDiscordDestinationsPerBot": 5,
+      "concurrentTelegramDestinationsPerBot": 5,
+      "concurrentDiscordWebhookConnections": 10
+    }
 }

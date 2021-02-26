@@ -5,12 +5,12 @@ const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
 const emojiStrip = require('emoji-strip')
 const hastebin = require('hastebin-gen')
-const Controller = require('../../../controllers/controller')
 
 class DiscordCommando {
-	constructor(knex, config, logs, GameData, dts, geofence, translatorFactory) {
+	constructor(token, query, config, logs, GameData, dts, geofence, translatorFactory) {
+		this.token = token
 		this.config = config
-		this.query = new Controller(knex, config)
+		this.query = query
 		this.logs = logs
 		this.GameData = GameData
 		this.dts = dts
@@ -29,6 +29,9 @@ class DiscordCommando {
 				this.busy = true
 				this.logs.log.error(`Discord worker #${this.id} \n bouncing`, err)
 				this.bounceWorker()
+			})
+			this.client.on('rateLimit', (info) => {
+				this.logs.log.error(`#${this.id} Discord commando worker - will not be responding to commands -  429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
 			})
 			// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
 			this.client.config = this.config
@@ -81,10 +84,10 @@ class DiscordCommando {
 				this.logs.log.info(`Discord commando loaded ${enabledCommands.join(', ')} commands`)
 			})
 
-			this.client.login(this.config.discord.token[0])
+			this.client.login(this.token)
 		} catch (err) {
 			this.logs.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)
-			this.sleep(2000)
+			await this.sleep(2000)
 			return this.bounceWorker()
 		}
 	}

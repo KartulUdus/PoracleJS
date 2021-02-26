@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
+const FairPromiseQueue = require('../FairPromiseQueue')
 
 class Telegram {
 	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
@@ -21,6 +22,8 @@ class Telegram {
 		this.commandFiles = fs.readdirSync(`${__dirname}/commands`)
 		this.bot = telegraf
 		this.id = id
+		this.telegramQueue = []
+		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, this.config.tuning.concurrentTelegramDestinationsPerBot, ((entry) => entry.target))
 		this.bot
 			.use(commandParser(this.translatorFactory))
 			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory))
@@ -45,7 +48,7 @@ class Telegram {
 			}
 		})
 		/* install extra middleware for telegram location sharing function, because .command(...) only catch text type messages */
-		if (!this.config.general.disabledCommands.includes('location')){
+		if (!this.config.general.disabledCommands.includes('location')) {
 			const locationHandler = require(`${__dirname}/commands/location`)
 			this.bot.on('location', locationHandler)
 		}
@@ -84,8 +87,16 @@ class Telegram {
 		this.busy = false
 	}
 
-	async work(data) {
-		this.busy = true
+	work(data) {
+		this.telegramQueue.push(data)
+		if (!this.busy) {
+			this.queueProcessor.run((work) => (this.sendAlert(work)))
+		}
+	}
+
+	async sendAlert(data) {
+		if ((Math.random() * 100) > 95) this.logs.log.verbose(`#${this.id} TelegramQueue is currently ${this.telegramQueue.length}`) // todo: per minute
+
 		switch (data.type) {
 			case 'telegram:user': {
 				await this.userAlert(data)
@@ -106,27 +117,56 @@ class Telegram {
 		}
 	}
 
+	async retrySender(senderId, fn) {
+		let retry
+		let res
+		let retryCount = 0
+
+		do {
+			retry = false
+			try {
+				res = await fn()
+			} catch (err) {
+				if (err.code == 429) {
+					const retryAfter = (err.response && err.response.parameters) ? err.response.parameters.retry_after : 30
+					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${retryAfter}`)
+					await this.sleep(retryAfter * 1000)
+					retry = true
+					if (retryCount++ == 5) {
+						throw err
+					}
+				} else {
+					throw err
+				}
+			}
+		} while (retry === true)
+		return res
+	}
+
 	async sendFormattedMessage(data) {
 		try {
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 			const messageIds = []
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
+			const senderId = `${logReference}: ${data.name} ${data.target}`
 			try {
 				if (data.message.sticker && data.message.sticker.length > 0) {
 					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
-					const msg = await this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true })
+					const msg = await this.retrySender(senderId,
+						async () => this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true }))
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
-				this.logs.telegram.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`, err)
+				this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`)
 			}
 			try {
 				if (data.message.photo && data.message.photo.length > 0) {
 					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Photo ${data.message.photo}`)
 
-					const msg = await this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true })
+					const msg = await this.retrySender(senderId,
+						async () => this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true }))
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
@@ -134,10 +174,11 @@ class Telegram {
 			}
 			this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
 
-			const msg = await this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-				parse_mode: 'Markdown',
-				disable_web_page_preview: !data.message.webpage_preview,
-			})
+			const msg = await this.retrySender(senderId,
+				async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
+					parse_mode: 'Markdown',
+					disable_web_page_preview: !data.message.webpage_preview,
+				}))
 			messageIds.push(msg.message_id)
 
 			if (data.message.location) {
@@ -145,7 +186,8 @@ class Telegram {
 
 				try {
 					// eslint-disable-next-line no-shadow
-					const msg = await this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true })
+					const msg = await this.retrySender(senderId,
+						async () => this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true }))
 					messageIds.push(msg.message_id)
 				} catch (err) {
 					this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
@@ -159,7 +201,7 @@ class Telegram {
 				}
 				setTimeout(() => {
 					for (const id of messageIds) {
-						this.bot.telegram.deleteMessage(data.target, id)
+						this.retrySender(`${senderId} (clean)`, async () => this.bot.telegram.deleteMessage(data.target, id)).catch(() => {})
 					}
 				}, msgDeletionMs)
 			}
