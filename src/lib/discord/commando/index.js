@@ -1,5 +1,4 @@
 const { Client } = require('discord.js')
-const Enmap = require('enmap')
 const fs = require('fs')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
@@ -58,7 +57,7 @@ class DiscordCommando {
 				})
 			})
 
-			this.client.commands = new Enmap()
+			this.client.commands = {}
 			const enabledCommands = []
 			fs.readdir(`${__dirname}/commands/`, (err, files) => {
 				if (err) return this.log.error(err)
@@ -67,7 +66,7 @@ class DiscordCommando {
 					const props = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 					const commandName = file.split('.')[0]
 					enabledCommands.push(`${this.config.discord.prefix}${commandName}`)
-					this.client.commands.set(commandName, props)
+					this.client.commands[commandName] = props
 				})
 
 				if (this.client.config.general.availableLanguages && !this.client.config.general.disabledCommands.includes('poracle')) {

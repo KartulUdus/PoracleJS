@@ -48,7 +48,7 @@ module.exports = async (client, msg) => {
 			initialArgs = [args]
 		}
 
-		const cmd = client.commands.get(command)
+		const cmd = client.commands[command]
 		if (!cmd) return
 
 		cmd.run(client, msg, initialArgs)
