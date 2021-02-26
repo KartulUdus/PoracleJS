@@ -112,10 +112,33 @@ module.exports = () => {
 				if (powerUpCost[level].xlCandy) xlCandyCost += powerUpCost[level].xlCandy
 			}
 		}
+		if (options.fn) {
+			return options.fn({
+				stardust: stardustCost,
+				candy: candyCost,
+				xlCandy: xlCandyCost,
+			})
+		}
+
 		if (stardustCost) returnString = `${stardustCost.toLocaleString(config.locale.timeformat)} ${translator.translate('Stardust')}`
 		if (candyCost) returnString = returnString.concat(` and ${candyCost} ${translator.translate('Candies')}`)
 		if (xlCandyCost) returnString = returnString.concat(` and ${xlCandyCost} ${translator.translate('XL Candies')}`)
 		return returnString
+	})
+
+	handlebars.registerHelper('map', (name, value, options) => {
+		const r = require('./customMap')
+
+		let f = r.find((x) => (x.name === name && x.language === options.data.language))
+		if (!f) {
+			f = r.find((x) => (x.name === name))
+		}
+
+		if (options.fn) {
+			return options.fn(f.map[value])
+		}
+
+		return f.map[value]
 	})
 
 	return handlebars

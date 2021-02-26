@@ -36,7 +36,7 @@ function getKnex(conf) {
 			return Knex({
 				client: 'mysql2',
 				connection: conf.database.conn,
-				pool: { min: 2, max: 10 },
+				pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
 			})
 		}
 
@@ -44,7 +44,7 @@ function getKnex(conf) {
 			return Knex({
 				client: 'pg',
 				connection: conf.database.conn,
-				pool: { min: 2, max: 10 },
+				pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
 			})
 		}
 		default: {
@@ -60,7 +60,7 @@ function getKnex(conf) {
 }
 
 module.exports = {
-	Config: () => {
+	Config: (performChecks = true) => {
 		config = importFresh('config')
 		dts = dtsLoader.readDtsFiles()
 		geofence = importFresh(path.join(__dirname, `../../${config.geofence.path}`))
@@ -73,9 +73,11 @@ module.exports = {
 		translatorFactory = new TranslatorFactory(config)
 		translator = translatorFactory.default
 
-		configChecker.checkConfig(config)
-		configChecker.checkDts(dts, config)
-		configChecker.checkGeofence(geofence)
+		if (performChecks) {
+			configChecker.checkConfig(config)
+			configChecker.checkDts(dts, config)
+			configChecker.checkGeofence(geofence)
+		}
 
 		moment.locale(config.locale.timeformat)
 		return {

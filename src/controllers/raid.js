@@ -1,7 +1,5 @@
-// const pokemonGif = require('pokemon-gif')
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-const { S2 } = require('s2-geometry')
 const Controller = require('./controller')
 
 class Raid extends Controller {
@@ -46,7 +44,7 @@ class Raid extends Controller {
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		}
-		this.log.silly(`${data.gym_id}: Raid query ${query}`)
+		// this.log.silly(`${data.gym_id}: Raid query ${query}`)
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -181,18 +179,7 @@ class Raid extends Controller {
 
 			data.matched = await this.pointInArea([data.latitude, data.longitude])
 
-			const weatherCellKey = S2.latLngToKey(data.latitude, data.longitude, 10)
-			const weatherCellId = S2.keyToId(weatherCellKey)
-			const nowTimestamp = Math.floor(Date.now() / 1000)
-			const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
-			let currentCellWeather = null
-			if (weatherCellId in this.weatherController.controllerData) {
-				const weatherCellData = this.weatherController.controllerData[weatherCellId]
-				if (weatherCellData) {
-					if (!currentCellWeather && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
-				}
-			}
-			data.weather = currentCellWeather || 0
+			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
@@ -246,16 +233,21 @@ class Raid extends Controller {
 
 				let discordCacheBad = true // assume the worst
 				whoCares.forEach((cares) => {
-					const { count } = this.getDiscordCache(cares.id)
-					if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+					if (!this.isRateLimited(cares.id)) discordCacheBad = false
 				})
 
-				if (discordCacheBad) return []
+				if (discordCacheBad) {
+					whoCares.forEach((cares) => {
+						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+					})
+
+					return []
+				}
 				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 				const jobs = []
 
-				if (pregenerateTile) {
-					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+				if (pregenerateTile && this.config.geocoding.staticMapType.raid) {
+					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
 					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
@@ -263,7 +255,13 @@ class Raid extends Controller {
 				for (const cares of whoCares) {
 					this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-					const caresCache = this.getDiscordCache(cares.id).count
+					const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+					if (rateLimitTtr) {
+						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+					this.log.verbose(`${logReference}: Creating raid alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 					const language = cares.language || this.config.general.locale
 					const translator = this.translatorFactory.Translator(language)
@@ -337,19 +335,17 @@ class Raid extends Controller {
 						const work = {
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
-							message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
+							message,
 							target: cares.id,
 							type: cares.type,
 							name: cares.name,
 							tth: data.tth,
 							clean: cares.clean,
-							emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+							emoji: data.emoji,
 							logReference,
+							language,
 						}
-						if (caresCache <= this.config.discord.limitAmount + 1) {
-							jobs.push(work)
-							this.addDiscordCache(cares.id)
-						}
+						jobs.push(work)
 					}
 				}
 				return jobs
@@ -362,7 +358,7 @@ class Raid extends Controller {
 			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-				this.log.debug(`${logReference}: Raid on ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				this.log.debug(`${logReference}: Egg at ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
 
@@ -378,23 +374,34 @@ class Raid extends Controller {
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
-				const { count } = this.getDiscordCache(cares.id)
-				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+				if (!this.isRateLimited(cares.id)) discordCacheBad = false
 			})
 
-			if (discordCacheBad) return []
+			if (discordCacheBad) {
+				whoCares.forEach((cares) => {
+					this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				})
+
+				return []
+			}
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('raid', data)
+			if (pregenerateTile && this.config.geocoding.staticMapType.raid) {
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
-				const caresCache = this.getDiscordCache(cares.id).count
+				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+				if (rateLimitTtr) {
+					this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+				this.log.verbose(`${logReference}: Creating egg alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
 				// eslint-disable-next-line no-unused-vars
@@ -446,19 +453,17 @@ class Raid extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: `You have reached the limit of ${this.config.discord.limitAmount} messages over ${this.config.discord.limitSec} seconds` } : message,
+						message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
 						tth: data.tth,
 						clean: cares.clean,
-						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						emoji: data.emoji,
 						logReference,
+						language,
 					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
-						jobs.push(work)
-						this.addDiscordCache(cares.id)
-					}
+					jobs.push(work)
 				}
 			}
 			return jobs

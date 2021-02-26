@@ -46,6 +46,9 @@ function checkConfig(config) {
 		logs.log.warn('Config Check: geocoding/staticProviderURL does not start with http')
 	}
 
+	if (typeof config.discord.limitSec != 'undefined') logs.log.warn('Config Check: legacy option “discord.limitSec” given and ignored, replace with “alertLimits.timingPeriod”')
+	if (typeof config.discord.limitAmount != 'undefined') logs.log.warn('Config Check: legacy option “discord.limitAmount” given and ignored, replace with “alertLimits.dmLimit/channelLimit”')
+
 	// check whether tracking.everythingFlagPermissions has a valid value
 	if (!['allow-any', 'allow-and-always-individually', 'allow-and-ignore-individually', 'deny'].includes(config.tracking.everythingFlagPermissions)) {
 		logs.log.warn('Config Check: everything flag permissions is not one of allow-any,allow-and-always-individually,allow-and-ignore-individually,deny')

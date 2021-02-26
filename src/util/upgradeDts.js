@@ -82,9 +82,7 @@ function fix(o, t) {
 		if (typeof o[key] === 'string') {
 			o[key] = updateDtsString(o[key], t)
 		} else if (Array.isArray(o[key])) {
-			for (let i = 0; i < o[key].length; i++) {
-				o[key][i] = updateDtsString(o[key][i], t)
-			}
+			o[key].map((x) => fix(x, t))
 		} else {
 			fix(o[key], t)
 		}

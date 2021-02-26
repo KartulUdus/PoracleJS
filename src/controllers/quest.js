@@ -58,7 +58,7 @@ class Quest extends Controller {
 			`)
 		}
 
-		this.log.silly(`${data.pokestop_id}: Query ${query}`)
+		// this.log.silly(`${data.pokestop_id}: Query ${query}`)
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
 			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({ lat: res.latitude, lon: res.longitude }, { lat: data.latitude, lon: data.longitude }))
@@ -169,17 +169,22 @@ class Quest extends Controller {
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
-				const { count } = this.getDiscordCache(cares.id)
-				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+				if (!this.isRateLimited(cares.id)) discordCacheBad = false
 			})
 
-			if (discordCacheBad) return []
+			if (discordCacheBad) {
+				whoCares.forEach((cares) => {
+					this.log.verbose(`${logReference}: Not creating quest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				})
+
+				return []
+			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('quest', data)
+			if (pregenerateTile && this.config.geocoding.staticMapType.quest) {
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
@@ -188,7 +193,13 @@ class Quest extends Controller {
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating quest alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-				const caresCache = this.getDiscordCache(cares.id).count
+				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+				if (rateLimitTtr) {
+					this.log.verbose(`${logReference}: Not creating quest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+				this.log.verbose(`${logReference}: Creating quest alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
@@ -223,7 +234,22 @@ class Quest extends Controller {
 
 				const mustache = this.getDts(logReference, 'quest', platform, cares.template, language)
 				if (mustache) {
-					const message = JSON.parse(mustache(view, { data: { language } }))
+					let mustacheResult
+					let message
+					try {
+						mustacheResult = mustache(view, { data: { language } })
+					} catch (err) {
+						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+					try {
+						message = JSON.parse(mustacheResult)
+					} catch (err) {
+						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+						// eslint-disable-next-line no-continue
+						continue
+					}
 
 					if (cares.ping) {
 						if (!message.content) {
@@ -236,18 +262,16 @@ class Quest extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
+						message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
 						tth: data.tth,
 						clean: cares.clean,
 						logReference,
+						language,
 					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
-						jobs.push(work)
-						this.addDiscordCache(cares.id)
-					}
+					jobs.push(work)
 				}
 			}
 

@@ -1,11 +1,12 @@
 module.exports = async (client, oldPresence, newPresence) => {
-	let before = false
-	let after = false
-	const roleBefore = oldPresence.roles.cache.find((role) => client.config.discord.userRole.includes(role.id))
-	const roleAfter = newPresence.roles.cache.find((role) => client.config.discord.userRole.includes(role.id))
-	if (roleBefore) before = true
-	if (roleAfter) after = true
 	try {
+		let before = false
+		let after = false
+		const roleBefore = oldPresence.roles.cache.find((role) => client.config.discord.userRole.includes(role.id))
+		const roleAfter = newPresence.roles.cache.find((role) => client.config.discord.userRole.includes(role.id))
+		if (roleBefore) before = true
+		if (roleAfter) after = true
+
 		if (!before && after) {
 			const isRegistered = await client.query.countQuery('humans', { id: oldPresence.user.id })
 			if (!isRegistered) {
@@ -34,6 +35,6 @@ module.exports = async (client, oldPresence, newPresence) => {
 			}
 		}
 	} catch (e) {
-		client.logs.discord.error(`Role based registration errored : ${e}`)
+		client.logs.discord.error('Role based registration errored', e)
 	}
 }

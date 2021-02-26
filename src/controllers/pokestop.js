@@ -44,7 +44,7 @@ class Pokestop extends Controller {
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 			`)
 		}
-		this.log.silly(`${data.pokestop_id}: Query ${query}`)
+		// this.log.silly(`${data.pokestop_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {
@@ -155,17 +155,22 @@ class Pokestop extends Controller {
 
 			let discordCacheBad = true // assume the worst
 			whoCares.forEach((cares) => {
-				const { count } = this.getDiscordCache(cares.id)
-				if (count <= this.config.discord.limitAmount + 1) discordCacheBad = false // but if anyone cares and has not exceeded cache, go on
+				if (!this.isRateLimited(cares.id)) discordCacheBad = false
 			})
 
-			if (discordCacheBad) return []
+			if (discordCacheBad) {
+				whoCares.forEach((cares) => {
+					this.log.verbose(`${logReference}: Not creating invasion alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+				})
+
+				return []
+			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL('pokestop', data)
+			if (pregenerateTile && this.config.geocoding.staticMapType.pokestop) {
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'pokestop', data, this.config.geocoding.staticMapType.pokestop)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
@@ -173,7 +178,13 @@ class Pokestop extends Controller {
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating invasion alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-				const caresCache = this.getDiscordCache(cares.id).count
+				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+				if (rateLimitTtr) {
+					this.log.verbose(`${logReference}: Not creating invasion alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+				this.log.verbose(`${logReference}: Creating invasion alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
@@ -189,6 +200,9 @@ class Pokestop extends Controller {
 						data.gruntName = translator.translate(gruntType.grunt)
 						data.gender = gruntType.gender
 						data.genderDataEng = this.GameData.utilData.genders[data.gender]
+						if (!data.genderDataEng) {
+							data.genderDataEng = { name: '', emoji: '' }
+						}
 						if (this.GameData.utilData.types[gruntType.type]) {
 							data.gruntTypeEmoji = translator.translate(this.GameData.utilData.types[gruntType.type].emoji)
 						}
@@ -256,7 +270,7 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
+					genderData: data.genderDataEng ? { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) } : { name: '', emoji: '' },
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
@@ -265,7 +279,22 @@ class Pokestop extends Controller {
 
 				const mustache = this.getDts(logReference, 'invasion', platform, cares.template, language)
 				if (mustache) {
-					const message = JSON.parse(mustache(view, { data: { language } }))
+					let mustacheResult
+					let message
+					try {
+						mustacheResult = mustache(view, { data: { language } })
+					} catch (err) {
+						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
+						// eslint-disable-next-line no-continue
+						continue
+					}
+					try {
+						message = JSON.parse(mustacheResult)
+					} catch (err) {
+						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+						// eslint-disable-next-line no-continue
+						continue
+					}
 
 					if (cares.ping) {
 						if (!message.content) {
@@ -277,19 +306,17 @@ class Pokestop extends Controller {
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
-						message: caresCache === this.config.discord.limitAmount + 1 ? { content: translator.translateFormat('You have reached the limit of {0} messages over {1} seconds', this.config.discord.limitAmount, this.config.discord.limitSec) } : message,
+						message,
 						target: cares.id,
 						type: cares.type,
 						name: cares.name,
 						tth: data.tth,
 						clean: cares.clean,
-						emoji: caresCache === this.config.discord.limitAmount + 1 ? [] : data.emoji,
+						emoji: data.emoji,
 						logReference,
+						language,
 					}
-					if (caresCache <= this.config.discord.limitAmount + 1) {
-						jobs.push(work)
-						this.addDiscordCache(cares.id)
-					}
+					jobs.push(work)
 				}
 			}
 

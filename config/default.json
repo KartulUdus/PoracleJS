@@ -240,7 +240,19 @@
     "channels": ["groups to listen in /poracle"],
     "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
   },
-
+  //
+  // Alert limits - these are so Poracle can limit the amount of messages sent to a user/channel pro-actively
+  // to avoid individual users hogging the system (or channel explosions during an event)
+  //
+  //   timingPeriod - seconds over which limits should be calculated
+  //   dmLimit - limit of number of direct messages a user can receive in the period
+  //   channelLimit - limit of number of messages a channel/group can receive in the period
+  //
+  "alertLimits": {
+    "timingPeriod": 240,
+    "dmLimit": 20,
+    "channelLimit": 40
+  },
   //
   // geocoding section
   //
@@ -254,13 +266,23 @@
   //   or google,osm,mapbox - staticKey provides an array of keys to use
   //   width/height/zoom/etc provide parameters for these while tileservercache
   //   uses templates (examples provided in tileservercache_templates folder)
+  //
+  //  staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook
+  //  type
 
     "geocoding": {
       "provider": "none",
       "providerURL": "Your Nominatim Server Address",
       "staticProvider": "none",
       "staticProviderURL": "Your TileServerCache Server Address",
-
+      "staticMapType": {
+        "pokemon": "staticMap",
+        "raid": "staticMap",
+        "pokestop": "staticMap",
+        "quest": "staticMap",
+        "weather": "staticMap",
+        "location": "staticMap"
+      },
       "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
 
       "staticKey":["Your MapQuest or Google Key"],
@@ -271,5 +293,16 @@
       "spriteWidth": 20,
       "scale": 2,
       "type": "klokantech-basic"
-    }
+    },
+  //
+  // Fine tuning
+  //
+  "tuning": {
+    "maxDatabaseConnections": 15,
+    "webhookProcessingWorkers": 2,
+    "concurrentWebhookProcessorsPerWorker": 10,
+    "concurrentDiscordDestinationsPerBot": 5,
+    "concurrentTelegramDestinationsPerBot": 5,
+    "concurrentDiscordWebhookConnections": 10
+  }
 }

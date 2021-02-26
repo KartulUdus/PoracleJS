@@ -51,8 +51,8 @@ exports.run = async (client, msg, args) => {
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
 		message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
 
-		if (platform === 'discord' && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
-			staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', { latitude: lat, longitude: lon })
+		if (platform === 'discord' && client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+			staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'location', { latitude: lat, longitude: lon }, client.config.geocoding.staticMapType.location)
 			message = {
 				embed: {
 					color: 0x00ff00,
