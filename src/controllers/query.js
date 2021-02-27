@@ -1,5 +1,5 @@
 const NodeGeocoder = require('node-geocoder')
-
+const cp = require('child_process')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Query {
@@ -7,6 +7,7 @@ class Query {
 		this.db = db
 		this.config = config
 		this.log = log
+		this.cp = cp
 		this.tileserverPregen = new TileserverPregen(config, log)
 	}
 
@@ -54,6 +55,20 @@ class Query {
 		} catch (err) {
 			throw { source: 'geolocate', err }
 		}
+	}
+
+	// generic exec method
+
+	execPromise(command) {
+		return new Promise((resolve, reject) => {
+			this.cp.exec(command, (error, stdout) => {
+				if (error) {
+					reject(error)
+					return
+				}
+				resolve(stdout.trim())
+			})
+		})
 	}
 
 	// database methods below

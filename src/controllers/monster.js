@@ -492,7 +492,7 @@ class Monster extends Controller {
 						continue
 					}
 
-					mustacheResult = await replaceAsync(mustacheResult, /@@SHTSTART@@(.*?)@@SHTEND@@/g,
+					mustacheResult = await replaceAsync(mustacheResult, /<S<(.*?)>S>/g,
 						async (match, name) => urlShortener(name))
 
 					try {
