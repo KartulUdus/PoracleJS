@@ -17,6 +17,7 @@ class DiscordCommando {
 		this.translatorFactory = translatorFactory
 		this.translator = translatorFactory.default
 		this.re = require('../../../util/regex')(this.translatorFactory)
+		this.id = '0'
 		this.bounceWorker()
 	}
 
@@ -30,8 +31,14 @@ class DiscordCommando {
 				this.bounceWorker()
 			})
 			this.client.on('rateLimit', (info) => {
-				this.logs.log.error(`#${this.id} Discord commando worker - will not be responding to commands -  429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
+				this.logs.log.warn(`#${this.id} Discord commando worker - will not be responding to commands -  429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
 			})
+			this.client.on('ready', () => {
+				this.logs.log.info(`#${this.id} Discord commando - ${this.client.user.tag} ready for action`)
+
+				this.busy = false
+			})
+
 			// We also need to make sure we're attaching the config to the CLIENT so it's accessible everywhere!
 			this.client.config = this.config
 			this.client.S2 = S2
