@@ -84,8 +84,7 @@
       "webhookLogLimit": 12
   },
   //
-  // Database connection strings.  client can be mysql or sqlite3, but PoracleWeb only
-  //    works with mysql, so...
+  // Database connection strings.  client should be mysql (sqlite3 no longer supported).
   //
   "database": {
       "client": "mysql",
