@@ -309,7 +309,7 @@ const rateChecker = new UserRateChecker(config)
 const workers = []
 const maxWorkers = config.tuning.webhookProcessingWorkers
 
-function processMessages(msgs) {
+async function processMessages(msgs) {
 	let newRateLimits = false
 
 	for (const msg of msgs) {
@@ -326,6 +326,29 @@ function processMessages(msgs) {
 					emoji: [],
 				}
 				log.info(`${msg.logReference}: Stopping alerts (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
+
+				if (config.alertLimits.maxLimitsBeforeStop) {
+					const userCheck = rateChecker.userIsBanned(msg.target, msg.type)
+					if (!userCheck.stopMessages) {
+						queueMessage = {
+							...msg,
+							message: {
+								content: userTranslator.translateFormat('You have breached the rate limit too many times in the last 24 hours. Your messages are now stopped, use {0}start to resume',
+									['discord:user', 'discord:channel', 'webhook'].includes(msg.type) ? config.discord.prefix : '/'),
+							},
+							emoji: [],
+						}
+
+						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
+
+						try {
+							await query.updateQuery('humans', { enabled: 0 }, { id: msg.target })
+						} catch (err) {
+							log.error('Failed to stop user messages', err)
+						}
+					}
+				}
+
 				newRateLimits = true
 			} else {
 				log.info(`${msg.logReference}: Intercepted and stopped message for user (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
