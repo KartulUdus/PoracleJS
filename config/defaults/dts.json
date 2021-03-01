@@ -487,6 +487,24 @@
     "webpage_preview": true
   }
 },
+  {
+    "id": 1,
+    "language": "en",
+    "type": "lure",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Lure at {{{pokestopName}}}",
+        "url": "{{{googleMapUrl}}}",
+        "color": "{{lureTypeColor}}",
+        "description": "Type: {{lureTypeName}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        }
+      }
+    }
+  },
 {
   "id": 1,
   "language": "en",

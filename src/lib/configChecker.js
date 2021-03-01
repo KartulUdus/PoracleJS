@@ -9,9 +9,18 @@ function checkDts(dts, config) {
 		platforms.push('telegram')
 	}
 
+	const languages = []
+	languages.push(config.general.locale)
+
+	for (const language of Object.keys(config.general.availableLanguages)) {
+		if (language != config.general.locale) {
+			languages.push(language)
+		}
+	}
+
 	for (const platform of platforms) {
-		for (const language of Object.keys(config.general.availableLanguages)) {
-			for (const type of ['monster', 'monsterNoIv', 'raid', 'egg', 'quest', 'invasion', 'weatherchange', 'greeting']) {
+		for (const language of languages) {
+			for (const type of ['monster', 'monsterNoIv', 'raid', 'egg', 'quest', 'invasion', 'lure', 'weatherchange', 'greeting']) {
 				if (!dts.find((x) => x.platform === platform && x.type === type && x.language == language && x.default)) {
 					logs.log.warn(`Config Check: DTS - No default entry found for platform:${platform} language:${language} type:${type}`)
 				}
