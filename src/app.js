@@ -329,7 +329,7 @@ async function processMessages(msgs) {
 
 				if (config.alertLimits.maxLimitsBeforeStop) {
 					const userCheck = rateChecker.userIsBanned(msg.target, msg.type)
-					if (!userCheck.stopMessages) {
+					if (!userCheck.canContinue) {
 						queueMessage = {
 							...msg,
 							message: {
