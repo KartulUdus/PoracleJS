@@ -88,6 +88,16 @@
         "dmLimit": 20,
         "channelLimit": 40
     },
+    "stats": {
+      "maxPokemonId": 800,
+      "minSampleSize": 100000,
+      "pokemonCountToKeep": 8,
+      "rarityRefreshInterval": 5,
+      "rarityGroup2Uncommon": 1,
+      "rarityGroup3Rare": 0.5,
+      "rarityGroup4VeryRare": 0.03,
+      "rarityGroup5UltraRare": 0.01
+    },
     "discord": {
         "enabled": true,
         "disableAutoGreetings": false,

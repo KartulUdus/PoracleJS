@@ -2,8 +2,8 @@ const { parentPort, isMainThread } = require('worker_threads')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const logs = require('./lib/logger')
 const schedule = require('node-schedule')
+const logs = require('./lib/logger')
 
 const { log } = logs
 
@@ -23,7 +23,8 @@ const GameData = {
 }
 
 const StatsController = require('./controllers/stats')
-const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })  // does not actually make sense to have this, perhaps we don't need to derive from controller for
+
+const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec }) // does not actually make sense to have this, perhaps we don't need to derive from controller for
 // the stats calculator - or just null and make safe
 
 const statsController = new StatsController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
@@ -34,14 +35,13 @@ let queuePort
 let commandPort
 
 async function processOne(hook) {
-	let queueAddition = []
-
 	try {
 		if ((Math.random() * 1000) > 995) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
 
 		switch (hook.type) {
 			case 'pokemon': {
-				const result = await statsController.handle(hook.message)
+				await statsController.handle(hook.message)
+//				const result = await statsController.handle(hook.message)
 //				if (result) {
 //					queueAddition = result
 //				} else {
@@ -71,12 +71,9 @@ function receiveQueue(msg) {
 	}
 }
 
-
 async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
-
-
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to process command`, err)
 	}
@@ -110,14 +107,18 @@ if (!isMainThread) {
 	statsController.on('statsChanged', broadcastStats)
 	setInterval(processQueue, 100)
 
-
-	schedule.scheduleJob({ minute: [0, 15, 30, 45] }, () => {			// Run every 15 minutes
+	const raritySchedule = []
+	let i
+	for (i = 0; i < 60; i += config.stats.rarityRefreshInterval) {
+		raritySchedule.push(i)
+	}
+	schedule.scheduleJob({ minute: raritySchedule }, () => {
 		try {
 			log.verbose('Calculating stats')
 
 			broadcastStats(statsController.calculateRarity())
 		} catch (err) {
-			log.error('Error setting calculating stats ', err)
+			log.error('Error calculating stats ', err)
 		}
 	})
 }
