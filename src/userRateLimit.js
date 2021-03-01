@@ -72,7 +72,6 @@ class UserRateChecker {
 		return badboys
 	}
 
-
 	/**
 	 * Add user to banned list
 	 * @param id user id

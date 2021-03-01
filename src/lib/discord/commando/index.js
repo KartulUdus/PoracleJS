@@ -82,7 +82,7 @@ class DiscordCommando {
 						if (commandName && !enabledCommands.includes(`${this.config.discord.prefix}${commandName}`)) {
 							const props = require(`${__dirname}/commands/poracle`)
 							enabledCommands.push(`${this.config.discord.prefix}${commandName}`)
-							this.client.commands.set(commandName, props)
+							this.client.commands[commandName] = props
 						}
 					}
 				}
