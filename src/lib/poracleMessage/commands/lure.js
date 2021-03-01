@@ -44,7 +44,7 @@ exports.run = async (client, msg, args) => {
 		}
 
 		if (!lures.length) {
-			return await msg.reply(translator.translate('404 No lure types'))
+			return await msg.reply(translator.translate('404 No lure types found'))
 		}
 
 		if (!remove) {
