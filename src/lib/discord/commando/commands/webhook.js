@@ -53,6 +53,11 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		if (args[0] == 'add') {
+			if (webhookName.includes('_')) {
+				await msg.author.send('A poracle webhook name cannot contain an underscore (_) user name parameter to override')
+
+				return await msg.react('👌')
+			}
 			const isRegistered = await client.query.countQuery('humans', { name: webhookName })
 			if (isRegistered) {
 				await msg.author.send(`A webhook or channel with the name ${webhookName} already exists`)

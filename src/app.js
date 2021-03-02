@@ -503,7 +503,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info(`pokestop ${JSON.stringify(hook.message)}`)
+				fastify.webhooks.info(`pokestop(${hook.type}) ${JSON.stringify(hook.message)}`)
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
 				const lureExpiration = hook.message.lure_expiration
 				if (!lureExpiration && !incidentExpiration) {
