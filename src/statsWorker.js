@@ -1,33 +1,20 @@
 const { parentPort, isMainThread } = require('worker_threads')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
-const NodeCache = require('node-cache')
 const schedule = require('node-schedule')
 const logs = require('./lib/logger')
 
 const { log } = logs
 
 const { Config } = require('./lib/configFetcher')
-const mustache = require('./lib/handlebars')()
 
 const {
-	config, knex, dts, geofence, translatorFactory,
+	config
 } = Config(false)
-
-const GameData = {
-	monsters: require('./util/monsters'),
-	utilData: require('./util/util'),
-	moves: require('./util/moves'),
-	items: require('./util/items'),
-	grunts: require('./util/grunts'),
-}
 
 const StatsController = require('./controllers/stats')
 
-const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec }) // does not actually make sense to have this, perhaps we don't need to derive from controller for
-// the stats calculator - or just null and make safe
-
-const statsController = new StatsController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
+const statsController = new StatsController(logs.controller, config)
 
 const hookQueue = []
 const workerId = 'STATS'

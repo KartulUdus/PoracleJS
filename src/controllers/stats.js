@@ -1,8 +1,10 @@
-const Controller = require('./controller')
+const EventEmitter = require('events')
 
-class Stats extends Controller {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
-		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null)
+class Stats extends EventEmitter {
+	constructor(log, config) {
+		super()
+		this.config = config
+		this.log = log
 		this.pokemonCount = {}
 	}
 
