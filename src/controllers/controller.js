@@ -12,7 +12,7 @@ const emojiFlags = require('emoji-flags')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData) {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData) {
 		super()
 		this.db = db
 		this.cp = cp
@@ -27,6 +27,7 @@ class Controller extends EventEmitter {
 		this.mustache = mustache
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherData = weatherData
+		this.statsData = statsData
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.dtsCache = {}

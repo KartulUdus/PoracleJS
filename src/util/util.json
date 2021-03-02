@@ -503,6 +503,14 @@
 			"emoji": "\u26aa"
 		}
 	},
+	"rarity": {
+		"1": "Common",
+		"2": "Uncommon",
+		"3": "Rare",
+		"4": "Very-Rare",
+		"5": "Ultra-Rare",
+		"6": "Unseen"
+	},
 	"evolution": {
 		"0": {
 			"name": ""

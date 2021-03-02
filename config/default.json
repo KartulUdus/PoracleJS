@@ -89,8 +89,8 @@
         "channelLimit": 40
     },
     "stats": {
-      "maxPokemonId": 800,
-      "minSampleSize": 100000,
+      "maxPokemonId": 810,
+      "minSampleSize": 10000,
       "pokemonCountToKeep": 8,
       "rarityRefreshInterval": 5,
       "rarityGroup2Uncommon": 1,

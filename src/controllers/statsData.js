@@ -5,7 +5,7 @@ class StatsData {
 	constructor(config, log) {
 		this.config = config
 		this.log = log
-		this.statsData = {}
+		this.rarityGroups = {}
 	}
 
 	/**
@@ -13,7 +13,7 @@ class StatsData {
 	 * @param data
 	 */
 	receiveStatsBroadcast(data) {
-		this.statsData = data
+		this.rarityGroups = data
 	}
 }
 

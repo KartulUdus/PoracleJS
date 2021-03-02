@@ -36,28 +36,16 @@ let commandPort
 
 async function processOne(hook) {
 	try {
-		if ((Math.random() * 1000) > 995) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
+		if ((Math.random() * 100000) > 99995) log.info(`Worker ${workerId}: WebhookQueue is currently ${hookQueue.length}`)
 
 		switch (hook.type) {
 			case 'pokemon': {
 				await statsController.handle(hook.message)
-//				const result = await statsController.handle(hook.message)
-//				if (result) {
-//					queueAddition = result
-//				} else {
-//					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
-//				}
 				break
 			}
 			default:
 				log.error(`Worker ${workerId}: Unexpected hook type ${hook.type} in stats worker process`)
 		}
-
-//		if (queueAddition && queueAddition.length) {
-//			await queuePort.postMessage({
-//				queue: queueAddition,
-//			})
-//		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: Hook processor error (something wasn't caught higher)`, err)
 	}
