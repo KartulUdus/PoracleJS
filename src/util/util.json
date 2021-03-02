@@ -493,17 +493,17 @@
 		},
 		"502": {
 			"name": "Glacial Lure",
-			"emoji": "",
+			"emoji": "\u2744",
 			"color": "2973DD"
 		},
 		"503": {
 			"name": "Mossy Lure",
-			"emoji": "",
+			"emoji": "\uD83C\uDF43",
 			"color": "86A630"
 		},
 		"504": {
 			"name": "Magnetic Lure",
-			"emoji": "",
+			"emoji": "\uD83E\uDDF2",
 			"color": "9FA6C1"
 		}
 	},

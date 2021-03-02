@@ -110,6 +110,8 @@ async function removeInvalidUser(user) {
 	await query.deleteQuery('monsters', { id: user.id })
 	await query.deleteQuery('raid', { id: user.id })
 	await query.deleteQuery('quest', { id: user.id })
+	await query.deleteQuery('lures', { id: user.id })
+	await query.deleteQuery('profiles', { id: user.id })
 	await query.deleteQuery('humans', { id: user.id })
 }
 

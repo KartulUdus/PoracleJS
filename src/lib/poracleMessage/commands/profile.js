@@ -25,10 +25,12 @@ exports.run = async (client, msg, args) => {
 
 				const name = args[1]
 				if (!name) {
+					await msg.react('🙅')
 					await msg.reply(translator.translate('That is not a valid profile name'))
 					return
 				}
 				if (profiles.some((x) => x.name == name)) {
+					await msg.react('🙅')
 					await msg.reply(translator.translate('That profile name already exists'))
 					return
 				}
@@ -60,24 +62,74 @@ exports.run = async (client, msg, args) => {
 			}
 
 			case 'remove': {
-				const profileNo = parseInt(args[1], 10)
-				let result
+				const human = await client.query.selectOneQuery('humans', { id: target.id })
+				const name = args[1]
+
+				if (!name) {
+					await msg.react('🙅')
+					await msg.reply(translator.translate('That is not a valid profile name'))
+					return
+				}
+
+				let profileNo = parseInt(args[1], 10)
 
 				if (profileNo) {
-					result = await client.query.deleteQuery('profiles',
-						{
-							id: target.id,
-							profile_no: profileNo,
-						})
+					if (!profiles.some((x) => x.profile_no == profileNo)) {
+						await msg.react('🙅')
+						await msg.reply(translator.translate('That is not a valid profile number'))
+					}
 				} else {
-					result = await client.query.deleteQuery('profiles',
-						{
-							id: target.id,
-							name: args[1],
-						})
+					const profile = profiles.find((x) => x.name == name)
+					if (!profile) {
+						await msg.react('🙅')
+						await msg.reply(translator.translate('That is not a valid profile name'))
+						return
+					}
+					profileNo = profile.profile_no
 				}
-				const reaction = result || client.config.database.client === 'sqlite3' ? '✅' : '🙅'
-				await msg.react(reaction)
+
+				await client.query.deleteQuery('profiles',
+					{
+						id: target.id,
+						profile_no: profileNo,
+					})
+
+				if (profiles.length != 1 || profileNo != 1) {
+					await client.query.deleteQuery('egg', { id: target.id, profile_no: profileNo })
+					await client.query.deleteQuery('monsters', { id: target.id, profile_no: profileNo })
+					await client.query.deleteQuery('raid', { id: target.id, profile_no: profileNo })
+					await client.query.deleteQuery('quest', { id: target.id, profile_no: profileNo })
+					await client.query.deleteQuery('lures', { id: target.id, profile_no: profileNo })
+				}
+
+				if (human.current_profile_no == profileNo) {
+					// Find lowest profile (or 1)
+
+					let lowestProfileNo = 9999
+					let lowestProfile
+					for (const profile of profiles) {
+						if (profile.profile_no < lowestProfileNo && profile.profile_no != profileNo) {
+							lowestProfileNo = profile.profile_no
+							lowestProfile = profile
+						}
+					}
+					if (!lowestProfile) {
+						await client.query.updateQuery('humans',
+							{
+								current_profile_no: 1,
+							}, { id: target.id })
+					} else {
+						await client.query.updateQuery('humans',
+							{
+								current_profile_no: lowestProfileNo,
+								area: lowestProfile.area,
+								latitude: lowestProfile.latitude,
+								longitude: lowestProfile.longitude,
+							}, { id: target.id })
+					}
+				}
+
+				await msg.react('✅')
 
 				break
 			}
@@ -98,7 +150,7 @@ exports.run = async (client, msg, args) => {
 							}
 						}
 
-						response = response.concat(`${profile.profile_no}. ${profile.name} - areas: ${profile.area} - ${profile.latitude} ${profile.longitude}\n${timeString}`)
+						response = response.concat(`${profile.profile_no}. ${profile.name} - areas: ${profile.area} ${profile.latitude ? ` - location: ${profile.latitude},${profile.longitude}` : ''}\n${timeString}`)
 					}
 					await msg.reply(`${translator.translate('Currently configured profiles are:')}\n${response}`)
 				}

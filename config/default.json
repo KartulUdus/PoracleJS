@@ -96,6 +96,12 @@
           "port": 3306
       }
   },
+  //
+  // addressFormat - how an address is consutructed into the {{addr}} tag
+  // language - this is the secondary language that is used for 'alt' translation in dts.  This is rarely used now
+  //   poracle now has multi-lingual support but can be useful for retrieving english language detail for web links
+  //   for example
+  //
   "locale": {
       "timeformat": "en-gb",
       "time": "LTS",
