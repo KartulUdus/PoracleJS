@@ -101,7 +101,7 @@
 
   //
   // Geofence - default format is that created here http://geo.jasparke.net/
-  //   You can also use a geojson file if you would like to share with other tools but you
+  //   You can also use a geojson file if you would like to share with other tools
   //
   "geofence": {
       "path": "./config/geofence.json",
@@ -239,7 +239,7 @@
   //
   "alertLimits": {
     "timingPeriod": 240,          // seconds over which limits should be calculated
-    "dmLimit": 20,                // limit of number of messages a channel/group can receive in the period
+    "dmLimit": 20,                // limit of number of messages a user can receive in the period
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
     "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
   },
