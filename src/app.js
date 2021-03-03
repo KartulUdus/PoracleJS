@@ -15,7 +15,9 @@ const fastify = require('fastify')({
 const Telegraf = require('telegraf')
 
 const path = require('path')
-
+const moment = require('moment-timezone')
+const geoTz = require('geo-tz')
+const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 const TelegramUtil = require('./lib/telegram/telegramUtil.js')
@@ -78,7 +80,7 @@ let telegram
 let telegramChannel
 
 if (config.discord.enabled) {
-	for (const key in config.discord.token) {
+	for (let key = 0; key < config.discord.token.length; key++) {
 		if (config.discord.token[key]) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
 		}
@@ -108,6 +110,8 @@ async function removeInvalidUser(user) {
 	await query.deleteQuery('monsters', { id: user.id })
 	await query.deleteQuery('raid', { id: user.id })
 	await query.deleteQuery('quest', { id: user.id })
+	await query.deleteQuery('lures', { id: user.id })
+	await query.deleteQuery('profiles', { id: user.id })
 	await query.deleteQuery('humans', { id: user.id })
 }
 
@@ -307,7 +311,7 @@ const rateChecker = new UserRateChecker(config)
 const workers = []
 const maxWorkers = config.tuning.webhookProcessingWorkers
 
-function processMessages(msgs) {
+async function processMessages(msgs) {
 	let newRateLimits = false
 
 	for (const msg of msgs) {
@@ -324,6 +328,29 @@ function processMessages(msgs) {
 					emoji: [],
 				}
 				log.info(`${msg.logReference}: Stopping alerts (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
+
+				if (config.alertLimits.maxLimitsBeforeStop) {
+					const userCheck = rateChecker.userIsBanned(msg.target, msg.type)
+					if (!userCheck.canContinue) {
+						queueMessage = {
+							...msg,
+							message: {
+								content: userTranslator.translateFormat('You have breached the rate limit too many times in the last 24 hours. Your messages are now stopped, use {0}start to resume',
+									['discord:user', 'discord:channel', 'webhook'].includes(msg.type) ? config.discord.prefix : '/'),
+							},
+							emoji: [],
+						}
+
+						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
+
+						try {
+							await query.updateQuery('humans', { enabled: 0 }, { id: msg.target })
+						} catch (err) {
+							log.error('Failed to stop user messages', err)
+						}
+					}
+				}
+
 				newRateLimits = true
 			} else {
 				log.info(`${msg.logReference}: Intercepted and stopped message for user (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
@@ -510,24 +537,41 @@ async function processOne(hook) {
 			case 'invasion':
 			case 'pokestop': {
 				if (config.general.disablePokestop) {
-					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was received but set to be ignored in config`)
+					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info(`pokestop ${JSON.stringify(hook.message)}`)
+				fastify.webhooks.info(`pokestop(${hook.type}) ${JSON.stringify(hook.message)}`)
 				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
-				if (!incidentExpiration) break
-				if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
-					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
+				const lureExpiration = hook.message.lure_expiration
+				if (!lureExpiration && !incidentExpiration) {
+					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
 				}
+				if (lureExpiration) {
+					if (fastify.cache.has(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
+						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
+						break
+					}
 
-				// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
-				const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
+					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+					const secondsRemaining = Math.max((lureExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-				fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
+					fastify.cache.set(`${hook.message.pokestop_id}_L${lureExpiration}`, 'cached', secondsRemaining)
 
-				processHook = hook
+					processHook = hook
+				} else {
+					if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
+						break
+					}
 
+					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+					const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
+
+					fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
+
+					processHook = hook
+				}
 				break
 			}
 			case 'quest': {
@@ -607,6 +651,71 @@ if (NODE_MAJOR_VERSION < 12) {
 if (NODE_MAJOR_VERSION > 14) {
 	throw new Error('Requires Node 12 or 14')
 }
+
+schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
+	try {
+		log.verbose('Profile Check: Checking for active profile changes')
+		const humans = await query.selectAllQuery('humans', {})
+		const profilesToCheck = await query.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
+
+		let lastId
+		for (const profile of profilesToCheck) {
+			const human = humans.find((x) => x.id == profile.id)
+
+			let nowForHuman = moment()
+			if (human.latitude) {
+				nowForHuman = moment().tz(geoTz(human.latitude, human.longitude).toString())
+			}
+
+			if (profile.id != lastId) {
+				const timings = JSON.parse(profile.active_hours)
+				const nowHour = nowForHuman.hour()
+				const nowMinutes = nowForHuman.minutes()
+				const nowDow = nowForHuman.isoWeekday()
+				const yesterdayDow = nowDow == 1 ? 7 : nowDow - 1
+
+				const active = timings.some((row) => (
+					(row.day == nowDow && row.hours == nowHour && nowMinutes > row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
+					|| (nowMinutes < 10 && row.day == nowDow && row.hours == nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
+					|| (nowHour == 0 && nowMinutes < 10 && row.day == yesterdayDow && row.hours == 23 && row.mins > 50) // first 10 minutes of day
+				))
+
+				if (active) {
+					if (human.current_profile_no != profile.profile_no) {
+						const userTranslator = translatorFactory.Translator(human.language || config.general.locale)
+
+						const job = {
+							type: human.type,
+							target: human.id,
+							name: human.name,
+							ping: '',
+							clean: false,
+							message: { content: userTranslator.translateFormat('I have set your profile to: {0}', profile.name) },
+							logReference: '',
+							tth: { hours: 1, minutes: 0, seconds: 0 },
+						}
+
+						if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+						if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(job.type)) fastify.telegramQueue.push(job)
+
+						log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
+
+						lastId = profile.id
+						await fastify.monsterController.updateQuery('humans',
+							{
+								current_profile_no: profile.profile_no,
+								area: profile.area,
+								latitude: profile.latitude,
+								longitude: profile.longitude,
+							}, { id: profile.id })
+					}
+				}
+			}
+		}
+	} catch (err) {
+		log.error('Error setting profiles', err)
+	}
+})
 
 run()
 setInterval(handleAlarms, 100)

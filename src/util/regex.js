@@ -23,7 +23,7 @@ function createCommandRegex(translatorFactory, commandName, paramMatch, flags = 
 
 module.exports = (translatorFactory) => ({
 	nameRe: createCommandRegex(translatorFactory, 'name', '\\S+'),
-	userRe: createCommandRegex(translatorFactory, 'user', '\\S+'),
+	userRe: createCommandRegex(translatorFactory, 'user', '-?\\d{1,20}'),
 	formRe: createCommandRegex(translatorFactory, 'form', '.+'),
 	genRe: createCommandRegex(translatorFactory, 'gen', '[1-7]+'),
 	maxlevelRe: createCommandRegex(translatorFactory, 'maxlevel', '\\d{1,2}'),
@@ -48,10 +48,21 @@ module.exports = (translatorFactory) => ({
 	ultraLeagueRe: createCommandRegex(translatorFactory, 'ultra', '\\d{1,4}'),
 	ultraLeagueCPRe: createCommandRegex(translatorFactory, 'ultracp', '\\d{1,5}'),
 	dRe: createCommandRegex(translatorFactory, 'd', '[\\d.]{1,}'),
+	tRe: createCommandRegex(translatorFactory, 't', '\\d{1,4}'),
 	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),
 	energyRe: createCommandRegex(translatorFactory, 'energy', '\\S+'),
 	channelRe: createCommandRegex(translatorFactory, 'channel', '\\d{1,20}'),
 	areaRe: createCommandRegex(translatorFactory, 'area', '.+'),
 	languageRe: createCommandRegex(translatorFactory, 'language', '.+'),
+	monRe: createCommandRegex(translatorFactory, 'mon', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	tueRe: createCommandRegex(translatorFactory, 'tue', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	wedRe: createCommandRegex(translatorFactory, 'wed', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	thuRe: createCommandRegex(translatorFactory, 'thu', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	friRe: createCommandRegex(translatorFactory, 'fri', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	satRe: createCommandRegex(translatorFactory, 'sat', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	sunRe: createCommandRegex(translatorFactory, 'sun', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	weekdayRe: createCommandRegex(translatorFactory, 'weekday', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+	weekendRe: createCommandRegex(translatorFactory, 'weekend', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+
 }
 )

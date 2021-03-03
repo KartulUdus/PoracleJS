@@ -6,7 +6,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, language,
+			canContinue, target, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -14,12 +14,15 @@ exports.run = async (client, msg, args) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
-		const monsters = await client.query.selectAllQuery('monsters', { id: target.id })
-		const raids = await client.query.selectAllQuery('raid', { id: target.id })
-		const eggs = await client.query.selectAllQuery('egg', { id: target.id })
+		const monsters = await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo })
+		const raids = await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo })
+		const eggs = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
 		const human = (await client.query.selectAllQuery('humans', { id: target.id }))[0]
-		const quests = await client.query.selectAllQuery('quest', { id: target.id })
-		const invasions = await client.query.selectAllQuery('invasion', { id: target.id })
+		const quests = await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo })
+		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
+		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
+		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
+
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		if (args.includes('area')) {
 			return msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
@@ -41,6 +44,13 @@ exports.run = async (client, msg, args) => {
 			message = message.concat('\n\n', translator.translate('You have not selected any area yet'))
 		}
 
+		if (profile) {
+			message = message.concat('\n\n', `${translator.translate('Your profile is currently set to:')} ${profile.name}`)
+		}
+		await msg.reply(message)
+
+		message = ''
+
 		if (!client.config.general.disablePokemon) {
 			if (monsters.length) {
 				message = message.concat('\n\n', translator.translate('You\'re tracking the following monsters:'), '\n')
@@ -55,9 +65,14 @@ exports.run = async (client, msg, args) => {
 					formName = ''
 				} else {
 					const mon = Object.values(client.GameData.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
-					monsterName = mon.name
-					formName = mon.form.name
-					if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
+					if (!mon) {
+						monsterName = `${translator.translate('Unknown monster')} ${monster.pokemon_id}`
+						formName = `${monster.form}`
+					} else {
+						monsterName = mon.name
+						formName = mon.form.name
+						if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
+					}
 				}
 				let miniv = monster.min_iv
 				if (miniv === -1) miniv = 0
@@ -66,7 +81,7 @@ exports.run = async (client, msg, args) => {
 
 				const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
 				const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-				message = message.concat(`\n**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(client.GameData.utilData.rarity[minRarity])}-${translator.translate(client.GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${client.GameData.utilData.genders[monster.gender].emoji}` : ''}`)
+				message = message.concat(`\n**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(client.GameData.utilData.rarity[minRarity])}-${translator.translate(client.GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${client.GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`)
 			})
 		}
 
@@ -140,6 +155,21 @@ exports.run = async (client, msg, args) => {
 					typeText = invasion.grunt_type
 				}
 				message = message.concat(`\n${translator.translate('grunt type').charAt(0).toUpperCase() + translator.translate('grunt type').slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`)
+			})
+
+			if (lures.length) {
+				message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
+			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
+
+			lures.forEach((lure) => {
+				let typeText = ''
+
+				if (lure.lure_id === 0) {
+					typeText = 'any'
+				} else {
+					typeText = client.GameData.utilData.lures[lure.lure_id].name
+				}
+				message = message.concat(`\n${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `)
 			})
 		}
 

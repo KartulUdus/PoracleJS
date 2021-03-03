@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language,
+			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -75,6 +75,7 @@ exports.run = async (client, msg, args) => {
 		if (!remove) {
 			const insert = monsters.map((mon) => ({
 				id: target.id,
+				profile_no: currentProfileNo,
 				pokemon_id: mon.id,
 				ping: pings,
 				exclusive: !!exclusive,
@@ -89,6 +90,7 @@ exports.run = async (client, msg, args) => {
 			levels.forEach((level) => {
 				insert.push({
 					id: target.id,
+					profile_no: currentProfileNo,
 					pokemon_id: 9000,
 					ping: pings,
 					exclusive: !!exclusive,
@@ -108,16 +110,22 @@ exports.run = async (client, msg, args) => {
 			const monsterIds = monsters.map((mon) => mon.id)
 			let result = 0
 			if (monsterIds.length) {
-				const monResult = await client.query.deleteWhereInQuery('raid', target.id, monsterIds, 'pokemon_id')
+				const monResult = await client.query.deleteWhereInQuery('raid', {
+					id: target.id,
+					profile_no: currentProfileNo,
+				}, monsterIds, 'pokemon_id')
 				result += monResult
 			}
 			if (levels.length) {
-				const lvlResult = await client.query.deleteWhereInQuery('raid', target.id, levels, 'level')
+				const lvlResult = await client.query.deleteWhereInQuery('raid', {
+					id: target.id,
+					profile_no: currentProfileNo,
+				}, levels, 'level')
 				client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} raids`)
 				result += lvlResult
 			}
 			if (commandEverything) {
-				const everythingResult = await client.query.deleteQuery('raid', { id: target.id })
+				const everythingResult = await client.query.deleteQuery('raid', { id: target.id, profile_no: currentProfileNo })
 				client.log.info(`${target.name} stopped tracking all raids`)
 				result += everythingResult
 			}

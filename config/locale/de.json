@@ -23,7 +23,7 @@
 	"<Your-Webhook-url>":"<Webhook-URL>",
 	"channel":"kanal",
 	"no valid areas there, please use one of":"Fehler: Kein gültiges Gebiet angegeben. Folgende Gebiete sind verfügbar:",
-	"Added areas:":"Hinzgefügte Gebiete:",
+	"Added areas:":"Hinzugefügte Gebiete:",
 	"Removed areas:":"Entfernte Gebiete",
 	"Current configured areas are:":"Aktuell sind folgende Gebiete festgelegt:",
 	"nameYourWebhookName":"nameWebhookName",

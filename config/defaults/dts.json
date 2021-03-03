@@ -487,6 +487,29 @@
     "webpage_preview": true
   }
 },
+  {
+    "id": 1,
+    "language": "en",
+    "type": "lure",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "username": "{{lureTypeName}}",
+      "avatar_url": "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/{{minus lureTypeId 500}}.png",
+      "embed": {
+        "title": "Lure at {{{pokestopName}}}",
+        "url": "{{{googleMapUrl}}}",
+        "color": "{{lureTypeColor}}",
+        "description": "**Type:** {{lureTypeName}}\n **Ends at:** {{time}} \n(**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n**Address:** {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}}) | [Waze]({{{wazeMapUrl}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticmap}}}"
+        }
+      }
+    }
+  },
 {
   "id": 1,
   "language": "en",

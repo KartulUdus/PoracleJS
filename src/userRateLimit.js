@@ -3,7 +3,8 @@ const NodeCache = require('node-cache')
 class UserRateChecker {
 	constructor(config) {
 		this.config = config
-		this.discordCache = new NodeCache({ useClones: false, stdTTL: this.config.discord.limitSec })
+		this.discordCache = new NodeCache({ useClones: false, stdTTL: this.config.alertLimits.timingPeriod })
+		this.limitCount = new NodeCache({ stdTTL: (24 * 60 * 60) })
 	}
 
 	// eslint-disable-next-line no-unused-vars
@@ -69,6 +70,42 @@ class UserRateChecker {
 		}
 
 		return badboys
+	}
+
+	/**
+	 * Add user to banned list
+	 * @param id user id
+	 */
+	// eslint-disable-next-line no-unused-vars
+	userIsBanned(id, type) {
+		let ch = this.limitCount.get(id)
+		const messageLimit = this.config.alertLimits.maxLimitsBeforeStop
+		const messageTimeout = 24 * 60 * 60
+		let newCount
+		let resetTime
+		if (!ch) {
+			ch = { count: 1 }
+			this.limitCount.set(id, ch, messageTimeout)
+
+			newCount = 1
+			resetTime = messageTimeout
+		} else {
+			newCount = ch.count + 1
+			ch.count = newCount
+
+			const ttl = this.limitCount.getTtl(id)
+			resetTime = Math.floor((ttl - Date.now()) / 1000)
+			if (resetTime > 0) this.limitCount.set(id, ch, resetTime)
+		}
+
+		return {
+			canContinue: newCount <= messageLimit,
+			justBreached: newCount == messageLimit + 1,
+			messageCount: newCount,
+			resetTime: Math.max(resetTime, 1),	// Don't look stupid if we are actually at 0
+			messageLimit,
+			messageTimeout,
+		}
 	}
 }
 

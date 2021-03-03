@@ -8,7 +8,7 @@
     "scale": 1,
     "markers": [
         {
-            "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/misc/pokestop.png",
+            "url": "#if(lureTypeId != nil):https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/#(lureTypeId-500).png#elseif(gruntTypeId != nil):https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/i0.png#else:https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/0.png#endif",
             "latitude": #(latitude),
             "longitude": #(longitude),
             "width": 50,

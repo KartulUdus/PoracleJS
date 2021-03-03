@@ -3,7 +3,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target,
+			canContinue, target, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -22,7 +22,10 @@ exports.run = async (client, msg, args) => {
 		if (args.includes('everything')) {
 			monsterIds.push(0)
 		}
-		const result = await client.query.deleteWhereInQuery('monsters', target.id, monsterIds, 'pokemon_id')
+		const result = await client.query.deleteWhereInQuery('monsters', {
+			id: target.id,
+			profile_no: currentProfileNo,
+		}, monsterIds, 'pokemon_id')
 		client.log.info(`${target.name} removed tracking for monsters: ${monsters.map((m) => m.name).join(', ')}`)
 
 		if (result.length || client.config.database.client === 'sqlite') {
