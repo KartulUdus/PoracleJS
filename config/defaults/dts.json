@@ -505,12 +505,48 @@
           "url": "{{{imgUrl}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
         }
       }
     }
   },
-{
+  {
+    "id": 1,
+    "language": "fr",
+    "type": "lure",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "username": "{{lureTypeName}}",
+      "avatar_url": "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/{{minus lureTypeId 500}}.png",
+      "embed": {
+        "title": "Leurre détecté sur {{{pokestopName}}}",
+        "url": "{{{googleMapUrl}}}",
+        "color": "{{lureTypeColor}}",
+        "description": "**Type :** {{lureTypeName}}\n **Fin à :** {{time}} \n(**Temps restant :** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n**Adresse :** {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}}) | [Waze]({{{wazeMapUrl}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticMap}}}"
+        }
+      }
+    }
+  },
+  {
+    "id":1,
+    "language":"en",
+    "type":"lure",
+    "default":true,
+    "platform":"telegram",
+    "template":{
+      "content":"**Lure type:** {{lureTypeName}}\n **Ends:** {{time}} \n**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
+      "location":true,
+      "sticker":"{{stickerUrl}}",
+      "webpage_preview":false
+    }
+  },
+  {
   "id": 1,
   "language": "en",
   "type": "weatherchange",

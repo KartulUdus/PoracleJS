@@ -82,12 +82,7 @@ if (!isMainThread) {
 	statsController.on('statsChanged', broadcastStats)
 	setInterval(processQueue, 100)
 
-	const raritySchedule = []
-	let i
-	for (i = 0; i < 60; i += config.stats.rarityRefreshInterval) {
-		raritySchedule.push(i)
-	}
-	schedule.scheduleJob({ minute: raritySchedule }, () => {
+	setInterval(() => {
 		try {
 			log.verbose('Calculating stats')
 
@@ -95,5 +90,5 @@ if (!isMainThread) {
 		} catch (err) {
 			log.error('Error calculating stats ', err)
 		}
-	})
+	}, config.stats.rarityRefreshInterval * 60000)
 }
