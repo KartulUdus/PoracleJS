@@ -68,14 +68,14 @@ module.exports = {
 		geofence = importFresh(path.join(__dirname, `../../${config.geofence.path}`))
 		if (geofence.type === 'FeatureCollection') geofence = getGeofenceFromGEOjson(path.join(__dirname, `../../${config.geofence.path}`))
 		knex = getKnex(config)
-		knex.migrate.latest({
-			directory: path.join(__dirname, './db/migrations'),
-			tableName: 'migrations',
-		})
 		translatorFactory = new TranslatorFactory(config)
 		translator = translatorFactory.default
 
 		if (performChecks) {
+		knex.migrate.latest({
+			directory: path.join(__dirname, './db/migrations'),
+			tableName: 'migrations',
+		})
 			configChecker.checkConfig(config)
 			configChecker.checkDts(dts, config)
 			configChecker.checkGeofence(geofence)
