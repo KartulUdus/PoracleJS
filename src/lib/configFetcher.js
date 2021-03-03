@@ -1,6 +1,7 @@
 const importFresh = require('import-fresh')
 const path = require('path')
 const Knex = require('knex')
+const moment = require('moment-timezone')
 const TranslatorFactory = require('../util/translatorFactory')
 const dtsLoader = require('./dtsloader')
 const configChecker = require('./configChecker')
@@ -47,15 +48,15 @@ function getKnex(conf) {
 			})
 		}
 		default: {
-			throw new Error('Sqlite is not currently working, move to MYSQL or get latest which worked: git checkout 4350c45bf63ce1bc6c341f3a0b921238b106f1d6 - come to discord for help')
+			throw new Error('Sqlite is no longer supported, move to MYSQL or get latest which worked: git checkout 4350c45bf63ce1bc6c341f3a0b921238b106f1d6 - come to discord for help')
 
-			return Knex({
-				client: 'sqlite3',
-				useNullAsDefault: true,
-				connection: {
-					filename: path.join(__dirname, './db/poracle.sqlite'),
-				},
-			})
+			// return Knex({
+			// 	client: 'sqlite3',
+			// 	useNullAsDefault: true,
+			// 	connection: {
+			// 		filename: path.join(__dirname, './db/poracle.sqlite'),
+			// 	},
+			// })
 		}
 	}
 }
@@ -79,6 +80,8 @@ module.exports = {
 			configChecker.checkDts(dts, config)
 			configChecker.checkGeofence(geofence)
 		}
+
+		moment.locale(config.locale.timeformat)
 		return {
 			config, knex, dts, geofence, translator, translatorFactory,
 		}

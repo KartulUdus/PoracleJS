@@ -12,8 +12,8 @@ class Pokestop extends Controller {
 		if (!data.gender) data.gender = -1
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
-		join humans on humans.id = invasion.id
-		where humans.enabled = 1 and
+		join humans on (humans.id = invasion.id and humans.current_profile_no = invasion.profile_no)
+		where humans.enabled = 1 and humans.admin_disable = false and
 		(invasion.grunt_type='${String(data.gruntType).toLowerCase()}' or invasion.grunt_type = 'everything') and
 		(invasion.gender = ${data.gender} or invasion.gender = 0)`
 
@@ -65,8 +65,7 @@ class Pokestop extends Controller {
 	async handle(obj) {
 		let pregenerateTile = false
 		const data = obj
-		const minTth = this.config.general.monsterMinimumTimeTillHidden || 0
-		// const minTth = this.config.general.alertMinimumTime || 0
+		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
 			const logReference = data.pokestop_id

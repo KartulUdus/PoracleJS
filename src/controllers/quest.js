@@ -22,8 +22,8 @@ class Quest extends Controller {
 		})
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
-		join humans on humans.id = quest.id
-		where humans.enabled = 1 and
+		join humans on (humans.id = quest.id and humans.current_profile_no = quest.profile_no)
+		where humans.enabled = 1 and humans.admin_disable = false and
 		(((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0))
 		or (reward_type = 2 and reward in (${data.rewardData.items}))
 		or (reward_type = 3 and reward <= ${data.dustAmount})

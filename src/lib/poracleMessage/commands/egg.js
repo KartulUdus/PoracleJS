@@ -3,7 +3,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language,
+			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -54,6 +54,7 @@ exports.run = async (client, msg, args) => {
 		if (!remove) {
 			const insert = levels.map((lvl) => ({
 				id: target.id,
+				profile_no: currentProfileNo,
 				ping: pings,
 				exclusive: !!exclusive,
 				template,
@@ -70,12 +71,18 @@ exports.run = async (client, msg, args) => {
 		} else {
 			let result = 0
 			if (levels.length) {
-				const lvlResult = await client.query.deleteWhereInQuery('egg', target.id, levels, 'level')
+				const lvlResult = await client.query.deleteWhereInQuery('egg', {
+					id: target.id,
+					profile_no: currentProfileNo,
+				}, levels, 'level')
 				client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} eggs`)
 				result += lvlResult
 			}
 			if (commandEverything) {
-				const everythingResult = await client.query.deleteQuery('egg', { id: target.id })
+				const everythingResult = await client.query.deleteQuery('egg', {
+					id: target.id,
+					profile_no: currentProfileNo,
+				})
 				client.log.info(`${target.name} stopped tracking all eggs`)
 				result += everythingResult
 			}

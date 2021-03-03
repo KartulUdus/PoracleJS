@@ -24,6 +24,11 @@ class PoracleTelegramMessage {
 		return ''
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	getMentions() {
+		return []
+	}
+
 	get isFromAdmin() {
 		return (this.config.telegram.admins.includes(this.userId.toString()))
 	}

@@ -455,5 +455,15 @@
 	"Douse":"Module Aqua",
 	"Shock":"Module Choc",
 	"Burn":"Module Pyro",
-	"Chill":"Module Cryo"
+	"Chill":"Module Cryo",
+	"lure":"leurre",
+	"glacial":"glacial",
+	"normal":"normal",
+	"mossy":"moussu",
+	"magnetic":"magnétique",
+	"Glacial Lure":"Leurre Glacial",
+	"Normal Lure":"Leurre Normal",
+	"Mossy Lure":"Leurre Moussu",
+	"Magnetic Lure":"Leurre Magnétique",
+	"404 No lure types found":"Type de Leurre Inconnu"
 }

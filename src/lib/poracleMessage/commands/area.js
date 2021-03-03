@@ -4,7 +4,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, language,
+			canContinue, target, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -42,6 +42,7 @@ exports.run = async (client, msg, args) => {
 				} else {
 					await msg.react('👌')
 				}
+				await client.query.updateQuery('profiles', { area: JSON.stringify(newAreas) }, { id: target.id, profile_no: currentProfileNo })
 
 				break
 			}
@@ -62,6 +63,7 @@ exports.run = async (client, msg, args) => {
 					await msg.react('👌')
 				}
 
+				await client.query.updateQuery('profiles', { area: JSON.stringify(newAreas) }, { id: target.id, profile_no: currentProfileNo })
 				break
 			}
 			case 'list': {

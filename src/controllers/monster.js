@@ -1,6 +1,7 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-
+const replaceAsync = require('../util/stringReplaceAsync')
+const urlShortener = require('../lib/urlShortener')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
@@ -23,11 +24,12 @@ class Monster extends Controller {
 		if (data.pvpEvoLookup) pvpQueryString = `great_league_ranking>=${data.pvp_bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.pvp_bestGreatLeagueRankCP} and ultra_league_ranking>=${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.pvp_bestUltraLeagueRankCP}`
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
-		join humans on humans.id = monsters.id
-		where humans.enabled = true and
+		join humans on (humans.id = monsters.id and humans.current_profile_no = monsters.profile_no)
+		where humans.enabled = true and humans.admin_disable = false and
 		(${pokemonQueryString}) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
+		min_time<=${data.tthSeconds} and
 		min_cp<=${data.cp} and
 		max_cp>=${data.cp} and
 		(gender = ${data.gender} or gender = 0) and
@@ -63,13 +65,13 @@ class Monster extends Controller {
 						monsters.distance = 0 and (${areastring})
 					)
 				)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 				`)
+			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 		} else {
 			query = query.concat(`
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
-					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 					`)
+			//					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 		}
 		// this.log.silly(`${data.encounter_id}: Query ${query}`)
 
@@ -100,7 +102,6 @@ class Monster extends Controller {
 			let hrstart = process.hrtime()
 			const logReference = data.encounter_id
 
-			moment.locale(this.config.locale.timeformat)
 			const minTth = this.config.general.alertMinimumTime || 0
 
 			switch (this.config.geocoding.staticProvider.toLowerCase()) {
@@ -138,9 +139,8 @@ class Monster extends Controller {
 				this.weatherData.checkWeatherOnMonster(weatherCellId, data.latitude, data.longitude, data.weather)
 			}
 
-			// Should this is getting currentCellWeather
+			// Get current cell weather from cache
 			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
-			// if (!currentCellWeather && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
 				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
@@ -178,6 +178,7 @@ class Monster extends Controller {
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivColor = this.findIvColor(data.iv)
+			data.tthSeconds = data.disappear_time - Date.now() / 1000
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.confirmedTime = data.disappear_time_verified
@@ -273,7 +274,7 @@ class Monster extends Controller {
 			}
 
 			// Stop handling if it already disappeared or is about to go away
-			if ((data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth)) {
+			if ((data.tth.firstDateWasLater || data.tthSeconds < minTth)) {
 				this.log.verbose(`${data.encounter_id}: ${monster.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
 			}
@@ -378,8 +379,6 @@ class Monster extends Controller {
 
 				if (this.config.weather.weatherChangeAlert) {
 					// Emit event so we can tell weather controller (different worker) about the pokemon being monitored
-
-					// ?? we haven't told it about the weather we current believe it is, is this missing info?
 
 					this.emit('userCares', {
 						target: {
@@ -492,6 +491,10 @@ class Monster extends Controller {
 						// eslint-disable-next-line no-continue
 						continue
 					}
+
+					mustacheResult = await replaceAsync(mustacheResult, /<S<(.*?)>S>/g,
+						async (match, name) => urlShortener(name))
+
 					try {
 						message = JSON.parse(mustacheResult)
 					} catch (err) {

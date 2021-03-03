@@ -11,13 +11,17 @@ class TelegramUtil {
 
 		for (const user of allUsers) {
 			this.log.debug(`Checking role for: ${user.name} - ${user.id}`)
-			const telegramUser = await this.telegraf.telegram.getChatMember(group, user.id)
-			if (telegramUser) {
-				const { status } = telegramUser
-				if (['left', 'kicked'].includes(status)) {
-					this.log.debug(`User ${user.name} - ${user.id} has status ${status}`)
-					invalidUsers.push(user)
+			try {
+				const telegramUser = await this.telegraf.telegram.getChatMember(group, user.id)
+				if (telegramUser) {
+					const { status } = telegramUser
+					if (['left', 'kicked'].includes(status)) {
+						this.log.debug(`User ${user.name} - ${user.id} has status ${status}`)
+						invalidUsers.push(user)
+					}
 				}
+			} catch (err) {
+				this.log.warn('Error retrieving telegram user data - may need manual intervention', err)
 			}
 		}
 		return invalidUsers

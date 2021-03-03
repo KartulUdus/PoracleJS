@@ -1,6 +1,5 @@
 exports.run = async (client, msg, args) => {
 	try {
-		// Check target
 		const util = client.createUtil(msg, args)
 
 		const {
@@ -12,26 +11,27 @@ exports.run = async (client, msg, args) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
-		const typeArray = Object.values(client.GameData.grunts).map((grunt) => grunt.type.toLowerCase())
-
 		let reaction = '👌'
+
 		const remove = !!args.find((arg) => arg === 'remove')
 		const commandEverything = !!args.find((arg) => arg === 'everything')
+
 		let distance = 0
 		let template = client.config.general.defaultTemplateName
-		let gender = 0
 		let clean = false
-		const types = args.filter((arg) => typeArray.includes(arg))
+		const lures = []
 		const pings = msg.getPings()
 
-		for (const element of args) {
-			if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
+		args.forEach((element) => {
+			if (element === 'normal') lures.push(501)
+			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
-			else if (element === 'female') gender = 2
-			else if (element === 'male') gender = 1
+			else if (element === 'glacial') lures.push(502)
+			else if (element === 'mossy') lures.push(503)
+			else if (element === 'magnetic') lures.push(504)
+			else if (element === 'everything') lures.push(0)
 			else if (element === 'clean') clean = true
-			else if (typeArray.includes(element) || element === 'everything') types.push(element)
-		}
+		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
@@ -39,45 +39,52 @@ exports.run = async (client, msg, args) => {
 			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 		if (distance === 0 && !userHasArea && !remove) {
-			await msg.react(client.translator.translate('🙅'))
+			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
-		if (!types.length) {
-			return await msg.reply(translator.translate('404 No valid invasion types found'))
+
+		if (!lures.length) {
+			return await msg.reply(translator.translate('404 No lure types found'))
 		}
 
 		if (!remove) {
-			const insertData = types.map((o) => ({
+			const insert = lures.map((lureId) => ({
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
 				template,
 				distance,
-				gender,
 				clean,
-				grunt_type: o,
+				lure_id: lureId,
 			}))
-			const result = await client.query.insertOrUpdateQuery('invasion', insertData)
-			client.log.info(`${target.name} started tracking ${types.join(', ')} invasions`)
+
+			const result = await client.query.insertOrUpdateQuery('lures', insert)
+			client.log.info(`${target.name} started tracking lures ${lures.join(', ')}`)
+
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
 		} else {
 			let result = 0
-			if (commandEverything) {
-				result = await client.query.deleteQuery('invasion', { id: target.id, profile_no: currentProfileNo })
-				client.log.info(`${target.name} stopped tracking all invasions`)
-			} else {
-				result = client.query.deleteWhereInQuery('invasion', {
+			if (lures.length) {
+				const lvlResult = await client.query.deleteWhereInQuery('lures', {
 					id: target.id,
 					profile_no: currentProfileNo,
-				}, types, 'grunt_type')
-				client.log.info(`${target.name} stopped tracking ${types.join(', ')} invasions`)
+				}, lures, 'lure_id')
+				client.log.info(`${target.name} stopped tracking lures ${lures.join(', ')}`)
+				result += lvlResult
+			}
+			if (commandEverything) {
+				const everythingResult = await client.query.deleteQuery('lures', {
+					id: target.id,
+					profile_no: currentProfileNo,
+				})
+				client.log.info(`${target.name} stopped tracking all lures`)
+				result += everythingResult
 			}
 			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
-			client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
 		}
 
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error('invasion command unhappy:', err)
+		client.log.error('lure command unhappy:', err)
 	}
 }

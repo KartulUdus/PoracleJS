@@ -13,21 +13,27 @@ class PoracleDiscordUtil {
 		let isRegistered = false
 		let id
 		let language = null
+		let currentProfileNo = 1
+		let name
+		let type
 
 		const human = target.webhook
 			? await this.client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
 			: await this.client.query.selectOneQuery('humans', { id: target.id })
 
 		if (human) {
-			isRegistered = true
+			isRegistered = !human.admin_disable
 			id = human.id
 			language = human.language || this.client.config.general.locale
+			name = human.name
+			type = human.type
+			currentProfileNo = human.current_profile_no
 			if (+human.latitude !== 0 && +human.longitude !== 0) userHasLocation = true
 			if (human.area.length > 2) userHasArea = true
 		}
 
 		return {
-			isRegistered, userHasLocation, userHasArea, language, id,
+			isRegistered, userHasLocation, userHasArea, language, id, currentProfileNo, name, type,
 		}
 	}
 
@@ -44,6 +50,10 @@ class PoracleDiscordUtil {
 
 		let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
 		if (webhookName) [,, webhookName] = webhookName.match(this.client.re.nameRe)
+
+		let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
+		if (userIdOverride) [,, userIdOverride] = userIdOverride.match(this.client.re.userRe)
+
 		if (this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
 			target = {
 				id: this.msg.msg.channel.id,
@@ -52,9 +62,14 @@ class PoracleDiscordUtil {
 				webhook: false,
 			}
 		}
+
+		if (this.msg.isFromAdmin && userIdOverride) {
+			target.id = userIdOverride
+		}
+
 		if (this.msg.isFromAdmin && webhookName) {
 			target = {
-				name: webhookName.replace(this.client.translator.translate('name'), ''),
+				name: webhookName,
 				type: 'webhook',
 				webhook: true,
 			}
@@ -72,9 +87,20 @@ class PoracleDiscordUtil {
 			return { canContinue: false }
 		}
 
+		if (!status.isRegistered && this.msg.isFromAdmin && userIdOverride) {
+			await this.msg.reply(this.client.translator.translate('User with that identity does not appear to be registered (or is disabled)'))
+			return { canContinue: false }
+		}
+
 		if (!status.isRegistered && this.msg.msg.channel.type === 'dm') {
 			await this.msg.react(this.client.translator.translate('🙅'))
 			return { canContinue: false }
+		}
+
+		if (this.msg.isFromAdmin && userIdOverride) {
+			target.name = status.name
+			target.type = status.type
+			await this.msg.reply(`${this.client.translator.translate('This command is being executed as')} ${target.id} ${target.name}`)
 		}
 
 		if (target.webhook) target.id = status.id
@@ -86,6 +112,7 @@ class PoracleDiscordUtil {
 			userHasLocation: status.userHasLocation,
 			userHasArea: status.userHasArea,
 			language: status.language,
+			currentProfileNo: status.currentProfileNo,
 		}
 	}
 }

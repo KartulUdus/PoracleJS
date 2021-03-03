@@ -17,7 +17,13 @@ class TranslatorFactory {
 
 	get CommandTranslators() {
 		if (this.commandTranslators) return this.commandTranslators
-		this.commandTranslators = Object.keys(this.config.general.availableLanguages).map((locale) => this.Translator(locale))
+		const availableLanguages = Object.keys(this.config.general.availableLanguages)
+
+		this.commandTranslators = availableLanguages.map((locale) => this.Translator(locale))
+
+		if (!availableLanguages.includes('en')) this.commandTranslators.push(this.Translator('en'))
+		if (this.config.general.locale !== 'en' && !availableLanguages.includes(this.config.general.locale)) this.commandTranslators.push(this.Translator(this.config.general.locale))
+
 		return this.commandTranslators
 	}
 

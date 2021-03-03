@@ -28,12 +28,13 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const PokestopLureController = require('./controllers/pokestop_lure')
 const ControllerWeatherManager = require('./controllers/weatherData')
 /**
  * Contains currently rate limited users
  * @type {NodeCache}
  */
-const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
+const rateLimitedUserCache = new NodeCache({ stdTTL: config.alertLimits.timingPeriod })
 
 const controllerWeatherManager = new ControllerWeatherManager(config, log)
 
@@ -41,6 +42,7 @@ const monsterController = new MonsterController(logs.controller, knex, config, d
 const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
 const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
 const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
+const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager)
 
 const hookQueue = []
 let queuePort
@@ -74,11 +76,20 @@ async function processOne(hook) {
 			}
 			case 'invasion':
 			case 'pokestop': {
-				const result = await pokestopController.handle(hook.message)
-				if (result) {
-					queueAddition = result
+				if (hook.message.lure_expiration) {
+					const result = await pokestopLureController.handle(hook.message)
+					if (result) {
+						queueAddition = result
+					} else {
+						log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+					}
 				} else {
-					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+					const result = await pokestopController.handle(hook.message)
+					if (result) {
+						queueAddition = result
+					} else {
+						log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+					}
 				}
 				break
 			}

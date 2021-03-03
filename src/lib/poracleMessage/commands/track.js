@@ -3,7 +3,7 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, target, userHasLocation, userHasArea, language,
+			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -17,6 +17,7 @@ exports.run = async (client, msg, args) => {
 		// Set defaults
 		let monsters
 		let distance = 0
+		let minTime = 0
 		let cp = 0
 		let maxcp = 9000
 		let iv = -1
@@ -130,6 +131,7 @@ exports.run = async (client, msg, args) => {
 			else if (element.match(client.re.defRe)) [,, def] = element.match(client.re.defRe)
 			else if (element.match(client.re.staRe)) [,, sta] = element.match(client.re.staRe)
 			else if (element.match(client.re.weightRe)) [,, weight] = element.match(client.re.weightRe)
+			else if (element.match(client.re.tRe)) [,, minTime] = element.match(client.re.tRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'female') gender = 2
 			else if (element === 'clean') clean = true
@@ -167,6 +169,7 @@ exports.run = async (client, msg, args) => {
 		}
 		const insert = monsters.map((mon) => ({
 			id: target.id,
+			profile_no: currentProfileNo,
 			pokemon_id: mon.id,
 			ping: pings,
 			distance,
@@ -192,6 +195,7 @@ exports.run = async (client, msg, args) => {
 			great_league_ranking_min_cp: greatLeagueCP,
 			ultra_league_ranking: ultraLeague,
 			ultra_league_ranking_min_cp: ultraLeagueCP,
+			min_time: minTime,
 		}))
 		if (!insert.length) {
 			return await msg.reply(translator.translate('404 No monsters found'))
