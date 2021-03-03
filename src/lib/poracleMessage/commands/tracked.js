@@ -66,7 +66,7 @@ exports.run = async (client, msg, args) => {
 				} else {
 					const mon = Object.values(client.GameData.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
 					if (!mon) {
-						monsterName = `Unknown monster ${monster.pokemon_id}`
+						monsterName = `${translator.translate('Unknown monster')} ${monster.pokemon_id}`
 						formName = `${monster.form}`
 					} else {
 						monsterName = mon.name

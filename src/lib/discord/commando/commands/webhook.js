@@ -54,7 +54,7 @@ exports.run = async (client, msg, [args]) => {
 
 		if (args[0] == 'add') {
 			if (webhookName.includes('_')) {
-				await msg.author.send('A poracle webhook name cannot contain an underscore (_) user name parameter to override')
+				await msg.author.send('A poracle webhook name cannot contain an underscore (_) - use name parameter to override')
 
 				return await msg.react('👌')
 			}
