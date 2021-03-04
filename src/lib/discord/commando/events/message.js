@@ -31,27 +31,31 @@ module.exports = async (client, msg) => {
 			}
 		}
 
-		// Ignore msgs not starting with the prefix (in config)
-		if (msg.content.indexOf(client.config.discord.prefix) !== 0) return
+		for (const commandText of msg.content.split('\n')) {
+			// Ignore msgs not starting with the prefix (in config)
+			// eslint-disable-next-line no-continue
+			if (commandText.indexOf(client.config.discord.prefix) !== 0) continue
 
-		let args = msg.content.slice(client.config.discord.prefix.length).trim().split(/ +/g)
+			let args = commandText.slice(client.config.discord.prefix.length).trim().split(/ +/g)
 
-		args = args.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
-		const command = args.shift()
+			args = args.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
+			const command = args.shift()
 
-		if (client.config.general.disabledCommands.includes(command)) return
+			// eslint-disable-next-line no-continue
+			if (client.config.general.disabledCommands.includes(command)) continue
 
-		let initialArgs
-		if (args.includes('|')) {
-			initialArgs = args.join(' ').split('|').map((com) => com.split(' ').filter((a) => a))
-		} else {
-			initialArgs = [args]
+			let initialArgs
+			if (args.includes('|')) {
+				initialArgs = args.join(' ').split('|').map((com) => com.split(' ').filter((a) => a))
+			} else {
+				initialArgs = [args]
+			}
+
+			const cmd = client.commands[command]
+			if (cmd) {
+				cmd.run(client, msg, initialArgs)
+			}
 		}
-
-		const cmd = client.commands[command]
-		if (!cmd) return
-
-		cmd.run(client, msg, initialArgs)
 	} catch (err) {
 		client.logs.discord.error('Error during message event', err)
 	}
