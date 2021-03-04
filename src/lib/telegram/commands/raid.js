@@ -13,7 +13,9 @@ module.exports = async (ctx) => {
 		const ptm = new PoracleTelegramMessage(ctx)
 		const pts = new PoracleTelegramState(ctx)
 
-		await commandLogic.run(pts, ptm, command.splitArgsArray[0])
+		for (const c of command.splitArgsArray) {
+			await commandLogic.run(pts, ptm, c)
+		}
 	} catch (err) {
 		controller.logs.telegram.error('Raid command unhappy:', err)
 	}
