@@ -25,7 +25,7 @@ class TileserverPregen {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. No id returned.`)
 				return null
 			}
-			return `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`
+			return result.data.startsWith('http') ? result.data : `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`
 		} catch (error) {
 			if (error.response) {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
