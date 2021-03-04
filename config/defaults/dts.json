@@ -510,6 +510,19 @@
       }
     }
   },
+  {
+    "id":1,
+    "language":"en",
+    "type":"lure",
+    "default":true,
+    "platform":"telegram",
+    "template":{
+      "content":"**Lure type:** {{lureTypeName}}\n **Ends:** {{time}} \n**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
+      "location":true,
+      "sticker":"{{stickerUrl}}",
+      "webpage_preview":false
+    }
+  },
 {
   "id": 1,
   "language": "en",
