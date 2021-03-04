@@ -315,7 +315,9 @@ async function processMessages(msgs) {
 	let newRateLimits = false
 
 	for (const msg of msgs) {
-		const rate = rateChecker.validateMessage(msg.target, msg.type)
+		const destinationId = msg.type == 'webhook' ? msg.name : msg.target
+		const destinationType = msg.type
+		const rate = rateChecker.validateMessage(destinationId, destinationType)
 
 		let queueMessage
 
@@ -330,7 +332,7 @@ async function processMessages(msgs) {
 				log.info(`${msg.logReference}: Stopping alerts (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
 
 				if (config.alertLimits.maxLimitsBeforeStop) {
-					const userCheck = rateChecker.userIsBanned(msg.target, msg.type)
+					const userCheck = rateChecker.userIsBanned(destinationId, destinationType)
 					if (!userCheck.canContinue) {
 						queueMessage = {
 							...msg,

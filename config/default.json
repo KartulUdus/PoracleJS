@@ -227,6 +227,14 @@
     "dmLimit": 20,                // limit of number of messages a channel/group can receive in the period
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
     "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
+    // allow override for specific channel ids in - id can be a channel/user id or a webhook name
+    //    "limitOverride": {
+    //        "id": limit,
+    //        "id": limit
+    //    }
+    "limitOverride": {
+
+    }
   },
   //
   // geocoding section
