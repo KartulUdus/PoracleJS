@@ -1,8 +1,8 @@
 class PoracleDiscordUtil {
-	constructor(client, msg, command) {
+	constructor(client, msg, options) {
 		this.client = client
 		this.msg = msg
-		this.command = command
+		this.options = options
 
 		this.prefix = this.client.config.discord.prefix
 	}
@@ -48,62 +48,72 @@ class PoracleDiscordUtil {
 			id: this.msg.msg.author.id, type: 'discord:user', name: this.msg.msg.author.tag, webhook: false,
 		}
 
-		let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
-		if (webhookName) [,, webhookName] = webhookName.match(this.client.re.nameRe)
+		let status
 
-		let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
-		if (userIdOverride) [,, userIdOverride] = userIdOverride.match(this.client.re.userRe)
+		if (this.options && this.options.targetOveride) {
+			target.id = this.options.targetOveride.id
+			target.name = this.options.targetOveride.name
+			target.type = this.options.targetOveride.type
+			target.webook = (target.type == 'webhook')
+			status = await this.checkRegistrationStatus(target)
+		} else {
+			let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
+			if (webhookName) [, , webhookName] = webhookName.match(this.client.re.nameRe)
 
-		if (this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
-			target = {
-				id: this.msg.msg.channel.id,
-				name: this.msg.msg.channel.name,
-				type: 'discord:channel',
-				webhook: false,
+			let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
+			if (userIdOverride) [, , userIdOverride] = userIdOverride.match(this.client.re.userRe)
+
+			if (this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
+				target = {
+					id: this.msg.msg.channel.id,
+					name: this.msg.msg.channel.name,
+					type: 'discord:channel',
+					webhook: false,
+				}
 			}
-		}
 
-		if (this.msg.isFromAdmin && userIdOverride) {
-			target.id = userIdOverride
-		}
-
-		if (this.msg.isFromAdmin && webhookName) {
-			target = {
-				name: webhookName,
-				type: 'webhook',
-				webhook: true,
+			if (this.msg.isFromAdmin && userIdOverride) {
+				target.id = userIdOverride
 			}
+
+			if (this.msg.isFromAdmin && webhookName) {
+				target = {
+					name: webhookName,
+					type: 'webhook',
+					webhook: true,
+				}
+			}
+
+			status = await this.checkRegistrationStatus(target)
+
+			if (!status.isRegistered && this.msg.isFromAdmin && target.webhook) {
+				await this.msg.reply(`Webhook ${target.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')} ${this.client.translator.translate('name')}webhookname ${this.client.translator.translate('<Your-Webhook-url>')}`)
+				return { canContinue: false }
+			}
+
+			if (!status.isRegistered && this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
+				await this.msg.reply(`${this.msg.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
+				return { canContinue: false }
+			}
+
+			if (!status.isRegistered && this.msg.isFromAdmin && userIdOverride) {
+				await this.msg.reply(this.client.translator.translate('User with that identity does not appear to be registered (or is disabled)'))
+				return { canContinue: false }
+			}
+
+			if (!status.isRegistered && this.msg.msg.channel.type === 'dm') {
+				await this.msg.react(this.client.translator.translate('🙅'))
+				return { canContinue: false }
+			}
+
+			if (this.msg.isFromAdmin && userIdOverride) {
+				target.name = status.name
+				target.type = status.type
+				await this.msg.reply(`${this.client.translator.translate('This command is being executed as')} ${target.id} ${target.name}`)
+			}
+
+			if (target.webhook) target.id = status.id
 		}
-
-		const status = await this.checkRegistrationStatus(target)
-
-		if (!status.isRegistered && this.msg.isFromAdmin && target.webhook) {
-			await this.msg.reply(`Webhook ${target.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')} ${this.client.translator.translate('name')}webhookname ${this.client.translator.translate('<Your-Webhook-url>')}`)
-			return { canContinue: false }
-		}
-
-		if (!status.isRegistered && this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
-			await this.msg.reply(`${this.msg.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
-			return { canContinue: false }
-		}
-
-		if (!status.isRegistered && this.msg.isFromAdmin && userIdOverride) {
-			await this.msg.reply(this.client.translator.translate('User with that identity does not appear to be registered (or is disabled)'))
-			return { canContinue: false }
-		}
-
-		if (!status.isRegistered && this.msg.msg.channel.type === 'dm') {
-			await this.msg.react(this.client.translator.translate('🙅'))
-			return { canContinue: false }
-		}
-
-		if (this.msg.isFromAdmin && userIdOverride) {
-			target.name = status.name
-			target.type = status.type
-			await this.msg.reply(`${this.client.translator.translate('This command is being executed as')} ${target.id} ${target.name}`)
-		}
-
-		if (target.webhook) target.id = status.id
 
 		return {
 			canContinue: true,

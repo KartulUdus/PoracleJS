@@ -1,12 +1,12 @@
 const fs = require('fs')
 const path = require('path')
 
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
-			canContinue, target, currentProfileNo
+			canContinue, target, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
