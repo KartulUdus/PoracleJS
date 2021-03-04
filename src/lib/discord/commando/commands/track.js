@@ -7,5 +7,7 @@ exports.run = async (client, msg, command) => {
 	const pdm = new PoracleDiscordMessage(client, msg)
 	const pds = new PoracleDiscordState(client)
 
-	await commandLogic.run(pds, pdm, command[0])
+	for (const c of command) {
+		await commandLogic.run(pds, pdm, c)
+	}
 }

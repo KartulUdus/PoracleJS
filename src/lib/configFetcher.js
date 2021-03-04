@@ -72,10 +72,10 @@ module.exports = {
 		translator = translatorFactory.default
 
 		if (performChecks) {
-		knex.migrate.latest({
-			directory: path.join(__dirname, './db/migrations'),
-			tableName: 'migrations',
-		})
+			knex.migrate.latest({
+				directory: path.join(__dirname, './db/migrations'),
+				tableName: 'migrations',
+			})
 			configChecker.checkConfig(config)
 			configChecker.checkDts(dts, config)
 			configChecker.checkGeofence(geofence)
