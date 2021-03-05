@@ -226,7 +226,7 @@
     "timingPeriod": 240,          // seconds over which limits should be calculated
     "dmLimit": 20,                // limit of number of messages a channel/group can receive in the period
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
-    "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
+    "maxLimitsBeforeStop": 10     // number of times user can hit rate limit (within 24hrs) before being stopped
   },
   //
   // geocoding section
