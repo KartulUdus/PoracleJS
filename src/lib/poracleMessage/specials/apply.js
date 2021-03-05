@@ -20,7 +20,7 @@ exports.run = async (client, msg, commands) => {
 			await msg.reply(`>>> Executing as ${target.type} / ${target.name} ${target.type != 'webhook' ? target.id : ''}`)
 			for (let x = 1; x < commands.length; x++) {
 				const command = commands[x]
-				msg.reply(`>> ${command.join(' ')}`)
+				await msg.reply(`>> ${command.join(' ')}`)
 				const cmdName = command[0]
 
 				try {
@@ -35,7 +35,7 @@ exports.run = async (client, msg, commands) => {
 							},
 						})
 				} catch (err) {
-					msg.reply('>> Error executing command')
+					await msg.reply('>> Error executing command')
 				}
 			}
 		}
