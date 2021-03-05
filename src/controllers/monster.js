@@ -1,7 +1,5 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-const replaceAsync = require('../util/stringReplaceAsync')
-const urlShortener = require('../lib/urlShortener')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
@@ -491,10 +489,7 @@ class Monster extends Controller {
 						// eslint-disable-next-line no-continue
 						continue
 					}
-
-					mustacheResult = await replaceAsync(mustacheResult, /<S<(.*?)>S>/g,
-						async (match, name) => urlShortener(name))
-
+					mustacheResult = await this.urlShorten(mustacheResult)
 					try {
 						message = JSON.parse(mustacheResult)
 					} catch (err) {

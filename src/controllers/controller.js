@@ -10,6 +10,8 @@ const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cac
 const emojiFlags = require('emoji-flags')
 
 const TileserverPregen = require('../lib/tileserverPregen')
+const replaceAsync = require('../util/stringReplaceAsync')
+const urlShortener = require('../lib/urlShortener')
 
 class Controller extends EventEmitter {
 	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData) {
@@ -173,6 +175,16 @@ class Controller extends EventEmitter {
 		a.streetName = this.escapeJsonString(a.streetName)
 		a.addr = this.escapeJsonString(a.addr)
 		return a
+	}
+
+	/**
+	 * Replace URLs with shortened versions if surrounded by <S< >S>
+	 * @param
+	 */
+	// eslint-disable-next-line class-methods-use-this
+	async urlShorten(s) {
+		return replaceAsync(s, /<S<(.*?)>S>/g,
+			async (match, name) => urlShortener(name))
 	}
 
 	async getAddress(locationObject) {
