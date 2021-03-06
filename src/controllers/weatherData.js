@@ -45,7 +45,7 @@ class WeatherData extends EventEmitter {
 
 		if (weatherCellId in this.controllerData) {
 			const weatherCellData = this.controllerData[weatherCellId]
-			const localCellData = this.controllerData[weatherCellId]
+			const localCellData = this.localWeatherData[weatherCellId]
 			if (weatherCellData) {
 				if (/*! currentCellWeather && */weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
 				if (localCellData && localCellData.currentHourTimestamp == currentHourTimestamp) currentCellWeather = localCellData.monsterWeather // We have discovered weather locally, use that
