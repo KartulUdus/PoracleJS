@@ -40,13 +40,14 @@ exports.run = async (client, msg, [args]) => {
 			language = newLanguage
 		}
 
-		if (webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
 		if (msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
-
-		const isRegistered = await client.query.countQuery('humans', { id: target.id })
 
 		if (args.find((arg) => arg === 'add')) {
 			if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name using the `name` parameter and an url')
+
+			if (webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
+
+			const isRegistered = await client.query.countQuery('humans', { id: target.id })
 
 			if (isRegistered) return await msg.react('👌')
 
@@ -64,9 +65,18 @@ exports.run = async (client, msg, [args]) => {
 			if (language) reply = reply.concat(` ${(areaName != '[]') ? client.translator.translate('and') : client.translator.translate('with')} ${client.translator.translate('language')} ${client.translator.translate(client.GameData.utilData.languageNames[language])}`)
 			await msg.reply(reply)
 		} else if (args.find((arg) => arg === 'remove')) {
-			if (!isRegistered && target.webhook) {
-				return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')} ${client.translator.translate('nameYourWebhookName')} nameYourWebhookName`)
+			if (webhookName) {
+				const webhookRegistered = await this.client.query.countQuery('humans', {name: webhookName, type: 'webhook'})
+				if (webhookRegistered) {
+					await client.query.deleteQuery('humans', {name: webhookName, type: 'webhook'})
+					await msg.react('✅')
+					return
+				}
+				return msg.reply('Webhook with that name does not appeared to be registered')
 			}
+
+			const isRegistered = await client.query.countQuery('humans', { id: target.id })
+
 			if (!isRegistered && msg.channel.type === 'text') {
 				return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('channel')} ${client.translator.translate('add')}`)
 			}
