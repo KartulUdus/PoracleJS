@@ -228,7 +228,7 @@ class Worker {
 					}
 				}
 			} catch (err) {
-				this.logs.info(`Error processing historic deletes ${err}`)
+				this.logs.log.info(`Error processing historic deletes ${err}`)
 			}
 		}
 	}
