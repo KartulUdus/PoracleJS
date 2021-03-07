@@ -3,9 +3,13 @@ exports.run = async (client, msg, [args]) => {
 
 	try {
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
+		if (!client.config.discord.admins.includes(msg.author.id)) {
+			return await msg.react('🙅')
 		}
+		// if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+		// 	return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
+		// }
+
 		let webhookName = args.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) [,, webhookName] = webhookName.match(client.re.nameRe)
 		const webhookLink = msg.content.match(client.hookRegex) ? msg.content.match(client.hookRegex)[0] : false
@@ -36,11 +40,14 @@ exports.run = async (client, msg, [args]) => {
 			language = newLanguage
 		}
 
-		if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name and an url')
-		if (client.config.discord.admins.includes(msg.author.id) && webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
-		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
+		if (webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
+		if (msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
+
 		const isRegistered = await client.query.countQuery('humans', { id: target.id })
+
 		if (args.find((arg) => arg === 'add')) {
+			if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name using the `name` parameter and an url')
+
 			if (isRegistered) return await msg.react('👌')
 
 			await client.query.insertQuery('humans', {
@@ -57,10 +64,10 @@ exports.run = async (client, msg, [args]) => {
 			if (language) reply = reply.concat(` ${(areaName != '[]') ? client.translator.translate('and') : client.translator.translate('with')} ${client.translator.translate('language')} ${client.translator.translate(client.GameData.utilData.languageNames[language])}`)
 			await msg.reply(reply)
 		} else if (args.find((arg) => arg === 'remove')) {
-			if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
+			if (!isRegistered && target.webhook) {
 				return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')} ${client.translator.translate('nameYourWebhookName')} nameYourWebhookName`)
 			}
-			if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+			if (!isRegistered && msg.channel.type === 'text') {
 				return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('channel')} ${client.translator.translate('add')}`)
 			}
 			if (isRegistered) {
