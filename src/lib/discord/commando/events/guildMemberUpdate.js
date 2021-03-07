@@ -21,17 +21,28 @@ module.exports = async (client, oldPresence, newPresence) => {
 				}
 
 				client.logs.discord.log({ level: 'info', message: `registered ${oldPresence.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
+			} else {
+			    const user = await client.query.selectOneQuery('humans', { id: oldPresence.user.id })
+			    if (user.admin_disable && client.config.discord.userDisableInstead) {
+			        await client.query.updateQuery('humans', { admin_disable: 0 }, { id: oldPresence.user.id })
+				    client.logs.discord.log({ level: 'info', message: `enabled ${oldPresence.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
+			    }
 			}
 		}
 		if (before && !after) {
 			const isRegistered = await client.query.countQuery('humans', { id: oldPresence.user.id })
 			if (isRegistered) {
-				await client.query.deleteQuery('egg', { id: oldPresence.user.id })
-				await client.query.deleteQuery('monsters', { id: oldPresence.user.id })
-				await client.query.deleteQuery('raid', { id: oldPresence.user.id })
-				await client.query.deleteQuery('quest', { id: oldPresence.user.id })
-				await client.query.deleteQuery('humans', { id: oldPresence.user.id })
-				client.logs.discord.log({ level: 'info', message: `unregistered ${oldPresence.user.username} because ${roleBefore.name} role removed`, event: 'discord:roleCheck' })
+			    if (client.config.discord.userDisableInstead) {
+			        await client.query.updateQuery('humans', { admin_disable: 1 }, { id: oldPresence.user.id })
+                    client.logs.discord.log({ level: 'info', message: `disabled ${oldPresence.user.username} because ${roleBefore.name} role removed`, event: 'discord:roleCheck' })
+			    } else {
+                    await client.query.deleteQuery('egg', { id: oldPresence.user.id })
+                    await client.query.deleteQuery('monsters', { id: oldPresence.user.id })
+                    await client.query.deleteQuery('raid', { id: oldPresence.user.id })
+                    await client.query.deleteQuery('quest', { id: oldPresence.user.id })
+                    await client.query.deleteQuery('humans', { id: oldPresence.user.id })
+                    client.logs.discord.log({ level: 'info', message: `unregistered ${oldPresence.user.username} because ${roleBefore.name} role removed`, event: 'discord:roleCheck' })
+			    }
 			}
 		}
 	} catch (e) {

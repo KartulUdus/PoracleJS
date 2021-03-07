@@ -106,13 +106,17 @@ if (config.telegram.enabled) {
 }
 
 async function removeInvalidUser(user) {
-	await query.deleteQuery('egg', { id: user.id })
-	await query.deleteQuery('monsters', { id: user.id })
-	await query.deleteQuery('raid', { id: user.id })
-	await query.deleteQuery('quest', { id: user.id })
-	await query.deleteQuery('lures', { id: user.id })
-	await query.deleteQuery('profiles', { id: user.id })
-	await query.deleteQuery('humans', { id: user.id })
+    if (client.config.discord.userDisableInstead) {
+        await query.updateQuery('humans', { admin_disable: 1 }, { id: user.id })
+    } else {
+        await query.deleteQuery('egg', { id: user.id })
+        await query.deleteQuery('monsters', { id: user.id })
+        await query.deleteQuery('raid', { id: user.id })
+        await query.deleteQuery('quest', { id: user.id })
+        await query.deleteQuery('lures', { id: user.id })
+        await query.deleteQuery('profiles', { id: user.id })
+        await query.deleteQuery('humans', { id: user.id })
+    }
 }
 
 async function syncTelegramMembership() {
@@ -128,7 +132,7 @@ async function syncTelegramMembership() {
 		}
 
 		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing from dB...')
+			log.info('Invalid users found, removing/disabling from dB...')
 			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
 				if (config.general.roleCheckDeletionsAllowed) {
@@ -157,7 +161,7 @@ async function syncDiscordRole() {
 			usersToCheck = invalidUsers
 		}
 		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing from dB...')
+			log.info('Invalid users found, removing/disabling from dB...')
 			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
 				if (config.general.roleCheckDeletionsAllowed) {

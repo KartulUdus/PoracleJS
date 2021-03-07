@@ -168,6 +168,10 @@
     //   actually carry out the deletions rather than just logging them)
       "checkRole": false,
       "checkRoleInterval": 6,
+    // userDisableInstead - In case where user (and all of his settings) would get removed from database
+    // we will use `admin_disable` flag to switch his state. This way user configuration won't be deleted.
+    // Keep in mind that auto-register event will overwrite state of manually issued command `!disable`
+      "userDisableInstead": false,
     // token - array of discord tokens - poracle can support any number of bots for transmitting
     //   messages but the first will be used as the command controller
       "token": ["discord bot token"],
