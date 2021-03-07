@@ -8,10 +8,11 @@ exports.run = async (client, msg, args) => {
 		const util = client.createUtil(msg, args)
 
 		const {
-			canContinue, language,
+			canContinue, language, target,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 
 		const translator = client.translatorFactory.Translator(language)
 
