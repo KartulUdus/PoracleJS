@@ -66,7 +66,7 @@ exports.run = async (client, msg, [args]) => {
 			await msg.reply(reply)
 		} else if (args.find((arg) => arg === 'remove')) {
 			if (webhookName) {
-				const webhookRegistered = await this.client.query.countQuery('humans', { name: webhookName, type: 'webhook' })
+				const webhookRegistered = await client.query.countQuery('humans', { name: webhookName, type: 'webhook' })
 				if (webhookRegistered) {
 					await client.query.deleteQuery('humans', { name: webhookName, type: 'webhook' })
 					await msg.react('✅')
