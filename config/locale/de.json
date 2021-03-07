@@ -251,5 +251,15 @@
 	"Douse":"Aquamodul",
 	"Shock":"Blitzmodul",
 	"Burn":"Flammenmodul",
-	"Chill":"Gefriermodul"
+	"Chill":"Gefriermodul",
+	"lure":"Lockmodul",
+	"glacial":"Gletscher",
+	"normal":"Normal",
+	"mossy":"Moos",
+	"magnetic":"Magnet",
+	"Glacial Lure":"Gletscher Lockmodul",
+	"Normal Lure":"Normales Lockmodul",
+	"Mossy Lure":"Moos Lockmodul",
+	"Magnetic Lure":"Magnet Lockmodul",
+	"404 No lure types found":"404 Kein Lockmodultyp gefunden"
 }

@@ -15,21 +15,26 @@ module.exports = async (client, msg) => {
 			if (client.config.discord.admins.includes(msg.author.id)) {
 				message = `**${msg.author.username}** > ${msg.cleanContent}`
 			}
-			try {
-				const channel = await client.channels.fetch(client.config.discord.dmLogChannelID)
-				const msgDeletionMs = (client.config.discord.dmLogChannelDeletionTime * 60) * 1000 || 0
-				if (!channel) {
-					client.logs.discord.warn('channel dmLogChannel not found')
-				} else {
-					const logmsg = await channel.send(message)
-					if (msgDeletionMs > 0) {
-						logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' })
+
+			client.channels.fetch(client.config.discord.dmLogChannelID).then(
+				(channel) => {
+					const msgDeletionMs = (client.config.discord.dmLogChannelDeletionTime * 60) * 1000 || 0
+					if (!channel) {
+						client.logs.discord.warn('channel dmLogChannel not found')
+					} else {
+						channel.send(message).then((logmsg) => {
+							if (msgDeletionMs > 0) {
+								logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+							}
+						}).catch(() => { })
 					}
-				}
-			} catch (err) {
+				},
+			).catch((err) => {
 				client.logs.discord.error('Failed to send Discord alert to dmLogChannel', err)
-			}
+			})
 		}
+
+		let recognisedCommand = false
 
 		for (const commandText of msg.content.split('\n')) {
 			// Ignore msgs not starting with the prefix (in config)
@@ -53,8 +58,12 @@ module.exports = async (client, msg) => {
 
 			const cmd = client.commands[command]
 			if (cmd) {
+				recognisedCommand = true
 				cmd.run(client, msg, initialArgs)
 			}
+		}
+		if (msg.channel.type === 'dm' && !recognisedCommand && client.config.discord.unrecognisedCommandMessage) {
+			msg.reply(client.config.discord.unrecognisedCommandMessage)
 		}
 	} catch (err) {
 		client.logs.discord.error('Error during message event', err)

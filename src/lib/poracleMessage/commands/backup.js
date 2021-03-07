@@ -5,7 +5,8 @@ exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
 		if (!msg.isFromAdmin) {
-			return client.log.info(`${msg.userId} ran "backup" command`)
+			client.log.info(`${msg.userId} ran "backup" command`)
+			return await msg.react('🙅')
 		}
 
 		const util = client.createUtil(msg, options)

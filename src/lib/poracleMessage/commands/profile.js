@@ -217,9 +217,13 @@ exports.run = async (client, msg, args, options) => {
 				if (args.length == 0) {
 					const profile = profiles.find((x) => x.profile_no === currentProfileNo)
 					if (!profile) {
-						return await msg.reply(translator.translate('You don\'t have a profile set'))
+						await msg.reply(translator.translate('You don\'t have a profile set'))
+					} else {
+						await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 					}
-					return await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
+
+					return await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`', util.prefix),
+						{ style: 'markdown' })
 				}
 
 				let profileNo = parseInt(args[0], 10)

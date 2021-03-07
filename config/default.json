@@ -191,7 +191,11 @@
     ],
       "dmLogChannelID": "",                           // an ID of a channel to use to log all poracle commands to (to watch users)
       "dmLogChannelDeletionTime": 0,                  // time to clean up after (seconds) - 0 do not delete
-      "messageDeleteDelay": 0                         // extra time to add on to a message 'clean' to leave behind (in ms)
+      "messageDeleteDelay": 0,                        // extra time to add on to a message 'clean' to leave behind (in ms)
+    // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
+      "unrecognisedCommandMessage": "",
+    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+      "unregisteredUserMessage": ""
   },
 
   //
@@ -226,7 +230,7 @@
     "timingPeriod": 240,          // seconds over which limits should be calculated
     "dmLimit": 20,                // limit of number of messages a channel/group can receive in the period
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
-    "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
+    "maxLimitsBeforeStop": 10     // number of times user can hit rate limit (within 24hrs) before being stopped
   },
   //
   // geocoding section
