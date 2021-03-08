@@ -1,6 +1,6 @@
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	// Check target
-	const util = client.createUtil(msg, args)
+	const util = client.createUtil(msg, options)
 
 	const {
 		canContinue, target,

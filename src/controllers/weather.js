@@ -63,7 +63,7 @@ class Weather extends Controller {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async mapPoGoWeather(weatherIcon) {
+	mapPoGoWeather(weatherIcon) {
 		const mapping = {
 			1: [1, 2, 30, 33, 34],
 			2: [12, 15, 18, 26, 29],
@@ -184,12 +184,18 @@ class Weather extends Controller {
 						const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}`
 						this.log.debug(`${id}: Fetching AccuWeather Forecast ${url}`)
 
+						let logString = ''
 						const weatherInfo = await axios.get(url)
 						for (const forecast in Object.entries(weatherInfo.data)) {
 							if (weatherInfo.data[forecast].EpochDateTime > currentHourTimestamp) {
-								data[weatherInfo.data[forecast].EpochDateTime] = await this.mapPoGoWeather(weatherInfo.data[forecast].WeatherIcon)
+								const pogoWeather = this.mapPoGoWeather(weatherInfo.data[forecast].WeatherIcon)
+								const epoch = weatherInfo.data[forecast].EpochDateTime
+								data[epoch] = pogoWeather
+								logString = logString.concat(` ${moment.unix(epoch).format('LTS')} = ${pogoWeather}`)
 							}
 						}
+						this.log.verbose(`${id}: Accuweather forecast ${logString}`)
+
 						data.forecastTimeout = forecastTimeout
 						data.lastCurrentWeatherCheck = currentHourTimestamp
 					} catch (err) {
@@ -310,11 +316,11 @@ class Weather extends Controller {
 			}
 
 			if (previousWeather === data.condition || whoCares.length === 0) {
-				this.log.verbose(`${data.s2_cell_id}: weather has not changed or nobody cares.`)
+				this.log.verbose(`${data.s2_cell_id}: weather of ${data.condition}${data.source == 'fromMonster' ? ' triggered from Monster' : ''} has not changed or nobody cares.`)
 				return []
 			}
 
-			this.log.info(`${data.s2_cell_id}: weather has changed to ${data.condition} and someone might care`)
+			this.log.info(`${data.s2_cell_id}: weather${data.source == 'fromMonster' ? ' triggered from Monster' : ''} has changed to ${data.condition} from ${previousWeather} and someone might care`)
 
 			if (data.source == 'fromMonster') {
 				const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(data.s2_cell_id))

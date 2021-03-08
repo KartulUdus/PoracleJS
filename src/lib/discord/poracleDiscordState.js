@@ -21,8 +21,8 @@ class PoracleDiscordState {
 		return new PoracleDiscordMessage(this, msg)
 	}
 
-	createUtil(msg, command) {
-		return new PoracleDiscordUtil(this, msg, command)
+	createUtil(msg, options) {
+		return new PoracleDiscordUtil(this, msg, options)
 	}
 }
 

@@ -1,7 +1,7 @@
 const fs = require('fs')
 const path = require('path')
 
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
 		if (!msg.isFromAdmin) {
@@ -9,7 +9,7 @@ exports.run = async (client, msg, args) => {
 			return await msg.react('🙅')
 		}
 
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
 			canContinue, target, currentProfileNo,
