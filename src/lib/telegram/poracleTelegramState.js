@@ -23,8 +23,8 @@ class PoracleTelegramState {
 		return new PoracleTelegramMessage(this, msg)
 	}
 
-	createUtil(msg, command) {
-		return new PoracleTelegramUtil(this, msg, command)
+	createUtil(msg, options) {
+		return new PoracleTelegramUtil(this, msg, options)
 	}
 }
 
