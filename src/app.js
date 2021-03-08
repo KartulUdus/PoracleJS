@@ -574,6 +574,8 @@ async function processOne(hook) {
 				break
 			}
 			default:
+				fastify.webhooks.info(`${hook.type} [unrecognised] ${JSON.stringify(hook.message)}`)
+				break
 		}
 		if (processHook) {
 			await workers[currentWorkerNo].queuePort.postMessage(processHook)

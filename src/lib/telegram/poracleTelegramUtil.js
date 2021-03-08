@@ -45,7 +45,7 @@ class PoracleTelegramUtil {
 		}
 
 		let target = {
-			id: this.msg.userId,
+			id: this.msg.userId.toString(),
 			name: this.msg.fullName,
 			type: 'telegram:user',
 			channel: false,

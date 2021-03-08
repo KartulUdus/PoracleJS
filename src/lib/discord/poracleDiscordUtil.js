@@ -94,6 +94,10 @@ class PoracleDiscordUtil {
 
 		if (!status.isRegistered && this.msg.msg.channel.type === 'dm') {
 			await this.msg.react(this.client.translator.translate('🙅'))
+			if (this.client.config.discord.unregisteredUserMessage) {
+				await this.msg.reply(this.client.config.discord.unregisteredUserMessage)
+			}
+
 			return { canContinue: false }
 		}
 
