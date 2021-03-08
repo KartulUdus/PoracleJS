@@ -50,10 +50,10 @@ class PoracleDiscordUtil {
 
 		let status
 
-		if (this.options && this.options.targetOveride) {
-			target.id = this.options.targetOveride.id
-			target.name = this.options.targetOveride.name
-			target.type = this.options.targetOveride.type
+		if (this.options && this.options.targetOverride) {
+			target.id = this.options.targetOverride.id
+			target.name = this.options.targetOverride.name
+			target.type = this.options.targetOverride.type
 			target.webook = (target.type == 'webhook')
 			status = await this.checkRegistrationStatus(target)
 		} else {
