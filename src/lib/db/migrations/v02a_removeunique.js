@@ -13,7 +13,7 @@ exports.up = async function migrationUp(knex) {
 	await knex.schema.alterTable('monsters', (table) => {
 		table.foreign('id').references('humans.id').onDelete('CASCADE')
 	})
-	log.info('Unique constraint removed')
+	log.info('Unique constraint removal migration completed')
 }
 
 exports.down = async function migrationDown(knex) {
