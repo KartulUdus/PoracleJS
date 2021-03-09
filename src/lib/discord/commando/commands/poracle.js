@@ -18,6 +18,16 @@ exports.run = async (client, msg) => {
 
 		const isRegistered = await client.query.countQuery('humans', { id: msg.author.id })
 		if (isRegistered) {
+            if (client.config.general.roleCheckDeletionsMode == 2) {
+                const user = await client.query.selectOneQuery('humans', { id: msg.author.id })
+                if (user.admin_disable && !user.disabled_date) {
+                    await client.query.updateQuery('humans', { admin_disable: 0 }, { id: msg.author.id })
+                    client.logs.discord.log({ level: 'debug', message: `user ${member.tag} used poracle command to remove admin_disable flag`, event: 'discord:registerCheck' })
+                } else if (user.admin_disable && user.disabled_date) {
+                    await msg.react('🙅')  // account was disabled by admin, don't let him re-enable
+                }
+            }
+
 			await msg.react('👌')
 			//			await client.query.updateQuery('humans', { language: language }, { id: msg.author.id })
 		} else {

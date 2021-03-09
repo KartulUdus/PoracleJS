@@ -55,6 +55,10 @@ function checkConfig(config) {
 		logs.log.warn('Config Check: geocoding/staticProviderURL does not start with http')
 	}
 
+	if (config.general.roleCheckDeletionsAllowed == true) {
+	    logs.log.warn('Config Check: legacy option “roleCheckDeletionsAllowed“ given and ignored, replace with “roleCheckDeletionsMode“')
+	}
+
 	if (typeof config.discord.limitSec != 'undefined') logs.log.warn('Config Check: legacy option “discord.limitSec” given and ignored, replace with “alertLimits.timingPeriod”')
 	if (typeof config.discord.limitAmount != 'undefined') logs.log.warn('Config Check: legacy option “discord.limitAmount” given and ignored, replace with “alertLimits.dmLimit/channelLimit”')
 

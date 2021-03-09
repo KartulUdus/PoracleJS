@@ -35,7 +35,11 @@
       "disablePokestop": false,
       "disableQuest": false,
       "disableWeather": false,
-      "roleCheckDeletionsAllowed": false,       // can poracle delete registered users when they lose their roles (test with false, set to true when confident)
+    // roleCheckDeletionsMode
+    // 0 - don't delete users once required role is removed
+    // 1 - delete user from database along with trackings once required role is removed
+    // 2 - disable user once required role is removed and re-enable once it's restored, trackings will remain
+      "roleCheckDeletionsMode": 0,
     // availableLanguages
     // - This is an array of available languages that users can swap between using the !language command
     // - Each language can have it's own call word which pre-sets that language, and you also define the help text
@@ -168,10 +172,6 @@
     //   actually carry out the deletions rather than just logging them)
       "checkRole": false,
       "checkRoleInterval": 6,
-    // userDisableInstead - In case where user (and all of his settings) would get removed from database
-    // we will use `admin_disable` flag to switch his state. This way user configuration won't be deleted.
-    // Keep in mind that auto-register event will overwrite state of manually issued command `!disable`
-      "userDisableInstead": false,
     // token - array of discord tokens - poracle can support any number of bots for transmitting
     //   messages but the first will be used as the command controller
       "token": ["discord bot token"],
