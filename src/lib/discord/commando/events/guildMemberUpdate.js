@@ -21,7 +21,7 @@ module.exports = async (client, oldPresence, newPresence) => {
 				}
 
 				client.logs.discord.log({ level: 'info', message: `registered ${oldPresence.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
-			} else if (client.config.general.roleCheckDeletionsMode == 2) {
+			} else if (isRegistered && client.config.general.roleCheckDeletionsMode == 2) {
 			    const user = await client.query.selectOneQuery('humans', { id: oldPresence.user.id })
 			    if (user.admin_disable && !user.disabled_date) {
 			        await client.query.updateQuery('humans', { admin_disable: 0 }, { id: oldPresence.user.id })

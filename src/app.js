@@ -108,7 +108,7 @@ if (config.telegram.enabled) {
 async function removeInvalidUser(user) {
     if (client.config.general.roleCheckDeletionsMode == 2) {
         if (!user.admin_disable) await query.updateQuery('humans', { admin_disable: 1 }, { id: user.id })
-    } else {
+    } else if (client.config.general.roleCheckDeletionsMode == 1) {  // sanity check
         await query.deleteQuery('egg', { id: user.id })
         await query.deleteQuery('monsters', { id: user.id })
         await query.deleteQuery('raid', { id: user.id })
