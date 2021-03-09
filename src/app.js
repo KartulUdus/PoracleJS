@@ -106,17 +106,17 @@ if (config.telegram.enabled) {
 }
 
 async function removeInvalidUser(user) {
-    if (client.config.general.roleCheckDeletionsMode == 2) {
-        if (!user.admin_disable) await query.updateQuery('humans', { admin_disable: 1 }, { id: user.id })
-    } else if (client.config.general.roleCheckDeletionsMode == 1) {  // sanity check
-        await query.deleteQuery('egg', { id: user.id })
-        await query.deleteQuery('monsters', { id: user.id })
-        await query.deleteQuery('raid', { id: user.id })
-        await query.deleteQuery('quest', { id: user.id })
-        await query.deleteQuery('lures', { id: user.id })
-        await query.deleteQuery('profiles', { id: user.id })
-        await query.deleteQuery('humans', { id: user.id })
-    }
+	if (config.general.roleCheckMode == 2) {
+		if (!user.admin_disable) await query.updateQuery('humans', { admin_disable: 1 }, { id: user.id })
+	} else if (config.general.roleCheckMode == 1) { // sanity check
+		await query.deleteQuery('egg', { id: user.id })
+		await query.deleteQuery('monsters', { id: user.id })
+		await query.deleteQuery('raid', { id: user.id })
+		await query.deleteQuery('quest', { id: user.id })
+		await query.deleteQuery('lures', { id: user.id })
+		await query.deleteQuery('profiles', { id: user.id })
+		await query.deleteQuery('humans', { id: user.id })
+	}
 }
 
 async function syncTelegramMembership() {
@@ -135,7 +135,7 @@ async function syncTelegramMembership() {
 			log.info('Invalid users found, removing/disabling from dB...')
 			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckDeletionsMode) {
+				if (config.general.roleCheckMode) {
 					await removeInvalidUser(user)
 				} else {
 					log.info('config.general.roleCheckDeletionAllowed not set, not removing')
@@ -164,7 +164,7 @@ async function syncDiscordRole() {
 			log.info('Invalid users found, removing/disabling from dB...')
 			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckDeletionsMode) {
+				if (config.general.roleCheckMode) {
 					await removeInvalidUser(user)
 				} else {
 					log.info('config.general.roleCheckDeletionAllowed not set, not removing')

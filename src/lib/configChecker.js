@@ -56,7 +56,7 @@ function checkConfig(config) {
 	}
 
 	if (config.general.roleCheckDeletionsAllowed == true) {
-	    logs.log.warn('Config Check: legacy option “roleCheckDeletionsAllowed“ given and ignored, replace with “roleCheckDeletionsMode“')
+		logs.log.warn('Config Check: legacy option “roleCheckDeletionsAllowed“ given and ignored, replace with “roleCheckMode“')
 	}
 
 	if (typeof config.discord.limitSec != 'undefined') logs.log.warn('Config Check: legacy option “discord.limitSec” given and ignored, replace with “alertLimits.timingPeriod”')
