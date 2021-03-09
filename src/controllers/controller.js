@@ -295,48 +295,6 @@ class Controller extends EventEmitter {
 		}
 	}
 
-	async insertOrUpdateQuery(table, values) {
-		switch (this.config.database.client) {
-			case 'pg': {
-				const firstData = values[0] ? values[0] : values
-				const query = `${this.db(table).insert(values).toQuery()} ON CONFLICT ON CONSTRAINT ${table}_tracking DO UPDATE SET ${
-					Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
-				return this.returnByDatabaseType(await this.db.raw(query))
-			}
-			case 'mysql': {
-				const firstData = values[0] ? values[0] : values
-				const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
-					Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
-				return this.returnByDatabaseType(await this.db.raw(query))
-			}
-			default: {
-				const constraints = {
-					humans: 'id',
-					monsters: 'monsters.id, monsters.profile_no, monsters.pokemon_id, monsters.min_iv, monsters.max_iv, monsters.min_level, monsters.max_level, monsters.atk, monsters.def, monsters.sta, monsters.form, monsters.gender, monsters.min_weight, monsters.great_league_ranking, monsters.great_league_ranking_min_cp, monsters.ultra_league_ranking, monsters.ultra_league_ranking_min_cp, monsters.min_time',
-					raid: 'raid.id, raid.profile_no, raid.pokemon_id, raid.exclusive, raid.level, raid.team',
-					egg: 'egg.id, egg.profile_no, egg.team, egg.exclusive, egg.level',
-					quest: 'quest.id, quest.profile_no, quest.reward_type, quest.reward',
-					invasion: 'invasion.id, invasion.profile_no, invasion.gender, invasion.grunt_type',
-					lures: 'lures.id, lures.profile_no, lures.lure_id',
-					weather: 'weather.id, weather.profile_no, weather.condition, weather.cell',
-				}
-
-				for (const val of values) {
-					for (const v of Object.keys(val)) {
-						if (typeof val[v] === 'string') val[v] = `'${val[v]}'`
-					}
-				}
-
-				const firstData = values[0] ? values[0] : values
-				const insertValues = values.map((o) => `(${Object.values(o).join()})`).join()
-				const query = `INSERT INTO ${table} (${Object.keys(firstData)}) VALUES ${insertValues} ON CONFLICT (${constraints[table]}) DO UPDATE SET ${
-					Object.keys(firstData).map((field) => `${field}=EXCLUDED.${field}`).join(', ')}`
-				const result = await this.db.raw(query)
-				return this.returnByDatabaseType(result)
-			}
-		}
-	}
-
 	async deleteQuery(table, values) {
 		try {
 			return await this.db(table).where(values).del()

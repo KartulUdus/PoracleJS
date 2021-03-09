@@ -16,10 +16,10 @@ exports.up = async function migrationUp(knex) {
 
 		if (config.database.client !== 'sqlite' && config.database.client !== 'sqlite3') table.dropForeign(['id'])
 		table.dropUnique(null, 'monsters_tracking')
-		table.unique([
-			'id', 'profile_no', 'pokemon_id', 'min_iv', 'max_iv', 'min_level', 'max_level', 'atk', 'def', 'sta', 'form',
-			'great_league_ranking', 'great_league_ranking_min_cp', 'ultra_league_ranking', 'ultra_league_ranking_min_cp', 'min_time',
-		], 'monsters_tracking')
+		// table.unique([
+		// 	'id', 'profile_no', 'pokemon_id', 'min_iv', 'max_iv', 'min_level', 'max_level', 'atk', 'def', 'sta', 'form',
+		// 	'great_league_ranking', 'great_league_ranking_min_cp', 'ultra_league_ranking', 'ultra_league_ranking_min_cp', 'min_time',
+		// ], 'monsters_tracking')
 		if (config.database.client !== 'sqlite' && config.database.client !== 'sqlite3') table.foreign('id').references('humans.id').onDelete('CASCADE')
 	})
 
