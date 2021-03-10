@@ -118,8 +118,8 @@
       "showAlteredPokemonStaticMap": false,         // Show weather changed on static map
       "showAlteredPokemonMaxCount": 10,             // Max number of changed pokémon allowed per alert
       "enableWeatherForecast": false,               // To enable or disable weather forecast (using accuweather)
-    // AccuWeather API keys - will rotate through keys
-      "apiKeyAccuWeather": ["key1", "key2", "key3"],
+    // AccuWeather API keys - array of keys, poracle will rotate through keys
+      "apiKeyAccuWeather": [""],
       "apiKeyDayQuota": 50,                         // Maximum API calls allowed per key per day
       "smartForecast": false,                       // use smart update of weather forecast (pull on demand if no weather data available for a given cell, otherwise will wait for next standard refresh)
       "localFirstFetchHOD": 3,                      // First hour of the day for the first API call (3am local seems best)
@@ -170,15 +170,15 @@
       "checkRoleInterval": 6,
     // token - array of discord tokens - poracle can support any number of bots for transmitting
     //   messages but the first will be used as the command controller
-      "token": ["discord bot token"],
+      "token": [""],
     // guilds - the guilds (servers) that poracle will be on
-      "guilds": ["guilds your bot will operate on"],
+      "guilds": [""],
     // channels - the ids of channels that can be used for the !poracle registration or alternatives by language
-      "channels": ["channels to listen for poracle activation commands"],
-    // userRoles - roles which will automatically grant poracle access (without registration required). Can be empty
-      "userRole": ["roles to grant access for"],
-    // admins - the ids of admins (those who can add channels using !channel add and perform other admin functions)
-      "admins": ["ids of admin accounts"],
+      "channels": [""],
+    // userRoles - role IDs which will automatically grant poracle access (without registration required). Can be empty
+      "userRole": [""],
+    // admins - the IDs of admins (those who can add channels using !channel add and perform other admin functions)
+      "admins": [""],
       "prefix": "!",                                  // prefix for poracle commands, usually '!'
     // ivColors - array of 6 color codes for pokemon IV rankings
       "ivColors": [
@@ -209,14 +209,14 @@
       "checkRole": false,
       "checkRoleInterval": 6,
     // token - telegram bot token
-      "token": "telegram bot token",
+      "token": "",
     // admins - admin user ids (array)
-      "admins": ["admin ids"],
+      "admins": [""],
     // channels - these are the groups that can be used for registration (it should really
     //   be called groups...). Note if they don't start with -100 then they may not be
     //   supergroups yet - google to find out how to make your group one.
     //   You can get the current group (and your) ids with the /identify command
-      "channels": ["groups to listen in /poracle"],
+      "channels": [""],
     // groupWelcomeText - message text (in channel) when someone registers. Users have to
     //   select the 'start' option on the bot in the telegram client before it can message
     //   them and this can be used to remind them of that
@@ -230,7 +230,7 @@
     "timingPeriod": 240,          // seconds over which limits should be calculated
     "dmLimit": 20,                // limit of number of messages a channel/group can receive in the period
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
-    "maxLimitsBeforeStop": 10     // number of times user can hit rate limit (within 24hrs) before being stopped
+    "maxLimitsBeforeStop": 10     // number of times user can hit rate limit (within 24hrs) before being stopped (0 = don't disable)
   },
   //
   // geocoding section
@@ -240,14 +240,14 @@
     //   'nominatim' for a local nominatim installation (recommended) https://github.com/mediagis/nominatim-docker
     //   or google (geocoding key provides an array of google API keys)
       "provider": "none",
-      "providerURL": "Your Nominatim Server Address",
+      "providerURL": "",
     // staticProvider - this is your provider of map tiles; can be tileservercache
     //   (swift tile server - https://github.com/123FLO321/SwiftTileserverCache)
     //   or google,osm,mapbox - staticKey provides an array of keys to use
     //   width/height/zoom/etc provide parameters for these while tileservercache
     //   uses templates (examples provided in tileservercache_templates folder)
       "staticProvider": "none",
-      "staticProviderURL": "Your TileServerCache Server Address",
+      "staticProviderURL": "",
     // staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook type
       "staticMapType": {
         "pokemon": "staticMap",
@@ -257,10 +257,10 @@
         "weather": "staticMap",
         "location": "staticMap"
       },
-    // geocodingKey - google keys for geolocation
-      "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
-    // staticKey - google or mapbox keys for provision of tiles, and parameters to use when requesting tiles
-      "staticKey":["Your MapQuest or Google Key"],
+    // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
+      "geocodingKey":[""],
+    // staticKey - google or mapquest keys for provision of tiles - can be array and poracle will cycle, and parameters to use when requesting tiles
+      "staticKey":[""],
       "width": 320,
       "height": 200,
       "zoom": 15,
