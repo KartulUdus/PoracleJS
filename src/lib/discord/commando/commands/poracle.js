@@ -24,7 +24,7 @@ exports.run = async (client, msg) => {
 					await client.query.updateQuery('humans', { admin_disable: 0 }, { id: msg.author.id })
 					client.logs.discord.log({ level: 'debug', message: `user ${msg.author.tag} used poracle command to remove admin_disable flag`, event: 'discord:registerCheck' })
 				} else if (user.admin_disable && user.disabled_date) {
-					await msg.react('🙅') // account was disabled by admin, don't let him re-enable
+					return await msg.react('🙅') // account was disabled by admin, don't let him re-enable
 				}
 			}
 
