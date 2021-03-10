@@ -42,6 +42,10 @@ exports.run = async (client, msg, args, options) => {
 			await msg.react(client.translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
+		if (distance === 0 && !userHasArea && !remove && msg.isFromAdmin) {
+			await msg.reply(`${translator.translate('Warning: Admin command detected without distance set - using default distance')} ${client.config.tracking.defaultDistance}`)
+			distance = client.config.tracking.defaultDistance
+		}
 		if (!types.length) {
 			return await msg.reply(translator.translate('404 No valid invasion types found'))
 		}

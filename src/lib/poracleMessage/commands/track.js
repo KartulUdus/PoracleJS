@@ -190,6 +190,10 @@ exports.run = async (client, msg, args, options) => {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
+		if (distance === 0 && !userHasArea && !target.webhook && msg.isFromAdmin) {
+			await msg.reply(`${translator.translate('Warning: Admin command detected without distance set - using default distance')} ${client.config.tracking.defaultDistance}`)
+			distance = client.config.tracking.defaultDistance
+		}
 		const insert = monsters.map((mon) => ({
 			id: target.id,
 			profile_no: currentProfileNo,
