@@ -152,7 +152,7 @@ exports.run = async (client, msg, args, options) => {
 							}
 						}
 
-						response = response.concat(`${profile.profile_no}. ${profile.name} - areas: ${profile.area} ${profile.latitude ? ` - location: ${profile.latitude},${profile.longitude}` : ''}\n${timeString}`)
+						response = response.concat(`${profile.profile_no}. ${profile.name}${profile.area != '[]' ? ` - ${translator.translate('areas')}: ${profile.area}` : ''}${profile.latitude ? ` - ${translator.translate('location')}: ${profile.latitude},${profile.longitude}` : ''}\n${timeString}`)
 					}
 					await msg.reply(`${translator.translate('Currently configured profiles are:')}\n${response}`)
 				}
