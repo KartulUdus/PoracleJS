@@ -55,7 +55,7 @@ exports.run = async (client, msg, [args]) => {
 				id: target.id,
 				type: target.webhook ? 'webhook' : 'discord:channel',
 				name: target.name,
-				area: areaName,
+				area: JSON.stringify(areaName),
 				language,
 			})
 			await msg.react('✅')
