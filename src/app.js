@@ -510,7 +510,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
 				}
-				if (lureExpiration) {
+				if (lureExpiration && !config.general.disableInvasion) {
 					if (fastify.cache.has(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
 						break
@@ -522,7 +522,7 @@ async function processOne(hook) {
 					fastify.cache.set(`${hook.message.pokestop_id}_L${lureExpiration}`, 'cached', secondsRemaining)
 
 					processHook = hook
-				} else {
+				} else if (!config.general.disableLure) {
 					if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
 						break

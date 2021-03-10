@@ -31,8 +31,9 @@
     //    invasion hook processing for RDM systems
       "disablePokemon": false,
       "disableRaid": false,
-      "disableInvasion": false,
       "disablePokestop": false,
+      "disableInvasion": false,
+      "disableLure": false,
       "disableQuest": false,
       "disableWeather": false,
       "roleCheckDeletionsAllowed": false,       // can poracle delete registered users when they lose their roles (test with false, set to true when confident)
