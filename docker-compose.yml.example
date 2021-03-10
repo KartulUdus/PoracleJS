@@ -30,4 +30,4 @@ services:
     volumes:
       - ./config/:/usr/src/app/config/
       - ./logs/:/usr/src/app/logs/
-      - ./.cache/:/usr/src/app/.cache
+      - ./.cache/:/usr/src/app/.cache/
