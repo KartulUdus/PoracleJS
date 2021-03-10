@@ -46,24 +46,21 @@ class Monster extends Controller {
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-				and
-				(
+				and (
 					(
-						round(
-							6371000
-							* acos(cos( radians(${data.latitude}) )
-							* cos( radians( humans.latitude ) )
-							* cos( radians( humans.longitude ) - radians(${data.longitude}) )
-							+ sin( radians(${data.latitude}) )
-							* sin( radians( humans.latitude ) )
-						)
-					) < monsters.distance and monsters.distance != 0)
-					or
-					(
-						monsters.distance = 0 and (${areastring})
-					)
+						monsters.distance != 0 and round(
+							6371000 *
+							acos(
+								cos(radians(${data.latitude})) *
+								cos(radians(humans.latitude)) *
+								cos(radians(humans.longitude) - radians(${data.longitude})) +
+								sin(radians(${data.latitude})) *
+								sin(radians(humans.latitude))
+							)
+						) < monsters.distance
+					) or (monsters.distance = 0 and (${areastring}))
 				)
-				`)
+            `)
 			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 		} else {
 			query = query.concat(`
