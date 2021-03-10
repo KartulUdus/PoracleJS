@@ -17,12 +17,12 @@ exports.run = async (client, msg, [args]) => {
 		let areaName = args.find((arg) => arg.match(client.re.areaRe))
 		if (areaName) {
 			[,, areaName] = areaName.match(client.re.areaRe)
-			areaName = '['+areaName.toLowerCase().replace(/ /g, '_')+']'
+			areaName = areaName.toLowerCase().replace(/ /g, '_')
 		}
 		const confAreas = client.geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
 		const isValidArea = confAreas.filter((x) => areaName == x)
 		if (!isValidArea.length) {
-			areaName = '[]'
+			areaName = ''
 		}
 
 		let language = null
@@ -55,7 +55,7 @@ exports.run = async (client, msg, [args]) => {
 				id: target.id,
 				type: target.webhook ? 'webhook' : 'discord:channel',
 				name: target.name,
-				area: areaName,
+				area: JSON.stringify([areaName]),
 				language,
 			})
 			await msg.react('✅')
