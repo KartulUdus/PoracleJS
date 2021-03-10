@@ -2,13 +2,13 @@ module.exports = async (client, member) => {
 	try {
 		const isRegistered = await client.query.countQuery('humans', { id: member.id })
 		if (isRegistered) {
-			if (client.config.general.roleCheckMode == 2) {
+			if (client.config.general.roleCheckMode == "disable") {
 				const user = await client.query.selectOneQuery('humans', { id: member.id })
 				if (!user.admin_disable) {
 					await client.query.updateQuery('humans', { admin_disable: 1 }, { id: member.id })
 					client.logs.discord.log({ level: 'debug', message: `user ${member.tag} left the server and was auto-disabled`, event: 'discord:registerCheck' })
 				}
-			} else if (client.config.general.roleCheckMode == 1) {
+			} else if (client.config.general.roleCheckMode == "delete") {
 				await client.query.deleteQuery('egg', { id: member.id })
 				await client.query.deleteQuery('monsters', { id: member.id })
 				await client.query.deleteQuery('raid', { id: member.id })

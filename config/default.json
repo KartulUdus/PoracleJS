@@ -35,11 +35,11 @@
       "disablePokestop": false,
       "disableQuest": false,
       "disableWeather": false,
-    // roleCheckMode
-    // 0 - don't delete users once required role is removed
-    // 1 - delete user from database along with trackings once required role is removed
-    // 2 - disable user once required role is removed and re-enable once it's restored, trackings will remain
-      "roleCheckMode": 0,
+    // roleCheckMode (case sensitive)
+    // "ignore" - log and don't delete/disable users once required role is removed
+    // "delete" - delete user from database along with trackings once required role is removed
+    // "disable" - disable user once required role is removed and re-enable once it's restored, trackings will remain
+      "roleCheckMode": "ignore",
     // availableLanguages
     // - This is an array of available languages that users can swap between using the !language command
     // - Each language can have it's own call word which pre-sets that language, and you also define the help text

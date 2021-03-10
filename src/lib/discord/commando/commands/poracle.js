@@ -18,7 +18,7 @@ exports.run = async (client, msg) => {
 
 		const isRegistered = await client.query.countQuery('humans', { id: msg.author.id })
 		if (isRegistered) {
-			if (client.config.general.roleCheckMode == 2) {
+			if (client.config.general.roleCheckMode == "disable") {
 				const user = await client.query.selectOneQuery('humans', { id: msg.author.id })
 				if (user.admin_disable && !user.disabled_date) {
 					await client.query.updateQuery('humans', { admin_disable: 0 }, { id: msg.author.id })
