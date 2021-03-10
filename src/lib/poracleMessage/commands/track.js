@@ -71,8 +71,8 @@ exports.run = async (client, msg, args, options) => {
 			case 'deny':
 			default: {
 				disableEverythingTracking = true
-				forceEverythingSeparately = true
-				individuallyAllowed	= false
+				forceEverythingSeparately = false
+				individuallyAllowed	= true
 			}
 		}
 
