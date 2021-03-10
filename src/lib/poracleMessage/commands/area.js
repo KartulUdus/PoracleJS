@@ -1,7 +1,7 @@
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
 			canContinue, target, language, currentProfileNo,
@@ -71,6 +71,9 @@ exports.run = async (client, msg, args) => {
 				break
 			}
 			default:
+				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
+					{ style: 'markdown' })
+				break
 		}
 	} catch (err) {
 		client.log.error(`area command ${msg.content} unhappy:`, err)

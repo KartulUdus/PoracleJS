@@ -41,11 +41,13 @@ function getKnex(conf) {
 		}
 
 		case 'pg': {
-			return Knex({
-				client: 'pg',
-				connection: conf.database.conn,
-				pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
-			})
+			throw new Error('Postgresql may be still supported but we don\'t test against it  - come to discord for help')
+
+			// return Knex({
+			// 	client: 'pg',
+			// 	connection: conf.database.conn,
+			// 	pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
+			// })
 		}
 		default: {
 			throw new Error('Sqlite is no longer supported, move to MYSQL or get latest which worked: git checkout 4350c45bf63ce1bc6c341f3a0b921238b106f1d6 - come to discord for help')
@@ -72,10 +74,10 @@ module.exports = {
 		translator = translatorFactory.default
 
 		if (performChecks) {
-		knex.migrate.latest({
-			directory: path.join(__dirname, './db/migrations'),
-			tableName: 'migrations',
-		})
+			knex.migrate.latest({
+				directory: path.join(__dirname, './db/migrations'),
+				tableName: 'migrations',
+			})
 			configChecker.checkConfig(config)
 			configChecker.checkDts(dts, config)
 			configChecker.checkGeofence(geofence)

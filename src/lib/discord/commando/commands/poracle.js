@@ -27,6 +27,8 @@ exports.run = async (client, msg) => {
 			await msg.react('✅')
 		}
 
+		client.logs.log.info(`${client.emojiStrip(msg.author.username)} Registered!`)
+
 		let greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.language == language)
 		if (!greetingDts) {
 			greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.default)
@@ -37,7 +39,6 @@ exports.run = async (client, msg) => {
 			const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
 			await msg.author.send(JSON.parse(greeting(view)))
 		}
-		client.logs.log.info(`${client.emojiStrip(msg.author.username)} Registered!`)
 	} catch (err) {
 		client.logs.log.error('!poracle command errored with:', err)
 	}

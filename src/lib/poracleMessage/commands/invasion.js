@@ -1,7 +1,7 @@
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
 			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo,
@@ -38,7 +38,7 @@ exports.run = async (client, msg, args) => {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
-		if (distance === 0 && !userHasArea && !remove) {
+		if (distance === 0 && !userHasArea && !remove && !msg.isFromAdmin) {
 			await msg.react(client.translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}

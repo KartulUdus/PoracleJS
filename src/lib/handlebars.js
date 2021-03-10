@@ -23,17 +23,23 @@ function translatorAlt() {
 }
 
 module.exports = () => {
-	handlebars.registerHelper('numberFormat', (value, decimals = 2) => {
+	handlebars.registerHelper('numberFormat', (value, decimals) => {
+		if (!['string', 'number'].includes(typeof decimals)) decimals = 2 // We may have the handlebars options in the parameter
+
 		if (Number.isNaN(+value) || Number.isNaN(+decimals)) return value
 		return Number(+value).toFixed(+decimals)
 	})
 
-	handlebars.registerHelper('math', (value, decimals = 2, add = 0, remove = 0, multiply = 1, divide = 1) => {
-		if (Number.isNaN(+value) || Number.isNaN(+decimals) || Number.isNaN(+add) || Number.isNaN(+remove) || Number.isNaN(+multiply) || Number.isNaN(+divide)) return value
-		return Number((+value + +add - +remove) * multiply / divide).toFixed(+decimals)
-	})
+	// Doubt this works or is used
+	// handlebars.registerHelper('math', (value, decimals = 2, add = 0, remove = 0, multiply = 1, divide = 1) => {
+	// 	if (Number.isNaN(+value) || Number.isNaN(+decimals) || Number.isNaN(+add) || Number.isNaN(+remove) || Number.isNaN(+multiply) || Number.isNaN(+divide)) return value
+	// 	return Number((+value + +add - +remove) * multiply / divide).toFixed(+decimals)
+	// })
 
-	handlebars.registerHelper('pad0', (value, padTo = 3) => (value.toString().padStart(padTo, '0')))
+	handlebars.registerHelper('pad0', (value, padTo) => {
+		if (!['string', 'number'].includes(typeof padTo)) padTo = 3 // We may have the handlebars options in the parameter
+		return value.toString().padStart(padTo, '0')
+	})
 
 	handlebars.registerHelper('moveName', (value, options) => (moves[value] ? userTranslator(options).translate(moves[value].name) : ''))
 	handlebars.registerHelper('moveNameAlt', (value) => (moves[value] ? translatorAlt().translate(moves[value].name) : ''))

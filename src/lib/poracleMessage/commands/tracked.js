@@ -1,9 +1,9 @@
 const fs = require('fs')
 const path = require('path')
 
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
 			canContinue, target, language, currentProfileNo,
@@ -135,42 +135,49 @@ exports.run = async (client, msg, args) => {
 		}
 
 		if (!client.config.general.disablePokestop) {
-			if (invasions.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following invasions:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any invasions'))
+			if (!client.config.general.disableInvasion) {
+				if (invasions.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following invasions:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any invasions'))
 
-			invasions.forEach((invasion) => {
-				let genderText = ''
-				let typeText = ''
-				if (!invasion.gender || invasion.gender === '') {
-					genderText = translator.translate('any')
-				} else if (invasion.gender === 1) {
-					genderText = translator.translate('male')
-				} else if (invasion.gender === 2) {
-					genderText = translator.translate('female')
-				}
-				if (!invasion.grunt_type || invasion.grunt_type === '') {
-					typeText = 'any'
-				} else {
-					typeText = invasion.grunt_type
-				}
-				message = message.concat(`\n${translator.translate('grunt type').charAt(0).toUpperCase() + translator.translate('grunt type').slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`)
-			})
+				invasions.forEach((invasion) => {
+					let genderText = ''
+					let typeText = ''
+					if (!invasion.gender || invasion.gender === '') {
+						genderText = translator.translate('any')
+					} else if (invasion.gender === 1) {
+						genderText = translator.translate('male')
+					} else if (invasion.gender === 2) {
+						genderText = translator.translate('female')
+					}
+					if (!invasion.grunt_type || invasion.grunt_type === '') {
+						typeText = 'any'
+					} else {
+						typeText = invasion.grunt_type
+					}
+					message = message.concat(`\n${translator.translate('grunt type')
+						.charAt(0)
+						.toUpperCase() + translator.translate('grunt type')
+						.slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`)
+				})
+			}
 
-			if (lures.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
+			if (!client.config.general.disableLure) {
+				if (lures.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
 
-			lures.forEach((lure) => {
-				let typeText = ''
+				lures.forEach((lure) => {
+					let typeText = ''
 
-				if (lure.lure_id === 0) {
-					typeText = 'any'
-				} else {
-					typeText = client.GameData.utilData.lures[lure.lure_id].name
-				}
-				message = message.concat(`\n${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `)
-			})
+					if (lure.lure_id === 0) {
+						typeText = 'any'
+					} else {
+						typeText = client.GameData.utilData.lures[lure.lure_id].name
+					}
+					message = message.concat(`\n${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `)
+				})
+			}
 		}
 
 		if (message.length < 4000) {

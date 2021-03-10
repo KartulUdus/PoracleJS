@@ -140,10 +140,24 @@ class Query {
 				return this.returnByDatabaseType(await this.db.raw(query))
 			}
 			case 'mysql': {
-				const firstData = values[0] ? values[0] : values
-				const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
-					Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
-				return this.returnByDatabaseType(await this.db.raw(query))
+				let rows = values
+				if (!Array.isArray(rows)) rows = [values]
+
+				let rowsAffected = []
+				for (const row of rows) {
+					const exists = await this.db.select().from(table).where(row).count()
+
+					if (!Object.values(exists[0])[0]) {
+						const res = await this.db(table).insert(row)
+						rowsAffected += res[0]
+					}
+				}
+
+				return rowsAffected
+				// const firstData = values[0] ? values[0] : values
+				// const query = `${this.db(table).insert(values).toQuery()} ON DUPLICATE KEY UPDATE ${
+				// 	Object.keys(firstData).map((field) => `\`${field}\`=VALUES(\`${field}\`)`).join(', ')}`
+				// return this.returnByDatabaseType(await this.db.raw(query))
 			}
 			default: {
 				const constraints = {

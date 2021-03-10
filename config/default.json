@@ -31,8 +31,9 @@
     //    invasion hook processing for RDM systems
       "disablePokemon": false,
       "disableRaid": false,
-      "disableInvasion": false,
       "disablePokestop": false,
+      "disableInvasion": false,
+      "disableLure": false,
       "disableQuest": false,
       "disableWeather": false,
       "roleCheckDeletionsAllowed": false,       // can poracle delete registered users when they lose their roles (test with false, set to true when confident)
@@ -206,7 +207,11 @@
     ],
       "dmLogChannelID": "",                           // an ID of a channel to use to log all poracle commands to (to watch users)
       "dmLogChannelDeletionTime": 0,                  // time to clean up after (seconds) - 0 do not delete
-      "messageDeleteDelay": 0                         // extra time to add on to a message 'clean' to leave behind (in ms)
+      "messageDeleteDelay": 0,                        // extra time to add on to a message 'clean' to leave behind (in ms)
+    // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
+      "unrecognisedCommandMessage": "",
+    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+      "unregisteredUserMessage": ""
   },
 
   //

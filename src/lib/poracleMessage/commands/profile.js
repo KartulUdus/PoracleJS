@@ -1,13 +1,15 @@
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
 			canContinue, target, language, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+
 		const translator = client.translatorFactory.Translator(language)
 
 		const profiles = await client.query.selectAllQuery('profiles', { id: target.id })
@@ -150,7 +152,7 @@ exports.run = async (client, msg, args) => {
 							}
 						}
 
-						response = response.concat(`${profile.profile_no}. ${profile.name} - areas: ${profile.area} ${profile.latitude ? ` - location: ${profile.latitude},${profile.longitude}` : ''}\n${timeString}`)
+						response = response.concat(`${profile.profile_no}. ${profile.name}${profile.area != '[]' ? ` - ${translator.translate('areas')}: ${profile.area}` : ''}${profile.latitude ? ` - ${translator.translate('location')}: ${profile.latitude},${profile.longitude}` : ''}\n${timeString}`)
 					}
 					await msg.reply(`${translator.translate('Currently configured profiles are:')}\n${response}`)
 				}
@@ -217,9 +219,13 @@ exports.run = async (client, msg, args) => {
 				if (args.length == 0) {
 					const profile = profiles.find((x) => x.profile_no === currentProfileNo)
 					if (!profile) {
-						return await msg.reply(translator.translate('You don\'t have a profile set'))
+						await msg.reply(translator.translate('You don\'t have a profile set'))
+					} else {
+						await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 					}
-					return await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
+
+					return await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`', util.prefix),
+						{ style: 'markdown' })
 				}
 
 				let profileNo = parseInt(args[0], 10)

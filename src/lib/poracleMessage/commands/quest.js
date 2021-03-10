@@ -1,7 +1,7 @@
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
 			canContinue, target, userHasLocation, userHasArea, language, currentProfileNo,
@@ -91,7 +91,7 @@ exports.run = async (client, msg, args) => {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
-		if (distance === 0 && !userHasArea && !remove) {
+		if (distance === 0 && !userHasArea && !remove && !msg.isFromAdmin) {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
@@ -166,7 +166,7 @@ exports.run = async (client, msg, args) => {
 			monsters.push(0)
 			energyMonsters.push(10000)
 			const remQuery = `
-				delete from quest WHERE id=${target.id} and profile_no=${currentProfileNo} and
+				delete from quest WHERE id='${target.id}' and profile_no=${currentProfileNo} and
 				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward in(${energyMonsters})) or (reward_type = 12 and ${commandEverything}=1))
 				`
 			const result = await client.query.misteryQuery(remQuery)

@@ -288,6 +288,7 @@ class Pokestop extends Controller {
 						// eslint-disable-next-line no-continue
 						continue
 					}
+					mustacheResult = await this.urlShorten(mustacheResult)
 					try {
 						message = JSON.parse(mustacheResult)
 					} catch (err) {

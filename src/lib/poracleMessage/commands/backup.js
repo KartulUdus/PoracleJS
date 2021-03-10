@@ -1,17 +1,18 @@
 const fs = require('fs')
 const path = require('path')
 
-exports.run = async (client, msg, args) => {
+exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
 		if (!msg.isFromAdmin) {
-			return client.log.info(`${msg.userId} ran "backup" command`)
+			client.log.info(`${msg.userId} ran "backup" command`)
+			return await msg.react('🙅')
 		}
 
-		const util = client.createUtil(msg, args)
+		const util = client.createUtil(msg, options)
 
 		const {
-			canContinue, target,
+			canContinue, target, currentProfileNo,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -30,19 +31,21 @@ exports.run = async (client, msg, args) => {
 		if (!args[0]) return msg.reply(client.translator.translate(`Your backup needs a name, please run \`${util.prefix}backup awesomeFiltersetName\``))
 		if (args.includes('list')) return msg.reply(client.translator.translate(`To list existing backups, run \`${util.prefix}restore list\``))
 		const backup = {
-			monsters: await client.query.selectAllQuery('monsters', { id: target.id }),
-			raid: await client.query.selectAllQuery('raid', { id: target.id }),
-			egg: await client.query.selectAllQuery('egg', { id: target.id }),
-			quest: await client.query.selectAllQuery('quest', { id: target.id }),
-			invasion: await client.query.selectAllQuery('invasion', { id: target.id }),
-			weather: await client.query.selectAllQuery('weather', { id: target.id }),
+			monsters: await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo }),
+			raid: await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo }),
+			egg: await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo }),
+			quest: await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo }),
+			invasion: await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo }),
+			weather: await client.query.selectAllQuery('weather', { id: target.id, profile_no: currentProfileNo }),
+			lures: await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo }),
 		}
-		backup.monsters.map((x) => x.id = 0)
-		backup.raid.map((x) => x.id = 0)
-		backup.egg.map((x) => x.id = 0)
-		backup.quest.map((x) => x.id = 0)
-		backup.invasion.map((x) => x.id = 0)
-		backup.weather.map((x) => x.id = 0)
+		backup.monsters.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.raid.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.egg.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.quest.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.invasion.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.weather.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.lures.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
 
 		fs.writeFileSync(path.join(__dirname, '../../../../backups', `${args[0]}.json`), JSON.stringify(backup, null, '\t'))
 		msg.react(client.translator.translate('✅'))
