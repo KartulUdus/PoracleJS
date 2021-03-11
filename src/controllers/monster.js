@@ -60,7 +60,7 @@ class Monster extends Controller {
 						) < monsters.distance
 					) or (monsters.distance = 0 and (${areastring}))
 				)
-            `)
+			`)
 			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 		} else {
 			query = query.concat(`

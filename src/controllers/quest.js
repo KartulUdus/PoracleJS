@@ -32,20 +32,20 @@ class Quest extends Controller {
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-                and (
-                    (
-                        quest.distance != 0 and round(
-                            6371000 *
-                            acos(
-                                cos(radians(${data.latitude})) *
-                                cos(radians(humans.latitude)) *
-                                cos(radians(humans.longitude) - radians(${data.longitude})) +
-                                sin(radians(${data.latitude})) *
-                                sin(radians(humans.latitude))
-                            )
-                        ) < quest.distance
-                    ) or (quest.distance = 0 and (${areastring}))
-                ) group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
+				and (
+					(
+						quest.distance != 0 and round(
+							6371000 *
+							acos(
+								cos(radians(${data.latitude})) *
+								cos(radians(humans.latitude)) *
+								cos(radians(humans.longitude) - radians(${data.longitude})) +
+								sin(radians(${data.latitude})) *
+								sin(radians(humans.latitude))
+							)
+						) < quest.distance
+					) or (quest.distance = 0 and (${areastring}))
+				) group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template
 			`)
 		} else {
 			query = query.concat(`

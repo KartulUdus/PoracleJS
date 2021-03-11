@@ -20,20 +20,20 @@ class Raid extends Controller {
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
 			and
-            (
-                (
-                    raid.distance != 0 and round(
-                        6371000 *
-                        acos(
-                            cos(radians(${data.latitude})) *
-                            cos(radians(humans.latitude)) *
-                            cos(radians(humans.longitude) - radians(${data.longitude})) +
-                            sin(radians(${data.latitude})) *
-                            sin(radians(humans.latitude))
-                        )
-                    ) < raid.distance
-                ) or (raid.distance = 0 and (${areastring}))
-            )
+			(
+				(
+					raid.distance != 0 and round(
+						6371000 *
+						acos(
+							cos(radians(${data.latitude})) *
+							cos(radians(humans.latitude)) *
+							cos(radians(humans.longitude) - radians(${data.longitude})) +
+							sin(radians(${data.latitude})) *
+							sin(radians(humans.latitude))
+						)
+					) < raid.distance
+				) or (raid.distance = 0 and (${areastring}))
+			)
 				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
 		} else {
@@ -76,20 +76,20 @@ class Raid extends Controller {
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-                and (
-                    (
-                        egg.distance != 0 and round(
-                            6371000 *
-                            acos(
-                                cos(radians(${data.latitude})) *
-                                cos(radians(humans.latitude)) *
-                                cos(radians(humans.longitude) - radians(${data.longitude})) +
-                                sin(radians(${data.latitude})) *
-                                sin(radians(humans.latitude))
-                            )
-                        ) < egg.distance
-                    ) or (egg.distance = 0 and (${areastring}))
-                ) group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
+				and (
+					(
+						egg.distance != 0 and round(
+							6371000 *
+							acos(
+								cos(radians(${data.latitude})) *
+								cos(radians(humans.latitude)) *
+								cos(radians(humans.longitude) - radians(${data.longitude})) +
+								sin(radians(${data.latitude})) *
+								sin(radians(humans.latitude))
+							)
+						) < egg.distance
+					) or (egg.distance = 0 and (${areastring}))
+				) group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
 		} else {
 			query = query.concat(`

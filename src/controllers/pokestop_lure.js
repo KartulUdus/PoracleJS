@@ -21,20 +21,20 @@ class PokestopLure extends Controller {
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-                and (
-                    (
-                        lures.distance != 0 and round(
-                            6371000 *
-                            acos(
-                                cos(radians(${data.latitude})) *
-                                cos(radians(humans.latitude)) *
-                                cos(radians(humans.longitude) - radians(${data.longitude})) +
-                                sin(radians(${data.latitude})) *
-                                sin(radians(humans.latitude))
-                            )
-                        ) < lures.distance
-                    ) or (lures.distance = 0 and (${areastring}))
-                )
+				and (
+					(
+						lures.distance != 0 and round(
+							6371000 *
+							acos(
+								cos(radians(${data.latitude})) *
+								cos(radians(humans.latitude)) *
+								cos(radians(humans.longitude) - radians(${data.longitude})) +
+								sin(radians(${data.latitude})) *
+								sin(radians(humans.latitude))
+							)
+						) < lures.distance
+					) or (lures.distance = 0 and (${areastring}))
+				)
 			`)
 			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 		} else {
