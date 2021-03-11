@@ -16,6 +16,12 @@ function getDts(client, language, platform, helpSubject) {
 
 	return dts
 }
+exports.isHelpAvailable = (client, language, target, helpSubject) => {
+	let platform = target.type.split(':')[0]
+	if (platform == 'webhook') platform = 'discord'
+
+	return getDts(client, language, platform, helpSubject)
+}
 
 exports.run = async (client, msg, args, options) => {
 	try {

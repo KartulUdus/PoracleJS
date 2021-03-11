@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const helpCommand = require('./help.js')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -10,10 +11,11 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
-			return require('./help.js').run(client, msg, [__filename.slice(__dirname.length + 1, -3)], options)
+			return helpCommand.run(client, msg, [commandName], options)
 		}
 
 		const translator = client.translatorFactory.Translator(language)

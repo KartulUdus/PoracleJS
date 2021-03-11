@@ -1,3 +1,5 @@
+const helpCommand = require('./help.js')
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
@@ -8,13 +10,25 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
-			return require('./help.js').run(client, msg, [__filename.slice(__dirname.length + 1, -3)], options)
+			return helpCommand.run(client, msg, [commandName], options)
 		}
 
 		const translator = client.translatorFactory.Translator(language)
+
+		if (args.length === 0) {
+			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}raid level5`, `{0}raid articuno`, `{0}raid remove everything`', util.prefix),
+				{ style: 'markdown' })
+			if (helpCommand.isHelpAvailable(client, language, target, commandName)) {
+				await msg.reply(translator.translateFormat('For more assistance, `{0}{1} {2}`', util.prefix, translator.translate('help'), translator.translate(commandName)))
+			} else {
+				await msg.reply(translator.translateFormat('For more assistance, `{0}{1}`', util.prefix, translator.translate('help')))
+			}
+			return
+		}
 
 		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 

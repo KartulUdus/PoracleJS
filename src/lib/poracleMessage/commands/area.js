@@ -1,3 +1,5 @@
+const helpCommand = require('./help.js')
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
@@ -8,10 +10,11 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
-			return require('./help.js').run(client, msg, [__filename.slice(__dirname.length + 1, -3)], options)
+			return helpCommand.run(client, msg, [commandName], options)
 		}
 
 		const translator = client.translatorFactory.Translator(language)
@@ -77,6 +80,11 @@ exports.run = async (client, msg, args, options) => {
 			default:
 				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
 					{ style: 'markdown' })
+				if (helpCommand.isHelpAvailable(client, language, target, commandName)) {
+					await msg.reply(translator.translateFormat('For more assistance, `{0}{1} {2}`', util.prefix, translator.translate('help'), translator.translate(commandName)))
+				} else {
+					await msg.reply(translator.translateFormat('For more assistance, `{0}{1}`', util.prefix, translator.translate('help')))
+				}
 				break
 		}
 	} catch (err) {
