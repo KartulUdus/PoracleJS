@@ -30,6 +30,4 @@ services:
     volumes:
       - ./config/:/usr/src/app/config/
       - ./logs/:/usr/src/app/logs/
-      - ./.weatherCache:/usr/src/app/.weatherCache
-      - ./.weatherKeyCache:/usr/src/app/.weatherKeyCache
-      - ./.geoCache:/usr/src/app/.geoCache
+      - ./.cache/:/usr/src/app/.cache/
