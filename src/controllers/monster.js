@@ -48,16 +48,18 @@ class Monster extends Controller {
 			query = query.concat(`
 				and
 				(
-					(
+					(	
+						monsters.distance != 0 and
 						round(
-							6371000
-							* acos(cos( radians(${data.latitude}) )
-							* cos( radians( humans.latitude ) )
-							* cos( radians( humans.longitude ) - radians(${data.longitude}) )
-							+ sin( radians(${data.latitude}) )
-							* sin( radians( humans.latitude ) )
-						)
-					) < monsters.distance and monsters.distance != 0)
+							6371000	* acos(
+								cos( radians(${data.latitude}) )
+								* cos( radians( humans.latitude ) )
+								* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+								+ sin( radians(${data.latitude}) )
+								* sin( radians( humans.latitude ) )
+							)
+						) < monsters.distance
+					)
 					or
 					(
 						monsters.distance = 0 and (${areastring})

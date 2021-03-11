@@ -12,6 +12,10 @@ exports.run = async (client, msg, args, options) => {
 		if (!canContinue) return
 		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 
+		if (args[0] === 'help') {
+			return require('./help.js').run(client, msg, [__filename.slice(__dirname.length + 1, -3)], options)
+		}
+
 		const translator = client.translatorFactory.Translator(language)
 
 		const monsters = await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo })
@@ -30,13 +34,17 @@ exports.run = async (client, msg, args, options) => {
 
 		let message = ''
 		let locationText
+		let adminExplanation = ''
+		if (msg.isFromAdmin) {
+			adminExplanation = `Tracking details for **${target.name}**\n`
+		}
 
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `\n${translator.translate('Your location is currently set to')} ${maplink}`
 		} else {
 			locationText = `\n${translator.translate('You have not set a location yet')}`
 		}
-		await msg.reply(`${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown' })
+		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown' })
 
 		if (human.area != '[]') {
 			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
