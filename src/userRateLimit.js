@@ -14,10 +14,11 @@ class UserRateChecker {
 
 	// eslint-disable-next-line no-unused-vars
 	getMessageLimit(id, type) {
-		const limit = type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
+		const limitOverride = this.config.alertLimits.limitOverride[id]
+		if (limitOverride) return limitOverride
 
+		const limit = type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
 		return limit
-		// return type.includes('user') ? this.config.alertLimits.dmLimit : this.config.alertLimits.channelLimit
 	}
 
 	validateMessage(id, type) {

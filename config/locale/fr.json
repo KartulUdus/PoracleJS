@@ -50,6 +50,14 @@
 	"female":"femelle",
 	"male":"mâle",
 	"genderless":"asexué",
+	"rarity":"rareté",
+	"maxrarity":"maxrareté",
+	"Common":"Commun",
+	"Uncommon":"Peu Commun",
+	"Rare":"Rare",
+	"Very-Rare":"Très-Rare",
+	"Ultra-Rare":"Ultra-Rare",
+	"Unseen":"Non Vu",
 	"clean":"clean",
 	"404 No valid invasion types found":"Erreur de commande",
 	"New location":"Nouvelle position",
@@ -462,6 +470,7 @@
 	"You're not tracking any lures":"Vous ne suivez pas encore de leurres",
 	"You're tracking the following lures:":"Vous suivez les leurres suivants :",
 	"lure":"leurre",
+	"Lure type":"Type de leurre",
 	"glacial":"glacial",
 	"normal":"normal",
 	"mossy":"moussu",
@@ -485,5 +494,6 @@
 	"Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`":"Les commandes valides sont `{0}profil <nom>`, `{0}profil liste`, `{0}profil ajouter <nom>`, `{0}profil enlever <nom>`, `{0}profil planning <description>`",
 	"I can't find that profile":"Profil non trouvé",
 	"Your tracking is now activated, send {0}{1} for more information about available commands":"Vos notifications sont à présent activées, utilisez {0}{1} pour accéder à l'aide sur les commandes disponibles.",
-	"These users are registered with Poracle:":"Les utilisateurs suivants sont enregistrés avec Poracle :"
+	"These users are registered with Poracle:":"Les utilisateurs suivants sont enregistrés avec Poracle :",
+	"Warning: Admin command detected without distance set - using default distance":"Avertissement: Commande Admin détectée sans distance configurée - utilisation de la distance par défaut"
 }

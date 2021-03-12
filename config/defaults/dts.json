@@ -505,7 +505,30 @@
           "url": "{{{imgUrl}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "language": "fr",
+    "type": "lure",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "username": "{{lureTypeName}}",
+      "avatar_url": "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/{{minus lureTypeId 500}}.png",
+      "embed": {
+        "title": "Leurre détecté sur {{{pokestopName}}}",
+        "url": "{{{googleMapUrl}}}",
+        "color": "{{lureTypeColor}}",
+        "description": "**Type :** {{lureTypeName}}\n **Fin à :** {{time}} \n(**Temps restant :** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n**Adresse :** {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}}) | [Waze]({{{wazeMapUrl}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticMap}}}"
         }
       }
     }
