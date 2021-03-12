@@ -16,12 +16,25 @@ function getDts(client, language, platform, helpSubject) {
 
 	return dts
 }
-exports.isHelpAvailable = (client, language, target, helpSubject) => {
+
+function isHelpAvailable(client, language, target, helpSubject) {
 	let platform = target.type.split(':')[0]
 	if (platform == 'webhook') platform = 'discord'
 
 	return getDts(client, language, platform, helpSubject)
 }
+
+async function provideSingleLineHelp(client, msg, util, language, target, commandName) {
+	const translator = client.translatorFactory.Translator(language)
+
+	if (isHelpAvailable(client, language, target, commandName)) {
+		await msg.reply(translator.translateFormat('Use `{0}{1} {2}` for more details on this command', util.prefix, translator.translate('help'), translator.translate(commandName)))
+	} else {
+		await msg.reply(translator.translateFormat('Use `{0}{1}` for more help', util.prefix, translator.translate('help')))
+	}
+}
+
+exports.provideSingleLineHelp = provideSingleLineHelp
 
 exports.run = async (client, msg, args, options) => {
 	try {

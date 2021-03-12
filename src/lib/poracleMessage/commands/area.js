@@ -80,11 +80,8 @@ exports.run = async (client, msg, args, options) => {
 			default:
 				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
 					{ style: 'markdown' })
-				if (helpCommand.isHelpAvailable(client, language, target, commandName)) {
-					await msg.reply(translator.translateFormat('For more assistance, `{0}{1} {2}`', util.prefix, translator.translate('help'), translator.translate(commandName)))
-				} else {
-					await msg.reply(translator.translateFormat('For more assistance, `{0}{1}`', util.prefix, translator.translate('help')))
-				}
+				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+
 				break
 		}
 	} catch (err) {

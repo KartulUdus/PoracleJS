@@ -19,8 +19,13 @@ exports.run = async (client, msg, args, options) => {
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
 		}
 
+		const currentLanguageName = client.GameData.utilData.languageNames[language]
+
 		if (args.length == 0) {
-			return msg.reply(`${translator.translate('Current language is set to')}: ${language}`)
+			await msg.reply(`${translator.translate('Current language is set to')}: ${currentLanguageName || language}`)
+			await msg.reply(translator.translateFormat('Use `{0}language` to set to one of {1}', util.prefix, Object.keys(client.config.general.availableLanguages)),
+				{ style: 'markdown' })
+			return
 		}
 
 		let newLanguage = args[0]
