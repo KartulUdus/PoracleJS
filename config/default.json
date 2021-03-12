@@ -102,7 +102,7 @@
 
   //
   // Geofence - default format is that created here http://geo.jasparke.net/
-  //   You can also use a geojson file if you would like to share with other tools but you
+  //   You can also use a geojson file if you would like to share with other tools
   //
   "geofence": {
       "path": "./config/geofence.json",
@@ -157,6 +157,21 @@
       "everythingFlagPermissions": "allow-any",
       "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
       "maxDistance": 0                            // restrict users from having too large a tracking circle
+  },
+  //
+  // stats configuration
+  //
+  "stats": {
+    "maxPokemonId": 810,              // current max Pokemon Id to consider in lists
+    "minSampleSize": 10000,           // minimum number of Pokemon to process before broadcasting stats to the controllers
+    "pokemonCountToKeep": 8,          // period for stats calculation in hours
+    "rarityRefreshInterval": 5,       // interval for rarity stats broadcast to controllers in minutes
+    "rarityGroup2Uncommon": 1,        // percentage of seen Pokemon to consider Uncommon - 1% of total
+    "rarityGroup3Rare": 0.5,          // percentage of seen Pokemon to consider Rare - 0.5% of total
+    "rarityGroup4VeryRare": 0.03,     // percentage of seen Pokemon to consider Very Rare - 0.03% of total
+    "rarityGroup5UltraRare": 0.01,    // percentage of seen Pokemon to consider Ultra Rare - 0.01% of total
+    // Array of Pokemon ID to exclude from Rare / Very Rare and Ultra Rare lists
+    "excludeFromRare": [1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 69, 70, 71, 72, 73, 74, 75, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 133, 137, 138, 139, 140, 141, 142, 147, 152, 153, 155, 156, 158, 159, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 173, 177, 178, 179, 180, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 198, 199, 200, 202, 203, 204, 206, 207, 208, 209, 210, 211, 213, 214, 215, 216, 218, 219, 220, 223, 224, 225, 226, 227, 228, 231, 232, 234, 246, 252, 253, 255, 256, 258, 259, 261, 262, 263, 264, 265, 270, 271, 273, 274, 276, 277, 278, 279, 280, 283, 284, 285, 286, 287, 288, 293, 294, 295, 296, 299, 300, 301, 302, 303, 304, 305, 307, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 320, 322, 325, 326, 328, 329, 331, 332, 333, 335, 336, 337, 338, 339, 340, 341, 342, 343, 345, 346, 347, 348, 349, 351, 353, 354, 355, 356, 361, 363, 364, 365, 370, 371, 374, 387, 388, 390, 391, 393, 394, 396, 397, 399, 400, 401, 402, 408, 410, 412, 415, 418, 419, 421, 422, 425, 427, 428, 431, 432, 434, 435, 436, 449, 451, 453, 456, 457, 459, 460, 495, 496, 498, 499, 501, 502, 504, 505, 506, 507, 509, 511, 513, 515, 519, 520, 522, 524, 527, 529, 535, 536, 538, 539, 543, 544, 546, 550, 554, 557, 562, 568, 572, 574, 577, 580, 582, 585, 588, 590, 595, 613, 616, 624, 650, 653, 656, 659, 661, 667]
   },
   //
   // Configure your discord bot(s)
@@ -231,7 +246,15 @@
     "timingPeriod": 240,          // seconds over which limits should be calculated
     "dmLimit": 20,                // limit of number of messages a channel/group can receive in the period
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
-    "maxLimitsBeforeStop": 10     // number of times user can hit rate limit (within 24hrs) before being stopped (0 = don't disable)
+    "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
+    // allow override for specific channel ids in - id can be a channel/user id or a webhook name
+    //    "limitOverride": {
+    //        "id": limit,
+    //        "id": limit
+    //    }
+    "limitOverride": {
+
+    }
   },
   //
   // geocoding section

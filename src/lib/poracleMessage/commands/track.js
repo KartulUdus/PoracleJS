@@ -47,6 +47,8 @@ exports.run = async (client, msg, args, options) => {
 		let gender = 0
 		let weight = 0
 		let maxweight = 9000000
+		let rarity = -1
+		let maxRarity = 6
 		let greatLeague = 4096
 		let greatLeagueCP = 0
 		let ultraLeague = 4096
@@ -83,8 +85,8 @@ exports.run = async (client, msg, args, options) => {
 			case 'deny':
 			default: {
 				disableEverythingTracking = true
-				forceEverythingSeparately = true
-				individuallyAllowed	= false
+				forceEverythingSeparately = false
+				individuallyAllowed	= true
 			}
 		}
 
@@ -135,6 +137,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.maxcpRe)) [,, maxcp] = element.match(client.re.maxcpRe)
 			else if (element.match(client.re.maxivRe)) [,, maxiv] = element.match(client.re.maxivRe)
 			else if (element.match(client.re.maxweightRe)) [,, maxweight] = element.match(client.re.maxweightRe)
+			else if (element.match(client.re.maxRarityRe)) [,, maxRarity] = element.match(client.re.maxRarityRe)
 			else if (element.match(client.re.maxatkRe)) [,, maxAtk] = element.match(client.re.maxatkRe)
 			else if (element.match(client.re.maxdefRe)) [,, maxDef] = element.match(client.re.maxdefRe)
 			else if (element.match(client.re.maxstaRe)) [,, maxSta] = element.match(client.re.maxstaRe)
@@ -146,6 +149,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.staRe)) [,, sta] = element.match(client.re.staRe)
 			else if (element.match(client.re.weightRe)) [,, weight] = element.match(client.re.weightRe)
 			else if (element.match(client.re.tRe)) [,, minTime] = element.match(client.re.tRe)
+			else if (element.match(client.re.rarityRe)) [,, rarity] = element.match(client.re.rarityRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'female') gender = 2
 			else if (element === 'clean') clean = true
@@ -173,6 +177,25 @@ exports.run = async (client, msg, args, options) => {
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 
+		if (rarity != -1 && !['1', '2', '3', '4', '5', '6'].includes(rarity)) {
+			rarity = client.translatorFactory.reverseTranslateCommand(rarity, true)
+			const rarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() == rarity.toLowerCase())
+			if (rarityLevel) {
+				rarity = rarityLevel
+			} else {
+				rarity = -1
+			}
+		}
+		if (maxRarity != 6 && !['1', '2', '3', '4', '5', '6'].includes(maxRarity)) {
+			maxRarity = client.translatorFactory.reverseTranslateCommand(maxRarity, true)
+			const maxRarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() == maxRarity.toLowerCase())
+			if (maxRarityLevel) {
+				maxRarity = maxRarityLevel
+			} else {
+				maxRarity = 6
+			}
+		}
+
 		if (distance > 0 && !userHasLocation && !target.webhook) {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
@@ -180,6 +203,10 @@ exports.run = async (client, msg, args, options) => {
 		if (distance === 0 && !userHasArea && !target.webhook && !msg.isFromAdmin) {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
+		}
+		if (distance === 0 && !userHasArea && !target.webhook && msg.isFromAdmin) {
+			await msg.reply(`${translator.translate('Warning: Admin command detected without distance set - using default distance')} ${client.config.tracking.defaultDistance}`)
+			distance = client.config.tracking.defaultDistance
 		}
 		const insert = monsters.map((mon) => ({
 			id: target.id,
@@ -209,6 +236,8 @@ exports.run = async (client, msg, args, options) => {
 			great_league_ranking_min_cp: greatLeagueCP,
 			ultra_league_ranking: ultraLeague,
 			ultra_league_ranking_min_cp: ultraLeagueCP,
+			rarity,
+			max_rarity: maxRarity,
 			min_time: minTime,
 		}))
 		if (!insert.length) {
