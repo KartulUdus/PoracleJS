@@ -442,7 +442,6 @@ function processMessageFromStats(msg) {
 	}
 }
 
-
 weatherWorker.commandPort.on('message', processMessageFromWeather)
 weatherWorker.queuePort.on('message', (res) => {
 	processMessages(res.queue)
@@ -452,7 +451,6 @@ statsWorker.commandPort.on('message', processMessageFromStats)
 statsWorker.queuePort.on('message', (res) => {
 	processMessages(res.queue)
 })
-
 
 for (let w = 0; w < maxWorkers; w++) {
 	worker = new Worker(path.join(__dirname, './controllerWorker.js'), {

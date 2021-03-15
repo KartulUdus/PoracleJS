@@ -1,3 +1,5 @@
+const helpCommand = require('./help.js')
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
@@ -8,7 +10,12 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+
+		if (args[0] === 'help') {
+			return helpCommand.run(client, msg, [commandName], options)
+		}
 
 		const translator = client.translatorFactory.Translator(language)
 
@@ -224,8 +231,10 @@ exports.run = async (client, msg, args, options) => {
 						await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 					}
 
-					return await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`', util.prefix),
+					await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`', util.prefix),
 						{ style: 'markdown' })
+
+					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 				}
 
 				let profileNo = parseInt(args[0], 10)

@@ -32,6 +32,13 @@ class PoracleDiscordMessage {
 	}
 
 	async reply(message) {
+		if (this.msg.channel.type === 'text') {
+			// This is a channel, do not reply but rather send to avoid @ reply
+			if (message.length > 1999) {
+				return this.msg.channel.send(message, { split: true })
+			}
+			return this.msg.channel.send(message)
+		}
 		if (message.length > 1999) {
 			return this.msg.reply(message, { split: true })
 		}
@@ -39,6 +46,11 @@ class PoracleDiscordMessage {
 	}
 
 	async replyWithAttachment(message, attachment) {
+		if (this.msg.channel.type === 'text') {
+			// This is a channel, do not reply but rather send to avoid @ reply
+			return this.msg.channel.send(message, { files: [attachment] })
+		}
+
 		return this.msg.reply(message, { files: [attachment] })
 	}
 

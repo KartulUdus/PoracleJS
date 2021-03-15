@@ -1,0 +1,147 @@
+[
+  {
+    "id": "area",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Area tracking commands",
+            "value": "`{{prefix}}area list`: List all available areas\n`{{prefix}}area add newyork`: This command would add the 'newyork' area to the list of areas you are interested in\n`{{prefix}}area remove newyork`: This command would remove 'newyork' from areas that you were interested in"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "track",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "description": "Thank you for registering \nPlease set a location `{{prefix}}location name of place` or add ares where to receive alarms from",
+        "fields": [
+          {
+            "name": "Monster tracking commands",
+            "value": "`{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: Any arguments are optional, this command would alert you about snorlax and lapras within 500 meters of your location or inside an added area. The set filters require them to have IV between 50% - 90% be at least level 15 and minimum CP of 1000 \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "raid",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Raid tracking commands",
+            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any arguments are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}raid remove lapras vileplume`: will remove tracking for lapras and vileplume raids"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "quest",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Raid tracking commands",
+            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any arguments are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}raid remove lapras vileplume`: will remove tracking for lapras and vileplume raids"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "lure",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Lure tracking commands",
+            "value": "`{{prefix}}lure magnetic glacial d500`: Any arguments are optional, this command would alert you about normal and glacial within 500 meters of your location.\n`{{prefix}}lure remove everything`: will remove tracking for all lures"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "invasion",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Invasion tracking commands",
+            "value": "`{{prefix}}invasion template3 d500 dragon mixed`: Any arguments are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove` Removes tracking for all Team Rocket Incidents."
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "egg",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Raid egg tracking commands",
+            "value": "`{{prefix}}egg level3 d500 instinct`: Any arguments are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}egg remove level3`: will remove tracking for level 3 raid eggs"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "quest",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Quest tracking commands",
+            "value": "`{{prefix}}quest porygon pikachu poke ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokeballs as rewards \n `{{prefix}}quest remove all items` Removes tracking for all item based quests. Can also use `all pokemon` or `stardust`"
+          }
+        ]
+      }
+    }
+  }
+]

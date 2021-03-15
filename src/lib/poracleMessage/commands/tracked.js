@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const helpCommand = require('./help.js')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -10,7 +11,12 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+
+		if (args[0] === 'help') {
+			return helpCommand.run(client, msg, [commandName], options)
+		}
 
 		const translator = client.translatorFactory.Translator(language)
 
@@ -30,13 +36,17 @@ exports.run = async (client, msg, args, options) => {
 
 		let message = ''
 		let locationText
+		let adminExplanation = ''
+		if (msg.isFromAdmin) {
+			adminExplanation = `Tracking details for **${target.name}**\n`
+		}
 
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `\n${translator.translate('Your location is currently set to')} ${maplink}`
 		} else {
 			locationText = `\n${translator.translate('You have not set a location yet')}`
 		}
-		await msg.reply(`${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown' })
+		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown' })
 
 		if (human.area != '[]') {
 			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)

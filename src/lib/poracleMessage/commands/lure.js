@@ -1,3 +1,5 @@
+const helpCommand = require('./help.js')
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		const util = client.createUtil(msg, options)
@@ -7,9 +9,21 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+
+		if (args[0] === 'help') {
+			return helpCommand.run(client, msg, [commandName], options)
+		}
 
 		const translator = client.translatorFactory.Translator(language)
+
+		if (args.length === 0) {
+			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}lure mossy`, `{0}lure remove everything`', util.prefix),
+				{ style: 'markdown' })
+			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+			return
+		}
 
 		let reaction = '👌'
 

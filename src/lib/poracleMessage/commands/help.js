@@ -1,3 +1,41 @@
+function getDts(client, language, platform, helpSubject) {
+	// 1. Help template, right language, right platform
+	let dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === platform && template.language == language)
+	// 2. Help template, right language, platform is empty (ie any platform
+	if (!dts) {
+		dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === '' && template.language == language)
+	}
+	// 3. Help template, right platform, marked as default
+	if (!dts) {
+		dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === platform && template.default)
+	}
+	// 4. Help template, marked as default, platform is empty (ie any platform)
+	if (!dts) {
+		dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === '' && template.default)
+	}
+
+	return dts
+}
+
+function isHelpAvailable(client, language, target, helpSubject) {
+	let platform = target.type.split(':')[0]
+	if (platform == 'webhook') platform = 'discord'
+
+	return getDts(client, language, platform, helpSubject)
+}
+
+async function provideSingleLineHelp(client, msg, util, language, target, commandName) {
+	const translator = client.translatorFactory.Translator(language)
+
+	if (isHelpAvailable(client, language, target, commandName)) {
+		await msg.reply(translator.translateFormat('Use `{0}{1} {2}` for more details on this command', util.prefix, translator.translate('help'), translator.translate(commandName)))
+	} else {
+		await msg.reply(translator.translateFormat('Use `{0}{1}` for more help', util.prefix, translator.translate('help')))
+	}
+}
+
+exports.provideSingleLineHelp = provideSingleLineHelp
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
@@ -29,10 +67,24 @@ exports.run = async (client, msg, args, options) => {
 		let platform = target.type.split(':')[0]
 		if (platform == 'webhook') platform = 'discord'
 
-		let dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language == helpLanguage)
-		if (!dts) {
-			dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.default)
+		let dts
+
+		if (args[0]) {
+			dts = getDts(client, helpLanguage, platform, args[0])
+		} else {
+			// choose appropriate generalised greeting text
+			dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.language === helpLanguage)
+			if (!dts) {
+				dts = client.dts.find((template) => template.type === 'greeting' && template.platform === platform && template.default)
+			}
+			if (!dts) {
+				dts = client.dts.find((template) => template.type === 'greeting' && template.platform === '' && template.language === helpLanguage)
+			}
+			if (!dts) {
+				dts = client.dts.find((template) => template.type === 'greeting' && template.platform === '' && template.default)
+			}
 		}
+
 		if (!dts) {
 			await msg.react('🙅')
 			return
