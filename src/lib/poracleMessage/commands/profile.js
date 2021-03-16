@@ -235,6 +235,7 @@ exports.run = async (client, msg, args, options) => {
 						{ style: 'markdown' })
 
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+					return
 				}
 
 				let profileNo = parseInt(args[0], 10)
