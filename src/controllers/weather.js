@@ -191,10 +191,10 @@ class Weather extends Controller {
 								const pogoWeather = this.mapPoGoWeather(weatherInfo.data[forecast].WeatherIcon)
 								const epoch = weatherInfo.data[forecast].EpochDateTime
 								data[epoch] = pogoWeather
-								logString = logString.concat(` ${moment.unix(epoch).format('LTS')} = ${pogoWeather}`)
+								logString = logString.concat(`${moment.unix(epoch).format('HH:mm')} = ${pogoWeather} `)
 							}
 						}
-						this.log.verbose(`${id}: Accuweather forecast ${logString}`)
+						this.log.verbose(`${id}: Accuweather forecast [GMT] ${logString}`)
 
 						data.forecastTimeout = forecastTimeout
 						data.lastCurrentWeatherCheck = currentHourTimestamp

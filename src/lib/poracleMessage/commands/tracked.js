@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const helpCommand = require('./help.js')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -10,7 +11,12 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+
+		if (args[0] === 'help') {
+			return helpCommand.run(client, msg, [commandName], options)
+		}
 
 		const translator = client.translatorFactory.Translator(language)
 
@@ -30,13 +36,17 @@ exports.run = async (client, msg, args, options) => {
 
 		let message = ''
 		let locationText
+		let adminExplanation = ''
+		if (msg.isFromAdmin) {
+			adminExplanation = `Tracking details for **${target.name}**\n`
+		}
 
 		if (+human.latitude !== 0 && +human.longitude !== 0) {
 			locationText = `\n${translator.translate('Your location is currently set to')} ${maplink}`
 		} else {
 			locationText = `\n${translator.translate('You have not set a location yet')}`
 		}
-		await msg.reply(`${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown' })
+		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown' })
 
 		if (human.area != '[]') {
 			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
@@ -76,10 +86,12 @@ exports.run = async (client, msg, args, options) => {
 				}
 				let miniv = monster.min_iv
 				if (miniv === -1) miniv = 0
+				let minRarity = monster.rarity
+				if (minRarity === -1) minRarity = 1
 
 				const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
 				const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-				message = message.concat(`\n**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${monster.gender ? ` | ${translator.translate('gender')}: ${client.GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`)
+				message = message.concat(`\n**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(client.GameData.utilData.rarity[minRarity])}-${translator.translate(client.GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${client.GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`)
 			})
 		}
 
@@ -133,42 +145,49 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!client.config.general.disablePokestop) {
-			if (invasions.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following invasions:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any invasions'))
+			if (!client.config.general.disableInvasion) {
+				if (invasions.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following invasions:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any invasions'))
 
-			invasions.forEach((invasion) => {
-				let genderText = ''
-				let typeText = ''
-				if (!invasion.gender || invasion.gender === '') {
-					genderText = translator.translate('any')
-				} else if (invasion.gender === 1) {
-					genderText = translator.translate('male')
-				} else if (invasion.gender === 2) {
-					genderText = translator.translate('female')
-				}
-				if (!invasion.grunt_type || invasion.grunt_type === '') {
-					typeText = 'any'
-				} else {
-					typeText = invasion.grunt_type
-				}
-				message = message.concat(`\n${translator.translate('grunt type').charAt(0).toUpperCase() + translator.translate('grunt type').slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`)
-			})
+				invasions.forEach((invasion) => {
+					let genderText = ''
+					let typeText = ''
+					if (!invasion.gender || invasion.gender === '') {
+						genderText = translator.translate('any')
+					} else if (invasion.gender === 1) {
+						genderText = translator.translate('male')
+					} else if (invasion.gender === 2) {
+						genderText = translator.translate('female')
+					}
+					if (!invasion.grunt_type || invasion.grunt_type === '') {
+						typeText = 'any'
+					} else {
+						typeText = invasion.grunt_type
+					}
+					message = message.concat(`\n${translator.translate('grunt type')
+						.charAt(0)
+						.toUpperCase() + translator.translate('grunt type')
+						.slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`)
+				})
+			}
 
-			if (lures.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
+			if (!client.config.general.disableLure) {
+				if (lures.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
 
-			lures.forEach((lure) => {
-				let typeText = ''
+				lures.forEach((lure) => {
+					let typeText = ''
 
-				if (lure.lure_id === 0) {
-					typeText = 'any'
-				} else {
-					typeText = client.GameData.utilData.lures[lure.lure_id].name
-				}
-				message = message.concat(`\n${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `)
-			})
+					if (lure.lure_id === 0) {
+						typeText = 'any'
+					} else {
+						typeText = client.GameData.utilData.lures[lure.lure_id].name
+					}
+					message = message.concat(`\n${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `)
+				})
+			}
 		}
 
 		if (message.length < 4000) {

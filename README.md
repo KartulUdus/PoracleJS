@@ -16,7 +16,7 @@ It allows for high end-user configurability using discord `!commands` or telegra
 
 ### Install
 - [Install NodeJS](https://nodejs.org/en/) version 12 or higher
-- [Create a discord bot and invite it to your server](https://wiki.poracle.world/createBot)
+- [Create a discord bot and invite it to your server](https://muckelba.github.io/poracleWiki/discordbot.html)
 
 ```bash
 git clone https://github.com/KartulUdus/PoracleJS.git   // Clone the repository

@@ -41,6 +41,8 @@ class Monster extends Controller {
 		max_sta>=${data.sta} and
 		min_weight<=${data.weight} * 1000 and
 		max_weight>=${data.weight} * 1000 and
+		rarity<=${data.rarityGroup} and
+		max_rarity>=${data.rarityGroup} and
 		(${pvpQueryString})
 		`
 
@@ -48,16 +50,18 @@ class Monster extends Controller {
 			query = query.concat(`
 				and
 				(
-					(
+					(	
+						monsters.distance != 0 and
 						round(
-							6371000
-							* acos(cos( radians(${data.latitude}) )
-							* cos( radians( humans.latitude ) )
-							* cos( radians( humans.longitude ) - radians(${data.longitude}) )
-							+ sin( radians(${data.latitude}) )
-							* sin( radians( humans.latitude ) )
-						)
-					) < monsters.distance and monsters.distance != 0)
+							6371000	* acos(
+								cos( radians(${data.latitude}) )
+								* cos( radians( humans.latitude ) )
+								* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+								+ sin( radians(${data.latitude}) )
+								* sin( radians( humans.latitude ) )
+							)
+						) < monsters.distance
+					)
 					or
 					(
 						monsters.distance = 0 and (${areastring})
@@ -195,6 +199,8 @@ class Monster extends Controller {
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
+			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1
+			data.rarityNameEng = this.GameData.utilData.rarity[data.rarityGroup] ? this.GameData.utilData.rarity[data.rarityGroup] : ''
 			data.pvpPokemonId = data.pokemon_id
 			data.pvpFormId = data.form
 			data.pvpEvolutionData = {}
@@ -347,10 +353,13 @@ class Monster extends Controller {
 				const weatherForecast = await this.weatherData.getWeatherForecast(weatherCellId)
 
 				let pokemonShouldBeBoosted = false
-				if (weatherForecast.current > 0 && this.GameData.utilData.weatherTypeBoost[weatherForecast.current].filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
+				let pokemonWillBeBoosted = false
+				const currentBoostedTypes = weatherForecast.current ? this.GameData.utilData.weatherTypeBoost[weatherForecast.current] : []
+				const forecastBoostedTypes = weatherForecast.next ? this.GameData.utilData.weatherTypeBoost[weatherForecast.next] : []
+				if (weatherForecast.current > 0 && currentBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 				if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather == 0))) {
 					const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time).slice(0, -3)
-					const pokemonWillBeBoosted = this.GameData.utilData.weatherTypeBoost[weatherForecast.next].filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
+					pokemonWillBeBoosted = forecastBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
 					if (data.weather > 0 && !pokemonWillBeBoosted || data.weather == 0 && pokemonWillBeBoosted) {
 						weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current
 						if (pokemonShouldBeBoosted && data.weather == 0) {
@@ -362,6 +371,7 @@ class Monster extends Controller {
 						data.weatherNext = weatherForecast.next
 					}
 				}
+				this.log.debug(`${logReference}: Pokemon ${data.pokemon_id} cell: ${weatherCellId} types ${JSON.stringify(data.types)} weather ${data.weather} Forecast ${weatherForecast.current} [boosted ${pokemonShouldBeBoosted} ${JSON.stringify(currentBoostedTypes)}] next ${weatherForecast.next} [boosted ${pokemonWillBeBoosted} ${JSON.stringify(forecastBoostedTypes)}]`)
 			}
 
 			for (const cares of whoCares) {
@@ -416,6 +426,7 @@ class Monster extends Controller {
 					name: translator.translate(data.genderDataEng.name),
 					emoji: translator.translate(data.genderDataEng.emoji),
 				}
+				data.rarityName = translator.translate(data.rarityNameEng)
 				data.quickMoveName = data.weight && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
 				data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji) : ''
 				data.chargeMoveName = data.weight && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
@@ -467,8 +478,7 @@ class Monster extends Controller {
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
 					now: new Date(),
-					greatleagueranking: cares.great_league_ranking === 4096 ? 0 : cares.great_league_ranking,
-					ultraleagueranking: cares.ultra_league_ranking === 4096 ? 0 : cares.ultra_league_ranking,
+					pvpUserRanking: Math.min(cares.great_league_ranking,cares.ultra_league_ranking) === 4096 ? 0 : Math.min(cares.great_league_ranking,cares.ultra_league_ranking),
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,

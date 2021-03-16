@@ -1,3 +1,5 @@
+const helpCommand = require('./help.js')
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		const util = client.createUtil(msg, options)
@@ -7,9 +9,21 @@ exports.run = async (client, msg, args, options) => {
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
+		const commandName = __filename.slice(__dirname.length + 1, -3)
+		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+
+		if (args[0] === 'help') {
+			return helpCommand.run(client, msg, [commandName], options)
+		}
 
 		const translator = client.translatorFactory.Translator(language)
+
+		if (args.length === 0) {
+			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}lure mossy`, `{0}lure remove everything`', util.prefix),
+				{ style: 'markdown' })
+			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+			return
+		}
 
 		let reaction = '👌'
 
@@ -38,9 +52,13 @@ exports.run = async (client, msg, args, options) => {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, a distance was set in command but no location is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
-		if (distance === 0 && !userHasArea && !remove) {
+		if (distance === 0 && !userHasArea && !remove && !msg.isFromAdmin) {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, no distance was set in command and no area is defined for your tracking - check the')} \`${util.prefix}${translator.translate('help')}\``)
+		}
+		if (distance === 0 && !userHasArea && !remove && msg.isFromAdmin) {
+			await msg.reply(`${translator.translate('Warning: Admin command detected without distance set - using default distance')} ${client.config.tracking.defaultDistance}`)
+			distance = client.config.tracking.defaultDistance
 		}
 
 		if (!lures.length) {

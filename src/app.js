@@ -319,7 +319,9 @@ async function processMessages(msgs) {
 	let newRateLimits = false
 
 	for (const msg of msgs) {
-		const rate = rateChecker.validateMessage(msg.target, msg.type)
+		const destinationId = msg.type == 'webhook' ? msg.name : msg.target
+		const destinationType = msg.type
+		const rate = rateChecker.validateMessage(destinationId, destinationType)
 
 		let queueMessage
 
@@ -334,7 +336,7 @@ async function processMessages(msgs) {
 				log.info(`${msg.logReference}: Stopping alerts (Rate limit) for ${msg.type} ${msg.target} ${msg.name} Time to release: ${rate.resetTime}`)
 
 				if (config.alertLimits.maxLimitsBeforeStop) {
-					const userCheck = rateChecker.userIsBanned(msg.target, msg.type)
+					const userCheck = rateChecker.userIsBanned(destinationId, destinationType)
 					if (!userCheck.canContinue) {
 						queueMessage = {
 							...msg,
@@ -400,11 +402,28 @@ const weatherWorker = {
 	queuePort: queueChannel.port1,
 }
 
+worker = new Worker(path.join(__dirname, './statsWorker.js'))
+queueChannel = new MessageChannel()
+commandChannel = new MessageChannel()
+
+worker.postMessage({
+	type: 'queuePort',
+	queuePort: queueChannel.port2,
+	commandPort: commandChannel.port2,
+}, [queueChannel.port2, commandChannel.port2])
+
+const statsWorker = {
+	worker,
+	commandPort: commandChannel.port1,
+	queuePort: queueChannel.port1,
+}
+
 function processMessageFromControllers(msg) {
 	// Relay commands of weather type to weather controller
 	if (msg.type == 'weather') {
 		weatherWorker.commandPort.postMessage(msg)
 	}
+	// No commands from controllers to stats, but would be relayed here
 }
 
 function processMessageFromWeather(msg) {
@@ -417,8 +436,23 @@ function processMessageFromWeather(msg) {
 	}
 }
 
+function processMessageFromStats(msg) {
+	// Relay broadcasts from stats to all controllers
+
+	if (msg.type == 'statsBroadcast') {
+		for (const relayWorker of workers) {
+			relayWorker.commandPort.postMessage(msg)
+		}
+	}
+}
+
 weatherWorker.commandPort.on('message', processMessageFromWeather)
 weatherWorker.queuePort.on('message', (res) => {
+	processMessages(res.queue)
+})
+
+statsWorker.commandPort.on('message', processMessageFromStats)
+statsWorker.queuePort.on('message', (res) => {
 	processMessages(res.queue)
 })
 
@@ -481,6 +515,9 @@ async function processOne(hook) {
 
 				processHook = hook
 
+				// also post directly to stats controller
+				statsWorker.queuePort.postMessage(hook)
+
 				break
 			}
 			case 'raid': {
@@ -514,7 +551,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
 				}
-				if (lureExpiration) {
+				if (lureExpiration && !config.general.disableInvasion) {
 					if (fastify.cache.has(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
 						break
@@ -526,7 +563,7 @@ async function processOne(hook) {
 					fastify.cache.set(`${hook.message.pokestop_id}_L${lureExpiration}`, 'cached', secondsRemaining)
 
 					processHook = hook
-				} else {
+				} else if (!config.general.disableLure) {
 					if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
 						break
