@@ -188,6 +188,9 @@ class Quest extends Controller {
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
+			if (data.monsters.length == 2) {
+				data.baseStats = Object.values(this.GameData.monsters).filter((mon) => data.monsters[1] == mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsters[1] == mon.id && !mon.form.id)[0].stats : ''
+			}
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
