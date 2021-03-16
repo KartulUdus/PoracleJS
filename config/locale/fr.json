@@ -497,7 +497,7 @@
 	"Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`":"Les commandes valides sont `{0}zone liste`, `{0}zone ajouter <NomZone>`, `{0}zone enlever <NomZone>`",
 	"Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`":"Les commandes valides sont `{0}profil <nom>`, `{0}profil liste`, `{0}profil ajouter <nom>`, `{0}profil enlever <nom>`, `{0}profil planning <description>`",
 	"Valid commands are e.g. `{0}egg level5`, `{0}egg remove everything`":"Les commandes valides sont par exemple `{0}oeuf niveau5`, `{0}oeuf enlever tous`",
-	"Use `{0}{1} {2}` for more details on this command":"Utiliser `{0}{1} {2}` pour plus de détails sur cette commade",
+	"Use `{0}{1} {2}` for more details on this command":"Utiliser `{0}{1} {2}` pour plus de détails sur cette commande",
 	"Use `{0}{1}` for more help":"Utiliser `{0}{1}` pour accéder à l'aide",
 	"Valid commands are e.g. `{0}invasion giovanni`, `{0}invasion dragon`, `{0}invasion remove everything`":"Les commandes valides sont par exemple `{0}invasion giovanni`, `{0}invasion dragon`, `{0}invasion enlever tous`",
 	"Use `{0}language` to set to one of {1}":"Utiliser `{0}langue` avec un choix parmi {1}",
