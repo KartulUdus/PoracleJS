@@ -16,19 +16,25 @@ exports.run = async (client, msg) => {
 			}
 		}
 
-		const isRegistered = await client.query.countQuery('humans', { id: msg.author.id })
-		if (isRegistered) {
-			if (client.config.general.roleCheckMode == "disable") {
-				const user = await client.query.selectOneQuery('humans', { id: msg.author.id })
-				if (user.admin_disable && !user.disabled_date) {
-					await client.query.updateQuery('humans', { admin_disable: 0 }, { id: msg.author.id })
-					client.logs.discord.log({ level: 'debug', message: `user ${msg.author.tag} used poracle command to remove admin_disable flag`, event: 'discord:registerCheck' })
-				} else if (user.admin_disable && user.disabled_date) {
-					return await msg.react('🙅') // account was disabled by admin, don't let him re-enable
-				}
+		const user = await client.query.selectOneQuery('humans', { id: msg.author.id })
+
+		if (user) {
+			if (user.admin_disable && !user.disabled_date) {
+				return await msg.react('🙅') // account was disabled by admin, don't let him re-enable
 			}
 
-			await msg.react('👌')
+			if (client.config.general.roleCheckMode == 'disable-user') {
+				if (user.admin_disable && user.disabled_date) {
+					await client.query.updateQuery('humans', { admin_disable: 0, disabled_date: null }, { id: msg.author.id })
+					client.logs.discord.log({ level: 'debug', message: `user ${msg.author.tag} used poracle command to remove admin_disable flag`, event: 'discord:registerCheck' })
+					await msg.react('✅')
+				} else {
+					await msg.react('👌')
+				}
+			} else {
+				await msg.react('👌')
+			}
+
 			//			await client.query.updateQuery('humans', { language: language }, { id: msg.author.id })
 		} else {
 			await client.query.insertQuery('humans', {

@@ -39,7 +39,7 @@
     // roleCheckMode (case sensitive)
     // "ignore" - log and don't delete/disable users once required role is removed
     // "delete" - delete user from database along with trackings once required role is removed
-    // "disable" - disable user once required role is removed and re-enable once it's restored, trackings will remain
+    // "disable-user" - disable user once required role is removed and re-enable once it's restored, trackings will remain
       "roleCheckMode": "ignore",
     // availableLanguages
     // - This is an array of available languages that users can swap between using the !language command
@@ -184,7 +184,7 @@
       "enabled": true,                                // is discord enabled?
       "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
     // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
-    //   hours, deleting them if not (note general.roleCheckDeletionsAllowed must be true to
+    //   hours, deleting them if not (note general.roleCheckMode must be set to
     //   actually carry out the deletions rather than just logging them)
       "checkRole": false,
       "checkRoleInterval": 6,
@@ -224,8 +224,8 @@
   "telegram": {
       "enabled": false,                             // whether telegram is enabled
     // checkRole - whether to check all telegram users for membership of a registration group
-    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckDeletionsAllowed
-    //   must be true to actually carry out the deletions rather than just logging them)
+    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
+    //   must be set to actually carry out the deletions rather than just logging them)
       "checkRole": false,
       "checkRoleInterval": 6,
     // token - telegram bot token
@@ -251,6 +251,7 @@
     "dmLimit": 20,                // limit of number of messages a channel/group can receive in the period
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
     "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
+    "disableOnStop": false,       // whether user should be admin disabled rather than just stopped (require admin assistance for restart)
     // allow override for specific channel ids in - id can be a channel/user id or a webhook name
     //    "limitOverride": {
     //        "id": limit,
