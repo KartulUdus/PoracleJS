@@ -22,7 +22,7 @@ exports.run = async (client, msg, args, options) => {
 		for (const id of targets) {
 			client.log.info(`Disable ${id}`)
 
-			await client.query.updateQuery('humans', { admin_disable: 1 }, { id })
+			await client.query.updateQuery('humans', { admin_disable: 1, disabled_date: null }, { id })
 		}
 		await msg.react('✅')
 	} catch (err) {

@@ -478,7 +478,7 @@ class Monster extends Controller {
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
 					now: new Date(),
-					pvpUserRanking: Math.min(cares.great_league_ranking,cares.ultra_league_ranking) === 4096 ? 0 : Math.min(cares.great_league_ranking,cares.ultra_league_ranking),
+					pvpUserRanking: Math.min(cares.great_league_ranking, cares.ultra_league_ranking) === 4096 ? 0 : Math.min(cares.great_league_ranking, cares.ultra_league_ranking),
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,

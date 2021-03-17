@@ -106,20 +106,24 @@ if (config.telegram.enabled) {
 }
 
 async function removeInvalidUser(user) {
-	await query.deleteQuery('egg', { id: user.id })
-	await query.deleteQuery('monsters', { id: user.id })
-	await query.deleteQuery('raid', { id: user.id })
-	await query.deleteQuery('quest', { id: user.id })
-	await query.deleteQuery('lures', { id: user.id })
-	await query.deleteQuery('profiles', { id: user.id })
-	await query.deleteQuery('humans', { id: user.id })
+	if (config.general.roleCheckMode == 'disable-user') {
+		if (!user.admin_disable) await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: user.id })
+	} else if (config.general.roleCheckMode == 'delete') { // sanity check
+		await query.deleteQuery('egg', { id: user.id })
+		await query.deleteQuery('monsters', { id: user.id })
+		await query.deleteQuery('raid', { id: user.id })
+		await query.deleteQuery('quest', { id: user.id })
+		await query.deleteQuery('lures', { id: user.id })
+		await query.deleteQuery('profiles', { id: user.id })
+		await query.deleteQuery('humans', { id: user.id })
+	}
 }
 
 async function syncTelegramMembership() {
 	try {
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'telegram:user' })
+		let usersToCheck = await query.selectAllQuery('humans', { type: 'telegram:user', admin_disable: 0 })
 		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
 		let invalidUsers = []
 		for (const channel of config.telegram.channels) {
@@ -128,13 +132,13 @@ async function syncTelegramMembership() {
 		}
 
 		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing from dB...')
+			log.info('Invalid users found, removing/disabling from dB...')
 			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckDeletionsAllowed) {
+				if (config.general.roleCheckMode != 'ignore') {
 					await removeInvalidUser(user)
 				} else {
-					log.info('config.general.roleCheckDeletionAllowed not set, not removing')
+					log.info('config.general.roleCheckMode is set to ignore, not removing')
 				}
 			}
 		} else {
@@ -149,7 +153,7 @@ async function syncTelegramMembership() {
 async function syncDiscordRole() {
 	try {
 		log.verbose('Verification of Discord role membership to Poracle users starting...')
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user' })
+		let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
 		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
 		let invalidUsers = []
 		for (const guild of config.discord.guilds) {
@@ -157,13 +161,13 @@ async function syncDiscordRole() {
 			usersToCheck = invalidUsers
 		}
 		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing from dB...')
+			log.info('Invalid users found, removing/disabling from dB...')
 			for (const user of invalidUsers) {
 				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckDeletionsAllowed) {
+				if (config.general.roleCheckMode != 'ignore') {
 					await removeInvalidUser(user)
 				} else {
-					log.info('config.general.roleCheckDeletionAllowed not set, not removing')
+					log.info('config.general.roleCheckMode is set to ignore, not removing')
 				}
 			}
 		} else {
@@ -337,8 +341,12 @@ async function processMessages(msgs) {
 						queueMessage = {
 							...msg,
 							message: {
-								content: userTranslator.translateFormat('You have breached the rate limit too many times in the last 24 hours. Your messages are now stopped, use {0}start to resume',
-									['discord:user', 'discord:channel', 'webhook'].includes(msg.type) ? config.discord.prefix : '/'),
+								content: userTranslator.translateFormat(
+									config.alertLimits.disableOnStop
+										? 'You have breached the rate limit too many times in the last 24 hours. Your messages are now stopped, contact an administrator to resume'
+										: 'You have breached the rate limit too many times in the last 24 hours. Your messages are now stopped, use {0}start to resume',
+									['discord:user', 'discord:channel', 'webhook'].includes(msg.type) ? config.discord.prefix : '/',
+								),
 							},
 							emoji: [],
 						}
@@ -346,7 +354,11 @@ async function processMessages(msgs) {
 						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
 
 						try {
-							await query.updateQuery('humans', { enabled: 0 }, { id: msg.target })
+							if (config.alertLimits.disableOnStop) {
+								await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: msg.target })
+							} else {
+								await query.updateQuery('humans', { enabled: 0 }, { id: msg.target })
+							}
 						} catch (err) {
 							log.error('Failed to stop user messages', err)
 						}

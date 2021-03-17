@@ -73,6 +73,14 @@ class Query {
 
 	// database methods below
 
+	/**
+	 * Gets current date time in a format acceptable to the database
+	 * @returns {string}
+	 */
+	dbNow() {
+		return this.db.fn.now()
+	}
+
 	async selectOneQuery(table, conditions) {
 		try {
 			return await this.db.select('*').from(table).where(conditions).first()
