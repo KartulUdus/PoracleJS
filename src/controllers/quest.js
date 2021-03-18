@@ -221,7 +221,7 @@ class Quest extends Controller {
 				data.rewardStringEng = data.monsterNames
 				data.rewardStringEng = data.dustAmount > 0 ? `${data.dustAmount} Stardust` : data.rewardStringEng
 				data.rewardStringEng = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNamesEng}` : data.rewardStringEng
-				data.rewardStringEng = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNamesEng} Mega Energy}` : data.rewardStringEng
+				data.rewardStringEng = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNamesEng} Mega Energy` : data.rewardStringEng
 
 				const view = {
 					...geoResult,
