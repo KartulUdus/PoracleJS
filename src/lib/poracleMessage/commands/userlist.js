@@ -18,7 +18,15 @@ exports.run = async (client, msg, args, options) => {
 
 		await msg.react('✅')
 
-		const humans = await client.query.selectAllQuery('humans', {})
+		const filterString = {}
+		if (args[0] === 'disabled') {
+			filterString.admin_disable = 1
+		}
+		if (args[0] === 'enabled') {
+			filterString.admin_disable = 0
+		}
+
+		const humans = await client.query.selectAllQuery('humans', filterString)
 		let response = ''
 		for (const human of humans) {
 			if (human.type === 'webhook') {

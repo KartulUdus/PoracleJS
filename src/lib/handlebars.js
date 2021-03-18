@@ -43,8 +43,10 @@ module.exports = () => {
 
 	handlebars.registerHelper('moveName', (value, options) => (moves[value] ? userTranslator(options).translate(moves[value].name) : ''))
 	handlebars.registerHelper('moveNameAlt', (value) => (moves[value] ? translatorAlt().translate(moves[value].name) : ''))
+	handlebars.registerHelper('moveNameEng', (value) => (moves[value] ? moves[value].name : ''))
 	handlebars.registerHelper('moveType', (value, options) => (moves[value] ? userTranslator(options).translate(moves[value].type) : ''))
 	handlebars.registerHelper('moveTypeAlt', (value) => (moves[value] ? translatorAlt().translate(moves[value].type) : ''))
+	handlebars.registerHelper('moveTypeEng', (value) => (moves[value] ? moves[value].type : ''))
 	handlebars.registerHelper('moveEmoji', (value, options) => {
 		if (!moves[value]) return ''
 		return types[moves[value].type] ? userTranslator(options).translate(types[moves[value].type].emoji) : ''
@@ -52,6 +54,10 @@ module.exports = () => {
 	handlebars.registerHelper('moveEmojiAlt', (value) => {
 		if (!moves[value]) return ''
 		return types[moves[value].type] ? translatorAlt.translate(types[moves[value].type].emoji) : ''
+	})
+	handlebars.registerHelper('moveEmojiEng', (value) => {
+		if (!moves[value]) return ''
+		return types[moves[value].type] ? types[moves[value].type].emoji : ''
 	})
 
 	handlebars.registerHelper('pokemonName', (value, options) => {
@@ -68,6 +74,13 @@ module.exports = () => {
 		return translatorAlt().translate(monster.name)
 	})
 
+	handlebars.registerHelper('pokemonNameEng', (value) => {
+		if (!+value) return ''
+		const monster = Object.values(monsters).find((m) => m.id === +value)
+		if (!monster) return ''
+		return monster.name
+	})
+
 	handlebars.registerHelper('pokemonForm', (value, options) => {
 		if (!+value) return ''
 		const monster = Object.values(monsters).find((m) => m.form.id === +value)
@@ -80,6 +93,13 @@ module.exports = () => {
 		const monster = Object.values(monsters).find((m) => m.form.id === +value)
 		if (!monster) return ''
 		return translatorAlt().translate(monster.form.name)
+	})
+
+	handlebars.registerHelper('pokemonFormEng', (value) => {
+		if (!+value) return ''
+		const monster = Object.values(monsters).find((m) => m.form.id === +value)
+		if (!monster) return ''
+		return monster.form.name
 	})
 
 	handlebars.registerHelper('translateAlt', (value) => {
