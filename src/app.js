@@ -324,6 +324,7 @@ async function processMessages(msgs) {
 		const rate = rateChecker.validateMessage(destinationId, destinationType)
 
 		let queueMessage
+		let logMessage = null
 
 		if (!rate.passMessage) {
 			if (rate.justBreached) {
@@ -353,6 +354,8 @@ async function processMessages(msgs) {
 
 						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
 
+						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type == 'discord:user' ? `<@${destinationId}>` : ''}`
+
 						try {
 							if (config.alertLimits.disableOnStop) {
 								await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: msg.target })
@@ -378,6 +381,23 @@ async function processMessages(msgs) {
 		if (queueMessage) {
 			if (['discord:user', 'discord:channel', 'webhook'].includes(queueMessage.type)) fastify.discordQueue.push(queueMessage)
 			if (['telegram:user', 'telegram:channel', 'telegram:group'].includes(queueMessage.type)) fastify.telegramQueue.push(queueMessage)
+			if (logMessage && config.discord.dmLogChannelID) {
+				fastify.discordQueue.push({
+					lat: 0,
+					lon: 0,
+					message: {
+						content: logMessage,
+					},
+					target: config.discord.dmLogChannelID,
+					type: 'discord:channel',
+					name: 'Log channel',
+					tth: { hours: 0, minutes: config.discord.dmLogChannelDeletionTime, seconds: 0 },
+					clean: config.discord.dmLogChannelDeletionTime > 0,
+					emoji: '',
+					logReference: queueMessage.logReference,
+					language: config.general.locale,
+				})
+			}
 		}
 	}
 

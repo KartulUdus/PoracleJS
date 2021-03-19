@@ -210,7 +210,7 @@
         "#FF8000"
     ],
       "dmLogChannelID": "",                           // an ID of a channel to use to log all poracle commands to (to watch users)
-      "dmLogChannelDeletionTime": 0,                  // time to clean up after (seconds) - 0 do not delete
+      "dmLogChannelDeletionTime": 0,                  // time to clean up after (minutes) - 0 do not delete
       "messageDeleteDelay": 0,                        // extra time to add on to a message 'clean' to leave behind (in ms)
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": "",

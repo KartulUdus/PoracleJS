@@ -125,7 +125,7 @@ class Quest extends Controller {
 				return []
 			}
 
-			data.questString = await this.getQuest(data)
+			data.questStringEng = await this.getQuest(data)
 			data.rewardData = await this.getReward(data)
 			// this.log.error('[DEBUG] Quest : data.questString: '+data.questString)
 			// this.log.error('[DEBUG] Quest : data.rewardData: ', data.rewardData)
@@ -207,14 +207,21 @@ class Quest extends Controller {
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
 
-				data.questString = translator.translate(data.questString)
+				data.questString = translator.translate(data.questStringEng)
 				data.monsterNames = Object.values(this.GameData.monsters).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
+				data.monsterNamesEng = Object.values(this.GameData.monsters).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => m.name).join(', ')
 				data.itemNames = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.GameData.items[i].name)).join(', ')
+				data.itemNamesEng = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => this.GameData.items[i].name).join(', ')
 				data.energyMonstersNames = Object.values(this.GameData.monsters).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
+				data.energyMonstersNamesEng = Object.values(this.GameData.monsters).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => m.name).join(', ')
 				data.rewardString = data.monsterNames
 				data.rewardString = data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : data.rewardString
 				data.rewardString = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNames}` : data.rewardString
 				data.rewardString = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNames} ${translator.translate('Mega Energy')}` : data.rewardString
+				data.rewardStringEng = data.monsterNames
+				data.rewardStringEng = data.dustAmount > 0 ? `${data.dustAmount} Stardust` : data.rewardStringEng
+				data.rewardStringEng = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNamesEng}` : data.rewardStringEng
+				data.rewardStringEng = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNamesEng} Mega Energy` : data.rewardStringEng
 
 				const view = {
 					...geoResult,
@@ -292,7 +299,7 @@ class Quest extends Controller {
 		let pstr = ''
 		let gstr = ''
 		let raidLevel
-		if (item.quest_task) {
+		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
 		} else {
 			const questinfo = item.conditions[0] ? item.conditions[0].info : ''

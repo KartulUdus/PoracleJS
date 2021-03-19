@@ -26,6 +26,13 @@ module.exports = async (client, oldPresence, newPresence) => {
 				if (user.admin_disable && user.disabled_date) {
 					await client.query.updateQuery('humans', { admin_disable: 0, disabled_date: null }, { id: oldPresence.user.id })
 					client.logs.discord.log({ level: 'info', message: `enabled ${oldPresence.user.username} because ${roleAfter.name} added`, event: 'discord:roleCheck' })
+
+					if (!client.config.discord.disableAutoGreetings) {
+						const greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.default)
+						const view = { prefix: client.config.discord.prefix }
+						const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
+						await oldPresence.user.send(JSON.parse(greeting(view)))
+					}
 				}
 			}
 		}
