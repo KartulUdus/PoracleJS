@@ -18,6 +18,8 @@ module.exports = (translatorFactory) => mount(['text', 'location'], (ctx, next) 
 		bot: parts[2],
 		args: parts[3],
 		get splitArgsArray() {
+			if (!parts[3].length) return [[]]
+
 			let args = parts[3].split(/ +/g)
 			args = args.map((arg) => translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
 			let initialArgs

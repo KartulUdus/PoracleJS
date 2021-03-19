@@ -193,7 +193,25 @@ class Controller extends EventEmitter {
 			return { addr: 'Unknown', flag: '' }
 		}
 
-		const cacheKey = `${String(+locationObject.lat.toFixed(3))}-${String(+locationObject.lon.toFixed(3))}`
+		if (this.config.geocoding.cacheDetail == 0) {
+			try {
+				const geocoder = this.getGeocoder()
+				const [result] = await geocoder.reverse(locationObject)
+				const flag = emojiFlags[result.countryCode]
+				if (!this.addressDts) {
+					this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
+				}
+				result.addr = this.addressDts(result)
+				result.flag = flag ? flag.emoji : ''
+
+				return this.escapeAddress(result)
+			} catch (err) {
+				this.log.error('getAddress: failed to fetch data', err)
+				return { addr: 'Unknown', flag: '' }
+			}
+		}
+
+		const cacheKey = `${String(+locationObject.lat.toFixed(this.config.geocoding.cacheDetail))}-${String(+locationObject.lon.toFixed(this.config.geocoding.cacheDetail))}`
 		const cachedResult = geoCache.getKey(cacheKey)
 		if (cachedResult) return this.escapeAddress(cachedResult)
 
