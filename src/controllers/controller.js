@@ -193,7 +193,7 @@ class Controller extends EventEmitter {
 			return { addr: 'Unknown', flag: '' }
 		}
 
-		const cacheKey = `${String(+locationObject.lat.toFixed(3))}-${String(+locationObject.lon.toFixed(3))}`
+		const cacheKey = `${String(+locationObject.lat.toFixed(this.config.geocoding.cacheDetail))}-${String(+locationObject.lon.toFixed(this.config.geocoding.cacheDetail))}`
 		const cachedResult = geoCache.getKey(cacheKey)
 		if (cachedResult) return this.escapeAddress(cachedResult)
 
