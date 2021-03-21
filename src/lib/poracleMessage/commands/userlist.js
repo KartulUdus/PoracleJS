@@ -30,9 +30,9 @@ exports.run = async (client, msg, args, options) => {
 		let response = ''
 		for (const human of humans) {
 			if (human.type === 'webhook') {
-				response = response.concat(`${human.type} • ${human.name}${human.admin_disable ? ' \u1F6AB' : ''}\n`)
+				response = response.concat(`${human.type} • ${human.name}${human.admin_disable ? ' \uD83D\uDEAB' : ''}\n`)
 			} else {
-				response = response.concat(`${human.type} • ${human.name} | ${human.id}${human.admin_disable ? ' \u1F6AB' : ''}\n`)
+				response = response.concat(`${human.type} • ${human.name} | ${human.id}${human.admin_disable ? ' \uD83D\uDEAB' : ''}\n`)
 			}
 		}
 		await msg.reply(`${translator.translate('These users are registered with Poracle:')}\n${response}`)
