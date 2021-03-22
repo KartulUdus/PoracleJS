@@ -531,7 +531,8 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.has(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`)) {
+				const verifiedSpawnTime = hook.message.verified || hook.message.disappear_time_verified || false
+				if (fastify.cache.has(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
 				}
@@ -539,7 +540,7 @@ async function processOne(hook) {
 				// Set cache expiry to calculated pokemon expiry + 5 minutes to cope with near misses
 				const secondsRemaining = Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300
 
-				fastify.cache.set(`${hook.message.encounter_id}_${hook.message.disappear_time}_${hook.message.cp}`, 'cached', secondsRemaining)
+				fastify.cache.set(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`, 'cached', secondsRemaining)
 
 				processHook = hook
 
