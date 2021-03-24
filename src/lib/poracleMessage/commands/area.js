@@ -19,9 +19,26 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		let availableAreas = client.geofence.map((area) => area.name)
+
+		if (target.type.includes(':user') && client.config.areaSecurity.enabled && !msg.isFromAdmin) {
+			const human = await client.query.selectOneQuery('humans', { id: target.id })
+
+			const calculatedAreas = []
+
+			for (const community of human.community_membership) {
+				const communityDetails = Object.keys(client.config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
+				if (communityDetails) {
+					calculatedAreas.push(...communityDetails.allowedAreas.map((x) => x.toLowerCase()))
+				}
+			}
+
+			availableAreas = availableAreas.filter((x) => calculatedAreas.includes(x.toLowerCase()))
+		}
+
 		// Check target
-		const confAreas = client.geofence.map((area) => area.name.toLowerCase().replace(/ /gi, '_')).sort()
-		const confAreas2 = client.geofence.map((area) => area.name.replace(/ /gi, '_')).sort()
+		const confAreas = availableAreas.map((area) => area.toLowerCase().replace(/ /gi, '_')).sort()
+		const confAreas2 = availableAreas.map((area) => area.replace(/ /gi, '_')).sort()
 		const confUse = confAreas2.join('\n')
 
 		// Remove arguments that we don't want to keep for area processing

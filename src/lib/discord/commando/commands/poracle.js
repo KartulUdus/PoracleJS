@@ -1,15 +1,30 @@
+const communityLogic = require('../../../communityLogic')
+
 exports.run = async (client, msg) => {
-	if (!client.config.discord.channels.includes(msg.channel.id)) {
-		return client.logs.log.info(`${msg.author.tag} tried to register in ${msg.channel.name}`)
-	}
 	try {
+		let communityToAdd
+
+		if (client.config.areaSecurity.enabled) {
+			for (const community of Object.keys(client.config.areaSecurity.communities)) {
+				if (client.config.areaSecurity.communities[community].discord.channels.includes(msg.channel.id)) {
+					communityToAdd = community
+					break
+				}
+			}
+			if (!communityToAdd) {
+				return client.logs.log.info(`${msg.author.tag} tried to register in ${msg.channel.name}`)
+			}
+		} else if (!client.config.discord.channels.includes(msg.channel.id)) {
+			return client.logs.log.info(`${msg.author.tag} tried to register in ${msg.channel.name}`)
+		}
+
 		const command = msg.content.split(' ')[0].substring(1)
 
 		let language = ''
 
 		if (client.config.general.availableLanguages) {
 			for (const [key, availableLanguage] of Object.entries(client.config.general.availableLanguages)) {
-				if (availableLanguage.poracle == command) {
+				if (availableLanguage.poracle === command) {
 					language = key
 					break
 				}
@@ -23,14 +38,33 @@ exports.run = async (client, msg) => {
 				return await msg.react('🙅') // account was disabled by admin, don't let him re-enable
 			}
 
-			if (client.config.general.roleCheckMode == 'disable-user') {
+			const update = {}
+			let updateRequired = false
+
+			if (client.config.general.roleCheckMode === 'disable-user') {
 				if (user.admin_disable && user.disabled_date) {
-					await client.query.updateQuery('humans', { admin_disable: 0, disabled_date: null }, { id: msg.author.id })
-					client.logs.discord.log({ level: 'debug', message: `user ${msg.author.tag} used poracle command to remove admin_disable flag`, event: 'discord:registerCheck' })
-					await msg.react('✅')
-				} else {
-					await msg.react('👌')
+					update.admin_disable = 0
+					update.disabled_date = null
+
+					updateRequired = true
+					client.logs.discord.log({
+						level: 'debug',
+						message: `user ${msg.author.tag} used poracle command to remove admin_disable flag`,
+						event: 'discord:registerCheck',
+					})
 				}
+			}
+
+			if (communityToAdd) {
+				update.community_membership = JSON.stringify(communityLogic.addCommunity(client.config, JSON.parse(user.community_membership), communityToAdd))
+				update.area_restriction = JSON.stringify(communityLogic.calculateLocationRestrictions(client.config,
+					JSON.parse(update.community_membership)))
+				updateRequired = true
+			}
+
+			if (updateRequired) {
+				await client.query.updateQuery('humans', update, { id: msg.author.id })
+				await msg.react('✅')
 			} else {
 				await msg.react('👌')
 			}
@@ -38,7 +72,12 @@ exports.run = async (client, msg) => {
 			//			await client.query.updateQuery('humans', { language: language }, { id: msg.author.id })
 		} else {
 			await client.query.insertQuery('humans', {
-				id: msg.author.id, type: 'discord:user', name: client.emojiStrip(msg.author.username), area: '[]', language,
+				id: msg.author.id,
+				type: 'discord:user',
+				name: client.emojiStrip(msg.author.username),
+				language,
+				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
+				area_restriction: communityToAdd ? communityLogic.calculateLocationRestrictions(client.config, [communityToAdd]) : null,
 			})
 			await msg.react('✅')
 		}

@@ -56,7 +56,7 @@ const re = require('./util/regex')(translatorFactory)
 
 const Query = require('./controllers/query')
 
-const query = new Query(logs.controller, knex, config)
+const query = new Query(logs.controller, knex, config, geofence)
 
 fastify.decorate('logger', logs.log)
 fastify.decorate('controllerLog', logs.controller)
