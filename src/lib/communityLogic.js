@@ -2,9 +2,16 @@ function calculateLocationRestrictions(config, communityMembership) {
 	const locationRestrictions = []
 
 	for (const community of communityMembership) {
-		const communityToAdd = config.areaSecurity.communities.find((x) => x.toLowerCase() == community)
-		if (communityToAdd) {
-			locationRestrictions.push(...communityToAdd.locationFence.map((x) => x.toLowerCase()))
+		const communityName = Object.keys(config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
+		if (communityName) {
+			const communityToAdd = config.areaSecurity.communities[communityName]
+			if (communityToAdd) {
+				// locationRestrictions.push(...communityToAdd.locationFence.map((x) => x.toLowerCase()))
+				const fence = communityToAdd.locationFence ? communityToAdd.locationFence.toLowerCase() : null
+				if (fence && !locationRestrictions.includes(fence)) {
+					locationRestrictions.push(communityToAdd.locationFence.toLowerCase())
+				}
+			}
 		}
 	}
 
@@ -16,7 +23,7 @@ function addCommunity(config, existingCommunities, communityToAdd) {
 	const lowercaseCommunities = communityKeys.map((area) => area.toLowerCase())
 
 	let newCommunities = existingCommunities
-	if (!lowercaseCommunities.includes(communityToAdd)) {
+	if (!newCommunities.includes(communityToAdd)) {
 		newCommunities = [...newCommunities, communityToAdd]
 	}
 
@@ -28,7 +35,7 @@ function removeCommunity(config, existingCommunities, communityToRemove) {
 	const lowercaseCommunities = communityKeys.map((area) => area.toLowerCase())
 
 	let newCommunities = existingCommunities
-	if (lowercaseCommunities.includes(communityToRemove)) {
+	if (newCommunities.includes(communityToRemove)) {
 		newCommunities = existingCommunities
 			.filter((x) => x != communityToRemove)
 	}
@@ -36,4 +43,4 @@ function removeCommunity(config, existingCommunities, communityToRemove) {
 	return newCommunities.filter((x) => lowercaseCommunities.includes(x))
 }
 
-exports.modules = { calculateLocationRestrictions, addCommunity, removeCommunity }
+module.exports = { calculateLocationRestrictions, addCommunity, removeCommunity }

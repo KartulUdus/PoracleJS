@@ -20,8 +20,8 @@ exports.run = async (client, msg, args, options) => {
 
 		let invalidCommand = true
 
-		if ((args[0] == 'add' || args[0] == 'remove' || args[0] == 'clear') && args.length >= 2) invalidCommand = false
-		if (args[0] == 'list' && args.length === 1) invalidCommand = false
+		if ((args[0] == 'add' || args[0] == 'remove' || args[0] == 'clear') && args.length < 2) invalidCommand = false
+		if (args[0] == 'list' && args.length !== 1) invalidCommand = false
 
 		if (!invalidCommand) {
 			await msg.reply(translator.translateFormat('Valid commands are `{0}community add <name> <users>`, `{0}community remove <name> <users>`, `{0}community list`', util.prefix),
@@ -32,13 +32,13 @@ exports.run = async (client, msg, args, options) => {
 
 		const command = args.shift()
 
-		const communityKeys = Object.keys(this.client.config.areaSecurity.communities)
+		const communityKeys = Object.keys(client.config.areaSecurity.communities)
 
 		if (command == 'list') {
 			const originalWithUnderscore = communityKeys.map((area) => area.replace(/ /gi, '_')).sort()
 
-			await msg.reply('These are the valid communities: (insert here)')
-			await msg.reply(`\`\`\`${originalWithUnderscore.join('\n')}\`\`\``)
+			await msg.reply(translator.translate('These are the valid communities:'))
+			await msg.reply(`\`\`\`\n${originalWithUnderscore.join('\n')}\`\`\``)
 			return
 		}
 
