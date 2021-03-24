@@ -176,7 +176,7 @@ async function run() {
 				if (daptcha.channels.includes(human.id)) human.type = 'discord:channel'
 				if (!daptcha.channels.includes(human.id) && !daptcha.humans.includes(human.id)) human.type = 'discord:user'
 			}
-			human.last_checked = new Date().toUTCString()
+			// human.last_checked = new Date().toUTCString()
 			human.fails = 0
 			delete human.alerts_sent
 		}
