@@ -68,7 +68,7 @@ exports.run = async (client, msg, args, options) => {
 				for (const id of targets) {
 					const human = await client.query.selectOneQuery('humans', { id })
 					if (human) {
-						const existingCommunities = JSON.parse(human.communities)
+						const existingCommunities = JSON.parse(human.community_membership)
 						const newCommunities = communityLogic.addCommunity(client.config, existingCommunities, community)
 
 						await client.query.updateQuery('humans', {
@@ -84,7 +84,7 @@ exports.run = async (client, msg, args, options) => {
 				for (const id of targets) {
 					const human = await client.query.selectOneQuery('humans', { id })
 					if (human) {
-						const existingCommunities = JSON.parse(human.communities)
+						const existingCommunities = JSON.parse(human.community_membership)
 						const newCommunities = communityLogic.removeCommunity(client.config, existingCommunities, community)
 
 						await client.query.updateQuery('humans', {
