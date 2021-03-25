@@ -27,7 +27,7 @@ function addCommunity(config, existingCommunities, communityToAdd) {
 		newCommunities = [...newCommunities, communityToAdd]
 	}
 
-	return newCommunities.filter((x) => lowercaseCommunities.includes(x))
+	return newCommunities.filter((x) => lowercaseCommunities.includes(x)).sort()
 }
 
 function removeCommunity(config, existingCommunities, communityToRemove) {
@@ -40,7 +40,7 @@ function removeCommunity(config, existingCommunities, communityToRemove) {
 			.filter((x) => x != communityToRemove)
 	}
 
-	return newCommunities.filter((x) => lowercaseCommunities.includes(x))
+	return newCommunities.filter((x) => lowercaseCommunities.includes(x)).sort()
 }
 
 module.exports = { calculateLocationRestrictions, addCommunity, removeCommunity }

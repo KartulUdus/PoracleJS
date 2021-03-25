@@ -112,7 +112,7 @@ class Pokestop extends Controller {
 				return []
 			}
 
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
+			data.matched = this.pointInArea([data.latitude, data.longitude])
 
 			data.gruntTypeId = 0
 			if (data.incident_grunt_type) {

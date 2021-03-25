@@ -68,9 +68,10 @@ exports.run = async (client, msg, args, options) => {
 				const allowedFences = JSON.parse(human.area_restriction)
 				const areas = client.query.pointInArea([lat, lon])
 
-				if (!allowedFences.any((x) => areas.includes(x))) {
+				if (!allowedFences.some((x) => areas.includes(x))) {
 					await msg.reply(translator.translate('This location is not your permitted area'))
 					await msg.react('🙅')
+					return
 				}
 			}
 		}

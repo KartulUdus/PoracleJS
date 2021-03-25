@@ -177,7 +177,7 @@ class Raid extends Controller {
 			data.color = data.gymColor // deprecated
 			data.distime = data.disappearTime // deprecated
 
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
+			data.matched = this.pointInArea([data.latitude, data.longitude])
 
 			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 
