@@ -199,8 +199,8 @@ class DiscordReconciliation {
 					}
 					if (Object.keys(updates).length) {
 						await this.query.updateQuery('humans', updates, { id })
+						this.log.info(`Reconciliation (Discord) Update user ${id} ${name} with communities ${communityList}`)
 					}
-					this.log.info(`Reconciliation (Discord) Update user ${id} ${name} with communities ${communityList}`)
 				}
 			}
 		} catch (err) {
