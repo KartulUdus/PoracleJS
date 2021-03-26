@@ -21,6 +21,7 @@ const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
 const TelegramUtil = require('./lib/telegram/telegramUtil.js')
+const DiscordReconciliation = require('./lib/discord/discordReconciliation')
 
 const { Config } = require('./lib/configFetcher')
 
@@ -75,7 +76,6 @@ const discordCommando = config.discord.enabled ? new DiscordCommando(config.disc
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
-let roleWorker
 let telegram
 let telegramChannel
 
@@ -86,10 +86,6 @@ if (config.discord.enabled) {
 		}
 	}
 	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
-
-	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-		roleWorker = new DiscordWorker(config.discord.token[0], 999, config, logs)
-	}
 }
 
 let telegramUtil
@@ -150,29 +146,56 @@ async function syncTelegramMembership() {
 	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
 }
 
+let discordReconciliation
+
 async function syncDiscordRole() {
 	try {
-		log.verbose('Verification of Discord role membership to Poracle users starting...')
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
-		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
-		let invalidUsers = []
-		for (const guild of config.discord.guilds) {
-			invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
-			usersToCheck = invalidUsers
-		}
-		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing/disabling from dB...')
-			for (const user of invalidUsers) {
-				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckMode != 'ignore') {
-					await removeInvalidUser(user)
-				} else {
-					log.info('config.general.roleCheckMode is set to ignore, not removing')
-				}
+		if (!discordReconciliation) {
+			const worker = discordWorkers[0]
+			if (!worker || worker.busy) {
+				// try again in 30 seconds
+				setTimeout(syncDiscordRole, 30000)
+				return
 			}
-		} else {
-			log.verbose('No invalid users found, all good!')
+			discordReconciliation = new DiscordReconciliation(worker.client, log, config, query, dts)
 		}
+		// "updateChannelNames": true,
+		// 	"updateChannelNotes": true,
+		// 	"unregisterMissingChannels": true
+		if (config.reconciliation.discord.updateChannelNames || config.reconciliation.discord.updateChannelNotes
+			|| config.reconciliation.discord.unregisterMissingChannels) {
+			await discordReconciliation.syncDiscordChannels(config.reconciliation.discord.updateChannelNames,
+				config.reconciliation.discord.updateChannelNotes, config.reconciliation.discord.unregisterMissingChannels)
+		}
+		// "updateUserNames": true,
+		// "removeInvalidUsers": true,
+		// "registerNewUsers": true,
+		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers)	{
+			await discordReconciliation.syncDiscordRole(config.reconciliation.discord.registerNewUsers,
+				config.reconciliation.discord.updateUserNames,
+				config.reconciliation.discord.removeInvalidUsers)
+		}
+
+		// let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
+		// usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
+		// let invalidUsers = []
+		// for (const guild of config.discord.guilds) {
+		// 	invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
+		// 	usersToCheck = invalidUsers
+		// }
+		// if (invalidUsers[0]) {
+		// 	log.info('Invalid users found, removing/disabling from dB...')
+		// 	for (const user of invalidUsers) {
+		// 		log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
+		// 		if (config.general.roleCheckMode != 'ignore') {
+		// 			await removeInvalidUser(user)
+		// 		} else {
+		// 			log.info('config.general.roleCheckMode is set to ignore, not removing')
+		// 		}
+		// 	}
+		// } else {
+		// 	log.verbose('No invalid users found, all good!')
+		// }
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
