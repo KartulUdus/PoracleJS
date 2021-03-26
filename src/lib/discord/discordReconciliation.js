@@ -190,11 +190,12 @@ class DiscordReconciliation {
 					// 	updates.notes = notes
 					// }
 
-					if (!user.area_restriction || !haveSameContents(areaRestriction, JSON.parse(user.area_restriction))) {
+					if (!user.area_restriction
+						|| !haveSameContents(areaRestriction, JSON.parse(user.area_restriction))) {
 						updates.area_restriction = JSON.stringify(areaRestriction)
 					}
 
-					if (!haveSameContents(communityList, JSON.parse(user.community_membership))) { // JSON!
+					if (!user.community_membership || !haveSameContents(communityList, JSON.parse(user.community_membership))) { // JSON!
 						updates.community_membership = JSON.stringify(communityList)
 					}
 					if (Object.keys(updates).length) {
