@@ -107,7 +107,7 @@ class DiscordReconciliation {
 
 			if (!this.config.areaSecurity.enabled) {
 				const before = !!user && !user.admin_disable
-				const after = roleList.some((role) => this.config.discord.userRole.includes(role.id))
+				const after = roleList.some((role) => this.config.discord.userRole.includes(role))
 
 				if (!before && after) {
 					if (!user) {

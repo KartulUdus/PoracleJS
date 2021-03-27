@@ -20,8 +20,9 @@ const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
-const TelegramUtil = require('./lib/telegram/telegramUtil.js')
+// const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 const DiscordReconciliation = require('./lib/discord/discordReconciliation')
+const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
 
 const { Config } = require('./lib/configFetcher')
 
@@ -88,57 +89,28 @@ if (config.discord.enabled) {
 	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
 }
 
-let telegramUtil
 if (config.telegram.enabled) {
 	telegram = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
 		telegramChannel = new TelegramWorker('2', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
-
-	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
-		telegramUtil = new TelegramUtil(config, log, telegraf)
-	}
 }
 
-async function removeInvalidUser(user) {
-	if (config.general.roleCheckMode == 'disable-user') {
-		if (!user.admin_disable) await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: user.id })
-	} else if (config.general.roleCheckMode == 'delete') { // sanity check
-		await query.deleteQuery('egg', { id: user.id })
-		await query.deleteQuery('monsters', { id: user.id })
-		await query.deleteQuery('raid', { id: user.id })
-		await query.deleteQuery('quest', { id: user.id })
-		await query.deleteQuery('lures', { id: user.id })
-		await query.deleteQuery('profiles', { id: user.id })
-		await query.deleteQuery('humans', { id: user.id })
-	}
-}
+let telegramReconciliation
 
 async function syncTelegramMembership() {
 	try {
+		if (!telegramReconciliation) {
+			telegramReconciliation = new TelegramReconciliation(telegraf, log, config, query, dts)
+		}
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'telegram:user', admin_disable: 0 })
-		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
-		let invalidUsers = []
-		for (const channel of config.telegram.channels) {
-			invalidUsers = await telegramUtil.checkMembership(usersToCheck, channel)
-			usersToCheck = invalidUsers
-		}
-
-		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing/disabling from dB...')
-			for (const user of invalidUsers) {
-				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckMode != 'ignore') {
-					await removeInvalidUser(user)
-				} else {
-					log.info('config.general.roleCheckMode is set to ignore, not removing')
-				}
-			}
-		} else {
-			log.verbose('No invalid users found, all good!')
+		if (config.reconciliation.telegram.updateUserNames || config.reconciliation.telegram.removeInvalidUsers)	{
+			await telegramReconciliation.syncTelegramUsers(
+				config.reconciliation.discord.updateUserNames,
+				config.reconciliation.discord.removeInvalidUsers,
+			)
 		}
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
