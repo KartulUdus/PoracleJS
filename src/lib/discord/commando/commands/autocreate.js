@@ -1,7 +1,7 @@
 const PoracleDiscordMessage = require('../../poracleDiscordMessage')
 const PoracleDiscordState = require('../../poracleDiscordState')
 
-//const channelTemplates = require('../../../../../config/channelTemplate.json')
+// const channelTemplates = require('../../../../../config/channelTemplate.json')
 
 exports.run = async (client, msg, [args]) => {
 	try {
