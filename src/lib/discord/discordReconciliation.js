@@ -242,7 +242,7 @@ class DiscordReconciliation {
 					}
 				}
 				const { name } = channel
-				const notes = `${channel.guild.name} / ${channel.parent.name}`
+				const notes = `${channel.guild.name}${channel.parent ? ` / ${channel.parent.name}` : ''}`
 				const updates = {}
 				if (syncNames && user.name !== name) {
 					updates.name = name

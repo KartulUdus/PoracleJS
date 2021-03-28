@@ -173,8 +173,8 @@ class TelegramReconciliation {
 			if (!this.config.areaSecurity.enabled) {
 				channelList.push(...this.config.telegram.channels)
 			} else {
-				for (const community of this.config.areaSecurity.communities) {
-					channelList.push(...community.telegram.channels)
+				for (const community of Object.keys(this.config.areaSecurity.communities)) {
+					channelList.push(...this.config.areaSecurity.communities[community].telegram.channels)
 				}
 			}
 
