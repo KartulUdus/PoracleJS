@@ -57,6 +57,7 @@ exports.run = async (client, msg, [args]) => {
 				name: target.name,
 				area: JSON.stringify([areaName]),
 				language,
+				community_membership: '[]',
 			})
 			await msg.react('✅')
 			let reply = `${client.translator.translate('Channel added')}`

@@ -118,6 +118,7 @@ class DiscordReconciliation {
 							type: 'discord:user',
 							name,
 							area: '[]',
+							community_membership: '[]',
 						})
 						await this.sendGreetings(id)
 					} else if (user.admin_disable && user.disabled_date) {

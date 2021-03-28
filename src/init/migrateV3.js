@@ -178,6 +178,8 @@ async function run() {
 			}
 			human.last_checked = new Date().toUTCString()
 			human.fails = 0
+			human.community_membership = '[]'
+
 			delete human.alerts_sent
 		}
 		for (const monster of monsters) {
