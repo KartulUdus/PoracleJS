@@ -170,8 +170,8 @@ class Monster extends Controller {
 			data.chargeMoveId = encountered ? data.move_2 : 0
 			data.quickMoveNameEng = encountered && this.GameData.moves[data.quickMoveId] ? this.GameData.moves[data.quickMoveId].name : ''
 			data.chargeMoveNameEng = encountered && this.GameData.moves[data.chargeMoveId] ? this.GameData.moves[data.chargeMoveId].name : ''
-			data.height = encountered ? data.height.toFixed(2) : 0
-			data.weight = encountered ? data.weight.toFixed(2) : 0
+			data.height = encountered && data.height ? data.height.toFixed(2) : 0
+			data.weight = encountered && data.weight ? data.weight.toFixed(2) : 0
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0

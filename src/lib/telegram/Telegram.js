@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
+const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
 class Telegram {
@@ -26,7 +27,7 @@ class Telegram {
 		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, this.config.tuning.concurrentTelegramDestinationsPerBot, ((entry) => entry.target))
 		this.bot
 			.use(commandParser(this.translatorFactory))
-			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory))
+			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory, emojiStrip))
 
 		/* set command middleware for each enabled command */
 		this.commandFiles.map((file) => {
