@@ -223,11 +223,6 @@
   //
   "telegram": {
       "enabled": false,                             // whether telegram is enabled
-    // checkRole - whether to check all telegram users for membership of a registration group
-    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
-    //   must be set to actually carry out the deletions rather than just logging them)
-      "checkRole": false,
-      "checkRoleInterval": 6,
     // token - telegram bot token
       "token": "",
     // admins - admin user ids (array)
@@ -240,7 +235,13 @@
     // groupWelcomeText - message text (in channel) when someone registers. Users have to
     //   select the 'start' option on the bot in the telegram client before it can message
     //   them and this can be used to remind them of that
-      "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
+      "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages",
+    // checkRole - whether to check all telegram users for membership of a registration group
+    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
+    //   must be set to actually carry out the deletions rather than just logging them)
+    "checkRole": false,
+    "checkRoleInterval": 6,
+    "registerOnStart": false                      // whether to treat initial /start to bot as a registration request
   },
   //
   // Alert limits - these are so Poracle can limit the amount of messages sent to a user/channel pro-actively

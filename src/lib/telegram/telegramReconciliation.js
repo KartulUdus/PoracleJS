@@ -20,14 +20,26 @@ class TelegramReconciliation {
 	}
 
 	async sendGreetings(id) {
-		if (!this.config.discord.disableAutoGreetings) {
-			const discordUser = await this.client.users.fetch(id)
-
+		if (!this.config.telegram.disableAutoGreetings) {
 			const greetingDts = this.dts.find((template) => template.type === 'greeting' && template.platform === 'telegram' && template.default)
-			const view = { prefix: this.config.discord.prefix }
-			const greeting = this.mustache.compile(JSON.stringify(greetingDts.template))
-			await discordUser.createDM()
-			await discordUser.send(JSON.parse(greeting(view)))
+			if (greetingDts) {
+				const view = { prefix: '/' }
+				const compileMustache = this.mustache.compile(JSON.stringify(greetingDts.template))
+				const greeting = JSON.parse(compileMustache(view))
+
+				let messageText = ''
+				const { fields } = greeting.embed
+
+				for (const field of fields) {
+					const fieldLine = `\n\n${field.name}\n\n${field.value}`
+					if (messageText.length + fieldLine.length > 1024) {
+						await this.telegraf.telegram.sendMessage(id, messageText)
+						messageText = ''
+					}
+					messageText = messageText.concat(fieldLine)
+				}
+				await this.telegraf.telegram.sendMessage(id, messageText)
+			}
 		}
 	}
 
@@ -164,20 +176,40 @@ class TelegramReconciliation {
 		}
 	}
 
+	async syncTelegramUser(id, syncNames, removeInvalidUsers) {
+		this.log.verbose('Reconciliation (Telegram) User role membership for single Poracle user starting...')
+
+		try {
+			const user = await this.query.selectOneQuery('humans', { id, type: 'telegram:user' })
+
+			const channelList = this.getChannelList()
+
+			const telegramInfo = await this.loadTelegramChannels(id, channelList)
+			await this.reconcileUser(id, user, telegramInfo, syncNames, removeInvalidUsers)
+		} catch (err) {
+			this.log.error('Reconciliation (Telegram) User role check failed', err)
+		}
+	}
+
+	getChannelList() {
+		const channelList = []
+		if (!this.config.areaSecurity.enabled) {
+			channelList.push(...this.config.telegram.channels)
+		} else {
+			for (const community of Object.keys(this.config.areaSecurity.communities)) {
+				channelList.push(...this.config.areaSecurity.communities[community].telegram.channels)
+			}
+		}
+		return channelList
+	}
+
 	async syncTelegramUsers(syncNames, removeInvalidUsers) {
 		try {
 			this.log.verbose('Reconciliation (Telegram) User role membership to Poracle users starting...')
 			let usersToCheck = await this.query.selectAllQuery('humans', { type: 'telegram:user' })
 			usersToCheck = usersToCheck.filter((user) => !this.config.telegram.admins.includes(user.id))
 
-			const channelList = []
-			if (!this.config.areaSecurity.enabled) {
-				channelList.push(...this.config.telegram.channels)
-			} else {
-				for (const community of Object.keys(this.config.areaSecurity.communities)) {
-					channelList.push(...this.config.areaSecurity.communities[community].telegram.channels)
-				}
-			}
+			const channelList = this.getChannelList()
 
 			for (const user of usersToCheck) {
 				const telegramInfo = await this.loadTelegramChannels(user.id, channelList)
