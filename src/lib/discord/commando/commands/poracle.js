@@ -80,6 +80,7 @@ exports.run = async (client, msg) => {
 				id: msg.author.id,
 				type: 'discord:user',
 				name: client.emojiStrip(msg.author.username),
+				area: '[]',
 				language,
 				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
 				area_restriction: communityToAdd ? communityLogic.calculateLocationRestrictions(client.config, [communityToAdd]) : null,

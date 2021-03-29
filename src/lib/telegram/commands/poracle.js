@@ -13,10 +13,10 @@ module.exports = async (ctx) => {
 
 	const telegramUser = ctx.update.message.from || ctx.update.message.chat
 
-	const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
-	if (ctx.update.message.chat.type === 'private' && channelName.toLowerCase() !== ctx.state.controller.config.telegram.channel.toLowerCase()) {
-		return controller.logs.log.info(`${userName} tried to register in ${channelName}`)
-	}
+	// const channelName = ctx.update.message.chat.title ? ctx.update.message.chat.title : ''
+	// if (ctx.update.message.chat.type === 'private' && channelName.toLowerCase() !== ctx.state.controller.config.telegram.channel.toLowerCase()) {
+	// 	return controller.logs.log.info(`${userName} tried to register in ${channelName}`)
+	// }
 
 	try {
 		const client = ctx.state.controller
@@ -94,6 +94,7 @@ module.exports = async (ctx) => {
 				type: 'telegram:user',
 				name: client.emojiStrip(userName || ''),
 				language,
+				area: '[]',
 				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
 				area_restriction: communityToAdd ? communityLogic.calculateLocationRestrictions(client.config, [communityToAdd]) : null,
 			})
