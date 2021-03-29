@@ -2,8 +2,8 @@ const { Client } = require('discord.js')
 const fs = require('fs')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
-const emojiStrip = require('emoji-strip')
 const hastebin = require('hastebin-gen')
+const emojiStrip = require('../../../util/emojiStrip')
 
 class DiscordCommando {
 	constructor(token, query, config, logs, GameData, dts, geofence, translatorFactory) {

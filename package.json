@@ -39,7 +39,6 @@
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "emoji-flags": "^1.3.0",
-    "emoji-strip": "^1.0.1",
     "fastify": "^3.12.0",
     "flat-cache": "^3.0.4",
     "fs-extra": "^9.1.0",
