@@ -4,7 +4,7 @@ module.exports = async (fastify, options, next) => {
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
 
 		const secret = req.headers['x-poracle-secret']
-		if (secret !== fastify.config.server.apiSecret) {
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
 			return { webserver: 'unhappy', reason: 'incorrect or missing api secret' }
 		}
 

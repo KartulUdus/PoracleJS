@@ -12,7 +12,8 @@
       "port": "3030",             // port
     // ipWhitelist, ipBlacklist - array of whitelisted or blacklisted addresses
       "ipWhitelist": [],
-      "ipBlacklist": []
+      "ipBlacklist": [],
+      "apiSecret": ""             // apiSecret to use for access to Poracle API -- blank will not work
   },
   //
   // These are general parameters
