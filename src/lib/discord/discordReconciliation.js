@@ -1,7 +1,7 @@
 const { DiscordAPIError } = require('discord.js')
-const emojiStrip = require('emoji-strip')
 const mustache = require('handlebars')
 const communityLogic = require('../communityLogic')
+const emojiStrip = require('../../util/emojiStrip')
 
 const haveSameContents = (a, b) => {
 	for (const v of new Set([...a, ...b])) {

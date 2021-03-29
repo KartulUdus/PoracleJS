@@ -1,5 +1,5 @@
-const emojiStrip = require('emoji-strip')
 const mustache = require('handlebars')
+const emojiStrip = require('../../util/emojiStrip')
 const communityLogic = require('../communityLogic')
 
 const haveSameContents = (a, b) => {
