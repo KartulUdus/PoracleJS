@@ -67,18 +67,20 @@ exports.run = async (client, msg, [args]) => {
 
 			const channelName = format(channelDefinition.channelName, args)
 
-			// create channel in discord
-			const channel = await guild.channels.create(channelName, channelOptions)
-			await msg.reply(`>> Creating ${channelName}`)
-
 			// add role permissions
 			let role
 			if (channelDefinition.roles) {
+				const roleOverwrites = []
 				for (const roleId of channelDefinition.roles) {
 					role = await guild.roles.cache.get(roleId)
-					await channel.updateOverwrite(role, { VIEW_CHANNEL: true })
+					roleOverwrites.push({ id: role, allow: ['VIEW_CHANNEL'] })
 				}
+				channelOptions.permissionOverwrites = roleOverwrites
 			}
+
+			// create channel in discord
+			const channel = await guild.channels.create(channelName, channelOptions)
+			await msg.reply(`>> Creating ${channelName}`)
 
 			// exit loop if simple text channel
 			if (!channelDefinition.controlType) {
