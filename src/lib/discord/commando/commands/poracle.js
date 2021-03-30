@@ -83,7 +83,7 @@ exports.run = async (client, msg) => {
 				area: '[]',
 				language,
 				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
-				area_restriction: communityToAdd ? communityLogic.calculateLocationRestrictions(client.config, [communityToAdd]) : null,
+				area_restriction: communityToAdd ? JSON.stringify(communityLogic.calculateLocationRestrictions(client.config, [communityToAdd])) : null,
 			})
 			await msg.react('✅')
 		}

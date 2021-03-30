@@ -96,7 +96,7 @@ module.exports = async (ctx) => {
 				language,
 				area: '[]',
 				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
-				area_restriction: communityToAdd ? communityLogic.calculateLocationRestrictions(client.config, [communityToAdd]) : null,
+				area_restriction: communityToAdd ? JSON.stringify(communityLogic.calculateLocationRestrictions(client.config, [communityToAdd])) : null,
 			})
 			await ctx.reply('✅')
 		}
