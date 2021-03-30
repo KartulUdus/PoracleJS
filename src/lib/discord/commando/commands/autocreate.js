@@ -1,7 +1,17 @@
+const stripJsonComments = require('strip-json-comments')
+const fs = require('fs')
+const path = require('path')
 const PoracleDiscordMessage = require('../../poracleDiscordMessage')
 const PoracleDiscordState = require('../../poracleDiscordState')
 
-// const channelTemplates = require('../../../../../config/channelTemplate.json')
+function format(str, ...args) {
+	let newStr = str
+	let i = args.length
+	while (i--) {
+		newStr = newStr.replace(new RegExp(`\\{${i}\\}`, 'gm'), args[i])
+	}
+	return newStr
+}
 
 exports.run = async (client, msg, [args]) => {
 	try {
@@ -12,77 +22,108 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
-		if (!msg.guild.me.hasPermission('MANAGE_WEBHOOKS')) {
+		const { guild } = msg
+
+		if (!guild.me.hasPermission('MANAGE_WEBHOOKS')) {
 			return await msg.reply('I have not been allowed to make webhooks!')
 		}
-		if (!msg.guild.me.hasPermission('MANAGE_CHANNELS')) {
+		if (!guild.me.hasPermission('MANAGE_CHANNELS')) {
 			return await msg.reply('I have not been allowed to manage channels!')
 		}
 
-		const category = await msg.guild.channels.create('Category', { type: 'category' })
-
-		const channel = await msg.guild.channels.create('new-channel', {
-			parent: category.id,
-			type: 'text',
-		})
-
-		// await channel.setParent(category)
-		await channel.setTopic('Auto created by PoracleJS')
-
-		let id
-		let type
-		let name
-
-		const channelType = 'bot'
-		if (channelType == 'bot') {
-			id = channel.id
-			type = 'discord:channel'
-			name = channel.name
-		} else {
-			const webhookName = channel.name
-			const res = await channel.createWebhook('Poracle')
-			const webhookLink = res.url
-
-			id = webhookLink
-			type = 'webhook'
-			name = webhookName
+		let fileContents
+		try {
+			fileContents = fs.readFileSync(path.join(__dirname, '../../../../../config/channelTemplate.json'), 'utf8')
+		} catch (err) {
+			return await msg.reply('Cannot read channelTemplate definition')
 		}
 
-		// Create
-		await client.query.insertQuery('humans', {
-			id,
-			type,
-			name,
-			area: '[]',
-			community_membership: '[]',
-		})
+		const channelTemplate = JSON.parse(stripJsonComments(fileContents))
 
-		// Commands
+		const templateName = args.shift()
 
-		const commands = [
-			'area add canterbury',
-			'track everything iv100',
-		]
+		const template = channelTemplate.find((x) => x.name.toLowerCase() === templateName)
+		if (!template || !template.definition) {
+			return await msg.reply('I can\'t find that channel template!')
+		}
 
-		const pdm = new PoracleDiscordMessage(client, msg)
-		const pds = new PoracleDiscordState(client)
+		let categoryId
+		if (template.definition.category) {
+			const category = await guild.channels.create(format(template.definition.category, args), { type: 'category' })
+			categoryId = category.id
+		}
 
-		for (const commandText of commands) {
-			let commandArgs = commandText.trim().split(/ +/g)
-			commandArgs = commandArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
+		for (const channelDefinition of template.definition.channels) {
+			const channelOptions = {
+				type: 'text',
+			}
+			if (categoryId) {
+				channelOptions.parent = categoryId
+			}
 
-			const cmdName = commandArgs.shift()
+			if (channelDefinition.topic) {
+				channelOptions.topic = format(channelDefinition.topic, args)
+			}
 
-			const cmd = require(`../../../poracleMessage/commands/${cmdName}`)
+			const channelName = format(channelDefinition.channelName, args)
+			const channelType = channelDefinition.controlType || 'bot'
+			await msg.reply(`>> Creating ${channelName} control type: ${channelType}`)
 
-			await cmd.run(pds, pdm, commandArgs,
-				{
-					targetOverride: {
-						type,
-						id,
-						name,
-					},
-				})
+			// create channel in discord
+			const channel = await guild.channels.create(channelName, channelOptions)
+
+			// register channel in poracle
+			let id
+			let type
+			let name
+
+			if (channelType == 'bot') {
+				id = channel.id
+				type = 'discord:channel'
+				name = channel.name
+			} else {
+				const webhookName = channel.name
+				const res = await channel.createWebhook('Poracle')
+				const webhookLink = res.url
+
+				id = webhookLink
+				type = 'webhook'
+				name = webhookName
+			}
+
+			// Create
+			await client.query.insertQuery('humans', {
+				id,
+				type,
+				name,
+				area: '[]',
+				community_membership: '[]',
+			})
+
+			// Commands
+
+			const commands = channelDefinition.commands.map((x) => format(x, args))
+
+			const pdm = new PoracleDiscordMessage(client, msg)
+			const pds = new PoracleDiscordState(client)
+			const target = { type, id, name }
+			await msg.reply(`>> Executing as ${target.type} / ${target.name} ${target.type != 'webhook' ? target.id : ''}`)
+
+			for (const commandText of commands) {
+				await msg.reply(`>>> Executing ${commandText}`)
+
+				let commandArgs = commandText.trim().split(/ +/g)
+				commandArgs = commandArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
+
+				const cmdName = commandArgs.shift()
+
+				const cmd = require(`../../../poracleMessage/commands/${cmdName}`)
+
+				await cmd.run(pds, pdm, commandArgs,
+					{
+						targetOverride: target,
+					})
+			}
 		}
 	} catch (err) {
 		client.logs.log.error(`Autocreate command "${msg.content}" unhappy:`, err)
