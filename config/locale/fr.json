@@ -506,5 +506,8 @@
 	"Valid commands are e.g. `{0}quest spinda`, `{0}quest energycharizard`, `{0}quest remove everything`":"Les commandes valides sont par exemple `{0}quete spinda`, `{0}quete energiedracaufeu`, `{0}quete enlever tous`",
 	"Valid commands are e.g. `{0}raid level5`, `{0}raid articuno`, `{0}raid remove everything`":"Les commandes valides sont par exemple `{0}raid niveau5`, `{0}raid artikodin`, `{0}raid enlever tous`",
 	"Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`":"Les commandes valides sont par exemple `{0}suivre reptincel`, `{0}suivre tous iv100`, `{0}suivre griknot d500`",
-	"Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`":"Les commandes valides sont par exemple `{0}ignorer reptincel`, `{0}ignorer tous`"
+	"Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`":"Les commandes valides sont par exemple `{0}ignorer reptincel`, `{0}ignorer tous`",
+	"The {0}{1} command is used to stop all alert messages, is that what you want?":"La commande {0}{1} est utilisée pour arrêter toutes vos alertes, est-ce bien ce que vous voulez ?",
+	"All alert messages have been stopped, you can resume them with {0}{1}":"Toutes vos alertes sont arrêtées, vous pouvez les réactiver avec {0}{1}",
+	"You can start receiving alerts again using {0}{1}":"Vous pouvez réactiver vos alertes avec {0}{1}"
 }
