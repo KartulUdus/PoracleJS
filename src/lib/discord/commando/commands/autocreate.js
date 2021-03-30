@@ -4,7 +4,7 @@ const path = require('path')
 const PoracleDiscordMessage = require('../../poracleDiscordMessage')
 const PoracleDiscordState = require('../../poracleDiscordState')
 
-function format(str, ...args) {
+function format(str, args) {
 	let newStr = str
 	let i = args.length
 	while (i--) {
@@ -25,7 +25,7 @@ exports.run = async (client, msg, [args]) => {
 		const { guild } = msg
 
 		if (!guild.me.hasPermission('MANAGE_WEBHOOKS')) {
-			return await msg.reply('I have not been allowed to make webhooks!')
+			return await msg.reply('I have not been allowed to manage webhooks!')
 		}
 		if (!guild.me.hasPermission('MANAGE_CHANNELS')) {
 			return await msg.reply('I have not been allowed to manage channels!')
@@ -44,7 +44,7 @@ exports.run = async (client, msg, [args]) => {
 
 		const template = channelTemplate.find((x) => x.name.toLowerCase() === templateName)
 		if (!template || !template.definition) {
-			return await msg.reply('I can\'t find that channel template!')
+			return await msg.reply('I can\'t find that channel template! (remember it has to be your first parameter)')
 		}
 
 		let categoryId
@@ -66,11 +66,27 @@ exports.run = async (client, msg, [args]) => {
 			}
 
 			const channelName = format(channelDefinition.channelName, args)
-			const channelType = channelDefinition.controlType || 'bot'
-			await msg.reply(`>> Creating ${channelName} control type: ${channelType}`)
 
 			// create channel in discord
 			const channel = await guild.channels.create(channelName, channelOptions)
+			await msg.reply(`>> Creating ${channelName}`)
+
+			// add role permissions
+			let role
+			if (channelDefinition.roles) {
+				for (const roleId of channelDefinition.roles) {
+					role = await guild.roles.cache.get(roleId)
+					await channel.updateOverwrite(role, { VIEW_CHANNEL: true })
+				}
+			}
+
+			// exit loop if simple text channel
+			if (!channelDefinition.controlType) {
+				continue
+			}
+
+			const channelType = channelDefinition.controlType
+			await msg.reply(`>> Adding control type: ${channelType}`)
 
 			// register channel in poracle
 			let id
@@ -97,7 +113,7 @@ exports.run = async (client, msg, [args]) => {
 				type,
 				name,
 				area: '[]',
-				community_membership: '[]',
+//				community_membership: '[]',
 			})
 
 			// Commands

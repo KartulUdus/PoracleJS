@@ -6,6 +6,7 @@
       "channels":[
         {
           "channelName":"{0}-iv100",
+//          "roles":["ROLEIDXXXXXX"],
           "topic": "Hundos for {0}",
           "controlType":"bot",
           "commands":[
@@ -33,5 +34,4 @@
       ]
     }
   }
-
 ]
