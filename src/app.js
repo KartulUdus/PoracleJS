@@ -737,7 +737,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 						log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
 
 						lastId = profile.id
-						await fastify.monsterController.updateQuery('humans',
+						await query.updateQuery('humans',
 							{
 								current_profile_no: profile.profile_no,
 								area: profile.area,
