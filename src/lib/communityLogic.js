@@ -18,6 +18,24 @@ function calculateLocationRestrictions(config, communityMembership) {
 	return locationRestrictions
 }
 
+function filterAreas(config, communityMembership, areas) {
+	const allowedAreas = []
+
+	for (const community of communityMembership) {
+		const communityName = Object.keys(config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
+		if (communityName) {
+			const communityToAdd = config.areaSecurity.communities[communityName]
+			if (communityToAdd) {
+				communityToAdd.allowedAreas.map((x) => x.toLowerCase()).forEach((x) => {
+					if (!allowedAreas.includes(x)) allowedAreas.push(x)
+				})
+			}
+		}
+	}
+
+	return areas.filter((x) => allowedAreas.includes(x))
+}
+
 function addCommunity(config, existingCommunities, communityToAdd) {
 	const communityKeys = Object.keys(config.areaSecurity.communities)
 	const lowercaseCommunities = communityKeys.map((area) => area.toLowerCase())
