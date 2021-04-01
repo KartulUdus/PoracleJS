@@ -61,4 +61,6 @@ function removeCommunity(config, existingCommunities, communityToRemove) {
 	return newCommunities.filter((x) => lowercaseCommunities.includes(x)).sort()
 }
 
-module.exports = { calculateLocationRestrictions, addCommunity, removeCommunity }
+module.exports = {
+	calculateLocationRestrictions, addCommunity, removeCommunity, filterAreas,
+}
