@@ -1,0 +1,36 @@
+{
+    "username": "{{name}}",
+    "avatar_url": "{{{imgUrl}}}",
+    "content": "This is a Poracle alert {{pad0 5 6}}",
+    "embed": {
+        "color": "{{ivColor}}",
+        "title": "{{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}}  IV: {{round iv}}% Nível: {{level}} {{boostWeatherEmoji}} \nAtk/Def/Sta: {{atk}}/{{def}}/{{sta}}  CP: {{cp}} {{genderData.emoji}}",
+        "fields": [
+        {{#if form}}
+            {
+                "name": "**Pokemon:**",
+                "value": "**🕑 Até às:** <S<https://www.stadiumgaming.gg/rank-checker?min_iv=0&league=1500&att_iv={{atk}}&def_iv={{def}}&hp_iv={{sta}}&include_best_buddy=false&min-iv=0&levelCap=50&pokemon=xxx>S> a {{time}} {{#if confirmedTime}}✅{{else}}❌{{/if}} \n(Resta: {{tthm}}m {{tths}}s{{#if confirmedTime}}{{else}} ❓ {{/if}})\n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{{addr}}} {{#if name}}{{#is name 'Magikarp'}} {{#if (gte weight 13.13)}} \n🥇 **Big Magikarp** 🐠 \n⚖️ {{weight}}Kg {{/if}} {{/is}}{{#is name 'Rattata'}} {{#if (lte weight 2.41)}} \n🥇  **Tiny Rattata** 🐭 \n⚖️ {{weight}}Kg {{/if}} {{else}} {{/is}}  {{/if}}"
+            },
+        {{/if}}
+            {
+                "name": "‎{{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}<:GL:810945989635866654> **Great League:**{{/compare}}{{/compare}}{{/if}}",
+                "value": "‎{{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}  {{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n**Power Up:** {{{replace (replace (replace (replace (getPowerUpCost ../level this.level) 'Stardust' '<:stardust:805212378412089344> | ') 'XL Candies' '<:rarecandyxl:805212901442715648>') 'Candies' '<:rarecandy:805212855313629224> | ') 'and ' ''}}}\n[Go Stadium Rank](<S<https://www.stadiumgaming.gg/rank-checker?min_iv=0&league=1500&att_iv={{../atk}}&def_iv={{../def}}&hp_iv={{../sta}}&include_best_buddy=false&min-iv=0&levelCap=50&pokemon={{{pokemonName this.pokemon}}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/1500/overall/{{{lowercase (pokemonName this.pokemon)}}}/>S>)\n\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}"
+            },
+            {
+                "name": "‎‎{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}<:UL:810946016789790730> **Ultra League:**\n{{/compare}}{{/compare}}{{/if}}",
+                "value": "‎‎{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}} {{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n**Power Up:** {{{replace (replace (replace (replace (getPowerUpCost ../level this.level) 'Stardust' '<:stardust:805212378412089344> | ') 'XL Candies' '<:rarecandyxl:805212901442715648>') 'Candies' '<:rarecandy:805212855313629224> | ') 'and ' ''}}}\n[Go Stadium Rank](<S<https://www.stadiumgaming.gg/rank-checker?min_iv=0&league=2500&att_iv={{../atk}}&def_iv={{../def}}&hp_iv={{../sta}}&include_best_buddy=false&min-iv=0&levelCap=50&pokemon={{{pokemonName this.pokemon}}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/2500/overall/{{{lowercase (pokemonName this.pokemon)}}}/>S>)\n\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}"
+            },
+
+            {
+                "name": "Mapas",
+                "value": "<:gmaps:810525644114493441>[Google]({{{googleMapUrl}}}) | <:imaps:810525670958432356>[Apple]({{{appleMapUrl}}}) | <:waze:810525700184211486>[Waze]({{{wazeMapUrl}}})"
+            }
+        ],
+        "thumbnail": {
+            "url": "{{{imgUrl}}}"
+        },
+        "image": {
+            "url": "{{{staticmap}}}"
+        }
+    }
+}
