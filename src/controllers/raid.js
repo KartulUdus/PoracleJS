@@ -4,10 +4,18 @@ const Controller = require('./controller')
 
 class Raid extends Controller {
 	async raidWhoCares(data) {
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
+		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
+		let strictareastring = ''
+		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
+			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
+			data.matched.forEach((area) => {
+				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
+			})
+			strictareastring = strictareastring.concat('))')
+		}
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
 		join humans on (humans.id = raid.id and humans.current_profile_no = raid.profile_no)
@@ -15,7 +23,8 @@ class Raid extends Controller {
 		(pokemon_id=${data.pokemon_id} or (pokemon_id=9000 and raid.level=${data.level})) and
 		(raid.team = ${data.team_id} or raid.team = 4) and
 		(raid.exclusive = ${data.ex} or raid.exclusive = 0) and
-		(raid.form = ${data.form} or raid.form = 0) `
+		(raid.form = ${data.form} or raid.form = 0)
+		${strictareastring}`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -36,13 +45,13 @@ class Raid extends Controller {
 						raid.distance = 0 and (${areastring})
 					)
 			)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
+			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 		} else {
 			query = query.concat(`
 				and ((raid.distance = 0 and (${areastring})) or raid.distance > 0)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 			`)
+			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 		}
 		// this.log.silly(`${data.gym_id}: Raid query ${query}`)
 		let result = await this.db.raw(query)
@@ -64,17 +73,26 @@ class Raid extends Controller {
 	}
 
 	async eggWhoCares(data) {
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
+		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
+		let strictareastring = ''
+		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
+			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
+			data.matched.forEach((area) => {
+				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
+			})
+			strictareastring = strictareastring.concat('))')
+		}
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on (humans.id = egg.id and humans.current_profile_no = egg.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
 		egg.level = ${data.level} and
 		(egg.team = ${data.team_id} or egg.team = 4) and
-		(egg.exclusive = ${data.ex} or egg.exclusive = 0) `
+		(egg.exclusive = ${data.ex} or egg.exclusive = 0)
+		${strictareastring}`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -95,13 +113,13 @@ class Raid extends Controller {
 						egg.distance = 0 and (${areastring})
 					)
 			)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
+			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 		} else {
 			query = query.concat(`
 				and ((egg.distance = 0 and (${areastring})) or egg.distance > 0)
-				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 			`)
+			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 		}
 
 		this.log.silly(`${data.gym_id}: Egg query ${query}`)
