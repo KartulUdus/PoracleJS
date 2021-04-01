@@ -353,7 +353,8 @@ async function processMessages(msgs) {
 
 						try {
 							if (config.alertLimits.disableOnStop) {
-								await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: msg.target })
+								// This acts like the admin de-registered the user rather than when losing a role so user does not get auto re-registered
+								await query.updateQuery('humans', { admin_disable: 1, disabled_date: null }, { id: msg.target })
 							} else {
 								await query.updateQuery('humans', { enabled: 0 }, { id: msg.target })
 							}
