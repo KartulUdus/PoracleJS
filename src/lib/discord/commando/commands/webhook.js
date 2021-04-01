@@ -70,6 +70,7 @@ exports.run = async (client, msg, [args]) => {
 				type: 'webhook',
 				name: webhookName,
 				area: '[]',
+				community_membership: '[]',
 			})
 			await msg.react('✅')
 		}

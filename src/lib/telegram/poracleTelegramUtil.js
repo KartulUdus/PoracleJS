@@ -7,6 +7,16 @@ class PoracleTelegramUtil {
 		this.prefix = '/'
 	}
 
+	canAdminChannel(id) {
+		const postUserId = this.msg.userId.toString()
+
+		const channelIds = this.client.config.telegram.delegatedAdministration
+		&& this.client.config.telegram.delegatedAdministration.channelTracking
+			? this.client.config.telegram.delegatedAdministration.channelTracking[id.toString()] : null
+		if (!channelIds) return false
+		return channelIds.includes(postUserId)
+	}
+
 	async checkRegistrationStatus(target) {
 		let userHasLocation = false
 		let userHasArea = false
@@ -38,7 +48,7 @@ class PoracleTelegramUtil {
 	}
 
 	async buildTarget(args) {
-		if (!this.msg.isFromAdmin && !this.msg.isDM) {
+		if (!this.msg.isFromAdmin && !this.msg.isDM && !this.canAdminChannel(this.msg.ctx.update.message.chat.id)) {
 			await this.msg.replyByDM(this.client.translator.translate('Please run commands in Direct Messages'))
 
 			return { canContinue: false }
@@ -66,7 +76,7 @@ class PoracleTelegramUtil {
 			let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
 			if (userIdOverride) [, , userIdOverride] = userIdOverride.match(this.client.re.userRe)
 
-			if (this.msg.isFromAdmin && !this.msg.isDM) {
+			if (!this.msg.isDM && (this.msg.isFromAdmin || this.canAdminChannel(this.msg.ctx.update.message.chat.id))) {
 				target = {
 					id: this.msg.ctx.update.message.chat.id.toString(),
 					type: 'telegram:group',
@@ -79,7 +89,7 @@ class PoracleTelegramUtil {
 				target.id = userIdOverride
 			}
 
-			if (this.msg.isFromAdmin && channelName) {
+			if (channelName && (this.msg.isFromAdmin || this.canAdminChannel(channelName))) {
 				target = {
 					name: channelName,
 					type: 'telegram:channel',
@@ -94,7 +104,7 @@ class PoracleTelegramUtil {
 				return { canContinue: false }
 			}
 
-			if (!status.isRegistered && this.msg.isFromAdmin && !this.msg.isDM) {
+			if (!status.isRegistered && (this.msg.isFromAdmin || this.canAdminChannel(this.msg.ctx.update.message.chat.id)) && !this.msg.isDM) {
 				await this.msg.reply(`${this.msg.ctx.update.message.chat.title} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.msg.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
 				return { canContinue: false }
 			}

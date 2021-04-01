@@ -7,6 +7,65 @@ class PoracleDiscordUtil {
 		this.prefix = this.client.config.discord.prefix
 	}
 
+	async calculatePermissions() {
+		let channelPermissions = false
+
+		if (!this.msg.isDM) {
+			const postUserId = this.msg.msg.author.id
+			const postChannelId = this.msg.msg.channel.id
+			const postGuildId = this.msg.msg.channel.guild ? this.msg.msg.channel.guild.id : 'x'
+			const postChannelCategoryId = this.msg.msg.channel.parentID
+
+			try {
+				const guildMember = await this.msg.msg.channel.guild.members.fetch(postUserId)
+				if (guildMember) {
+					const userRoleMembership = []
+
+					for (const role of guildMember.roles.cache.values()) {
+						userRoleMembership.push(role.id)
+					}
+
+					const roleList = this.client.config.discord.delegatedAdministration
+						? this.client.config.discord.delegatedAdministration.channelTracking : null
+
+					if (roleList) {
+						for (const id of Object.keys(roleList)) {
+							if (id == postChannelId || id == postGuildId || id == postChannelCategoryId) {
+								const checkUserAgainst = roleList[id]
+
+								if (postUserId == checkUserAgainst) {
+									channelPermissions = true
+								}
+
+								for (const role of userRoleMembership) {
+									if (role == checkUserAgainst) {
+										channelPermissions = true
+									}
+								}
+							}
+						}
+					}
+				}
+			} catch (err) {
+				this.client.log.error('Calculating user security', err)
+			}
+		}
+
+		this.permissions = {
+			channelTracking: channelPermissions,
+		}
+	}
+
+	canAdminWebhook(name) {
+		const postUserId = this.msg.msg.author.id
+
+		const webHookAdminIds = this.client.config.discord.delegatedAdministration
+			&& this.client.config.discord.delegatedAdministration.webhookTracking
+			? this.client.config.discord.delegatedAdministration.webhookTracking[name] : null
+		if (!webHookAdminIds) return false
+		return webHookAdminIds.includes(postUserId)
+	}
+
 	async checkRegistrationStatus(target) {
 		let userHasLocation = false
 		let userHasArea = false
@@ -38,7 +97,9 @@ class PoracleDiscordUtil {
 	}
 
 	async buildTarget(args) {
-		if (!this.msg.isFromAdmin && !this.msg.isDM) {
+		await this.calculatePermissions()
+
+		if (!this.msg.isDM && !this.msg.isFromAdmin && !this.permissions.channelTracking && !this.permissions.channelCreation) {
 			await this.msg.replyByDM(this.client.translator.translate('Please run commands in Direct Messages'))
 
 			return { canContinue: false }
@@ -63,7 +124,7 @@ class PoracleDiscordUtil {
 			let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
 			if (userIdOverride) [, , userIdOverride] = userIdOverride.match(this.client.re.userRe)
 
-			if (this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
+			if (this.msg.msg.channel.type === 'text' && (this.msg.isFromAdmin || this.permissions.channelTracking)) {
 				target = {
 					id: this.msg.msg.channel.id,
 					name: this.msg.msg.channel.name,
@@ -76,7 +137,7 @@ class PoracleDiscordUtil {
 				target.id = userIdOverride
 			}
 
-			if (this.msg.isFromAdmin && webhookName) {
+			if (webhookName && (this.msg.isFromAdmin || this.canAdminWebhook(webhookName))) {
 				target = {
 					name: webhookName,
 					type: 'webhook',
@@ -91,7 +152,7 @@ class PoracleDiscordUtil {
 				return { canContinue: false }
 			}
 
-			if (!status.isRegistered && this.msg.isFromAdmin && this.msg.msg.channel.type === 'text') {
+			if (!status.isRegistered && (this.msg.isFromAdmin || this.permissions.channelTracking) && this.msg.msg.channel.type === 'text') {
 				await this.msg.reply(`${this.msg.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
 				return { canContinue: false }
 			}

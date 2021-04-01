@@ -62,6 +62,20 @@ exports.run = async (client, msg, args, options) => {
 			placeConfirmation = locations[0].city ? ` **${locations[0].city} - ${locations[0].country}** ` : ` **${locations[0].country}** `
 		}
 
+		if (target.type.includes(':user') && client.config.areaSecurity.enabled && !msg.isFromAdmin) {
+			const human = await client.query.selectOneQuery('humans', { id: target.id })
+			if (human.area_restriction) {
+				const allowedFences = JSON.parse(human.area_restriction)
+				const areas = client.query.pointInArea([lat, lon])
+
+				if (!allowedFences.some((x) => areas.includes(x))) {
+					await msg.reply(translator.translate('This location is not your permitted area'))
+					await msg.react('🙅')
+					return
+				}
+			}
+		}
+
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
 		message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
 
