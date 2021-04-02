@@ -29,3 +29,5 @@ services:
       PORACLE_DB_PASSWORD: poracle_secure_database_password
     volumes:
       - ./config/:/usr/src/app/config/
+      - ./logs/:/usr/src/app/logs/
+      - ./.cache/:/usr/src/app/.cache/

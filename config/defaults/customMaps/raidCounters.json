@@ -1,0 +1,17 @@
+{
+  "name": "raidCounters",
+  "map": {
+    "144": {
+      "trainers": "2",
+      "counters": "Rampardos, Shadow Tyranitar, Rhyperior, Terrakion, Shadow Omastar & Tyranitar"
+    },
+    "145": {
+      "trainers": "3",
+      "counters": "Shadow Mamoswine, Shadow Tyranitar, Rhyperior, Shadow Mewtwo, Mega Abomasnow & Mamoswine"
+    },
+    "146": {
+      "trainers": "2",
+      "counters": "Shadow Tyranitar, Rampardos, Rhyperior, Terrakion, Shadow Omastar & Shadow Aerodactyl"
+    }
+  }
+}

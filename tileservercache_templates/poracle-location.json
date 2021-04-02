@@ -1,0 +1,20 @@
+{
+    "style": "klokantech-basic",
+    "latitude": #(latitude),
+    "longitude": #(longitude),
+    "zoom": 15,
+    "width": 500,
+    "height": 250,
+    "scale": 1,
+    "markers": [
+        {
+            "url": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/NPCs/f_poses_empty_icon.png",
+            "latitude": #(latitude),
+            "longitude": #(longitude),
+            "width": 20,
+            "height": 55,
+            "x_offset": 0,
+            "y_offset": -20
+        }
+    ]
+}

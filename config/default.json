@@ -1,108 +1,328 @@
 {
-    "server": {
-        "host": "127.0.0.1",
-        "port": "3030",
-        "ipWhitelist": [],
-        "ipBlacklist": []
-    },
-    "general": {
-        "environment": "production",
-        "alertMinimumTime" : 120,
-        "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
-        "locale": "en",
-        "weatherChangeAlert": false,
-        "disabledCommands": [],
-        "disablePokemon": false,
-        "disableRaid": false,
-        "disableInvasion": false,
-        "disablePokestop": false,
-        "disableQuest": false,
-        "disableWeather": false
-    },
-    "logger": {
-        "level": "info",
-        "logSize": 25
-    },
-    "database": {
-        "client": "sqlite",
-        "conn": {
-            "host": "127.0.0.1",
-            "database": "poracle",
-            "user": "poracleuser",
-            "password": "poraclepassword",
-            "port": 3306
-        }
-    },
-    "locale": {
-        "timeformat": "en-gb",
-        "time": "LTS",
-        "addressFormat": "{{ streetName}} {{ streetNumber }}:",
-        "language": "en"
-    },
-    "geofence": {
-        "path": "./config/geofence.json",
-        "defaultGeofenceName": "city",
-        "defaultGeofenceColor": "#3399ff"
-    },
-    "pvp": {
-        "pvpEvolutionDirectTracking": false,
-        "pvpDisplayMaxRank": 10,
-        "pvpDisplayGreatMinCP": 1450,
-        "pvpDisplayUltraMinCP": 2450,
-        "pvpFilterMaxRank": 10,
-        "pvpFilterGreatMinCP": 1450,
-        "pvpFilterUltraMinCP": 2450
-    },
-    "tracking": {
-        "disableEverythingTracking": false,
-        "forceEverythingSeparately": false,
-        "defaultDistance": 0,
-        "maxDistance": 0
-    },
-    "discord": {
-        "enabled": true,
-        "checkRole": false,
-        "checkRoleInterval": 6,
-        "unknownResponse": false,
-        "invite": "",
-        "token": [],
-        "guilds": ["358180805031493634"],
-        "channels": ["533927791096233984"],
-        "userRole": ["roleId1", "358207117951369217"],
-        "admins": ["222742859059560458"],
-        "prefix": "!",
-        "limitSec": 240,
-        "limitAmount": 20,
-        "ivColors": [
-            "#9D9D9D",
-            "#FFFFFF",
-            "#1EFF00",
-            "#0070DD",
-            "#A335EE",
-            "#FF8000"
-        ],
-        "dmLogChannelID": "",
-        "dmLogChannelDeletionTime": 0
+  // **** This is the Poracle default configuration settings. Do not change this file,
+  // **** It is updated by us when new config parameters are added
+
+  // **** Copy any sections you wish to modify your local.json
+
+  //
+  // Server settings
+  //
+  "server": {
+      "host": "127.0.0.1",        // host name to listen on 127.0.0.1 only localhost; 0.0.0.0 would be in all network interfaces
+      "port": "3030",             // port
+    // ipWhitelist, ipBlacklist - array of whitelisted or blacklisted addresses
+      "ipWhitelist": [],
+      "ipBlacklist": []
+  },
+  //
+  // These are general parameters
+  //
+  "general": {
+      "environment": "production",              // leave as 'production'
+      "alertMinimumTime" : 120,                 // time inside which alerts will not be generated (120s - 2mins before expiration no alert)
+    // imgUrl - base url for poracle creation of {{imgUrl}} reference
+      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
+    // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers
+      "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
+      "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
+    // disabledCommands - array of commands which will be disabled from use
+      "disabledCommands": [],
+    // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
+    //    invasion hook processing for RDM systems
+      "disablePokemon": false,
+      "disableRaid": false,
+      "disablePokestop": false,
+      "disableInvasion": false,
+      "disableLure": false,
+      "disableQuest": false,
+      "disableWeather": false,
+    // roleCheckMode (case sensitive)
+    // "ignore" - log and don't delete/disable users once required role is removed
+    // "delete" - delete user from database along with trackings once required role is removed
+    // "disable-user" - disable user once required role is removed and re-enable once it's restored, trackings will remain
+      "roleCheckMode": "ignore",
+    // availableLanguages
+    // - This is an array of available languages that users can swap between using the !language command
+    // - Each language can have it's own call word which pre-sets that language, and you also define the help text
+    // - command so that Poracle can always answer help in native language regardless of the users current settings
+    // An example might be:
+    //         "availableLanguages": {
+    //            "en": {"poracle": "poracle", "help": "help" },
+    //            "de": {"poracle": "dasporacle", "help": "hilfe" },
+    //            "fr": {"poracle": "leporacle", "help": "aide" }
+    //        },
+      "availableLanguages": {
       },
-      "telegram": {
-        "enabled": false,
-        "token": "",
-        "admins": [""],
-        "channels": [""]
+      "defaultTemplateName": 1,               // default template name/number to use when users add new trackings
+    // persistDuplicateCache - whether to store the webhook duplicate cache on exit. If you have a busy system
+    //   this could be very large and slow down shutdown (many gigabytes) and startup. This is stored in the .cache
+    //   directory
+      "persistDuplicateCache": false
+  },
+
+  //
+  // Log levels - silly, debug, verbose, info, warn
+  //
+  // Suggestion - start at verbose, info will be a bit less logging. If you are trying to track down an issue
+  // debug has more detail.
+  //
+  "logger": {
+      "consoleLogLevel": "verbose",       // this is the level displayed on the screen (and perhaps in pm2 or systemd logs if you run that way)
+      "logLevel": "verbose",              // this is the log level on disk, affecting all logs
+      "enableLogs": {
+        "webhooks": false,                // turn on hourly webhook log (can be quite large)
+        "discord": true,                  // turn on discord log (for outbound messages to discord users and channels)
+        "telegram": true                  // turn on telegram log (for outbound messages to telegram users, groups and channels)
       },
-      "geocoding": {
-        "provider": "poracle",
-        "providerURL": "Your Nominatim Server Address",
-        "staticProvider": "poracle",
-        "staticProviderURL": "Your TileServerCache Server Address",
-        "geocodingKey":["Your Google Geocoding Key if you Use google as provider"],
-        "staticKey":["Your MapQuest or Google Key"],
-        "width": 320,
-        "height": 200,
-        "zoom": 15,
-        "spriteHeight": 20,
-        "spriteWidth": 20,
-        "scale": 2,
-        "type": "klokantech-basic"
+      "dailyLogLimit": 7,                 // the number of days to keep the daily logs (everything aside from webhooks)
+      "webhookLogLimit": 12               // the number of hours to keep the webhook logs, if enabled
+  },
+
+  //
+  // Database connection strings.  client should be mysql (sqlite3 no longer supported).
+  //
+  "database": {
+      "client": "mysql",
+      "conn": {
+          "host": "127.0.0.1",
+          "database": "poracle",
+          "user": "poracleuser",
+          "password": "poraclepassword",
+          "port": 3306
       }
+  },
+  //
+  //
+  "locale": {
+      "timeformat": "en-gb",
+      "time": "LTS",
+    // addressFormat - how an address is consutructed into the {{addr}} tag
+      "addressFormat": "{{{streetName}}} {{streetNumber}}",
+    // language - this is the secondary language that is used for 'alt' translation in dts.  This is rarely used now
+    //   poracle now has multi-lingual support but can be useful for retrieving english language detail for web links
+    //   for example
+      "language": "en"
+  },
+
+  //
+  // Geofence - default format is that created here http://geo.jasparke.net/
+  //   You can also use a geojson file if you would like to share with other tools
+  //
+  "geofence": {
+      "path": "./config/geofence.json",
+      "defaultGeofenceName": "city",               // default fence name if your fence does not have names
+      "defaultGeofenceColor": "#3399ff"
+  },
+
+  //
+  // Weather support
+  //
+  "weather": {
+      "weatherChangeAlert": false,                  // To enable or disable the weather change alerts
+      "showAlteredPokemon": false,                  // Track weather changed pokémon to be able to be shown in DTS
+      "showAlteredPokemonStaticMap": false,         // Show weather changed on static map
+      "showAlteredPokemonMaxCount": 10,             // Max number of changed pokémon allowed per alert
+      "enableWeatherForecast": false,               // To enable or disable weather forecast (using accuweather)
+    // AccuWeather API keys - array of keys, poracle will rotate through keys
+      "apiKeyAccuWeather": [""],
+      "apiKeyDayQuota": 50,                         // Maximum API calls allowed per key per day
+      "smartForecast": false,                       // use smart update of weather forecast (pull on demand if no weather data available for a given cell, otherwise will wait for next standard refresh)
+      "localFirstFetchHOD": 3,                      // First hour of the day for the first API call (3am local seems best)
+      "forecastRefreshInterval": 8                  // API call interval
+  },
+
+  //
+  // PVP tracking fine tuning
+  // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean
+  //   would match an eevee)
+  //
+  "pvp": {
+      "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
+    // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
+    //   a filtering calculation
+      "pvpDisplayMaxRank": 10,
+      "pvpDisplayGreatMinCP": 1450,
+      "pvpDisplayUltraMinCP": 2450,
+    // pvpFilter* - these filters are used as minimums on the track command to help users get
+    //   PVP tracking right and to eliminate unexpectedly large tracks
+      "pvpFilterMaxRank": 10,
+      "pvpFilterGreatMinCP": 1450,
+      "pvpFilterUltraMinCP": 2450
+  },
+  //
+  // tracking configuration - this section contains restrictions around tracking
+  //
+  "tracking": {
+    // everythingFlagPermissions defines how the 'everything' flag is treated by the !track command.
+    //    allow-any: the use of everything is unrestricted, it is recorded as a wildcard, and users can use 'individually' to get individual rows
+    //    allow-and-always-individually: the use of everything is unrestricted and recorded as individual rows for each pokemon tracked
+    //    allow-and-ignore-individually: the use of everything is unrestricted but users can't opt for individual tracking rows
+    //    deny: users cannot track for everything and must track against individual pokemon
+      "everythingFlagPermissions": "allow-any",
+      "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
+      "maxDistance": 0                            // restrict users from having too large a tracking circle
+  },
+  //
+  // stats configuration
+  //
+  "stats": {
+    "maxPokemonId": 810,              // current max Pokemon Id to consider in lists
+    "minSampleSize": 10000,           // minimum number of Pokemon to process before broadcasting stats to the controllers
+    "pokemonCountToKeep": 8,          // period for stats calculation in hours
+    "rarityRefreshInterval": 5,       // interval for rarity stats broadcast to controllers in minutes
+    "rarityGroup2Uncommon": 1,        // percentage of seen Pokemon to consider Uncommon - 1% of total
+    "rarityGroup3Rare": 0.5,          // percentage of seen Pokemon to consider Rare - 0.5% of total
+    "rarityGroup4VeryRare": 0.03,     // percentage of seen Pokemon to consider Very Rare - 0.03% of total
+    "rarityGroup5UltraRare": 0.01,    // percentage of seen Pokemon to consider Ultra Rare - 0.01% of total
+    // Array of Pokemon ID to exclude from Rare / Very Rare and Ultra Rare lists
+    "excludeFromRare": [1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 69, 70, 71, 72, 73, 74, 75, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 133, 137, 138, 139, 140, 141, 142, 147, 152, 153, 155, 156, 158, 159, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 173, 177, 178, 179, 180, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 198, 199, 200, 202, 203, 204, 206, 207, 208, 209, 210, 211, 213, 214, 215, 216, 218, 219, 220, 223, 224, 225, 226, 227, 228, 231, 232, 234, 246, 252, 253, 255, 256, 258, 259, 261, 262, 263, 264, 265, 270, 271, 273, 274, 276, 277, 278, 279, 280, 283, 284, 285, 286, 287, 288, 293, 294, 295, 296, 299, 300, 301, 302, 303, 304, 305, 307, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 320, 322, 325, 326, 328, 329, 331, 332, 333, 335, 336, 337, 338, 339, 340, 341, 342, 343, 345, 346, 347, 348, 349, 351, 353, 354, 355, 356, 361, 363, 364, 365, 370, 371, 374, 387, 388, 390, 391, 393, 394, 396, 397, 399, 400, 401, 402, 408, 410, 412, 415, 418, 419, 421, 422, 425, 427, 428, 431, 432, 434, 435, 436, 449, 451, 453, 456, 457, 459, 460, 495, 496, 498, 499, 501, 502, 504, 505, 506, 507, 509, 511, 513, 515, 519, 520, 522, 524, 527, 529, 535, 536, 538, 539, 543, 544, 546, 550, 554, 557, 562, 568, 572, 574, 577, 580, 582, 585, 588, 590, 595, 613, 616, 624, 650, 653, 656, 659, 661, 667]
+  },
+  //
+  // Configure your discord bot(s)
+  //
+  "discord": {
+      "enabled": true,                                // is discord enabled?
+      "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
+    // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
+    //   hours, deleting them if not (note general.roleCheckMode must be set to
+    //   actually carry out the deletions rather than just logging them)
+      "checkRole": false,
+      "checkRoleInterval": 6,
+    // token - array of discord tokens - poracle can support any number of bots for transmitting
+    //   messages but the first will be used as the command controller
+      "token": [""],
+    // guilds - the guilds (servers) that poracle will be on
+      "guilds": [""],
+    // channels - the ids of channels that can be used for the !poracle registration or alternatives by language
+      "channels": [""],
+    // userRoles - role IDs which will automatically grant poracle access (without registration required). Can be empty
+      "userRole": [""],
+    // admins - the IDs of admins (those who can add channels using !channel add and perform other admin functions)
+      "admins": [""],
+      "prefix": "!",                                  // prefix for poracle commands, usually '!'
+    // ivColors - array of 6 color codes for pokemon IV rankings
+      "ivColors": [
+        "#9D9D9D",
+        "#FFFFFF",
+        "#1EFF00",
+        "#0070DD",
+        "#A335EE",
+        "#FF8000"
+    ],
+      "dmLogChannelID": "",                           // an ID of a channel to use to log all poracle commands to (to watch users)
+      "dmLogChannelDeletionTime": 0,                  // time to clean up after (minutes) - 0 do not delete
+      "messageDeleteDelay": 0,                        // extra time to add on to a message 'clean' to leave behind (in ms)
+    // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
+      "unrecognisedCommandMessage": "",
+    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+      "unregisteredUserMessage": ""
+  },
+
+  //
+  // Telegram settings
+  //
+  "telegram": {
+      "enabled": false,                             // whether telegram is enabled
+    // checkRole - whether to check all telegram users for membership of a registration group
+    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
+    //   must be set to actually carry out the deletions rather than just logging them)
+      "checkRole": false,
+      "checkRoleInterval": 6,
+    // token - telegram bot token
+      "token": "",
+    // admins - admin user ids (array)
+      "admins": [""],
+    // channels - these are the groups that can be used for registration (it should really
+    //   be called groups...). Note if they don't start with -100 then they may not be
+    //   supergroups yet - google to find out how to make your group one.
+    //   You can get the current group (and your) ids with the /identify command
+      "channels": [""],
+    // groupWelcomeText - message text (in channel) when someone registers. Users have to
+    //   select the 'start' option on the bot in the telegram client before it can message
+    //   them and this can be used to remind them of that
+      "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages"
+  },
+  //
+  // Alert limits - these are so Poracle can limit the amount of messages sent to a user/channel pro-actively
+  // to avoid individual users hogging the system (or channel explosions during an event)
+  //
+  "alertLimits": {
+    "timingPeriod": 240,          // seconds over which limits should be calculated
+    "dmLimit": 20,                // limit of number of messages a user can receive in the period
+    "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
+    "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
+    "disableOnStop": false,       // whether user should be admin disabled rather than just stopped (require admin assistance for restart)
+    // allow override for specific channel ids in - id can be a channel/user id or a webhook name
+    //    "limitOverride": {
+    //        "id": limit,
+    //        "id": limit
+    //    }
+    "limitOverride": {
+
+    }
+  },
+  //
+  // geocoding section
+  //
+  "geocoding": {
+    //  provider, providerURL - these are used for address lookups. Can be 'none',
+    //   'nominatim' for a local nominatim installation (recommended) https://github.com/mediagis/nominatim-docker
+    //   or google (geocoding key provides an array of google API keys)
+      "provider": "none",
+      "providerURL": "",
+      "cacheDetail": 3,     // number of decimal places of lon/lat to use while caching geocoding (default 3 - or use 4 for 100x more detail)
+    // staticProvider - this is your provider of map tiles; can be tileservercache
+    //   (swift tile server - https://github.com/123FLO321/SwiftTileserverCache)
+    //   or google,osm,mapbox - staticKey provides an array of keys to use
+    //   width/height/zoom/etc provide parameters for these while tileservercache
+    //   uses templates (examples provided in tileservercache_templates folder)
+      "staticProvider": "none",
+      "staticProviderURL": "",
+    // staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook type
+      "staticMapType": {
+        "pokemon": "staticMap",
+        "raid": "staticMap",
+        "pokestop": "staticMap",
+        "quest": "staticMap",
+        "weather": "staticMap",
+        "location": "staticMap"
+      },
+    // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
+      "geocodingKey":[""],
+    // staticKey - google or mapquest keys for provision of tiles - can be array and poracle will cycle, and parameters to use when requesting tiles
+      "staticKey":[""],
+      "width": 320,
+      "height": 200,
+      "zoom": 15,
+      "spriteHeight": 20,
+      "spriteWidth": 20,
+      "scale": 2,
+      "type": "klokantech-basic"
+    },
+  //
+  // Fine tuning.  We do not recommend that you change these settings without talking to us in discord.
+  // But for reference here are some internal settings that can be tunes.
+  // Change these numbers slowl. Remember that inbound performance is not how long it takes to process an individual alert but how your
+  // webhook queue is kept under control; if this clears nicely in between drops from your scanner you are keeping up.  For outbound, a lower number of
+  // concurrent senders will reduce chance of hitting the global rate limit (probably) which is why we haven't defaulted too high here
+  //
+  // maxDatabaseConnections - This is the max number of database connections Poracle can have (per worker)
+  // webhookProcessingWorkers - Number of threads to run inbound webhook workers.  Two is enough for very big systems, going too high is probably
+  //     counter productive so talk to me before playing with this one
+  // concurrentWebhookProcessorsPerWorker - Number of inbound webhooks that can be processed at once per worker thread. Since each requires a database
+  //     connection for a query this should be lower than the maxDatabaseConnections
+  // concurrentDiscordDestinationsPerBot - How many concurrent messages should be queued for sending by the discord.js based bots. Discord rate limits
+  //     by route as well as a global limit so this will message 5 people at once
+  // concurrentTelegramDestinationsPerBot - How many concurrent messages should be queued for sending by the Telegram/telegraf based bots. Telegram rate
+  //     limits by route as well as a global limit so this will message 5 people at once
+  // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
+  //
+  "tuning": {
+    "maxDatabaseConnections": 15,
+    "webhookProcessingWorkers": 2,
+    "concurrentWebhookProcessorsPerWorker": 10,
+    "concurrentDiscordDestinationsPerBot": 5,
+    "concurrentTelegramDestinationsPerBot": 5,
+    "concurrentDiscordWebhookConnections": 10
+  }
 }

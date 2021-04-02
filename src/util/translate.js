@@ -3,7 +3,27 @@ const path = require('path')
 
 class Translator {
 	constructor(region) {
-		this.data = fs.existsSync(path.join(__dirname, `../../config/locale/${region}.json`)) ? require(path.join(__dirname, `../../config/locale/${region}.json`)) : {}
+		const moveNames = fs.existsSync(path.join(__dirname, `locale/moveNames_${region}.json`)) ? require(path.join(__dirname, `locale/moveNames_${region}.json`)) : {}
+		const pokemonNames = fs.existsSync(path.join(__dirname, `locale/pokemonNames_${region}.json`)) ? require(path.join(__dirname, `locale/pokemonNames_${region}.json`)) : {}
+		const defaultData = fs.existsSync(path.join(__dirname, `../../config/locale/${region}.json`)) ? require(path.join(__dirname, `../../config/locale/${region}.json`)) : {}
+		const dataAddition = fs.existsSync(path.join(__dirname, `../../config/custom.${region}.json`)) ? require(path.join(__dirname, `../../config/custom.${region}.json`)) : {}
+		this.data = {
+			...moveNames, ...pokemonNames, ...defaultData, ...dataAddition,
+		}
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	format(str, ...args) {
+		let newStr = str
+		let i = args.length
+		while (i--) {
+			newStr = newStr.replace(new RegExp(`\\{${i}\\}`, 'gm'), args[i])
+		}
+		return newStr
+	}
+
+	translateFormat(bit, ...args) {
+		return this.format(this.data[bit] ? this.data[bit] : bit, ...args)
 	}
 
 	translate(bit, lowercase = false) {

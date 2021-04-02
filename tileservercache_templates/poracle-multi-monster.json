@@ -1,0 +1,73 @@
+{
+    "grid": [
+        {
+            "direction": "first",
+            "maps": [
+                {
+                    "direction": "first",
+                    "map": {
+                        "style": "klokantech-basic",
+                        "latitude": #(latitude),
+                        "longitude": #(longitude),
+                        "zoom": 15,
+                        "width": 350,
+                        "height": 250,
+                        "scale": 2,
+                        "markers": [
+                            {
+                                "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_#if(form != nil):#pad(form, 2)#else:00#endif.png",
+                                "fallback_url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_00.png",
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "width": 20,
+                                "height": 20
+                            }
+                        ],
+                        "circles": [
+                            {
+                                "fill_color": "rgba(255,255,255,0.6)",
+                                "stroke_color": "\#C7C7C7",
+                                "stroke_width": 1,
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "radius": 40
+                            }
+                        ]
+                    }
+                },
+                {
+                    "direction": "right",
+                    "map": {
+                        "style": "mapbox-sattelite",
+                        "latitude": #(latitude),
+                        "longitude": #(longitude),
+                        "zoom": 18,
+                        "width": 400,
+                        "height": 500,
+                        "scale": 1,
+                        "markers": [
+                            {
+                                "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_#if(form != nil):#pad(form, 2)#else:00#endif.png",
+                                "fallback_url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_00.png",
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "width": 60,
+                                "height": 60
+                            }
+                        ],
+                        "circles": [
+                            {
+                                "fill_color": "rgba(255,255,255,0.4)",
+                                "stroke_color": "rgba(255,255,255,0.25)",
+                                "stroke_width": 1,
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "radius": 40
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
