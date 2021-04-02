@@ -6,7 +6,7 @@ module.exports = async (ctx) => {
 
 	const { controller } = ctx.state
 
-	const userName = `${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name ? ctx.update.message.from.last_name : ''} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`
+	const userName = controller.emojiStrip(`${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name ? ctx.update.message.from.last_name : ''} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`)
 	if (ctx.update.message.chat.type === 'private') {
 		return controller.logs.log.info(`${userName} tried to register in direct message`)
 	}

@@ -37,6 +37,7 @@ exports.run = async (client, msg, args, options) => {
 		let message = ''
 		let locationText
 		let adminExplanation = ''
+		let restartExplanation = ''
 		if (msg.isFromAdmin) {
 			adminExplanation = `Tracking details for **${target.name}**\n`
 		}
@@ -46,7 +47,10 @@ exports.run = async (client, msg, args, options) => {
 		} else {
 			locationText = `\n${translator.translate('You have not set a location yet')}`
 		}
-		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${locationText}`, { style: 'markdown' })
+		if (!human.enabled) {
+			restartExplanation = `\n${translator.translateFormat('You can start receiving alerts again using {0}{1}', util.prefix, translator.translate('start'))}`
+		}
+		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${restartExplanation}${locationText}`, { style: 'markdown' })
 
 		if (human.area != '[]') {
 			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)

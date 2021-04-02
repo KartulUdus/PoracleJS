@@ -66,7 +66,7 @@ class DiscordWebhookWorker {
 					}
 					await this.sleep(retryAfterMs)
 					shouldRetry = true
-				} else if (res.status !== 200) {
+				} else if (res.status < 200 || res.status > 299) {
 					this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
 				}
 				this.logs.discord.silly(`${logReference}: ${data.name} WEBHOOK results ${data.target} ${res.statusText} ${res.status}`, res.headers)
