@@ -22,13 +22,33 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
-		const { guild } = msg
+		let { guild } = msg
+
+		let guildIdOverride = args.find((arg) => arg.match(client.re.guildRe))
+		if (guildIdOverride) [, , guildIdOverride] = guildIdOverride.match(client.re.guildRe)
+
+		if (guildIdOverride) {
+			try {
+				guild = await msg.client.guilds.fetch(guildIdOverride)
+			} catch {
+				return await msg.reply('I was not able to retrieve that guild')
+			}
+		}
+
+		if (!guild) {
+			return await msg.reply('No guild has been set, either execute inside a channel or specify guild<id>')
+		}
 
 		if (!guild.me.hasPermission('MANAGE_WEBHOOKS')) {
 			return await msg.reply('I have not been allowed to manage webhooks!')
 		}
 		if (!guild.me.hasPermission('MANAGE_CHANNELS')) {
 			return await msg.reply('I have not been allowed to manage channels!')
+		}
+
+		// Remove arguments that we don't want to keep
+		for (let i = 0; i < args.length; i++) {
+			if (args[i].match(client.re.guildRe)) args.splice(i, 1)
 		}
 
 		let fileContents
@@ -69,7 +89,7 @@ exports.run = async (client, msg, [args]) => {
 
 			// add role permissions
 			let roleId
-			let allowed = []
+			const allowed = []
 			if (channelDefinition.roles) {
 				const roleOverwrites = []
 				for (const role of channelDefinition.roles) {
@@ -89,6 +109,7 @@ exports.run = async (client, msg, [args]) => {
 
 			// exit loop if simple text channel
 			if (!channelDefinition.controlType) {
+				// eslint-disable-next-line no-continue
 				continue
 			}
 
@@ -120,7 +141,7 @@ exports.run = async (client, msg, [args]) => {
 				type,
 				name,
 				area: '[]',
-//				community_membership: '[]',
+				// community_membership: '[]',
 			})
 
 			// Commands
