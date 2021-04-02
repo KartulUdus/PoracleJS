@@ -10,6 +10,10 @@ exports.run = async (client, msg, args, options) => {
 		if (!canContinue) return
 		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 
+		if (!client.config.general.availableLanguages.length) {
+			return await msg.react('🙅')
+		}
+
 		const translator = client.translatorFactory.Translator(language)
 
 		// Remove arguments that we don't want to keep for processing
