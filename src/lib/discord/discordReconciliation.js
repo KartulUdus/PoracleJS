@@ -137,6 +137,23 @@ class DiscordReconciliation {
 						await this.disableUser(user)
 					}
 				}
+				if (before && after) {
+					// check options for any changes here
+					// should ignore admin?
+
+					const updates = {}
+					if (syncNames && user.name != name) { // check if we should update name
+						updates.name = name
+					}
+
+					// if (user.notes != notes) {
+					// 	updates.notes = notes
+					// }
+					if (Object.keys(updates).length) {
+						await this.query.updateQuery('humans', updates, { id })
+						this.log.info(`Reconciliation (Discord) Update user ${id} ${name}`)
+					}
+				}
 			} else {
 				const communityList = []
 
