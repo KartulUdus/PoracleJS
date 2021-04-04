@@ -92,6 +92,10 @@ class Telegram {
 		if (Object.keys(this.commands).includes(command.command)) {
 			return this.commands[command.command](ctx)
 		}
+		if (ctx.update.message.chat.type === 'private'
+				&& this.config.telegram.unrecognisedCommandMessage) {
+			ctx.reply(this.config.telegram.unrecognisedCommandMessage)
+		}
 	}
 
 	// eslint-disable-next-line class-methods-use-this
