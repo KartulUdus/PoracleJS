@@ -241,6 +241,8 @@
     //   select the 'start' option on the bot in the telegram client before it can message
     //   them and this can be used to remind them of that
       "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages",
+    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+      "unregisteredUserMessage": "",
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": ""
   },
