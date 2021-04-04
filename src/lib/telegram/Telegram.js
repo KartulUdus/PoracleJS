@@ -29,25 +29,30 @@ class Telegram {
 			.use(commandParser(this.translatorFactory))
 			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory, emojiStrip))
 
-		/* set command middleware for each enabled command */
+		this.commands = {}
+
+		// use bot control for identify command so it works in channels
+		this.bot.command('identify', require('./commands/identify'))
+
+		/* load available commands into command structure */
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 			const commandName = file.split('.')[0]
 			if (!this.config.general.disabledCommands.includes(commandName)) {
 				this.enabledCommands.push(commandName)
-				this.bot.command(commandName, this.tempProps)
+				this.commands[commandName] = this.tempProps
 
 				const translatedCommands = this.translatorFactory.translateCommand(commandName)
 				for (const translatedCommand of translatedCommands) {
-					const normalisedCommand = translatedCommand.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-					if (normalisedCommand != commandName) {
-						this.enabledCommands.push(normalisedCommand)
-						this.bot.command(normalisedCommand, this.tempProps)
+					if (translatedCommand != commandName) {
+						this.enabledCommands.push(translatedCommand)
+						this.commands[commandName] = this.tempProps
 					}
 				}
 			}
 		})
+
 		/* install extra middleware for telegram location sharing function, because .command(...) only catch text type messages */
 		if (!this.config.general.disabledCommands.includes('location')) {
 			const locationHandler = require(`${__dirname}/commands/location`)
@@ -60,10 +65,16 @@ class Telegram {
 				if (commandName && !this.enabledCommands.includes(commandName)) {
 					const props = require(`${__dirname}/commands/poracle`)
 					this.enabledCommands.push(commandName)
-					this.bot.command(commandName, props)
+					this.commands[commandName] = props
 				}
 			}
 		}
+
+		// use 'hears' to launch our command processor rather than bot commands
+		this.bot.hears(/^\/(.*)/, async (ctx) => (
+			this.processCommand(ctx)
+		))
+
 		this.bot.catch((err, ctx) => {
 			this.logs.log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)
 		})
@@ -73,6 +84,14 @@ class Telegram {
 		// this.work()
 		this.logs.log.info(`Telegram commando loaded ${this.enabledCommands.join(', ')} commands`)
 		this.init()
+	}
+
+	async processCommand(ctx) {
+		const { command } = ctx.state
+		if (!command) return
+		if (Object.keys(this.commands).includes(command.command)) {
+			return this.commands[command.command](ctx)
+		}
 	}
 
 	// eslint-disable-next-line class-methods-use-this
