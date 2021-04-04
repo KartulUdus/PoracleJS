@@ -170,7 +170,7 @@
       "title": "Team Rocket a {{{pokestopName}}}",
       "url": "{{{googleMapUrl}}}",
       "color": "{{gruntTypeColor}}",
-      "description": "Tipo: {{gruntType}} {{gruntTypeEmoji}}\nGenere: {{genderData.name}}{{genderData.emoji}}\nPossibili ricompense: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "description": "Tipo: {{gruntType}} {{gruntTypeEmoji}}\nGenere: {{genderData.name}}{{genderData.emoji}}\nPossibili ricompense: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Finisce: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nIndirizzo: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
       }
@@ -184,7 +184,7 @@
   "default": true,
   "platform": "telegram",
   "template": {
-    "content": "Team Rocket a {{{pokestopName}}}\nTipo: {{gruntType}} {{gruntTypeEmoji}}\nGenere: {{genderData.name}}{{genderData.emoji}}\nPossibili ricompense: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "content": "Team Rocket a {{{pokestopName}}}\nTipo: {{gruntType}} {{gruntTypeEmoji}}\nGenere: {{genderData.name}}{{genderData.emoji}}\nPossibili ricompense: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Finisce: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nIndirizzo: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
     "location": true,
     "webpage_preview": true
@@ -220,42 +220,6 @@
   }
 },
 {
-    "id": 1,
-    "language": "it",
-    "type": "lure",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "username": "{{lureTypeName}}",
-      "avatar_url": "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/{{minus lureTypeId 500}}.png",
-      "embed": {
-        "title": "Esca a {{{pokestopName}}}",
-        "url": "{{{googleMapUrl}}}",
-        "color": "{{lureTypeColor}}",
-        "description": "**Tipo:** {{lureTypeName}}\n **Finisce alle:** {{time}} \n(**Tempo rimasto:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n\n [PokeMapGravina](<S<https://pokemapgravina.it/?lat={{latitude}}&lon={{longitude}}&zoom=20>S>) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-        "thumbnail": {
-          "url": "{{{imgUrl}}}"
-        },
-        "image": {
-          "url": "{{{staticmap}}}"
-        }
-      }
-    }
-},
-{
-      "id":1,
-      "language":"it",
-      "type":"lure",
-      "default":true,
-      "platform":"telegram",
-      "template":{
-         "content":"**Tipo Esca:** {{lureTypeName}}\n **Finisce alle:** {{time}} \n**Tempo rimasto:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
-         "location":true,
-         "sticker":"{{stickerUrl}}",
-         "webpage_preview":false
-      }
-},
-{
   "id": 1,
   "language": "it",
   "type": "greeting",
@@ -268,7 +232,7 @@
       "fields": [
           {
             "name": "***Comandi Generali***",
-            "value": "`{{prefix}}aiuto`: Mostra questo messaggio \n`{{prefix}}waglio`: Ti aggiunge al database ed abilita le notifiche \n`{{prefix}}deregistra`: Ti rimuove dalle notifiche \n`{{prefix}}stop`: Ferma temporaneamente le notifiche \n`{{prefix}}start`: Riabilita le notifiche \n`{{prefix}}posizione tuaArea`: Cerca per la tuaArea e la imposta come tua posizione \n`{{prefix}}area inserisci unPosto`: Imposta una o piÃ¹ aree per le quali ricevere notifiche, le aree devono essere configurate dall'admin \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area impostata \n `{{prefix}}ricercati`: Mostra per cosa sei attualmente configurato per ricevere le notifiche. \n Puoi aggiungere la variabile `pulito` alla maggior parte dei comandi di tracciamento, per far si che il bot cancelli il massaggio quando il pokemon sparisce. \n Vedi più opzioni per ogni comando spiegato qui [manuale completo](https://muckelba.github.io/poracleWiki/)"
+            "value": "`{{prefix}}aiuto`: Mostra questo messaggio \n`{{prefix}}waglio`: Ti aggiunge al database ed abilita le notifiche \n`{{prefix}}deregistra`: Ti rimuove dalle notifiche \n`{{prefix}}stop`: Ferma temporaneamente le notifiche \n`{{prefix}}start`: Riabilita le notifiche \n`{{prefix}}posizione tuaArea`: Cerca per la tuaArea e la imposta come tua posizione \n`{{prefix}}area inserisci unPosto`: Imposta una o piÃ¹ aree per le quali ricevere notifiche, le aree devono essere configurate dall'admin \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area impostata \n `{{prefix}}tracciati`: Mostra per cosa sei attualmente configurato per ricevere le notifiche. \n Puoi aggiungere la variabile `pulito` alla maggior parte dei comandi di tracciamento, per far si che il bot cancelli il massaggio quando il pokemon sparisce. \n Vedi più opzioni per ogni comando spiegato qui [manuale completo](https://muckelba.github.io/poracleWiki/)"
           },
           {
             "name": "***Esempi Base***",
@@ -319,7 +283,7 @@
       "fields": [
           {
             "name": "***Comandi Generali***",
-            "value": "`{{prefix}}aiuto`: Mostra questo messaggio \n`{{prefix}}waglio`: Ti aggiunge al database ed abilita le notifiche \n`{{prefix}}deregistra`: Ti rimuove dalle notifiche \n`{{prefix}}stop`: Ferma temporaneamente le notifiche \n`{{prefix}}start`: Riabilita le notifiche \n`{{prefix}}posizione tuaArea`: Cerca per la tuaArea e la imposta come tua posizione \n`{{prefix}}area inserisci unPosto`: Imposta una o più aree per le quali ricevere notifiche, le aree devono essere configurate dall'admin \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area impostata \n `{{prefix}}ricercati`: Mostra per cosa sei attualmente configurato per ricevere le notifiche. \n Puoi aggiungere la variabile `pulito` alla maggior parte dei comandi di tracciamento, per far si che il bot cancelli il massaggio quando il pokemon sparisce. \n Vedi più opzioni per ogni comando spiegato qui [manuale completo](https://muckelba.github.io/poracleWiki/)"
+            "value": "`{{prefix}}aiuto`: Mostra questo messaggio \n`{{prefix}}waglio`: Ti aggiunge al database ed abilita le notifiche \n`{{prefix}}deregistra`: Ti rimuove dalle notifiche \n`{{prefix}}stop`: Ferma temporaneamente le notifiche \n`{{prefix}}start`: Riabilita le notifiche \n`{{prefix}}posizione tuaArea`: Cerca per la tuaArea e la imposta come tua posizione \n`{{prefix}}area inserisci unPosto`: Imposta una o più aree per le quali ricevere notifiche, le aree devono essere configurate dall'admin \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area impostata \n `{{prefix}}tracciati`: Mostra per cosa sei attualmente configurato per ricevere le notifiche. \n Puoi aggiungere la variabile `pulito` alla maggior parte dei comandi di tracciamento, per far si che il bot cancelli il massaggio quando il pokemon sparisce. \n Vedi più opzioni per ogni comando spiegato qui [manuale completo](https://muckelba.github.io/poracleWiki/)"
           },
           {
             "name": "***Esempi Base***",
