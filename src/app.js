@@ -85,7 +85,7 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
 		}
 	}
-	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
+	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true)
 
 	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
 		roleWorker = new DiscordWorker(config.discord.token[0], 999, config, logs)
@@ -219,6 +219,7 @@ function handleShutdown() {
 	}
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
+	if (discordWebhookWorker) workerSaves.push(discordWebhookWorker.saveTimeouts())
 	if (config.general.persistDuplicateCache) {
 		workerSaves.push(saveEventCache())
 	}
