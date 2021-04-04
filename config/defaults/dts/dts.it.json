@@ -220,6 +220,42 @@
   }
 },
 {
+    "id": 1,
+    "language": "it",
+    "type": "lure",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "username": "{{lureTypeName}}",
+      "avatar_url": "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/{{minus lureTypeId 500}}.png",
+      "embed": {
+        "title": "Esca a {{{pokestopName}}}",
+        "url": "{{{googleMapUrl}}}",
+        "color": "{{lureTypeColor}}",
+        "description": "**Tipo:** {{lureTypeName}}\n **Finisce alle:** {{time}} \n(**Tempo rimasto:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n\n [PokeMapGravina](<S<https://pokemapgravina.it/?lat={{latitude}}&lon={{longitude}}&zoom=20>S>) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticmap}}}"
+        }
+      }
+    }
+},
+{
+      "id":1,
+      "language":"it",
+      "type":"lure",
+      "default":true,
+      "platform":"telegram",
+      "template":{
+         "content":"**Tipo Esca:** {{lureTypeName}}\n **Finisce alle:** {{time}} \n**Tempo rimasto:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
+         "location":true,
+         "sticker":"{{stickerUrl}}",
+         "webpage_preview":false
+      }
+},
+{
   "id": 1,
   "language": "it",
   "type": "greeting",
