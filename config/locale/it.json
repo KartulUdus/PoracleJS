@@ -23,7 +23,7 @@
 	"Channel added":"Canale aggiunto",
 	"with":"con",
 	"and":"e",
-	"add":"inserisci",
+	"add":"aggiungi",
 	"<Your-Webhook-url>":"<Tuo-Webhook-url>",
 	"channel":"canale",
 	"no valid areas there, please use one of":"nessuna area valida, si prega di utilizzare una delle",
@@ -131,7 +131,7 @@
 	"start":"start",
 	"stop":"stop",
 	"track":"trova",
-	"tracked":"ricercati",
+	"tracked":"tracciati",
 	"unregister":"deregistra",
 	"untrack":"basta",
 	"weather":"meteo",
@@ -494,7 +494,7 @@
 	"Your tracking is now activated, send {0}{1} for more information about available commands":"Le tue notifiche sono adesso attivate, utilizza {0}{1} per avere informazioni sui comandi disponibili.",
 	"These users are registered with Poracle:":"Questi utenti sono registrati con Poracle :",
 	"Warning: Admin command detected without distance set - using default distance":"Attenzione: Rilevati commandi amministrativi senza una distanza impostata - uso distanza di default",
-	"Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`":"I comandi validi sono `{0}zona lista`, `{0}zona aggiungi <NomeZona>`, `{0}zona elimina <NomeZona>`",
+	"Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`":"I comandi validi sono `{0}area lista`, `{0}area aggiungi <NomeZona>`, `{0}area elimina <NomeZona>`",
 	"Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`":"I comandi validi sono `{0}profilo <nome>`, `{0}profilo lista`, `{0}profilo aggiungi <nome>`, `{0}profilo rimuovi <nome>`, `{0}profilo planning <descrizione>`",
 	"Valid commands are e.g. `{0}egg level5`, `{0}egg remove everything`":"I comandi validi sono ad es `{0}uova livello5`, `{0}uova rimuovi tutto`",
 	"Use `{0}{1} {2}` for more details on this command":"Utilizza `{0}{1} {2}` per più dettagli su questo comando",
@@ -505,6 +505,6 @@
 	"Valid commands are e.g. `{0}lure mossy`, `{0}lure remove everything`":"I comandi validi sono ad es. `{0}esca silvestre`, `{0}esca rimuovi tutto`",
 	"Valid commands are e.g. `{0}quest spinda`, `{0}quest energycharizard`, `{0}quest remove everything`":"I comandi validi sono ad es. `{0}quest spinda`, `{0}quest energiacharizard`, `{0}quest rimuovi tutto`",
 	"Valid commands are e.g. `{0}raid level5`, `{0}raid articuno`, `{0}raid remove everything`":"I comandi validi sono ad es. `{0}raid livello5`, `{0}raid articuno`, `{0}raid rimuovi tutto`",
-	"Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`":"I comandi validi sono ad es. `{0}traccia charmander`, `{0}traccia tutto iv100`, `{0}traccia gible d500`",
-	"Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`":"I comandi validi sono ad es. `{0}untrack charmander`, `{0}untrack tutto`"
+	"Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`":"I comandi validi sono ad es. `{0}trova charmander`, `{0}trova tutto iv100`, `{0}trova gible d500`",
+	"Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`":"I comandi validi sono ad es. `{0}basta charmander`, `{0}basta tutto`"
 }
