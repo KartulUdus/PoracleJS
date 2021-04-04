@@ -334,7 +334,7 @@ class Quest extends Controller {
 							let first = true
 							for (const [index, id] of Object.entries(questinfo.pokemon_ids)) {
 								if (first) {
-									pstr += `${this.GameData.monsters[id].name}`
+									pstr += `${this.GameData.monsters[`${id}_0`].name}`
 								} else {
 									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
 								}
