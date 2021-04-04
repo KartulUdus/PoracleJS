@@ -47,7 +47,7 @@ class Telegram {
 				for (const translatedCommand of translatedCommands) {
 					if (translatedCommand != commandName) {
 						this.enabledCommands.push(translatedCommand)
-						this.commands[commandName] = this.tempProps
+						this.commands[translatedCommand] = this.tempProps
 					}
 				}
 			}
