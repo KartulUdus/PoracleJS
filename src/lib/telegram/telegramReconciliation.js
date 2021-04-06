@@ -197,7 +197,10 @@ class TelegramReconciliation {
 			channelList.push(...this.config.telegram.channels)
 		} else {
 			for (const community of Object.keys(this.config.areaSecurity.communities)) {
-				channelList.push(...this.config.areaSecurity.communities[community].telegram.channels)
+				const communityDetails = this.config.areaSecurity.communities[community]
+				if (communityDetails.telegram && communityDetails.telegram.channels) {
+					channelList.push(...this.config.areaSecurity.communities[community].telegram.channels)
+				}
 			}
 		}
 		return channelList
@@ -226,7 +229,15 @@ class TelegramReconciliation {
 
 			let name
 			for (const group of channelList) {
-				const telegramUser = await this.telegraf.telegram.getChatMember(group, id)
+				let telegramUser
+				try {
+					telegramUser = await this.telegraf.telegram.getChatMember(group, id)
+				} catch (err) {
+					this.log.error(`Reconciliation (Telegram) Load telegram channels failed - chat id '${group}'`, err)
+
+					// eslint-disable-next-line no-continue
+					continue
+				}
 
 				if (telegramUser) {
 					if (!name) {
