@@ -109,12 +109,21 @@ class DiscordWebhookWorker {
 				this.webhookTimeouts.set(msgId, data.target, Math.floor(msgDeletionMs / 1000) + 1)
 
 				const deleteUrl = `${data.target}/messages/${msgId}`
-				setTimeout(() => {
-					this.retrySender(`${senderId} (clean)`, async () => this.axios({
-						method: 'delete',
-						url: deleteUrl,
-						validateStatus: ((status) => status < 500),
-					}).catch(() => {}))
+				setTimeout(async () => {
+					try {
+						this.logs.discord.verbose(`${logReference}: http(s)> ${data.name} WEBHOOK Cleaning discord message`)
+
+						const cleanRes = await this.retrySender(`${senderId} (clean)`, async () => this.axios({
+							method: 'delete',
+							url: deleteUrl,
+							validateStatus: ((status) => status < 500),
+						}))
+						if (cleanRes.status < 200 || cleanRes.status > 299) {
+							this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Clean got ${cleanRes.status} ${cleanRes.statusText}`)
+						}
+					} catch (err) {
+						this.logs.discord.error(`${logReference}: ${data.name} WEBHOOK Clean failed`, err)
+					}
 				}, msgDeletionMs)
 			}
 		} catch (err) {
