@@ -1,8 +1,9 @@
 const inside = require('point-in-polygon')
-const path = require('path')
 const NodeGeocoder = require('node-geocoder')
 const cp = require('child_process')
 const EventEmitter = require('events')
+const path = require('path')
+const fs = require('fs')
 
 const pcache = require('flat-cache')
 
@@ -104,15 +105,28 @@ class Controller extends EventEmitter {
 
 		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
 
-		if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
-			findDts.template.embed.description = findDts.template.embed.description.join('')
+		let template
+		if (findDts.templateFile) {
+			let filepath
+			try {
+				filepath = path.join(__dirname, '../../config', findDts.templateFile)
+				template = fs.readFileSync(filepath, 'utf8')
+			} catch (err) {
+				this.log.error(`${logReference}: Unable to load DTS filepath ${filepath} from DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
+				return null
+			}
+		} else {
+			if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
+				findDts.template.embed.description = findDts.template.embed.description.join('')
+			}
+
+			if (Array.isArray(findDts.template.content)) {
+				findDts.template.content = findDts.template.content.join('')
+			}
+
+			template = JSON.stringify(findDts.template)
 		}
 
-		if (Array.isArray(findDts.template.content)) {
-			findDts.template.content = findDts.template.content.join('')
-		}
-
-		const template = JSON.stringify(findDts.template)
 		const mustache = this.mustache.compile(template)
 
 		this.dtsCache[key] = mustache

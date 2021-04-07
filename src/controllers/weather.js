@@ -199,7 +199,7 @@ class Weather extends Controller {
 						data.forecastTimeout = forecastTimeout
 						data.lastCurrentWeatherCheck = currentHourTimestamp
 					} catch (err) {
-						this.log.error(`${id}: Fetching AccuWeather weather info errored with: ${err}`)
+						this.log.error(`${id}: Fetching AccuWeather weather info [${apiKeyWeatherInfo.substring(0, 5)}...] errored with: ${err}`)
 					}
 				} else {
 					this.log.warn(`${id}: Couldn't fetch weather forecast - no API key available`)
