@@ -87,7 +87,7 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
 		}
 	}
-	discordWebhookWorker = new DiscordWebhookWorker(config, logs)
+	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true)
 }
 
 if (config.telegram.enabled) {
@@ -708,7 +708,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 				const yesterdayDow = nowDow == 1 ? 7 : nowDow - 1
 
 				const active = timings.some((row) => (
-					(row.day == nowDow && row.hours == nowHour && nowMinutes > row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
+					(row.day == nowDow && row.hours == nowHour && nowMinutes >= row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
 					|| (nowMinutes < 10 && row.day == nowDow && row.hours == nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
 					|| (nowHour == 0 && nowMinutes < 10 && row.day == yesterdayDow && row.hours == 23 && row.mins > 50) // first 10 minutes of day
 				))
@@ -734,7 +734,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 						log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
 
 						lastId = profile.id
-						await fastify.monsterController.updateQuery('humans',
+						await query.updateQuery('humans',
 							{
 								current_profile_no: profile.profile_no,
 								area: profile.area,

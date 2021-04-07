@@ -116,6 +116,9 @@ class PoracleTelegramUtil {
 
 			if (!status.isRegistered && this.msg.isDM) {
 				await this.msg.react(this.client.translator.translate('🙅'))
+				if (this.client.config.telegram.unregisteredUserMessage) {
+					await this.msg.reply(this.client.config.telegram.unregisteredUserMessage)
+				}
 				return { canContinue: false }
 			}
 

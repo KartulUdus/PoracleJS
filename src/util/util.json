@@ -402,7 +402,8 @@
 		"ja": "japanese",
 		"ko": "korean",
 		"pl": "polish",
-		"ru": "russian"
+		"ru": "russian",
+		"fi": "finnish"
 	},
 	"cpMultipliers": {
 		"1": 0.0939999967813492,

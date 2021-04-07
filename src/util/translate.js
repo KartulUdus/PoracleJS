@@ -10,6 +10,9 @@ class Translator {
 		this.data = {
 			...moveNames, ...pokemonNames, ...defaultData, ...dataAddition,
 		}
+
+		// remove duplicates
+		for (const [k, v] of Object.entries(this.data)) { if (k.toLowerCase() === v.toLowerCase()) delete this.data[k] }
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -46,10 +49,11 @@ class Translator {
 			word = word.toLowerCase()
 			let match = ''
 			const matched = Object.values(this.data).find((key, index) => {
-				if (key.toLowerCase() === word) match = Object.keys(this.data)[index]
-				return key.toLowerCase() === word
+				const lCaseKey = key.toLowerCase()
+				if (lCaseKey === word) match = Object.keys(this.data)[index]
+				return lCaseKey === word && match.toLowerCase() !== word
 			})
-			return matched ? match : bit
+			return matched ? match.toLowerCase() : bit
 		}
 		return Object.keys(this.data).find((key) => this.data[key] === word) ? Object.keys(this.data).find((key) => this.data[key] === word) : bit
 	}

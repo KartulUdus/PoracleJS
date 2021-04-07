@@ -13,7 +13,7 @@
     // ipWhitelist, ipBlacklist - array of whitelisted or blacklisted addresses
       "ipWhitelist": [],
       "ipBlacklist": [],
-      "apiSecret": ""             // apiSecret to use for access to Poracle API -- blank will not work
+      "apiSecret": ""             // apiSecret to use for access to Poracle API -- blank API disabled
   },
   //
   // These are general parameters
@@ -284,12 +284,16 @@
     //   select the 'start' option on the bot in the telegram client before it can message
     //   them and this can be used to remind them of that
       "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages",
+    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+      "unregisteredUserMessage": "",
+    // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
+      "unrecognisedCommandMessage": "",
     // checkRole - whether to check all telegram users for membership of a registration group
     //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
     //   must be set to actually carry out the deletions rather than just logging them)
-    "checkRole": false,
-    "checkRoleInterval": 6,
-    "registerOnStart": false                      // whether to treat initial /start to bot as a registration request
+      "checkRole": false,
+      "checkRoleInterval": 6,
+      "registerOnStart": false            // Whether auto registration is attempted on /start being issued
   },
   //
   // Alert limits - these are so Poracle can limit the amount of messages sent to a user/channel pro-actively
@@ -341,7 +345,6 @@
     //        },
     //        "telegram": {
     //          "channels": [
-    //            "xx"
     //          ]
     //        }
     //      },

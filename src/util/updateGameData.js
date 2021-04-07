@@ -264,11 +264,24 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
 						.forEach((word) => {
 							item_name += ' ' + capitalize(word)
 						})
+					let item_name_eng_key = object.data.itemSettings.itemId.toLowerCase() + '_name'
+					const englishAPKDataItems = {}
+					const englishData = await getLanguageData('english')
+					Object.keys(englishData)
+						.map((index, item) => {
+							if (englishData[item].includes('item_') && englishData[item].includes('_name')) {
+								englishAPKDataItems[englishData[item]] = englishData[parseInt(index, 10) + 1]
+							}
+						})
+					let englishRemoteData = await getLanguageRemoteData('english')
+					englishRemoteData = getJSONFromTxt(englishRemoteData)
+					const englishDataItems = { ...englishAPKDataItems, ...englishRemoteData }
 					let item_id = Item_List[object.data.itemSettings.itemId]
 					if (!GameMaster.items[item_id]) {
 						GameMaster.items[item_id] = {}
 					}
 					GameMaster.items[item_id].name = item_name.slice(1)
+					if (englishDataItems[item_name_eng_key]) GameMaster.items[item_id].name = englishDataItems[item_name_eng_key]
 					GameMaster.items[item_id].proto = object.data.itemSettings.itemId
 					GameMaster.items[item_id].type = capitalize(object.data.itemSettings.itemType.replace('ITEM_TYPE_', ''))
 					GameMaster.items[item_id].category = capitalize(object.data.itemSettings.category.replace('ITEM_CATEGORY_', ''))
