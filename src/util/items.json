@@ -1,6 +1,6 @@
 {
 	"1": {
-		"name": "Poke Ball",
+		"name": "Poké Ball",
 		"proto": "ITEM_POKE_BALL",
 		"type": "Pokeball",
 		"category": "Pokeball",
@@ -82,42 +82,42 @@
 		"min_trainer_level": 1
 	},
 	"401": {
-		"name": "Incense Ordinary",
+		"name": "Incense",
 		"proto": "ITEM_INCENSE_ORDINARY",
 		"type": "Incense",
 		"category": "Incense",
 		"min_trainer_level": 1
 	},
 	"405": {
-		"name": "Incense Beluga Box",
+		"name": "Mystery Box",
 		"proto": "ITEM_INCENSE_BELUGA_BOX",
 		"type": "Incense",
 		"category": "Incense",
 		"min_trainer_level": 1
 	},
 	"501": {
-		"name": "Troy Disk",
+		"name": "Lure Module",
 		"proto": "ITEM_TROY_DISK",
 		"type": "Disk",
 		"category": "Disk",
 		"min_trainer_level": 1
 	},
 	"502": {
-		"name": "Troy Disk Glacial",
+		"name": "Glacial Lure Module",
 		"proto": "ITEM_TROY_DISK_GLACIAL",
 		"type": "Disk",
 		"category": "Disk",
 		"min_trainer_level": 1
 	},
 	"503": {
-		"name": "Troy Disk Mossy",
+		"name": "Mossy Lure Module",
 		"proto": "ITEM_TROY_DISK_MOSSY",
 		"type": "Disk",
 		"category": "Disk",
 		"min_trainer_level": 1
 	},
 	"504": {
-		"name": "Troy Disk Magnetic",
+		"name": "Magnetic Lure Module",
 		"proto": "ITEM_TROY_DISK_MAGNETIC",
 		"type": "Disk",
 		"category": "Disk",
@@ -136,7 +136,7 @@
 		"category": "Boost"
 	},
 	"604": {
-		"name": "X Miracle",
+		"name": "UNDEFINED",
 		"proto": "ITEM_X_MIRACLE",
 		"type": "Battle",
 		"category": "Boost"
@@ -162,7 +162,7 @@
 		"min_trainer_level": 4
 	},
 	"704": {
-		"name": "Wepar Berry",
+		"name": "Wepear Berry",
 		"proto": "ITEM_WEPAR_BERRY",
 		"type": "Food",
 		"category": "Food"
@@ -182,7 +182,7 @@
 		"min_trainer_level": 10
 	},
 	"708": {
-		"name": "Golden Pinap Berry",
+		"name": "Silver Pinap Berry",
 		"proto": "ITEM_GOLDEN_PINAP_BERRY",
 		"type": "Food",
 		"category": "Food",
@@ -195,32 +195,32 @@
 		"category": "Buddy Exclusive Food"
 	},
 	"801": {
-		"name": "Special Camera",
+		"name": "Camera",
 		"proto": "ITEM_SPECIAL_CAMERA",
 		"type": "Camera",
 		"category": "Camera"
 	},
 	"802": {
-		"name": "Sticker Inventory",
+		"name": "Stickers",
 		"proto": "ITEM_STICKER_INVENTORY",
 		"type": "Sticker Inventory",
 		"category": "Sticker"
 	},
 	"901": {
-		"name": "Incubator Basic Unlimited",
+		"name": "Egg Incubator ∞",
 		"proto": "ITEM_INCUBATOR_BASIC_UNLIMITED",
 		"type": "Incubator",
 		"category": "Incubator"
 	},
 	"902": {
-		"name": "Incubator Basic",
+		"name": "Egg Incubator",
 		"proto": "ITEM_INCUBATOR_BASIC",
 		"type": "Incubator",
 		"category": "Incubator",
 		"min_trainer_level": 1
 	},
 	"903": {
-		"name": "Incubator Super",
+		"name": "Super Incubator",
 		"proto": "ITEM_INCUBATOR_SUPER",
 		"type": "Incubator",
 		"category": "Incubator",
@@ -246,7 +246,7 @@
 		"min_trainer_level": 10
 	},
 	"1102": {
-		"name": "Kings Rock",
+		"name": "King's Rock",
 		"proto": "ITEM_KINGS_ROCK",
 		"type": "Evolution Requirement",
 		"category": "Evolution Requirement",
@@ -267,49 +267,49 @@
 		"min_trainer_level": 10
 	},
 	"1105": {
-		"name": "Up Grade",
+		"name": "Upgrade",
 		"proto": "ITEM_UP_GRADE",
 		"type": "Evolution Requirement",
 		"category": "Evolution Requirement",
 		"min_trainer_level": 10
 	},
 	"1106": {
-		"name": "Gen4 Evolution Stone",
+		"name": "Sinnoh Stone",
 		"proto": "ITEM_GEN4_EVOLUTION_STONE",
 		"type": "Evolution Requirement",
 		"category": "Evolution Requirement",
 		"min_trainer_level": 10
 	},
 	"1107": {
-		"name": "Gen5 Evolution Stone",
+		"name": "Unova Stone",
 		"proto": "ITEM_GEN5_EVOLUTION_STONE",
 		"type": "Evolution Requirement",
 		"category": "Evolution Requirement",
 		"min_trainer_level": 10
 	},
 	"1201": {
-		"name": "Move Reroll Fast Attack",
+		"name": "Fast TM",
 		"proto": "ITEM_MOVE_REROLL_FAST_ATTACK",
 		"type": "Move Reroll",
 		"category": "Move Reroll",
 		"min_trainer_level": 15
 	},
 	"1202": {
-		"name": "Move Reroll Special Attack",
+		"name": "Charged TM",
 		"proto": "ITEM_MOVE_REROLL_SPECIAL_ATTACK",
 		"type": "Move Reroll",
 		"category": "Move Reroll",
 		"min_trainer_level": 25
 	},
 	"1203": {
-		"name": "Move Reroll Elite Fast Attack",
+		"name": "Elite Fast TM",
 		"proto": "ITEM_MOVE_REROLL_ELITE_FAST_ATTACK",
 		"type": "Move Reroll",
 		"category": "Move Reroll",
 		"min_trainer_level": 1
 	},
 	"1204": {
-		"name": "Move Reroll Elite Special Attack",
+		"name": "Elite Charged TM",
 		"proto": "ITEM_MOVE_REROLL_ELITE_SPECIAL_ATTACK",
 		"type": "Move Reroll",
 		"category": "Move Reroll",
@@ -323,27 +323,27 @@
 		"min_trainer_level": 5
 	},
 	"1302": {
-		"name": "Xl Rare Candy",
+		"name": "Rare Candy XL",
 		"proto": "ITEM_XL_RARE_CANDY",
 		"type": "Candy",
 		"category": "Candy",
 		"min_trainer_level": 40
 	},
 	"1401": {
-		"name": "Free Raid Ticket",
+		"name": "Raid Pass",
 		"proto": "ITEM_FREE_RAID_TICKET",
 		"type": "Raid Ticket",
 		"category": "Raid Ticket"
 	},
 	"1402": {
-		"name": "Paid Raid Ticket",
+		"name": "Premium Battle Pass",
 		"proto": "ITEM_PAID_RAID_TICKET",
 		"type": "Raid Ticket",
 		"category": "Raid Ticket",
 		"min_trainer_level": 1
 	},
 	"1403": {
-		"name": "Legendary Raid Ticket",
+		"name": "EX Raid Pass",
 		"proto": "ITEM_LEGENDARY_RAID_TICKET",
 		"type": "Raid Ticket",
 		"category": "Raid Ticket"
@@ -356,53 +356,53 @@
 		"min_trainer_level": 1
 	},
 	"1405": {
-		"name": "Friend Gift Box",
+		"name": "Gift",
 		"proto": "ITEM_FRIEND_GIFT_BOX",
 		"type": "Friend Gift Box",
 		"category": "Friend Gift Box"
 	},
 	"1406": {
-		"name": "Team Change",
+		"name": "Team Medallion",
 		"proto": "ITEM_TEAM_CHANGE",
 		"type": "Team Change",
 		"category": "Team Change"
 	},
 	"1408": {
-		"name": "Remote Raid Ticket",
+		"name": "Remote Raid Pass",
 		"proto": "ITEM_REMOTE_RAID_TICKET",
 		"type": "Raid Ticket",
 		"category": "Raid Ticket",
 		"min_trainer_level": 5
 	},
 	"1501": {
-		"name": "Leader Map Fragment",
+		"name": "Mysterious Component",
 		"proto": "ITEM_LEADER_MAP_FRAGMENT",
 		"type": "Incident Ticket",
 		"category": "Incident Ticket",
 		"min_trainer_level": 8
 	},
 	"1502": {
-		"name": "Leader Map",
+		"name": "Rocket Radar",
 		"proto": "ITEM_LEADER_MAP",
 		"type": "Incident Ticket",
 		"category": "Incident Ticket",
 		"min_trainer_level": 8
 	},
 	"1503": {
-		"name": "Giovanni Map",
+		"name": "Super Rocket Radar",
 		"proto": "ITEM_GIOVANNI_MAP",
 		"type": "Incident Ticket",
 		"category": "Incident Ticket",
 		"min_trainer_level": 8
 	},
 	"1600": {
-		"name": "Global Event Ticket",
+		"name": "Ticket",
 		"proto": "ITEM_GLOBAL_EVENT_TICKET",
 		"type": "Global Event Ticket",
 		"category": "Global Event Ticket"
 	},
 	"1601": {
-		"name": "Event Ticket Pink",
+		"name": "Ticket",
 		"proto": "ITEM_EVENT_TICKET_PINK",
 		"type": "Global Event Ticket",
 		"category": "Global Event Ticket"
