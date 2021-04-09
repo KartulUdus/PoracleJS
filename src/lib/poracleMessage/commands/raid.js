@@ -48,6 +48,16 @@ exports.run = async (client, msg, args, options) => {
 		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase())
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
+		// Substitute aliases
+		const pokemonAlias = require('../../../../config/pokemonAlias.json')
+		for (let i = args.length - 1; i >= 0; i--) {
+			let alias = pokemonAlias[args]
+			if (alias) {
+				if (!Array.isArray(alias)) alias = [alias]
+				args.splice(i, 1, ...alias.map((x) => x.toString()))
+			}
+		}
+
 		if (formNames.length) {
 			monsters = Object.values(client.GameData.monsters).filter((mon) => (
 				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))

@@ -94,6 +94,16 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 
+		// Substitute aliases
+		const pokemonAlias = require('../../../../config/pokemonAlias.json')
+		for (let i = args.length - 1; i >= 0; i--) {
+			let alias = pokemonAlias[args]
+			if (alias) {
+				if (!Array.isArray(alias)) alias = [alias]
+				args.splice(i, 1, ...alias.map((x) => x.toString()))
+			}
+		}
+
 		// Check for monsters or forms
 		const formArgs = args.filter((arg) => arg.match(client.re.formRe))
 		const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []

@@ -29,6 +29,16 @@ exports.run = async (client, msg, args, options) => {
 
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
+		// Substitute aliases
+		const pokemonAlias = require('../../../../config/pokemonAlias.json')
+		for (let i = args.length - 1; i >= 0; i--) {
+			let alias = pokemonAlias[args]
+			if (alias) {
+				if (!Array.isArray(alias)) alias = [alias]
+				args.splice(i, 1, ...alias.map((x) => x.toString()))
+			}
+		}
+
 		let monsters = []
 		monsters = Object.values(client.GameData.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) || args.includes('everything'))
