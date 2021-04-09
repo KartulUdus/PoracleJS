@@ -2,6 +2,51 @@ const fs = require('fs')
 const path = require('path')
 const helpCommand = require('./help.js')
 
+function monsterRowText(translator, GameData, monster) {
+	let monsterName
+	let formName
+
+	if (monster.pokemon_id == 0) {
+		monsterName = translator.translate('Everything')
+		formName = ''
+	} else {
+		const mon = Object.values(GameData.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
+		if (!mon) {
+			monsterName = `${translator.translate('Unknown monster')} ${monster.pokemon_id}`
+			formName = `${monster.form}`
+		} else {
+			monsterName = mon.name
+			formName = mon.form.name
+			if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
+		}
+	}
+	let miniv = monster.min_iv
+	if (miniv === -1) miniv = 0
+	let minRarity = monster.rarity
+	if (minRarity === -1) minRarity = 1
+
+	const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
+	const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
+	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`
+}
+
+function raidRowText(translator, GameData, raid) {
+	const mon = Object.values(GameData.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
+	const monsterName = mon ? translator.translate(mon.name) : 'levelMon'
+	const raidTeam = translator.translate(GameData.utilData.teams[raid.team].name)
+	let formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
+	if (!mon || formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
+
+	if (+raid.pokemon_id === 9000) {
+		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
+	}
+
+	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
+}
+
+exports.monsterRowText = monsterRowText
+exports.raidRowText = raidRowText
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		const util = client.createUtil(msg, options)
@@ -71,31 +116,7 @@ exports.run = async (client, msg, args, options) => {
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any monsters'))
 
 			monsters.forEach((monster) => {
-				let monsterName
-				let formName
-
-				if (monster.pokemon_id == 0) {
-					monsterName = translator.translate('Everything')
-					formName = ''
-				} else {
-					const mon = Object.values(client.GameData.monsters).find((m) => m.id === monster.pokemon_id && m.form.id === monster.form)
-					if (!mon) {
-						monsterName = `${translator.translate('Unknown monster')} ${monster.pokemon_id}`
-						formName = `${monster.form}`
-					} else {
-						monsterName = mon.name
-						formName = mon.form.name
-						if (formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
-					}
-				}
-				let miniv = monster.min_iv
-				if (miniv === -1) miniv = 0
-				let minRarity = monster.rarity
-				if (minRarity === -1) minRarity = 1
-
-				const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
-				const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-				message = message.concat(`\n**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(client.GameData.utilData.rarity[minRarity])}-${translator.translate(client.GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${client.GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`)
+				message = message.concat('\n', monsterRowText(translator, client.GameData, monster))
 			})
 		}
 
@@ -104,17 +125,7 @@ exports.run = async (client, msg, args, options) => {
 				message = message.concat('\n\n', translator.translate('You\'re tracking the following raids:'), '\n')
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any raids'))
 			raids.forEach((raid) => {
-				const mon = Object.values(client.GameData.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
-				const monsterName = mon ? translator.translate(mon.name) : 'levelMon'
-				const raidTeam = translator.translate(client.GameData.utilData.teams[raid.team].name)
-				let formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
-				if (!mon || formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
-
-				if (+raid.pokemon_id === 9000) {
-					message = message.concat(`\n**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`)
-				} else {
-					message = message.concat(`\n**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`)
-				}
+				message = message.concat('\n', raidRowText(translator, client.GameData, raid))
 			})
 			eggs.forEach((egg) => {
 				const raidTeam = translator.translate(client.GameData.utilData.teams[egg.team].name)

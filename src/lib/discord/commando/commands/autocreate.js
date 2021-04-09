@@ -47,7 +47,7 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		// Remove arguments that we don't want to keep
-		for (let i = 0; i < args.length; i++) {
+		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.guildRe)) args.splice(i, 1)
 		}
 
