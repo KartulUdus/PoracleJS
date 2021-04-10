@@ -85,7 +85,7 @@ class Telegram {
 		}
 
 		// use 'hears' to launch our command processor rather than bot commands
-		this.bot.hears(/^\/(.*)/, async (ctx) => this.processCommand(ctx))
+		this.bot.on('text', async (ctx) => this.processCommand(ctx))
 
 		this.bot.catch((err, ctx) => {
 			this.logs.log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)
@@ -100,8 +100,7 @@ class Telegram {
 
 	async processCommand(ctx) {
 		const { command } = ctx.state
-		if (!command) return
-		if (Object.keys(this.commands).includes(command.command)) {
+		if (command && Object.keys(this.commands).includes(command.command)) {
 			return this.commands[command.command](ctx)
 		}
 		if (ctx.update.message.chat.type === 'private'
