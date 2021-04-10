@@ -31,8 +31,22 @@ class Telegram {
 
 		this.commands = {}
 
-		// use bot control for identify command so it works in channels
-		this.bot.command('identify', require('./commands/identify'))
+		// Handle identify special case on channels & in conversations
+
+		this.bot.on('channel_post', (ctx, next) => {
+			if (ctx.update.channel_post.text.startsWith('/identify')) {
+				ctx.reply(`This channel is id: [ ${ctx.update.channel_post.chat.id} ] and your id is: unknown - this is a channel (and can't be used for bot registration)`)
+			}
+			return next()
+		})
+
+		this.bot.hears(/^\/identify/, (ctx) => {
+			if (ctx.update.message.chat.type === 'private') {
+				ctx.reply(`This is a private message and your id is: [ ${ctx.update.message.from.id} ]`)
+			} else {
+				ctx.reply(`This channel is id: [ ${ctx.update.message.chat.id} ] and your id is: [ ${ctx.update.message.from.id} ]`)
+			}
+		})
 
 		/* load available commands into command structure */
 		this.commandFiles.map((file) => {
@@ -71,9 +85,7 @@ class Telegram {
 		}
 
 		// use 'hears' to launch our command processor rather than bot commands
-		this.bot.hears(/^\/(.*)/, async (ctx) => (
-			this.processCommand(ctx)
-		))
+		this.bot.hears(/^\/(.*)/, async (ctx) => this.processCommand(ctx))
 
 		this.bot.catch((err, ctx) => {
 			this.logs.log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)

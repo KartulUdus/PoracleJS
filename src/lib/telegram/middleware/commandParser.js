@@ -1,6 +1,5 @@
-const { mount } = require('telegraf')
 /* eslint no-param-reassign: ["error", { "props": false }] */
-module.exports = (translatorFactory) => mount(['text', 'location'], (ctx, next) => {
+module.exports = (translatorFactory) => (ctx, next) => {
 	const regex = /^\/([^@\s]+)@?(?:(\S+)|)\s?([\s\S]*)$/i
 	if (!ctx.message) return next()
 
@@ -35,4 +34,4 @@ module.exports = (translatorFactory) => mount(['text', 'location'], (ctx, next) 
 	}
 	ctx.state.command = command
 	return next()
-})
+}
