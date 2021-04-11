@@ -403,7 +403,8 @@
 		"ko": "korean",
 		"pl": "polish",
 		"ru": "russian",
-		"fi": "finnish"
+		"fi": "finnish",
+		"se": "swedish"
 	},
 	"cpMultipliers": {
 		"1": 0.0939999967813492,
