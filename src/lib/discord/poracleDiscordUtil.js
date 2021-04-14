@@ -187,6 +187,7 @@ class PoracleDiscordUtil {
 			userHasArea: status.userHasArea,
 			language: status.language,
 			currentProfileNo: status.currentProfileNo,
+			targetIsAdmin: this.client.config.discord.admins.includes(target.id.toString()),
 		}
 	}
 }

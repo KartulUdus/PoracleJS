@@ -6,7 +6,7 @@ exports.run = async (client, msg, args, options) => {
 		const util = client.createUtil(msg, options)
 
 		const {
-			canContinue, target, language, currentProfileNo,
+			canContinue, target, language, currentProfileNo, targetIsAdmin,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -22,7 +22,7 @@ exports.run = async (client, msg, args, options) => {
 		let availableAreas = client.geofence.map((area) => area.name)
 		let lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
 
-		if (target.type.includes(':user') && client.config.areaSecurity.enabled && !msg.isFromAdmin) {
+		if (target.type.includes(':user') && client.config.areaSecurity.enabled && !targetIsAdmin) {
 			const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 			const calculatedAreas = []

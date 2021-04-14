@@ -139,6 +139,7 @@ class PoracleTelegramUtil {
 			userHasArea: status.userHasArea,
 			language: status.language,
 			currentProfileNo: status.currentProfileNo,
+			targetIsAdmin: this.client.config.telegram.admins.includes(target.id.toString()),
 		}
 	}
 }
