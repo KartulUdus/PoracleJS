@@ -19,9 +19,11 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		let allowedAreas = fastify.geofence.map((x) => x.name.toLowerCase())
-		if (fastify.config.areaSecurity.enabled) {
-			allowedAreas = communityLogic.filterAreas(fastify.config, human.community_membership,
-				allowedAreas)
+		if (fastify.config.areaSecurity.enabled && !fastify.config.discord.admins.includes(req.params.id)
+		&& !fastify.config.telegram.admins.includes(req.params.id)) {
+			allowedAreas = communityLogic.filterAreas(fastify.config, human.community_membership
+				? JSON.parse(human.community_membership) : [],
+			allowedAreas)
 		}
 
 		return {
