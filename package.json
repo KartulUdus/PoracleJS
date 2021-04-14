@@ -32,7 +32,6 @@
   },
   "homepage": "https://github.com/KartulUdus/reference#readme",
   "dependencies": {
-    "node-schedule": "^2.0.0",
     "async-mutex": "^0.3.0",
     "axios": "^0.21.1",
     "config": "^3.3.3",
@@ -54,6 +53,7 @@
     "node-cache": "^5.1.2",
     "node-fetch": "^2.6.1",
     "node-geocoder": "^3.27.0",
+    "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
     "pg": "^8.5.1",
     "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",

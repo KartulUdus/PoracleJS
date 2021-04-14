@@ -1,4 +1,6 @@
 const helpCommand = require('./help.js')
+const trackedCommand = require('./tracked.js')
+const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -82,10 +84,61 @@ exports.run = async (client, msg, args, options) => {
 				level: lvl,
 			}))
 
-			const result = await client.query.insertOrUpdateQuery('egg', insert)
-			client.log.info(`${target.name} started tracking level ${levels.join(', ')} eggs`)
+			const tracked = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
+			const updates = []
+			const alreadyPresent = []
 
-			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+			for (let i = insert.length - 1; i >= 0; i--) {
+				const toInsert = insert[i]
+
+				for (const existing of tracked.filter((x) => x.level == toInsert.level)) {
+					const differences = objectDiff.diff(existing, toInsert)
+
+					switch (Object.keys(differences).length) {
+						case 1:		// No differences (only UID)
+							// No need to insert
+							alreadyPresent.push(toInsert)
+							insert.splice(i, 1)
+							break
+						case 2:		// One difference (something + uid)
+							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean'].includes(x))) {
+								updates.push({
+									...toInsert,
+									uid: existing.uid,
+								})
+								insert.splice(i, 1)
+							}
+							break
+						default:	// more differences
+							break
+					}
+				}
+			}
+
+			let message = ''
+
+			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
+				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
+			} else {
+				alreadyPresent.forEach((egg) => {
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
+				})
+				updates.forEach((egg) => {
+					message = message.concat(translator.translate('Updated: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
+				})
+				insert.forEach((egg) => {
+					message = message.concat(translator.translate('New: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
+				})
+			}
+
+			await client.query.insertQuery('egg', insert)
+			for (const row of updates) {
+				await client.query.updateQuery('egg', row, { uid: row.uid })
+			}
+
+			client.log.info(`${target.name} started tracking level ${levels.join(', ')} eggs`)
+			await msg.reply(message)
+			reaction = insert.length ? '✅' : reaction
 		} else {
 			let result = 0
 			if (levels.length) {

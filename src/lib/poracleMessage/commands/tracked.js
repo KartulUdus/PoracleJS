@@ -44,8 +44,35 @@ function raidRowText(translator, GameData, raid) {
 	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
 }
 
+function eggRowText(translator, GameData, egg) {
+	const raidTeam = translator.translate(GameData.utilData.teams[egg.team].name)
+	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
+}
+
+function questRowText(translator, GameData, quest) {
+	let rewardThing = ''
+	if (quest.reward_type === 7) {
+		rewardThing = Object.values(GameData.monsters).find((m) => m.id === quest.reward).name
+		rewardThing = translator.translate(rewardThing)
+	}
+	if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${translator.translate('or more stardust')}` : `${translator.translate('stardust')}`}`
+	if (quest.reward_type === 2) rewardThing = translator.translate(GameData.items[quest.reward].name)
+	if (quest.reward_type === 12) {
+		if (quest.reward == 0) {
+			rewardThing = `${translator.translate('mega energy')}`
+		} else {
+			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
+			const monsterName = mon ? translator.translate(mon.name) : 'energyMon'
+			rewardThing = `${translator.translate('mega energy')} ${monsterName}`
+		}
+	}
+	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`
+}
+
 exports.monsterRowText = monsterRowText
 exports.raidRowText = raidRowText
+exports.eggRowText = eggRowText
+exports.questRowText = questRowText
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -128,8 +155,7 @@ exports.run = async (client, msg, args, options) => {
 				message = message.concat('\n', raidRowText(translator, client.GameData, raid))
 			})
 			eggs.forEach((egg) => {
-				const raidTeam = translator.translate(client.GameData.utilData.teams[egg.team].name)
-				message = message.concat(`\n**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`)
+				message = message.concat('\n', eggRowText(translator, client.GameData, egg))
 			})
 		}
 
@@ -139,23 +165,7 @@ exports.run = async (client, msg, args, options) => {
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any quests'))
 
 			quests.forEach((quest) => {
-				let rewardThing = ''
-				if (quest.reward_type === 7) {
-					rewardThing = Object.values(client.GameData.monsters).find((m) => m.id === quest.reward).name
-					rewardThing = translator.translate(rewardThing)
-				}
-				if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${translator.translate('or more stardust')}` : `${translator.translate('stardust')}`}`
-				if (quest.reward_type === 2) rewardThing = translator.translate(client.GameData.items[quest.reward].name)
-				if (quest.reward_type === 12) {
-					if (quest.reward == 0) {
-						rewardThing = `${translator.translate('mega energy')}`
-					} else {
-						const mon = Object.values(client.GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
-						const monsterName = mon ? translator.translate(mon.name) : 'energyMon'
-						rewardThing = `${translator.translate('mega energy')} ${monsterName}`
-					}
-				}
-				message = message.concat(`\n${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`)
+				message = message.concat('\n', questRowText(translator, client.GameData, quest))
 			})
 		}
 

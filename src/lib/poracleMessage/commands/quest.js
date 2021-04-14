@@ -1,4 +1,6 @@
 const helpCommand = require('./help.js')
+const trackedCommand = require('./tracked.js')
+const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -90,8 +92,8 @@ exports.run = async (client, msg, args, options) => {
 			} else if (element.match(client.re.energyRe)) {
 				[,, energyMonster] = element.match(client.re.energyRe)
 				energyMonster = translator.reverse(energyMonster.toLowerCase(), true).toLowerCase()
-				energyMonster = Object.values(client.GameData.monsters).filter((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
-				energyMonster = energyMonster.map((mon) => mon.id)
+				energyMonster = Object.values(client.GameData.monsters).find((mon) => energyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
+				energyMonster = energyMonster ? energyMonster.id : 0
 				if (+energyMonster > 0) energyMonsters.push(energyMonster)
 			} else if (element === 'energy') {
 				energyMonsters.push('0')
@@ -175,9 +177,64 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!remove) {
-			const result = await client.query.insertOrUpdateQuery('quest', questTracks)
-			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+			const insert = questTracks
+			const tracked = await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo })
+			const updates = []
+			const alreadyPresent = []
+
+			for (let i = insert.length - 1; i >= 0; i--) {
+				const toInsert = insert[i]
+
+				for (const existing of tracked.filter((x) => x.reward_type == toInsert.reward_type && x.reward == toInsert.reward)) {
+					const differences = objectDiff.diff(existing, toInsert)
+
+					switch (Object.keys(differences).length) {
+						case 1:		// No differences (only UID)
+							// No need to insert
+							alreadyPresent.push(toInsert)
+							insert.splice(i, 1)
+							break
+						case 2:		// One difference (something + uid)
+							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean'].includes(x))) {
+								updates.push({
+									...toInsert,
+									uid: existing.uid,
+								})
+								insert.splice(i, 1)
+							}
+							break
+						default:	// more differences
+							break
+					}
+				}
+			}
+
+			let message = ''
+
+			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
+				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
+			} else {
+				alreadyPresent.forEach((quest) => {
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+				})
+				updates.forEach((quest) => {
+					message = message.concat(translator.translate('Updated: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+				})
+				insert.forEach((quest) => {
+					message = message.concat(translator.translate('New: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+				})
+			}
+
+			await client.query.insertQuery('quest', insert)
+			for (const row of updates) {
+				await client.query.updateQuery('quest', row, { uid: row.uid })
+			}
+
 			client.log.info(`${target.name} added quest trackings`)
+
+			// const result = await client.query.insertOrUpdateQuery('quest', questTracks)
+			await msg.reply(message)
+			reaction = insert.length ? '✅' : reaction
 		} else {
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql
 			items.push(0)
