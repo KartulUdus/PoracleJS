@@ -27,6 +27,7 @@ const weatherController = new WeatherController(logs.controller, knex, config, d
 
 const hookQueue = []
 const workerId = 'WEATHER'
+logs.setWorkerId(workerId)
 let queuePort
 let commandPort
 
