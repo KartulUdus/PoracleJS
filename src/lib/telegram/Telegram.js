@@ -114,7 +114,10 @@ class Telegram {
 	work(data) {
 		this.telegramQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run((work) => (this.sendAlert(work)))
+			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+				async (err) => {
+					this.logs.log.error('Telegram queueProcessor exception', err)
+				})
 		}
 	}
 
@@ -290,7 +293,7 @@ class Telegram {
 					this.telegramMessageTimeouts.set(key, msgData.v, newTtl)
 				}
 			} catch (err) {
-				this.log.info(`Error processing historic deletes ${err}`)
+				this.logs.log.info(`Error processing historic deletes ${err}`)
 			}
 		}
 	}
