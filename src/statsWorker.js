@@ -17,6 +17,8 @@ const statsController = new StatsController(logs.controller, config)
 
 const hookQueue = []
 const workerId = 'STATS'
+logs.setWorkerId(workerId)
+
 let queuePort
 let commandPort
 

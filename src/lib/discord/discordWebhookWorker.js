@@ -134,7 +134,10 @@ class DiscordWebhookWorker {
 
 	work(data) {
 		this.webhookQueue.push(data)
-		this.queueProcessor.run((work) => (this.sendAlert(work)))
+		this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+			async (err) => {
+				this.logs.log.error('Discord Webhook queueProcessor exception', err)
+			})
 	}
 
 	async saveTimeouts() {
@@ -182,7 +185,7 @@ class DiscordWebhookWorker {
 					this.webhookTimeouts.set(key, msgData.v, newTtl)
 				}
 			} catch (err) {
-				this.log.info(`Error processing historic deletes ${err}`)
+				this.logs.log.info(`Error processing historic deletes ${err}`)
 			}
 		}
 	}

@@ -67,7 +67,10 @@ class Worker {
 	work(data) {
 		this.discordQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run((work) => (this.sendAlert(work)))
+			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+				async (err) => {
+					this.logs.log.error('Discord queueProcessor exception', err)
+				})
 		}
 	}
 
