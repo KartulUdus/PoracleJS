@@ -54,7 +54,15 @@ exports.run = async (client, msg, args, options) => {
 		}, monsterIds, 'pokemon_id')
 		client.log.info(`${target.name} removed tracking for monsters: ${monsters.map((m) => m.name).join(', ')}`)
 
-		msg.reply(translator.translateFormat('I removed {0} entries, use {1}{2} to see what you are currently tracking', result, util.prefix, translator.translate('tracked')))
+		msg.reply(
+			''.concat(
+				result == 1 ? translator.translate('I removed 1 entry')
+					: translator.translateFormat('I removed {0} entries', result),
+				', ',
+				translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),
+			),
+			{ style: 'markdown' },
+		)
 
 		if (result || client.config.database.client === 'sqlite') {
 			msg.react('✅')

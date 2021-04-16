@@ -148,8 +148,15 @@ exports.run = async (client, msg, args, options) => {
 				client.log.info(`${target.name} stopped tracking ${types.join(', ')} invasions`)
 			}
 
-			msg.reply(translator.translateFormat('I removed {0} entries, use {1}{2} to see what you are currently tracking', result, util.prefix, translator.translate('tracked')))
-
+			msg.reply(
+				''.concat(
+					result == 1 ? translator.translate('I removed 1 entry')
+						: translator.translateFormat('I removed {0} entries', result),
+					', ',
+					translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),
+				),
+				{ style: 'markdown' },
+			)
 			reaction = result || client.config.database.client === 'sqlite' ? '✅' : reaction
 			client.log.info(`${logReference}: ${target.name} deleted ${types.join(', ')} invasions`)
 		}

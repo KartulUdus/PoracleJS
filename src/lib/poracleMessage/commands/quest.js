@@ -250,8 +250,15 @@ exports.run = async (client, msg, args, options) => {
 
 			result = result ? result.affectedRows : 0
 
-			msg.reply(translator.translateFormat('I removed {0} entries, use {1}{2} to see what you are currently tracking', result, util.prefix, translator.translate('tracked')))
-
+			msg.reply(
+				''.concat(
+					result == 1 ? translator.translate('I removed 1 entry')
+						: translator.translateFormat('I removed {0} entries', result),
+					', ',
+					translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),
+				),
+				{ style: 'markdown' },
+			)
 			reaction = result || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
 		await msg.react(reaction)

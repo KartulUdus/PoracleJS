@@ -154,7 +154,7 @@ exports.run = async (client, msg, args, options) => {
 			locationText = `\n${translator.translate('You have not set a location yet')}`
 		}
 		if (!human.enabled) {
-			restartExplanation = `\n${translator.translateFormat('You can start receiving alerts again using {0}{1}', util.prefix, translator.translate('start'))}`
+			restartExplanation = `\n${translator.translateFormat('You can start receiving alerts again using `{0}{1}`', util.prefix, translator.translate('start'))}`
 		}
 		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${restartExplanation}${locationText}`, { style: 'markdown' })
 
