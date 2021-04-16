@@ -69,10 +69,44 @@ function questRowText(translator, GameData, quest) {
 	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`
 }
 
+function invasionRowText(translator, GameData, invasion) {
+	let genderText = ''
+	let typeText = ''
+	if (!invasion.gender || invasion.gender === '') {
+		genderText = translator.translate('any')
+	} else if (invasion.gender === 1) {
+		genderText = translator.translate('male')
+	} else if (invasion.gender === 2) {
+		genderText = translator.translate('female')
+	}
+	if (!invasion.grunt_type || invasion.grunt_type === '') {
+		typeText = 'any'
+	} else {
+		typeText = invasion.grunt_type
+	}
+	return `${translator.translate('grunt type')
+		.charAt(0)
+		.toUpperCase() + translator.translate('grunt type')
+		.slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`
+}
+
+function lureRowText(translator, GameData, lure) {
+	let typeText = ''
+
+	if (lure.lure_id === 0) {
+		typeText = 'any'
+	} else {
+		typeText = GameData.utilData.lures[lure.lure_id].name
+	}
+	return `${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `
+}
+
 exports.monsterRowText = monsterRowText
 exports.raidRowText = raidRowText
 exports.eggRowText = eggRowText
 exports.questRowText = questRowText
+exports.invasionRowText = invasionRowText
+exports.lureRowText = lureRowText
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -176,24 +210,7 @@ exports.run = async (client, msg, args, options) => {
 				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any invasions'))
 
 				invasions.forEach((invasion) => {
-					let genderText = ''
-					let typeText = ''
-					if (!invasion.gender || invasion.gender === '') {
-						genderText = translator.translate('any')
-					} else if (invasion.gender === 1) {
-						genderText = translator.translate('male')
-					} else if (invasion.gender === 2) {
-						genderText = translator.translate('female')
-					}
-					if (!invasion.grunt_type || invasion.grunt_type === '') {
-						typeText = 'any'
-					} else {
-						typeText = invasion.grunt_type
-					}
-					message = message.concat(`\n${translator.translate('grunt type')
-						.charAt(0)
-						.toUpperCase() + translator.translate('grunt type')
-						.slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`)
+					message = message.concat('\n', invasionRowText(translator, client.GameData, invasion))
 				})
 			}
 
@@ -203,14 +220,7 @@ exports.run = async (client, msg, args, options) => {
 				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
 
 				lures.forEach((lure) => {
-					let typeText = ''
-
-					if (lure.lure_id === 0) {
-						typeText = 'any'
-					} else {
-						typeText = client.GameData.utilData.lures[lure.lure_id].name
-					}
-					message = message.concat(`\n${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `)
+					message = message.concat('\n', lureRowText(translator, client.GameData, lure))
 				})
 			}
 		}

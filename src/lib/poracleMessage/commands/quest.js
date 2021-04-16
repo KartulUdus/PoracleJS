@@ -3,6 +3,8 @@ const trackedCommand = require('./tracked.js')
 const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
+	const logReference = Math.random().toString().slice(2, 11)
+
 	try {
 		// Check target
 		const util = client.createUtil(msg, options)
@@ -13,7 +15,7 @@ exports.run = async (client, msg, args, options) => {
 
 		if (!canContinue) return
 		const commandName = __filename.slice(__dirname.length + 1, -3)
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+		client.log.info(`${logReference}: ${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
 			return helpCommand.run(client, msg, [commandName], options)
@@ -244,11 +246,17 @@ exports.run = async (client, msg, args, options) => {
 				delete from quest WHERE id='${target.id}' and profile_no=${currentProfileNo} and
 				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward in(${energyMonsters})) or (reward_type = 12 and ${commandEverything}=1))
 				`
-			const result = await client.query.misteryQuery(remQuery)
-			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+			let result = await client.query.misteryQuery(remQuery)
+
+			result = result ? result.affectedRows : 0
+
+			msg.reply(translator.translateFormat('I removed {0} entries, use {1}{2} to see what you are currently tracking', result, util.prefix, translator.translate('tracked')))
+
+			reaction = result || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error('Quest command unhappy:', err)
+		client.log.error(`${logReference}: Quest command unhappy:`, err)
+		msg.reply(`There was a problem making these changes, the administrator can find the details with reference ${logReference}`)
 	}
 }

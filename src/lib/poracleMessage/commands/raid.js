@@ -214,7 +214,8 @@ exports.run = async (client, msg, args, options) => {
 				client.log.info(`${logReference}: ${target.name} stopped tracking all raids`)
 				result += everythingResult
 			}
-			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+			msg.reply(translator.translateFormat('I removed {0} entries, use {1}{2} to see what you are currently tracking', result, util.prefix, translator.translate('tracked')))
+			reaction = result || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
 		await msg.react(reaction)
 	} catch (err) {

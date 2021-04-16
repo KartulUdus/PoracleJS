@@ -3,6 +3,8 @@ const trackedCommand = require('./tracked.js')
 const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
+	const logReference = Math.random().toString().slice(2, 11)
+
 	try {
 		const util = client.createUtil(msg, options)
 
@@ -12,7 +14,7 @@ exports.run = async (client, msg, args, options) => {
 
 		if (!canContinue) return
 		const commandName = __filename.slice(__dirname.length + 1, -3)
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+		client.log.info(`${logReference}: ${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
 			return helpCommand.run(client, msg, [commandName], options)
@@ -136,7 +138,7 @@ exports.run = async (client, msg, args, options) => {
 				await client.query.updateQuery('egg', row, { uid: row.uid })
 			}
 
-			client.log.info(`${target.name} started tracking level ${levels.join(', ')} eggs`)
+			client.log.info(`${logReference}: ${target.name} started tracking level ${levels.join(', ')} eggs`)
 			await msg.reply(message)
 			reaction = insert.length ? '✅' : reaction
 		} else {
@@ -146,7 +148,7 @@ exports.run = async (client, msg, args, options) => {
 					id: target.id,
 					profile_no: currentProfileNo,
 				}, levels, 'level')
-				client.log.info(`${target.name} stopped tracking level ${levels.join(', ')} eggs`)
+				client.log.info(`${logReference}: ${target.name} stopped tracking level ${levels.join(', ')} eggs`)
 				result += lvlResult
 			}
 			if (commandEverything) {
@@ -154,14 +156,16 @@ exports.run = async (client, msg, args, options) => {
 					id: target.id,
 					profile_no: currentProfileNo,
 				})
-				client.log.info(`${target.name} stopped tracking all eggs`)
+				client.log.info(`${logReference}: ${target.name} stopped tracking all eggs`)
 				result += everythingResult
 			}
-			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+			msg.reply(translator.translateFormat('I removed {0} entries, use {1}{2} to see what you are currently tracking', result, util.prefix, translator.translate('tracked')))
+			reaction = result || client.config.database.client === 'sqlite' ? '✅' : reaction
 		}
 
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error('egg command unhappy:', err)
+		client.log.error(`${logReference}: egg command unhappy:`, err)
+		msg.reply(`There was a problem making these changes, the administrator can find the details with reference ${logReference}`)
 	}
 }
