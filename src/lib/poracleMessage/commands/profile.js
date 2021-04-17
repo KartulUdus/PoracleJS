@@ -38,7 +38,7 @@ exports.run = async (client, msg, args, options) => {
 					await msg.reply(translator.translate('That is not a valid profile name'))
 					return
 				}
-				if (profiles.some((x) => x.name == name)) {
+				if (profiles.some((x) => x.name.toLowerCase() == name)) {
 					await msg.react('🙅')
 					await msg.reply(translator.translate('That profile name already exists'))
 					return
@@ -88,7 +88,7 @@ exports.run = async (client, msg, args, options) => {
 						await msg.reply(translator.translate('That is not a valid profile number'))
 					}
 				} else {
-					const profile = profiles.find((x) => x.name == name)
+					const profile = profiles.find((x) => x.name.toLowerCase() == name)
 					if (!profile) {
 						await msg.react('🙅')
 						await msg.reply(translator.translate('That is not a valid profile name'))
@@ -242,7 +242,7 @@ exports.run = async (client, msg, args, options) => {
 				let valid = false
 				let profile
 				if (!profileNo) {
-					profile = profiles.find((x) => x.name === args[0])
+					profile = profiles.find((x) => x.name.toLowerCase() === args[0])
 					if (profile) {
 						profileNo = profile.profile_no
 						valid = true
