@@ -11,7 +11,7 @@ class FairPromiseQueue {
 		return ((this.running.length < this.count) && this.todo.length)
 	}
 
-	run(fn) {
+	run(fn, errfn) {
 		while (this.runNext()) {
 			let i = 0
 			let selectedKey
@@ -28,6 +28,11 @@ class FairPromiseQueue {
 
 				this.busyDestinations[selectedKey] = true
 				const promise = fn(queueEntry).then(() => {
+					this.busyDestinations[selectedKey] = false
+					this.running.shift()
+					this.run(fn)
+				}).catch((err) => {
+					if (errfn) errfn(err).catch(() => {})
 					this.busyDestinations[selectedKey] = false
 					this.running.shift()
 					this.run(fn)

@@ -60,6 +60,7 @@ const Query = require('./controllers/query')
 
 const query = new Query(logs.controller, knex, config, geofence)
 
+logs.setWorkerId('MAIN')
 fastify.decorate('logger', logs.log)
 fastify.decorate('controllerLog', logs.controller)
 fastify.decorate('webhooks', logs.webhooks)

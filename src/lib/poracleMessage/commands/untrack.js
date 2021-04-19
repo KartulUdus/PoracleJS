@@ -29,6 +29,16 @@ exports.run = async (client, msg, args, options) => {
 
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
+		// Substitute aliases
+		const pokemonAlias = require('../../../../config/pokemonAlias.json')
+		for (let i = args.length - 1; i >= 0; i--) {
+			let alias = pokemonAlias[args[i]]
+			if (alias) {
+				if (!Array.isArray(alias)) alias = [alias]
+				args.splice(i, 1, ...alias.map((x) => x.toString()))
+			}
+		}
+
 		let monsters = []
 		monsters = Object.values(client.GameData.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) || args.includes('everything'))
@@ -44,7 +54,17 @@ exports.run = async (client, msg, args, options) => {
 		}, monsterIds, 'pokemon_id')
 		client.log.info(`${target.name} removed tracking for monsters: ${monsters.map((m) => m.name).join(', ')}`)
 
-		if (result.length || client.config.database.client === 'sqlite') {
+		msg.reply(
+			''.concat(
+				result == 1 ? translator.translate('I removed 1 entry')
+					: translator.translateFormat('I removed {0} entries', result),
+				', ',
+				translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),
+			),
+			{ style: 'markdown' },
+		)
+
+		if (result || client.config.database.client === 'sqlite') {
 			msg.react('✅')
 		} else {
 			msg.react('👌')

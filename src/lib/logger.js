@@ -45,11 +45,13 @@ const path = require('path')
 // Error log
 // -- exceptions logged and uncaught exceptions
 
+const logInfo = {}
+
 function poracleFormatter(debug) {
 	const {
 		timestamp, level, message, ...args
 	} = debug
-	return `${timestamp} ${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args) : ''}`
+	return `${timestamp} ${logInfo.workerId ? `$${logInfo.workerId} ` : ''}${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args) : ''}`
 }
 
 const poracleFormat = winston.format.combine(
@@ -216,3 +218,7 @@ module.exports.controller = winston.createLogger({
 	],
 	exitOnError: false,
 })
+
+module.exports.setWorkerId = (id) => {
+	logInfo.workerId = id
+}

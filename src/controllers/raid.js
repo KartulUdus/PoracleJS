@@ -186,6 +186,7 @@ class Raid extends Controller {
 			}
 			data.teamId = data.team_id ? data.team_id : 0
 			data.teamName = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+			data.teamEmoji = data.team_id ? this.GameData.utilData.teams[data.team_id].emoji : ''
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url ? data.gym_url : ''
@@ -218,6 +219,10 @@ class Raid extends Controller {
 				//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
+				data.quickMoveId = data.move_1 ? data.move_1 : ''
+				data.chargeMoveId = data.move_2 ? data.move_2 : ''
+				data.quickMoveNameEng = this.GameData.moves[data.move_1] ? this.GameData.moves[data.move_1].name : ''
+				data.chargeMoveNameEng = this.GameData.moves[data.move_2] ? this.GameData.moves[data.move_2].name : ''
 
 				const e = []
 				const t = []
@@ -232,6 +237,7 @@ class Raid extends Controller {
 				data.emoji = e
 				data.boostingWeathers = data.types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
 				data.boosted = !!data.boostingWeathers.includes(data.weather)
+				data.boostWeatherNameEng = data.boosted ? this.GameData.utilData.weather[data.weather].name : ''
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -289,10 +295,8 @@ class Raid extends Controller {
 					data.evolutionName = translator.translate(data.evolutionNameEng)
 					data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
 					data.typeEmoji = data.emoji.map((emoji) => translator.translate(emoji)).join('')
-					data.quickMoveId = data.move_1 ? data.move_1 : ''
 					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
 					data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji) : ''
-					data.chargeMoveId = data.move_2 ? data.move_2 : ''
 					data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
 					data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji) : ''
 					data.boostWeatherId = data.boosted ? data.weather : ''

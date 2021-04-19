@@ -50,7 +50,7 @@ exports.run = async (client, msg, args, options) => {
 		const confUse = confAreas2.join('\n')
 
 		// Remove arguments that we don't want to keep for area processing
-		for (let i = 0; i < args.length; i++) {
+		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.channelRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
@@ -102,12 +102,16 @@ exports.run = async (client, msg, args, options) => {
 				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
 				break
 			}
-			default:
+			default: {
+				const human = await client.query.selectOneQuery('humans', { id: target.id })
+				await msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+
 				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
 					{ style: 'markdown' })
 				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 
 				break
+			}
 		}
 	} catch (err) {
 		client.log.error(`area command ${msg.content} unhappy:`, err)

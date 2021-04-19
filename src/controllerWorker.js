@@ -11,6 +11,7 @@ const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 
 const { workerId } = workerData
+logs.setWorkerId(workerId)
 
 const {
 	config, knex, dts, geofence, translatorFactory,
@@ -126,7 +127,11 @@ const alarmProcessor = new PromiseQueue(hookQueue, config.tuning.concurrentWebho
 function receiveQueue(msg) {
 	try {
 		hookQueue.push(msg)
-		alarmProcessor.run(processOne)
+		alarmProcessor.run(processOne, async (err) => {
+			// eslint-disable-next-line no-console
+			console.error(err)
+			log.error(`Worker ${workerId}: alarmProcessor exception`, err)
+		})
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to add new queue entry`, err)
 	}
@@ -178,6 +183,20 @@ async function currentStatus() {
 }
 
 if (!isMainThread) {
+	process.on('unhandledRejection', (reason) => {
+		// eslint-disable-next-line no-console
+		console.error(`Worker ${workerId} Unhandled Rejection at: ${reason.stack || reason}`)
+
+		log.error(`Unhandled Rejection at: ${reason.stack || reason}`)
+	})
+
+	process.on('uncaughtException', (err) => {
+		// eslint-disable-next-line no-console
+		console.error(`Worker ${workerId} Unhandled Rejection at: ${err.stack || err}`)
+
+		log.error(err)
+	})
+
 	parentPort.on('message', (msg) => {
 		if (msg.type == 'queuePort') {
 			queuePort = msg.queuePort
