@@ -168,6 +168,7 @@ class Raid extends Controller {
 			}
 			data.teamId = data.team_id ? data.team_id : 0
 			data.teamName = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+			data.teamEmoji = data.team_id ? this.GameData.utilData.teams[data.team_id].emoji : ''
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url ? data.gym_url : ''

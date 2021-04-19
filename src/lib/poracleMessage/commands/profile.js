@@ -22,7 +22,7 @@ exports.run = async (client, msg, args, options) => {
 		const profiles = await client.query.selectAllQuery('profiles', { id: target.id })
 
 		// Remove arguments that we don't want to keep for area processing
-		for (let i = 0; i < args.length; i++) {
+		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.channelRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
@@ -155,11 +155,11 @@ exports.run = async (client, msg, args, options) => {
 							const dayNames = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
 
 							for (const t of times) {
-								timeString = timeString.concat(`    ${translator.translate(dayNames[t.day - 1])} ${t.hours}:${t.mins}\n`)
+								timeString = timeString.concat(`    ${translator.translate(dayNames[t.day - 1])} ${t.hours}:${`00${t.mins}`.slice(-2)}\n`)
 							}
 						}
 
-						response = response.concat(`${profile.profile_no}. ${profile.name}${profile.area != '[]' ? ` - ${translator.translate('areas')}: ${profile.area}` : ''}${profile.latitude ? ` - ${translator.translate('location')}: ${profile.latitude},${profile.longitude}` : ''}\n${timeString}`)
+						response = response.concat(`${profile.profile_no}${profile.profile_no == currentProfileNo ? '*' : '.'} ${profile.name}${profile.area != '[]' ? ` - ${translator.translate('areas')}: ${profile.area}` : ''}${profile.latitude ? ` - ${translator.translate('location')}: ${profile.latitude.toFixed(5)},${profile.longitude.toFixed(5)}` : ''}\n${timeString}`)
 					}
 					await msg.reply(`${translator.translate('Currently configured profiles are:')}\n${response}`)
 				}

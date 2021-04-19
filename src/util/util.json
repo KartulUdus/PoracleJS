@@ -557,19 +557,23 @@
 	"teams": {
 		"0": {
 			"name": "Uncontested",
-			"color": "BABABA"
+			"color": "BABABA",
+			"emoji": "\u26AA"
 		},
 		"1": {
 			"name": "Mystic",
-			"color": "3B4CCA"
+			"color": "3B4CCA",
+			"emoji": "\uD83D\uDD35"
 		},
 		"2": {
 			"name": "Valor",
-			"color": "CC0000"
+			"color": "CC0000",
+			"emoji": "\uD83D\uDD34"
 		},
 		"3": {
 			"name": "Instinct",
-			"color": "FFDE00"
+			"color": "FFDE00",
+			"emoji": "\uD83D\uDFE1"
 		},
 		"4": {
 			"name": "Any team",
