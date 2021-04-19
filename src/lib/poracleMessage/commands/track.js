@@ -97,7 +97,7 @@ exports.run = async (client, msg, args, options) => {
 		// Substitute aliases
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
 		for (let i = args.length - 1; i >= 0; i--) {
-			let alias = pokemonAlias[args]
+			let alias = pokemonAlias[args[i]]
 			if (alias) {
 				if (!Array.isArray(alias)) alias = [alias]
 				args.splice(i, 1, ...alias.map((x) => x.toString()))
