@@ -188,6 +188,7 @@ module.exports.webhooks = winston.createLogger({
 module.exports.telegram = winston.createLogger({
 	transports: [
 		telegramLog,
+		consoleLog,
 		errorLog,
 	],
 	exitOnError: false,
@@ -205,6 +206,7 @@ module.exports.command = winston.createLogger({
 module.exports.discord = winston.createLogger({
 	transports: [
 		discordLog,
+		consoleLog,
 		errorLog,
 	],
 	exitOnError: false,
