@@ -145,7 +145,7 @@ exports.run = async (client, msg, args, options) => {
 		let adminExplanation = ''
 		let restartExplanation = ''
 		if (msg.isFromAdmin) {
-			adminExplanation = `Tracking details for **${target.name}**\n`
+			adminExplanation = `Tracking details for **${msg.convertSafe(target.name)}**\n`
 		}
 
 		if (+human.latitude !== 0 && +human.longitude !== 0) {

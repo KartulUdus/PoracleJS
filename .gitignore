@@ -18,7 +18,6 @@ poracledb/*
 !config/default.json
 
 !config/custom-environment-variables.json
-src/lib/discord/commando/commands/template.js
 npm-debug.log
 .DS_Store
 .env

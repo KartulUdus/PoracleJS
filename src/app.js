@@ -20,7 +20,9 @@ const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
-const TelegramUtil = require('./lib/telegram/telegramUtil.js')
+// const TelegramUtil = require('./lib/telegram/telegramUtil.js')
+const DiscordReconciliation = require('./lib/discord/discordReconciliation')
+const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
 
 const { Config } = require('./lib/configFetcher')
 
@@ -56,7 +58,7 @@ const re = require('./util/regex')(translatorFactory)
 
 const Query = require('./controllers/query')
 
-const query = new Query(logs.controller, knex, config)
+const query = new Query(logs.controller, knex, config, geofence)
 
 logs.setWorkerId('MAIN')
 fastify.decorate('logger', logs.log)
@@ -65,6 +67,7 @@ fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
+fastify.decorate('query', query)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)
@@ -76,7 +79,6 @@ const discordCommando = config.discord.enabled ? new DiscordCommando(config.disc
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
-let roleWorker
 let telegram
 let telegramChannel
 
@@ -87,63 +89,30 @@ if (config.discord.enabled) {
 		}
 	}
 	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true)
-
-	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-		roleWorker = new DiscordWorker(config.discord.token[0], 999, config, logs)
-	}
 }
 
-let telegramUtil
 if (config.telegram.enabled) {
 	telegram = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
 		telegramChannel = new TelegramWorker('2', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
-
-	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
-		telegramUtil = new TelegramUtil(config, log, telegraf)
-	}
 }
 
-async function removeInvalidUser(user) {
-	if (config.general.roleCheckMode == 'disable-user') {
-		if (!user.admin_disable) await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: user.id })
-	} else if (config.general.roleCheckMode == 'delete') { // sanity check
-		await query.deleteQuery('egg', { id: user.id })
-		await query.deleteQuery('monsters', { id: user.id })
-		await query.deleteQuery('raid', { id: user.id })
-		await query.deleteQuery('quest', { id: user.id })
-		await query.deleteQuery('lures', { id: user.id })
-		await query.deleteQuery('profiles', { id: user.id })
-		await query.deleteQuery('humans', { id: user.id })
-	}
-}
+let telegramReconciliation
 
 async function syncTelegramMembership() {
 	try {
+		if (!telegramReconciliation) {
+			telegramReconciliation = new TelegramReconciliation(telegraf, log, config, query, dts)
+		}
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'telegram:user', admin_disable: 0 })
-		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
-		let invalidUsers = []
-		for (const channel of config.telegram.channels) {
-			invalidUsers = await telegramUtil.checkMembership(usersToCheck, channel)
-			usersToCheck = invalidUsers
-		}
-
-		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing/disabling from dB...')
-			for (const user of invalidUsers) {
-				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckMode != 'ignore') {
-					await removeInvalidUser(user)
-				} else {
-					log.info('config.general.roleCheckMode is set to ignore, not removing')
-				}
-			}
-		} else {
-			log.verbose('No invalid users found, all good!')
+		if (config.reconciliation.telegram.updateUserNames || config.reconciliation.telegram.removeInvalidUsers)	{
+			await telegramReconciliation.syncTelegramUsers(
+				config.reconciliation.discord.updateUserNames,
+				config.reconciliation.discord.removeInvalidUsers,
+			)
 		}
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
@@ -151,29 +120,56 @@ async function syncTelegramMembership() {
 	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
 }
 
+let discordReconciliation
+
 async function syncDiscordRole() {
 	try {
-		log.verbose('Verification of Discord role membership to Poracle users starting...')
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
-		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
-		let invalidUsers = []
-		for (const guild of config.discord.guilds) {
-			invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
-			usersToCheck = invalidUsers
-		}
-		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing/disabling from dB...')
-			for (const user of invalidUsers) {
-				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckMode != 'ignore') {
-					await removeInvalidUser(user)
-				} else {
-					log.info('config.general.roleCheckMode is set to ignore, not removing')
-				}
+		if (!discordReconciliation) {
+			const worker = discordWorkers[0]
+			if (!worker || worker.busy) {
+				// try again in 30 seconds
+				setTimeout(syncDiscordRole, 30000)
+				return
 			}
-		} else {
-			log.verbose('No invalid users found, all good!')
+			discordReconciliation = new DiscordReconciliation(worker.client, log, config, query, dts)
 		}
+		// "updateChannelNames": true,
+		// 	"updateChannelNotes": true,
+		// 	"unregisterMissingChannels": true
+		if (config.reconciliation.discord.updateChannelNames || config.reconciliation.discord.updateChannelNotes
+			|| config.reconciliation.discord.unregisterMissingChannels) {
+			await discordReconciliation.syncDiscordChannels(config.reconciliation.discord.updateChannelNames,
+				config.reconciliation.discord.updateChannelNotes, config.reconciliation.discord.unregisterMissingChannels)
+		}
+		// "updateUserNames": true,
+		// "removeInvalidUsers": true,
+		// "registerNewUsers": true,
+		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers)	{
+			await discordReconciliation.syncDiscordRole(config.reconciliation.discord.registerNewUsers,
+				config.reconciliation.discord.updateUserNames,
+				config.reconciliation.discord.removeInvalidUsers)
+		}
+
+		// let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
+		// usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
+		// let invalidUsers = []
+		// for (const guild of config.discord.guilds) {
+		// 	invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
+		// 	usersToCheck = invalidUsers
+		// }
+		// if (invalidUsers[0]) {
+		// 	log.info('Invalid users found, removing/disabling from dB...')
+		// 	for (const user of invalidUsers) {
+		// 		log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
+		// 		if (config.general.roleCheckMode != 'ignore') {
+		// 			await removeInvalidUser(user)
+		// 		} else {
+		// 			log.info('config.general.roleCheckMode is set to ignore, not removing')
+		// 		}
+		// 	}
+		// } else {
+		// 	log.verbose('No invalid users found, all good!')
+		// }
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
@@ -220,7 +216,6 @@ function handleShutdown() {
 	}
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
-	if (discordWebhookWorker) workerSaves.push(discordWebhookWorker.saveTimeouts())
 	if (config.general.persistDuplicateCache) {
 		workerSaves.push(saveEventCache())
 	}
@@ -360,7 +355,8 @@ async function processMessages(msgs) {
 
 						try {
 							if (config.alertLimits.disableOnStop) {
-								await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: msg.target })
+								// This acts like the admin de-registered the user rather than when losing a role so user does not get auto re-registered
+								await query.updateQuery('humans', { admin_disable: 1, disabled_date: null }, { id: msg.target })
 							} else {
 								await query.updateQuery('humans', { enabled: 0 }, { id: msg.target })
 							}

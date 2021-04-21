@@ -138,7 +138,7 @@ class Quest extends Controller {
 			data.energyAmount = data.rewardData.energyAmount
 			data.energyMonsters = data.rewardData.energyMonsters
 
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
+			data.matched = this.pointInArea([data.latitude, data.longitude])
 			data.imgUrl = data.rewardData.monsters[1]
 				? `${this.config.general.imgUrl}pokemon_icon_${data.monsterData.pokemonId.toString().padStart(3, '0')}_${data.monsterData.formId.toString().padStart(2, '0')}.png`
 				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
