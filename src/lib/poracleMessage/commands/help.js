@@ -28,9 +28,9 @@ async function provideSingleLineHelp(client, msg, util, language, target, comman
 	const translator = client.translatorFactory.Translator(language)
 
 	if (isHelpAvailable(client, language, target, commandName)) {
-		await msg.reply(translator.translateFormat('Use `{0}{1} {2}` for more details on this command', util.prefix, translator.translate('help'), translator.translate(commandName)))
+		await msg.reply(translator.translateFormat('Use `{0}{1} {2}` for more details on this command', util.prefix, translator.translate('help'), translator.translate(commandName)), { style: 'markdown' })
 	} else {
-		await msg.reply(translator.translateFormat('Use `{0}{1}` for more help', util.prefix, translator.translate('help')))
+		await msg.reply(translator.translateFormat('Use `{0}{1}` for more help', util.prefix, translator.translate('help')), { style: 'markdown' })
 	}
 }
 
