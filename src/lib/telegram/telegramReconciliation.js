@@ -76,7 +76,7 @@ class TelegramReconciliation {
 
 			if (!this.config.areaSecurity.enabled) {
 				const before = !!user && !user.admin_disable
-				const after = channelList.some((channel) => this.config.discord.channels.includes(channel))
+				const after = channelList.some((channel) => this.config.telegram.channels.includes(channel))
 
 				if (!before && after) {
 					if (!user) {
