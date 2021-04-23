@@ -179,7 +179,8 @@
     //    deny: users cannot track for everything and must track against individual pokemon
       "everythingFlagPermissions": "allow-any",
       "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
-      "maxDistance": 0                            // restrict users from having too large a tracking circle
+      "maxDistance": 0,                           // restrict users from having too large a tracking circle
+      "ignoreRaidHourRaids": false                // ignore raids > 47m long to save raid hour spam
   },
   //
   // stats configuration

@@ -200,6 +200,12 @@ class Raid extends Controller {
 
 			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 
+			if (this.config.tracking.ignoreRaidHourRaids
+				&& (data.end - data.start) > 47 * 60) {
+				this.log.verbose(`${this.logReference}: Raid/Egg on ${data.gymName} will be longer than 47 minutes - ignored`)
+				return []
+			}
+
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
 				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
