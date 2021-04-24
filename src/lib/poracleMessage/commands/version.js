@@ -3,7 +3,7 @@ const { version } = require('../../../../package.json')
 exports.run = async (client, msg, args, options) => {
 	try {
 		if (msg.isDM) {
-			msg.reply(`PoraclsJS version ${version}`)
+			msg.reply(`PoracleJS version ${version}`)
 		}
 
 		if (!msg.isFromAdmin) {
