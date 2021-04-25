@@ -1,5 +1,6 @@
 const handlebars = require('handlebars')
 const config = require('config')
+const moreHandlebars = require('./more-handlebars')
 const monsters = require('../util/monsters')
 const {
 	cpMultipliers, types, powerUpCost,
@@ -23,6 +24,8 @@ function translatorAlt() {
 }
 
 module.exports = () => {
+	moreHandlebars.registerHelpers(handlebars)
+
 	handlebars.registerHelper('numberFormat', (value, decimals) => {
 		if (!['string', 'number'].includes(typeof decimals)) decimals = 2 // We may have the handlebars options in the parameter
 
