@@ -126,6 +126,18 @@ module.exports = () => {
 		))
 	})
 
+	handlebars.registerHelper('pokemonBaseStats', (pokemonId, formId) => {
+		if (!['string', 'number'].includes(typeof formId)) formId = 0
+
+		const monster = monsters[`${pokemonId}_${formId}`] ? monsters[`${pokemonId}_${formId}`] : monsters[`${pokemonId}_0`]
+
+		return monster ? monster.stats : {
+			baseAttack: 0,
+			baseDefense: 0,
+			baseStamina: 0,
+		}
+	})
+
 	handlebars.registerHelper('getPowerUpCost', (levelStart, levelEnd, options) => {
 		const translator = userTranslator(options)
 
