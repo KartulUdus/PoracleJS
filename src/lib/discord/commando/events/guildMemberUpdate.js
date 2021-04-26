@@ -3,6 +3,7 @@ const DiscordReconciliation = require('../../discordReconciliation')
 module.exports = async (client, oldPresence) => {
 	try {
 		if (client.config.discord.admins.includes(oldPresence.user.id)) return
+		if (oldPresence.user.bot) return
 
 		const dr = new DiscordReconciliation(oldPresence.client,
 			client.logs.log,
