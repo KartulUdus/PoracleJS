@@ -251,7 +251,7 @@ class DiscordReconciliation {
 
 	async syncDiscordChannels(syncNames, syncNotes, removeInvalidChannels) {
 		try {
-			this.log.verbose('Reconciliation (Discord) Channel membership to Poracle users starting...')
+			this.log.info('Reconciliation (Discord) Channel membership to Poracle users starting...')
 			const usersToCheck = await this.query.selectAllQuery('humans', { type: 'discord:channel', admin_disable: 0 })
 
 			for (const user of usersToCheck) {
@@ -299,6 +299,7 @@ class DiscordReconciliation {
 					this.log.info(`Reconciliation (Discord) Update channel ${user.id} ${name}`)
 				}
 			}
+			this.log.verbose('Reconciliation (Discord) Channel membership to Poracle users complete...')
 		} catch (err) {
 			this.log.error('Verification of Poracle channels failed with', err)
 		}
@@ -320,13 +321,17 @@ class DiscordReconciliation {
 			}
 
 			if (registerNewUsers) {
+				this.log.verbose('Reconciliation (Discord) Find qualified users missing from Poracle users starting...')
+
 				for (const id of Object.keys(discordUserList)) {
 					if (!this.config.discord.admins.includes(id)
 						&& !checked.includes(id)) {
 						await this.reconcileUser(id, null, discordUserList[id], syncNames, removeInvalidUsers)
 					}
 				}
+				this.log.verbose('Reconciliation (Discord) Find qualified users missing from Poracle users complete...')
 			}
+			this.log.verbose('Reconciliation (Discord) User role membership to Poracle users complete...')
 		} catch (err) {
 			this.log.error('Reconciliation (Discord) User role check failed', err)
 		}
@@ -334,6 +339,8 @@ class DiscordReconciliation {
 
 	async loadAllGuildUsers() {
 		const userList = {}
+
+		this.log.verbose('Reconciliation (Discord) Loading all guild users...')
 
 		for (const guildId of this.config.discord.guilds) {
 			let guild
@@ -373,6 +380,8 @@ class DiscordReconciliation {
 				}
 			}
 		}
+
+		this.log.verbose('Reconciliation (Discord) Loading all guild users complete...')
 
 		return userList
 	}
