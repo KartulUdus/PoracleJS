@@ -265,14 +265,12 @@ class DiscordReconciliation {
 					if (err instanceof DiscordAPIError) {
 						if (err.code === 10003) {
 							if (removeInvalidChannels) {
-								this.log.info(`Reconciliation (Discord) Deleted channel ${user.id} ${user.name}`)
-								await this.query.deleteQuery('egg', { id: user.id })
-								await this.query.deleteQuery('monsters', { id: user.id })
-								await this.query.deleteQuery('raid', { id: user.id })
-								await this.query.deleteQuery('quest', { id: user.id })
-								await this.query.deleteQuery('lures', { id: user.id })
-								await this.query.deleteQuery('profiles', { id: user.id })
-								await this.query.deleteQuery('humans', { id: user.id })
+								this.log.info(`Reconciliation (Discord) Disable channel ${user.id} ${user.name}`)
+
+								await this.query.updateQuery('humans', {
+									admin_disable: 1,
+									disabled_date: this.query.dbNow(),
+								}, { id: user.id })
 							}
 							// eslint-disable-next-line no-continue
 							continue
@@ -364,19 +362,21 @@ class DiscordReconciliation {
 			}
 			const members = await guild.members.fetch({ force: false })
 			for (const member of members.values()) {
-				const roleList = []
+				if (!member.user.bot) {
+					const roleList = []
 
-				for (const role of member.roles.cache.values()) {
-					roleList.push(role.id)
-				}
-
-				if (!userList[member.id]) {
-					userList[member.id] = {
-						name: emojiStrip(member.displayName),
-						roles: roleList,
+					for (const role of member.roles.cache.values()) {
+						roleList.push(role.id)
 					}
-				} else {
-					userList[member.id].roles.push(...roleList)
+
+					if (!userList[member.id]) {
+						userList[member.id] = {
+							name: emojiStrip(member.displayName),
+							roles: roleList,
+						}
+					} else {
+						userList[member.id].roles.push(...roleList)
+					}
 				}
 			}
 		}
