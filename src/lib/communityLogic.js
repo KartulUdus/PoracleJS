@@ -7,7 +7,7 @@ function calculateLocationRestrictions(config, communityMembership) {
 			const communityToAdd = config.areaSecurity.communities[communityName]
 			if (communityToAdd) {
 				if (Array.isArray(communityToAdd.locationFence)) {
-					locationRestrictions.add(...communityToAdd.locationFence.map((x) => x.toLowerCase()))
+					communityToAdd.locationFence.forEach((x) => locationRestrictions.add(x.toLowerCase()))
 				} else {
 					locationRestrictions.add(communityToAdd.locationFence.toLowerCase())
 				}
