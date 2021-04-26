@@ -80,7 +80,25 @@ class DiscordReconciliation {
 					throw err
 				}
 			}
-			const guildMember = await guild.members.fetch({ user: id, force: true })
+			if (!guild) {
+				this.log.warn(`Reconciliation (Discord) Cannot load guild "${guildId}"`)
+				// eslint-disable-next-line no-continue
+				continue
+			}
+
+			let guildMember
+			try {
+				guildMember = await guild.members.fetch({ user: id, force: true })
+			} catch (err) {
+				if (err instanceof DiscordAPIError) {
+					if (err.httpStatus === 404) {
+						// eslint-disable-next-line no-continue
+						continue
+					}
+				} else {
+					throw err
+				}
+			}
 			if (guildMember) {
 				if (!name) name = emojiStrip(guildMember.displayName)
 				for (const role of guildMember.roles.cache.values()) {
