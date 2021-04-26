@@ -57,6 +57,8 @@ class DiscordReconciliation {
 	}
 
 	async reconcileSingleUser(id, removeInvalidUsers) {
+		this.log.verbose(`Reconciliation (Discord) Check (single) user ${id}`)
+
 		const roleList = []
 
 		let name = ''
@@ -67,18 +69,20 @@ class DiscordReconciliation {
 			try {
 				guild = await this.client.guilds.fetch(guildId)
 			} catch (err) {
-				if (err instanceof DiscordAPIError) {
-					if (err.httpStatus === 403) {
-						// eslint-disable-next-line no-continue
-						continue
-						// this.logs.log.debug(`${guildID} no access`)
-
-						// .push(...allUsers)
-						// return invalidUsers
-					}
-				} else {
-					throw err
-				}
+				this.log.warn(`Reconciliation (Discord) Cannot load guild "${guildId}"`, err)
+				throw err
+				// if (err instanceof DiscordAPIError) {
+				// 	if (err.httpStatus === 403) {
+				// 		// eslint-disable-next-line no-continue
+				// 		continue
+				// 		// this.logs.log.debug(`${guildID} no access`)
+				//
+				// 		// .push(...allUsers)
+				// 		// return invalidUsers
+				// 	}
+				// } else {
+				// 	throw err
+				// }
 			}
 			if (!guild) {
 				this.log.warn(`Reconciliation (Discord) Cannot load guild "${guildId}"`)
@@ -273,6 +277,10 @@ class DiscordReconciliation {
 							// eslint-disable-next-line no-continue
 							continue
 						}
+
+						this.log.info(`Reconciliation (Discord) Problem accessing channel ${user.id} ${user.name}`, err)
+						// eslint-disable-next-line no-continue
+						continue
 					} else {
 						throw err
 					}
@@ -332,15 +340,20 @@ class DiscordReconciliation {
 			try {
 				guild = await this.client.guilds.fetch(guildId)
 			} catch (err) {
-				if (err instanceof DiscordAPIError) {
-					if (err.httpStatus === 403) {
-						this.log.debug(`${guildId} no access`)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-				} else {
-					throw err
-				}
+				// if (err instanceof DiscordAPIError) {
+				// 	if (err.httpStatus === 403) {
+				// 		this.log.debug(`${guildId} no access`)
+				// 		// eslint-disable-next-line no-continue
+				// 		continue
+				// 	}
+				// 	this.log.info(`Reconciliation (Discord) Problem accessing guild ${guildId}`, err)
+				// 	// eslint-disable-next-line no-continue
+				// 	continue
+				//
+				// } else {
+				this.log.info(`Reconciliation (Discord) Problem accessing guild ${guildId}`, err)
+				throw err
+				// }
 			}
 			const members = await guild.members.fetch({ force: false })
 			for (const member of members.values()) {
