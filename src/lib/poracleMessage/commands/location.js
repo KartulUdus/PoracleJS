@@ -62,7 +62,7 @@ exports.run = async (client, msg, args, options) => {
 			placeConfirmation = locations[0].city ? ` **${locations[0].city} - ${locations[0].country}** ` : ` **${locations[0].country}** `
 		}
 
-		if (target.type.includes(':user') && client.config.areaSecurity.enabled && !msg.isFromAdmin) {
+		if (client.config.areaSecurity.enabled && !msg.isFromAdmin) {
 			const human = await client.query.selectOneQuery('humans', { id: target.id })
 			if (human.area_restriction) {
 				const allowedFences = JSON.parse(human.area_restriction)
