@@ -621,6 +621,22 @@ async function processOne(hook) {
 
 				break
 			}
+			case 'nest': {
+				if (config.general.disableNest) {
+					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was received but set to be ignored in config`)
+					break
+				}
+				fastify.webhooks.info(`nest ${JSON.stringify(hook.message)}`)
+				if (fastify.cache.has(`${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`)) {
+					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was sent again too soon, ignoring`)
+					break
+				}
+				fastify.cache.set(`${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`, 'cached')
+				processHook = hook
+
+				break
+			}
+
 			case 'weather': {
 				if (config.general.disableWeather) break
 				fastify.webhooks.info(`weather ${JSON.stringify(hook.message)}`)
