@@ -83,7 +83,7 @@ exports.run = async (client, msg, args, options) => {
 					if (human) {
 						msg.reply(`Add community ${community} to target ${id} ${human.name}`)
 
-						const existingCommunities = JSON.parse(human.community_membership)
+						const existingCommunities = human.community_membership ? JSON.parse(human.community_membership) : []
 						const newCommunities = communityLogic.addCommunity(client.config, existingCommunities, community)
 
 						await client.query.updateQuery('humans', {
@@ -101,7 +101,7 @@ exports.run = async (client, msg, args, options) => {
 					if (human) {
 						msg.reply(`Remove community ${community} from target ${id} ${human.name}`)
 
-						const existingCommunities = JSON.parse(human.community_membership)
+						const existingCommunities = human.community_membership ? JSON.parse(human.community_membership) : []
 						const newCommunities = communityLogic.removeCommunity(client.config, existingCommunities, community)
 
 						await client.query.updateQuery('humans', {
@@ -128,6 +128,6 @@ exports.run = async (client, msg, args, options) => {
 		}
 		await msg.react('✅')
 	} catch (err) {
-		client.log.error(`disable command ${msg.content} unhappy:`, err)
+		client.log.error(`community command ${msg.content} unhappy:`, err)
 	}
 }
