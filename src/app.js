@@ -2,6 +2,7 @@ require('./lib/configFileCreator')()
 require('dotenv').config()
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
+const { writeHeapSnapshot } = require('v8')
 
 const fs = require('fs')
 const fsp = require('fs').promises
@@ -514,6 +515,15 @@ for (let w = 0; w < maxWorkers; w++) {
 	})
 }
 
+process.on('SIGUSR2', () => {
+	writeHeapSnapshot()
+	for (const dumpWorker of workers) {
+		dumpWorker.commandPort.postMessage({ type: 'heapdump' })
+	}
+	weatherWorker.commandPort.postMessage({ type: 'heapdump' })
+	statsWorker.commandPort.postMessage({ type: 'heapdump' })
+})
+
 let currentWorkerNo = 0
 
 async function processOne(hook) {
@@ -530,7 +540,7 @@ async function processOne(hook) {
 				}
 				fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
 				const verifiedSpawnTime = hook.message.verified || hook.message.disappear_time_verified
-				if (fastify.cache.has(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`)) {
+				if (fastify.cache.get(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
 				}
@@ -555,7 +565,7 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
+				if (fastify.cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
 					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 					break
 				}
@@ -580,7 +590,7 @@ async function processOne(hook) {
 					break
 				}
 				if (lureExpiration && !config.general.disableInvasion) {
-					if (fastify.cache.has(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
+					if (fastify.cache.get(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
 						break
 					}
@@ -592,7 +602,7 @@ async function processOne(hook) {
 
 					processHook = hook
 				} else if (!config.general.disableLure) {
-					if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+					if (fastify.cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
 						break
 					}
@@ -612,7 +622,7 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
+				if (fastify.cache.get(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
 					break
 				}
@@ -630,7 +640,7 @@ async function processOne(hook) {
 				}
 				const updateTimestamp = hook.message.time_changed || hook.message.updated
 				const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
-				if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
+				if (fastify.cache.get(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
 					fastify.controllerLog.debug(`${hook.message.s2_cell_id}: Weather for this cell was sent again too soon, ignoring`)
 					break
 				}
@@ -673,6 +683,7 @@ async function currentStatus() {
 
 	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
 	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`)
+	log.verbose(`Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`)
 }
 
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
