@@ -179,6 +179,9 @@ class DiscordReconciliation {
 			} else {
 				const communityList = []
 
+				// This rebuilds the community membership list based on roles.
+				// If a community does not have any user roles, perhaps we should be taking those communities into account
+				// later -- but the @everyone group could be added by users in config
 				for (const community of Object.keys(this.config.areaSecurity.communities)) {
 					if (roleList.some((role) => this.config.areaSecurity.communities[community].discord.userRole.includes(role))) {
 						communityList.push(community.toLowerCase())
@@ -292,6 +295,15 @@ class DiscordReconciliation {
 				if (syncNotes && user.notes !== notes) {
 					updates.notes = notes
 				}
+
+				// If there is currently an area restriction for a channel, ensure the location restrictions are correct
+				if (user.area_restriction && user.community_membership) {
+					const areaRestriction = communityLogic.calculateLocationRestrictions(this.config, JSON.parse(user.community_membership))
+					if (!haveSameContents(areaRestriction, JSON.parse(user.area_restriction))) {
+						updates.area_restriction = JSON.stringify(areaRestriction)
+					}
+				}
+
 				if (Object.keys(updates).length) {
 					await this.query.updateQuery('humans', updates, { id: user.id })
 					this.log.info(`Reconciliation (Discord) Update channel ${user.id} ${name}`)
