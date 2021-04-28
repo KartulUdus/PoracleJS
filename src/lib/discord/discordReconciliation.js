@@ -368,7 +368,7 @@ class DiscordReconciliation {
 				// 	continue
 				//
 				// } else {
-				this.log.info(`Reconciliation (Discord) Problem accessing guild ${guildId}`, err)
+				this.log.error(`Reconciliation (Discord) Problem accessing guild ${guildId}`, err)
 				throw err
 				// }
 			}
