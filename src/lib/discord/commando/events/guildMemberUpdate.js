@@ -2,6 +2,8 @@ const DiscordReconciliation = require('../../discordReconciliation')
 
 module.exports = async (client, oldPresence) => {
 	try {
+		client.logs.discord.info(`Discord event: guildMemberUpdate - ${oldPresence.user.id}`)
+
 		if (client.config.discord.admins.includes(oldPresence.user.id)) return
 		if (oldPresence.user.bot) return
 
