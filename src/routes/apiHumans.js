@@ -1,4 +1,5 @@
 const communityLogic = require('../lib/communityLogic')
+const DiscordUtil = require('../lib/discord/discordUtil')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/humans/:id', options, async (req) => {
@@ -29,6 +30,94 @@ module.exports = async (fastify, options, next) => {
 		return {
 			status: 'ok',
 			areas: fastify.geofence.filter((x) => allowedAreas.includes(x.name.toLowerCase())).map((x) => ({ name: x.name, group: x.group || '' })),
+		}
+	})
+
+	fastify.get('/api/humans/:id/getAdministrationRoles', options, async (req) => {
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+
+		if (!human) {
+			return {
+				status: 'error',
+				message: 'User not found',
+			}
+		}
+
+		const result = {}
+
+		if (fastify.config.discord.enabled) {
+			let roles
+
+			result.discord = {}
+			result.discord.channels = []
+			result.discord.webhooks = []
+
+			if (fastify.config.discord.delegatedAdministration && Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
+				const dr = new DiscordUtil(fastify.discordWorker.client,
+					fastify.log, fastify.config, fastify.query)
+
+				roles = await dr.getUserRoles(req.params.id)
+				const channels = await dr.getAllChannels()
+
+				const rolesAndId = [...roles, req.params.id]
+
+				for (const id of Object.keys(fastify.config.discord.delegatedAdministration.channelTracking)) {
+					if (fastify.config.discord.delegatedAdministration.channelTracking[id].some((x) => rolesAndId.includes(x))) {
+						if (fastify.config.discord.guilds.includes(id)) {
+							// push whole guild
+							result.discord.channels.push(...channels[id].map((x) => x.id))
+						}
+						for (const guild of fastify.config.discord.guilds) {
+							if (channels[guild]) {
+								if (channels[guild].some((x) => x.categoryId == id)) {
+									// push whole category
+									result.discord.channels.push(...channels[guild].filter((x) => x.categoryId == id).map((x) => x.id))
+								}
+								if (channels[guild].some((x) => x.id == id)) {
+									result.discord.channels.push(id)
+								}
+							}
+						}
+					}
+				}
+			}
+
+			if (fastify.config.discord.delegatedAdministration && Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).length) {
+				if (!roles) {
+					const dr = new DiscordUtil(fastify.discordWorker.client,
+						fastify.log, fastify.config, fastify.query)
+
+					roles = await dr.getUserRoles(req.params.id)
+				}
+
+				// Add hooks identified by user
+				result.discord.webhooks.push(...Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).filter((x) => fastify.config.discord.delegatedAdministration.webhookTracking[x].includes(req.params.id)))
+				// Add hooks identified by role
+				result.discord.webhooks.push(...Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).filter((x) => fastify.config.discord.delegatedAdministration.webhookTracking[x].some((y) => roles.includes(y))))
+			}
+		}
+
+		if (fastify.config.telegram.enabled) {
+			result.telegram = {}
+			result.telegram.channels = []
+
+			if (fastify.config.telegram.delegatedAdministration && Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).length) {
+				// Add hooks identified by user
+				result.telegram.channels.push(...Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).filter((x) => fastify.config.telegram.delegatedAdministration.channelTracking[x].includes(req.params.id)))
+			}
+		}
+
+		return {
+			status: 'ok',
+			admin: result,
 		}
 	})
 
