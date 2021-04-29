@@ -1388,6 +1388,12 @@
 		"type": "Fire",
 		"power": 95
 	},
+	"343": {
+		"name": "Leaf Storm",
+		"proto": "LEAF_STORM",
+		"type": "Grass",
+		"power": 130
+	},
 	"344": {
 		"name": "Tri Attack",
 		"proto": "TRI_ATTACK",
