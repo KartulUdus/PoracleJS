@@ -20,7 +20,7 @@ module.exports = async (fastify, options, next) => {
 			admins: {
 				discord: fastify.config.discord.admins,
 				telegram: fastify.config.telegram.admins,
-			}
+			},
 		}
 	})
 	next()
