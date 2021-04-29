@@ -23,7 +23,12 @@ class DiscordCommando {
 
 	async bounceWorker() {
 		delete this.client
-		this.client = new Client()
+		this.client = new Client({
+			messageCacheMaxSize: 1,
+			messsageCacheLifetime: 60,
+			messageSweepInterval: 120,
+			messageEditHistoryMaxSize: 1,
+		})
 		try {
 			this.client.on('error', (err) => {
 				this.busy = true

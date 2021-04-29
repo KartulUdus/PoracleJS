@@ -57,6 +57,8 @@ class DiscordReconciliation {
 	}
 
 	async reconcileSingleUser(id, removeInvalidUsers) {
+		this.log.verbose(`Reconciliation (Discord) Check (single) user ${id}`)
+
 		const roleList = []
 
 		let name = ''
@@ -67,20 +69,40 @@ class DiscordReconciliation {
 			try {
 				guild = await this.client.guilds.fetch(guildId)
 			} catch (err) {
+				this.log.warn(`Reconciliation (Discord) Cannot load guild "${guildId}"`, err)
+				throw err
+				// if (err instanceof DiscordAPIError) {
+				// 	if (err.httpStatus === 403) {
+				// 		// eslint-disable-next-line no-continue
+				// 		continue
+				// 		// this.logs.log.debug(`${guildID} no access`)
+				//
+				// 		// .push(...allUsers)
+				// 		// return invalidUsers
+				// 	}
+				// } else {
+				// 	throw err
+				// }
+			}
+			if (!guild) {
+				this.log.warn(`Reconciliation (Discord) Cannot load guild "${guildId}"`)
+				// eslint-disable-next-line no-continue
+				continue
+			}
+
+			let guildMember
+			try {
+				guildMember = await guild.members.fetch({ user: id, force: true })
+			} catch (err) {
 				if (err instanceof DiscordAPIError) {
-					if (err.httpStatus === 403) {
+					if (err.httpStatus === 404) {
 						// eslint-disable-next-line no-continue
 						continue
-						// this.logs.log.debug(`${guildID} no access`)
-
-						// .push(...allUsers)
-						// return invalidUsers
 					}
 				} else {
 					throw err
 				}
 			}
-			const guildMember = await guild.members.fetch({ user: id, force: true })
 			if (guildMember) {
 				if (!name) name = emojiStrip(guildMember.displayName)
 				for (const role of guildMember.roles.cache.values()) {
@@ -157,6 +179,9 @@ class DiscordReconciliation {
 			} else {
 				const communityList = []
 
+				// This rebuilds the community membership list based on roles.
+				// If a community does not have any user roles, perhaps we should be taking those communities into account
+				// later -- but the @everyone group could be added by users in config
 				for (const community of Object.keys(this.config.areaSecurity.communities)) {
 					if (roleList.some((role) => this.config.areaSecurity.communities[community].discord.userRole.includes(role))) {
 						communityList.push(community.toLowerCase())
@@ -229,7 +254,7 @@ class DiscordReconciliation {
 
 	async syncDiscordChannels(syncNames, syncNotes, removeInvalidChannels) {
 		try {
-			this.log.verbose('Reconciliation (Discord) Channel membership to Poracle users starting...')
+			this.log.info('Reconciliation (Discord) Channel membership to Poracle users starting...')
 			const usersToCheck = await this.query.selectAllQuery('humans', { type: 'discord:channel', admin_disable: 0 })
 
 			for (const user of usersToCheck) {
@@ -243,18 +268,20 @@ class DiscordReconciliation {
 					if (err instanceof DiscordAPIError) {
 						if (err.code === 10003) {
 							if (removeInvalidChannels) {
-								this.log.info(`Reconciliation (Discord) Deleted channel ${user.id} ${user.name}`)
-								await this.query.deleteQuery('egg', { id: user.id })
-								await this.query.deleteQuery('monsters', { id: user.id })
-								await this.query.deleteQuery('raid', { id: user.id })
-								await this.query.deleteQuery('quest', { id: user.id })
-								await this.query.deleteQuery('lures', { id: user.id })
-								await this.query.deleteQuery('profiles', { id: user.id })
-								await this.query.deleteQuery('humans', { id: user.id })
+								this.log.info(`Reconciliation (Discord) Disable channel ${user.id} ${user.name}`)
+
+								await this.query.updateQuery('humans', {
+									admin_disable: 1,
+									disabled_date: this.query.dbNow(),
+								}, { id: user.id })
 							}
 							// eslint-disable-next-line no-continue
 							continue
 						}
+
+						this.log.info(`Reconciliation (Discord) Problem accessing channel ${user.id} ${user.name}`, err)
+						// eslint-disable-next-line no-continue
+						continue
 					} else {
 						throw err
 					}
@@ -268,11 +295,21 @@ class DiscordReconciliation {
 				if (syncNotes && user.notes !== notes) {
 					updates.notes = notes
 				}
+
+				// If there is currently an area restriction for a channel, ensure the location restrictions are correct
+				if (user.area_restriction && user.community_membership) {
+					const areaRestriction = communityLogic.calculateLocationRestrictions(this.config, JSON.parse(user.community_membership))
+					if (!haveSameContents(areaRestriction, JSON.parse(user.area_restriction))) {
+						updates.area_restriction = JSON.stringify(areaRestriction)
+					}
+				}
+
 				if (Object.keys(updates).length) {
 					await this.query.updateQuery('humans', updates, { id: user.id })
 					this.log.info(`Reconciliation (Discord) Update channel ${user.id} ${name}`)
 				}
 			}
+			this.log.verbose('Reconciliation (Discord) Channel membership to Poracle users complete...')
 		} catch (err) {
 			this.log.error('Verification of Poracle channels failed with', err)
 		}
@@ -294,13 +331,17 @@ class DiscordReconciliation {
 			}
 
 			if (registerNewUsers) {
+				this.log.verbose('Reconciliation (Discord) Find qualified users missing from Poracle users starting...')
+
 				for (const id of Object.keys(discordUserList)) {
 					if (!this.config.discord.admins.includes(id)
 						&& !checked.includes(id)) {
 						await this.reconcileUser(id, null, discordUserList[id], syncNames, removeInvalidUsers)
 					}
 				}
+				this.log.verbose('Reconciliation (Discord) Find qualified users missing from Poracle users complete...')
 			}
+			this.log.verbose('Reconciliation (Discord) User role membership to Poracle users complete...')
 		} catch (err) {
 			this.log.error('Reconciliation (Discord) User role check failed', err)
 		}
@@ -309,39 +350,50 @@ class DiscordReconciliation {
 	async loadAllGuildUsers() {
 		const userList = {}
 
+		this.log.verbose('Reconciliation (Discord) Loading all guild users...')
+
 		for (const guildId of this.config.discord.guilds) {
 			let guild
 			try {
 				guild = await this.client.guilds.fetch(guildId)
 			} catch (err) {
-				if (err instanceof DiscordAPIError) {
-					if (err.httpStatus === 403) {
-						this.log.debug(`${guildId} no access`)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-				} else {
-					throw err
-				}
+				// if (err instanceof DiscordAPIError) {
+				// 	if (err.httpStatus === 403) {
+				// 		this.log.debug(`${guildId} no access`)
+				// 		// eslint-disable-next-line no-continue
+				// 		continue
+				// 	}
+				// 	this.log.info(`Reconciliation (Discord) Problem accessing guild ${guildId}`, err)
+				// 	// eslint-disable-next-line no-continue
+				// 	continue
+				//
+				// } else {
+				this.log.error(`Reconciliation (Discord) Problem accessing guild ${guildId}`, err)
+				throw err
+				// }
 			}
 			const members = await guild.members.fetch({ force: false })
 			for (const member of members.values()) {
-				const roleList = []
+				if (!member.user.bot) {
+					const roleList = []
 
-				for (const role of member.roles.cache.values()) {
-					roleList.push(role.id)
-				}
-
-				if (!userList[member.id]) {
-					userList[member.id] = {
-						name: emojiStrip(member.displayName),
-						roles: roleList,
+					for (const role of member.roles.cache.values()) {
+						roleList.push(role.id)
 					}
-				} else {
-					userList[member.id].roles.push(...roleList)
+
+					if (!userList[member.id]) {
+						userList[member.id] = {
+							name: emojiStrip(member.displayName),
+							roles: roleList,
+						}
+					} else {
+						userList[member.id].roles.push(...roleList)
+					}
 				}
 			}
 		}
+
+		this.log.verbose('Reconciliation (Discord) Loading all guild users complete...')
 
 		return userList
 	}

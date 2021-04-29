@@ -47,6 +47,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'glacial') lures.push(502)
 			else if (element === 'mossy') lures.push(503)
 			else if (element === 'magnetic') lures.push(504)
+			else if (element === 'rainy') lures.push(505)
 			else if (element === 'everything') lures.push(0)
 			else if (element === 'clean') clean = true
 		})

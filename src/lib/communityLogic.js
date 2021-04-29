@@ -1,21 +1,21 @@
 function calculateLocationRestrictions(config, communityMembership) {
-	const locationRestrictions = []
+	const locationRestrictions = new Set()
 
 	for (const community of communityMembership) {
 		const communityName = Object.keys(config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
 		if (communityName) {
 			const communityToAdd = config.areaSecurity.communities[communityName]
 			if (communityToAdd) {
-				// locationRestrictions.push(...communityToAdd.locationFence.map((x) => x.toLowerCase()))
-				const fence = communityToAdd.locationFence ? communityToAdd.locationFence.toLowerCase() : null
-				if (fence && !locationRestrictions.includes(fence)) {
-					locationRestrictions.push(communityToAdd.locationFence.toLowerCase())
+				if (Array.isArray(communityToAdd.locationFence)) {
+					communityToAdd.locationFence.forEach((x) => locationRestrictions.add(x.toLowerCase()))
+				} else {
+					locationRestrictions.add(communityToAdd.locationFence.toLowerCase())
 				}
 			}
 		}
 	}
 
-	return locationRestrictions
+	return [...locationRestrictions]
 }
 
 function filterAreas(config, communityMembership, areas) {

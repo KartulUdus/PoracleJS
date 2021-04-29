@@ -157,6 +157,7 @@ class Monster extends Controller {
 				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
 				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
+			if (data.fort_name) data.fort_name = this.escapeJsonString(data.fort_name)
 			data.pokemonId = data.pokemon_id
 			data.encounterId = data.encounter_id
 			data.nameEng = monster.name

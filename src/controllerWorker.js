@@ -1,4 +1,5 @@
 const { parentPort, workerData, isMainThread } = require('worker_threads')
+const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
@@ -147,6 +148,11 @@ function updateBadGuys(badguys) {
 function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
+
+		if (cmd.type == 'heapdump') {
+			writeHeapSnapshot()
+			return
+		}
 
 		if (cmd.type == 'badguys') {
 			log.debug(`Worker ${workerId}: Received badguys`, cmd.badguys)

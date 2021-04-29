@@ -1,4 +1,5 @@
 const { parentPort, isMainThread } = require('worker_threads')
+const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const logs = require('./lib/logger')
@@ -50,6 +51,10 @@ function receiveQueue(msg) {
 async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
+		if (cmd.type == 'heapdump') {
+			writeHeapSnapshot()
+			return
+		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to process command`, err)
 	}

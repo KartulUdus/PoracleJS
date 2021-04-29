@@ -6,6 +6,8 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
+const noop = () => {}
+
 class DiscordWebhookWorker {
 	constructor(config, logs, rehydrateTimeouts) {
 		this.config = config
@@ -152,7 +154,7 @@ class DiscordWebhookWorker {
 			method: 'delete',
 			url: deleteUrl,
 			validateStatus: ((status) => status < 500),
-		}).catch(() => {}))
+		}).catch(noop))
 	}
 
 	async loadTimeouts() {
@@ -174,12 +176,12 @@ class DiscordWebhookWorker {
 				const msgId = key
 				const hookUrl = msgData.v
 				if (msgData.t <= now) {
-					this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(() => {})
+					this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(noop)
 				} else {
 					const newTtlms = Math.max(msgData.t - now, 2000)
 					const newTtl = Math.floor(newTtlms / 1000)
 					setTimeout(() => {
-						this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(() => {})
+						this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(noop)
 					}, newTtlms)
 
 					this.webhookTimeouts.set(key, msgData.v, newTtl)
