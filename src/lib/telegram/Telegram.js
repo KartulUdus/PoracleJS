@@ -4,6 +4,8 @@ const NodeCache = require('node-cache')
 const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
+const noop = () => {}
+
 class Telegram {
 	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
 		this.config = config
@@ -228,7 +230,7 @@ class Telegram {
 				}
 				setTimeout(() => {
 					for (const id of messageIds) {
-						this.retrySender(`${senderId} (clean)`, async () => this.bot.telegram.deleteMessage(data.target, id)).catch(() => {})
+						this.retrySender(`${senderId} (clean)`, async () => this.bot.telegram.deleteMessage(data.target, id)).catch(noop)
 					}
 				}, msgDeletionMs)
 			}
@@ -282,12 +284,12 @@ class Telegram {
 				const msgNo = parseInt(key.split(':')[0], 10)
 				const chatId = parseInt(msgData.v, 10)
 				if (msgData.t <= now) {
-					this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
+					this.bot.telegram.deleteMessage(chatId, msgNo).catch(noop)
 				} else {
 					const newTtlms = Math.max(msgData.t - now, 2000)
 					const newTtl = Math.floor(newTtlms / 1000)
 					setTimeout(() => {
-						this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
+						this.bot.telegram.deleteMessage(chatId, msgNo).catch(noop)
 					}, newTtlms)
 
 					this.telegramMessageTimeouts.set(key, msgData.v, newTtl)

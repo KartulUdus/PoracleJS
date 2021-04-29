@@ -539,8 +539,9 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
-				const verifiedSpawnTime = hook.message.verified || hook.message.disappear_time_verified
-				if (fastify.cache.get(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`)) {
+				const verifiedSpawnTime = (hook.message.verified || hook.message.disappear_time_verified)
+				const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp}`
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
 				}
@@ -549,7 +550,7 @@ async function processOne(hook) {
 
 				const secondsRemaining = !verifiedSpawnTime ? 3600 : (Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300)
 
-				fastify.cache.set(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`, 'cached', secondsRemaining)
+				fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 				processHook = hook
 
@@ -565,12 +566,14 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.get(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
+				const cacheKey = `${hook.message.gym_id}${hook.message.end}${hook.message.pokemon_id}`
+
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 					break
 				}
 
-				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
+				fastify.cache.set(cacheKey, 'x')
 
 				processHook = hook
 
@@ -589,8 +592,10 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
 				}
-				if (lureExpiration && !config.general.disableInvasion) {
-					if (fastify.cache.get(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
+				if (lureExpiration && !config.general.disableLure) {
+					const cacheKey = `${hook.message.pokestop_id}L${lureExpiration}`
+
+					if (fastify.cache.get(cacheKey)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
 						break
 					}
@@ -598,11 +603,13 @@ async function processOne(hook) {
 					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
 					const secondsRemaining = Math.max((lureExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-					fastify.cache.set(`${hook.message.pokestop_id}_L${lureExpiration}`, 'cached', secondsRemaining)
+					fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 					processHook = hook
-				} else if (!config.general.disableLure) {
-					if (fastify.cache.get(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+				} else if (!config.general.disableInvasion) {
+					const cacheKey = `${hook.message.pokestop_id}I${lureExpiration}`
+
+					if (fastify.cache.get(cacheKey)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
 						break
 					}
@@ -610,7 +617,7 @@ async function processOne(hook) {
 					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
 					const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-					fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
+					fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 					processHook = hook
 				}
@@ -622,11 +629,13 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.get(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
+				const cacheKey = `${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`
+
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
 					break
 				}
-				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
+				fastify.cache.set(cacheKey, 'x')
 				processHook = hook
 
 				break
@@ -640,11 +649,12 @@ async function processOne(hook) {
 				}
 				const updateTimestamp = hook.message.time_changed || hook.message.updated
 				const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
-				if (fastify.cache.get(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
+				const cacheKey = `${hook.message.s2_cell_id}_${hookHourTimestamp}`
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.s2_cell_id}: Weather for this cell was sent again too soon, ignoring`)
 					break
 				}
-				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
+				fastify.cache.set(cacheKey, 'x')
 
 				// post directly to weather controller
 				weatherWorker.queuePort.postMessage(hook)
