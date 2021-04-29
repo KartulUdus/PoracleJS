@@ -17,6 +17,10 @@ module.exports = async (fastify, options, next) => {
 			pvpFilterGreatMinCP: fastify.config.pvp.pvpFilterGreatMinCP,
 			pvpFilterUltraMinCP: fastify.config.pvp.pvpFilterUltraMinCP,
 			defaultTemplateName: fastify.config.general.defaultTemplateName,
+			admins: {
+				discord: fastify.config.discord.admins,
+				telegram: fastify.config.telegram.admins,
+			}
 		}
 	})
 	next()
