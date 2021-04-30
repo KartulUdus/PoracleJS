@@ -76,7 +76,7 @@ exports.run = async (client, msg, args, options) => {
 			if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element.match(client.re.minspawnRe)) [,, minSpawn] = element.match(client.re.minspawnRe)
-			else if (element === 'everything' && !formNames.length) monsters.push(0)
+			else if (element === 'everything' && !formNames.length) monsters.push({ id: 0, form: { id: 0 } })
 			else if (element === 'clean') clean = true
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance

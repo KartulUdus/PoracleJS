@@ -51,6 +51,9 @@ exports.run = async (client, msg, args, options) => {
 		const confAreas2 = availableAreas.map((area) => area.replace(/ /gi, '_')).sort()
 		const confUse = confAreas2.join('\n')
 
+		let platform = target.type.split(':')[0]
+		if (platform === 'webhook') platform = 'discord'
+
 		// Remove arguments that we don't want to keep for area processing
 		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
@@ -102,6 +105,35 @@ exports.run = async (client, msg, args, options) => {
 			}
 			case 'list': {
 				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
+				break
+			}
+			case 'show': {
+				if (/* platform === 'discord' && */client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+					for (const area of args) {
+						const fence = client.geofence.find((x) => x.name.toLowerCase() == area)
+						if (fence) {
+							const position = client.query.tileserverPregen.autoposition({
+								polygons: [{
+									path: fence.path,
+								}],
+							}, 500, 250)
+
+							const staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'area', {
+								zoom: position.zoom, latitude: position.latitude, longitude: position.longitude, coords: fence.path,
+							}, client.config.geocoding.staticMapType.location)
+							const message = {
+								embed: {
+									color: 0x00ff00,
+									title: translator.translate('Area layout'),
+									image: {
+										url: staticMap,
+									},
+								},
+							}
+							await msg.reply(message)
+						}
+					}
+				}
 				break
 			}
 			default: {
