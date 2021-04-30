@@ -20,11 +20,13 @@ exports.run = async (client, msg, args, options) => {
 
 		let invalidCommand = true
 
-		if ((args[0] == 'add' || args[0] == 'remove' || args[0] == 'clear') && args.length < 2) invalidCommand = false
-		if (args[0] == 'list' && args.length !== 1) invalidCommand = false
+		if ((args[0] == 'add' || args[0] == 'remove') && args.length >= 2) invalidCommand = false
 
-		if (!invalidCommand) {
-			await msg.reply(translator.translateFormat('Valid commands are `{0}community add <name> <users>`, `{0}community remove <name> <users>`, `{0}community list`', util.prefix),
+		if ((args[0] == 'show' || args[0] == 'clear') && args.length >= 1) invalidCommand = false
+		if (args[0] == 'list' && args.length == 1) invalidCommand = false
+
+		if (invalidCommand) {
+			await msg.reply(translator.translateFormat('Valid commands are `{0}community add <name> <targets>`, `{0}community remove <name> <targets>`, `{0}community clear <targets>`, `{0}community show <targets>`, `{0}community list`', util.prefix),
 				{ style: 'markdown' })
 			// await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
@@ -52,10 +54,21 @@ exports.run = async (client, msg, args, options) => {
 		const targets = mentions.map((x) => x.id)
 		targets.push(...(args.filter((x) => parseInt(x, 10))))
 
+		if (!targets.length) {
+			if (!target.type.includes('user')) {
+				await msg.reply(`No targets listed, assuming target of ${target.id} ${target.name}`)
+				targets.push(target.id)
+			} else {
+				msg.reply('No targets listed')
+				return
+			}
+		}
+
 		switch (command) {
 			case 'clear': {
 				for (const id of targets) {
 					client.log.info(`Disable ${id}`)
+					msg.reply(`Clear target ${id}}`)
 
 					await client.query.updateQuery('humans', {
 						area_restriction: null,
@@ -68,7 +81,9 @@ exports.run = async (client, msg, args, options) => {
 				for (const id of targets) {
 					const human = await client.query.selectOneQuery('humans', { id })
 					if (human) {
-						const existingCommunities = JSON.parse(human.community_membership)
+						msg.reply(`Add community ${community} to target ${id} ${human.name}`)
+
+						const existingCommunities = human.community_membership ? JSON.parse(human.community_membership) : []
 						const newCommunities = communityLogic.addCommunity(client.config, existingCommunities, community)
 
 						await client.query.updateQuery('humans', {
@@ -84,7 +99,9 @@ exports.run = async (client, msg, args, options) => {
 				for (const id of targets) {
 					const human = await client.query.selectOneQuery('humans', { id })
 					if (human) {
-						const existingCommunities = JSON.parse(human.community_membership)
+						msg.reply(`Remove community ${community} from target ${id} ${human.name}`)
+
+						const existingCommunities = human.community_membership ? JSON.parse(human.community_membership) : []
 						const newCommunities = communityLogic.removeCommunity(client.config, existingCommunities, community)
 
 						await client.query.updateQuery('humans', {
@@ -97,11 +114,20 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				break
+			case 'show':
 			default:
+				for (const id of targets) {
+					const human = await client.query.selectOneQuery('humans', { id })
+					if (human) {
+						msg.reply(`User target ${id} ${human.name} has communities ${human.community_membership} location restrictions ${human.area_restriction ? human.area_restriction : 'none'}`)
+					}
+
+					break
+				}
 				break
 		}
 		await msg.react('✅')
 	} catch (err) {
-		client.log.error(`disable command ${msg.content} unhappy:`, err)
+		client.log.error(`community command ${msg.content} unhappy:`, err)
 	}
 }

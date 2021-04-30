@@ -22,25 +22,27 @@ exports.run = async (client, msg, args, options) => {
 		let availableAreas = client.geofence.map((area) => area.name)
 		let lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
 
-		if (target.type.includes(':user') && client.config.areaSecurity.enabled && !targetIsAdmin) {
+		if (client.config.areaSecurity.enabled && !targetIsAdmin) {
 			const human = await client.query.selectOneQuery('humans', { id: target.id })
 
-			const calculatedAreas = []
+			if (human.area_restriction) {
+				const calculatedAreas = []
 
-			if (human.community_membership) {
-				for (const community of JSON.parse(human.community_membership)) {
-					const communityName = Object.keys(client.config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
-					const communityDetails = communityName ? client.config.areaSecurity.communities[communityName] : null
-					if (communityDetails && communityDetails.allowedAreas) {
-						calculatedAreas.push(...communityDetails.allowedAreas.map((x) => x.toLowerCase()))
+				if (human.community_membership) {
+					for (const community of JSON.parse(human.community_membership)) {
+						const communityName = Object.keys(client.config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
+						const communityDetails = communityName ? client.config.areaSecurity.communities[communityName] : null
+						if (communityDetails && communityDetails.allowedAreas) {
+							calculatedAreas.push(...communityDetails.allowedAreas.map((x) => x.toLowerCase()))
+						}
 					}
-				}
 
-				availableAreas = availableAreas.filter((x) => calculatedAreas.includes(x.toLowerCase()))
-				lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
-			} else {
-				availableAreas = []
-				lowercaseAreas = []
+					availableAreas = availableAreas.filter((x) => calculatedAreas.includes(x.toLowerCase()))
+					lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
+				} else {
+					availableAreas = []
+					lowercaseAreas = []
+				}
 			}
 		}
 
