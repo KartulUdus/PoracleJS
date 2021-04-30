@@ -50,6 +50,20 @@ class PoracleDiscordMessage {
 		return this.msg.reply(message)
 	}
 
+	async replyWithImageUrl(title, message, url) {
+		const messageText = {
+			embed: {
+				color: 0x00ff00,
+				title,
+				description: message,
+				image: {
+					url,
+				},
+			},
+		}
+		await this.msg.reply(messageText)
+	}
+
 	async replyWithAttachment(message, attachment) {
 		if (this.msg.channel.type === 'text') {
 			// This is a channel, do not reply but rather send to avoid @ reply

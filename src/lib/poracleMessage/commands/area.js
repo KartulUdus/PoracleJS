@@ -144,16 +144,9 @@ exports.run = async (client, msg, args, options) => {
 						}
 
 						if (staticMap) {
-							const message = {
-								embed: {
-									color: 0x00ff00,
-									title: translator.translate('Area layout'),
-									image: {
-										url: staticMap,
-									},
-								},
-							}
-							await msg.reply(message)
+							await msg.replyWithImageUrl(translator.translateFormat('Area display: {0}', area),
+								null,
+								staticMap)
 						}
 					}
 				}
