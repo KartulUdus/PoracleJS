@@ -24,7 +24,7 @@ exports.run = async (client, msg, args, options) => {
 		const translator = client.translatorFactory.Translator(language)
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}nest bulbasaur`, `{0}nest remove everything`', util.prefix),
+			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}nest bulbasaur`, `{0}nest remove everything`, `{0}nest hoppip minspawn5`', util.prefix),
 				{ style: 'markdown' })
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
