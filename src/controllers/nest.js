@@ -16,7 +16,8 @@ class Nest extends Controller {
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, nests.template, nests.distance, nests.clean, nests.ping from nests
 		join humans on (humans.id = nests.id and humans.current_profile_no = nests.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
-		((nests.pokemon_id = 0 or nests.pokemon_id='${data.pokemon_id}') and nests.min_spawn_avg <= ${data.pokemon_avg}) `
+		((nests.pokemon_id = 0 or nests.pokemon_id='${data.pokemon_id}') and nests.min_spawn_avg <= ${data.pokemon_avg}) and
+		(nests.form = ${data.form} or nests.form = 0)`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -66,8 +67,7 @@ class Nest extends Controller {
 	async handle(obj) {
 		let pregenerateTile = false
 		const data = obj
-		// const minTth = this.config.general.monsterMinimumTimeTillHidden || 0
-		const minTth = this.config.general.alertMinimumTime || 0
+		// const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
 			const logReference = data.nest_id
@@ -103,6 +103,8 @@ class Nest extends Controller {
 
 			const nestExpiration = data.reset_time + (7 * 24 * 60 * 60)
 			data.tth = moment.preciseDiff(Date.now(), nestExpiration * 1000, true)
+			data.disappearDate = moment(nestExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.date)
+			data.resetDate = moment(data.reset_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.date)
 			data.disappearTime = moment(nestExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.resetTime = moment(data.reset_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 
@@ -125,8 +127,10 @@ class Nest extends Controller {
 				this.log.warn(`${logReference}: Couldn't find monster in:`, data)
 				return
 			}
+
+			data.nestName = this.escapeJsonString(data.name)
 			data.pokemonId = data.pokemon_id
-			data.pokemonNameEng = monster.name
+			data.nameEng = monster.name
 			data.formId = monster.form.id
 			data.formNameEng = monster.form.name
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
@@ -159,8 +163,16 @@ class Nest extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.pokestop) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'nest', data, this.config.geocoding.staticMapType.pokestop)
+			if (pregenerateTile && this.config.geocoding.staticMapType.nest) {
+				// Attempt to calculate best position for nest
+				const position = this.tileserverPregen.autoposition({
+					polygons:
+						JSON.parse(data.poly_path).map((x) => ({ path: x })),
+				}, 500, 250)
+				data.zoom = position.zoom
+				data.map_longitude = position.longitude
+				data.map_latitude = position.latitude
+				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'nest', data, this.config.geocoding.staticMapType.nest)
 				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
@@ -180,7 +192,7 @@ class Nest extends Controller {
 				const translator = this.translatorFactory.Translator(language)
 
 				// full build
-				data.pokemonName = translator.translate(data.pokemonNameEng)
+				data.name = translator.translate(data.nameEng)
 				data.formName = translator.translate(data.formNameEng)
 
 				const view = {

@@ -35,6 +35,72 @@ class TileserverPregen {
 			return null
 		}
 	}
+
+	// Inspiration from https://github.com/ccev/stscpy/blob/main/tileserver/staticmap.py#L138
+
+	/**
+	 * work out zoom and lat/lon for best tile
+	 * @param shapes
+	 */
+	// eslint-disable-next-line class-methods-use-this
+	autoposition(shapes, height, width, margin = 1.06, defaultZoom = 17.5) {
+		const objs = []
+		if (shapes.circles) {
+			objs.push(...shapes.circles.map((x) => [x.latitude, x.longitude]))
+		}
+		if (shapes.markers) {
+			objs.push(...shapes.markers.map((x) => [x.latitude, x.longitude]))
+		}
+		if (shapes.polygons) {
+			shapes.polygons.forEach((p) => {
+				objs.push(...p.path)
+			})
+		}
+
+		if (!objs.length) return
+
+		const lats = objs.map(([lat]) => lat)
+		const lons = objs.map(([, lon]) => lon)
+
+		const minLat = Math.min(...lats)
+		const maxLat = Math.max(...lats)
+		const minLon = Math.min(...lons)
+		const maxLon = Math.max(...lons)
+
+		const ne = [maxLat * margin, maxLon * margin]
+		const sw = [minLat * margin, minLon * margin]
+
+		if (ne == sw) {
+			return {
+				zoom: defaultZoom,
+				latitude: lats[0],
+				longitude: lons[0],
+			}
+		}
+
+		const latitude = minLat + ((maxLat - minLat) / 2.0)
+		const longitude = minLon + ((maxLon - minLon) / 2.0)
+
+		function latRad(lat) {
+			const sin = Math.sin(lat * Math.PI / 180.0)
+			const rad = Math.log((1.0 + sin) / (1.0 - sin)) / 2.0
+			return Math.max(Math.min(rad, Math.PI), -Math.PI) / 2.0
+		}
+
+		function zoom(px, fraction) {
+			return Math.round(Math.log2(px / 256.0 / fraction), 2.0)
+		}
+
+		const latFraction = (latRad(ne[0]) - latRad(sw[0])) / Math.PI
+		let angle = ne[1] - sw[1]
+		if (angle < 0.0) angle += 360.0
+		const lonFraction = angle / 360.0
+		return {
+			zoom: Math.min(zoom(height, latFraction), zoom(width, lonFraction)),
+			latitude,
+			longitude,
+		}
+	}
 }
 
 module.exports = TileserverPregen

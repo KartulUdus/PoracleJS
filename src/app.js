@@ -272,7 +272,7 @@ async function run() {
 			}
 		}, 100)
 
-		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guilds) {
 			setTimeout(syncDiscordRole, 10000)
 		}
 	}
@@ -646,11 +646,16 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`nest ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.has(`${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`)) {
+				const cacheKey = `${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was sent again too soon, ignoring`)
 					break
 				}
-				fastify.cache.set(`${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`, 'cached')
+
+				// expiry time -- 14 days (!) after reset time
+				const secondsRemaining = Math.max(((hook.message.reset_time + 14 * 24 * 60 * 60) * 1000 - Date.now()) / 1000, 0)
+
+				fastify.cache.set(cacheKey, 'x', secondsRemaining)
 				processHook = hook
 
 				break
