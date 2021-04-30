@@ -44,9 +44,32 @@ class TileserverPregen {
 	 */
 	// eslint-disable-next-line class-methods-use-this
 	autoposition(shapes, height, width, margin = 1.06, defaultZoom = 17.5) {
+		function adjustLatitude(lat, distance) {
+			const earth = 6378.137 // radius of the earth in kilometer
+			const pi = Math.PI
+			const m = (1 / ((2 * pi / 360) * earth)) / 1000 // 1 meter in degree
+
+			return lat + (distance * m)
+		}
+
+		function adjustLongitude(lat, lon, distance) {
+			const earth = 6378.137 // radius of the earth in kilometer
+			const pi = Math.PI
+			const { cos } = Math
+			const m = (1 / ((2 * pi / 360) * earth)) / 1000 // 1 meter in degree
+
+			return lon + (distance * m) / cos(lat * (pi / 180))
+		}
+
 		const objs = []
 		if (shapes.circles) {
-			objs.push(...shapes.circles.map((x) => [x.latitude, x.longitude]))
+			shapes.circles.forEach((c) => {
+				objs.push([adjustLatitude(c.latitude, -c.radiusM), c.longitude])
+				objs.push([adjustLatitude(c.latitude, c.radiusM), c.longitude])
+
+				objs.push([c.latitude, adjustLongitude(c.latitude, c.longitude, -c.radiusM)])
+				objs.push([c.latitude, adjustLongitude(c.latitude, c.longitude, c.radiusM)])
+			})
 		}
 		if (shapes.markers) {
 			objs.push(...shapes.markers.map((x) => [x.latitude, x.longitude]))
@@ -96,7 +119,7 @@ class TileserverPregen {
 		if (angle < 0.0) angle += 360.0
 		const lonFraction = angle / 360.0
 		return {
-			zoom: Math.min(zoom(height, latFraction), zoom(width, lonFraction)),
+			zoom: Math.min(zoom(width, latFraction), zoom(height, lonFraction)),
 			latitude,
 			longitude,
 		}

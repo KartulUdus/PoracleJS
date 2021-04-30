@@ -21,10 +21,9 @@ exports.run = async (client, msg, args, options) => {
 
 		let availableAreas = client.geofence.map((area) => area.name)
 		let lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
+		const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 		if (client.config.areaSecurity.enabled && !targetIsAdmin) {
-			const human = await client.query.selectOneQuery('humans', { id: target.id })
-
 			if (human.area_restriction) {
 				const calculatedAreas = []
 
@@ -64,7 +63,6 @@ exports.run = async (client, msg, args, options) => {
 		const areaArgs = args.map((a) => a.replace(/ /g, '_'))
 		switch (args[0]) {
 			case 'add': {
-				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
 				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
@@ -84,7 +82,6 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			case 'remove': {
-				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
 				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
 				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
@@ -110,17 +107,43 @@ exports.run = async (client, msg, args, options) => {
 			case 'show': {
 				if (/* platform === 'discord' && */client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
 					for (const area of args) {
-						const fence = client.geofence.find((x) => x.name.toLowerCase() == area)
-						if (fence) {
+						let staticMap
+
+						if (area.match(client.re.dRe)) {
+							const [,, distance] = area.match(client.re.dRe)
 							const position = client.query.tileserverPregen.autoposition({
-								polygons: [{
-									path: fence.path,
+								circles: [{
+									latitude: human.latitude,
+									longitude: human.longitude,
+									radiusM: distance,
 								}],
 							}, 500, 250)
 
-							const staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'area', {
-								zoom: position.zoom, latitude: position.latitude, longitude: position.longitude, coords: fence.path,
+							staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'distance', {
+								zoom: position.zoom,
+								latitude: position.latitude,
+								longitude: position.longitude,
+								distance,
 							}, client.config.geocoding.staticMapType.location)
+						} else {
+							const fence = client.geofence.find((x) => x.name.toLowerCase() == area)
+							if (fence) {
+								const position = client.query.tileserverPregen.autoposition({
+									polygons: [{
+										path: fence.path,
+									}],
+								}, 500, 250)
+
+								staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'area', {
+									zoom: position.zoom,
+									latitude: position.latitude,
+									longitude: position.longitude,
+									coords: fence.path,
+								}, client.config.geocoding.staticMapType.location)
+							}
+						}
+
+						if (staticMap) {
 							const message = {
 								embed: {
 									color: 0x00ff00,
@@ -137,7 +160,6 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			default: {
-				const human = await client.query.selectOneQuery('humans', { id: target.id })
 				await msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 
 				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),

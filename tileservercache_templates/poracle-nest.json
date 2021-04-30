@@ -11,9 +11,9 @@
     #for(polygon in poly_path):
     #if(index != 0):,#endif
     {
-      "fill_color": "rgba(0,0,255,0.6)",
-      "stroke_color": "\#ADD8E6",
-      "stroke_width": 1,
+      "fill_color": "rgba(46,204,113,0.3)",
+      "stroke_color": "rgba(46,204,113)",
+      "stroke_width": 2,
       "path":
       [
         #for(coord in polygon):
