@@ -43,7 +43,10 @@ class TileserverPregen {
 	 * @param shapes
 	 */
 	// eslint-disable-next-line class-methods-use-this
-	autoposition(shapes, width, height, margin = 1.2, defaultZoom = 17.5) {
+	autoposition(shapes, width, height, margin = 1.25, defaultZoom = 17.5) {
+		width /= margin
+		height /= margin
+
 		function adjustLatitude(lat, distance) {
 			const earth = 6378.137 // radius of the earth in kilometer
 			const pi = Math.PI
@@ -93,10 +96,8 @@ class TileserverPregen {
 		const latitude = minLat + ((maxLat - minLat) / 2.0)
 		const longitude = minLon + ((maxLon - minLon) / 2.0)
 
-		const longitudeMargin = (maxLon - longitude) * margin
-		const latitudeMargin = (maxLat - latitude) * margin
-		const ne = [latitude + latitudeMargin, longitude + longitudeMargin]
-		const sw = [latitude - longitudeMargin, longitude - longitudeMargin]
+		const ne = [maxLat, maxLon]
+		const sw = [minLat, minLon]
 
 		if (ne == sw) {
 			return {
