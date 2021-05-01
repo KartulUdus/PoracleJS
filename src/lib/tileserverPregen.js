@@ -121,7 +121,7 @@ class TileserverPregen {
 		if (angle < 0.0) angle += 360.0
 		const lonFraction = angle / 360.0
 		return {
-			zoom: Math.min(zoom(height, latFraction), zoom(width, lonFraction)),
+			zoom: Math.min(zoom(width, latFraction), zoom(height, lonFraction)),
 			latitude,
 			longitude,
 		}
