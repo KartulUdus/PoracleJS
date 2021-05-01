@@ -90,8 +90,13 @@ class TileserverPregen {
 		const minLon = Math.min(...lons)
 		const maxLon = Math.max(...lons)
 
-		const ne = [maxLat * margin, maxLon * margin]
-		const sw = [minLat * margin, minLon * margin]
+		const latitude = minLat + ((maxLat - minLat) / 2.0)
+		const longitude = minLon + ((maxLon - minLon) / 2.0)
+
+		const longitudeMargin = (maxLon - longitude) * margin
+		const latitudeMargin = (maxLat - latitude) * margin
+		const ne = [latitude + latitudeMargin, longitude + longitudeMargin]
+		const sw = [latitude - longitudeMargin, longitude - longitudeMargin]
 
 		if (ne == sw) {
 			return {
@@ -100,9 +105,6 @@ class TileserverPregen {
 				longitude: lons[0],
 			}
 		}
-
-		const latitude = minLat + ((maxLat - minLat) / 2.0)
-		const longitude = minLon + ((maxLon - minLon) / 2.0)
 
 		function latRad(lat) {
 			const sin = Math.sin(lat * Math.PI / 180.0)
