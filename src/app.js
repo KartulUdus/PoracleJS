@@ -89,6 +89,7 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
 		}
 	}
+	fastify.decorate('discordWorker', discordWorkers[0])
 	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true)
 }
 
