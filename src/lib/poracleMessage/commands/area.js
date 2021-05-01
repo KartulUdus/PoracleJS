@@ -110,21 +110,25 @@ exports.run = async (client, msg, args, options) => {
 						let staticMap
 
 						if (area.match(client.re.dRe)) {
-							const [,, distance] = area.match(client.re.dRe)
-							const position = client.query.tileserverPregen.autoposition({
-								circles: [{
-									latitude: human.latitude,
-									longitude: human.longitude,
-									radiusM: distance,
-								}],
-							}, 500, 250)
+							if (+human.latitude == 0 || +human.longitude == 0) {
+								await msg.reply(translator.translate('You have not set a location yet'))
+							} else {
+								const [, , distance] = area.match(client.re.dRe)
+								const position = client.query.tileserverPregen.autoposition({
+									circles: [{
+										latitude: human.latitude,
+										longitude: human.longitude,
+										radiusM: distance,
+									}],
+								}, 500, 250)
 
-							staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'distance', {
-								zoom: position.zoom,
-								latitude: position.latitude,
-								longitude: position.longitude,
-								distance,
-							}, client.config.geocoding.staticMapType.location)
+								staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'distance', {
+									zoom: position.zoom,
+									latitude: position.latitude,
+									longitude: position.longitude,
+									distance,
+								}, client.config.geocoding.staticMapType.location)
+							}
 						} else {
 							const fence = client.geofence.find((x) => x.name.toLowerCase() == area)
 							if (fence) {
