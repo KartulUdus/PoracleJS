@@ -1,4 +1,5 @@
 const helpCommand = require('./help.js')
+const geofenceTileGenerator = require('../../geofenceTileGenerator')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -105,7 +106,7 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			case 'show': {
-				if (/* platform === 'discord' && */client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+				if (client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
 					for (const area of args) {
 						let staticMap
 
@@ -114,37 +115,19 @@ exports.run = async (client, msg, args, options) => {
 								await msg.reply(translator.translate('You have not set a location yet'))
 							} else {
 								const [, , distance] = area.match(client.re.dRe)
-								const position = client.query.tileserverPregen.autoposition({
-									circles: [{
-										latitude: human.latitude,
-										longitude: human.longitude,
-										radiusM: distance,
-									}],
-								}, 500, 250)
-
-								staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'distance', {
-									zoom: position.zoom,
-									latitude: position.latitude,
-									longitude: position.longitude,
+								staticMap = await geofenceTileGenerator.generateDistanceTile(
+									client.query.tileserverPregen,
+									human.latitude,
+									human.longitude,
 									distance,
-								}, client.config.geocoding.staticMapType.location)
+								)
 							}
 						} else {
-							const fence = client.geofence.find((x) => x.name.toLowerCase() == area)
-							if (fence) {
-								const position = client.query.tileserverPregen.autoposition({
-									polygons: [{
-										path: fence.path,
-									}],
-								}, 500, 250)
-
-								staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'area', {
-									zoom: position.zoom,
-									latitude: position.latitude,
-									longitude: position.longitude,
-									coords: fence.path,
-								}, client.config.geocoding.staticMapType.location)
-							}
+							staticMap = await geofenceTileGenerator.generateGeofenceTile(
+								client.geofence,
+								client.query.tileserverPregen,
+								area,
+							)
 						}
 
 						if (staticMap) {

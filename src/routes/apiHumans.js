@@ -125,7 +125,7 @@ module.exports = async (fastify, options, next) => {
 		}
 	})
 
-	fastify.get('/api/humans/:id/checkLocation/:lat-:lon', options, async (req) => {
+	fastify.get('/api/humans/:id/checkLocation/:lat/:lon', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }

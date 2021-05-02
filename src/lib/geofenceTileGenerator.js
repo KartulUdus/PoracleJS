@@ -22,9 +22,9 @@ async function generateGeofenceTile(geofence, tileserverPregen, area) {
 async function generateDistanceTile(tileserverPregen, latitude, longitude, distance) {
 	const position = tileserverPregen.autoposition({
 		circles: [{
-			latitude,
-			longitude,
-			radiusM: distance,
+			latitude: +latitude,
+			longitude: +longitude,
+			radiusM: +distance,
 		}],
 	}, 500, 250)
 
@@ -37,4 +37,12 @@ async function generateDistanceTile(tileserverPregen, latitude, longitude, dista
 	return staticMap
 }
 
-module.exports = { generateGeofenceTile, generateDistanceTile }
+async function generateLocationTile(tileserverPregen, latitude, longitude) {
+	const staticMap = tileserverPregen.getPregeneratedTileURL('location', 'location', {
+		latitude,
+		longitude,
+	}, 'staticMap')
+	return staticMap
+}
+
+module.exports = { generateGeofenceTile, generateDistanceTile, generateLocationTile }
