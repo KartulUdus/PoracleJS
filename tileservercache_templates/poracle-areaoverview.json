@@ -1,0 +1,25 @@
+{
+  "style": "klokantech-basic",
+  "latitude": #(latitude),
+  "longitude": #(longitude),
+  "zoom": #(zoom),
+  "width": 1024,
+  "height": 768,
+  "scale": 1,
+
+  "polygons": [
+    #for(fence in fences):
+    #if(index != 0):,#endif
+    {
+      "fill_color": "#(fence.color)40",
+      "stroke_color": "#(fence.color)",
+      "stroke_width": 2,
+      "path": [
+        #for(coord in fence.path):
+        #if(index != 0):,#endif[#index(coord, 0), #index(coord, 1)]
+        #endfor
+      ]
+    }
+    #endfor
+  ]
+}

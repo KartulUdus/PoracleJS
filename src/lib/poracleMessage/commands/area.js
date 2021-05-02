@@ -105,6 +105,21 @@ exports.run = async (client, msg, args, options) => {
 				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
 				break
 			}
+			case 'overview': {
+				if (client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+					const staticMap = await geofenceTileGenerator.generateGeofenceOverviewTile(
+						client.geofence,
+						client.query.tileserverPregen,
+						args,
+					)
+					if (staticMap) {
+						await msg.replyWithImageUrl(translator.translateFormat('Overview display'),
+							null,
+							staticMap)
+					}
+				}
+				break
+			}
 			case 'show': {
 				if (client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
 					for (const area of args) {
