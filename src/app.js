@@ -218,6 +218,7 @@ function handleShutdown() {
 	}
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
+	if (discordWebhookWorker) workerSaves.push(discordWebhookWorker.saveTimeouts())
 	if (config.general.persistDuplicateCache) {
 		workerSaves.push(saveEventCache())
 	}
