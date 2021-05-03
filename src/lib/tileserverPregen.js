@@ -36,6 +36,21 @@ class TileserverPregen {
 		}
 	}
 
+	async getTileURL(logReference, type, data, staticMapType) {
+		let mapType = 'staticmap'
+		let templateType = ''
+		if (staticMapType.toLowerCase() === 'multistaticmap') {
+			mapType = 'multistaticmap'
+			templateType = 'multi-'
+		}
+		const url = new URL(`${this.config.geocoding.staticProviderURL}/${mapType}/poracle-${templateType}${type}`)
+		Object.keys(data).forEach((item) => {
+			url.searchParams.set(item, data[item])
+		})
+
+		return url.toString()
+	}
+
 	// Inspiration from https://github.com/ccev/stscpy/blob/main/tileserver/staticmap.py#L138
 
 	/**

@@ -88,6 +88,24 @@ async function generateDistanceTile(tileserverPregen, latitude, longitude, dista
 	return staticMap
 }
 
+function generateDistanceTileURL(tileserverPregen, latitude, longitude, distance) {
+	const position = tileserverPregen.autoposition({
+		circles: [{
+			latitude: +latitude,
+			longitude: +longitude,
+			radiusM: +distance,
+		}],
+	}, 500, 250)
+
+	const mapUrl = tileserverPregen.getTileURL('location', 'distance', {
+		zoom: position.zoom,
+		latitude,
+		longitude,
+		distance,
+	}, 'staticMap')
+	return mapUrl
+}
+
 async function generateLocationTile(tileserverPregen, latitude, longitude) {
 	const staticMap = tileserverPregen.getPregeneratedTileURL('location', 'location', {
 		latitude,
@@ -96,6 +114,14 @@ async function generateLocationTile(tileserverPregen, latitude, longitude) {
 	return staticMap
 }
 
+function generateLocationTileURL(tileserverPregen, latitude, longitude) {
+	const mapUrl = tileserverPregen.getTileURL('location', 'location', {
+		latitude,
+		longitude,
+	}, 'staticMap')
+	return mapUrl
+}
+
 module.exports = {
-	generateGeofenceTile, generateDistanceTile, generateLocationTile, generateGeofenceOverviewTile,
+	generateGeofenceTile, generateDistanceTile, generateDistanceTileURL, generateLocationTile, generateLocationTileURL, generateGeofenceOverviewTile,
 }
