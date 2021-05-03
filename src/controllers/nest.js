@@ -169,7 +169,7 @@ class Nest extends Controller {
 					polygons:
 						JSON.parse(data.poly_path).map((x) => ({ path: x })),
 				}, 500, 250)
-				data.zoom = position.zoom
+				data.zoom = Math.min(position.zoom, 16)
 				data.map_longitude = position.longitude
 				data.map_latitude = position.latitude
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'nest', data, this.config.geocoding.staticMapType.nest)
