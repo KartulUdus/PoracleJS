@@ -1,0 +1,19 @@
+{
+  "style": "klokantech-basic",
+  "latitude": #(latitude),
+  "longitude": #(longitude),
+  "zoom": #(zoom),
+  "width": 500,
+  "height": 250,
+  "scale": 1,
+  "circles": [
+    {
+      "fill_color": "transparent",
+      "stroke_color": "red",
+      "stroke_width": 2,
+      "radius": #(distance),
+      "latitude": #(latitude),
+      "longitude": #(longitude)
+    }
+  ]
+}

@@ -44,6 +44,23 @@ function raidRowText(translator, GameData, raid) {
 	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
 }
 
+function nestRowText(translator, GameData, nest) {
+	let monsterName
+	let formName
+
+	if (nest.pokemon_id == 0) {
+		monsterName = translator.translate('Everything')
+		formName = ''
+	} else {
+		const mon = Object.values(GameData.monsters).find((m) => m.id === nest.pokemon_id && m.form.id === nest.form)
+		monsterName = mon ? translator.translate(mon.name) : 'levelMon'
+		formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
+		if (!mon || formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
+	}
+
+	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${nest.distance ? ` | ${translator.translate('distance')}: ${nest.distance}m` : ''} ${nest.min_spawn_avg ? translator.translateFormat('Min avg. spawn {0}/hour', nest.min_spawn_avg) : ''}`
+}
+
 function eggRowText(translator, GameData, egg) {
 	const raidTeam = translator.translate(GameData.utilData.teams[egg.team].name)
 	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
@@ -106,6 +123,7 @@ exports.raidRowText = raidRowText
 exports.eggRowText = eggRowText
 exports.questRowText = questRowText
 exports.invasionRowText = invasionRowText
+exports.nestRowText = nestRowText
 exports.lureRowText = lureRowText
 
 exports.run = async (client, msg, args, options) => {
@@ -133,6 +151,7 @@ exports.run = async (client, msg, args, options) => {
 		const quests = await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo })
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
 		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
+		const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
 		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
@@ -223,6 +242,16 @@ exports.run = async (client, msg, args, options) => {
 					message = message.concat('\n', lureRowText(translator, client.GameData, lure))
 				})
 			}
+		}
+
+		if (!client.config.general.disableNest) {
+			if (nests.length) {
+				message = message.concat('\n\n', translator.translate('You\'re tracking the following nests:'), '\n')
+			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any nests'))
+
+			nests.forEach((nest) => {
+				message = message.concat('\n', nestRowText(translator, client.GameData, nest))
+			})
 		}
 
 		if (message.length < 4000) {

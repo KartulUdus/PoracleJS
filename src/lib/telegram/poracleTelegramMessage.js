@@ -44,6 +44,14 @@ class PoracleTelegramMessage {
 		})
 	}
 
+	async replyWithImageUrl(title, message, url) {
+		return this.ctx.reply(`[\u200A](${url})*${title}*\n${message || ''}`,
+			{
+				parse_mode: 'Markdown',
+				disable_web_page_preview: false,
+			})
+	}
+
 	async replyWithAttachment(message, filename) {
 		const document = fs.readFileSync(filename)
 		this.ctx.reply(message, {

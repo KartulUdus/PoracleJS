@@ -115,6 +115,7 @@
   "locale": {
       "timeformat": "en-gb",
       "time": "LTS",
+      "date": "L",
     // addressFormat - how an address is consutructed into the {{addr}} tag
       "addressFormat": "{{{streetName}}} {{streetNumber}}",
     // language - this is the secondary language that is used for 'alt' translation in dts.  This is rarely used now
@@ -396,7 +397,8 @@
         "pokestop": "staticMap",
         "quest": "staticMap",
         "weather": "staticMap",
-        "location": "staticMap"
+        "location": "staticMap",
+        "nest": "staticMap"
       },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],
