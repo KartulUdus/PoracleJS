@@ -12,6 +12,13 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 
+		if (fastify.config.geocoding.staticProvider.toLowerCase() != 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
+			return {
+				status: 'error',
+				message: 'Unsupported configuration for staticProvider',
+			}
+		}
+
 		try {
 			const url = await geofenceTileGenerator.generateGeofenceTile(fastify.geofence, fastify.query.tileserverPregen, req.params.area)
 			return {
@@ -37,6 +44,13 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 
+		if (fastify.config.geocoding.staticProvider.toLowerCase() != 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
+			return {
+				status: 'error',
+				message: 'Unsupported configuration for staticProvider',
+			}
+		}
+
 		try {
 			const url = await geofenceTileGenerator.generateDistanceTileURL(fastify.query.tileserverPregen,
 				req.params.lat, req.params.lon, req.params.distance)
@@ -48,6 +62,7 @@ module.exports = async (fastify, options, next) => {
 			fastify.logger.error(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`, err)
 			return {
 				status: 'error',
+				message: 'Exception raised during execution',
 			}
 		}
 	})
@@ -61,6 +76,13 @@ module.exports = async (fastify, options, next) => {
 		const secret = req.headers['x-poracle-secret']
 		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		if (fastify.config.geocoding.staticProvider.toLowerCase() != 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
+			return {
+				status: 'error',
+				message: 'Unsupported configuration for staticProvider',
+			}
 		}
 
 		try {
