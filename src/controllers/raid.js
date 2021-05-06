@@ -200,7 +200,7 @@ class Raid extends Controller {
 
 			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 
-			if (this.config.tracking.ignoreRaidHourRaids
+			if (this.config.general.ignoreLongRaids
 				&& (data.end - data.start) > 47 * 60) {
 				this.log.verbose(`${this.logReference}: Raid/Egg on ${data.gymName} will be longer than 47 minutes - ignored`)
 				return []
