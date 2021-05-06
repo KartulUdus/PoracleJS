@@ -186,7 +186,6 @@ class Quest extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.quest) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
 			if (data.monsters.length == 2) {
@@ -220,7 +219,7 @@ class Quest extends Controller {
 				data.rewardString = data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : data.rewardString
 				data.rewardString = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNames}` : data.rewardString
 				data.rewardString = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNames} ${translator.translate('Mega Energy')}` : data.rewardString
-				data.rewardStringEng = data.monsterNames
+				data.rewardStringEng = data.monsterNamesEng
 				data.rewardStringEng = data.dustAmount > 0 ? `${data.dustAmount} Stardust` : data.rewardStringEng
 				data.rewardStringEng = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNamesEng}` : data.rewardStringEng
 				data.rewardStringEng = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNamesEng} Mega Energy` : data.rewardStringEng

@@ -17,7 +17,17 @@ class TileserverPregen {
 		const url = `${this.config.geocoding.staticProviderURL}/${mapType}/poracle-${templateType}${type}?pregenerate=true&regeneratable=true`
 		try {
 			this.log.debug(`${logReference}: Pre-generating static map ${url}`)
-			const result = await axios.post(url, data)
+			const hrstart = process.hrtime()
+
+			const timeoutMs = this.config.tuning.tileserverTimeout || 10000
+			const source = axios.CancelToken.source()
+			const timeout = setTimeout(() => {
+				source.cancel(`Timeout waiting for response - ${timeoutMs}ms`)
+				// Timeout Logic
+			}, timeoutMs)
+
+			const result = await axios.post(url, data, { cancelToken: source.token })
+			clearTimeout(timeout)
 			if (result.status !== 200) {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
 				return null
@@ -25,7 +35,13 @@ class TileserverPregen {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. No id returned.`)
 				return null
 			}
-			return result.data.startsWith('http') ? result.data : `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`
+			const hrend = process.hrtime(hrstart)
+			const hrendms = hrend[1] / 1000000
+
+			const tileResult = result.data.startsWith('http') ? result.data : `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`
+			this.log.debug(`${logReference}: Tile generated ${tileResult} (${hrendms} ms)`)
+
+			return tileResult
 		} catch (error) {
 			if (error.response) {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
