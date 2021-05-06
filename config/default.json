@@ -68,8 +68,8 @@
   "reconciliation": {
     "discord": {
       "updateUserNames": false,                // Follow discord username changes
-      "removeInvalidUsers": true,              // Whether users who lose roles should be de-registered
-      "registerNewUsers": false,               // Whether users who are granted roles are auto-registered
+      "removeInvalidUsers": true,              // Whether users who lose roles should be de-registered on role-check
+      "registerNewUsers": false,               // Whether users who are granted roles are auto-registered on role-check
       "updateChannelNames": true,              // Whether channel names are kept in sync
       "updateChannelNotes": false,             // Whether channel notes are updated to contain guild name / category
       "unregisterMissingChannels": false       // Whether channels that are deleted from discord are removed from database
@@ -333,7 +333,7 @@
     //    "communities": {
     //      "newyork": {
     //        "allowedAreas": [
-    //          "manhatten", "bronx", "brooklyn", "queens"
+    //          "manhattan", "bronx", "brooklyn", "queens"
     //        ],
     //        "locationFence": "wholenewyork",
     //        "discord": {

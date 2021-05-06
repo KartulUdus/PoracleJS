@@ -26,6 +26,8 @@ module.exports = async (fastify, options, next) => {
 				discord: fastify.config.discord.admins,
 				telegram: fastify.config.telegram.admins,
 			},
+			maxDistance: fastify.config.tracking.maxDistance,
+			everythingFlagPermissions: fastify.config.tracking.everythingFlagPermissions,
 		}
 	})
 	next()

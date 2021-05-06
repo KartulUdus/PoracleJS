@@ -34,10 +34,6 @@ exports.run = async (client, msg, args, options) => {
 			} else {
 				response = response.concat(`${human.type} \u2022 ${human.name} | (${human.id}) ${human.community_membership} ${human.admin_disable ? ' \uD83D\uDEAB' : ''}\n`)
 			}
-			if (response.length > 900) {
-				await msg.reply(response)
-				response = ''
-			}
 		}
 		await msg.reply(response)
 	} catch (err) {
