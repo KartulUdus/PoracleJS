@@ -173,7 +173,6 @@ class Nest extends Controller {
 				data.map_longitude = position.longitude
 				data.map_latitude = position.latitude
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'nest', data, this.config.geocoding.staticMapType.nest)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 

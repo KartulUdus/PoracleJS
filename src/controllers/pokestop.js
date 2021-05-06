@@ -171,7 +171,6 @@ class Pokestop extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.pokestop) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'pokestop', data, this.config.geocoding.staticMapType.pokestop)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 

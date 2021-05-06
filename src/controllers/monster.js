@@ -352,7 +352,6 @@ class Monster extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.pokemon) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data, this.config.geocoding.staticMapType.pokemon)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 

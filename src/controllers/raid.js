@@ -272,7 +272,6 @@ class Raid extends Controller {
 
 				if (pregenerateTile && this.config.geocoding.staticMapType.raid) {
 					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
-					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
 
@@ -412,7 +411,6 @@ class Raid extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.raid) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 

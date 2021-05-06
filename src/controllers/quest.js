@@ -186,7 +186,6 @@ class Quest extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.quest) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
 			if (data.monsters.length == 2) {
