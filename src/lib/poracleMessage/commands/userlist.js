@@ -27,15 +27,15 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		const humans = await client.query.selectAllQuery('humans', filterString)
-		let response = ''
+		let response = `${translator.translate('These users are registered with Poracle:')}\n`
 		for (const human of humans) {
 			if (human.type === 'webhook') {
-				response = response.concat(`${human.type} • ${human.name}${human.admin_disable ? ' \uD83D\uDEAB' : ''}\n`)
+				response = response.concat(`${human.type} \u2022 ${human.name}${human.admin_disable ? ' \uD83D\uDEAB' : ''}\n`)
 			} else {
-				response = response.concat(`${human.type} • ${human.name} | ${human.id}${human.admin_disable ? ' \uD83D\uDEAB' : ''}\n`)
+				response = response.concat(`${human.type} \u2022 ${human.name} | (${human.id}) ${human.community_membership} ${human.admin_disable ? ' \uD83D\uDEAB' : ''}\n`)
 			}
 		}
-		await msg.reply(`${translator.translate('These users are registered with Poracle:')}\n${response}`)
+		await msg.reply(response)
 	} catch (err) {
 		client.log.error(`userlist command ${msg.content} unhappy:`, err)
 	}

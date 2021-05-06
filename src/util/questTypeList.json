@@ -162,5 +162,33 @@
   "46": {
     "prototext": "",
     "text": "AR-Scan {0} pokéstop(s)"
+  },
+  "50": {
+    "prototext": "QUEST_BUDDY_EVOLUTION_WALK",
+    "text": "QUEST_BUDDY_EVOLUTION_WALK"
+  },
+  "51": {
+    "prototext": "QUEST_GBL_RANK",
+    "text": "QUEST_GBL_RANK"
+  },
+  "53": {
+    "prototext": "QUEST_CHARGE_ATTACK",
+    "text": "QUEST_CHARGE_ATTACK"
+  },
+  "54": {
+    "prototext": "QUEST_CHANGE_POKEMON_FORM",
+    "text": "QUEST_CHANGE_POKEMON_FORM"
+  },
+  "55": {
+    "prototext": "QUEST_BATTLE_EVENT_NPC",
+    "text": "QUEST_BATTLE_EVENT_NPC"
+  },
+  "57": {
+    "prototext": "QUEST_TAKE_WILD_SNAPSHOT",
+    "text": "Take {0} snapshots of wild Pokémon"
+  },
+  "58": {
+    "prototext": "QUEST_BATTLE_EVENT_NPC",
+    "text": "QUEST_USE_POKEMON_ITEM"
   }
 }

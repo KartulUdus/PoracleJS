@@ -1,0 +1,22 @@
+{
+  "style": "klokantech-basic",
+  "latitude": #(latitude),
+  "longitude": #(longitude),
+  "zoom": #(zoom),
+  "width": 500,
+  "height": 250,
+  "scale": 1,
+
+  "polygons": [
+    {
+      "fill_color": "rgba(46,204,113,0.3)",
+      "stroke_color": "rgba(46,204,113)",
+      "stroke_width": 2,
+      "path": [
+        #for(coord in coords):
+        #if(index != 0):,#endif[#index(coord, 0), #index(coord, 1)]
+        #endfor
+      ]
+    }
+  ]
+}

@@ -6,6 +6,8 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 
 const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
 
+const noop = () => {}
+
 class DiscordWebhookWorker {
 	constructor(config, logs, rehydrateTimeouts) {
 		this.config = config
@@ -61,13 +63,13 @@ class DiscordWebhookWorker {
 				if (!res.headers.via) {
 					this.logs.discord.error(`${senderId} WEBHOOK 429 Rate limit [Discord Webhook] TELL @JABES ON DISCORD THIS COULD BE FROM CLOUDFLARE: ${retryAfterMs}`)
 				}
-				await this.sleep(retryAfterMs)
+				await this.sleep(retryAfterMs + Math.random() * 5000)
 				retry = true
 				retryCount++
 			}
-		} while (retry === true && retryCount < 5)
+		} while (retry === true && retryCount < 10)
 
-		if (retryCount === 5 && retry) {
+		if (retryCount === 10 && retry) {
 			this.logs.discord.warn(`${senderId} WEBHOOK given up sending after retries`)
 		}
 		return res
@@ -134,7 +136,10 @@ class DiscordWebhookWorker {
 
 	work(data) {
 		this.webhookQueue.push(data)
-		this.queueProcessor.run((work) => (this.sendAlert(work)))
+		this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+			async (err) => {
+				this.logs.log.error('Discord Webhook queueProcessor exception', err)
+			})
 	}
 
 	async saveTimeouts() {
@@ -149,7 +154,7 @@ class DiscordWebhookWorker {
 			method: 'delete',
 			url: deleteUrl,
 			validateStatus: ((status) => status < 500),
-		}).catch(() => {}))
+		}).catch(noop))
 	}
 
 	async loadTimeouts() {
@@ -171,18 +176,18 @@ class DiscordWebhookWorker {
 				const msgId = key
 				const hookUrl = msgData.v
 				if (msgData.t <= now) {
-					this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(() => {})
+					this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(noop)
 				} else {
 					const newTtlms = Math.max(msgData.t - now, 2000)
 					const newTtl = Math.floor(newTtlms / 1000)
 					setTimeout(() => {
-						this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(() => {})
+						this.deleteMessage('Rehydrated delete', hookUrl, msgId).catch(noop)
 					}, newTtlms)
 
 					this.webhookTimeouts.set(key, msgData.v, newTtl)
 				}
 			} catch (err) {
-				this.log.info(`Error processing historic deletes ${err}`)
+				this.logs.log.info(`Error processing historic deletes ${err}`)
 			}
 		}
 	}

@@ -30,7 +30,7 @@ exports.run = async (client, msg, args, options) => {
 		if (platform === 'webhook') platform = 'discord'
 
 		// Remove arguments that we don't want to keep for area processing
-		for (let i = 0; i < args.length; i++) {
+		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.channelRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
@@ -60,6 +60,20 @@ exports.run = async (client, msg, args, options) => {
 			lat = locations[0].latitude
 			lon = locations[0].longitude
 			placeConfirmation = locations[0].city ? ` **${locations[0].city} - ${locations[0].country}** ` : ` **${locations[0].country}** `
+		}
+
+		if (client.config.areaSecurity.enabled && !msg.isFromAdmin) {
+			const human = await client.query.selectOneQuery('humans', { id: target.id })
+			if (human.area_restriction) {
+				const allowedFences = JSON.parse(human.area_restriction)
+				const areas = client.query.pointInArea([lat, lon])
+
+				if (!allowedFences.some((x) => areas.includes(x))) {
+					await msg.reply(translator.translate('This location is not your permitted area'))
+					await msg.react('🙅')
+					return
+				}
+			}
 		}
 
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`

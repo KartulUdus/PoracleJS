@@ -12,7 +12,8 @@
       "port": "3030",             // port
     // ipWhitelist, ipBlacklist - array of whitelisted or blacklisted addresses
       "ipWhitelist": [],
-      "ipBlacklist": []
+      "ipBlacklist": [],
+      "apiSecret": ""             // apiSecret to use for access to Poracle API -- blank API disabled
   },
   //
   // These are general parameters
@@ -20,6 +21,7 @@
   "general": {
       "environment": "production",              // leave as 'production'
       "alertMinimumTime" : 120,                 // time inside which alerts will not be generated (120s - 2mins before expiration no alert)
+      "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
     // imgUrl - base url for poracle creation of {{imgUrl}} reference
       "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
     // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers
@@ -37,7 +39,7 @@
       "disableQuest": false,
       "disableWeather": false,
     // roleCheckMode (case sensitive)
-    // "ignore" - log and don't delete/disable users once required role is removed
+    // "ignore" - log and don't delete/disable users once required roles/channel membership are removed
     // "delete" - delete user from database along with trackings once required role is removed
     // "disable-user" - disable user once required role is removed and re-enable once it's restored, trackings will remain
       "roleCheckMode": "ignore",
@@ -59,7 +61,25 @@
     //   directory
       "persistDuplicateCache": false
   },
-
+  //
+  // Configuration for the user reconciliation/role check function
+  // The automated check is only enabled if roleCheck is enabled for either telegram or discord (default is off)
+  // But these also apply when role changes are seen on discord
+  //
+  "reconciliation": {
+    "discord": {
+      "updateUserNames": false,                // Follow discord username changes
+      "removeInvalidUsers": true,              // Whether users who lose roles should be de-registered on role-check
+      "registerNewUsers": false,               // Whether users who are granted roles are auto-registered on role-check
+      "updateChannelNames": true,              // Whether channel names are kept in sync
+      "updateChannelNotes": false,             // Whether channel notes are updated to contain guild name / category
+      "unregisterMissingChannels": false       // Whether channels that are deleted from discord are removed from database
+    },
+    "telegram": {
+      "updateUserNames": false,                // Follow telegram username changes
+      "removeInvalidUsers": true               // Whether users are automatically removed
+    }
+  },
   //
   // Log levels - silly, debug, verbose, info, warn
   //
@@ -96,6 +116,7 @@
   "locale": {
       "timeformat": "en-gb",
       "time": "LTS",
+      "date": "L",
     // addressFormat - how an address is consutructed into the {{addr}} tag
       "addressFormat": "{{{streetName}}} {{streetNumber}}",
     // language - this is the secondary language that is used for 'alt' translation in dts.  This is rarely used now
@@ -182,6 +203,7 @@
   //
   "discord": {
       "enabled": true,                                // is discord enabled?
+      "activity": "PoracleJS",                        // activity to set ('Playing PoracleJS'), blank to none
       "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
     // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
     //   hours, deleting them if not (note general.roleCheckMode must be set to
@@ -194,11 +216,27 @@
     // guilds - the guilds (servers) that poracle will be on
       "guilds": [""],
     // channels - the ids of channels that can be used for the !poracle registration or alternatives by language
+    //  -- note these are not used in multi community (area security) mode
       "channels": [""],
     // userRoles - role IDs which will automatically grant poracle access (without registration required). Can be empty
+    //  -- note these are not used in multi community (area security) mode
       "userRole": [""],
     // admins - the IDs of admins (those who can add channels using !channel add and perform other admin functions)
       "admins": [""],
+    // delegatedAdministration - list of channels/webhooks and users who can admin these channels
+    //  for channels the id may be a guild, a category or an individual channel
+    //  eg:
+    //     "delegatedAdministration": {
+    //       "channelTracking": {
+    //          "id": [ "id" ]
+    //        },
+    //        "webhookTracking": {
+    //          "name": ["id" ]
+    //        }
+    //      }
+      "delegatedAdministration": {
+
+      },
       "prefix": "!",                                  // prefix for poracle commands, usually '!'
     // ivColors - array of 6 color codes for pokemon IV rankings
       "ivColors": [
@@ -223,19 +261,26 @@
   //
   "telegram": {
       "enabled": false,                             // whether telegram is enabled
-    // checkRole - whether to check all telegram users for membership of a registration group
-    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
-    //   must be set to actually carry out the deletions rather than just logging them)
-      "checkRole": false,
-      "checkRoleInterval": 6,
     // token - telegram bot token
       "token": "",
     // admins - admin user ids (array)
       "admins": [""],
+    // delegatedAdministration - list of group ids or channel names and users who can admin these
+    //  eg:
+    //     "delegatedAdministration": {
+    //       "channelTracking": {
+    //          "id": [ "id" ],
+    //          "name": [ "id", "id ]
+    //        },
+    //      }
+    "delegatedAdministration": {
+
+    },
     // channels - these are the groups that can be used for registration (it should really
     //   be called groups...). Note if they don't start with -100 then they may not be
     //   supergroups yet - google to find out how to make your group one.
     //   You can get the current group (and your) ids with the /identify command
+    //  -- note these are not used in multi community (area security) mode
       "channels": [""],
     // groupWelcomeText - message text (in channel) when someone registers. Users have to
     //   select the 'start' option on the bot in the telegram client before it can message
@@ -244,7 +289,13 @@
     // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
       "unregisteredUserMessage": "",
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
-      "unrecognisedCommandMessage": ""
+      "unrecognisedCommandMessage": "",
+    // checkRole - whether to check all telegram users for membership of a registration group
+    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
+    //   must be set to actually carry out the deletions rather than just logging them)
+      "checkRole": false,
+      "checkRoleInterval": 6,
+      "registerOnStart": false            // Whether auto registration is attempted on /start being issued
   },
   //
   // Alert limits - these are so Poracle can limit the amount of messages sent to a user/channel pro-actively
@@ -262,6 +313,64 @@
     //        "id": limit
     //    }
     "limitOverride": {
+
+    }
+  },
+  //
+  // Area security -- this section allows you to define whether Poracle will restrict access to different
+  // communities based on individual membership. These settings override the relevant roles and channels in the discord/
+  // telegram section above
+  //
+  "areaSecurity": {
+    "enabled": false,                           // Whether area security functions are enabled
+    // strictLocations checks that alerts are coming from the defined locationFence for every alert
+    "strictLocations": false,
+    // List of communities with
+    //    -- allowedAreas - these are fences uses are allowed to !area add
+    //    -- locationFence - the single area used for checking strictLocations against
+    //    -- discord - registration channels and user roles for this community
+    //    -- telegram - membership groups that qualify for access to this community
+    // Example
+    //    "communities": {
+    //      "newyork": {
+    //        "allowedAreas": [
+    //          "manhattan", "bronx", "brooklyn", "queens"
+    //        ],
+    //        "locationFence": "wholenewyork",
+    //        "discord": {
+    //          "channels": [
+    //            "xx"
+    //          ],
+    //          "userRole": [
+    //            "xx"
+    //          ]
+    //        },
+    //        "telegram": {
+    //          "channels": [
+    //          ]
+    //        }
+    //      },
+    //      "chicago": {
+    //        "allowedAreas": [
+    //          "northwest", "southside", "central"
+    //        ],
+    //        "locationFence": "wholechicago",
+    //        "discord": {
+    //          "channels": [
+    //            "xx"
+    //          ],
+    //          "userRole": [
+    //            "xx"
+    //          ]
+    //        },
+    //        "telegram": {
+    //          "channels": [
+    //            "xx"
+    //          ]
+    //        }
+    //      },
+    //
+    "communities": {
 
     }
   },
@@ -289,7 +398,8 @@
         "pokestop": "staticMap",
         "quest": "staticMap",
         "weather": "staticMap",
-        "location": "staticMap"
+        "location": "staticMap",
+        "nest": "staticMap"
       },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],
@@ -323,10 +433,10 @@
   //
   "tuning": {
     "maxDatabaseConnections": 15,
-    "webhookProcessingWorkers": 2,
-    "concurrentWebhookProcessorsPerWorker": 10,
-    "concurrentDiscordDestinationsPerBot": 5,
-    "concurrentTelegramDestinationsPerBot": 5,
+    "webhookProcessingWorkers": 5,
+    "concurrentWebhookProcessorsPerWorker": 4,
+    "concurrentDiscordDestinationsPerBot": 10,
+    "concurrentTelegramDestinationsPerBot": 10,
     "concurrentDiscordWebhookConnections": 10
   }
 }

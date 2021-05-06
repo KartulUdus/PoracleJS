@@ -8714,9 +8714,69 @@
 	"114_0": {
 		"name": "Tangela",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 114,
+		"stats": {
+			"baseAttack": 183,
+			"baseDefense": 169,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"114_1059": {
+		"name": "Tangela",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "TANGELA_NORMAL",
+			"id": 1059
+		},
+		"id": 114,
+		"stats": {
+			"baseAttack": 183,
+			"baseDefense": 169,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"114_1061": {
+		"name": "Tangela",
+		"form": {
+			"name": "Purified",
+			"proto": "TANGELA_PURIFIED",
+			"id": 1061
+		},
+		"id": 114,
+		"stats": {
+			"baseAttack": 183,
+			"baseDefense": 169,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"114_1060": {
+		"name": "Tangela",
+		"form": {
+			"name": "Shadow",
+			"proto": "TANGELA_SHADOW",
+			"id": 1060
 		},
 		"id": 114,
 		"stats": {
@@ -8814,9 +8874,69 @@
 	"116_0": {
 		"name": "Horsea",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 116,
+		"stats": {
+			"baseAttack": 129,
+			"baseDefense": 103,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"116_1062": {
+		"name": "Horsea",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "HORSEA_NORMAL",
+			"id": 1062
+		},
+		"id": 116,
+		"stats": {
+			"baseAttack": 129,
+			"baseDefense": 103,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"116_1064": {
+		"name": "Horsea",
+		"form": {
+			"name": "Purified",
+			"proto": "HORSEA_PURIFIED",
+			"id": 1064
+		},
+		"id": 116,
+		"stats": {
+			"baseAttack": 129,
+			"baseDefense": 103,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"116_1063": {
+		"name": "Horsea",
+		"form": {
+			"name": "Shadow",
+			"proto": "HORSEA_SHADOW",
+			"id": 1063
 		},
 		"id": 116,
 		"stats": {
@@ -8834,9 +8954,69 @@
 	"117_0": {
 		"name": "Seadra",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 117,
+		"stats": {
+			"baseAttack": 187,
+			"baseDefense": 156,
+			"baseStamina": 146
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"117_1065": {
+		"name": "Seadra",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "SEADRA_NORMAL",
+			"id": 1065
+		},
+		"id": 117,
+		"stats": {
+			"baseAttack": 187,
+			"baseDefense": 156,
+			"baseStamina": 146
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"117_1067": {
+		"name": "Seadra",
+		"form": {
+			"name": "Purified",
+			"proto": "SEADRA_PURIFIED",
+			"id": 1067
+		},
+		"id": 117,
+		"stats": {
+			"baseAttack": 187,
+			"baseDefense": 156,
+			"baseStamina": 146
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"117_1066": {
+		"name": "Seadra",
+		"form": {
+			"name": "Shadow",
+			"proto": "SEADRA_SHADOW",
+			"id": 1066
 		},
 		"id": 117,
 		"stats": {
@@ -14254,9 +14434,69 @@
 	"209_0": {
 		"name": "Snubbull",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 209,
+		"stats": {
+			"baseAttack": 137,
+			"baseDefense": 85,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"209_1253": {
+		"name": "Snubbull",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "SNUBBULL_NORMAL",
+			"id": 1253
+		},
+		"id": 209,
+		"stats": {
+			"baseAttack": 137,
+			"baseDefense": 85,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"209_1255": {
+		"name": "Snubbull",
+		"form": {
+			"name": "Purified",
+			"proto": "SNUBBULL_PURIFIED",
+			"id": 1255
+		},
+		"id": 209,
+		"stats": {
+			"baseAttack": 137,
+			"baseDefense": 85,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"209_1254": {
+		"name": "Snubbull",
+		"form": {
+			"name": "Shadow",
+			"proto": "SNUBBULL_SHADOW",
+			"id": 1254
 		},
 		"id": 209,
 		"stats": {
@@ -14274,9 +14514,69 @@
 	"210_0": {
 		"name": "Granbull",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 210,
+		"stats": {
+			"baseAttack": 212,
+			"baseDefense": 131,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"210_1256": {
+		"name": "Granbull",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "GRANBULL_NORMAL",
+			"id": 1256
+		},
+		"id": 210,
+		"stats": {
+			"baseAttack": 212,
+			"baseDefense": 131,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"210_1258": {
+		"name": "Granbull",
+		"form": {
+			"name": "Purified",
+			"proto": "GRANBULL_PURIFIED",
+			"id": 1258
+		},
+		"id": 210,
+		"stats": {
+			"baseAttack": 212,
+			"baseDefense": 131,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"210_1257": {
+		"name": "Granbull",
+		"form": {
+			"name": "Shadow",
+			"proto": "GRANBULL_SHADOW",
+			"id": 1257
 		},
 		"id": 210,
 		"stats": {
@@ -15522,9 +15822,81 @@
 	"230_0": {
 		"name": "Kingdra",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 230,
+		"stats": {
+			"baseAttack": 194,
+			"baseDefense": 194,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"230_1298": {
+		"name": "Kingdra",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "KINGDRA_NORMAL",
+			"id": 1298
+		},
+		"id": 230,
+		"stats": {
+			"baseAttack": 194,
+			"baseDefense": 194,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"230_1300": {
+		"name": "Kingdra",
+		"form": {
+			"name": "Purified",
+			"proto": "KINGDRA_PURIFIED",
+			"id": 1300
+		},
+		"id": 230,
+		"stats": {
+			"baseAttack": 194,
+			"baseDefense": 194,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"230_1299": {
+		"name": "Kingdra",
+		"form": {
+			"name": "Shadow",
+			"proto": "KINGDRA_SHADOW",
+			"id": 1299
 		},
 		"id": 230,
 		"stats": {
@@ -16570,9 +16942,69 @@
 	"255_0": {
 		"name": "Torchic",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 255,
+		"stats": {
+			"baseAttack": 130,
+			"baseDefense": 87,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"255_1358": {
+		"name": "Torchic",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "TORCHIC_NORMAL",
+			"id": 1358
+		},
+		"id": 255,
+		"stats": {
+			"baseAttack": 130,
+			"baseDefense": 87,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"255_1360": {
+		"name": "Torchic",
+		"form": {
+			"name": "Purified",
+			"proto": "TORCHIC_PURIFIED",
+			"id": 1360
+		},
+		"id": 255,
+		"stats": {
+			"baseAttack": 130,
+			"baseDefense": 87,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"255_1359": {
+		"name": "Torchic",
+		"form": {
+			"name": "Shadow",
+			"proto": "TORCHIC_SHADOW",
+			"id": 1359
 		},
 		"id": 255,
 		"stats": {
@@ -16590,9 +17022,81 @@
 	"256_0": {
 		"name": "Combusken",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 256,
+		"stats": {
+			"baseAttack": 163,
+			"baseDefense": 115,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"256_1361": {
+		"name": "Combusken",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "COMBUSKEN_NORMAL",
+			"id": 1361
+		},
+		"id": 256,
+		"stats": {
+			"baseAttack": 163,
+			"baseDefense": 115,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"256_1363": {
+		"name": "Combusken",
+		"form": {
+			"name": "Purified",
+			"proto": "COMBUSKEN_PURIFIED",
+			"id": 1363
+		},
+		"id": 256,
+		"stats": {
+			"baseAttack": 163,
+			"baseDefense": 115,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"256_1362": {
+		"name": "Combusken",
+		"form": {
+			"name": "Shadow",
+			"proto": "COMBUSKEN_SHADOW",
+			"id": 1362
 		},
 		"id": 256,
 		"stats": {
@@ -16614,9 +17118,81 @@
 	"257_0": {
 		"name": "Blaziken",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 257,
+		"stats": {
+			"baseAttack": 240,
+			"baseDefense": 141,
+			"baseStamina": 190
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"257_1364": {
+		"name": "Blaziken",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "BLAZIKEN_NORMAL",
+			"id": 1364
+		},
+		"id": 257,
+		"stats": {
+			"baseAttack": 240,
+			"baseDefense": 141,
+			"baseStamina": 190
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"257_1366": {
+		"name": "Blaziken",
+		"form": {
+			"name": "Purified",
+			"proto": "BLAZIKEN_PURIFIED",
+			"id": 1366
+		},
+		"id": 257,
+		"stats": {
+			"baseAttack": 240,
+			"baseDefense": 141,
+			"baseStamina": 190
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"257_1365": {
+		"name": "Blaziken",
+		"form": {
+			"name": "Shadow",
+			"proto": "BLAZIKEN_SHADOW",
+			"id": 1365
 		},
 		"id": 257,
 		"stats": {
@@ -16910,9 +17486,69 @@
 	"261_0": {
 		"name": "Poochyena",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 261,
+		"stats": {
+			"baseAttack": 96,
+			"baseDefense": 61,
+			"baseStamina": 111
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"261_1367": {
+		"name": "Poochyena",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "POOCHYENA_NORMAL",
+			"id": 1367
+		},
+		"id": 261,
+		"stats": {
+			"baseAttack": 96,
+			"baseDefense": 61,
+			"baseStamina": 111
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"261_1369": {
+		"name": "Poochyena",
+		"form": {
+			"name": "Purified",
+			"proto": "POOCHYENA_PURIFIED",
+			"id": 1369
+		},
+		"id": 261,
+		"stats": {
+			"baseAttack": 96,
+			"baseDefense": 61,
+			"baseStamina": 111
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"261_1368": {
+		"name": "Poochyena",
+		"form": {
+			"name": "Shadow",
+			"proto": "POOCHYENA_SHADOW",
+			"id": 1368
 		},
 		"id": 261,
 		"stats": {
@@ -16930,9 +17566,69 @@
 	"262_0": {
 		"name": "Mightyena",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 262,
+		"stats": {
+			"baseAttack": 171,
+			"baseDefense": 132,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"262_1370": {
+		"name": "Mightyena",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "MIGHTYENA_NORMAL",
+			"id": 1370
+		},
+		"id": 262,
+		"stats": {
+			"baseAttack": 171,
+			"baseDefense": 132,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"262_1372": {
+		"name": "Mightyena",
+		"form": {
+			"name": "Purified",
+			"proto": "MIGHTYENA_PURIFIED",
+			"id": 1372
+		},
+		"id": 262,
+		"stats": {
+			"baseAttack": 171,
+			"baseDefense": 132,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"262_1371": {
+		"name": "Mightyena",
+		"form": {
+			"name": "Shadow",
+			"proto": "MIGHTYENA_SHADOW",
+			"id": 1371
 		},
 		"id": 262,
 		"stats": {
@@ -18278,9 +18974,69 @@
 	"296_0": {
 		"name": "Makuhita",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 296,
+		"stats": {
+			"baseAttack": 99,
+			"baseDefense": 54,
+			"baseStamina": 176
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"296_1451": {
+		"name": "Makuhita",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "MAKUHITA_NORMAL",
+			"id": 1451
+		},
+		"id": 296,
+		"stats": {
+			"baseAttack": 99,
+			"baseDefense": 54,
+			"baseStamina": 176
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"296_1453": {
+		"name": "Makuhita",
+		"form": {
+			"name": "Purified",
+			"proto": "MAKUHITA_PURIFIED",
+			"id": 1453
+		},
+		"id": 296,
+		"stats": {
+			"baseAttack": 99,
+			"baseDefense": 54,
+			"baseStamina": 176
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"296_1452": {
+		"name": "Makuhita",
+		"form": {
+			"name": "Shadow",
+			"proto": "MAKUHITA_SHADOW",
+			"id": 1452
 		},
 		"id": 296,
 		"stats": {
@@ -18298,9 +19054,69 @@
 	"297_0": {
 		"name": "Hariyama",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 297,
+		"stats": {
+			"baseAttack": 209,
+			"baseDefense": 114,
+			"baseStamina": 302
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"297_1454": {
+		"name": "Hariyama",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "HARIYAMA_NORMAL",
+			"id": 1454
+		},
+		"id": 297,
+		"stats": {
+			"baseAttack": 209,
+			"baseDefense": 114,
+			"baseStamina": 302
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"297_1456": {
+		"name": "Hariyama",
+		"form": {
+			"name": "Purified",
+			"proto": "HARIYAMA_PURIFIED",
+			"id": 1456
+		},
+		"id": 297,
+		"stats": {
+			"baseAttack": 209,
+			"baseDefense": 114,
+			"baseStamina": 302
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"297_1455": {
+		"name": "Hariyama",
+		"form": {
+			"name": "Shadow",
+			"proto": "HARIYAMA_SHADOW",
+			"id": 1455
 		},
 		"id": 297,
 		"stats": {
@@ -19014,9 +19830,69 @@
 	"309_0": {
 		"name": "Electrike",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 309,
+		"stats": {
+			"baseAttack": 123,
+			"baseDefense": 78,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"309_1484": {
+		"name": "Electrike",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "ELECTRIKE_NORMAL",
+			"id": 1484
+		},
+		"id": 309,
+		"stats": {
+			"baseAttack": 123,
+			"baseDefense": 78,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"309_1486": {
+		"name": "Electrike",
+		"form": {
+			"name": "Purified",
+			"proto": "ELECTRIKE_PURIFIED",
+			"id": 1486
+		},
+		"id": 309,
+		"stats": {
+			"baseAttack": 123,
+			"baseDefense": 78,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"309_1485": {
+		"name": "Electrike",
+		"form": {
+			"name": "Shadow",
+			"proto": "ELECTRIKE_SHADOW",
+			"id": 1485
 		},
 		"id": 309,
 		"stats": {
@@ -19034,9 +19910,69 @@
 	"310_0": {
 		"name": "Manectric",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 310,
+		"stats": {
+			"baseAttack": 215,
+			"baseDefense": 127,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"310_1487": {
+		"name": "Manectric",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "MANECTRIC_NORMAL",
+			"id": 1487
+		},
+		"id": 310,
+		"stats": {
+			"baseAttack": 215,
+			"baseDefense": 127,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"310_1489": {
+		"name": "Manectric",
+		"form": {
+			"name": "Purified",
+			"proto": "MANECTRIC_PURIFIED",
+			"id": 1489
+		},
+		"id": 310,
+		"stats": {
+			"baseAttack": 215,
+			"baseDefense": 127,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"310_1488": {
+		"name": "Manectric",
+		"form": {
+			"name": "Shadow",
+			"proto": "MANECTRIC_SHADOW",
+			"id": 1488
 		},
 		"id": 310,
 		"stats": {
@@ -23554,9 +24490,81 @@
 	"396_0": {
 		"name": "Starly",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 396,
+		"stats": {
+			"baseAttack": 101,
+			"baseDefense": 58,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"396_1658": {
+		"name": "Starly",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "STARLY_NORMAL",
+			"id": 1658
+		},
+		"id": 396,
+		"stats": {
+			"baseAttack": 101,
+			"baseDefense": 58,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"396_1660": {
+		"name": "Starly",
+		"form": {
+			"name": "Purified",
+			"proto": "STARLY_PURIFIED",
+			"id": 1660
+		},
+		"id": 396,
+		"stats": {
+			"baseAttack": 101,
+			"baseDefense": 58,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"396_1659": {
+		"name": "Starly",
+		"form": {
+			"name": "Shadow",
+			"proto": "STARLY_SHADOW",
+			"id": 1659
 		},
 		"id": 396,
 		"stats": {
@@ -23578,9 +24586,81 @@
 	"397_0": {
 		"name": "Staravia",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 397,
+		"stats": {
+			"baseAttack": 142,
+			"baseDefense": 94,
+			"baseStamina": 146
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"397_1661": {
+		"name": "Staravia",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "STARAVIA_NORMAL",
+			"id": 1661
+		},
+		"id": 397,
+		"stats": {
+			"baseAttack": 142,
+			"baseDefense": 94,
+			"baseStamina": 146
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"397_1663": {
+		"name": "Staravia",
+		"form": {
+			"name": "Purified",
+			"proto": "STARAVIA_PURIFIED",
+			"id": 1663
+		},
+		"id": 397,
+		"stats": {
+			"baseAttack": 142,
+			"baseDefense": 94,
+			"baseStamina": 146
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"397_1662": {
+		"name": "Staravia",
+		"form": {
+			"name": "Shadow",
+			"proto": "STARAVIA_SHADOW",
+			"id": 1662
 		},
 		"id": 397,
 		"stats": {
@@ -23602,9 +24682,81 @@
 	"398_0": {
 		"name": "Staraptor",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 398,
+		"stats": {
+			"baseAttack": 234,
+			"baseDefense": 140,
+			"baseStamina": 198
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"398_1664": {
+		"name": "Staraptor",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "STARAPTOR_NORMAL",
+			"id": 1664
+		},
+		"id": 398,
+		"stats": {
+			"baseAttack": 234,
+			"baseDefense": 140,
+			"baseStamina": 198
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"398_1666": {
+		"name": "Staraptor",
+		"form": {
+			"name": "Purified",
+			"proto": "STARAPTOR_PURIFIED",
+			"id": 1666
+		},
+		"id": 398,
+		"stats": {
+			"baseAttack": 234,
+			"baseDefense": 140,
+			"baseStamina": 198
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"398_1665": {
+		"name": "Staraptor",
+		"form": {
+			"name": "Shadow",
+			"proto": "STARAPTOR_SHADOW",
+			"id": 1665
 		},
 		"id": 398,
 		"stats": {
@@ -23626,9 +24778,69 @@
 	"399_0": {
 		"name": "Bidoof",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 399,
+		"stats": {
+			"baseAttack": 80,
+			"baseDefense": 73,
+			"baseStamina": 153
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"399_1667": {
+		"name": "Bidoof",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "BIDOOF_NORMAL",
+			"id": 1667
+		},
+		"id": 399,
+		"stats": {
+			"baseAttack": 80,
+			"baseDefense": 73,
+			"baseStamina": 153
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"399_1669": {
+		"name": "Bidoof",
+		"form": {
+			"name": "Purified",
+			"proto": "BIDOOF_PURIFIED",
+			"id": 1669
+		},
+		"id": 399,
+		"stats": {
+			"baseAttack": 80,
+			"baseDefense": 73,
+			"baseStamina": 153
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"399_1668": {
+		"name": "Bidoof",
+		"form": {
+			"name": "Shadow",
+			"proto": "BIDOOF_SHADOW",
+			"id": 1668
 		},
 		"id": 399,
 		"stats": {
@@ -23646,9 +24858,81 @@
 	"400_0": {
 		"name": "Bibarel",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 400,
+		"stats": {
+			"baseAttack": 162,
+			"baseDefense": 119,
+			"baseStamina": 188
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"400_1670": {
+		"name": "Bibarel",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "BIBAREL_NORMAL",
+			"id": 1670
+		},
+		"id": 400,
+		"stats": {
+			"baseAttack": 162,
+			"baseDefense": 119,
+			"baseStamina": 188
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"400_1672": {
+		"name": "Bibarel",
+		"form": {
+			"name": "Purified",
+			"proto": "BIBAREL_PURIFIED",
+			"id": 1672
+		},
+		"id": 400,
+		"stats": {
+			"baseAttack": 162,
+			"baseDefense": 119,
+			"baseStamina": 188
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"400_1671": {
+		"name": "Bibarel",
+		"form": {
+			"name": "Shadow",
+			"proto": "BIBAREL_SHADOW",
+			"id": 1671
 		},
 		"id": 400,
 		"stats": {
@@ -25694,9 +26978,81 @@
 	"451_0": {
 		"name": "Skorupi",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 451,
+		"stats": {
+			"baseAttack": 93,
+			"baseDefense": 151,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"451_1796": {
+		"name": "Skorupi",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "SKORUPI_NORMAL",
+			"id": 1796
+		},
+		"id": 451,
+		"stats": {
+			"baseAttack": 93,
+			"baseDefense": 151,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"451_1798": {
+		"name": "Skorupi",
+		"form": {
+			"name": "Purified",
+			"proto": "SKORUPI_PURIFIED",
+			"id": 1798
+		},
+		"id": 451,
+		"stats": {
+			"baseAttack": 93,
+			"baseDefense": 151,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"451_1797": {
+		"name": "Skorupi",
+		"form": {
+			"name": "Shadow",
+			"proto": "SKORUPI_SHADOW",
+			"id": 1797
 		},
 		"id": 451,
 		"stats": {
@@ -25718,9 +27074,81 @@
 	"452_0": {
 		"name": "Drapion",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 452,
+		"stats": {
+			"baseAttack": 180,
+			"baseDefense": 202,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"452_1799": {
+		"name": "Drapion",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "DRAPION_NORMAL",
+			"id": 1799
+		},
+		"id": 452,
+		"stats": {
+			"baseAttack": 180,
+			"baseDefense": 202,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"452_1801": {
+		"name": "Drapion",
+		"form": {
+			"name": "Purified",
+			"proto": "DRAPION_PURIFIED",
+			"id": 1801
+		},
+		"id": 452,
+		"stats": {
+			"baseAttack": 180,
+			"baseDefense": 202,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"452_1800": {
+		"name": "Drapion",
+		"form": {
+			"name": "Shadow",
+			"proto": "DRAPION_SHADOW",
+			"id": 1800
 		},
 		"id": 452,
 		"stats": {
@@ -26374,9 +27802,69 @@
 	"465_0": {
 		"name": "Tangrowth",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 465,
+		"stats": {
+			"baseAttack": 207,
+			"baseDefense": 184,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"465_1823": {
+		"name": "Tangrowth",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "TANGROWTH_NORMAL",
+			"id": 1823
+		},
+		"id": 465,
+		"stats": {
+			"baseAttack": 207,
+			"baseDefense": 184,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"465_1825": {
+		"name": "Tangrowth",
+		"form": {
+			"name": "Purified",
+			"proto": "TANGROWTH_PURIFIED",
+			"id": 1825
+		},
+		"id": 465,
+		"stats": {
+			"baseAttack": 207,
+			"baseDefense": 184,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"465_1824": {
+		"name": "Tangrowth",
+		"form": {
+			"name": "Shadow",
+			"proto": "TANGROWTH_SHADOW",
+			"id": 1824
 		},
 		"id": 465,
 		"stats": {
@@ -33354,9 +34842,209 @@
 	"676_0": {
 		"name": "Furfrou",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2629": {
+		"name": "Furfrou",
+		"default_form": true,
+		"form": {
+			"name": "Natural",
+			"proto": "FURFROU_NATURAL",
+			"id": 2629
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2630": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Heart",
+			"proto": "FURFROU_HEART",
+			"id": 2630
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2631": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Star",
+			"proto": "FURFROU_STAR",
+			"id": 2631
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2632": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Diamond",
+			"proto": "FURFROU_DIAMOND",
+			"id": 2632
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2633": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Debutante",
+			"proto": "FURFROU_DEBUTANTE",
+			"id": 2633
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2634": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Matron",
+			"proto": "FURFROU_MATRON",
+			"id": 2634
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2635": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Dandy",
+			"proto": "FURFROU_DANDY",
+			"id": 2635
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2636": {
+		"name": "Furfrou",
+		"form": {
+			"name": "La Reine",
+			"proto": "FURFROU_LA_REINE",
+			"id": 2636
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2637": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Kabuki",
+			"proto": "FURFROU_KABUKI",
+			"id": 2637
+		},
+		"id": 676,
+		"stats": {
+			"baseAttack": 164,
+			"baseDefense": 167,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"676_2638": {
+		"name": "Furfrou",
+		"form": {
+			"name": "Pharaoh",
+			"proto": "FURFROU_PHARAOH",
+			"id": 2638
 		},
 		"id": 676,
 		"stats": {
@@ -34151,7 +35839,11 @@
 			"id": 0
 		},
 		"id": 710,
-		"stats": {},
+		"stats": {
+			"baseAttack": 121,
+			"baseDefense": 123,
+			"baseStamina": 135
+		},
 		"types": [
 			{
 				"id": 8,
@@ -34171,7 +35863,11 @@
 			"id": 0
 		},
 		"id": 711,
-		"stats": {},
+		"stats": {
+			"baseAttack": 175,
+			"baseDefense": 213,
+			"baseStamina": 163
+		},
 		"types": [
 			{
 				"id": 8,
@@ -34280,9 +35976,9 @@
 		},
 		"id": 716,
 		"stats": {
-			"baseAttack": 275,
-			"baseDefense": 203,
-			"baseStamina": 270
+			"baseAttack": 250,
+			"baseDefense": 185,
+			"baseStamina": 246
 		},
 		"types": [
 			{
@@ -34300,9 +35996,9 @@
 		},
 		"id": 717,
 		"stats": {
-			"baseAttack": 275,
-			"baseDefense": 203,
-			"baseStamina": 270
+			"baseAttack": 250,
+			"baseDefense": 185,
+			"baseStamina": 246
 		},
 		"types": [
 			{

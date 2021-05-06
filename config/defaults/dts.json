@@ -546,6 +546,39 @@
       "webpage_preview":false
     }
   },
+ {
+    "id": 1,
+    "type": "nest",
+    "language": "en",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "{{name}} nest at {{nestName}}",
+        "description": "Nest first found on {{resetDate}}\nAverage spawn: {{pokemonSpawnAvg}}/hour",
+        "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticMap}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "type": "nest",
+    "language": "en",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})***New Nest : {{name}}***\n{{nestName}}\nFound on {{resetDate}}\nSpawns/hour: {{pokemonSpawnAvg}}",
+      "sticker": "{{{stickerUrl}}}",
+      "location": false,
+      "webpage_preview": true
+     }
+  },
 {
   "id": 1,
   "language": "en",

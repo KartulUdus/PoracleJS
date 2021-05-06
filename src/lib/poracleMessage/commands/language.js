@@ -10,10 +10,14 @@ exports.run = async (client, msg, args, options) => {
 		if (!canContinue) return
 		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 
+		if (!Object.keys(client.config.general.availableLanguages).length) {
+			return await msg.react('🙅')
+		}
+
 		const translator = client.translatorFactory.Translator(language)
 
 		// Remove arguments that we don't want to keep for processing
-		for (let i = 0; i < args.length; i++) {
+		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.channelRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)

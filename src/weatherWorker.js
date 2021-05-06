@@ -1,4 +1,5 @@
 const { parentPort, isMainThread } = require('worker_threads')
+const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
@@ -27,6 +28,7 @@ const weatherController = new WeatherController(logs.controller, knex, config, d
 
 const hookQueue = []
 const workerId = 'WEATHER'
+logs.setWorkerId(workerId)
 let queuePort
 let commandPort
 
@@ -83,6 +85,11 @@ function updateBadGuys(badguys) {
 async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
+		if (cmd.type == 'heapdump') {
+			writeHeapSnapshot()
+			return
+		}
+
 		if (cmd.type == 'badguys') {
 			updateBadGuys(cmd.badguys)
 		}

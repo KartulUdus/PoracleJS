@@ -38,10 +38,45 @@ class PoracleTelegramMessage {
 	}
 
 	async reply(message, options = {}) {
+		const maxLength = 4095
+		if (!options.disableSplit) {
+			let remainingMessage = options.style != 'markdown' ? this.convertSafe(message) : message
+
+			while (remainingMessage.length > maxLength) {
+				let breakPosn = maxLength
+				while (breakPosn && remainingMessage[breakPosn] != '\n') breakPosn--
+
+				if (!breakPosn) break // cannot find CR - abort
+				const toSend = remainingMessage.substring(0, breakPosn + 1)
+				remainingMessage = remainingMessage.substring(breakPosn + 1)
+
+				await this.ctx.reply(toSend, {
+					parse_mode: 'Markdown',
+					disable_web_page_preview: true,
+				})
+			}
+
+			if (remainingMessage.length) {
+				return this.ctx.reply(remainingMessage, {
+					parse_mode: 'Markdown',
+					disable_web_page_preview: true,
+				})
+			}
+
+			return
+		}
 		return this.ctx.reply(options.style != 'markdown' ? this.convertSafe(message) : message, {
 			parse_mode: 'Markdown',
 			disable_web_page_preview: true,
 		})
+	}
+
+	async replyWithImageUrl(title, message, url) {
+		return this.ctx.reply(`[\u200A](${url})*${title}*\n${message || ''}`,
+			{
+				parse_mode: 'Markdown',
+				disable_web_page_preview: false,
+			})
 	}
 
 	async replyWithAttachment(message, filename) {

@@ -2,6 +2,7 @@ require('./lib/configFileCreator')()
 require('dotenv').config()
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
+const { writeHeapSnapshot } = require('v8')
 
 const fs = require('fs')
 const fsp = require('fs').promises
@@ -20,7 +21,9 @@ const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
-const TelegramUtil = require('./lib/telegram/telegramUtil.js')
+// const TelegramUtil = require('./lib/telegram/telegramUtil.js')
+const DiscordReconciliation = require('./lib/discord/discordReconciliation')
+const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
 
 const { Config } = require('./lib/configFetcher')
 
@@ -56,14 +59,16 @@ const re = require('./util/regex')(translatorFactory)
 
 const Query = require('./controllers/query')
 
-const query = new Query(logs.controller, knex, config)
+const query = new Query(logs.controller, knex, config, geofence)
 
+logs.setWorkerId('MAIN')
 fastify.decorate('logger', logs.log)
 fastify.decorate('controllerLog', logs.controller)
 fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
+fastify.decorate('query', query)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translator', translator)
@@ -75,7 +80,6 @@ const discordCommando = config.discord.enabled ? new DiscordCommando(config.disc
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
-let roleWorker
 let telegram
 let telegramChannel
 
@@ -85,64 +89,32 @@ if (config.discord.enabled) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
 		}
 	}
+	fastify.decorate('discordWorker', discordWorkers[0])
 	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true)
-
-	if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
-		roleWorker = new DiscordWorker(config.discord.token[0], 999, config, logs)
-	}
 }
 
-let telegramUtil
 if (config.telegram.enabled) {
 	telegram = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
 		telegramChannel = new TelegramWorker('2', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
-
-	if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
-		telegramUtil = new TelegramUtil(config, log, telegraf)
-	}
 }
 
-async function removeInvalidUser(user) {
-	if (config.general.roleCheckMode == 'disable-user') {
-		if (!user.admin_disable) await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: user.id })
-	} else if (config.general.roleCheckMode == 'delete') { // sanity check
-		await query.deleteQuery('egg', { id: user.id })
-		await query.deleteQuery('monsters', { id: user.id })
-		await query.deleteQuery('raid', { id: user.id })
-		await query.deleteQuery('quest', { id: user.id })
-		await query.deleteQuery('lures', { id: user.id })
-		await query.deleteQuery('profiles', { id: user.id })
-		await query.deleteQuery('humans', { id: user.id })
-	}
-}
+let telegramReconciliation
 
 async function syncTelegramMembership() {
 	try {
+		if (!telegramReconciliation) {
+			telegramReconciliation = new TelegramReconciliation(telegraf, log, config, query, dts)
+		}
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'telegram:user', admin_disable: 0 })
-		usersToCheck = usersToCheck.filter((user) => !config.telegram.admins.includes(user.id))
-		let invalidUsers = []
-		for (const channel of config.telegram.channels) {
-			invalidUsers = await telegramUtil.checkMembership(usersToCheck, channel)
-			usersToCheck = invalidUsers
-		}
-
-		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing/disabling from dB...')
-			for (const user of invalidUsers) {
-				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckMode != 'ignore') {
-					await removeInvalidUser(user)
-				} else {
-					log.info('config.general.roleCheckMode is set to ignore, not removing')
-				}
-			}
-		} else {
-			log.verbose('No invalid users found, all good!')
+		if (config.reconciliation.telegram.updateUserNames || config.reconciliation.telegram.removeInvalidUsers)	{
+			await telegramReconciliation.syncTelegramUsers(
+				config.reconciliation.discord.updateUserNames,
+				config.reconciliation.discord.removeInvalidUsers,
+			)
 		}
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
@@ -150,29 +122,56 @@ async function syncTelegramMembership() {
 	setTimeout(syncTelegramMembership, config.telegram.checkRoleInterval * 3600000)
 }
 
+let discordReconciliation
+
 async function syncDiscordRole() {
 	try {
-		log.verbose('Verification of Discord role membership to Poracle users starting...')
-		let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
-		usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
-		let invalidUsers = []
-		for (const guild of config.discord.guilds) {
-			invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
-			usersToCheck = invalidUsers
-		}
-		if (invalidUsers[0]) {
-			log.info('Invalid users found, removing/disabling from dB...')
-			for (const user of invalidUsers) {
-				log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-				if (config.general.roleCheckMode != 'ignore') {
-					await removeInvalidUser(user)
-				} else {
-					log.info('config.general.roleCheckMode is set to ignore, not removing')
-				}
+		if (!discordReconciliation) {
+			const worker = discordWorkers[0]
+			if (!worker || worker.busy) {
+				// try again in 30 seconds
+				setTimeout(syncDiscordRole, 30000)
+				return
 			}
-		} else {
-			log.verbose('No invalid users found, all good!')
+			discordReconciliation = new DiscordReconciliation(worker.client, log, config, query, dts)
 		}
+		// "updateChannelNames": true,
+		// 	"updateChannelNotes": true,
+		// 	"unregisterMissingChannels": true
+		if (config.reconciliation.discord.updateChannelNames || config.reconciliation.discord.updateChannelNotes
+			|| config.reconciliation.discord.unregisterMissingChannels) {
+			await discordReconciliation.syncDiscordChannels(config.reconciliation.discord.updateChannelNames,
+				config.reconciliation.discord.updateChannelNotes, config.reconciliation.discord.unregisterMissingChannels)
+		}
+		// "updateUserNames": true,
+		// "removeInvalidUsers": true,
+		// "registerNewUsers": true,
+		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers)	{
+			await discordReconciliation.syncDiscordRole(config.reconciliation.discord.registerNewUsers,
+				config.reconciliation.discord.updateUserNames,
+				config.reconciliation.discord.removeInvalidUsers)
+		}
+
+		// let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
+		// usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
+		// let invalidUsers = []
+		// for (const guild of config.discord.guilds) {
+		// 	invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
+		// 	usersToCheck = invalidUsers
+		// }
+		// if (invalidUsers[0]) {
+		// 	log.info('Invalid users found, removing/disabling from dB...')
+		// 	for (const user of invalidUsers) {
+		// 		log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
+		// 		if (config.general.roleCheckMode != 'ignore') {
+		// 			await removeInvalidUser(user)
+		// 		} else {
+		// 			log.info('config.general.roleCheckMode is set to ignore, not removing')
+		// 		}
+		// 	}
+		// } else {
+		// 	log.verbose('No invalid users found, all good!')
+		// }
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
@@ -275,7 +274,7 @@ async function run() {
 			}
 		}, 100)
 
-		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guild != '') {
+		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guilds) {
 			setTimeout(syncDiscordRole, 10000)
 		}
 	}
@@ -359,7 +358,8 @@ async function processMessages(msgs) {
 
 						try {
 							if (config.alertLimits.disableOnStop) {
-								await query.updateQuery('humans', { admin_disable: 1, disabled_date: query.dbNow() }, { id: msg.target })
+								// This acts like the admin de-registered the user rather than when losing a role so user does not get auto re-registered
+								await query.updateQuery('humans', { admin_disable: 1, disabled_date: null }, { id: msg.target })
 							} else {
 								await query.updateQuery('humans', { enabled: 0 }, { id: msg.target })
 							}
@@ -517,6 +517,15 @@ for (let w = 0; w < maxWorkers; w++) {
 	})
 }
 
+process.on('SIGUSR2', () => {
+	writeHeapSnapshot()
+	for (const dumpWorker of workers) {
+		dumpWorker.commandPort.postMessage({ type: 'heapdump' })
+	}
+	weatherWorker.commandPort.postMessage({ type: 'heapdump' })
+	statsWorker.commandPort.postMessage({ type: 'heapdump' })
+})
+
 let currentWorkerNo = 0
 
 async function processOne(hook) {
@@ -532,8 +541,9 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
-				const verifiedSpawnTime = hook.message.verified || hook.message.disappear_time_verified
-				if (fastify.cache.has(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`)) {
+				const verifiedSpawnTime = (hook.message.verified || hook.message.disappear_time_verified)
+				const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp}`
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
 				}
@@ -542,7 +552,7 @@ async function processOne(hook) {
 
 				const secondsRemaining = !verifiedSpawnTime ? 3600 : (Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300)
 
-				fastify.cache.set(`${hook.message.encounter_id}_${verifiedSpawnTime}_${hook.message.cp}`, 'cached', secondsRemaining)
+				fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 				processHook = hook
 
@@ -558,12 +568,14 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.has(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`)) {
+				const cacheKey = `${hook.message.gym_id}${hook.message.end}${hook.message.pokemon_id}`
+
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 					break
 				}
 
-				fastify.cache.set(`${hook.message.gym_id}_${hook.message.end}_${hook.message.pokemon_id}`, 'cached')
+				fastify.cache.set(cacheKey, 'x')
 
 				processHook = hook
 
@@ -582,8 +594,10 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
 				}
-				if (lureExpiration && !config.general.disableInvasion) {
-					if (fastify.cache.has(`${hook.message.pokestop_id}_L${lureExpiration}`)) {
+				if (lureExpiration && !config.general.disableLure) {
+					const cacheKey = `${hook.message.pokestop_id}L${lureExpiration}`
+
+					if (fastify.cache.get(cacheKey)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
 						break
 					}
@@ -591,11 +605,13 @@ async function processOne(hook) {
 					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
 					const secondsRemaining = Math.max((lureExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-					fastify.cache.set(`${hook.message.pokestop_id}_L${lureExpiration}`, 'cached', secondsRemaining)
+					fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 					processHook = hook
-				} else if (!config.general.disableLure) {
-					if (fastify.cache.has(`${hook.message.pokestop_id}_${incidentExpiration}`)) {
+				} else if (!config.general.disableInvasion) {
+					const cacheKey = `${hook.message.pokestop_id}I${lureExpiration}`
+
+					if (fastify.cache.get(cacheKey)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
 						break
 					}
@@ -603,7 +619,7 @@ async function processOne(hook) {
 					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
 					const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-					fastify.cache.set(`${hook.message.pokestop_id}_${incidentExpiration}`, 'cached', secondsRemaining)
+					fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 					processHook = hook
 				}
@@ -615,15 +631,38 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
-				if (fastify.cache.has(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`)) {
+				const cacheKey = `${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`
+
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
 					break
 				}
-				fastify.cache.set(`${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`, 'cached')
+				fastify.cache.set(cacheKey, 'x')
 				processHook = hook
 
 				break
 			}
+			case 'nest': {
+				if (config.general.disableNest) {
+					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was received but set to be ignored in config`)
+					break
+				}
+				fastify.webhooks.info(`nest ${JSON.stringify(hook.message)}`)
+				const cacheKey = `${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`
+				if (fastify.cache.get(cacheKey)) {
+					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was sent again too soon, ignoring`)
+					break
+				}
+
+				// expiry time -- 14 days (!) after reset time
+				const secondsRemaining = Math.max(((hook.message.reset_time + 14 * 24 * 60 * 60) * 1000 - Date.now()) / 1000, 0)
+
+				fastify.cache.set(cacheKey, 'x', secondsRemaining)
+				processHook = hook
+
+				break
+			}
+
 			case 'weather': {
 				if (config.general.disableWeather) break
 				fastify.webhooks.info(`weather ${JSON.stringify(hook.message)}`)
@@ -633,11 +672,12 @@ async function processOne(hook) {
 				}
 				const updateTimestamp = hook.message.time_changed || hook.message.updated
 				const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
-				if (fastify.cache.has(`${hook.message.s2_cell_id}_${hookHourTimestamp}`)) {
+				const cacheKey = `${hook.message.s2_cell_id}_${hookHourTimestamp}`
+				if (fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.s2_cell_id}: Weather for this cell was sent again too soon, ignoring`)
 					break
 				}
-				fastify.cache.set(`${hook.message.s2_cell_id}_${hookHourTimestamp}`, 'cached')
+				fastify.cache.set(cacheKey, 'x')
 
 				// post directly to weather controller
 				weatherWorker.queuePort.postMessage(hook)
@@ -676,6 +716,7 @@ async function currentStatus() {
 
 	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
 	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`)
+	log.verbose(`Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`)
 }
 
 const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]

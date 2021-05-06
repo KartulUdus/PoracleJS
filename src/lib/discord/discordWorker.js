@@ -3,6 +3,8 @@ const fsp = require('fs').promises
 const NodeCache = require('node-cache')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
+const noop = () => {}
+
 class Worker {
 	constructor(token, id, config, logs, rehydrateTimeouts = false) {
 		this.id = id
@@ -52,7 +54,12 @@ class Worker {
 
 	async bounceWorker() {
 		delete this.client
-		this.client = new Client()
+		this.client = new Client({
+			messageCacheMaxSize: 1,
+			messsageCacheLifetime: 60,
+			messageSweepInterval: 120,
+			messageEditHistoryMaxSize: 1,
+		})
 		try {
 			await this.setListeners()
 			await this.client.login(this.token)
@@ -67,7 +74,10 @@ class Worker {
 	work(data) {
 		this.discordQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run((work) => (this.sendAlert(work)))
+			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+				async (err) => {
+					this.logs.log.error('Discord queueProcessor exception', err)
+				})
 		}
 	}
 
@@ -105,7 +115,7 @@ class Worker {
 
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(noop)
 				this.discordMessageTimeouts.set(msg.id, { type: 'user', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true
@@ -219,11 +229,11 @@ class Worker {
 				if (channel) {
 					const msg = await channel.messages.fetch(key)
 					if (msgData.t <= now) {
-						msg.delete().catch(() => {})
+						msg.delete().catch(noop)
 					} else {
 						const newTtlms = Math.max(msgData.t - now, 2000)
 						const newTtl = Math.floor(newTtlms / 1000)
-						msg.delete({ timeout: newTtlms, reason: 'Historic message delete after restart' }).catch(() => {})
+						msg.delete({ timeout: newTtlms, reason: 'Historic message delete after restart' }).catch(noop)
 						this.discordMessageTimeouts.set(key, msgData.v, newTtl)
 					}
 				}
