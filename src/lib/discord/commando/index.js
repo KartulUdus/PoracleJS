@@ -33,7 +33,7 @@ class DiscordCommando {
 			messsageCacheLifetime: 60,
 			messageSweepInterval: 120,
 			messageEditHistoryMaxSize: 1,
-			ws: { intents },
+			//ws: { intents },
 		})
 		try {
 			this.client.on('error', (err) => {
