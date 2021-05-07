@@ -101,6 +101,8 @@ class DiscordWebhookWorker {
 				validateStatus: ((status) => status < 500),
 			}))
 
+			this.logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
+
 			if (res.status < 200 || res.status > 299) {
 				this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
 			}
