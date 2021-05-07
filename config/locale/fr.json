@@ -515,5 +515,8 @@
 	"New: ": "Nouveau: ",
 	"I removed 1 entry": "J'ai retiré 1 entrée",
 	"I removed {0} entries": "J'ai retiré {0} entrées",
-	"use `{0}{1}` to see what you are currently tracking": "utiliser {0}{1} pour voir vos suivis configurés"
+	"use `{0}{1}` to see what you are currently tracking": "utiliser {0}{1} pour voir vos suivis configurés",
+	"Mega {0}": "Méga-{0}",
+	"Mega {0} X": "Méga-{0} X",
+	"Mega {0} Y": "Méga-{0} Y"
 }
