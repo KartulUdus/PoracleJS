@@ -103,7 +103,7 @@ class Telegram {
 	async processCommand(ctx) {
 		const { command } = ctx.state
 		if (!command) return
-		if (command.bot && command.bot.toLowerCase() != ctx.options.username.toLowerCase()) return
+		if (command.bot && command.bot.toLowerCase() != ctx.botInfo.username.toLowerCase()) return
 		if (Object.keys(this.commands).includes(command.command)) {
 			return this.commands[command.command](ctx)
 		}
