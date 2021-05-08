@@ -16,7 +16,6 @@ class DiscordWebhookWorker {
 		this.users = []
 		this.userCount = 0
 		this.client = {}
-		this.axios = axios
 		this.webhookQueue = []
 		this.rehydrateTimeouts = rehydrateTimeouts
 		this.webhookTimeouts = new NodeCache()
@@ -94,19 +93,31 @@ class DiscordWebhookWorker {
 			const senderId = `${logReference}: ${data.name}`
 			const url = data.clean ? `${data.target}?wait=true` : data.target
 
-			const res = await this.retrySender(senderId, async () => this.axios({
-				method: 'post',
-				url,
-				data: data.message,
-				timeout: 10000,
-				validateStatus: ((status) => status < 500),
-			}))
+			const timeoutMs = this.config.tuning.discordTimeout || 10000
+			const res = await this.retrySender(senderId, async () => {
+				const source = axios.CancelToken.source()
+				const timeout = setTimeout(() => {
+					source.cancel(`Timeout waiting for response - ${timeoutMs}ms`)
+					// Timeout Logic
+				}, timeoutMs)
+
+				const result = await axios({
+					method: 'post',
+					url,
+					data: data.message,
+					validateStatus: ((status) => status < 500),
+					cancelToken: source.token,
+				})
+
+				clearTimeout(timeout)
+				return result
+			})
 
 			if (res.status < 200 || res.status > 299) {
 				this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
 				this.logs.discord.warn(`${logReference}: ${JSON.stringify(data.message)}`)
 			} else {
-				this.logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
+				this.logs.discord.verbose(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
 			}
 			this.logs.discord.silly(`${logReference}: ${data.name} WEBHOOK results ${data.target} ${res.statusText} ${res.status}`, res.headers)
 
@@ -119,12 +130,23 @@ class DiscordWebhookWorker {
 					try {
 						this.logs.discord.verbose(`${logReference}: http(s)> ${data.name} WEBHOOK Cleaning discord message`)
 
-						const cleanRes = await this.retrySender(`${senderId} (clean)`, async () => this.axios({
-							method: 'delete',
-							url: deleteUrl,
-							timeout: 10000,
-							validateStatus: ((status) => status < 500),
-						}))
+						const cleanRes = await this.retrySender(`${senderId} (clean)`, async () => {
+							const source = axios.CancelToken.source()
+							const timeout = setTimeout(() => {
+								source.cancel(`Timeout waiting for response - ${timeoutMs}ms`)
+								// Timeout Logic
+							}, timeoutMs)
+
+							const result = await axios({
+								method: 'delete',
+								url: deleteUrl,
+								cancelToken: source.token,
+								validateStatus: ((status) => status < 500),
+							})
+
+							clearTimeout(timeout)
+							return result
+						})
 						if (cleanRes.status < 200 || cleanRes.status > 299) {
 							this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Clean got ${cleanRes.status} ${cleanRes.statusText}`)
 						}
@@ -155,7 +177,7 @@ class DiscordWebhookWorker {
 
 	async deleteMessage(senderId, hookUrl, msgId) {
 		const deleteUrl = `${hookUrl}/messages/${msgId}`
-		await this.retrySender(`${senderId} (clean)`, async () => this.axios({
+		await this.retrySender(`${senderId} (clean)`, async () => axios({
 			method: 'delete',
 			url: deleteUrl,
 			timeout: 10000,
