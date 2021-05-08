@@ -541,18 +541,10 @@
 		"6": "Unseen"
 	},
 	"megaName": {
-		"0": {
-			"name": "{0}"
-		},
-		"1": {
-			"name": "Mega {0}"
-		},
-		"2": {
-			"name": "Mega {0} X"
-		},
-		"3": {
-			"name": "Mega {0} Y"
-		}
+		"0": "{0}",
+		"1": "Mega {0}",
+		"2": "Mega {0} X",
+		"3": "Mega {0} Y"
 	},
 	"evolution": {
 		"0": {
