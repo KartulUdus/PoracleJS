@@ -121,7 +121,7 @@ class Worker {
 			return true
 		} catch (err) {
 			this.logs.discord.error(`${data.logReference}: #${this.id} Failed to send Discord alert to ${data.name}`, err, data)
-			this.logs.discord.error(JSON.stringify(data))
+			this.logs.discord.error(`${data.logReference}: ${JSON.stringify(data)}`)
 		}
 		return true
 	}
@@ -144,7 +144,7 @@ class Worker {
 			return true
 		} catch (err) {
 			this.logs.discord.error(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
-			this.logs.discord.error(JSON.stringify(data))
+			this.logs.discord.error(`${data.logReference}: ${JSON.stringify(data)}`)
 		}
 		return true
 	}
