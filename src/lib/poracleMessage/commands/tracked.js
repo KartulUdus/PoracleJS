@@ -69,11 +69,21 @@ function eggRowText(translator, GameData, egg) {
 function questRowText(translator, GameData, quest) {
 	let rewardThing = ''
 	if (quest.reward_type === 7) {
-		rewardThing = Object.values(GameData.monsters).find((m) => m.id === quest.reward).name
-		rewardThing = translator.translate(rewardThing)
+		const monster = Object.values(GameData.monsters).find((m) => m.id === quest.reward)
+		if (monster) {
+			rewardThing = translator.translate(monster.name)
+		} else {
+			rewardThing = `${translator.translate('Unknown monster')} ${quest.reward}`
+		}
 	}
 	if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${translator.translate('or more stardust')}` : `${translator.translate('stardust')}`}`
-	if (quest.reward_type === 2) rewardThing = translator.translate(GameData.items[quest.reward].name)
+	if (quest.reward_type === 2) {
+		if (GameData.items[quest.reward]) {
+			rewardThing = translator.translate(GameData.items[quest.reward].name)
+		} else {
+			rewardThing = `${translator.translate('Unknown item')} ${quest.reward}`
+		}
+	}
 	if (quest.reward_type === 12) {
 		if (quest.reward == 0) {
 			rewardThing = `${translator.translate('mega energy')}`

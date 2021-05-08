@@ -98,11 +98,15 @@ class DiscordWebhookWorker {
 				method: 'post',
 				url,
 				data: data.message,
+				timeout: 10000,
 				validateStatus: ((status) => status < 500),
 			}))
 
 			if (res.status < 200 || res.status > 299) {
 				this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
+				this.logs.discord.warn(`${logReference}: ${JSON.stringify(data.message)}`)
+			} else {
+				this.logs.discord.debug(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
 			}
 			this.logs.discord.silly(`${logReference}: ${data.name} WEBHOOK results ${data.target} ${res.statusText} ${res.status}`, res.headers)
 
@@ -118,6 +122,7 @@ class DiscordWebhookWorker {
 						const cleanRes = await this.retrySender(`${senderId} (clean)`, async () => this.axios({
 							method: 'delete',
 							url: deleteUrl,
+							timeout: 10000,
 							validateStatus: ((status) => status < 500),
 						}))
 						if (cleanRes.status < 200 || cleanRes.status > 299) {
@@ -153,6 +158,7 @@ class DiscordWebhookWorker {
 		await this.retrySender(`${senderId} (clean)`, async () => this.axios({
 			method: 'delete',
 			url: deleteUrl,
+			timeout: 10000,
 			validateStatus: ((status) => status < 500),
 		}).catch(noop))
 	}

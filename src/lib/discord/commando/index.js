@@ -23,7 +23,8 @@ class DiscordCommando {
 
 	async bounceWorker() {
 		delete this.client
-		// Will be required for discord.js 13 -- but causes an exception if intent not granted
+		// This will be required in discord.js 13
+		// -- but causes an exception if intent not given in discord bot configuration
 		// const intents = new Intents([
 		// 	Intents.NON_PRIVILEGED, // include all non-privileged intents, would be better to specify which ones you actually need
 		// 	'GUILD_MEMBERS', // lets you request guild members (i.e. fixes the issue)
