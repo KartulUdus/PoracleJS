@@ -298,7 +298,7 @@ class Raid extends Controller {
 					data.name = translator.translate(data.nameEng)
 					data.formName = translator.translate(data.formNameEng)
 					data.evolutionName = translator.translate(data.evolutionNameEng)
-					data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution].name, data.name) : data.name
+					data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
 					data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
 					data.typeEmoji = data.emoji.map((emoji) => translator.translate(emoji)).join('')
 					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
