@@ -13,7 +13,7 @@ const NodeCache = require('node-cache')
 const fastify = require('fastify')({
 	bodyLimit: 5242880,
 })
-const Telegraf = require('telegraf')
+const { Telegraf } = require('telegraf')
 
 const path = require('path')
 const moment = require('moment-timezone')
@@ -41,8 +41,8 @@ const GameData = {
 
 const readDir = util.promisify(fs.readdir)
 
-const telegraf = new Telegraf(config.telegram.token, { channelMode: true })
-const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken, { channelMode: true }) : null
+const telegraf = new Telegraf(config.telegram.token)// , { channelMode: true })
+const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken)/* , { channelMode: true }) */ : null
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
