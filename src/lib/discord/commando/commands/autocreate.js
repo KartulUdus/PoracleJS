@@ -93,7 +93,7 @@ exports.run = async (client, msg, [args]) => {
 			if (channelDefinition.roles) {
 				const roleOverwrites = []
 				for (const role of channelDefinition.roles) {
-					roleId = await guild.roles.cache.get(role.id)
+					roleId = await guild.roles.cache.get(format(role.id, args))
 					if (role.view) allowed.push('VIEW_CHANNEL')
 					if (role.viewHistory) allowed.push('READ_MESSAGE_HISTORY')
 					if (role.send) allowed.push('SEND_MESSAGES')
@@ -141,7 +141,7 @@ exports.run = async (client, msg, [args]) => {
 				type,
 				name,
 				area: '[]',
-				// community_membership: '[]',
+				community_membership: '[]',
 			})
 
 			// Commands
@@ -170,6 +170,7 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 	} catch (err) {
+		await msg.reply('Failed to run autocreate, check logs')
 		client.logs.log.error(`Autocreate command "${msg.content}" unhappy:`, err)
 	}
 }
