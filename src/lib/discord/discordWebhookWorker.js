@@ -104,7 +104,7 @@ class DiscordWebhookWorker {
 			const senderId = `${logReference}: ${data.name}`
 			const url = data.clean ? `${data.target}?wait=true` : data.target
 
-			const timeoutMs = this.config.tuning.discordTimeout || 100
+			const timeoutMs = this.config.tuning.discordTimeout || 10000
 			const res = await this.retrySender(senderId, async () => {
 				const source = axios.CancelToken.source()
 				const timeout = setTimeout(() => {
