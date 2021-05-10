@@ -70,6 +70,7 @@ class DiscordWebhookWorker {
 			} catch (err) {
 				// Cancel indicates we hit the timeout, which we will retry (but only up to 5 times)
 				if (err instanceof axios.Cancel && retryCount < 5) {
+					this.logs.discord.warn(`${senderId} WEBHOOK Timeout, will retry...`)
 					await this.sleep(2500 + Math.random() * 7500)
 					retry = true
 					retryCount++
