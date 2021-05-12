@@ -53,18 +53,30 @@ class DiscordWebhookWorker {
 		do {
 			retry = false
 
-			res = await fn()
-			if (res.status === 429) {
-				this.logs.discord.warn(`${senderId} WEBHOOK 429 Rate limit [Discord Webhook] retryCount ${retryCount} x-ratelimit-bucket ${res.headers['x-ratelimit-bucket']} retry after ${res.headers['retry-after']} limit ${res.headers['x-ratelimit-limit']} global ${res.headers['x-ratelimit-global']} reset after ${res.headers['x-ratelimit-reset-after']} `)
-				//	const resetAfter = res.headers["x-ratelimit-reset-after"]
+			try {
+				res = await fn()
+				if (res.status === 429) {
+					this.logs.discord.warn(`${senderId} WEBHOOK 429 Rate limit [Discord Webhook] retryCount ${retryCount} x-ratelimit-bucket ${res.headers['x-ratelimit-bucket']} retry after ${res.headers['retry-after']} limit ${res.headers['x-ratelimit-limit']} global ${res.headers['x-ratelimit-global']} reset after ${res.headers['x-ratelimit-reset-after']} `)
+					//	const resetAfter = res.headers["x-ratelimit-reset-after"]
 
-				const retryAfterMs = res.headers['retry-after']
-				if (!res.headers.via) {
-					this.logs.discord.error(`${senderId} WEBHOOK 429 Rate limit [Discord Webhook] TELL @JABES ON DISCORD THIS COULD BE FROM CLOUDFLARE: ${retryAfterMs}`)
+					const retryAfterMs = res.headers['retry-after']
+					if (!res.headers.via) {
+						this.logs.discord.error(`${senderId} WEBHOOK 429 Rate limit [Discord Webhook] TELL @JABES ON DISCORD THIS COULD BE FROM CLOUDFLARE: ${retryAfterMs}`)
+					}
+					await this.sleep(retryAfterMs + Math.random() * 5000)
+					retry = true
+					retryCount++
 				}
-				await this.sleep(retryAfterMs + Math.random() * 5000)
-				retry = true
-				retryCount++
+			} catch (err) {
+				// Cancel indicates we hit the timeout, which we will retry (but only up to 5 times)
+				if (err instanceof axios.Cancel && retryCount < 5) {
+					this.logs.discord.warn(`${senderId} WEBHOOK Timeout, will retry...`)
+					await this.sleep(2500 + Math.random() * 7500)
+					retry = true
+					retryCount++
+				} else {
+					throw err
+				}
 			}
 		} while (retry === true && retryCount < 10)
 

@@ -67,6 +67,11 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.reply('I can\'t find that channel template! (remember it has to be your first parameter)')
 		}
 
+		// switch underscores back in so works for substitution later
+		for (let x = 0; x < args.length; x++) {
+			args[x] = args[x].replace(/ /g, '_')
+		}
+
 		let categoryId
 		if (template.definition.category) {
 			const category = await guild.channels.create(format(template.definition.category, args), { type: 'category' })
@@ -93,7 +98,7 @@ exports.run = async (client, msg, [args]) => {
 			if (channelDefinition.roles) {
 				const roleOverwrites = []
 				for (const role of channelDefinition.roles) {
-					roleId = await guild.roles.cache.get(role.id)
+					roleId = await guild.roles.cache.get(format(role.id, args))
 					if (role.view) allowed.push('VIEW_CHANNEL')
 					if (role.viewHistory) allowed.push('READ_MESSAGE_HISTORY')
 					if (role.send) allowed.push('SEND_MESSAGES')
@@ -132,7 +137,7 @@ exports.run = async (client, msg, [args]) => {
 
 				id = webhookLink
 				type = 'webhook'
-				name = webhookName
+				name = channelDefinition.webhookName ? format(channelDefinition.webhookName, args) : webhookName
 			}
 
 			// Create
@@ -141,7 +146,7 @@ exports.run = async (client, msg, [args]) => {
 				type,
 				name,
 				area: '[]',
-				// community_membership: '[]',
+				community_membership: '[]',
 			})
 
 			// Commands
@@ -170,6 +175,7 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 	} catch (err) {
+		await msg.reply('Failed to run autocreate, check logs')
 		client.logs.log.error(`Autocreate command "${msg.content}" unhappy:`, err)
 	}
 }
