@@ -160,6 +160,8 @@ class Monster extends Controller {
 			if (data.fort_name) data.fort_name = this.escapeJsonString(data.fort_name)
 			data.pokemonId = data.pokemon_id
 			data.encounterId = data.encounter_id
+			// eslint-disable-next-line prefer-destructuring
+			data.generation = Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
 			data.nameEng = monster.name
 			data.formNameEng = monster.form.name
 			data.formId = data.form
