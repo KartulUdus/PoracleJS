@@ -67,6 +67,11 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.reply('I can\'t find that channel template! (remember it has to be your first parameter)')
 		}
 
+		// switch underscores back in so works for substitution later
+		for (let x = 0; x < args.length; x++) {
+			args[x] = args[x].replace(/ /g, '_')
+		}
+
 		let categoryId
 		if (template.definition.category) {
 			const category = await guild.channels.create(format(template.definition.category, args), { type: 'category' })
@@ -132,7 +137,7 @@ exports.run = async (client, msg, [args]) => {
 
 				id = webhookLink
 				type = 'webhook'
-				name = webhookName
+				name = channelDefinition.webhookName ? format(channelDefinition.webhookName, args) : webhookName
 			}
 
 			// Create
