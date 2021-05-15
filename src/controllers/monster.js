@@ -473,10 +473,14 @@ class Monster extends Controller {
 				}
 
 				const e = []
+				const n = []
 				monster.types.forEach((type) => {
 					e.push(translator.translate(this.GameData.utilData.types[type.name].emoji))
+					n.push(type.name)
 				})
 				data.emoji = e
+				data.typeNameEng = n
+				data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
 				data.emojiString = e.join('')
 
 				const view = {

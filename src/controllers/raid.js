@@ -199,6 +199,8 @@ class Raid extends Controller {
 			data.matched = this.pointInArea([data.latitude, data.longitude])
 
 			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
+			data.gameWeatherId = data.weather
+			data.gameWeatherNameEng = data.weather ? this.GameData.utilData.weather[data.gameWeatherId].name : ''
 
 			if (this.config.general.ignoreLongRaids
 				&& (data.end - data.start) > 47 * 60) {
@@ -308,6 +310,9 @@ class Raid extends Controller {
 					data.boostWeatherId = data.boosted ? data.weather : ''
 					data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
 					data.boostWeatherEmoji = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
+					data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
+					data.gameWeatherEmoji = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].emoji) : ''
+
 					data.quickMove = data.quickMoveName // deprecated
 					data.chargeMove = data.chargeMoveName // deprecated
 					data.move1 = data.quickMoveName // deprecated
