@@ -71,12 +71,15 @@ module.exports = async (fastify, options, next) => {
 						fastify.log, fastify.config, fastify.query)
 
 					roles = await dr.getUserRoles(req.params.id)
-					const channels = await dr.getAllChannels()
 
 					const rolesAndId = [...roles, req.params.id]
 
+					let channels
 					for (const id of Object.keys(fastify.config.discord.delegatedAdministration.channelTracking)) {
 						if (fastify.config.discord.delegatedAdministration.channelTracking[id].some((x) => rolesAndId.includes(x))) {
+							if (!channels) {
+								channels = await dr.getAllChannels()
+							}
 							if (fastify.config.discord.guilds.includes(id)) {
 								// push whole guild
 								result.discord.channels.push(...channels[id].map((x) => x.id))
