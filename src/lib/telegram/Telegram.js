@@ -36,7 +36,9 @@ class Telegram {
 		// Handle identify special case on channels & in conversations
 
 		this.bot.on('channel_post', (ctx, next) => {
-			if (ctx.update.channel_post.text.startsWith('/identify')) {
+			if (ctx.update.channel_post
+				&& ctx.update.channel_post.text
+				&& ctx.update.channel_post.text.startsWith('/identify')) {
 				ctx.reply(`This channel is id: [ ${ctx.update.channel_post.chat.id} ] and your id is: unknown - this is a channel (and can't be used for bot registration)`)
 			}
 			return next()
