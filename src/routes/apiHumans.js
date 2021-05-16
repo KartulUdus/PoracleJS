@@ -64,7 +64,8 @@ module.exports = async (fastify, options, next) => {
 			result.discord.channels = []
 			result.discord.webhooks = []
 
-			if (fastify.config.discord.delegatedAdministration && Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
+			if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.channelTracking
+				&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
 				const dr = new DiscordUtil(fastify.discordWorker.client,
 					fastify.log, fastify.config, fastify.query)
 
@@ -94,7 +95,8 @@ module.exports = async (fastify, options, next) => {
 				}
 			}
 
-			if (fastify.config.discord.delegatedAdministration && Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).length) {
+			if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.webhookTracking
+				&& Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).length) {
 				if (!roles) {
 					const dr = new DiscordUtil(fastify.discordWorker.client,
 						fastify.log, fastify.config, fastify.query)
@@ -113,7 +115,8 @@ module.exports = async (fastify, options, next) => {
 			result.telegram = {}
 			result.telegram.channels = []
 
-			if (fastify.config.telegram.delegatedAdministration && Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).length) {
+			if (fastify.config.telegram.delegatedAdministration && fastify.config.telegram.delegatedAdministration.channelTracking
+				&& Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).length) {
 				// Add hooks identified by user
 				result.telegram.channels.push(...Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).filter((x) => fastify.config.telegram.delegatedAdministration.channelTracking[x].includes(req.params.id)))
 			}
