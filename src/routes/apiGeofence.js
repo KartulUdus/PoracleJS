@@ -51,9 +51,20 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
+		const { distance } = req.params
+		const { lat } = req.params
+		const { lon } = req.params
+
+		if (!distance || distance < 0 || !lat || !lon) {
+			return {
+				status: 'error',
+				message: 'Invalid parameters',
+			}
+		}
+
 		try {
 			const url = await geofenceTileGenerator.generateDistanceTile(fastify.query.tileserverPregen,
-				req.params.lat, req.params.lon, req.params.distance)
+				lat, lon, distance)
 			return {
 				status: 'ok',
 				url,

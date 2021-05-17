@@ -48,6 +48,11 @@ function checkConfig(config) {
 		logs.log.warn('Config Check: geocoding/providerURL does not start with http')
 	}
 
+	if (config.discord.enabled) {
+		if (!config.discord.guilds || !config.discord.guilds.length) {
+			logs.log.warn('Config Check: discord guilds entry missing or empty - will cause reconciliation failures')
+		}
+	}
 	if (!['none', 'tileservercache', 'google', 'osm', 'mapbox'].includes(config.geocoding.staticProvider.toLowerCase())) {
 		logs.log.warn('Config Check: static provider is not one of none,tileservercache,google,osm,mapbox')
 	}

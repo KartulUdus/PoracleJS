@@ -55,73 +55,87 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
-		const result = {}
+		try {
+			const result = {}
 
-		if (fastify.config.discord.enabled) {
-			let roles
+			if (fastify.config.discord.enabled) {
+				let roles
 
-			result.discord = {}
-			result.discord.channels = []
-			result.discord.webhooks = []
+				result.discord = {}
+				result.discord.channels = []
+				result.discord.webhooks = []
 
-			if (fastify.config.discord.delegatedAdministration && Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
-				const dr = new DiscordUtil(fastify.discordWorker.client,
-					fastify.log, fastify.config, fastify.query)
+				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.channelTracking
+						&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
+					const dr = new DiscordUtil(fastify.discordWorker.client,
+						fastify.log, fastify.config, fastify.query)
 
-				roles = await dr.getUserRoles(req.params.id)
-				const channels = await dr.getAllChannels()
+					roles = await dr.getUserRoles(req.params.id)
 
-				const rolesAndId = [...roles, req.params.id]
+					const rolesAndId = [...roles, req.params.id]
 
-				for (const id of Object.keys(fastify.config.discord.delegatedAdministration.channelTracking)) {
-					if (fastify.config.discord.delegatedAdministration.channelTracking[id].some((x) => rolesAndId.includes(x))) {
-						if (fastify.config.discord.guilds.includes(id)) {
-							// push whole guild
-							result.discord.channels.push(...channels[id].map((x) => x.id))
-						}
-						for (const guild of fastify.config.discord.guilds) {
-							if (channels[guild]) {
-								if (channels[guild].some((x) => x.categoryId == id)) {
-									// push whole category
-									result.discord.channels.push(...channels[guild].filter((x) => x.categoryId == id).map((x) => x.id))
-								}
-								if (channels[guild].some((x) => x.id == id)) {
-									result.discord.channels.push(id)
+					let channels
+					for (const id of Object.keys(fastify.config.discord.delegatedAdministration.channelTracking)) {
+						if (fastify.config.discord.delegatedAdministration.channelTracking[id].some((x) => rolesAndId.includes(x))) {
+							if (!channels) {
+								channels = await dr.getAllChannels()
+							}
+							if (fastify.config.discord.guilds.includes(id)) {
+								// push whole guild
+								result.discord.channels.push(...channels[id].map((x) => x.id))
+							}
+							for (const guild of fastify.config.discord.guilds) {
+								if (channels[guild]) {
+									if (channels[guild].some((x) => x.categoryId == id)) {
+										// push whole category
+										result.discord.channels.push(...channels[guild].filter((x) => x.categoryId == id).map((x) => x.id))
+									}
+									if (channels[guild].some((x) => x.id == id)) {
+										result.discord.channels.push(id)
+									}
 								}
 							}
 						}
 					}
 				}
-			}
 
-			if (fastify.config.discord.delegatedAdministration && Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).length) {
-				if (!roles) {
-					const dr = new DiscordUtil(fastify.discordWorker.client,
-						fastify.log, fastify.config, fastify.query)
+				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.webhookTracking
+					&& Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).length) {
+					if (!roles) {
+						const dr = new DiscordUtil(fastify.discordWorker.client,
+							fastify.log, fastify.config, fastify.query)
 
-					roles = await dr.getUserRoles(req.params.id)
+						roles = await dr.getUserRoles(req.params.id)
+					}
+
+					// Add hooks identified by user
+					result.discord.webhooks.push(...Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).filter((x) => fastify.config.discord.delegatedAdministration.webhookTracking[x].includes(req.params.id)))
+					// Add hooks identified by role
+					result.discord.webhooks.push(...Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).filter((x) => fastify.config.discord.delegatedAdministration.webhookTracking[x].some((y) => roles.includes(y))))
 				}
-
-				// Add hooks identified by user
-				result.discord.webhooks.push(...Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).filter((x) => fastify.config.discord.delegatedAdministration.webhookTracking[x].includes(req.params.id)))
-				// Add hooks identified by role
-				result.discord.webhooks.push(...Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).filter((x) => fastify.config.discord.delegatedAdministration.webhookTracking[x].some((y) => roles.includes(y))))
 			}
-		}
 
-		if (fastify.config.telegram.enabled) {
-			result.telegram = {}
-			result.telegram.channels = []
+			if (fastify.config.telegram.enabled) {
+				result.telegram = {}
+				result.telegram.channels = []
 
-			if (fastify.config.telegram.delegatedAdministration && Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).length) {
-				// Add hooks identified by user
-				result.telegram.channels.push(...Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).filter((x) => fastify.config.telegram.delegatedAdministration.channelTracking[x].includes(req.params.id)))
+				if (fastify.config.telegram.delegatedAdministration && fastify.config.telegram.delegatedAdministration.channelTracking
+					&& Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).length) {
+					// Add hooks identified by user
+					result.telegram.channels.push(...Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).filter((x) => fastify.config.telegram.delegatedAdministration.channelTracking[x].includes(req.params.id)))
+				}
 			}
-		}
 
-		return {
-			status: 'ok',
-			admin: result,
+			return {
+				status: 'ok',
+				admin: result,
+			}
+		} catch (err) {
+			fastify.logger.error(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`, err)
+			return {
+				status: 'error',
+				message: 'Exception raised during execution',
+			}
 		}
 	})
 
