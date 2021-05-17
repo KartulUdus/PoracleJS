@@ -1,4 +1,4 @@
-// const { DiscordAPIError } = require('discord.js')
+const { DiscordAPIError } = require('discord.js')
 
 class DiscordUtil {
 	constructor(client, log, config, query) {
@@ -64,10 +64,20 @@ class DiscordUtil {
 				this.log.error('Get User Roles (Discord) error', err)
 				throw err
 			}
-			const guildMember = await guild.members.fetch({ user: id })
-			if (guildMember) {
-				for (const role of guildMember.roles.cache.values()) {
-					roleList.push(role.id)
+			try {
+				const guildMember = await guild.members.fetch({ user: id })
+				if (guildMember) {
+					for (const role of guildMember.roles.cache.values()) {
+						roleList.push(role.id)
+					}
+				}
+			} catch (err) {
+				if (err instanceof DiscordAPIError) {
+					if (err.code == 10013) { // Unknown user
+						// eslint-disable-next-line no-continue
+						continue
+					}
+					throw err
 				}
 			}
 		}

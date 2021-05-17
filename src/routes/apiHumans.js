@@ -66,7 +66,7 @@ module.exports = async (fastify, options, next) => {
 				result.discord.webhooks = []
 
 				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.channelTracking
-					&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
+						&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
 					const dr = new DiscordUtil(fastify.discordWorker.client,
 						fastify.log, fastify.config, fastify.query)
 
