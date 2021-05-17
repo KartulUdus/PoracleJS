@@ -77,8 +77,8 @@ class DiscordUtil {
 						// eslint-disable-next-line no-continue
 						continue
 					}
-					throw err
 				}
+				throw err
 			}
 		}
 		return roleList
