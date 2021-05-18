@@ -70,17 +70,18 @@ class Controller extends EventEmitter {
 	}
 
 	getDts(logReference, templateType, platform, templateName, language) {
+		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
 		const key = `${templateType} ${platform} ${templateName} ${language}`
 		if (this.dtsCache[key]) {
 			return this.dtsCache[key]
 		}
 
 		// Exact match
-		let findDts = this.dts.find((template) => template.type === templateType && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language == language)
+		let findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language == language)
 
 		// First right template and platform and no language (likely backward compatible choice)
 		if (!findDts) {
-			findDts = this.dts.find((template) => template.type === templateType && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && !template.language)
+			findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && !template.language)
 		}
 
 		// Default of right template type, platform and language
