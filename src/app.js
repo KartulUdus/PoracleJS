@@ -718,16 +718,16 @@ async function currentStatus() {
 	log.verbose(`Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`)
 }
 
-const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-if (NODE_MAJOR_VERSION < 12) {
-	throw new Error('Requires Node 12 or 14')
-}
-// if (NODE_MAJOR_VERSION == 13) {
-//	throw new Error('Requires Node 12 or 14')
+// const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
+// if (NODE_MAJOR_VERSION < 12) {
+// 	throw new Error('Requires Node 12 or 14')
 // }
-if (NODE_MAJOR_VERSION > 14) {
-	throw new Error('Requires Node 12 or 14')
-}
+// // if (NODE_MAJOR_VERSION == 13) {
+// //	throw new Error('Requires Node 12 or 14')
+// // }
+// if (NODE_MAJOR_VERSION > 14) {
+// 	throw new Error('Requires Node 12 or 14')
+// }
 
 schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
 	try {
