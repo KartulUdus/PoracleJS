@@ -324,6 +324,7 @@ async function processMessages(msgs) {
 
 		let queueMessage
 		let logMessage = null
+		let shameMessage = null
 
 		if (!rate.passMessage) {
 			if (rate.justBreached) {
@@ -354,6 +355,9 @@ async function processMessages(msgs) {
 						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
 
 						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type == 'discord:user' ? `<@${destinationId}>` : ''}`
+						if (msg.type == 'discord:user') {
+							shameMessage = userTranslator.translateFormat('{0} has had their Poracle tracking disabled for exceeding the rate limit too many times!', destinationId)
+						}
 
 						try {
 							if (config.alertLimits.disableOnStop) {
@@ -393,6 +397,23 @@ async function processMessages(msgs) {
 					name: 'Log channel',
 					tth: { hours: 0, minutes: config.discord.dmLogChannelDeletionTime, seconds: 0 },
 					clean: config.discord.dmLogChannelDeletionTime > 0,
+					emoji: '',
+					logReference: queueMessage.logReference,
+					language: config.general.locale,
+				})
+			}
+			if (shameMessage && config.alertLimits.disableShameChannel) {
+				fastify.discordQueue.push({
+					lat: 0,
+					lon: 0,
+					message: {
+						content: shameMessage,
+					},
+					target: config.alertLimits.disableShameChannel,
+					type: 'discord:channel',
+					name: 'Shame channel',
+					tth: { hours: 0, minutes: 0, seconds: 0 },
+					clean: false,
 					emoji: '',
 					logReference: queueMessage.logReference,
 					language: config.general.locale,
