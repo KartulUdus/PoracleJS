@@ -79,6 +79,7 @@ class DiscordUtil {
 					}
 					if (err.code == 10007) { // Unknown member
 						// eslint-disable-next-line no-continue
+						continue
 					}
 				}
 				throw err
