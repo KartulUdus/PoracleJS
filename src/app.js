@@ -356,7 +356,7 @@ async function processMessages(msgs) {
 
 						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type == 'discord:user' ? `<@${destinationId}>` : ''}`
 						if (msg.type == 'discord:user') {
-							shameMessage = userTranslator.translateFormat('{0} has had their Poracle tracking disabled for exceeding the rate limit too many times!', destinationId)
+							shameMessage = userTranslator.translateFormat('<@{0}> has had their Poracle tracking disabled for exceeding the rate limit too many times!', destinationId)
 						}
 
 						try {
