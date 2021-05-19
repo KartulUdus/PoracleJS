@@ -64,6 +64,7 @@ module.exports = async (fastify, options, next) => {
 				result.discord = {}
 				result.discord.channels = []
 				result.discord.webhooks = []
+				result.discord.users = false
 
 				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.channelTracking
 						&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
@@ -113,16 +114,34 @@ module.exports = async (fastify, options, next) => {
 					// Add hooks identified by role
 					result.discord.webhooks.push(...Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).filter((x) => fastify.config.discord.delegatedAdministration.webhookTracking[x].some((y) => roles.includes(y))))
 				}
+
+				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.userTracking) {
+					if (!roles) {
+						const dr = new DiscordUtil(fastify.discordWorker.client,
+							fastify.log, fastify.config, fastify.query)
+
+						roles = await dr.getUserRoles(req.params.id)
+					}
+
+					const rolesAndId = [...roles, req.params.id]
+
+					result.discord.users = fastify.config.discord.delegatedAdministration.userTracking.some((x) => rolesAndId.includes(x))
+				}
 			}
 
 			if (fastify.config.telegram.enabled) {
 				result.telegram = {}
 				result.telegram.channels = []
+				result.telegram.users = false
 
 				if (fastify.config.telegram.delegatedAdministration && fastify.config.telegram.delegatedAdministration.channelTracking
 					&& Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).length) {
 					// Add hooks identified by user
 					result.telegram.channels.push(...Object.keys(fastify.config.telegram.delegatedAdministration.channelTracking).filter((x) => fastify.config.telegram.delegatedAdministration.channelTracking[x].includes(req.params.id)))
+				}
+
+				if (fastify.config.telegram.delegatedAdministration && fastify.config.telegram.delegatedAdministration.userTracking) {
+					result.telegram.users = fastify.config.telegram.delegatedAdministration.userTracking.includes(req.params.id)
 				}
 			}
 
