@@ -402,14 +402,14 @@ async function processMessages(msgs) {
 					language: config.general.locale,
 				})
 			}
-			if (shameMessage && config.alertLimits.disableShameChannel) {
+			if (shameMessage && config.alertLimits.shameChannel) {
 				fastify.discordQueue.push({
 					lat: 0,
 					lon: 0,
 					message: {
 						content: shameMessage,
 					},
-					target: config.alertLimits.disableShameChannel,
+					target: config.alertLimits.shameChannel,
 					type: 'discord:channel',
 					name: 'Shame channel',
 					tth: { hours: 0, minutes: 0, seconds: 0 },
