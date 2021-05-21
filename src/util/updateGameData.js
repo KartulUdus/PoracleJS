@@ -456,11 +456,11 @@ function Add_Missing_Pokemon() {
 			updatedGruntData[gruntId].second_reward = !!(gruntData[gruntId].lineup && gruntData[gruntId].lineup.rewards.length > 1)
 			updatedGruntData[gruntId].encounters = {
 				first: Object.keys(gruntData[gruntId].lineup.team[0])
-					.map((pok) => gruntData[gruntId].lineup.team[0][pok].id).filter((e) => e != null),
+					.map((pok) => gruntData[gruntId].lineup.team[0][pok].id).filter((e) => e  !== null),
 				second: Object.keys(gruntData[gruntId].lineup.team[1])
-					.map((pok) => gruntData[gruntId].lineup.team[1][pok].id).filter((e) => e != null),
+					.map((pok) => gruntData[gruntId].lineup.team[1][pok].id).filter((e) => e  !== null),
 				third: Object.keys(gruntData[gruntId].lineup.team[2])
-					.map((pok) => gruntData[gruntId].lineup.team[2][pok].id).filter((e) => e != null),
+					.map((pok) => gruntData[gruntId].lineup.team[2][pok].id).filter((e) => e  !== null),
 			}
 		}
 	}

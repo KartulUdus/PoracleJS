@@ -20,10 +20,10 @@ exports.run = async (client, msg, args, options) => {
 
 		let invalidCommand = true
 
-		if ((args[0] == 'add' || args[0] == 'remove') && args.length >= 2) invalidCommand = false
+		if ((args[0] === 'add' || args[0] === 'remove') && args.length >= 2) invalidCommand = false
 
-		if ((args[0] == 'show' || args[0] == 'clear') && args.length >= 1) invalidCommand = false
-		if (args[0] == 'list' && args.length == 1) invalidCommand = false
+		if ((args[0] === 'show' || args[0] === 'clear') && args.length >= 1) invalidCommand = false
+		if (args[0] === 'list' && args.length === 1) invalidCommand = false
 
 		if (invalidCommand) {
 			await msg.reply(translator.translateFormat('Valid commands are `{0}community add <name> <targets>`, `{0}community remove <name> <targets>`, `{0}community clear <targets>`, `{0}community show <targets>`, `{0}community list`', util.prefix),
@@ -36,7 +36,7 @@ exports.run = async (client, msg, args, options) => {
 
 		const communityKeys = Object.keys(client.config.areaSecurity.communities)
 
-		if (command == 'list') {
+		if (command === 'list') {
 			const originalWithUnderscore = communityKeys.map((area) => area.replace(/ /gi, '_')).sort()
 
 			await msg.reply(translator.translate('These are the valid communities:'))
@@ -45,7 +45,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		let community
-		if (command == 'add' || command == 'remove') {
+		if (command === 'add' || command === 'remove') {
 			community = args.shift().toLowerCase()
 		}
 

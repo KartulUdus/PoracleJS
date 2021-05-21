@@ -1,5 +1,5 @@
-const helpCommand = require('./help.js')
-const trackedCommand = require('./tracked.js')
+const helpCommand = require('./help')
+const trackedCommand = require('./tracked')
 const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
@@ -95,6 +95,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		// Substitute aliases
+		// eslint-disable-next-line
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
 		for (let i = args.length - 1; i >= 0; i--) {
 			let alias = pokemonAlias[args[i]]
@@ -191,18 +192,18 @@ exports.run = async (client, msg, args, options) => {
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 
-		if (rarity != -1 && !['1', '2', '3', '4', '5', '6'].includes(rarity)) {
+		if (rarity !== -1 && !['1', '2', '3', '4', '5', '6'].includes(rarity)) {
 			rarity = client.translatorFactory.reverseTranslateCommand(rarity, true)
-			const rarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() == rarity.toLowerCase())
+			const rarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() === rarity.toLowerCase())
 			if (rarityLevel) {
 				rarity = rarityLevel
 			} else {
 				rarity = -1
 			}
 		}
-		if (maxRarity != 6 && !['1', '2', '3', '4', '5', '6'].includes(maxRarity)) {
+		if (maxRarity !== 6 && !['1', '2', '3', '4', '5', '6'].includes(maxRarity)) {
 			maxRarity = client.translatorFactory.reverseTranslateCommand(maxRarity, true)
-			const maxRarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() == maxRarity.toLowerCase())
+			const maxRarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() === maxRarity.toLowerCase())
 			if (maxRarityLevel) {
 				maxRarity = maxRarityLevel
 			} else {
@@ -265,7 +266,7 @@ exports.run = async (client, msg, args, options) => {
 		for (let i = insert.length - 1; i >= 0; i--) {
 			const toInsert = insert[i]
 
-			for (const existing of tracked.filter((x) => x.pokemon_id == toInsert.pokemon_id)) {
+			for (const existing of tracked.filter((x) => x.pokemon_id === toInsert.pokemon_id)) {
 				const differences = objectDiff.diff(existing, toInsert)
 
 				switch (Object.keys(differences).length) {

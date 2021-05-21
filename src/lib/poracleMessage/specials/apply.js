@@ -17,7 +17,7 @@ exports.run = async (client, msg, commands) => {
 		}
 
 		for (const target of targets) {
-			await msg.reply(`>>> Executing as ${target.type} / ${target.name} ${target.type != 'webhook' ? target.id : ''}`)
+			await msg.reply(`>>> Executing as ${target.type} / ${target.name} ${target.type !== 'webhook' ? target.id : ''}`)
 			for (let x = 1; x < commands.length; x++) {
 				const command = commands[x]
 				await msg.reply(`>> ${command.join(' ')}`)

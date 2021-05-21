@@ -1,5 +1,5 @@
-const helpCommand = require('./help.js')
-const trackedCommand = require('./tracked.js')
+const helpCommand = require('./help')
+const trackedCommand = require('./tracked')
 const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
@@ -93,7 +93,7 @@ exports.run = async (client, msg, args, options) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of tracked.filter((x) => x.level == toInsert.level)) {
+				for (const existing of tracked.filter((x) => x.level === toInsert.level)) {
 					const differences = objectDiff.diff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
@@ -161,7 +161,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 			msg.reply(
 				''.concat(
-					result == 1 ? translator.translate('I removed 1 entry')
+					result === 1 ? translator.translate('I removed 1 entry')
 						: translator.translateFormat('I removed {0} entries', result),
 					', ',
 					translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),

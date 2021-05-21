@@ -47,7 +47,7 @@ class Query {
 	}
 
 	async geolocate(locationString) {
-		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+		if (this.config.geocoding.provider.toLowerCase() === 'none') {
 			return []
 		}
 

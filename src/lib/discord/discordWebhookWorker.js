@@ -133,7 +133,7 @@ class DiscordWebhookWorker {
 			}
 			this.logs.discord.silly(`${logReference}: ${data.name} WEBHOOK results ${data.target} ${res.statusText} ${res.status}`, res.headers)
 
-			if (data.clean && res.status == 200) {
+			if (data.clean && res.status === 200) {
 				const msgId = res.data.id
 				this.webhookTimeouts.set(msgId, data.target, Math.floor(msgDeletionMs / 1000) + 1)
 

@@ -30,15 +30,15 @@ class PoracleDiscordUtil {
 
 					if (roleList) {
 						for (const id of Object.keys(roleList)) {
-							if (id == postChannelId || id == postGuildId || id == postChannelCategoryId) {
+							if (id === postChannelId || id === postGuildId || id === postChannelCategoryId) {
 								const checkUserAgainst = roleList[id]
 
-								if (postUserId == checkUserAgainst) {
+								if (postUserId === checkUserAgainst) {
 									channelPermissions = true
 								}
 
 								for (const role of userRoleMembership) {
-									if (role == checkUserAgainst) {
+									if (role === checkUserAgainst) {
 										channelPermissions = true
 									}
 								}
@@ -115,7 +115,7 @@ class PoracleDiscordUtil {
 			target.id = this.options.targetOverride.id
 			target.name = this.options.targetOverride.name
 			target.type = this.options.targetOverride.type
-			target.webook = (target.type == 'webhook')
+			target.webook = (target.type === 'webhook')
 			status = await this.checkRegistrationStatus(target)
 		} else {
 			let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))

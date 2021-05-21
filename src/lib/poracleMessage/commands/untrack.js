@@ -1,4 +1,4 @@
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -30,6 +30,7 @@ exports.run = async (client, msg, args, options) => {
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
 		// Substitute aliases
+		// eslint-disable-next-line
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
 		for (let i = args.length - 1; i >= 0; i--) {
 			let alias = pokemonAlias[args[i]]
@@ -56,7 +57,7 @@ exports.run = async (client, msg, args, options) => {
 
 		msg.reply(
 			''.concat(
-				result == 1 ? translator.translate('I removed 1 entry')
+				result === 1 ? translator.translate('I removed 1 entry')
 					: translator.translateFormat('I removed {0} entries', result),
 				', ',
 				translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),

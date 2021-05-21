@@ -41,7 +41,7 @@ module.exports = async (ctx) => {
 
 		if (client.config.general.availableLanguages) {
 			for (const [key, availableLanguage] of Object.entries(client.config.general.availableLanguages)) {
-				if (availableLanguage.poracle == ctx.state.command.command) {
+				if (availableLanguage.poracle === ctx.state.command.command) {
 					language = key
 					break
 				}

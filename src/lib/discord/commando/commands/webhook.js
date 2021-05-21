@@ -13,7 +13,7 @@ exports.run = async (client, msg, [args]) => {
 
 		await msg.author.send(`This is ${msg.channel.type} Channel: ${msg.channel.name}`)
 
-		if (args[0] == 'list') {
+		if (args[0] === 'list') {
 			const hooks = await msg.channel.fetchWebhooks()
 			hooks.forEach((hook) => {
 				msg.author.send(`${hook.name} | ${hook.url}`)
@@ -28,7 +28,7 @@ exports.run = async (client, msg, [args]) => {
 
 		let webhookLink
 
-		if (args[0] == 'add') {
+		if (args[0] === 'add') {
 			const isRegistered = await client.query.countQuery('humans', { name: webhookName })
 			if (isRegistered) {
 				await msg.author.send(`A webhook or channel with the name ${webhookName} already exists`)
@@ -37,10 +37,10 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 
-		if (args[0] == 'create' || args[0] == 'add') {
+		if (args[0] === 'create' || args[0] === 'add') {
 			const hooks = await msg.channel.fetchWebhooks()
 			hooks.forEach((hook) => {
-				if (hook.name == 'Poracle') webhookLink = hook.url
+				if (hook.name === 'Poracle') webhookLink = hook.url
 			})
 
 			if (webhookLink) {
@@ -52,7 +52,7 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 
-		if (args[0] == 'add') {
+		if (args[0] === 'add') {
 			if (webhookName.includes('_')) {
 				await msg.author.send('A poracle webhook name cannot contain an underscore (_) - use name parameter to override')
 

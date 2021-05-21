@@ -9,7 +9,7 @@ const diff1 = (left = {}, right = {}, rel = 'left') => Object.entries(left)
 	// eslint-disable-next-line no-nested-ternary
 	.map(([k, v]) => (isObject(v) && isObject(right[k])
 		? [k, diff1(v, right[k], rel)]
-		: right[k] != v
+		: right[k] !== v
 			? [k, { [rel]: v }]
 			: [k, empty]))
 	.reduce((acc, [k, v]) => (v === empty
