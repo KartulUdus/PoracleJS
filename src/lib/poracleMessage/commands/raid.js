@@ -143,7 +143,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.pokemon_id === toInsert.pokemon_id && x.level === toInsert.level)) {
-					const differences = util.updatedDiff(existing, toInsert)
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)

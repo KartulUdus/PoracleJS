@@ -87,7 +87,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.grunt_type === toInsert.grunt_type)) {
-					const differences = client.util.updatedDiff(existing, toInsert)
+					const differences = client.client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)
