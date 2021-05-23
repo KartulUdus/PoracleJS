@@ -46,7 +46,6 @@ exports.run = async (client, msg, args, options) => {
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 
 		// Substitute aliases
-		// eslint-disable-next-line
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
 		for (let i = args.length - 1; i >= 0; i--) {
 			let alias = pokemonAlias[args[i]]
