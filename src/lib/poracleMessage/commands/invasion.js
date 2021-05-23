@@ -1,6 +1,5 @@
 const helpCommand = require('./help')
 const trackedCommand = require('./tracked')
-const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
 	const logReference = Math.random().toString().slice(2, 11)
@@ -88,7 +87,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.grunt_type === toInsert.grunt_type)) {
-					const differences = objectDiff.diff(existing, toInsert)
+					const differences = this.client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)
@@ -102,7 +101,6 @@ exports.run = async (client, msg, args, options) => {
 									...toInsert,
 									uid: existing.uid,
 								})
-								insert.splice(i, 1)
 							}
 							break
 						default:	// more differences
@@ -127,10 +125,14 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
+			await client.query.deleteWhereInQuery('invasion', {
+				id: target.id,
+				profile_no: currentProfileNo,
+			},
+			updates.map((x) => x.uid),
+			'uid')
+
 			await client.query.insertQuery('invasion', insert)
-			for (const row of updates) {
-				await client.query.updateQuery('invasion', row, { uid: row.uid })
-			}
 
 			client.log.info(`${logReference}: ${target.name} started tracking ${types.join(', ')} invasions`)
 			await msg.reply(message)
