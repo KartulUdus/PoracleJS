@@ -157,6 +157,7 @@ exports.run = async (client, msg, args, options) => {
 									...toInsert,
 									uid: existing.uid,
 								})
+								insert.splice(i, 1)
 							}
 							break
 						default:	// more differences
@@ -188,7 +189,7 @@ exports.run = async (client, msg, args, options) => {
 			updates.map((x) => x.uid),
 			'uid')
 
-			await client.query.insertQuery('raid', insert)
+			await client.query.insertQuery('raid', [...updates, ...insert])
 
 			//			const result = await client.query.insertOrUpdateQuery('raid', insert)
 			client.log.info(`${logReference}: ${target.name} started tracking level ${levels.join(', ')} raids`)

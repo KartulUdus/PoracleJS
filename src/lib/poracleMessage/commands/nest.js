@@ -132,6 +132,7 @@ exports.run = async (client, msg, args, options) => {
 									...toInsert,
 									uid: existing.uid,
 								})
+								insert.splice(i, 1)
 							}
 							break
 						default:	// more differences
@@ -163,7 +164,7 @@ exports.run = async (client, msg, args, options) => {
 			updates.map((x) => x.uid),
 			'uid')
 
-			await client.query.insertQuery('nests', insert)
+			await client.query.insertQuery('nests', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking nests `)
 			await msg.reply(message)

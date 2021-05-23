@@ -101,6 +101,7 @@ exports.run = async (client, msg, args, options) => {
 									...toInsert,
 									uid: existing.uid,
 								})
+								insert.splice(i, 1)
 							}
 							break
 						default:	// more differences
@@ -132,7 +133,7 @@ exports.run = async (client, msg, args, options) => {
 			updates.map((x) => x.uid),
 			'uid')
 
-			await client.query.insertQuery('invasion', insert)
+			await client.query.insertQuery('invasion', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking ${types.join(', ')} invasions`)
 			await msg.reply(message)

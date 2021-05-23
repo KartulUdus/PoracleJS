@@ -279,6 +279,7 @@ exports.run = async (client, msg, args, options) => {
 								...toInsert,
 								uid: existing.uid,
 							})
+							insert.splice(i, 1)
 						}
 						break
 					default:	// more differences
@@ -310,7 +311,7 @@ exports.run = async (client, msg, args, options) => {
 		updates.map((x) => x.uid),
 		'uid')
 
-		await client.query.insertQuery('monsters', insert)
+		await client.query.insertQuery('monsters', [...insert, ...updates])
 
 		// const result = await client.query.insertOrUpdateQuery('monsters', insert)
 		reaction = insert.length ? '✅' : reaction
