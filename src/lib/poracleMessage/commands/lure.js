@@ -88,7 +88,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.lure_id === toInsert.lure_id)) {
-					const differences = this.client.updatedDiff(existing, toInsert)
+					const differences = client.util.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)

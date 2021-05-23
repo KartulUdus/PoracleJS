@@ -1,9 +1,10 @@
 const { Client } = require('discord.js')
 const fs = require('fs')
-const { updatedDiff } = require('deep-object-diff')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
 const hastebin = require('hastebin-gen')
+const { updatedDiff } = require('deep-object-diff')
+
 const emojiStrip = require('../../../util/emojiStrip')
 
 class DiscordCommando {
@@ -62,12 +63,12 @@ class DiscordCommando {
 			this.client.logs = this.logs
 			this.client.dts = this.dts
 			this.client.re = this.re
-			this.client.updatedDiff = this.updatedDiff()
 			this.client.geofence = this.geofence
 			this.client.GameData = this.GameData
 			this.client.mustache = mustache
 			this.client.hastebin = hastebin
 			this.client.translatorFactory = this.translatorFactory
+			this.client.updatedDiff = updatedDiff
 			this.client.translator = this.translator
 			this.client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$])', 'igm')
 

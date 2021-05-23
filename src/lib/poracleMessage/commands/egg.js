@@ -1,3 +1,4 @@
+const { updatedDiff } = require('deep-object-diff')
 const helpCommand = require('./help')
 const trackedCommand = require('./tracked')
 
@@ -93,7 +94,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.level === toInsert.level)) {
-					const differences = this.client.updatedDiff(existing, toInsert)
+					const differences = util.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)

@@ -94,7 +94,6 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		// Substitute aliases
-		// eslint-disable-next-line
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
 		for (let i = args.length - 1; i >= 0; i--) {
 			let alias = pokemonAlias[args[i]]
@@ -266,7 +265,7 @@ exports.run = async (client, msg, args, options) => {
 			const toInsert = insert[i]
 
 			for (const existing of tracked.filter((x) => x.pokemon_id === toInsert.pokemon_id)) {
-				const differences = this.client.updatedDiff(existing, toInsert)
+				const differences = util.updatedDiff(existing, toInsert)
 
 				switch (Object.keys(differences).length) {
 					case 1:		// No differences (only UID)
