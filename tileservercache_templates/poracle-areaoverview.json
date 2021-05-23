@@ -9,14 +9,14 @@
 
   "polygons": [
     #for(fence in fences):
-    #if(index  !== 0):,#endif
+    #if(index != 0):,#endif
     {
       "fill_color": "#(fence.color)40",
       "stroke_color": "#(fence.color)",
       "stroke_width": 2,
       "path": [
         #for(coord in fence.path):
-        #if(index  !== 0):,#endif[#index(coord, 0), #index(coord, 1)]
+        #if(index != 0):,#endif[#index(coord, 0), #index(coord, 1)]
         #endfor
       ]
     }

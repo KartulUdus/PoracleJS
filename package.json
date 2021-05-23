@@ -27,7 +27,7 @@
   },
   "husky": {
     "hooks": {
-      "pre-commit": "npm run lint"
+      "pre-push": "npm run lint"
     }
   },
   "homepage": "https://github.com/KartulUdus/reference#readme",
