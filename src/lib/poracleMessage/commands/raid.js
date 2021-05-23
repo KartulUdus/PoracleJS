@@ -1,4 +1,3 @@
-const { updatedDiff } = require('deep-object-diff')
 const helpCommand = require('./help')
 const trackedCommand = require('./tracked')
 
