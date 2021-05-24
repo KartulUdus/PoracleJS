@@ -157,7 +157,9 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.insertQuery('nests', insert)
+			if (insert.length) {
+				await client.query.insertQuery('nests', insert)
+			}
 			for (const row of updates) {
 				await client.query.updateQuery('nests', row, { uid: row.uid })
 			}

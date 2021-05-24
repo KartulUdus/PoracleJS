@@ -133,7 +133,9 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.insertQuery('egg', insert)
+			if (insert.length) {
+				await client.query.insertQuery('egg', insert)
+			}
 			for (const row of updates) {
 				await client.query.updateQuery('egg', row, { uid: row.uid })
 			}
