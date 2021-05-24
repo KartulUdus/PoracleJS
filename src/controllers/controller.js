@@ -304,6 +304,7 @@ class Controller extends EventEmitter {
 	}
 
 	async insertQuery(table, values) {
+		if (Array.isArray(values) && !values.length) return
 		try {
 			return await this.db.insert(values).into(table)
 		} catch (err) {
