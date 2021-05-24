@@ -313,7 +313,6 @@ exports.run = async (client, msg, args, options) => {
 
 		await client.query.insertQuery('monsters', [...insert, ...updates])
 
-		// const result = await client.query.insertOrUpdateQuery('monsters', insert)
 		reaction = insert.length ? '✅' : reaction
 		await msg.reply(message)
 		await msg.react(reaction)
