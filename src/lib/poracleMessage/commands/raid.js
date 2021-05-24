@@ -182,7 +182,9 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.insertQuery('raid', insert)
+			if (insert.length) {
+				await client.query.insertQuery('raid', insert)
+			}
 			for (const row of updates) {
 				await client.query.updateQuery('raid', row, { uid: row.uid })
 			}
