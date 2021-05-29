@@ -335,6 +335,7 @@ class Weather extends Controller {
 			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+			data.matched = this.pointInArea([data.latitude, data.longitude])
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.weather && !this.config.weather.showAlteredPokemonStaticMap) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
@@ -343,6 +344,7 @@ class Weather extends Controller {
 			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
 			data.oldWeatherNameEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].name : ''
 			data.oldWeatherEmojiEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].emoji : ''
+			data.weatherCellId = data.s2_cell_id
 			data.weatherId = data.condition ? data.condition : ''
 			data.weatherNameEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].name : ''
 			data.weatherEmojiEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].emoji : ''
@@ -415,6 +417,7 @@ class Weather extends Controller {
 				const view = {
 					...data,
 					...geoResult,
+					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 					id: data.s2_cell_id,
 					now: new Date(),
 				}
