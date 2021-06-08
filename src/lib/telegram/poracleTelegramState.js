@@ -1,4 +1,4 @@
-const { updatedDiff } = require('deep-object-diff')
+const { diff } = require('deep-object-diff')
 const mustache = require('handlebars')
 const hastebin = require('hastebin-gen')
 const PoracleTelegramUtil = require('./poracleTelegramUtil')
@@ -18,7 +18,7 @@ class PoracleTelegramState {
 		this.config = ctx.state.controller.config
 		this.mustache = mustache
 		this.hastebin = hastebin
-		this.updatedDiff = updatedDiff
+		this.updatedDiff = diff
 	}
 
 	createMessage(msg) {
