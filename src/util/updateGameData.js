@@ -38,7 +38,7 @@ async function getLanguageData(language) {
 		const rawJSONData = await Fetch_Json(`${sourceAPK}i18n_${language}.json`)
 		return rawJSONData.data
 	} catch (e) {
-		console.error('Unable to fetch game data for ' + language, e)
+		console.error(`Unable to fetch game data for ${language}`, e)
 	}
 }
 

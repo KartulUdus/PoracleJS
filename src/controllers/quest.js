@@ -189,8 +189,8 @@ class Quest extends Controller {
 			}
 
 			if (data.monsters.length === 2) {
-				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id)[0].stats : ''
-				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id)[0].stats : ''
+				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId === mon.id && data.monsterData.formId === mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId === mon.id && data.monsterData.formId === mon.form.id)[0].stats : ''
+				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId === mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId === mon.id && !mon.form.id)[0].stats : ''
 			}
 			data.staticmap = data.staticMap // deprecated
 
