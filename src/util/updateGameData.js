@@ -1,58 +1,54 @@
-/* eslint-disable */
 const Fetch = require('node-fetch')
 const Fs = require('fs-extra')
 const rpc = require('pogo-protos')
 
-const utilData = require('./util')
+const utilData = require('./util.json')
+
 const gameMasterFile = 'https://raw.githubusercontent.com/PokeMiners/game_masters/master/latest/latest.json'
 const sourceAPK = 'https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Texts/Latest%20APK/JSON/'
 const sourceRemote = 'https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Texts/Latest%20Remote/'
 const gruntSource = 'https://raw.githubusercontent.com/ccev/pogoinfo/v2/active/grunts.json'
 const gameLanguages = ['brazilianportuguese', 'chinesetraditional', 'english', 'french', 'german', 'italian', 'japanese', 'korean', 'russian', 'spanish', 'thai']
-var GameMaster,
-	Form_List,
-	Pokemon_List,
-	Item_List,
-	Quest_Types,
-	Gender_List,
-	Temp_Evolutions
+let GameMaster
+let formList
+let pokemonList
+let itemList
+let questTypes
+let genderList
+let tempEvolutions
 
 function Fetch_Json(url) {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		Fetch(url)
-			.then(res => res.json())
-			.then(json => {
-				return resolve(json)
-			})
+			.then((res) => res.json())
+			.then((json) => resolve(json))
 	})
 }
 
 function Fetch_Txt(url) {
-	return new Promise(resolve => {
+	return new Promise((resolve) => {
 		Fetch(url)
-			.then(res => res.text())
-			.then(text => {
-				return resolve(text)
-			})
+			.then((res) => res.text())
+			.then((text) => resolve(text))
 	})
 }
 
 async function getLanguageData(language) {
 	try {
-		const rawJSONData = await Fetch_Json(sourceAPK + 'i18n_' + language + '.json')
+		const rawJSONData = await Fetch_Json(`${sourceAPK}i18n_${language}.json`)
 		return rawJSONData.data
 	} catch (e) {
-		console.error('Unable to fetch game data for ' + language, e, data)
+		console.error('Unable to fetch game data for ' + language, e)
 	}
 }
 
 async function getLanguageRemoteData(language) {
 	try {
-		const rawTxtData = await Fetch_Txt(sourceRemote + language.charAt(0)
-			.toUpperCase() + language.slice(1) + '.txt')
+		const rawTxtData = await Fetch_Txt(`${sourceRemote + language.charAt(0)
+			.toUpperCase() + language.slice(1)}.txt`)
 		return rawTxtData
 	} catch (e) {
-		console.error('Unable to fetch game data for ' + language, e, data)
+		console.error(`Unable to fetch game data for ${language}`, e, data)
 	}
 }
 
@@ -66,8 +62,7 @@ function getJSONFromTxt(text) {
 				|| filteredArray[index].includes('move_name_')
 				|| filteredArray[index].includes('pokemon_category_')
 				|| filteredArray[index].includes('pokemon_desc_'))
-			&& filteredArray[index + 1].includes('TEXT:'))
-		result[filteredArray[index].replace('RESOURCE ID: ', '')] = filteredArray[index + 1].replace('TEXT: ', '')
+			&& filteredArray[index + 1].includes('TEXT:')) result[filteredArray[index].replace('RESOURCE ID: ', '')] = filteredArray[index + 1].replace('TEXT: ', '')
 	})
 	return result
 }
@@ -79,14 +74,13 @@ function capitalize(string) {
 			let processed = ''
 			string.split('_')
 				.forEach((word) => {
-					processed += ' ' + word.charAt(0)
-						.toUpperCase() + word.slice(1)
+					processed += ` ${word.charAt(0)
+						.toUpperCase()}${word.slice(1)}`
 				})
 			return processed.slice(1)
-		} else {
-			return string.charAt(0)
-				.toUpperCase() + string.slice(1)
 		}
+		return string.charAt(0)
+			.toUpperCase() + string.slice(1)
 	} catch (e) {
 		console.error(e)
 		console.error(string)
@@ -96,37 +90,37 @@ function capitalize(string) {
 function ensure_pokemon(pokemon_id, englishData) {
 	const hasFormId = /^(\d{1,4})_(\d{1,4})?$/.exec(pokemon_id)
 	const pokemonId = hasFormId ? parseInt(hasFormId[1]) : pokemon_id
-	const defaultId = pokemonId + '_0'
-	const pokemon_name_id_4 = 'pokemon_name_' + pokemonId.toString()
-		.padStart(4, '0')
+	const defaultId = `${pokemonId}_0`
+	const pokemon_name_id_4 = `pokemon_name_${pokemonId.toString()
+		.padStart(4, '0')}`
 	if (!GameMaster.pokemon[defaultId]) {
 		GameMaster.pokemon[defaultId] = {}
 	}
 	if (!GameMaster.pokemon[defaultId].name) {
-		GameMaster.pokemon[defaultId].name = pokemonId === 29 ? 'Nidoran♀' : pokemonId === 32 ? 'Nidoran♂' : capitalize(Pokemon_List[pokemonId])
+		GameMaster.pokemon[defaultId].name = pokemonId === 29 ? 'Nidoran♀' : pokemonId === 32 ? 'Nidoran♂' : capitalize(pokemonList[pokemonId])
 		if (englishData[pokemon_name_id_4]) GameMaster.pokemon[defaultId].name = englishData[pokemon_name_id_4]
 	}
 	if (!GameMaster.pokemon[pokemon_id]) {
 		GameMaster.pokemon[pokemon_id] = {}
 	}
 	if (!GameMaster.pokemon[pokemon_id].name) {
-		GameMaster.pokemon[pokemon_id].name = pokemonId === 29 ? 'Nidoran♀' : pokemonId === 32 ? 'Nidoran♂' : capitalize(Pokemon_List[pokemonId])
+		GameMaster.pokemon[pokemon_id].name = pokemonId === 29 ? 'Nidoran♀' : pokemonId === 32 ? 'Nidoran♂' : capitalize(pokemonList[pokemonId])
 		if (englishData[pokemon_name_id_4]) GameMaster.pokemon[pokemon_id].name = englishData[pokemon_name_id_4]
 	}
 }
 
 function ensure_form_name(form, pokemon_id, form_name) {
 	if (!form.name) {
-		form.name = capitalize(form_name.substr(Pokemon_List[pokemon_id].length + 1))
-		if (pokemon_id === 29) form.name = capitalize(form_name.substr(Pokemon_List[pokemon_id].length - 6))
-		if (pokemon_id === 32) form.name = capitalize(form_name.substr(Pokemon_List[pokemon_id].length - 4))
+		form.name = capitalize(form_name.substr(pokemonList[pokemon_id].length + 1))
+		if (pokemon_id === 29) form.name = capitalize(form_name.substr(pokemonList[pokemon_id].length - 6))
+		if (pokemon_id === 32) form.name = capitalize(form_name.substr(pokemonList[pokemon_id].length - 4))
 	}
 }
 
 function Lookup_Pokemon(name) {
 	let pokemon_id = null
-	for (const key of Object.keys(Pokemon_List)) {
-		if (!key.startsWith('V') || !name.startsWith(key.substr('V9999_POKEMON_'.length) + '_') && name !== key.substr('V9999_POKEMON_'.length)) {
+	for (const key of Object.keys(pokemonList)) {
+		if (!key.startsWith('V') || !name.startsWith(`${key.substr('V9999_POKEMON_'.length)}_`) && name !== key.substr('V9999_POKEMON_'.length)) {
 			continue
 		}
 		if (pokemon_id !== null) {
@@ -146,20 +140,20 @@ function Lookup_Pokemon(name) {
 }
 
 function Generate_Forms(GameMaster, MasterArray, englishData) {
-	return new Promise(async resolve => {
+	return new Promise(async (resolve) => {
 		for (let o = 0, len = MasterArray.length; o < len; o++) {
-			let object = MasterArray[o]
+			const object = MasterArray[o]
 			if (object.templateId.split('_')[1]) {
-				let pokemon_id = Number(object.templateId.split('_')[1].slice(1))
+				const pokemon_id = Number(object.templateId.split('_')[1].slice(1))
 				try {
 					if (object.data.formSettings) {
-						let pokemon_form_id_default = pokemon_id + '_0'
+						const pokemon_form_id_default = `${pokemon_id}_0`
 						ensure_pokemon(pokemon_form_id_default, englishData)
-						let forms = object.data.formSettings.forms
+						const { forms } = object.data.formSettings
 						if (forms) {
 							for (let f = 0, flen = forms.length; f < flen; f++) {
-								let id = Form_List[object.data.formSettings.forms[f].form]
-								let pokemon_form_id = pokemon_id + '_' + id
+								const id = formList[object.data.formSettings.forms[f].form]
+								const pokemon_form_id = `${pokemon_id}_${id}`
 								ensure_pokemon(pokemon_form_id, englishData)
 								if (f === 0) {
 									GameMaster.pokemon[pokemon_form_id].default_form = true
@@ -181,13 +175,11 @@ function Generate_Forms(GameMaster, MasterArray, englishData) {
 									GameMaster.pokemon[pokemon_form_id].form.id = id
 								}
 							}
-						} else {
-							if (!GameMaster.pokemon[pokemon_form_id_default].form) {
-								GameMaster.pokemon[pokemon_form_id_default].form = {
-									name: 'Normal',
-									proto: '',
-									id: 0
-								}
+						} else if (!GameMaster.pokemon[pokemon_form_id_default].form) {
+							GameMaster.pokemon[pokemon_form_id_default].form = {
+								name: 'Normal',
+								proto: '',
+								id: 0,
 							}
 						}
 					}
@@ -202,25 +194,25 @@ function Generate_Forms(GameMaster, MasterArray, englishData) {
 }
 
 function Compile_Data(GameMaster, MasterArray, englishData) {
-	return new Promise(async resolve => {
+	return new Promise(async (resolve) => {
 		for (let o = 0, len = MasterArray.length; o < len; o++) {
-			let object = MasterArray[o]
+			const object = MasterArray[o]
 			try {
 				if (object.data.pokemonSettings) {
-					let pokemon_id = Number(object.templateId.split('_')[0].slice(1))
-					let pokemon_id_default = pokemon_id + '_0'
+					const pokemon_id = Number(object.templateId.split('_')[0].slice(1))
+					const pokemon_id_default = `${pokemon_id}_0`
 					ensure_pokemon(pokemon_id_default, englishData)
-					let Pokemon = GameMaster.pokemon[pokemon_id_default]
+					const Pokemon = GameMaster.pokemon[pokemon_id_default]
 					let form_id = null
 					if (/^V\d{4}_POKEMON_/.test(object.templateId)) {
-						form_id = Form_List[object.templateId.substr('V9999_POKEMON_'.length)]
+						form_id = formList[object.templateId.substr('V9999_POKEMON_'.length)]
 					}
 					if (form_id) {
-						let pokemon_form_id = pokemon_id + '_' + form_id
+						const pokemon_form_id = `${pokemon_id}_${form_id}`
 						if (!GameMaster.pokemon[pokemon_form_id]) {
 							GameMaster.pokemon[pokemon_form_id] = {}
 						}
-						let Form = GameMaster.pokemon[pokemon_form_id]
+						const Form = GameMaster.pokemon[pokemon_form_id]
 						Form.id = pokemon_id
 						Form.stats = {}
 						Form.stats.baseAttack = object.data.pokemonSettings.stats.baseAttack
@@ -231,14 +223,14 @@ function Compile_Data(GameMaster, MasterArray, englishData) {
 							const type1name = capitalize(object.data.pokemonSettings.type.replace('POKEMON_TYPE_', ''))
 							Form.types.push({
 								id: utilData.types[type1name].id,
-								name: type1name
+								name: type1name,
 							})
 						}
 						if (object.data.pokemonSettings.type2) {
 							const type2name = capitalize(object.data.pokemonSettings.type2.replace('POKEMON_TYPE_', ''))
 							Form.types.push({
 								id: utilData.types[type2name].id,
-								name: type2name
+								name: type2name,
 							})
 						}
 					} else {
@@ -252,14 +244,14 @@ function Compile_Data(GameMaster, MasterArray, englishData) {
 							const type1name = capitalize(object.data.pokemonSettings.type.replace('POKEMON_TYPE_', ''))
 							Pokemon.types.push({
 								id: utilData.types[type1name].id,
-								name: type1name
+								name: type1name,
 							})
 						}
 						if (object.data.pokemonSettings.type2) {
 							const type2name = capitalize(object.data.pokemonSettings.type2.replace('POKEMON_TYPE_', ''))
 							Pokemon.types.push({
 								id: utilData.types[type2name].id,
-								name: type2name
+								name: type2name,
 							})
 						}
 					}
@@ -268,9 +260,9 @@ function Compile_Data(GameMaster, MasterArray, englishData) {
 					object.data.itemSettings.itemId.split('_')
 						.splice(1)
 						.forEach((word) => {
-							item_name += ' ' + capitalize(word)
+							item_name += ` ${capitalize(word)}`
 						})
-					let item_name_eng_key = object.data.itemSettings.itemId.toLowerCase() + '_name'
+					const item_name_eng_key = `${object.data.itemSettings.itemId.toLowerCase()}_name`
 					const englishAPKDataItems = {}
 					const englishData = await getLanguageData('english')
 					Object.keys(englishData)
@@ -282,7 +274,7 @@ function Compile_Data(GameMaster, MasterArray, englishData) {
 					let englishRemoteData = await getLanguageRemoteData('english')
 					englishRemoteData = getJSONFromTxt(englishRemoteData)
 					const englishDataItems = { ...englishAPKDataItems, ...englishRemoteData }
-					let item_id = Item_List[object.data.itemSettings.itemId]
+					const item_id = itemList[object.data.itemSettings.itemId]
 					if (!GameMaster.items[item_id]) {
 						GameMaster.items[item_id] = {}
 					}
@@ -295,13 +287,13 @@ function Compile_Data(GameMaster, MasterArray, englishData) {
 						GameMaster.items[item_id].min_trainer_level = object.data.itemSettings.dropTrainerLevel
 					}
 				} else if (object.data.combatMove) {
-					let move_id = Move_List[object.data.templateId.substr(18)]
-					let move_name_id_4 = 'move_name_' + move_id.toString()
-						.padStart(4, '0')
+					const move_id = moveList[object.data.templateId.substr(18)]
+					const move_name_id_4 = `move_name_${move_id.toString()
+						.padStart(4, '0')}`
 					if (!GameMaster.moves[move_id]) {
 						GameMaster.moves[move_id] = {}
 					}
-					let Move = GameMaster.moves[move_id]
+					const Move = GameMaster.moves[move_id]
 					Move.name = capitalize(object.data.combatMove.uniqueId.replace('_FAST', ''))
 					Move.name = englishData[move_name_id_4]
 					Move.proto = object.templateId.substr(18)
@@ -322,20 +314,20 @@ function Compile_Data(GameMaster, MasterArray, englishData) {
 function Add_Missing_Pokemon() {
 	// add missing data for Unown forms
 	for (let i = 1; i < 29; i++) {
-		const currentUnown = '201_' + i
+		const currentUnown = `201_${i}`
 		GameMaster.pokemon[currentUnown].id = GameMaster.pokemon['201_0'].id
 		GameMaster.pokemon[currentUnown].stats = GameMaster.pokemon['201_0'].stats
 		GameMaster.pokemon[currentUnown].types = GameMaster.pokemon['201_0'].types
 	}
 	// add missing data for Spinda forms
 	for (let i = 37; i < 45; i++) {
-		const currentSpinda = '327_' + i
+		const currentSpinda = `327_${i}`
 		GameMaster.pokemon[currentSpinda].id = GameMaster.pokemon['327_0'].id
 		GameMaster.pokemon[currentSpinda].stats = GameMaster.pokemon['327_0'].stats
 		GameMaster.pokemon[currentSpinda].types = GameMaster.pokemon['327_0'].types
 	}
 	for (let i = 121; i < 133; i++) {
-		const currentSpinda = '327_' + i
+		const currentSpinda = `327_${i}`
 		GameMaster.pokemon[currentSpinda].id = GameMaster.pokemon['327_0'].id
 		GameMaster.pokemon[currentSpinda].stats = GameMaster.pokemon['327_0'].stats
 		GameMaster.pokemon[currentSpinda].types = GameMaster.pokemon['327_0'].types
@@ -344,7 +336,7 @@ function Add_Missing_Pokemon() {
 	delete GameMaster.pokemon['719_0']
 	delete GameMaster.pokemon['721_0']
 	// set proper form name for Armored Mewtwo
-	if (GameMaster.pokemon['150_133'].form.name === "A") GameMaster.pokemon['150_133'].form.name = "Armored"
+	if (GameMaster.pokemon['150_133'].form.name === 'A') GameMaster.pokemon['150_133'].form.name = 'Armored'
 }
 
 (async function () {
@@ -363,25 +355,25 @@ function Add_Missing_Pokemon() {
 	englishRemoteData = getJSONFromTxt(englishRemoteData)
 	const englishData = { ...englishAPKData, ...englishRemoteData }
 	// Force Sirfetchd
-	englishData['pokemon_name_0865'] = 'Sirfetchd'
+	englishData.pokemon_name_0865 = 'Sirfetchd'
 	const supportedLanguages = utilData.languageNames
 	for (const lang of Object.keys(supportedLanguages)) {
 		const currentLanguage = supportedLanguages[lang]
 		if (!gameLanguages.includes(currentLanguage)) {
-			console.log(currentLanguage + ' does not exist in Game data')
+			console.log(`${currentLanguage} does not exist in Game data`)
 			continue
 		}
 		let currentRawData = ''
-		console.log('Computing ' + currentLanguage)
+		console.log(`Computing ${currentLanguage}`)
 		try {
 			currentRawData = await getLanguageData(currentLanguage)
 		} catch (e) {
 			currentRawData = null
 		}
 		if (!currentRawData) {
-			console.log('Unable to fetch game data for ' + currentLanguage)
+			console.log(`Unable to fetch game data for ${currentLanguage}`)
 		} else {
-			console.log('Fetched game translations for ' + currentLanguage)
+			console.log(`Fetched game translations for ${currentLanguage}`)
 			const currentAPKData = {}
 			Object.keys(currentRawData)
 				.map((index, item) => {
@@ -395,10 +387,10 @@ function Add_Missing_Pokemon() {
 			let currentRemoteData = await getLanguageRemoteData(currentLanguage)
 			currentRemoteData = getJSONFromTxt(currentRemoteData)
 			const currentData = { ...currentAPKData, ...currentRemoteData }
-			let currentPokemonNames = {}
-			let currentMoveNames = {}
-			let currentPokemonCategories = {}
-			let currentPokemonDescriptions = {}
+			const currentPokemonNames = {}
+			const currentMoveNames = {}
+			const currentPokemonCategories = {}
+			const currentPokemonDescriptions = {}
 			for (const item of Object.keys(englishData)) {
 				if (item.includes('pokemon_name_')) {
 					currentPokemonNames[englishData[item]] = currentData[item]
@@ -413,27 +405,27 @@ function Add_Missing_Pokemon() {
 					currentPokemonDescriptions[englishData[item]] = currentData[item]
 				}
 			}
-			Fs.writeJSONSync('./locale/pokemonNames_' + lang + '.json', currentPokemonNames, {
+			Fs.writeJSONSync(`./locale/pokemonNames_${lang}.json`, currentPokemonNames, {
 				spaces: '\t',
-				EOL: '\n'
+				EOL: '\n',
 			})
-			Fs.writeJSONSync('./locale/moveNames_' + lang + '.json', currentMoveNames, {
+			Fs.writeJSONSync(`./locale/moveNames_${lang}.json`, currentMoveNames, {
 				spaces: '\t',
-				EOL: '\n'
+				EOL: '\n',
 			})
-			Fs.writeJSONSync('./locale/pokemonCategories_' + lang + '.json', currentPokemonCategories, {
+			Fs.writeJSONSync(`./locale/pokemonCategories_${lang}.json`, currentPokemonCategories, {
 				spaces: '\t',
-				EOL: '\n'
+				EOL: '\n',
 			})
-			Fs.writeJSONSync('./locale/pokemonDescriptions_' + lang + '.json', currentPokemonDescriptions, {
+			Fs.writeJSONSync(`./locale/pokemonDescriptions_${lang}.json`, currentPokemonDescriptions, {
 				spaces: '\t',
-				EOL: '\n'
+				EOL: '\n',
 			})
-			console.log('Translation files saved for ' + currentLanguage)
+			console.log(`Translation files saved for ${currentLanguage}`)
 		}
 		Fs.writeJSONSync('./locale/englishData.json', englishData, {
 			spaces: '\t',
-			EOL: '\n'
+			EOL: '\n',
 		})
 		console.log('English Game data file saved')
 	}
@@ -442,45 +434,46 @@ function Add_Missing_Pokemon() {
 	const gruntData = await Fetch_Json(gruntSource)
 	const updatedGruntData = {}
 	for (const gruntId of Object.keys(gruntData)) {
-		let type = gruntData[gruntId].character.type.name ? gruntData[gruntId].character.type.name : gruntData[gruntId].character.template
+		const type = gruntData[gruntId].character.type.name ? gruntData[gruntId].character.type.name : gruntData[gruntId].character.template
 		updatedGruntData[gruntId] = {
 			type: capitalize(type.replace('CHARACTER_', '').replace('EXECUTIVE_', '').replace('_MALE', '')
-				.replace('_FEMALE', '').replace('_GRUNT', '')),
+				.replace('_FEMALE', '')
+				.replace('_GRUNT', '')),
 			gender: gruntData[gruntId].character.gender === 0 ? 2 : gruntData[gruntId].character.gender === 1 ? 1 : '',
 			grunt: capitalize(gruntData[gruntId].character.template.replace('CHARACTER_', '')
 				.replace('_MALE', '')
 				.replace('_FEMALE', '')),
 		}
-		if (updatedGruntData[gruntId].type === "Grunt") updatedGruntData[gruntId].type = "Mixed"
+		if (updatedGruntData[gruntId].type === 'Grunt') updatedGruntData[gruntId].type = 'Mixed'
 		if (gruntData[gruntId].lineup) {
 			updatedGruntData[gruntId].second_reward = !!(gruntData[gruntId].lineup && gruntData[gruntId].lineup.rewards.length > 1)
 			updatedGruntData[gruntId].encounters = {
 				first: Object.keys(gruntData[gruntId].lineup.team[0])
-					.map((pok) => gruntData[gruntId].lineup.team[0][pok].id).filter((e) => e  !== null),
+					.map((pok) => gruntData[gruntId].lineup.team[0][pok].id).filter((e) => e !== null),
 				second: Object.keys(gruntData[gruntId].lineup.team[1])
-					.map((pok) => gruntData[gruntId].lineup.team[1][pok].id).filter((e) => e  !== null),
+					.map((pok) => gruntData[gruntId].lineup.team[1][pok].id).filter((e) => e !== null),
 				third: Object.keys(gruntData[gruntId].lineup.team[2])
-					.map((pok) => gruntData[gruntId].lineup.team[2][pok].id).filter((e) => e  !== null),
+					.map((pok) => gruntData[gruntId].lineup.team[2][pok].id).filter((e) => e !== null),
 			}
 		}
 	}
 	Fs.writeJSONSync('./newGrunts.json', updatedGruntData, {
 		spaces: '\t',
-		EOL: '\n'
+		EOL: '\n',
 	})
 	console.log('Updated grunt list file saved')
 
-	Move_List = rpc.Rpc.HoloPokemonMove
-	Form_List = rpc.Rpc.PokemonDisplayProto.Form
-	Pokemon_List = rpc.Rpc.HoloPokemonId
-	Quest_Types = rpc.Rpc.QuestType
-	Item_List = rpc.Rpc.Item
-	Gender_List = rpc.Rpc.PokemonDisplayProto.Gender
-	Temp_Evolutions = rpc.Rpc.HoloTemporaryEvolutionId
+	moveList = rpc.Rpc.HoloPokemonMove
+	formList = rpc.Rpc.PokemonDisplayProto.Form
+	pokemonList = rpc.Rpc.HoloPokemonId
+	questTypes = rpc.Rpc.QuestType
+	itemList = rpc.Rpc.Item
+	genderList = rpc.Rpc.PokemonDisplayProto.Gender
+	tempEvolutions = rpc.Rpc.HoloTemporaryEvolutionId
 
 	GameMaster = {}
 
-	let MasterArray = await Fetch_Json(gameMasterFile)
+	const MasterArray = await Fetch_Json(gameMasterFile)
 
 	GameMaster.pokemon = {}
 	GameMaster.moves = {}
@@ -490,17 +483,17 @@ function Add_Missing_Pokemon() {
 	Add_Missing_Pokemon()
 	Fs.writeJSONSync('newMonsters.json', GameMaster.pokemon, {
 		spaces: '\t',
-		EOL: '\n'
+		EOL: '\n',
 	})
 	console.log('newMonsters.json saved')
 	Fs.writeJSONSync('newMoves.json', GameMaster.moves, {
 		spaces: '\t',
-		EOL: '\n'
+		EOL: '\n',
 	})
 	console.log('newMoves.json saved')
 	Fs.writeJSONSync('newItems.json', GameMaster.items, {
 		spaces: '\t',
-		EOL: '\n'
+		EOL: '\n',
 	})
 	console.log('newItems.json saved')
-})()
+}())

@@ -63,7 +63,7 @@ class DiscordWebhookWorker {
 					if (!res.headers.via) {
 						this.logs.discord.error(`${senderId} WEBHOOK 429 Rate limit [Discord Webhook] TELL @JABES ON DISCORD THIS COULD BE FROM CLOUDFLARE: ${retryAfterMs}`)
 					}
-					await this.sleep(retryAfterMs + Math.random() * 5000)
+					await this.sleep(+retryAfterMs + Math.random() * 5000)
 					retry = true
 					retryCount++
 				}
