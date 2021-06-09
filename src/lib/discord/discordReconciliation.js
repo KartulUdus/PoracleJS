@@ -128,52 +128,54 @@ class DiscordReconciliation {
 			// const notes = ''
 
 			if (!this.config.areaSecurity.enabled) {
-				const before = !!user && !user.admin_disable
-				const after = roleList.some((role) => this.config.discord.userRole.includes(role))
+				if (this.config.discord.userRole && this.config.discord.userRole.length) {
+					const before = !!user && !user.admin_disable
+					const after = roleList.some((role) => this.config.discord.userRole.includes(role))
 
-				if (!before && after) {
-					if (!user) {
-						this.log.info(`Reconciliation (Discord) Create user ${id} ${name}`)
+					if (!before && after) {
+						if (!user) {
+							this.log.info(`Reconciliation (Discord) Create user ${id} ${name}`)
 
-						await this.query.insertOrUpdateQuery('humans', {
-							id,
-							type: 'discord:user',
-							name,
-							area: '[]',
-							community_membership: '[]',
-						})
-						await this.sendGreetings(id)
-					} else if (user.admin_disable && user.disabled_date) {
-						this.log.info(`Reconciliation (Discord) Reactivate user ${id} ${name}`)
+							await this.query.insertOrUpdateQuery('humans', {
+								id,
+								type: 'discord:user',
+								name,
+								area: '[]',
+								community_membership: '[]',
+							})
+							await this.sendGreetings(id)
+						} else if (user.admin_disable && user.disabled_date) {
+							this.log.info(`Reconciliation (Discord) Reactivate user ${id} ${name}`)
 
-						await this.query.updateQuery('humans', {
-							admin_disable: 0,
-							disabled_date: null,
-						}, { id })
+							await this.query.updateQuery('humans', {
+								admin_disable: 0,
+								disabled_date: null,
+							}, { id })
 
-						await this.sendGreetings(id)
+							await this.sendGreetings(id)
+						}
 					}
-				}
-				if (before && !after) {
-					if (user && removeInvalidUsers) {
-						await this.disableUser(user)
+					if (before && !after) {
+						if (user && removeInvalidUsers) {
+							await this.disableUser(user)
+						}
 					}
-				}
-				if (before && after) {
-					// check options for any changes here
-					// should ignore admin?
+					if (before && after) {
+						// check options for any changes here
+						// should ignore admin?
 
-					const updates = {}
-					if (syncNames && user.name != name) { // check if we should update name
-						updates.name = name
-					}
+						const updates = {}
+						if (syncNames && user.name != name) { // check if we should update name
+							updates.name = name
+						}
 
-					// if (user.notes != notes) {
-					// 	updates.notes = notes
-					// }
-					if (Object.keys(updates).length) {
-						await this.query.updateQuery('humans', updates, { id })
-						this.log.info(`Reconciliation (Discord) Update user ${id} ${name}`)
+						// if (user.notes != notes) {
+						// 	updates.notes = notes
+						// }
+						if (Object.keys(updates).length) {
+							await this.query.updateQuery('humans', updates, { id })
+							this.log.info(`Reconciliation (Discord) Update user ${id} ${name}`)
+						}
 					}
 				}
 			} else {
