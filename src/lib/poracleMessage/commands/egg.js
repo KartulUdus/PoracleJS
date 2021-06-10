@@ -77,12 +77,12 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				exclusive: !!exclusive,
-				template,
-				distance,
-				team,
-				clean,
-				level: lvl,
+				exclusive: +exclusive,
+				template: template.toString(),
+				distance: +distance,
+				team: +team,
+				clean: +clean,
+				level: +lvl,
 			}))
 
 			const tracked = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })

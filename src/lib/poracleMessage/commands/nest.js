@@ -100,12 +100,12 @@ exports.run = async (client, msg, args, options) => {
 			const insert = monsters.map((mon) => ({
 				id: target.id,
 				profile_no: currentProfileNo,
-				pokemon_id: mon.id,
+				pokemon_id: +mon.id,
 				ping: pings,
-				min_spawn_avg: minSpawn,
-				template,
-				distance,
-				clean,
+				min_spawn_avg: +minSpawn,
+				template: template.toString(),
+				distance: +distance,
+				clean: +clean,
 				form: mon.form.id,
 			}))
 
@@ -117,7 +117,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.pokemon_id === toInsert.pokemon_id)) {
-					const differences = client.client.updatedDiff(existing, toInsert)
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)

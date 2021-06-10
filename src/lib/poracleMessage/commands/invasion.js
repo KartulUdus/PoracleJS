@@ -72,10 +72,10 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				template,
-				distance,
-				gender,
-				clean,
+				template: template.toString(),
+				distance: +distance,
+				gender: +gender,
+				clean: +clean,
 				grunt_type: o,
 			}))
 
@@ -87,7 +87,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.grunt_type === toInsert.grunt_type)) {
-					const differences = client.client.updatedDiff(existing, toInsert)
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)

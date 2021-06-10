@@ -122,12 +122,12 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: minDust,
-				template,
-				shiny: mustShiny,
+				reward: +minDust,
+				template: template.toString(),
+				shiny: +mustShiny,
 				reward_type: 3,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		}
 
@@ -136,12 +136,12 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: pid,
-				template,
+				reward: +pid,
+				template: template.toString(),
 				shiny: mustShiny,
 				reward_type: 12,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		})
 
@@ -151,11 +151,11 @@ exports.run = async (client, msg, args, options) => {
 				profile_no: currentProfileNo,
 				ping: pings,
 				reward: pid,
-				template,
-				shiny: mustShiny,
+				template: template.toString(),
+				shiny: +mustShiny,
 				reward_type: 7,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		})
 
@@ -164,12 +164,12 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: i,
-				template,
-				shiny: mustShiny,
+				reward: +i,
+				template: template.toString(),
+				shiny: +mustShiny,
 				reward_type: 2,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		})
 
@@ -187,7 +187,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.reward_type === toInsert.reward_type && x.reward === toInsert.reward)) {
-					const differences = client.client.updatedDiff(existing, toInsert)
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)

@@ -74,10 +74,10 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				template,
-				distance,
-				clean,
-				lure_id: lureId,
+				template: template.toString(),
+				distance: +distance,
+				clean: +clean,
+				lure_id: +lureId,
 			}))
 
 			const tracked = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
@@ -88,7 +88,7 @@ exports.run = async (client, msg, args, options) => {
 				const toInsert = insert[i]
 
 				for (const existing of tracked.filter((x) => x.lure_id === toInsert.lure_id)) {
-					const differences = client.client.updatedDiff(existing, toInsert)
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)
