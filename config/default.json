@@ -39,6 +39,7 @@
       "disableQuest": false,
       "disableWeather": false,
       "disableNest": false,
+      "disableGym": false,
     // roleCheckMode (case sensitive)
     // "ignore" - log and don't delete/disable users once required roles/channel membership are removed
     // "delete" - delete user from database along with trackings once required role is removed
@@ -400,7 +401,8 @@
         "quest": "staticMap",
         "weather": "staticMap",
         "location": "staticMap",
-        "nest": "staticMap"
+        "nest": "staticMap",
+        "gym": "staticMap"
       },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],

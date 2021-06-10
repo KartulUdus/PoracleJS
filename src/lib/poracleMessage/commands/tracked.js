@@ -44,6 +44,12 @@ function raidRowText(translator, GameData, raid) {
 	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
 }
 
+function gymRowText(translator, GameData, gym) {
+	const raidTeam = translator.translate(GameData.utilData.teams[gym.team].name)
+
+	return `**${raidTeam} ${translator.translate('gyms')}** ${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}`
+}
+
 function nestRowText(translator, GameData, nest) {
 	let monsterName
 	let formName
@@ -135,6 +141,7 @@ exports.questRowText = questRowText
 exports.invasionRowText = invasionRowText
 exports.nestRowText = nestRowText
 exports.lureRowText = lureRowText
+exports.gymRowText = gymRowText
 
 exports.run = async (client, msg, args, options) => {
 	try {

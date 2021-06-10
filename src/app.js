@@ -641,6 +641,27 @@ async function processOne(hook) {
 
 				break
 			}
+			case 'gym':
+			case 'gym_details': {
+				const id = hook.message.id || hook.message.gym_id
+				if (config.general.disableGym) {
+					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
+					break
+				}
+				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
+
+				const cachedGymDetails = fastify.cache.get(id)
+				if (cachedGymDetails && cachedGymDetails.team_id === hook.message.team_id && cachedGymDetails.slots_available === hook.message.slots_available) {
+					fastify.controllerLog.debug(`${hook.message.id}: Gym was sent again with same details, ignoring`)
+					break
+				}
+				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : ''
+				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : ''
+				fastify.cache.set(id, { team_id: hook.message.team_id, slots_available: hook.message.slots_available }, 0)
+				processHook = hook
+				break
+			}
+
 			case 'nest': {
 				if (config.general.disableNest) {
 					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was received but set to be ignored in config`)
