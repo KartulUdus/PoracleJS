@@ -24,7 +24,7 @@ class Quest extends Controller {
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on (humans.id = quest.id and humans.current_profile_no = quest.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
-		(((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0))
+		(((reward_type=7 and reward = ${data.monsterData.pokemonId} and (form = 0 or form=${data.monsterData.formId}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward = ${data.monsterData.pokemonId} and (form = 0 or form=${data.monsterData.formId}) and shiny = 0))
 		or (reward_type = 2 and reward in (${data.rewardData.items}))
 		or (reward_type = 3 and reward <= ${data.dustAmount})
 		or (reward_type = 12 and reward in (${data.energyMonsters}) and ${data.rewardData.energyAmount}>0))
