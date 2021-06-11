@@ -123,13 +123,6 @@
 		"category": "Disk",
 		"min_trainer_level": 1
 	},
-	"505": {
-		"name": "Rainy Lure Module",
-		"proto": "ITEM_TROY_DISK_RAINY",
-		"type": "Disk",
-		"category": "Disk",
-		"min_trainer_level": 1
-	},
 	"602": {
 		"name": "X Attack",
 		"proto": "ITEM_X_ATTACK",
