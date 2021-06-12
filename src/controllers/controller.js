@@ -43,6 +43,7 @@ class Controller extends EventEmitter {
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressFormat,
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 			case 'nominatim': {
@@ -50,6 +51,7 @@ class Controller extends EventEmitter {
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressFormat,
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 			case 'google': {
@@ -57,6 +59,7 @@ class Controller extends EventEmitter {
 					provider: 'google',
 					httpAdapter: 'https',
 					apiKey: this.config.geocoding.geocodingKey[Math.floor(Math.random() * this.config.geocoding.geocodingKey.length)],
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 			default:
@@ -64,6 +67,7 @@ class Controller extends EventEmitter {
 				return NodeGeocoder({
 					provider: 'openstreetmap',
 					formatterPattern: this.config.locale.addressFormat,
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 		}
