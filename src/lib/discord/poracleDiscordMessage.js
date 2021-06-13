@@ -1,3 +1,25 @@
+const maxLength = 2000
+async function split(message, send) {
+	let remainingMessage = message
+
+	while (remainingMessage.length > maxLength) {
+		let breakPosn = maxLength
+		while (breakPosn && remainingMessage[breakPosn] !== '\n') breakPosn--
+
+		if (!breakPosn) { // Can't find CR, just break wherever
+			breakPosn = maxLength - 1
+		}
+		const toSend = remainingMessage.substring(0, breakPosn + 1)
+		remainingMessage = remainingMessage.substring(breakPosn + 1)
+
+		await send(toSend)
+	}
+
+	if (remainingMessage.length) {
+		await send(remainingMessage)
+	}
+}
+
 class PoracleDiscordMessage {
 	constructor(client, msg) {
 		this.client = client
@@ -39,15 +61,12 @@ class PoracleDiscordMessage {
 	async reply(message) {
 		if (this.msg.channel.type === 'text') {
 			// This is a channel, do not reply but rather send to avoid @ reply
-			if (message.length > 1999) {
-				return this.msg.channel.send(message, { split: true })
-			}
-			return this.msg.channel.send(message)
+			await split(message, async (msg) => this.msg.channel.send(msg))
+
+			return
 		}
-		if (message.length > 1999) {
-			return this.msg.reply(message, { split: true })
-		}
-		return this.msg.reply(message)
+
+		await split(message, async (msg) => this.msg.reply(msg))
 	}
 
 	async replyWithImageUrl(title, message, url) {

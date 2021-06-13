@@ -9,6 +9,7 @@ class PoracleTelegramState {
 		this.dts = ctx.state.controller.dts
 		this.log = ctx.state.controller.logs.command
 		this.GameData = ctx.state.controller.GameData
+		this.PoracleInfo = ctx.state.controller.PoracleInfo
 		this.query = ctx.state.controller.query
 		this.geofence = ctx.state.controller.geofence
 		this.re = ctx.state.controller.re
