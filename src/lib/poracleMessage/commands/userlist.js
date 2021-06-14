@@ -25,7 +25,7 @@ exports.run = async (client, msg, args, options) => {
 		if (args.includes('discord')) humans = humans.filter((x) => x.type.startsWith('discord'))
 		if (args.includes('telegram')) humans = humans.filter((x) => x.type.startsWith('telegram'))
 		if (args.includes('webhook')) humans = humans.filter((x) => x.type.startsWith('webhook'))
-		if (args.includes('user')) humans = humans.filter((x) => x.type.includes('webhook'))
+		if (args.includes('user')) humans = humans.filter((x) => x.type.includes('user'))
 		if (args.includes('group')) humans = humans.filter((x) => x.type.includes('group'))
 		if (args.includes('channel')) humans = humans.filter((x) => x.type.includes('channel'))
 
