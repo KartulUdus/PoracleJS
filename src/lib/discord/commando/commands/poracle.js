@@ -82,7 +82,7 @@ exports.run = async (client, msg) => {
 				name: client.emojiStrip(msg.author.username),
 				area: '[]',
 				language,
-				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
+				community_membership: communityToAdd ? JSON.stringify([communityToAdd.toLowerCase()]) : '[]',
 				area_restriction: communityToAdd ? JSON.stringify(communityLogic.calculateLocationRestrictions(client.config, [communityToAdd])) : null,
 			})
 			await msg.react('✅')

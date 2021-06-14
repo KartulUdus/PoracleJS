@@ -95,7 +95,7 @@ module.exports = async (ctx) => {
 				name: client.emojiStrip(userName || ''),
 				language,
 				area: '[]',
-				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
+				community_membership: communityToAdd ? JSON.stringify([communityToAdd.toLowerCase()]) : '[]',
 				area_restriction: communityToAdd ? JSON.stringify(communityLogic.calculateLocationRestrictions(client.config, [communityToAdd])) : null,
 			})
 			await ctx.reply('✅')
