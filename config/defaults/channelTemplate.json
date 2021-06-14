@@ -1,0 +1,43 @@
+[
+  {
+    "name":"newSection",
+    "definition":{
+      "category":"{0} Pokemon",
+      "channels":[
+        {
+          "channelName":"{0}-iv100",
+/*
+          "roles":[
+            {
+              "id":"11111111111111111", "view": true, "viewHistory": true, "send": true, "react": true
+            }
+          ],
+*/
+          "topic": "Hundos for {0}",
+          "controlType":"bot",
+          "commands":[
+            "area add {0}",
+            "track everything iv100"
+          ]
+        },
+        {
+          "channelName":"{0}-UltraRares",
+          "controlType":"webhook",
+          "commands":[
+            "area add {0}",
+            "track everything rarityultra-rare maxrarityultra-rare"
+          ]
+        },
+        {
+          "channelName":"{0}-Raids",
+          "controlType":"webhook",
+          "commands":[
+            "area add {0}",
+            "egg level5 level6 clean",
+            "raid level5 level6 clean"
+          ]
+        }
+      ]
+    }
+  }
+]

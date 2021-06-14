@@ -29,6 +29,13 @@ exports.run = async (client, msg, [args]) => {
 		let webhookLink
 
 		if (args[0] == 'add') {
+			const isChannelBotRegistered = await client.query.countQuery('humans', { id: msg.channel.id })
+			if (isChannelBotRegistered) {
+				await msg.author.send('This channel is already registered under bot control - `channel remove` first')
+
+				return await msg.react('👌')
+			}
+
 			const isRegistered = await client.query.countQuery('humans', { name: webhookName })
 			if (isRegistered) {
 				await msg.author.send(`A webhook or channel with the name ${webhookName} already exists`)
@@ -70,6 +77,7 @@ exports.run = async (client, msg, [args]) => {
 				type: 'webhook',
 				name: webhookName,
 				area: '[]',
+				community_membership: '[]',
 			})
 			await msg.react('✅')
 		}

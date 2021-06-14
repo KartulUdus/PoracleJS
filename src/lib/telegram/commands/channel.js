@@ -34,6 +34,7 @@ module.exports = async (ctx) => {
 				type: target.channel ? 'telegram:channel' : 'telegram:group',
 				name: target.name,
 				area: '[]',
+				community_membership: '[]',
 			})
 			await ctx.reply('✅')
 		} else if (args.find((arg) => arg === 'remove')) {

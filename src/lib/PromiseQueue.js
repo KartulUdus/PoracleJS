@@ -9,11 +9,15 @@ class PromiseQueue {
 		return ((this.running.length < this.count) && this.todo.length)
 	}
 
-	run(fn) {
+	run(fn, errfn) {
 		while (this.runNext()) {
 			const promise = fn(this.todo.shift()).then(() => {
 				this.running.shift()
-				this.run(fn)
+				this.run(fn, errfn)
+			}).catch((err) => {
+				this.running.shift()
+				if (errfn) errfn(err).catch(() => {})
+				this.run(fn, errfn)
 			})
 			this.running.push(promise)
 		}

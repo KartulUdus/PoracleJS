@@ -1,6 +1,10 @@
 const helpCommand = require('./help.js')
+const trackedCommand = require('./tracked.js')
+const objectDiff = require('../../objectDiff')
 
 exports.run = async (client, msg, args, options) => {
+	const logReference = Math.random().toString().slice(2, 11)
+
 	try {
 		// Check target
 		const util = client.createUtil(msg, options)
@@ -11,7 +15,7 @@ exports.run = async (client, msg, args, options) => {
 
 		if (!canContinue) return
 		const commandName = __filename.slice(__dirname.length + 1, -3)
-		client.log.info(`${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
+		client.log.info(`${logReference}: ${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
 			return helpCommand.run(client, msg, [commandName], options)
@@ -35,7 +39,7 @@ exports.run = async (client, msg, args, options) => {
 		let template = client.config.general.defaultTemplateName
 		let gender = 0
 		let clean = false
-		const types = args.filter((arg) => typeArray.includes(arg))
+		const types = [] // args.filter((arg) => typeArray.includes(arg))
 		const pings = msg.getPings()
 
 		for (const element of args) {
@@ -65,7 +69,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!remove) {
-			const insertData = types.map((o) => ({
+			const insert = types.map((o) => ({
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
@@ -75,27 +79,93 @@ exports.run = async (client, msg, args, options) => {
 				clean,
 				grunt_type: o,
 			}))
-			const result = await client.query.insertOrUpdateQuery('invasion', insertData)
-			client.log.info(`${target.name} started tracking ${types.join(', ')} invasions`)
-			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
+
+			const tracked = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
+			const updates = []
+			const alreadyPresent = []
+
+			for (let i = insert.length - 1; i >= 0; i--) {
+				const toInsert = insert[i]
+
+				for (const existing of tracked.filter((x) => x.grunt_type == toInsert.grunt_type)) {
+					const differences = objectDiff.diff(existing, toInsert)
+
+					switch (Object.keys(differences).length) {
+						case 1:		// No differences (only UID)
+							// No need to insert
+							alreadyPresent.push(toInsert)
+							insert.splice(i, 1)
+							break
+						case 2:		// One difference (something + uid)
+							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean'].includes(x))) {
+								updates.push({
+									...toInsert,
+									uid: existing.uid,
+								})
+								insert.splice(i, 1)
+							}
+							break
+						default:	// more differences
+							break
+					}
+				}
+			}
+
+			let message = ''
+
+			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
+				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
+			} else {
+				alreadyPresent.forEach((invasion) => {
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+				})
+				updates.forEach((invasion) => {
+					message = message.concat(translator.translate('Updated: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+				})
+				insert.forEach((invasion) => {
+					message = message.concat(translator.translate('New: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+				})
+			}
+
+			if (insert.length) {
+				await client.query.insertQuery('invasion', insert)
+			}
+			for (const row of updates) {
+				await client.query.updateQuery('invasion', row, { uid: row.uid })
+			}
+
+			client.log.info(`${logReference}: ${target.name} started tracking ${types.join(', ')} invasions`)
+			await msg.reply(message)
+			reaction = insert.length ? '✅' : reaction
 		} else {
 			let result = 0
 			if (commandEverything) {
 				result = await client.query.deleteQuery('invasion', { id: target.id, profile_no: currentProfileNo })
-				client.log.info(`${target.name} stopped tracking all invasions`)
+				client.log.info(`${logReference}: ${target.name} stopped tracking all invasions`)
 			} else {
-				result = client.query.deleteWhereInQuery('invasion', {
+				result = await client.query.deleteWhereInQuery('invasion', {
 					id: target.id,
 					profile_no: currentProfileNo,
 				}, types, 'grunt_type')
 				client.log.info(`${target.name} stopped tracking ${types.join(', ')} invasions`)
 			}
-			reaction = result.length || client.config.database.client === 'sqlite' ? '✅' : reaction
-			client.log.info(`${target.name} deleted ${types.join(', ')} invasions`)
+
+			msg.reply(
+				''.concat(
+					result == 1 ? translator.translate('I removed 1 entry')
+						: translator.translateFormat('I removed {0} entries', result),
+					', ',
+					translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),
+				),
+				{ style: 'markdown' },
+			)
+			reaction = result || client.config.database.client === 'sqlite' ? '✅' : reaction
+			client.log.info(`${logReference}: ${target.name} deleted ${types.join(', ')} invasions`)
 		}
 
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error('invasion command unhappy:', err)
+		client.log.error(`${logReference}: invasion command unhappy:`, err)
+		msg.reply(`There was a problem making these changes, the administrator can find the details with reference ${logReference}`)
 	}
 }

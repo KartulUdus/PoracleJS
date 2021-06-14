@@ -23,7 +23,20 @@ class DiscordCommando {
 
 	async bounceWorker() {
 		delete this.client
-		this.client = new Client()
+		// This will be required in discord.js 13
+		// -- but causes an exception if intent not given in discord bot configuration
+		// const intents = new Intents([
+		// 	Intents.NON_PRIVILEGED, // include all non-privileged intents, would be better to specify which ones you actually need
+		// 	'GUILD_MEMBERS', // lets you request guild members (i.e. fixes the issue)
+		// ])
+
+		this.client = new Client({
+			messageCacheMaxSize: 1,
+			messsageCacheLifetime: 60,
+			messageSweepInterval: 120,
+			messageEditHistoryMaxSize: 1,
+			// ws: { intents },
+		})
 		try {
 			this.client.on('error', (err) => {
 				this.busy = true

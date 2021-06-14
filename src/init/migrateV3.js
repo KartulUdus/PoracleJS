@@ -156,7 +156,7 @@ async function run() {
 			tableName: 'migrations',
 		})
 
-		const discordIds = humans.filter((h) => !h.id.toString().length < 17 && !h.id.match(hookRegex)).map((hm) => hm.id.toString())
+		const discordIds = humans.filter((h) => !(h.id.toString().length < 17) && !h.id.match(hookRegex)).map((hm) => hm.id.toString())
 		let daptcha = { humans: [], channels: [] }
 		if (discordIds.length) {
 			daptcha = await Daptcha(discordIds, config, log)
@@ -165,9 +165,9 @@ async function run() {
 		for (const human of humans) {
 			if (human.id.toString().length < 17) {
 				if (+human.id < 0) {
-					human.type = 'telegram:user'
+					human.type = 'telegram:group'
 				} else {
-					human.type = 'telegram:channel'
+					human.type = 'telegram:user'
 				}
 			} else if (human.id.match(hookRegex)) {
 				human.type = 'webhook'
@@ -178,6 +178,8 @@ async function run() {
 			}
 			// human.last_checked = new Date().toUTCString()
 			human.fails = 0
+			human.community_membership = '[]'
+
 			delete human.alerts_sent
 		}
 		for (const monster of monsters) {
@@ -223,26 +225,63 @@ async function run() {
 		const questSlices = quests.map((e, i) => (i % 25 === 0 ? quests.slice(i, i + 25) : null)).filter((e) => e)
 		const eggSlices = eggs.map((e, i) => (i % 25 === 0 ? eggs.slice(i, i + 25) : null)).filter((e) => e)
 
+		let humanErrors = 0
+		let monsterErrors = 0
+		let invasionErrors = 0
+		let raidErrors = 0
+		let questErrors = 0
+		let eggErrors = 0
+
 		for (const h of humanSlices) {
-			await insertOrUpdateQuery(newDb, 'humans', h)
+			try {
+				await insertOrUpdateQuery(newDb, 'humans', h)
+			} catch (err) {
+				log.info(`Problem with human ${h.id}`, err)
+				humanErrors++
+			}
 		}
 		for (const m of monsterSlices) {
-			await insertOrUpdateQuery(newDb, 'monsters', m)
+			try {
+				await insertOrUpdateQuery(newDb, 'monsters', m)
+			} catch (err) {
+				log.info('Problem with monster', err)
+				monsterErrors++
+			}
 		}
 		for (const i of invasionSlices) {
-			await insertOrUpdateQuery(newDb, 'invasion', i)
+			try {
+				await insertOrUpdateQuery(newDb, 'invasion', i)
+			} catch (err) {
+				log.info('Problem with invasion', err)
+				invasionErrors++
+			}
 		}
 		for (const r of raidsSlices) {
-			await insertOrUpdateQuery(newDb, 'raid', r)
+			try {
+				await insertOrUpdateQuery(newDb, 'raid', r)
+			} catch (err) {
+				log.info('Problem with raid', err)
+				raidErrors++
+			}
 		}
 		for (const q of questSlices) {
-			await insertOrUpdateQuery(newDb, 'quest', q)
+			try {
+				await insertOrUpdateQuery(newDb, 'quest', q)
+			} catch (err) {
+				log.info('Problem with quest', err)
+				questErrors++
+			}
 		}
 		for (const e of eggSlices) {
-			await insertOrUpdateQuery(newDb, 'egg', e)
+			try {
+				await insertOrUpdateQuery(newDb, 'egg', e)
+			} catch (err) {
+				log.info('Problem with egg', err)
+				eggErrors++
+			}
 		}
 
-		log.info(`Updated ${humans.length} humans, ${monsters.length} monsters, ${invasions.length} invasions, ${raids.length} raids and ${eggs.length} eggs `)
+		log.info(`Updated ${humans.length} humans (${humanErrors} skipped), ${monsters.length} monsters (${monsterErrors} skipped), ${quests.length} (${questErrors} skipped), ${invasions.length} invasions (${invasionErrors} skipped), ${raids.length} raids (${raidErrors} skipped) and ${eggs.length} eggs (${eggErrors} skipped)`)
 
 		process.exit()
 	} catch (e) {

@@ -19,7 +19,7 @@ exports.run = async (client, msg, args, options) => {
 		const translator = client.translatorFactory.Translator(language)
 
 		// Remove arguments that are part of overrides
-		for (let i = 0; i < args.length; i++) {
+		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.channelRe)) args.splice(i, 1)
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)

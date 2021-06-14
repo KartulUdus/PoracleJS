@@ -29,14 +29,14 @@
 				143
 			],
 			"second": [
-				282,
+				62,
 				143,
-				62
+				282
 			],
 			"third": [
-				149,
+				143,
 				130,
-				143
+				149
 			]
 		}
 	},
@@ -52,14 +52,14 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
+				451,
 				347,
-				48,
 				213
 			],
 			"second": [
 				127,
-				212,
-				49
+				49,
+				212
 			],
 			"third": [
 				15,
@@ -72,15 +72,15 @@
 		"type": "Dark",
 		"gender": 2,
 		"grunt": "Dark Grunt",
-		"second_reward": false,
+		"second_reward": true,
 		"encounters": {
 			"first": [
-				434,
-				302
+				261,
+				198
 			],
 			"second": [
-				274,
-				435
+				302,
+				262
 			],
 			"third": [
 				332,
@@ -108,7 +108,8 @@
 			],
 			"third": [
 				149,
-				130
+				330,
+				148
 			]
 		}
 	},
@@ -120,7 +121,20 @@
 	"14": {
 		"type": "Fairy",
 		"gender": 2,
-		"grunt": "Fairy Grunt"
+		"grunt": "Fairy Grunt",
+		"second_reward": false,
+		"encounters": {
+			"first": [
+				209
+			],
+			"second": [
+				209,
+				210
+			],
+			"third": [
+				210
+			]
+		}
 	},
 	"15": {
 		"type": "Fairy",
@@ -134,15 +148,16 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				107,
-				66
+				66,
+				296
 			],
 			"second": [
 				67
 			],
 			"third": [
-				67,
-				106
+				107,
+				106,
+				297
 			]
 		}
 	},
@@ -158,17 +173,17 @@
 		"second_reward": true,
 		"encounters": {
 			"first": [
-				228,
-				37
+				37,
+				228
 			],
 			"second": [
-				229,
 				38,
-				126
+				126,
+				229
 			],
 			"third": [
-				5,
 				38,
+				5,
 				59
 			]
 		}
@@ -185,19 +200,17 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				42,
-				227,
+				396,
 				41
 			],
 			"second": [
 				42,
-				169,
-				123
+				397
 			],
 			"third": [
-				149,
+				130,
 				169,
-				130
+				149
 			]
 		}
 	},
@@ -218,19 +231,19 @@
 		"second_reward": true,
 		"encounters": {
 			"first": [
+				43,
 				187,
-				345,
-				43
+				114
 			],
 			"second": [
 				44,
-				2,
-				70
+				114,
+				188
 			],
 			"third": [
 				275,
-				71,
-				45
+				45,
+				71
 			]
 		}
 	},
@@ -246,17 +259,17 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				50,
-				220
+				220,
+				50
 			],
 			"second": [
-				105,
 				329,
+				105,
 				247
 			],
 			"third": [
-				330,
-				472
+				472,
+				330
 			]
 		}
 	},
@@ -267,8 +280,8 @@
 		"second_reward": true,
 		"encounters": {
 			"first": [
-				459,
-				363
+				363,
+				459
 			],
 			"second": [
 				91,
@@ -276,8 +289,8 @@
 				220
 			],
 			"third": [
-				460,
 				131,
+				460,
 				91
 			]
 		}
@@ -312,8 +325,8 @@
 				216
 			],
 			"second": [
-				233,
-				20
+				20,
+				233
 			],
 			"third": [
 				474,
@@ -328,18 +341,18 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
+				451,
 				29,
-				32,
-				41
+				32
 			],
 			"second": [
-				89,
-				88
+				33,
+				30
 			],
 			"third": [
 				30,
-				89,
-				110
+				110,
+				89
 			]
 		}
 	},
@@ -360,19 +373,18 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				102,
 				202,
-				79
+				79,
+				102
 			],
 			"second": [
-				96,
 				64,
-				281
+				96
 			],
 			"third": [
+				103,
 				97,
-				281,
-				103
+				281
 			]
 		}
 	},
@@ -410,17 +422,16 @@
 		"encounters": {
 			"first": [
 				60,
-				90,
-				194
+				363,
+				116
 			],
 			"second": [
-				55,
-				259,
-				61
+				195,
+				259
 			],
 			"third": [
-				62,
-				186
+				186,
+				62
 			]
 		}
 	},
@@ -449,17 +460,17 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				142
+				273
 			],
 			"second": [
-				475,
-				346,
-				199
+				297,
+				62,
+				99
 			],
 			"third": [
-				477,
-				473,
-				248
+				248,
+				319,
+				389
 			]
 		}
 	},
@@ -470,17 +481,17 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				374
+				48
 			],
 			"second": [
-				282,
-				392,
-				306
+				310,
+				217,
+				169
 			],
 			"third": [
-				348,
 				212,
-				373
+				462,
+				45
 			]
 		}
 	},
@@ -491,17 +502,17 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				318
+				215
 			],
 			"second": [
-				450,
-				429,
-				474
+				472,
+				210,
+				181
 			],
 			"third": [
-				330,
 				229,
-				365
+				230,
+				452
 			]
 		}
 	},
@@ -516,11 +527,11 @@
 			],
 			"second": [
 				445,
-				34,
-				115
+				115,
+				34
 			],
 			"third": [
-				150
+				146
 			]
 		}
 	},
@@ -543,8 +554,8 @@
 				20
 			],
 			"third": [
-				143,
-				20
+				20,
+				143
 			]
 		}
 	},
@@ -560,13 +571,13 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
+				353,
 				200,
-				355,
-				353
+				355
 			],
 			"second": [
-				356,
-				354
+				354,
+				356
 			],
 			"third": [
 				354,
@@ -582,18 +593,17 @@
 		"second_reward": false,
 		"encounters": {
 			"first": [
-				125,
-				81,
-				179
+				309,
+				179,
+				125
 			],
 			"second": [
-				125,
-				82,
-				180
+				180,
+				125
 			],
 			"third": [
-				125,
-				181
+				181,
+				125
 			]
 		}
 	},
@@ -605,35 +615,51 @@
 	"53": {
 		"type": "Gruntb",
 		"gender": 2,
-		"grunt": "Gruntb",
-		"second_reward": false,
-		"encounters": {
-			"first": [
-				123
-			],
-			"second": [
-				23
-			],
-			"third": [
-				234
-			]
-		}
+		"grunt": "Gruntb"
 	},
 	"54": {
 		"type": "Gruntb",
 		"gender": 1,
-		"grunt": "Gruntb",
-		"second_reward": false,
-		"encounters": {
-			"first": [
-				127
-			],
-			"second": [
-				109
-			],
-			"third": [
-				88
-			]
-		}
+		"grunt": "Gruntb"
+	},
+	"500": {
+		"type": "Event Npc 0",
+		"gender": 2,
+		"grunt": "Event Npc 0"
+	},
+	"501": {
+		"type": "Event Npc 1",
+		"gender": 1,
+		"grunt": "Event Npc 1"
+	},
+	"502": {
+		"type": "Event Npc 2",
+		"gender": 1,
+		"grunt": "Event Npc 2"
+	},
+	"504": {
+		"type": "Event Npc 4",
+		"gender": 1,
+		"grunt": "Event Npc 4"
+	},
+	"506": {
+		"type": "Event Npc 6",
+		"gender": 2,
+		"grunt": "Event Npc 6"
+	},
+	"507": {
+		"type": "Event Npc 7",
+		"gender": 1,
+		"grunt": "Event Npc 7"
+	},
+	"509": {
+		"type": "Event Npc 9",
+		"gender": 1,
+		"grunt": "Event Npc 9"
+	},
+	"510": {
+		"type": "Event Npc 10",
+		"gender": 1,
+		"grunt": "Event Npc 10"
 	}
 }

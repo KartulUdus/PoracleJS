@@ -345,7 +345,7 @@
 		"name": "Cross Poison",
 		"proto": "CROSS_POISON",
 		"type": "Poison",
-		"power": 40
+		"power": 50
 	},
 	"90": {
 		"name": "Sludge Bomb",
@@ -717,7 +717,7 @@
 		"name": "Poison Jab",
 		"proto": "POISON_JAB_FAST",
 		"type": "Poison",
-		"power": 6
+		"power": 7
 	},
 	"225": {
 		"name": "Acid",
@@ -853,7 +853,7 @@
 		"name": "Focus Blast",
 		"proto": "FOCUS_BLAST",
 		"type": "Fighting",
-		"power": 140
+		"power": 150
 	},
 	"248": {
 		"name": "Aurora Beam",
@@ -889,7 +889,7 @@
 		"name": "Dragon Tail",
 		"proto": "DRAGON_TAIL_FAST",
 		"type": "Dragon",
-		"power": 9
+		"power": 13
 	},
 	"254": {
 		"name": "Avalanche",
@@ -1133,7 +1133,7 @@
 	"294": {
 		"name": "Weather Ball",
 		"proto": "WEATHER_BALL_ROCK",
-		"type": "Normal",
+		"type": "Rock",
 		"power": 60
 	},
 	"295": {
@@ -1388,6 +1388,12 @@
 		"type": "Fire",
 		"power": 95
 	},
+	"343": {
+		"name": "Leaf Storm",
+		"proto": "LEAF_STORM",
+		"type": "Grass",
+		"power": 130
+	},
 	"344": {
 		"name": "Tri Attack",
 		"proto": "TRI_ATTACK",
@@ -1405,5 +1411,11 @@
 		"proto": "INCINERATE_FAST",
 		"type": "Fire",
 		"power": 15
+	},
+	"348": {
+		"name": "Feather Dance",
+		"proto": "FEATHER_DANCE",
+		"type": "Flying",
+		"power": 35
 	}
 }

@@ -5,7 +5,7 @@ module.exports = async (fastify, options, next) => {
 
 		let data = req.body
 		if (!Array.isArray(data)) data = [data]
-		setImmediate(() => { fastify.hookQueue.push(...data) })
+		fastify.hookQueue.push(...data)
 		if (!reply.sent) return { webserver: 'happy' }
 	})
 	next()

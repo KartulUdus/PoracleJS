@@ -1,8 +1,9 @@
 const inside = require('point-in-polygon')
-const path = require('path')
 const NodeGeocoder = require('node-geocoder')
 const cp = require('child_process')
 const EventEmitter = require('events')
+const path = require('path')
+const fs = require('fs')
 
 const pcache = require('flat-cache')
 
@@ -42,6 +43,7 @@ class Controller extends EventEmitter {
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressFormat,
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 			case 'nominatim': {
@@ -49,6 +51,7 @@ class Controller extends EventEmitter {
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressFormat,
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 			case 'google': {
@@ -56,6 +59,7 @@ class Controller extends EventEmitter {
 					provider: 'google',
 					httpAdapter: 'https',
 					apiKey: this.config.geocoding.geocodingKey[Math.floor(Math.random() * this.config.geocoding.geocodingKey.length)],
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 			default:
@@ -63,23 +67,25 @@ class Controller extends EventEmitter {
 				return NodeGeocoder({
 					provider: 'openstreetmap',
 					formatterPattern: this.config.locale.addressFormat,
+					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
 			}
 		}
 	}
 
 	getDts(logReference, templateType, platform, templateName, language) {
+		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
 		const key = `${templateType} ${platform} ${templateName} ${language}`
 		if (this.dtsCache[key]) {
 			return this.dtsCache[key]
 		}
 
 		// Exact match
-		let findDts = this.dts.find((template) => template.type === templateType && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language == language)
+		let findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language == language)
 
 		// First right template and platform and no language (likely backward compatible choice)
 		if (!findDts) {
-			findDts = this.dts.find((template) => template.type === templateType && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && !template.language)
+			findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && !template.language)
 		}
 
 		// Default of right template type, platform and language
@@ -104,15 +110,28 @@ class Controller extends EventEmitter {
 
 		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
 
-		if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
-			findDts.template.embed.description = findDts.template.embed.description.join('')
+		let template
+		if (findDts.templateFile) {
+			let filepath
+			try {
+				filepath = path.join(__dirname, '../../config', findDts.templateFile)
+				template = fs.readFileSync(filepath, 'utf8')
+			} catch (err) {
+				this.log.error(`${logReference}: Unable to load DTS filepath ${filepath} from DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
+				return null
+			}
+		} else {
+			if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
+				findDts.template.embed.description = findDts.template.embed.description.join('')
+			}
+
+			if (Array.isArray(findDts.template.content)) {
+				findDts.template.content = findDts.template.content.join('')
+			}
+
+			template = JSON.stringify(findDts.template)
 		}
 
-		if (Array.isArray(findDts.template.content)) {
-			findDts.template.content = findDts.template.content.join('')
-		}
-
-		const template = JSON.stringify(findDts.template)
 		const mustache = this.mustache.compile(template)
 
 		this.dtsCache[key] = mustache
@@ -234,15 +253,13 @@ class Controller extends EventEmitter {
 		}
 	}
 
-	async pointInArea(point) {
+	pointInArea(point) {
 		if (!this.geofence.length) return []
-		const confAreas = this.geofence.map((area) => area.name.toLowerCase())
 		const matchAreas = []
 
-		for (const area of confAreas) {
-			const areaObj = this.geofence.find((p) => p.name.toLowerCase() === area)
-			if (inside(point, areaObj.path)) matchAreas.push(area)
-		}
+		this.geofence.forEach((areaObj) => {
+			if (inside(point, areaObj.path)) matchAreas.push(areaObj.name.toLowerCase())
+		})
 		return matchAreas
 	}
 

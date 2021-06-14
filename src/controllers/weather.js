@@ -199,7 +199,7 @@ class Weather extends Controller {
 						data.forecastTimeout = forecastTimeout
 						data.lastCurrentWeatherCheck = currentHourTimestamp
 					} catch (err) {
-						this.log.error(`${id}: Fetching AccuWeather weather info errored with: ${err}`)
+						this.log.error(`${id}: Fetching AccuWeather weather info [${apiKeyWeatherInfo.substring(0, 5)}...] errored with: ${err}`)
 					}
 				} else {
 					this.log.warn(`${id}: Couldn't fetch weather forecast - no API key available`)
@@ -338,7 +338,6 @@ class Weather extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.weather && !this.config.weather.showAlteredPokemonStaticMap) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
 			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
@@ -390,7 +389,6 @@ class Weather extends Controller {
 				}
 				if (pregenerateTile && this.config.geocoding.staticMapType.weather && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
 					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
-					this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 				}
 				data.staticmap = data.staticMap // deprecated
 				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)

@@ -61,7 +61,13 @@ function getJSONFromTxt(text) {
 	const filteredArray = text.split('\n')
 		.filter((line) => line.includes('RESOURCE ID:') || line.includes('TEXT:'))
 	filteredArray.map((item, index) => {
-		if (filteredArray[index].includes('RESOURCE ID:') && (filteredArray[index].includes('pokemon_name_') || filteredArray[index].includes('move_name_')) && filteredArray[index + 1].includes('TEXT:')) result[filteredArray[index].replace('RESOURCE ID: ', '')] = filteredArray[index + 1].replace('TEXT: ', '')
+		if (filteredArray[index].includes('RESOURCE ID:')
+			&& (filteredArray[index].includes('pokemon_name_')
+				|| filteredArray[index].includes('move_name_')
+				|| filteredArray[index].includes('pokemon_category_')
+				|| filteredArray[index].includes('pokemon_desc_'))
+			&& filteredArray[index + 1].includes('TEXT:'))
+		result[filteredArray[index].replace('RESOURCE ID: ', '')] = filteredArray[index + 1].replace('TEXT: ', '')
 	})
 	return result
 }
@@ -87,7 +93,7 @@ function capitalize(string) {
 	}
 }
 
-function ensure_pokemon(pokemon_id, englishDataPokemonsAndMoves) {
+function ensure_pokemon(pokemon_id, englishData) {
 	const hasFormId = /^(\d{1,4})_(\d{1,4})?$/.exec(pokemon_id)
 	const pokemonId = hasFormId ? parseInt(hasFormId[1]) : pokemon_id
 	const defaultId = pokemonId + '_0'
@@ -98,14 +104,14 @@ function ensure_pokemon(pokemon_id, englishDataPokemonsAndMoves) {
 	}
 	if (!GameMaster.pokemon[defaultId].name) {
 		GameMaster.pokemon[defaultId].name = pokemonId === 29 ? 'Nidoran♀' : pokemonId === 32 ? 'Nidoran♂' : capitalize(Pokemon_List[pokemonId])
-		if (englishDataPokemonsAndMoves[pokemon_name_id_4]) GameMaster.pokemon[defaultId].name = englishDataPokemonsAndMoves[pokemon_name_id_4]
+		if (englishData[pokemon_name_id_4]) GameMaster.pokemon[defaultId].name = englishData[pokemon_name_id_4]
 	}
 	if (!GameMaster.pokemon[pokemon_id]) {
 		GameMaster.pokemon[pokemon_id] = {}
 	}
 	if (!GameMaster.pokemon[pokemon_id].name) {
 		GameMaster.pokemon[pokemon_id].name = pokemonId === 29 ? 'Nidoran♀' : pokemonId === 32 ? 'Nidoran♂' : capitalize(Pokemon_List[pokemonId])
-		if (englishDataPokemonsAndMoves[pokemon_name_id_4]) GameMaster.pokemon[pokemon_id].name = englishDataPokemonsAndMoves[pokemon_name_id_4]
+		if (englishData[pokemon_name_id_4]) GameMaster.pokemon[pokemon_id].name = englishData[pokemon_name_id_4]
 	}
 }
 
@@ -139,7 +145,7 @@ function Lookup_Pokemon(name) {
 	return pokemon_id
 }
 
-function Generate_Forms(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
+function Generate_Forms(GameMaster, MasterArray, englishData) {
 	return new Promise(async resolve => {
 		for (let o = 0, len = MasterArray.length; o < len; o++) {
 			let object = MasterArray[o]
@@ -148,13 +154,13 @@ function Generate_Forms(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
 				try {
 					if (object.data.formSettings) {
 						let pokemon_form_id_default = pokemon_id + '_0'
-						ensure_pokemon(pokemon_form_id_default, englishDataPokemonsAndMoves)
+						ensure_pokemon(pokemon_form_id_default, englishData)
 						let forms = object.data.formSettings.forms
 						if (forms) {
 							for (let f = 0, flen = forms.length; f < flen; f++) {
 								let id = Form_List[object.data.formSettings.forms[f].form]
 								let pokemon_form_id = pokemon_id + '_' + id
-								ensure_pokemon(pokemon_form_id, englishDataPokemonsAndMoves)
+								ensure_pokemon(pokemon_form_id, englishData)
 								if (f === 0) {
 									GameMaster.pokemon[pokemon_form_id].default_form = true
 									if (!GameMaster.pokemon[pokemon_form_id_default].form) {
@@ -195,7 +201,7 @@ function Generate_Forms(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
 	})
 }
 
-function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
+function Compile_Data(GameMaster, MasterArray, englishData) {
 	return new Promise(async resolve => {
 		for (let o = 0, len = MasterArray.length; o < len; o++) {
 			let object = MasterArray[o]
@@ -203,7 +209,7 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
 				if (object.data.pokemonSettings) {
 					let pokemon_id = Number(object.templateId.split('_')[0].slice(1))
 					let pokemon_id_default = pokemon_id + '_0'
-					ensure_pokemon(pokemon_id_default, englishDataPokemonsAndMoves)
+					ensure_pokemon(pokemon_id_default, englishData)
 					let Pokemon = GameMaster.pokemon[pokemon_id_default]
 					let form_id = null
 					if (/^V\d{4}_POKEMON_/.test(object.templateId)) {
@@ -264,11 +270,24 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
 						.forEach((word) => {
 							item_name += ' ' + capitalize(word)
 						})
+					let item_name_eng_key = object.data.itemSettings.itemId.toLowerCase() + '_name'
+					const englishAPKDataItems = {}
+					const englishData = await getLanguageData('english')
+					Object.keys(englishData)
+						.map((index, item) => {
+							if (englishData[item].includes('item_') && englishData[item].includes('_name')) {
+								englishAPKDataItems[englishData[item]] = englishData[parseInt(index, 10) + 1]
+							}
+						})
+					let englishRemoteData = await getLanguageRemoteData('english')
+					englishRemoteData = getJSONFromTxt(englishRemoteData)
+					const englishDataItems = { ...englishAPKDataItems, ...englishRemoteData }
 					let item_id = Item_List[object.data.itemSettings.itemId]
 					if (!GameMaster.items[item_id]) {
 						GameMaster.items[item_id] = {}
 					}
 					GameMaster.items[item_id].name = item_name.slice(1)
+					if (englishDataItems[item_name_eng_key]) GameMaster.items[item_id].name = englishDataItems[item_name_eng_key]
 					GameMaster.items[item_id].proto = object.data.itemSettings.itemId
 					GameMaster.items[item_id].type = capitalize(object.data.itemSettings.itemType.replace('ITEM_TYPE_', ''))
 					GameMaster.items[item_id].category = capitalize(object.data.itemSettings.category.replace('ITEM_CATEGORY_', ''))
@@ -284,7 +303,7 @@ function Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves) {
 					}
 					let Move = GameMaster.moves[move_id]
 					Move.name = capitalize(object.data.combatMove.uniqueId.replace('_FAST', ''))
-					Move.name = englishDataPokemonsAndMoves[move_name_id_4]
+					Move.name = englishData[move_name_id_4]
 					Move.proto = object.templateId.substr(18)
 					Move.type = capitalize(object.data.combatMove.type.replace('POKEMON_TYPE_', ''))
 					Move.power = object.data.combatMove.power
@@ -329,19 +348,22 @@ function Add_Missing_Pokemon() {
 }
 
 (async function () {
-	const englishAPKDataPokemonsAndMoves = {}
-	const englishData = await getLanguageData('english')
-	Object.keys(englishData)
+	const englishAPKData = {}
+	const englishLanguageData = await getLanguageData('english')
+	Object.keys(englishLanguageData)
 		.map((index, item) => {
-			if (englishData[item].includes('pokemon_name_') || englishData[item].includes('move_name_')) {
-				englishAPKDataPokemonsAndMoves[englishData[item]] = englishData[parseInt(index, 10) + 1]
+			if (englishLanguageData[item].includes('pokemon_name_')
+				|| englishLanguageData[item].includes('move_name_')
+				|| englishLanguageData[item].includes('pokemon_desc_')
+				|| englishLanguageData[item].includes('pokemon_category_')) {
+				englishAPKData[englishLanguageData[item]] = englishLanguageData[parseInt(index, 10) + 1]
 			}
 		})
 	let englishRemoteData = await getLanguageRemoteData('english')
 	englishRemoteData = getJSONFromTxt(englishRemoteData)
-	const englishDataPokemonsAndMoves = { ...englishAPKDataPokemonsAndMoves, ...englishRemoteData }
+	const englishData = { ...englishAPKData, ...englishRemoteData }
 	// Force Sirfetchd
-	englishDataPokemonsAndMoves['pokemon_name_0865'] = 'Sirfetchd'
+	englishData['pokemon_name_0865'] = 'Sirfetchd'
 	const supportedLanguages = utilData.languageNames
 	for (const lang of Object.keys(supportedLanguages)) {
 		const currentLanguage = supportedLanguages[lang]
@@ -360,24 +382,35 @@ function Add_Missing_Pokemon() {
 			console.log('Unable to fetch game data for ' + currentLanguage)
 		} else {
 			console.log('Fetched game translations for ' + currentLanguage)
-			const currentAPKDataPokemonsAndMoves = {}
+			const currentAPKData = {}
 			Object.keys(currentRawData)
 				.map((index, item) => {
-					if (currentRawData[item].includes('pokemon_name_') || currentRawData[item].includes('move_name_')) {
-						currentAPKDataPokemonsAndMoves[currentRawData[item]] = currentRawData[parseInt(index, 10) + 1]
+					if (currentRawData[item].includes('pokemon_name_')
+						|| currentRawData[item].includes('move_name_')
+						|| currentRawData[item].includes('pokemon_category_')
+						|| currentRawData[item].includes('pokemon_desc_')) {
+						currentAPKData[currentRawData[item]] = currentRawData[parseInt(index, 10) + 1]
 					}
 				})
 			let currentRemoteData = await getLanguageRemoteData(currentLanguage)
 			currentRemoteData = getJSONFromTxt(currentRemoteData)
-			const currentDataPokemonsAndMoves = { ...currentAPKDataPokemonsAndMoves, ...currentRemoteData }
+			const currentData = { ...currentAPKData, ...currentRemoteData }
 			let currentPokemonNames = {}
 			let currentMoveNames = {}
-			for (const item of Object.keys(englishDataPokemonsAndMoves)) {
+			let currentPokemonCategories = {}
+			let currentPokemonDescriptions = {}
+			for (const item of Object.keys(englishData)) {
 				if (item.includes('pokemon_name_')) {
-					currentPokemonNames[englishDataPokemonsAndMoves[item]] = currentDataPokemonsAndMoves[item]
+					currentPokemonNames[englishData[item]] = currentData[item]
 				}
 				if (item.includes('move_name_')) {
-					currentMoveNames[englishDataPokemonsAndMoves[item]] = currentDataPokemonsAndMoves[item]
+					currentMoveNames[englishData[item]] = currentData[item]
+				}
+				if (item.includes('pokemon_category_')) {
+					currentPokemonCategories[englishData[item]] = currentData[item]
+				}
+				if (item.includes('pokemon_desc_')) {
+					currentPokemonDescriptions[englishData[item]] = currentData[item]
 				}
 			}
 			Fs.writeJSONSync('./locale/pokemonNames_' + lang + '.json', currentPokemonNames, {
@@ -388,13 +421,21 @@ function Add_Missing_Pokemon() {
 				spaces: '\t',
 				EOL: '\n'
 			})
+			Fs.writeJSONSync('./locale/pokemonCategories_' + lang + '.json', currentPokemonCategories, {
+				spaces: '\t',
+				EOL: '\n'
+			})
+			Fs.writeJSONSync('./locale/pokemonDescriptions_' + lang + '.json', currentPokemonDescriptions, {
+				spaces: '\t',
+				EOL: '\n'
+			})
 			console.log('Translation files saved for ' + currentLanguage)
 		}
-		Fs.writeJSONSync('./locale/englishPokemonAndMoveNames.json', englishDataPokemonsAndMoves, {
+		Fs.writeJSONSync('./locale/englishData.json', englishData, {
 			spaces: '\t',
 			EOL: '\n'
 		})
-		console.log('English Game Pokemon and move names file saved')
+		console.log('English Game data file saved')
 	}
 
 	console.log('Getting Grunt list update')
@@ -444,8 +485,8 @@ function Add_Missing_Pokemon() {
 	GameMaster.pokemon = {}
 	GameMaster.moves = {}
 	GameMaster.items = {}
-	GameMaster = await Generate_Forms(GameMaster, MasterArray, englishDataPokemonsAndMoves)
-	GameMaster = await Compile_Data(GameMaster, MasterArray, englishDataPokemonsAndMoves)
+	GameMaster = await Generate_Forms(GameMaster, MasterArray, englishData)
+	GameMaster = await Compile_Data(GameMaster, MasterArray, englishData)
 	Add_Missing_Pokemon()
 	Fs.writeJSONSync('newMonsters.json', GameMaster.pokemon, {
 		spaces: '\t',

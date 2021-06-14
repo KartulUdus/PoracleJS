@@ -402,7 +402,9 @@
 		"ja": "japanese",
 		"ko": "korean",
 		"pl": "polish",
-		"ru": "russian"
+		"ru": "russian",
+		"fi": "finnish",
+		"se": "swedish"
 	},
 	"cpMultipliers": {
 		"1": 0.0939999967813492,
@@ -505,6 +507,11 @@
 			"name": "Magnetic Lure",
 			"emoji": "\uD83E\uDDF2",
 			"color": "9FA6C1"
+		},
+		"505": {
+			"name": "Rainy Lure",
+			"emoji": "\uD83D\uDCA7",
+			"color": "03D7FC"
 		}
 	},
 	"genders": {
@@ -533,6 +540,12 @@
 		"5": "Ultra-Rare",
 		"6": "Unseen"
 	},
+	"megaName": {
+		"0": "{0}",
+		"1": "Mega {0}",
+		"2": "Mega {0} X",
+		"3": "Mega {0} Y"
+	},
 	"evolution": {
 		"0": {
 			"name": ""
@@ -555,19 +568,23 @@
 	"teams": {
 		"0": {
 			"name": "Uncontested",
-			"color": "BABABA"
+			"color": "BABABA",
+			"emoji": "\u26AA"
 		},
 		"1": {
 			"name": "Mystic",
-			"color": "3B4CCA"
+			"color": "3B4CCA",
+			"emoji": "\uD83D\uDD35"
 		},
 		"2": {
 			"name": "Valor",
-			"color": "CC0000"
+			"color": "CC0000",
+			"emoji": "\uD83D\uDD34"
 		},
 		"3": {
 			"name": "Instinct",
-			"color": "FFDE00"
+			"color": "FFDE00",
+			"emoji": "\uD83D\uDFE1"
 		},
 		"4": {
 			"name": "Any team",

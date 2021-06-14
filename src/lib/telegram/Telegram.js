@@ -4,6 +4,8 @@ const NodeCache = require('node-cache')
 const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
+const noop = () => {}
+
 class Telegram {
 	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
 		this.config = config
@@ -29,25 +31,46 @@ class Telegram {
 			.use(commandParser(this.translatorFactory))
 			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory, emojiStrip))
 
-		/* set command middleware for each enabled command */
+		this.commands = {}
+
+		// Handle identify special case on channels & in conversations
+
+		this.bot.on('channel_post', (ctx, next) => {
+			if (ctx.update.channel_post
+				&& ctx.update.channel_post.text
+				&& ctx.update.channel_post.text.startsWith('/identify')) {
+				ctx.reply(`This channel is id: [ ${ctx.update.channel_post.chat.id} ] and your id is: unknown - this is a channel (and can't be used for bot registration)`)
+			}
+			return next()
+		})
+
+		this.bot.hears(/^\/identify/, (ctx) => {
+			if (ctx.update.message.chat.type === 'private') {
+				ctx.reply(`This is a private message and your id is: [ ${ctx.update.message.from.id} ]`)
+			} else {
+				ctx.reply(`This channel is id: [ ${ctx.update.message.chat.id} ] and your id is: [ ${ctx.update.message.from.id} ]`)
+			}
+		})
+
+		/* load available commands into command structure */
 		this.commandFiles.map((file) => {
 			if (!file.endsWith('.js')) return
 			this.tempProps = require(`${__dirname}/commands/${file}`) // eslint-disable-line global-require
 			const commandName = file.split('.')[0]
 			if (!this.config.general.disabledCommands.includes(commandName)) {
 				this.enabledCommands.push(commandName)
-				this.bot.command(commandName, this.tempProps)
+				this.commands[commandName] = this.tempProps
 
 				const translatedCommands = this.translatorFactory.translateCommand(commandName)
 				for (const translatedCommand of translatedCommands) {
-					const normalisedCommand = translatedCommand.normalize('NFD').replace(/[\u0300-\u036f]/g, '')
-					if (normalisedCommand != commandName) {
-						this.enabledCommands.push(normalisedCommand)
-						this.bot.command(normalisedCommand, this.tempProps)
+					if (translatedCommand != commandName) {
+						this.enabledCommands.push(translatedCommand)
+						this.commands[translatedCommand] = this.tempProps
 					}
 				}
 			}
 		})
+
 		/* install extra middleware for telegram location sharing function, because .command(...) only catch text type messages */
 		if (!this.config.general.disabledCommands.includes('location')) {
 			const locationHandler = require(`${__dirname}/commands/location`)
@@ -60,10 +83,14 @@ class Telegram {
 				if (commandName && !this.enabledCommands.includes(commandName)) {
 					const props = require(`${__dirname}/commands/poracle`)
 					this.enabledCommands.push(commandName)
-					this.bot.command(commandName, props)
+					this.commands[commandName] = props
 				}
 			}
 		}
+
+		// use 'hears' to launch our command processor rather than bot commands
+		this.bot.on('text', async (ctx) => this.processCommand(ctx))
+
 		this.bot.catch((err, ctx) => {
 			this.logs.log.error(`Ooops, encountered an error for ${ctx.updateType}`, err)
 		})
@@ -73,6 +100,19 @@ class Telegram {
 		// this.work()
 		this.logs.log.info(`Telegram commando loaded ${this.enabledCommands.join(', ')} commands`)
 		this.init()
+	}
+
+	async processCommand(ctx) {
+		const { command } = ctx.state
+		if (!command) return
+		if (command.bot && command.bot.toLowerCase() != ctx.botInfo.username.toLowerCase()) return
+		if (Object.keys(this.commands).includes(command.command)) {
+			return this.commands[command.command](ctx)
+		}
+		if (ctx.update.message.chat.type === 'private'
+				&& this.config.telegram.unrecognisedCommandMessage) {
+			ctx.reply(this.config.telegram.unrecognisedCommandMessage)
+		}
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -91,7 +131,10 @@ class Telegram {
 	work(data) {
 		this.telegramQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run((work) => (this.sendAlert(work)))
+			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+				async (err) => {
+					this.logs.log.error('Telegram queueProcessor exception', err)
+				})
 		}
 	}
 
@@ -130,7 +173,7 @@ class Telegram {
 			} catch (err) {
 				if (err.code == 429) {
 					const retryAfter = (err.response && err.response.parameters) ? err.response.parameters.retry_after : 30
-					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${retryAfter}`)
+					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${retryAfter} retry count ${retryCount}`)
 					await this.sleep(retryAfter * 1000)
 					retry = true
 					if (retryCount++ == 5) {
@@ -202,7 +245,7 @@ class Telegram {
 				}
 				setTimeout(() => {
 					for (const id of messageIds) {
-						this.retrySender(`${senderId} (clean)`, async () => this.bot.telegram.deleteMessage(data.target, id)).catch(() => {})
+						this.retrySender(`${senderId} (clean)`, async () => this.bot.telegram.deleteMessage(data.target, id)).catch(noop)
 					}
 				}, msgDeletionMs)
 			}
@@ -256,18 +299,18 @@ class Telegram {
 				const msgNo = parseInt(key.split(':')[0], 10)
 				const chatId = parseInt(msgData.v, 10)
 				if (msgData.t <= now) {
-					this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
+					this.bot.telegram.deleteMessage(chatId, msgNo).catch(noop)
 				} else {
 					const newTtlms = Math.max(msgData.t - now, 2000)
 					const newTtl = Math.floor(newTtlms / 1000)
 					setTimeout(() => {
-						this.bot.telegram.deleteMessage(chatId, msgNo).catch(() => {})
+						this.bot.telegram.deleteMessage(chatId, msgNo).catch(noop)
 					}, newTtlms)
 
 					this.telegramMessageTimeouts.set(key, msgData.v, newTtl)
 				}
 			} catch (err) {
-				this.log.info(`Error processing historic deletes ${err}`)
+				this.logs.log.info(`Error processing historic deletes ${err}`)
 			}
 		}
 	}

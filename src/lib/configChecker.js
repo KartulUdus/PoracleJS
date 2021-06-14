@@ -41,17 +41,22 @@ function checkDts(dts, config) {
 }
 
 function checkConfig(config) {
-	if (!['none', 'nominatim', 'google'].includes(config.geocoding.provider.toLowerCase())) {
-		logs.log.warn('Config Check: geocoding/provider is not one of none,nominatim,google')
+	if (!['none', 'nominatim', 'google', 'openstreetmap'].includes(config.geocoding.provider.toLowerCase())) {
+		logs.log.warn('Config Check: geocoding/provider is not one of none,nominatim,google,openstreetmap')
 	}
-	if (config.geocoding.provider != 'none' && !config.geocoding.providerURL.startsWith('http')) {
+	if (config.geocoding.provider == 'nominatim' && !config.geocoding.providerURL.startsWith('http')) {
 		logs.log.warn('Config Check: geocoding/providerURL does not start with http')
 	}
 
+	if (config.discord.enabled) {
+		if (!config.discord.guilds || !config.discord.guilds.length) {
+			logs.log.warn('Config Check: discord guilds entry missing or empty - will cause reconciliation failures')
+		}
+	}
 	if (!['none', 'tileservercache', 'google', 'osm', 'mapbox'].includes(config.geocoding.staticProvider.toLowerCase())) {
 		logs.log.warn('Config Check: static provider is not one of none,tileservercache,google,osm,mapbox')
 	}
-	if (config.geocoding.staticProvider != 'none' && !config.geocoding.staticProviderURL.startsWith('http')) {
+	if (config.geocoding.staticProvider == 'tileservercache' && !config.geocoding.staticProviderURL.startsWith('http')) {
 		logs.log.warn('Config Check: geocoding/staticProviderURL does not start with http')
 	}
 	if (!['ignore', 'delete', 'disable-user'].includes(config.general.roleCheckMode)) {

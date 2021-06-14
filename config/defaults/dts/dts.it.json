@@ -1,0 +1,360 @@
+[{
+  "id": 1,
+  "language": "it",
+  "type": "monster",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "color": "{{ivColor}}",
+      "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} PL:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}",
+      "description": "Finisce: {{time}}, Tempo rimasto: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{{addr}}} \n veloce: {{quickMoveName}}, caricata: {{chargeMoveName}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Mappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "image": {
+                    "url": "{{{staticmap}}}"
+      },
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "monster",
+  "default": false,
+  "platform": "telegram",
+  "template": {
+    "content": "{{round iv}}% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} PL:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\nFinisce: {{time}}, Tempo rimasto: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}} {{{addr}}} \n veloce: {{quickMoveName}}, caricata: {{chargeMoveName}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Mappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "sticker": "{{{stickerUrl}}}",
+    "location": true,
+    "webpage_preview": true
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "monsterNoIv",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "color": "{{color}}",
+      "title": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}",
+      "description": "Finisce: {{time}}, Tempo rimasto: {{tthm}}m {{tths}}s \n {{{addr}}} \n Mappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "monsterNoIv",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}\nFinisce: {{time}}, Tempo rimasto: {{tthm}}m {{tths}}s\n {{{addr}}}\nMappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "sticker": "{{{stickerUrl}}}",
+    "location": true,
+    "webpage_preview": true
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "raid",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "title": "Raid contro {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} è inziato alla palestra {{{gymName}}}! {{#ex}}(Ex){{/ex}}",
+      "description": "PL: {{cp}}, veloce: {{quickMoveName}}, caricata: {{chargeMoveName}} \n Mappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "color": "{{gymColor}}",
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
+      },
+      "author": {
+        "name": "{{name}} lvl{{level}}. Finisce: {{time}} in {{tthm}}m {{tths}}s",
+        "icon_url": "{{{detailsurl}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "raid",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "Raid contro {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} è iniziato alla palestra {{{gymName}}}! {{#ex}}(Ex){{/ex}}\nPL: {{cp}}, veloce: {{quickMoveName}}, caricata: {{chargeMoveName}} \n{{name}} lvl{{level}}. Finisce: {{time}} in {{tthm}}m {{tths}}s\nMappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "sticker": "{{{stickerUrl}}}",
+    "location": true,
+    "webpage_preview": true
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "egg",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "title": "uovo Raid livello{{level}} a {{{gymName}}} {{#ex}}(Ex){{/ex}}",
+      "description": "Mappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "color": "{{gymColor}}",
+      "thumbnail": {
+        "url": "{{{detailsurl}}}"
+      },
+      "author": {
+        "name": "Schiude alle: {{time}} in {{tthm}}m {{tths}}s",
+        "icon_url": "{{{imgUrl}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "egg",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "Uovo Raid livello{{level}} a {{{gymName}}} {{#ex}}(Ex){{/ex}}\nSchiude alle: {{time}} in {{tthm}}m {{tths}}s\nMappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "sticker": "{{{stickerUrl}}}",
+    "location": true,
+    "webpage_preview": true
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "quest",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "title": "Nome Pokestop: {{{pokestopName}}}",
+      "url": "{{{googleMapUrl}}}",
+      "description": "Quest: {{{questString}}}\nnRicompensa: {{{rewardString}}}\n{{{addr}}}\nMappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "quest",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "Pokestop: {{{pokestopName}}}\nQuest: {{{questString}}}\nRicompensa: {{{rewardString}}} \n {{{addr}}} \n Mappe: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "sticker": "{{{stickerUrl}}}",
+    "location": true,
+    "webpage_preview": true
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "invasion",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "title": "Team Rocket a {{{pokestopName}}}",
+      "url": "{{{googleMapUrl}}}",
+      "color": "{{gruntTypeColor}}",
+      "description": "Tipo: {{gruntType}} {{gruntTypeEmoji}}\nGenere: {{genderData.name}}{{genderData.emoji}}\nPossibili ricompense: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Finisce: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nIndirizzo: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "invasion",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "Team Rocket a {{{pokestopName}}}\nTipo: {{gruntType}} {{gruntTypeEmoji}}\nGenere: {{genderData.name}}{{genderData.emoji}}\nPossibili ricompense: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Finisce: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nIndirizzo: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "sticker": "{{{stickerUrl}}}",
+    "location": true,
+    "webpage_preview": true
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "weatherchange",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "title": "⚠️ Cambio Meteo ⚠️",
+      "description": "Il meteo per alcuni Pokémon attivi che stai monitorando è cambiato!\n{{#if oldWeatherName}}È passato da {{oldWeatherName}} {{oldWeatherEmoji}} a {{else}}Adesso è {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}I seguenti Pokémon sono ora cambiati e avranno statistiche diverse:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}Questo potrebbe aver alterato le statistiche riportate e IV ...{{/if}}",
+      "image": {
+        "url": "{{{staticMap}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "weatherchange",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "[\u200A]({{{staticMap}}})⚠️ Cambio Meteo ⚠️\nIl meteo per alcuni Pokémon attivi che stai monitorando è cambiato!\n{{#if oldWeatherName}}È passato da {{oldWeatherName}} {{oldWeatherEmoji}} a {{else}}Adesso è {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}I seguenti Pokémon sono ora cambiati e avranno statistiche diverse:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}Questo potrebbe aver alterato le statistiche riportate e IV ...{{/if}}",
+    "webpage_preview": true,
+    "sticker": "",
+    "location": false
+  }
+},
+{
+    "id": 1,
+    "language": "it",
+    "type": "lure",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "username": "{{lureTypeName}}",
+      "avatar_url": "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/{{minus lureTypeId 500}}.png",
+      "embed": {
+        "title": "Esca a {{{pokestopName}}}",
+        "url": "{{{googleMapUrl}}}",
+        "color": "{{lureTypeColor}}",
+        "description": "**Tipo:** {{lureTypeName}}\n **Finisce alle:** {{time}} \n(**Tempo rimasto:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n\n [PokeMapGravina](<S<https://pokemapgravina.it/?lat={{latitude}}&lon={{longitude}}&zoom=20>S>) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticmap}}}"
+        }
+      }
+    }
+},
+{
+      "id":1,
+      "language":"it",
+      "type":"lure",
+      "default":true,
+      "platform":"telegram",
+      "template":{
+         "content":"**Tipo Esca:** {{lureTypeName}}\n **Finisce alle:** {{time}} \n**Tempo rimasto:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
+         "location":true,
+         "sticker":"{{stickerUrl}}",
+         "webpage_preview":false
+      }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "greeting",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "title": "Benvenuto",
+      "description": "Grazie per esserti registrato! \nPer favore imposta una posizione `{{prefix}}posizione nome di un posto` o aggiungi un'area per la quale ricevere notifiche.",
+      "fields": [
+          {
+            "name": "***Comandi Generali***",
+            "value": "`{{prefix}}aiuto`: Mostra questo messaggio \n`{{prefix}}waglio`: Ti aggiunge al database ed abilita le notifiche \n`{{prefix}}deregistra`: Ti rimuove dalle notifiche \n`{{prefix}}stop`: Ferma temporaneamente le notifiche \n`{{prefix}}start`: Riabilita le notifiche \n`{{prefix}}posizione tuaArea`: Cerca per la tuaArea e la imposta come tua posizione \n`{{prefix}}area inserisci unPosto`: Imposta una o piÃ¹ aree per le quali ricevere notifiche, le aree devono essere configurate dall'admin \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area impostata \n `{{prefix}}tracciati`: Mostra per cosa sei attualmente configurato per ricevere le notifiche. \n Puoi aggiungere la variabile `pulito` alla maggior parte dei comandi di tracciamento, per far si che il bot cancelli il massaggio quando il pokemon sparisce. \n Vedi più opzioni per ogni comando spiegato qui [manuale completo](https://muckelba.github.io/poracleWiki/)"
+          },
+          {
+            "name": "***Esempi Base***",
+            "value": "Probabilmente vorrai iniziare con qualcosa come questi 5 comandi. Modificare le distanze (d = metri) in base alle proprie esigenze. \n `{{prefix}}posizione 123 via MICHELA, Gravina, BARI` \n `{{prefix}}trova archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka unown d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}trova tutto iv100 d1000` \n `{{prefix}}quest baccananas d500 pulito`"
+          },
+          {
+            "name": "***Comandi di Ricerca Mostri***",
+            "value": "Il comando deve includere almeno un mostro e una qualsiasi quantità di filtri es. \n `{{prefix}}trova snorlax lapras d500 iv50 maxiv90 pl1000 livello15`: Questo comando ti avviserebbe di Snorlax e Lapras entro 500 metri dalla tua posizione, con delle IV tra il 50% e il 90%, di almeno livello 15 e PL minimi di 1000. \n`{{prefix}}basta lapras vileplume`: will remove tracking for lapras and vileplume"
+          },
+          {
+            "name": "***Comandi di Ricerca Raid***",
+            "value": "`{{prefix}}raid snorlax lapras d500 instinto`: Qualsiasi variabile è facoltativa, questo comando ti avviserebbe dei raid di Snorlax e Lapras entro 500 metri dalla tua posizione o all'interno di un'area aggiuntiva. i filtri impostati richiedono che la palestra sia controllata dalla squadra Istinto \n`{{prefix}}raid rimuovi lapras vileplume`: RimuoverÃ  il monitoraggio di lapras e vileplume dai raid"
+          },
+          {
+            "name": "***Comandi di Ricerca Quest***",
+            "value": "`{{prefix}}quest porygon pikachu caramella_rara baccananas d500 pulito`: Qualsiasi variabile è facoltativa, questo comando ti avviserebbe delle quest ottenibili entro 500 metri dalla tua posizione per porygon, pikachu, caramella rara, o baccananas come premio\n `{{prefix}}quest rimuovi tutti_gli_oggetti`: Rimuove le notifiche per tutte le missioni basate sulle quest. Puoi anche usare `tutti_i_pokemon` or `polvere_di_stelle`"
+          },
+          {
+            "name": "***Comandi di Ricerca Rocket***",
+            "value": "`{{prefix}}invasion d500 drago misto`: Qualsiasi variabile è facoltativa, questo comando ti avviserebbe delle invasion del Team Rocket entro 500 metri dalla tua posizione se il tipo di recluta è di tipo misto o drago. Puoi usare ogni nome di tipo pokemon.\n `{{prefix}}invasion rimuovi dragn`: Rimuove le notifiche per l'invasio del Team Rocket specificate.."
+          },
+          {
+            "name": "***Aree***",
+            "value": "Se il tuo amministratore ha configurato le aree, questi altri comandi sono disponibili: \n `{{prefix}}area lista`: elenca le possibili aree che puoi aggiungere. \n `{{prefix}}posizione tuaArea`: Cerca la tua area e la imposta come posizione\n `{{prefix}}area aggiungi unPosto`: Imposta una o più aree da cui ricevere notifiche (le aree devono essere configurate dall'amministratore) \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area configurata"
+          },
+          {
+            "name": "***Ulteriori Informazioni***",
+            "value": "Vedi tutti i dettagli sui comandi nel [manuale completo](https://muckelba.github.io/poracleWiki/v4/commands.html)"
+          },
+          {
+            "name": "***Quanto posso camminare in metri / minuti? Secondo il web ...***",
+            "value": "`Metri | Veloce | Moderato | Camminata \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63`"
+          }
+      ]
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "it",
+  "type": "greeting",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "embed": {
+      "title": "Benvenuto",
+      "description": "Grazie per esserti registrato! \nPer favore imposta una posizione `{{prefix}}posizione nome di un posto` o aggiungi un'area per la quale ricevere notifiche.",
+      "fields": [
+          {
+            "name": "***Comandi Generali***",
+            "value": "`{{prefix}}aiuto`: Mostra questo messaggio \n`{{prefix}}waglio`: Ti aggiunge al database ed abilita le notifiche \n`{{prefix}}deregistra`: Ti rimuove dalle notifiche \n`{{prefix}}stop`: Ferma temporaneamente le notifiche \n`{{prefix}}start`: Riabilita le notifiche \n`{{prefix}}posizione tuaArea`: Cerca per la tuaArea e la imposta come tua posizione \n`{{prefix}}area inserisci unPosto`: Imposta una o più aree per le quali ricevere notifiche, le aree devono essere configurate dall'admin \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area impostata \n `{{prefix}}tracciati`: Mostra per cosa sei attualmente configurato per ricevere le notifiche. \n Puoi aggiungere la variabile `pulito` alla maggior parte dei comandi di tracciamento, per far si che il bot cancelli il massaggio quando il pokemon sparisce. \n Vedi più opzioni per ogni comando spiegato qui [manuale completo](https://muckelba.github.io/poracleWiki/)"
+          },
+          {
+            "name": "***Esempi Base***",
+            "value": "Probabilmente vorrai iniziare con qualcosa come questi 5 comandi. Modificare le distanze (d = metri) in base alle proprie esigenze. \n `{{prefix}}posizione 123 via MICHELA, Gravina, BARI` \n `{{prefix}}trova archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka unown d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}trova tutto iv100 d1000` \n `{{prefix}}quest baccananas d500 pulito`"
+          },
+          {
+            "name": "***Comandi di Ricerca Mostri***",
+            "value": "Il comando deve includere almeno un mostro e una qualsiasi quantità di filtri es. \n `{{prefix}}trova snorlax lapras d500 iv50 maxiv90 pl1000 livello15`: Questo comando ti avviserebbe di Snorlax e Lapras entro 500 metri dalla tua posizione, con delle IV tra il 50% e il 90%, di almeno livello 15 e PL minimi di 1000. \n`{{prefix}}basta lapras vileplume`: will remove tracking for lapras and vileplume"
+          },
+          {
+            "name": "***Comandi di Ricerca Raid***",
+            "value": "`{{prefix}}raid snorlax lapras d500 instinto`: Qualsiasi variabile è facoltativa, questo comando ti avviserebbe dei raid di Snorlax e Lapras entro 500 metri dalla tua posizione o all'interno di un'area aggiuntiva. i filtri impostati richiedono che la palestra sia controllata dalla squadra Istinto \n`{{prefix}}raid rimuovi lapras vileplume`: Rimuoverà il monitoraggio di lapras e vileplume dai raid"
+          },
+          {
+            "name": "***Comandi di Ricerca Quest***",
+            "value": "`{{prefix}}quest porygon pikachu caramella_rara baccananas d500 pulito`: Qualsiasi variabile è facoltativa, questo comando ti avviserebbe delle quest ottenibili entro 500 metri dalla tua posizione per porygon, pikachu, caramella rara, o baccananas come premio\n `{{prefix}}quest rimuovi tutti_gli_oggetti`: Rimuove le notifiche per tutte le missioni basate sulle quest. Puoi anche usare `tutti_i_pokemon` or `polvere_di_stelle`"
+          },
+          {
+            "name": "***Comandi di Ricerca Rocket***",
+            "value": "`{{prefix}}invasion d500 drago misto`: Qualsiasi variabile è facoltativa, questo comando ti avviserebbe delle invasion del Team Rocket entro 500 metri dalla tua posizione se il tipo di recluta è di tipo misto o drago. Puoi usare ogni nome di tipo pokemon.\n `{{prefix}}invasion rimuovi dragn`: Rimuove le notifiche per l'invasio del Team Rocket specificate.."
+          },
+          {
+            "name": "***Aree***",
+            "value": "Se il tuo amministratore ha configurato le aree, questi altri comandi sono disponibili: \n `{{prefix}}area lista`: elenca le possibili aree che puoi aggiungere. \n `{{prefix}}posizione tuaArea`: Cerca la tua area e la imposta come posizione\n `{{prefix}}area aggiungi unPosto`: Imposta una o più aree da cui ricevere notifiche (le aree devono essere configurate dall'amministratore) \n`{{prefix}}area rimuovi unPosto`: Rimuove un'area configurata"
+          },
+          {
+            "name": "***Ulteriori Informazioni***",
+            "value": "Vedi tutti i dettagli sui comandi nel [manuale completo](https://muckelba.github.io/poracleWiki/v4/commands.html)"
+          },
+          {
+            "name": "***Quanto posso camminare in metri / minuti? Secondo il web ...***",
+            "value": "`Metri | Veloce | Moderato | Camminata \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63`"
+          }
+        ]
+      }
+    }
+  }
+]

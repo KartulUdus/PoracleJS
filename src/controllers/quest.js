@@ -133,16 +133,17 @@ class Quest extends Controller {
 			data.isShiny = data.rewardData.isShiny
 			data.itemAmount = data.rewardData.itemAmount
 			data.monsters = data.rewardData.monsters
+			data.monsterData = data.rewardData.monsterData
 			data.items = data.rewardData.items
 			data.energyAmount = data.rewardData.energyAmount
 			data.energyMonsters = data.rewardData.energyMonsters
 
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
+			data.matched = this.pointInArea([data.latitude, data.longitude])
 			data.imgUrl = data.rewardData.monsters[1]
-				? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.png`
+				? `${this.config.general.imgUrl}pokemon_icon_${data.monsterData.pokemonId.toString().padStart(3, '0')}_${data.monsterData.formId.toString().padStart(2, '0')}.png`
 				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
 			data.stickerUrl = data.rewardData.monsters[1]
-				? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[1].toString().padStart(3, '0')}_00.webp`
+				? `${this.config.general.stickerUrl}pokemon_icon_${data.monsterData.pokemonId.toString().padStart(3, '0')}_${data.monsterData.formId.toString().padStart(2, '0')}.webp`
 				: ''
 
 			if (data.rewardData.items[1]) {
@@ -185,11 +186,11 @@ class Quest extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.quest) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 
 			if (data.monsters.length == 2) {
-				data.baseStats = Object.values(this.GameData.monsters).filter((mon) => data.monsters[1] == mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsters[1] == mon.id && !mon.form.id)[0].stats : ''
+				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id)[0].stats : ''
+				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id)[0].stats : ''
 			}
 			data.staticmap = data.staticMap // deprecated
 
@@ -218,7 +219,7 @@ class Quest extends Controller {
 				data.rewardString = data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : data.rewardString
 				data.rewardString = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNames}` : data.rewardString
 				data.rewardString = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNames} ${translator.translate('Mega Energy')}` : data.rewardString
-				data.rewardStringEng = data.monsterNames
+				data.rewardStringEng = data.monsterNamesEng
 				data.rewardStringEng = data.dustAmount > 0 ? `${data.dustAmount} Stardust` : data.rewardStringEng
 				data.rewardStringEng = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNamesEng}` : data.rewardStringEng
 				data.rewardStringEng = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNamesEng} Mega Energy` : data.rewardStringEng
@@ -334,7 +335,7 @@ class Quest extends Controller {
 							let first = true
 							for (const [index, id] of Object.entries(questinfo.pokemon_ids)) {
 								if (first) {
-									pstr += `${this.GameData.monsters[id].name}`
+									pstr += `${this.GameData.monsters[`${id}_0`].name}`
 								} else {
 									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
 								}
@@ -468,6 +469,7 @@ class Quest extends Controller {
 	// eslint-disable-next-line class-methods-use-this
 	async getReward(item) {
 		const monsters = [0]
+		const monsterData = { pokemonId: 0, formId: 0 }
 		const items = [0]
 		let itemAmount = 0
 		let dustAmount = 0
@@ -484,13 +486,15 @@ class Quest extends Controller {
 			} else if (reward.type === 7) {
 				if (reward.info.shiny) isShiny = 1
 				monsters.push(reward.info.pokemon_id)
+				monsterData.pokemonId = reward.info.pokemon_id
+				monsterData.formId = reward.info.form_id
 			} else if (reward.type === 12) {
 				energyAmount = reward.info.amount
 				energyMonsters.push(reward.info.pokemon_id)
 			}
 		})
 		return {
-			monsters, items, itemAmount, dustAmount, isShiny, energyAmount, energyMonsters,
+			monsters, monsterData, items, itemAmount, dustAmount, isShiny, energyAmount, energyMonsters,
 		}
 	}
 }

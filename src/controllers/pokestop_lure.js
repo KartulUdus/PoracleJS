@@ -115,7 +115,7 @@ class PokestopLure extends Controller {
 				return []
 			}
 
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
+			data.matched = this.pointInArea([data.latitude, data.longitude])
 
 			data.lureTypeId = 0
 			if (data.lure_id) {
@@ -152,7 +152,6 @@ class PokestopLure extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.pokestop) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'pokestop', data, this.config.geocoding.staticMapType.pokestop)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 

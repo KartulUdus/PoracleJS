@@ -4,7 +4,7 @@ const reader = require('readline-sync')
 const fs = require('fs')
 const { log } = require('../lib/logger')
 
-const discordRe = /[MN][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}/g
+const discordRe = /[ODMN][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}/g
 const telegramRe = /[0-9]{9}:[a-zA-Z0-9_-]{35}/gm
 
 // fs.writeFileSync(path.join(__dirname, '../../config/local.json'), defaultConfig)

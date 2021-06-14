@@ -23,7 +23,11 @@ function getGeofenceFromGEOjson(file) {
 			const name = geofenceGEOjson[i].properties.name || config.defaultGeofenceName + i.toString()
 			const color = geofenceGEOjson[i].properties.color || config.defaultGeofenceColor
 			outGeofence[i] = {
-				name, id: i, color, path: [],
+				name,
+				id: i,
+				color,
+				path: [],
+				group: geofenceGEOjson[i].properties.group || '',
 			}
 			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
 		}

@@ -11,6 +11,11 @@ class PoracleDiscordMessage {
 		this.command = msg.content.split(' ')[0].substring(1)
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	convertSafe(message) {
+		return message.replace(/[_*[`]/g, ((m) => `\\${m}`))
+	}
+
 	getPings() {
 		return [this.msg.mentions.users.array().map((u) => `<@!${u.id}>`), this.msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
 	}
@@ -43,6 +48,20 @@ class PoracleDiscordMessage {
 			return this.msg.reply(message, { split: true })
 		}
 		return this.msg.reply(message)
+	}
+
+	async replyWithImageUrl(title, message, url) {
+		const messageText = {
+			embed: {
+				color: 0x00ff00,
+				title,
+				description: message,
+				image: {
+					url,
+				},
+			},
+		}
+		await this.msg.reply(messageText)
 	}
 
 	async replyWithAttachment(message, attachment) {

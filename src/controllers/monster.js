@@ -12,10 +12,18 @@ class Monster extends Controller {
 	}
 
 	async monsterWhoCares(data) {
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
+		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
 		data.matched.forEach((area) => {
 			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
 		})
+		let strictareastring = ''
+		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
+			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
+			data.matched.forEach((area) => {
+				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
+			})
+			strictareastring = strictareastring.concat('))')
+		}
 		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
 		if (data.pvpEvoLookup) pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and (form = 0 or form = ${data.pvpFormId}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
 		let pvpQueryString = `great_league_ranking>=${data.bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and ultra_league_ranking>=${data.bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}`
@@ -39,11 +47,12 @@ class Monster extends Controller {
 		max_atk>=${data.atk} and
 		max_def>=${data.def} and
 		max_sta>=${data.sta} and
-		min_weight<=${data.weight} * 1000 and
-		max_weight>=${data.weight} * 1000 and
+		min_weight<=${data.weight * 1000} and
+		max_weight>=${data.weight * 1000} and
 		rarity<=${data.rarityGroup} and
 		max_rarity>=${data.rarityGroup} and
 		(${pvpQueryString})
+		${strictareastring}
 		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
@@ -148,8 +157,11 @@ class Monster extends Controller {
 				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
 				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
+			if (data.fort_name) data.fort_name = this.escapeJsonString(data.fort_name)
 			data.pokemonId = data.pokemon_id
 			data.encounterId = data.encounter_id
+			// eslint-disable-next-line prefer-destructuring
+			data.generation = Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
 			data.nameEng = monster.name
 			data.formNameEng = monster.form.name
 			data.formId = data.form
@@ -283,7 +295,7 @@ class Monster extends Controller {
 				return []
 			}
 
-			data.matched = await this.pointInArea([data.latitude, data.longitude])
+			data.matched = this.pointInArea([data.latitude, data.longitude])
 
 			data.pvpEvoLookup = 0
 			const whoCares = await this.monsterWhoCares(data)
@@ -342,7 +354,6 @@ class Monster extends Controller {
 
 			if (pregenerateTile && this.config.geocoding.staticMapType.pokemon) {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data, this.config.geocoding.staticMapType.pokemon)
-				this.log.debug(`${logReference}: Tile generated ${data.staticMap}`)
 			}
 			data.staticmap = data.staticMap // deprecated
 
@@ -462,10 +473,14 @@ class Monster extends Controller {
 				}
 
 				const e = []
+				const n = []
 				monster.types.forEach((type) => {
 					e.push(translator.translate(this.GameData.utilData.types[type.name].emoji))
+					n.push(type.name)
 				})
 				data.emoji = e
+				data.typeNameEng = n
+				data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
 				data.emojiString = e.join('')
 
 				const view = {
