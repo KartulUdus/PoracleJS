@@ -21,7 +21,7 @@ function monsterRowText(translator, GameData, monster) {
 		}
 	}
 	let miniv = monster.min_iv
-	if (miniv === -1) miniv = 0
+	if (miniv === -1) miniv = '?'
 	let minRarity = monster.rarity
 	if (minRarity === -1) minRarity = 1
 
