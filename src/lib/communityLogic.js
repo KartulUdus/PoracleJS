@@ -37,12 +37,13 @@ function filterAreas(config, communityMembership, areas) {
 }
 
 function addCommunity(config, existingCommunities, communityToAdd) {
+	const lowercaseCommunityToAdd = communityToAdd.toLowerCase()
 	const communityKeys = Object.keys(config.areaSecurity.communities)
 	const lowercaseCommunities = communityKeys.map((area) => area.toLowerCase())
 
 	let newCommunities = existingCommunities
-	if (!newCommunities.includes(communityToAdd)) {
-		newCommunities = [...newCommunities, communityToAdd]
+	if (!newCommunities.includes(lowercaseCommunityToAdd)) {
+		newCommunities = [...newCommunities, lowercaseCommunityToAdd]
 	}
 
 	return newCommunities.filter((x) => lowercaseCommunities.includes(x)).sort()
