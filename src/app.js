@@ -462,6 +462,8 @@ function processMessageFromWeather(msg) {
 	// Relay broadcasts from weather to all controllers
 
 	if (msg.type == 'weatherBroadcast') {
+		PoracleInfo.lastWeatherBroadcast = msg.data
+
 		for (const relayWorker of workers) {
 			relayWorker.commandPort.postMessage(msg)
 		}
