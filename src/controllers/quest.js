@@ -138,7 +138,8 @@ class Quest extends Controller {
 			data.energyAmount = data.rewardData.energyAmount
 			data.energyMonsters = data.rewardData.energyMonsters
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 			data.imgUrl = data.rewardData.monsters[1]
 				? `${this.config.general.imgUrl}pokemon_icon_${data.monsterData.pokemonId.toString().padStart(3, '0')}_${data.monsterData.formId.toString().padStart(2, '0')}.png`
 				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
@@ -237,7 +238,7 @@ class Quest extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
 				let [platform] = cares.type.split(':')

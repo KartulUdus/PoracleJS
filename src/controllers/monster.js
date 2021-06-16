@@ -295,7 +295,8 @@ class Monster extends Controller {
 				return []
 			}
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.pvpEvoLookup = 0
 			const whoCares = await this.monsterWhoCares(data)
@@ -494,7 +495,7 @@ class Monster extends Controller {
 					tths: data.tth.seconds,
 					now: new Date(),
 					pvpUserRanking: Math.min(cares.great_league_ranking, cares.ultra_league_ranking) === 4096 ? 0 : Math.min(cares.great_league_ranking, cares.ultra_league_ranking),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
