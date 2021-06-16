@@ -128,6 +128,13 @@ function lureRowText(translator, GameData, lure) {
 	return `${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `
 }
 
+function currentAreaText(translator, geofence, areas) {
+	if (areas.length) {
+		return `${translator.translate('You are currently set to receive alarms in')} ${geofence.filter((x) => areas.includes(x.name.toLowerCase())).map((x) => x.name).join(', ')}`
+	}
+	return translator.translate('You have not selected any area yet')
+}
+
 exports.monsterRowText = monsterRowText
 exports.raidRowText = raidRowText
 exports.eggRowText = eggRowText
@@ -135,6 +142,7 @@ exports.questRowText = questRowText
 exports.invasionRowText = invasionRowText
 exports.nestRowText = nestRowText
 exports.lureRowText = lureRowText
+exports.currentAreaText = currentAreaText
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -166,7 +174,7 @@ exports.run = async (client, msg, args, options) => {
 
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		if (args.includes('area')) {
-			return msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+			return msg.reply(currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 		}
 
 		let message = ''
@@ -187,11 +195,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${restartExplanation}${locationText}`, { style: 'markdown' })
 
-		if (human.area != '[]') {
-			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
-		} else {
-			message = message.concat('\n\n', translator.translate('You have not selected any area yet'))
-		}
+		message = message.concat('\n\n', currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 
 		if (profile) {
 			message = message.concat('\n\n', `${translator.translate('Your profile is currently set to:')} ${profile.name}`)
