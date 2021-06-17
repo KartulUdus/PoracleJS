@@ -24,7 +24,7 @@ function checkDts(dts, config) {
 				if (!dts.find((x) => x.platform === platform && x.type === type && x.language === language && x.default)) {
 					logs.log.warn(`Config Check: DTS - No default entry found for platform:${platform} language:${language} type:${type}`)
 				}
-				if (!dts.find((x) => x.platform === platform && x.type === type && x.language === language && x.id.toString() === config.general.defaultTemplateName)) {
+				if (!dts.find((x) => x.platform === platform && x.type === type && x.language === language && x.id.toString() === config.general.defaultTemplateName.toString())) {
 					logs.log.warn(`Config Check: DTS - No entry found for template “${config.general.defaultTemplateName}” platform:${platform} language:${language} type:${type} - this is the one that users will get if no template override`)
 				}
 
