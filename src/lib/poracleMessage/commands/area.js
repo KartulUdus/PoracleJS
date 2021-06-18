@@ -147,6 +147,7 @@ exports.run = async (client, msg, args, options) => {
 					confUse = confUse.concat(`   ${areaDisplayName}${area.description ? ` - ${area.description}` : ''}\n`)
 				}
 				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
+
 				break
 			}
 			case 'overview': {
@@ -154,7 +155,7 @@ exports.run = async (client, msg, args, options) => {
 					const staticMap = await geofenceTileGenerator.generateGeofenceOverviewTile(
 						client.geofence,
 						client.query.tileserverPregen,
-						args,
+						args.length > 2 ? args : JSON.parse(human.area),
 					)
 					if (staticMap) {
 						await msg.replyWithImageUrl(translator.translateFormat('Overview display'),
@@ -199,7 +200,7 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			default: {
-				await msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 
 				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
 					{ style: 'markdown' })
