@@ -16,20 +16,20 @@ class PoracleRedisCache {
 		this.defaultTtl = ttl
 		this.hits = 0
 		this.misses = 0
+		this.commands = {
+			getAsync: promisify(this.client.get).bind(this.client),
+			setexAsync: promisify(this.client.setex).bind(this.client),
+		}
 	}
 
 	async get(key) {
-		const getAsync = promisify(this.client.get).bind(this.client)
-
-		const val = await getAsync(key)
+		const val = await this.commands.getAsync(key)
 		if (val) { this.hits++ } else { this.misses++ }
 		return val
 	}
 
 	async set(key, value, ttl) {
-		const setexAsync = promisify(this.client.setex).bind(this.client)
-
-		return setexAsync(key, Math.floor(ttl || this.defaultTtl), value)
+		return this.commands.setexAsync(key, Math.floor(ttl || this.defaultTtl), value)
 	}
 
 	getStats() {
