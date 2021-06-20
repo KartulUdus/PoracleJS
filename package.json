@@ -57,6 +57,7 @@
     "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",
     "point-in-polygon": "^1.1.0",
     "readline-sync": "^1.4.10",
+    "redis": "^3.1.2",
     "s2-geometry": "^1.2.10",
     "strip-json-comments": "^3.1.1",
     "telegraf": "^4.3.0",
