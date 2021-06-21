@@ -1,6 +1,5 @@
-const helpCommand = require('./help.js')
-const trackedCommand = require('./tracked.js')
-const objectDiff = require('../../objectDiff')
+const helpCommand = require('./help')
+const trackedCommand = require('./tracked')
 
 exports.run = async (client, msg, args, options) => {
 	const logReference = Math.random().toString().slice(2, 11)
@@ -78,12 +77,12 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				exclusive: !!exclusive,
-				template,
-				distance,
-				team,
-				clean,
-				level: lvl,
+				exclusive: +exclusive,
+				template: template.toString(),
+				distance: +distance,
+				team: +team,
+				clean: +clean,
+				level: +lvl,
 			}))
 
 			const tracked = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
@@ -93,8 +92,8 @@ exports.run = async (client, msg, args, options) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of tracked.filter((x) => x.level == toInsert.level)) {
-					const differences = objectDiff.diff(existing, toInsert)
+				for (const existing of tracked.filter((x) => x.level === toInsert.level)) {
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)
@@ -133,12 +132,14 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			if (insert.length) {
-				await client.query.insertQuery('egg', insert)
-			}
-			for (const row of updates) {
-				await client.query.updateQuery('egg', row, { uid: row.uid })
-			}
+			await client.query.deleteWhereInQuery('egg', {
+				id: target.id,
+				profile_no: currentProfileNo,
+			},
+			updates.map((x) => x.uid),
+			'uid')
+
+			await client.query.insertQuery('egg', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking level ${levels.join(', ')} eggs`)
 			await msg.reply(message)
@@ -163,7 +164,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 			msg.reply(
 				''.concat(
-					result == 1 ? translator.translate('I removed 1 entry')
+					result === 1 ? translator.translate('I removed 1 entry')
 						: translator.translateFormat('I removed {0} entries', result),
 					', ',
 					translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),

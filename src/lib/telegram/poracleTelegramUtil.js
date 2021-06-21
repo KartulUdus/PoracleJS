@@ -67,7 +67,7 @@ class PoracleTelegramUtil {
 			target.id = this.options.targetOverride.id
 			target.name = this.options.targetOverride.name
 			target.type = this.options.targetOverride.type
-			target.channel = (target.type == 'telegram:channel')
+			target.channel = (target.type === 'telegram:channel')
 			status = await this.checkRegistrationStatus(target)
 		} else {
 			let channelName = args.find((arg) => arg.match(this.client.re.nameRe))

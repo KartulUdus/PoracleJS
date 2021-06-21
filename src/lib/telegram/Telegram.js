@@ -64,7 +64,7 @@ class Telegram {
 
 				const translatedCommands = this.translatorFactory.translateCommand(commandName)
 				for (const translatedCommand of translatedCommands) {
-					if (translatedCommand != commandName) {
+					if (translatedCommand !== commandName) {
 						this.enabledCommands.push(translatedCommand)
 						this.commands[translatedCommand] = this.tempProps
 					}
@@ -106,7 +106,7 @@ class Telegram {
 	async processCommand(ctx) {
 		const { command } = ctx.state
 		if (!command) return
-		if (command.bot && command.bot.toLowerCase() != ctx.botInfo.username.toLowerCase()) return
+		if (command.bot && command.bot.toLowerCase() !== ctx.botInfo.username.toLowerCase()) return
 		if (Object.keys(this.commands).includes(command.command)) {
 			return this.commands[command.command](ctx)
 		}
@@ -172,12 +172,12 @@ class Telegram {
 			try {
 				res = await fn()
 			} catch (err) {
-				if (err.code == 429) {
+				if (err.code === 429) {
 					const retryAfter = (err.response && err.response.parameters) ? err.response.parameters.retry_after : 30
 					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${retryAfter} retry count ${retryCount}`)
 					await this.sleep(retryAfter * 1000)
 					retry = true
-					if (retryCount++ == 5) {
+					if (retryCount++ === 5) {
 						throw err
 					}
 				} else {
