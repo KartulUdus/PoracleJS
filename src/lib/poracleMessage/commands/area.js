@@ -1,4 +1,4 @@
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 const geofenceTileGenerator = require('../../geofenceTileGenerator')
 const trackedCommand = require('./tracked')
 

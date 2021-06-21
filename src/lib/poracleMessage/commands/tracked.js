@@ -1,12 +1,12 @@
 const fs = require('fs')
 const path = require('path')
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 
 function monsterRowText(translator, GameData, monster) {
 	let monsterName
 	let formName
 
-	if (monster.pokemon_id == 0) {
+	if (monster.pokemon_id === 0) {
 		monsterName = translator.translate('Everything')
 		formName = ''
 	} else {
@@ -48,7 +48,7 @@ function nestRowText(translator, GameData, nest) {
 	let monsterName
 	let formName
 
-	if (nest.pokemon_id == 0) {
+	if (nest.pokemon_id === 0) {
 		monsterName = translator.translate('Everything')
 		formName = ''
 	} else {
@@ -85,7 +85,7 @@ function questRowText(translator, GameData, quest) {
 		}
 	}
 	if (quest.reward_type === 12) {
-		if (quest.reward == 0) {
+		if (quest.reward === 0) {
 			rewardThing = `${translator.translate('mega energy')}`
 		} else {
 			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)

@@ -338,7 +338,7 @@ class Raid extends Controller {
 					}
 
 					let [platform] = cares.type.split(':')
-					if (platform == 'webhook') platform = 'discord'
+					if (platform === 'webhook') platform = 'discord'
 
 					const mustache = this.getDts(logReference, 'raid', platform, cares.template, language)
 					if (mustache) {
@@ -455,7 +455,7 @@ class Raid extends Controller {
 				}
 
 				let [platform] = cares.type.split(':')
-				if (platform == 'webhook') platform = 'discord'
+				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts(logReference, 'egg', platform, cares.template, language)
 				if (mustache) {

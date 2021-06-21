@@ -51,7 +51,7 @@ function receiveQueue(msg) {
 async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
-		if (cmd.type == 'heapdump') {
+		if (cmd.type === 'heapdump') {
 			writeHeapSnapshot()
 			return
 		}
@@ -77,7 +77,7 @@ async function processQueue() {
 
 if (!isMainThread) {
 	parentPort.on('message', (msg) => {
-		if (msg.type == 'queuePort') {
+		if (msg.type === 'queuePort') {
 			queuePort = msg.queuePort
 			commandPort = msg.commandPort
 			msg.commandPort.on('message', receiveCommand)

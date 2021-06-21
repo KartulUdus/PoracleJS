@@ -9,7 +9,7 @@ const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
 
-const questTypeList = require('../util/questTypeList')
+const questTypeList = require('../util/questTypeList.json')
 // const itemList = require('../util/quests/items')
 const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
 const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)', 'Arlo', 'Cliff', 'Sierra', 'Giovanni']
@@ -189,9 +189,9 @@ class Quest extends Controller {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
 			}
 
-			if (data.monsters.length == 2) {
-				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id)[0].stats : ''
-				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id)[0].stats : ''
+			if (data.monsters.length === 2) {
+				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId === mon.id && data.monsterData.formId === mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId === mon.id && data.monsterData.formId === mon.form.id)[0].stats : ''
+				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId === mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId === mon.id && !mon.form.id)[0].stats : ''
 			}
 			data.staticmap = data.staticMap // deprecated
 
@@ -242,7 +242,7 @@ class Quest extends Controller {
 				}
 
 				let [platform] = cares.type.split(':')
-				if (platform == 'webhook') platform = 'discord'
+				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts(logReference, 'quest', platform, cares.template, language)
 				if (mustache) {
@@ -318,7 +318,7 @@ class Quest extends Controller {
 								if (first) {
 									tstr += `${pokemonTypes[typeId]}`
 								} else {
-									tstr += (index == questinfo.pokemon_type_ids.length - 1) ? ` or ${pokemonTypes[typeId]}` : `, ${pokemonTypes[typeId]}`
+									tstr += (index === questinfo.pokemon_type_ids.length - 1) ? ` or ${pokemonTypes[typeId]}` : `, ${pokemonTypes[typeId]}`
 								}
 								first = false
 							}
@@ -338,7 +338,7 @@ class Quest extends Controller {
 								if (first) {
 									pstr += `${this.GameData.monsters[`${id}_0`].name}`
 								} else {
-									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
+									pstr += (index === questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
 								}
 								first = false
 							}
@@ -419,7 +419,7 @@ class Quest extends Controller {
 								if (first) {
 									gstr += `${gruntCharacterTypes[charId]}`
 								} else {
-									gstr += (index == questinfo.character_category_ids.length - 1) ? ` or ${gruntCharacterTypes[charId]}` : `, ${gruntCharacterTypes[charId]}`
+									gstr += (index === questinfo.character_category_ids.length - 1) ? ` or ${gruntCharacterTypes[charId]}` : `, ${gruntCharacterTypes[charId]}`
 								}
 								first = false
 							}
