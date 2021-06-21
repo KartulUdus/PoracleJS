@@ -126,7 +126,7 @@ exports.run = async (client, msg, [args]) => {
 			let type
 			let name
 
-			if (channelType == 'bot') {
+			if (channelType === 'bot') {
 				id = channel.id
 				type = 'discord:channel'
 				name = channel.name
@@ -156,7 +156,7 @@ exports.run = async (client, msg, [args]) => {
 			const pdm = new PoracleDiscordMessage(client, msg)
 			const pds = new PoracleDiscordState(client)
 			const target = { type, id, name }
-			await msg.reply(`>> Executing as ${target.type} / ${target.name} ${target.type != 'webhook' ? target.id : ''}`)
+			await msg.reply(`>> Executing as ${target.type} / ${target.name} ${target.type !== 'webhook' ? target.id : ''}`)
 
 			for (const commandText of commands) {
 				await msg.reply(`>>> Executing ${commandText}`)

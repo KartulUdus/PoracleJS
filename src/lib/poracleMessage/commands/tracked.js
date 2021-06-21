@@ -1,12 +1,12 @@
 const fs = require('fs')
 const path = require('path')
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 
 function monsterRowText(translator, GameData, monster) {
 	let monsterName
 	let formName
 
-	if (monster.pokemon_id == 0) {
+	if (monster.pokemon_id === 0) {
 		monsterName = translator.translate('Everything')
 		formName = ''
 	} else {
@@ -21,7 +21,7 @@ function monsterRowText(translator, GameData, monster) {
 		}
 	}
 	let miniv = monster.min_iv
-	if (miniv === -1) miniv = 0
+	if (miniv === -1) miniv = '?'
 	let minRarity = monster.rarity
 	if (minRarity === -1) minRarity = 1
 
@@ -54,7 +54,7 @@ function nestRowText(translator, GameData, nest) {
 	let monsterName
 	let formName
 
-	if (nest.pokemon_id == 0) {
+	if (nest.pokemon_id === 0) {
 		monsterName = translator.translate('Everything')
 		formName = ''
 	} else {
@@ -91,7 +91,7 @@ function questRowText(translator, GameData, quest) {
 		}
 	}
 	if (quest.reward_type === 12) {
-		if (quest.reward == 0) {
+		if (quest.reward === 0) {
 			rewardThing = `${translator.translate('mega energy')}`
 		} else {
 			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
@@ -194,7 +194,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${restartExplanation}${locationText}`, { style: 'markdown' })
 
-		if (human.area != '[]') {
+		if (human.area !== '[]') {
 			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
 		} else {
 			message = message.concat('\n\n', translator.translate('You have not selected any area yet'))

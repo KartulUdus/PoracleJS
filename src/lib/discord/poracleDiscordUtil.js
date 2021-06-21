@@ -16,8 +16,10 @@ class PoracleDiscordUtil {
 			const postGuildId = this.msg.msg.channel.guild ? this.msg.msg.channel.guild.id : 'x'
 			const postChannelCategoryId = this.msg.msg.channel.parentID
 
+			this.client.log.debug(`Channel message - examine permissions for ${postUserId} in channel ${postChannelId} guild ${postGuildId} category ${postChannelCategoryId}`)
 			try {
 				const guildMember = await this.msg.msg.channel.guild.members.fetch(postUserId)
+
 				if (guildMember) {
 					const userRoleMembership = []
 
@@ -30,15 +32,15 @@ class PoracleDiscordUtil {
 
 					if (roleList) {
 						for (const id of Object.keys(roleList)) {
-							if (id == postChannelId || id == postGuildId || id == postChannelCategoryId) {
+							if (id === postChannelId || id === postGuildId || id === postChannelCategoryId) {
 								const checkUserAgainst = roleList[id]
 
-								if (postUserId == checkUserAgainst) {
+								if (checkUserAgainst.includes(postUserId)) {
 									channelPermissions = true
 								}
 
 								for (const role of userRoleMembership) {
-									if (role == checkUserAgainst) {
+									if (checkUserAgainst.includes(role)) {
 										channelPermissions = true
 									}
 								}
@@ -115,7 +117,7 @@ class PoracleDiscordUtil {
 			target.id = this.options.targetOverride.id
 			target.name = this.options.targetOverride.name
 			target.type = this.options.targetOverride.type
-			target.webook = (target.type == 'webhook')
+			target.webook = (target.type === 'webhook')
 			status = await this.checkRegistrationStatus(target)
 		} else {
 			let webhookName = args.find((arg) => arg.match(this.client.re.nameRe))
