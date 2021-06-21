@@ -81,7 +81,7 @@ class Controller extends EventEmitter {
 		}
 
 		// Exact match
-		let findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language == language)
+		let findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language === language)
 
 		// First right template and platform and no language (likely backward compatible choice)
 		if (!findDts) {
@@ -90,7 +90,7 @@ class Controller extends EventEmitter {
 
 		// Default of right template type, platform and language
 		if (!findDts) {
-			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language == language)
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language === language)
 		}
 
 		// First default of right template type and platform with empty language
@@ -173,7 +173,7 @@ class Controller extends EventEmitter {
 	}
 
 	async geolocate(locationString) {
-		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+		if (this.config.geocoding.provider.toLowerCase() === 'none') {
 			return []
 		}
 
@@ -208,11 +208,11 @@ class Controller extends EventEmitter {
 	}
 
 	async getAddress(locationObject) {
-		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+		if (this.config.geocoding.provider.toLowerCase() === 'none') {
 			return { addr: 'Unknown', flag: '' }
 		}
 
-		if (this.config.geocoding.cacheDetail == 0) {
+		if (this.config.geocoding.cacheDetail === 0) {
 			try {
 				const geocoder = this.getGeocoder()
 				const [result] = await geocoder.reverse(locationObject)
@@ -308,6 +308,7 @@ class Controller extends EventEmitter {
 	}
 
 	async insertQuery(table, values) {
+		if (Array.isArray(values) && !values.length) return
 		try {
 			return await this.db.insert(values).into(table)
 		} catch (err) {

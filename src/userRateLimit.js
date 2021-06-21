@@ -48,7 +48,7 @@ class UserRateChecker {
 
 		return {
 			passMessage: newCount <= messageLimit,
-			justBreached: newCount == messageLimit + 1,
+			justBreached: newCount === messageLimit + 1,
 			messageCount: newCount,
 			resetTime: Math.max(resetTime, 1),	// Don't look stupid if we are actually at 0
 			messageLimit,
@@ -101,7 +101,7 @@ class UserRateChecker {
 
 		return {
 			canContinue: newCount <= messageLimit,
-			justBreached: newCount == messageLimit + 1,
+			justBreached: newCount === messageLimit + 1,
 			messageCount: newCount,
 			resetTime: Math.max(resetTime, 1),	// Don't look stupid if we are actually at 0
 			messageLimit,
