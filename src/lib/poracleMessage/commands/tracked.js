@@ -98,7 +98,7 @@ function questRowText(translator, GameData, quest) {
 	}
 
 	if (quest.reward_type === 4) {
-		if (quest.reward == 0) {
+		if (quest.reward === 0) {
 			rewardThing = `${translator.translate('candy')}`
 		} else {
 			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
