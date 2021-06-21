@@ -47,7 +47,7 @@ class Query {
 	}
 
 	async geolocate(locationString) {
-		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+		if (this.config.geocoding.provider.toLowerCase() === 'none') {
 			return []
 		}
 
@@ -128,6 +128,7 @@ class Query {
 	}
 
 	async insertQuery(table, values) {
+		if (Array.isArray(values) && !values.length) return
 		try {
 			return await this.db.insert(values).into(table)
 		} catch (err) {

@@ -9,7 +9,7 @@ const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
 
-const questTypeList = require('../util/questTypeList')
+const questTypeList = require('../util/questTypeList.json')
 // const itemList = require('../util/quests/items')
 const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
 const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)', 'Arlo', 'Cliff', 'Sierra', 'Giovanni']

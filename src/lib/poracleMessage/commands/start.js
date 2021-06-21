@@ -11,7 +11,7 @@ exports.run = async (client, msg, args, options) => {
 		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 
 		if (args[0] === 'help') {
-			return require('./help.js').run(client, msg, [__filename.slice(__dirname.length + 1, -3)], options)
+			return require('./help').run(client, msg, [__filename.slice(__dirname.length + 1, -3)], options)
 		}
 
 		const translator = client.translatorFactory.Translator(language)

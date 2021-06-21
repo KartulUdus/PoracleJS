@@ -22,7 +22,7 @@ class Weather extends Controller {
 	}
 
 	async getLaziestWeatherKey() {
-		if (this.config.weather.apiKeyAccuWeather.length == 0) {
+		if (this.config.weather.apiKeyAccuWeather.length === 0) {
 			this.log.error('no AccuWeather API key provided in config')
 			return ''
 		}
@@ -102,7 +102,7 @@ class Weather extends Controller {
 		// }
 		// // if (!this.config.weather.enableWeatherForecast
 		// 	|| moment().hour() >= moment(weatherObject.disappear * 1000).hour()
-		// 	&& !(moment().hour() == 23 && moment(weatherObject.disappear * 1000).hour() == 0)
+		// 	&& !(moment().hour() === 23 && moment(weatherObject.disappear * 1000).hour() === 0)
 		// ) {
 		// 	this.log.info('weather forecast target will disappear in current hour')
 		// 	return res
@@ -272,7 +272,7 @@ class Weather extends Controller {
 			const updateHourTimestamp = data.time_changed - (data.time_changed % 3600)
 			const previousHourTimestamp = updateHourTimestamp - 3600
 
-			this.log.verbose(`${data.s2_cell_id}: weather received ${data.source == 'fromMonster' ? ' from Monster' : ''} - weather ${currentInGameWeather}`)
+			this.log.verbose(`${data.s2_cell_id}: weather received ${data.source === 'fromMonster' ? ' from Monster' : ''} - weather ${currentInGameWeather}`)
 
 			if (!this.controllerData[data.s2_cell_id]) this.controllerData[data.s2_cell_id] = {}
 			if (!this.caresData[data.s2_cell_id]) this.caresData[data.s2_cell_id] = {}
@@ -303,7 +303,7 @@ class Weather extends Controller {
 				whoCares = whoCares.filter((cares) => (('caredPokemons' in cares) ? cares.caredPokemons.find((pokemon) => pokemon.alteringWeathers.includes(currentInGameWeather)) : ''))
 			}
 
-			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData.lastCurrentWeatherCheck < updateHourTimestamp) {
+			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] !== currentInGameWeather || weatherCellData.lastCurrentWeatherCheck < updateHourTimestamp) {
 				weatherCellData[updateHourTimestamp] = currentInGameWeather
 				weatherCellData.lastCurrentWeatherCheck = updateHourTimestamp
 
@@ -318,13 +318,13 @@ class Weather extends Controller {
 			}
 
 			if (previousWeather === data.condition || whoCares.length === 0) {
-				this.log.verbose(`${data.s2_cell_id}: weather of ${data.condition}${data.source == 'fromMonster' ? ' triggered from Monster' : ''} has not changed or nobody cares.`)
+				this.log.verbose(`${data.s2_cell_id}: weather of ${data.condition}${data.source === 'fromMonster' ? ' triggered from Monster' : ''} has not changed or nobody cares.`)
 				return []
 			}
 
-			this.log.info(`${data.s2_cell_id}: weather${data.source == 'fromMonster' ? ' triggered from Monster' : ''} has changed to ${data.condition} from ${previousWeather} and someone might care`)
+			this.log.info(`${data.s2_cell_id}: weather${data.source === 'fromMonster' ? ' triggered from Monster' : ''} has changed to ${data.condition} from ${previousWeather} and someone might care`)
 
-			if (data.source == 'fromMonster') {
+			if (data.source === 'fromMonster') {
 				const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(data.s2_cell_id))
 				const s2cellCenter = S2ts.S2LatLng.fromPoint(s2cell.getCenter())
 				data.latitude = s2cellCenter.latRadians * 180 / Math.PI
@@ -368,23 +368,23 @@ class Weather extends Controller {
 
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.debug(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)
-					caresCellData.cares = caresCellData.cares.filter((caring) => caring.id != cares.id)
+					caresCellData.cares = caresCellData.cares.filter((caring) => caring.id !== cares.id)
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				if (cares.lastChangeAlert == currentHourTimestamp) {
+				if (cares.lastChangeAlert === currentHourTimestamp) {
 					this.log.debug(`${data.s2_cell_id}: user already alerted for this weather change`)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 
-				const userStillCares = caresCellData.cares.find((caring) => caring.id == cares.id)
+				const userStillCares = caresCellData.cares.find((caring) => caring.id === cares.id)
 				if (userStillCares) {
 					userStillCares.lastChangeAlert = currentHourTimestamp
 				}
 
 				if (this.config.weather.showAlteredPokemon) {
-					// const activePokemons = caresCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
+					// const activePokemons = caresCellData.cares.filter((caring) => caring.id === cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 					const activePokemons = cares.caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
@@ -422,7 +422,7 @@ class Weather extends Controller {
 				}
 
 				let [platform] = cares.type.split(':')
-				if (platform == 'webhook') platform = 'discord'
+				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts(logReference, 'weatherchange', platform, cares.template, language)
 				if (mustache) {

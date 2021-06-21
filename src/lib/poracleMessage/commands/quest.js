@@ -1,6 +1,5 @@
-const helpCommand = require('./help.js')
-const trackedCommand = require('./tracked.js')
-const objectDiff = require('../../objectDiff')
+const helpCommand = require('./help')
+const trackedCommand = require('./tracked')
 
 exports.run = async (client, msg, args, options) => {
 	const logReference = Math.random().toString().slice(2, 11)
@@ -146,14 +145,14 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: minDust,
-				template,
-				shiny: mustShiny,
+				reward: +minDust,
+				template: template.toString(),
+				shiny: +mustShiny,
 				reward_type: 3,
 				amount: 0,
 				form: 0,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		}
 
@@ -162,14 +161,14 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: pid,
-				template,
+				reward: +pid,
+				template: template.toString(),
 				shiny: mustShiny,
 				reward_type: 12,
 				amount: 0,
 				form: 0,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		})
 
@@ -178,14 +177,14 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: pid,
-				template,
+				reward: +pid,
+				template: template.toString(),
 				shiny: mustShiny,
 				reward_type: 4,
 				amount: 0,
 				form: 0,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		})
 
@@ -194,14 +193,14 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: mon.id,
-				template,
-				shiny: mustShiny,
+				reward: +mon.id,
+				template: template.toString(),
+				shiny: +mustShiny,
 				reward_type: 7,
 				amount: 0,
 				form: mon.form.id,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		})
 
@@ -210,14 +209,14 @@ exports.run = async (client, msg, args, options) => {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: i,
-				template,
-				shiny: mustShiny,
+				reward: +i,
+				template: template.toString(),
+				shiny: +mustShiny,
 				reward_type: 2,
 				amount: 0,
 				form: 0,
-				distance,
-				clean,
+				distance: +distance,
+				clean: +clean,
 			})
 		})
 
@@ -234,8 +233,8 @@ exports.run = async (client, msg, args, options) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of tracked.filter((x) => x.reward_type == toInsert.reward_type && x.reward == toInsert.reward)) {
-					const differences = objectDiff.diff(existing, toInsert)
+				for (const existing of tracked.filter((x) => x.reward_type === toInsert.reward_type && x.reward === toInsert.reward)) {
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)
@@ -274,12 +273,14 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			if (insert.length) {
-				await client.query.insertQuery('quest', insert)
-			}
-			for (const row of updates) {
-				await client.query.updateQuery('quest', row, { uid: row.uid })
-			}
+			await client.query.deleteWhereInQuery('quest', {
+				id: target.id,
+				profile_no: currentProfileNo,
+			},
+			updates.map((x) => x.uid),
+			'uid')
+
+			await client.query.insertQuery('quest', [...insert, ...updates])
 
 			client.log.info(`${target.name} added quest trackings`)
 
@@ -309,7 +310,7 @@ exports.run = async (client, msg, args, options) => {
 
 			msg.reply(
 				''.concat(
-					result == 1 ? translator.translate('I removed 1 entry')
+					result === 1 ? translator.translate('I removed 1 entry')
 						: translator.translateFormat('I removed {0} entries', result),
 					', ',
 					translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),
