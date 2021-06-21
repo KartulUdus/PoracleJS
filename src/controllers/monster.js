@@ -323,9 +323,9 @@ class Monster extends Controller {
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
 			if (whoCares.length) {
-				this.log.info(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+				this.log.info(`${data.encounter_id}: ${monster.name} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 			} else {
-				this.log.verbose(`${data.encounter_id}: ${monster.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+				this.log.verbose(`${data.encounter_id}: ${monster.name} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 			}
 
 			if (!whoCares.length) return []
