@@ -28,6 +28,9 @@ function getGeofenceFromGEOjson(file) {
 				color,
 				path: [],
 				group: geofenceGEOjson[i].properties.group || '',
+				description: geofenceGEOjson[i].properties.description,
+				userSelectable: geofenceGEOjson[i].properties.userSelectable,
+				displayInMatches: geofenceGEOjson[i].properties.displayInMatches,
 			}
 			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
 		}
