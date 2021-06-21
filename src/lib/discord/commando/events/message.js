@@ -51,7 +51,17 @@ module.exports = async (client, msg) => {
 
 			let initialArgs
 			if (args.includes('|')) {
-				initialArgs = args.join(' ').split('|').map((com) => com.split(' ').filter((a) => a))
+				let currentArg = []
+				initialArgs = []
+				for (const arg of args) {
+					if (arg === '|') {
+						initialArgs.push(currentArg)
+						currentArg = []
+					} else {
+						currentArg.push(arg)
+					}
+				}
+				initialArgs.push(currentArg)
 			} else {
 				initialArgs = [args]
 			}

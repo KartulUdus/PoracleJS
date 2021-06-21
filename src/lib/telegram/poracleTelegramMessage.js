@@ -40,11 +40,11 @@ class PoracleTelegramMessage {
 	async reply(message, options = {}) {
 		const maxLength = 4095
 		if (!options.disableSplit) {
-			let remainingMessage = options.style != 'markdown' ? this.convertSafe(message) : message
+			let remainingMessage = options.style !== 'markdown' ? this.convertSafe(message) : message
 
 			while (remainingMessage.length > maxLength) {
 				let breakPosn = maxLength
-				while (breakPosn && remainingMessage[breakPosn] != '\n') breakPosn--
+				while (breakPosn && remainingMessage[breakPosn] !== '\n') breakPosn--
 
 				if (!breakPosn) break // cannot find CR - abort
 				const toSend = remainingMessage.substring(0, breakPosn + 1)
@@ -65,7 +65,7 @@ class PoracleTelegramMessage {
 
 			return
 		}
-		return this.ctx.reply(options.style != 'markdown' ? this.convertSafe(message) : message, {
+		return this.ctx.reply(options.style !== 'markdown' ? this.convertSafe(message) : message, {
 			parse_mode: 'Markdown',
 			disable_web_page_preview: true,
 		})
@@ -89,15 +89,15 @@ class PoracleTelegramMessage {
 	}
 
 	async react(message, options = {}) {
-		return this.ctx.reply(options.style != 'markdown' ? this.convertSafe(message) : message)
+		return this.ctx.reply(options.style !== 'markdown' ? this.convertSafe(message) : message)
 	}
 
 	async replyByDM(message, options = {}) {
-		return this.ctx.telegram.sendMessage(this.userId, options.style != 'markdown' ? this.convertSafe(message) : message)
+		return this.ctx.telegram.sendMessage(this.userId, options.style !== 'markdown' ? this.convertSafe(message) : message)
 	}
 
 	async send(target, message, options = {}) {
-		return this.ctx.telegram.sendMessage(target, options.style != 'markdown' ? this.convertSafe(message) : message)
+		return this.ctx.telegram.sendMessage(target, options.style !== 'markdown' ? this.convertSafe(message) : message)
 	}
 }
 

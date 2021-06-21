@@ -130,7 +130,7 @@ class TileserverPregen {
 		const ne = [maxLat, maxLon]
 		const sw = [minLat, minLon]
 
-		if (ne == sw) {
+		if (ne === sw) {
 			return {
 				zoom: defaultZoom,
 				latitude: lats[0],
