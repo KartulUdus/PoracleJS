@@ -18,15 +18,23 @@ exports.run = async (client, msg, args, options) => {
 
 		await msg.react('✅')
 
-		const filterString = {}
-		if (args[0] === 'disabled') {
-			filterString.admin_disable = 1
-		}
-		if (args[0] === 'enabled') {
-			filterString.admin_disable = 0
-		}
+		let humans = await client.query.selectAllQuery('humans', {})
 
-		const humans = await client.query.selectAllQuery('humans', filterString)
+		if (args.includes('disabled')) humans = humans.filter((x) => x.admin_disable === 1)
+		if (args.includes('enabled')) humans = humans.filter((x) => x.admin_disable === 0)
+		if (args.includes('discord')) humans = humans.filter((x) => x.type.startsWith('discord'))
+		if (args.includes('telegram')) humans = humans.filter((x) => x.type.startsWith('telegram'))
+		if (args.includes('webhook')) humans = humans.filter((x) => x.type.startsWith('webhook'))
+		if (args.includes('user')) humans = humans.filter((x) => x.type.includes('user'))
+		if (args.includes('group')) humans = humans.filter((x) => x.type.includes('group'))
+		if (args.includes('channel')) humans = humans.filter((x) => x.type.includes('channel'))
+
+		humans.sort((a, b) => {
+			const compare = a.type.localeCompare(b.type)
+			if (compare === 0) return a.name.localeCompare(b.name)
+			return compare
+		})
+
 		let response = `${translator.translate('These users are registered with Poracle:')}\n`
 		for (const human of humans) {
 			if (human.type === 'webhook') {

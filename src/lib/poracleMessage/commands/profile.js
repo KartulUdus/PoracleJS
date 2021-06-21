@@ -1,4 +1,4 @@
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -38,7 +38,7 @@ exports.run = async (client, msg, args, options) => {
 					await msg.reply(translator.translate('That is not a valid profile name'))
 					return
 				}
-				if (profiles.some((x) => x.name.toLowerCase() == name)) {
+				if (profiles.some((x) => x.name.toLowerCase() === name)) {
 					await msg.react('🙅')
 					await msg.reply(translator.translate('That profile name already exists'))
 					return
@@ -49,7 +49,7 @@ exports.run = async (client, msg, args, options) => {
 					retry = false
 
 					for (const profile of profiles) {
-						if (profile.profile_no == newProfileNo) {
+						if (profile.profile_no === newProfileNo) {
 							newProfileNo++
 							retry = true
 						}
@@ -83,12 +83,12 @@ exports.run = async (client, msg, args, options) => {
 				let profileNo = parseInt(args[1], 10)
 
 				if (profileNo) {
-					if (!profiles.some((x) => x.profile_no == profileNo)) {
+					if (!profiles.some((x) => x.profile_no === profileNo)) {
 						await msg.react('🙅')
 						await msg.reply(translator.translate('That is not a valid profile number'))
 					}
 				} else {
-					const profile = profiles.find((x) => x.name.toLowerCase() == name)
+					const profile = profiles.find((x) => x.name.toLowerCase() === name)
 					if (!profile) {
 						await msg.react('🙅')
 						await msg.reply(translator.translate('That is not a valid profile name'))
@@ -103,7 +103,7 @@ exports.run = async (client, msg, args, options) => {
 						profile_no: profileNo,
 					})
 
-				if (profiles.length != 1 || profileNo != 1) {
+				if (profiles.length !== 1 || profileNo !== 1) {
 					await client.query.deleteQuery('egg', { id: target.id, profile_no: profileNo })
 					await client.query.deleteQuery('monsters', { id: target.id, profile_no: profileNo })
 					await client.query.deleteQuery('raid', { id: target.id, profile_no: profileNo })
@@ -111,13 +111,13 @@ exports.run = async (client, msg, args, options) => {
 					await client.query.deleteQuery('lures', { id: target.id, profile_no: profileNo })
 				}
 
-				if (human.current_profile_no == profileNo) {
+				if (human.current_profile_no === profileNo) {
 					// Find lowest profile (or 1)
 
 					let lowestProfileNo = 9999
 					let lowestProfile
 					for (const profile of profiles) {
-						if (profile.profile_no < lowestProfileNo && profile.profile_no != profileNo) {
+						if (profile.profile_no < lowestProfileNo && profile.profile_no !== profileNo) {
 							lowestProfileNo = profile.profile_no
 							lowestProfile = profile
 						}
@@ -159,7 +159,7 @@ exports.run = async (client, msg, args, options) => {
 							}
 						}
 
-						response = response.concat(`${profile.profile_no}${profile.profile_no == currentProfileNo ? '*' : '.'} ${profile.name}${profile.area != '[]' ? ` - ${translator.translate('areas')}: ${profile.area}` : ''}${profile.latitude ? ` - ${translator.translate('location')}: ${profile.latitude.toFixed(5)},${profile.longitude.toFixed(5)}` : ''}\n${timeString}`)
+						response = response.concat(`${profile.profile_no}${profile.profile_no === currentProfileNo ? '*' : '.'} ${profile.name}${profile.area !== '[]' ? ` - ${translator.translate('areas')}: ${profile.area}` : ''}${profile.latitude ? ` - ${translator.translate('location')}: ${profile.latitude.toFixed(5)},${profile.longitude.toFixed(5)}` : ''}\n${timeString}`)
 					}
 					await msg.reply(`${translator.translate('Currently configured profiles are:')}\n${response}`)
 				}
@@ -192,7 +192,7 @@ exports.run = async (client, msg, args, options) => {
 										mins,
 									})
 								}
-								if (day == 7) {
+								if (day === 7) {
 									for (const d of [1, 2, 3, 4, 5]) {
 										timeArray.push({
 											day: d,
@@ -201,7 +201,7 @@ exports.run = async (client, msg, args, options) => {
 										})
 									}
 								}
-								if (day == 8) {
+								if (day === 8) {
 									for (const d of [6, 7]) {
 										timeArray.push({
 											day: d,
@@ -223,7 +223,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			default: {
-				if (args.length == 0) {
+				if (args.length === 0) {
 					const profile = profiles.find((x) => x.profile_no === currentProfileNo)
 					if (!profile) {
 						await msg.reply(translator.translate('You don\'t have a profile set'))

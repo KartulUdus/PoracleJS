@@ -1,4 +1,4 @@
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 const geofenceTileGenerator = require('../../geofenceTileGenerator')
 
 exports.run = async (client, msg, args, options) => {
@@ -30,7 +30,7 @@ exports.run = async (client, msg, args, options) => {
 
 				if (human.community_membership) {
 					for (const community of JSON.parse(human.community_membership)) {
-						const communityName = Object.keys(client.config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
+						const communityName = Object.keys(client.config.areaSecurity.communities).find((x) => x.toLowerCase() === community)
 						const communityDetails = communityName ? client.config.areaSecurity.communities[communityName] : null
 						if (communityDetails && communityDetails.allowedAreas) {
 							calculatedAreas.push(...communityDetails.allowedAreas.map((x) => x.toLowerCase()))
@@ -126,7 +126,7 @@ exports.run = async (client, msg, args, options) => {
 						let staticMap
 
 						if (area.match(client.re.dRe)) {
-							if (+human.latitude == 0 || +human.longitude == 0) {
+							if (+human.latitude === 0 || +human.longitude === 0) {
 								await msg.reply(translator.translate('You have not set a location yet'))
 							} else {
 								const [, , distance] = area.match(client.re.dRe)

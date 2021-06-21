@@ -1,17 +1,17 @@
 function getDts(client, language, platform, helpSubject) {
 	// 1. Help template, right language, right platform
-	let dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === platform && template.language == language)
+	let dts = client.dts.find((template) => template.type === 'help' && template.id === helpSubject && template.platform === platform && template.language === language)
 	// 2. Help template, right language, platform is empty (ie any platform
 	if (!dts) {
-		dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === '' && template.language == language)
+		dts = client.dts.find((template) => template.type === 'help' && template.id === helpSubject && template.platform === '' && template.language === language)
 	}
 	// 3. Help template, right platform, marked as default
 	if (!dts) {
-		dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === platform && template.default)
+		dts = client.dts.find((template) => template.type === 'help' && template.id === helpSubject && template.platform === platform && template.default)
 	}
 	// 4. Help template, marked as default, platform is empty (ie any platform)
 	if (!dts) {
-		dts = client.dts.find((template) => template.type === 'help' && template.id == helpSubject && template.platform === '' && template.default)
+		dts = client.dts.find((template) => template.type === 'help' && template.id === helpSubject && template.platform === '' && template.default)
 	}
 
 	return dts
@@ -19,7 +19,7 @@ function getDts(client, language, platform, helpSubject) {
 
 function isHelpAvailable(client, language, target, helpSubject) {
 	let platform = target.type.split(':')[0]
-	if (platform == 'webhook') platform = 'discord'
+	if (platform === 'webhook') platform = 'discord'
 
 	return getDts(client, language, platform, helpSubject)
 }
@@ -51,7 +51,7 @@ exports.run = async (client, msg, args, options) => {
 		let helpLanguage = language
 		if (client.config.general.availableLanguages) {
 			for (const [key, availableLanguage] of Object.entries(client.config.general.availableLanguages)) {
-				if (availableLanguage.help == msg.command) {
+				if (availableLanguage.help === msg.command) {
 					helpLanguage = key
 					break
 				}
@@ -65,7 +65,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		let platform = target.type.split(':')[0]
-		if (platform == 'webhook') platform = 'discord'
+		if (platform === 'webhook') platform = 'discord'
 
 		let dts
 

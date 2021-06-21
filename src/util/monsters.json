@@ -6255,6 +6255,26 @@
 			}
 		]
 	},
+	"79_2582": {
+		"name": "Slowpoke",
+		"form": {
+			"name": "Galarian",
+			"proto": "SLOWPOKE_GALARIAN",
+			"id": 2582
+		},
+		"id": 79,
+		"stats": {
+			"baseAttack": 109,
+			"baseDefense": 98,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			}
+		]
+	},
 	"80_0": {
 		"name": "Slowbro",
 		"form": {
@@ -6368,6 +6388,30 @@
 			{
 				"id": 11,
 				"name": "Water"
+			},
+			{
+				"id": 14,
+				"name": "Psychic"
+			}
+		]
+	},
+	"80_2583": {
+		"name": "Slowbro",
+		"form": {
+			"name": "Galarian",
+			"proto": "SLOWBRO_GALARIAN",
+			"id": 2583
+		},
+		"id": 80,
+		"stats": {
+			"baseAttack": 182,
+			"baseDefense": 156,
+			"baseStamina": 216
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
 			},
 			{
 				"id": 14,
@@ -13272,6 +13316,30 @@
 			{
 				"id": 11,
 				"name": "Water"
+			},
+			{
+				"id": 14,
+				"name": "Psychic"
+			}
+		]
+	},
+	"199_2584": {
+		"name": "Slowking",
+		"form": {
+			"name": "Galarian",
+			"proto": "SLOWKING_GALARIAN",
+			"id": 2584
+		},
+		"id": 199,
+		"stats": {
+			"baseAttack": 190,
+			"baseDefense": 180,
+			"baseStamina": 216
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
 			},
 			{
 				"id": 14,
