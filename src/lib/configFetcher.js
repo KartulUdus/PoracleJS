@@ -30,7 +30,7 @@ function getGeofenceFromGEOjson(file) {
 				color,
 				path: [],
 				group: properties.group || '',
-				description: properties.description,
+				description: properties.description || '',
 				userSelectable: properties.userSelectable === undefined || properties.userSelectable,
 				displayInMatches: properties.displayInMatches === undefined || properties.displayInMatches,
 			}
