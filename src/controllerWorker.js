@@ -20,11 +20,11 @@ const {
 } = Config(false)
 
 const GameData = {
-	monsters: require('./util/monsters'),
-	utilData: require('./util/util'),
-	moves: require('./util/moves'),
-	items: require('./util/items'),
-	grunts: require('./util/grunts'),
+	monsters: require('./util/monsters.json'),
+	utilData: require('./util/util.json'),
+	moves: require('./util/moves.json'),
+	items: require('./util/items.json'),
+	grunts: require('./util/grunts.json'),
 }
 
 const MonsterController = require('./controllers/monster')
@@ -162,22 +162,22 @@ function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
 
-		if (cmd.type == 'heapdump') {
+		if (cmd.type === 'heapdump') {
 			writeHeapSnapshot()
 			return
 		}
 
-		if (cmd.type == 'badguys') {
+		if (cmd.type === 'badguys') {
 			log.debug(`Worker ${workerId}: Received badguys`, cmd.badguys)
 
 			updateBadGuys(cmd.badguys)
 		}
-		if (cmd.type == 'weatherBroadcast') {
+		if (cmd.type === 'weatherBroadcast') {
 			log.debug(`Worker ${workerId}: Received weather broadcast`, cmd.data)
 
 			controllerWeatherManager.receiveWeatherBroadcast(cmd.data)
 		}
-		if (cmd.type == 'statsBroadcast') {
+		if (cmd.type === 'statsBroadcast') {
 			log.debug(`Worker ${workerId}: Received stats broadcast`, cmd.data)
 
 			statsData.receiveStatsBroadcast(cmd.data)
@@ -222,7 +222,7 @@ if (!isMainThread) {
 	})
 
 	parentPort.on('message', (msg) => {
-		if (msg.type == 'queuePort') {
+		if (msg.type === 'queuePort') {
 			queuePort = msg.queuePort
 			commandPort = msg.commandPort
 

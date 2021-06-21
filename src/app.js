@@ -32,11 +32,11 @@ const {
 } = Config()
 
 const GameData = {
-	monsters: require('./util/monsters'),
-	utilData: require('./util/util'),
-	moves: require('./util/moves'),
-	items: require('./util/items'),
-	grunts: require('./util/grunts'),
+	monsters: require('./util/monsters.json'),
+	utilData: require('./util/util.json'),
+	moves: require('./util/moves.json'),
+	items: require('./util/items.json'),
+	grunts: require('./util/grunts.json'),
 }
 
 const readDir = util.promisify(fs.readdir)
@@ -164,7 +164,7 @@ async function syncDiscordRole() {
 		// 	log.info('Invalid users found, removing/disabling from dB...')
 		// 	for (const user of invalidUsers) {
 		// 		log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-		// 		if (config.general.roleCheckMode != 'ignore') {
+		// 		if (config.general.roleCheckMode  !== 'ignore') {
 		// 			await removeInvalidUser(user)
 		// 		} else {
 		// 			log.info('config.general.roleCheckMode is set to ignore, not removing')
@@ -279,7 +279,7 @@ async function run() {
 			while (fastify.discordQueue.length) {
 				const { target, type } = fastify.discordQueue[0]
 				let worker
-				if (type == 'webhook') {
+				if (type === 'webhook') {
 					worker = discordWebhookWorker
 				} else {
 					// see if target has dedicated worker
@@ -347,7 +347,7 @@ async function processMessages(msgs) {
 	let newRateLimits = false
 
 	for (const msg of msgs) {
-		const destinationId = msg.type == 'webhook' ? msg.name : msg.target
+		const destinationId = msg.type === 'webhook' ? msg.name : msg.target
 		const destinationType = msg.type
 		const rate = rateChecker.validateMessage(destinationId, destinationType)
 
@@ -382,7 +382,7 @@ async function processMessages(msgs) {
 
 						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
 
-						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type == 'discord:user' ? `<@${destinationId}>` : ''}`
+						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type === 'discord:user' ? `<@${destinationId}>` : ''}`
 
 						try {
 							if (config.alertLimits.disableOnStop) {
@@ -477,7 +477,7 @@ const statsWorker = {
 
 function processMessageFromControllers(msg) {
 	// Relay commands of weather type to weather controller
-	if (msg.type == 'weather') {
+	if (msg.type === 'weather') {
 		weatherWorker.commandPort.postMessage(msg)
 	}
 	// No commands from controllers to stats, but would be relayed here
@@ -486,7 +486,7 @@ function processMessageFromControllers(msg) {
 function processMessageFromWeather(msg) {
 	// Relay broadcasts from weather to all controllers
 
-	if (msg.type == 'weatherBroadcast') {
+	if (msg.type === 'weatherBroadcast') {
 		for (const relayWorker of workers) {
 			relayWorker.commandPort.postMessage(msg)
 		}
@@ -496,7 +496,7 @@ function processMessageFromWeather(msg) {
 function processMessageFromStats(msg) {
 	// Relay broadcasts from stats to all controllers
 
-	if (msg.type == 'statsBroadcast') {
+	if (msg.type === 'statsBroadcast') {
 		for (const relayWorker of workers) {
 			relayWorker.commandPort.postMessage(msg)
 		}
@@ -751,7 +751,7 @@ const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
 if (NODE_MAJOR_VERSION < 12) {
 	throw new Error('Requires Node 12 or 14')
 }
-// if (NODE_MAJOR_VERSION == 13) {
+// if (NODE_MAJOR_VERSION === 13) {
 //	throw new Error('Requires Node 12 or 14')
 // }
 if (NODE_MAJOR_VERSION > 14) {
@@ -766,28 +766,28 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 
 		let lastId
 		for (const profile of profilesToCheck) {
-			const human = humans.find((x) => x.id == profile.id)
+			const human = humans.find((x) => x.id === profile.id)
 
 			let nowForHuman = moment()
 			if (human.latitude) {
 				nowForHuman = moment().tz(geoTz(human.latitude, human.longitude).toString())
 			}
 
-			if (profile.id != lastId) {
+			if (profile.id !== lastId) {
 				const timings = JSON.parse(profile.active_hours)
 				const nowHour = nowForHuman.hour()
 				const nowMinutes = nowForHuman.minutes()
 				const nowDow = nowForHuman.isoWeekday()
-				const yesterdayDow = nowDow == 1 ? 7 : nowDow - 1
+				const yesterdayDow = +nowDow === 1 ? 7 : nowDow - 1
 
 				const active = timings.some((row) => (
-					(row.day == nowDow && row.hours == nowHour && nowMinutes >= row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
-					|| (nowMinutes < 10 && row.day == nowDow && row.hours == nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
-					|| (nowHour == 0 && nowMinutes < 10 && row.day == yesterdayDow && row.hours == 23 && row.mins > 50) // first 10 minutes of day
+					(row.day === nowDow && row.hours === nowHour && nowMinutes >= row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
+					|| (nowMinutes < 10 && row.day === nowDow && row.hours === nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
+					|| (nowHour === 0 && nowMinutes < 10 && row.day === yesterdayDow && row.hours === 23 && row.mins > 50) // first 10 minutes of day
 				))
 
 				if (active) {
-					if (human.current_profile_no != profile.profile_no) {
+					if (human.current_profile_no !== profile.profile_no) {
 						const userTranslator = translatorFactory.Translator(human.language || config.general.locale)
 
 						const job = {

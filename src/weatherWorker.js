@@ -15,11 +15,11 @@ const {
 } = Config(false)
 
 const GameData = {
-	monsters: require('./util/monsters'),
-	utilData: require('./util/util'),
-	moves: require('./util/moves'),
-	items: require('./util/items'),
-	grunts: require('./util/grunts'),
+	monsters: require('./util/monsters.json'),
+	utilData: require('./util/util.json'),
+	moves: require('./util/moves.json'),
+	items: require('./util/items.json'),
+	grunts: require('./util/grunts.json'),
 }
 const WeatherController = require('./controllers/weather')
 
@@ -85,21 +85,21 @@ function updateBadGuys(badguys) {
 async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
-		if (cmd.type == 'heapdump') {
+		if (cmd.type === 'heapdump') {
 			writeHeapSnapshot()
 			return
 		}
 
-		if (cmd.type == 'badguys') {
+		if (cmd.type === 'badguys') {
 			updateBadGuys(cmd.badguys)
 		}
-		if (cmd.type == 'weather') {
+		if (cmd.type === 'weather') {
 			log.debug(`Worker ${workerId}: receiveCommand<weather> ${cmd.weatherCommand}`)
 
-			if (cmd.weatherCommand == 'userCares') {
+			if (cmd.weatherCommand === 'userCares') {
 				weatherController.handleUserCares(cmd.data)
 			}
-			if (cmd.weatherCommand == 'weatherChanged') {
+			if (cmd.weatherCommand === 'weatherChanged') {
 				const jobs = weatherController.handleMonsterWeatherChange(cmd.data)
 				if (jobs && jobs.length) {
 					queuePort.postMessage({
@@ -107,7 +107,7 @@ async function receiveCommand(cmd) {
 					})
 				}
 			}
-			if (cmd.weatherCommand == 'weatherForecastRequested') {
+			if (cmd.weatherCommand === 'weatherForecastRequested') {
 				await weatherController.getWeather(cmd.data)
 				//				weatherController.handleMonsterWeatherChange(cmd.data)
 			}
@@ -127,7 +127,7 @@ function broadcastWeather(cmd) {
 
 if (!isMainThread) {
 	parentPort.on('message', (msg) => {
-		if (msg.type == 'queuePort') {
+		if (msg.type === 'queuePort') {
 			queuePort = msg.queuePort
 			commandPort = msg.commandPort
 			msg.commandPort.on('message', receiveCommand)

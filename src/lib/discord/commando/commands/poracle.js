@@ -82,7 +82,7 @@ exports.run = async (client, msg) => {
 				name: client.emojiStrip(msg.author.username),
 				area: '[]',
 				language,
-				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
+				community_membership: communityToAdd ? JSON.stringify([communityToAdd.toLowerCase()]) : '[]',
 				area_restriction: communityToAdd ? JSON.stringify(communityLogic.calculateLocationRestrictions(client.config, [communityToAdd])) : null,
 			})
 			await msg.react('✅')
@@ -90,7 +90,7 @@ exports.run = async (client, msg) => {
 
 		client.logs.log.info(`${client.emojiStrip(msg.author.username)} Registered!`)
 
-		let greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.language == language)
+		let greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.language === language)
 		if (!greetingDts) {
 			greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.default)
 		}

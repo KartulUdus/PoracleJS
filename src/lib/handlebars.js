@@ -1,11 +1,11 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
-const monsters = require('../util/monsters')
+const monsters = require('../util/monsters.json')
 const {
 	cpMultipliers, types, powerUpCost,
-} = require('../util/util')
-const moves = require('../util/moves')
+} = require('../util/util.json')
+const moves = require('../util/moves.json')
 
 const TranslatorFactory = require('../util/translatorFactory')
 
