@@ -110,6 +110,15 @@
           "user": "poracleuser",
           "password": "poraclepassword",
           "port": 3306
+      },
+      "cache": "memory",                // can be 'memory' or 'redis'
+      "redis": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "user": null,                   // default redis installation is no user/password but localhost only connections
+        "password": null,
+        "prefix": null,                 // usually leave as null! prefix all keys with this string (multi instance)
+        "database": null                // usually leave as null! select this database on startup (advanced)
       }
   },
   //
