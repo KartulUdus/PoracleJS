@@ -308,6 +308,7 @@
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
     "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
     "disableOnStop": false,       // whether user should be admin disabled rather than just stopped (require admin assistance for restart)
+    "shameChannel": "",     // name and shame stopped/disabled users to this discord channel
     // allow override for specific channel ids in - id can be a channel/user id or a webhook name
     //    "limitOverride": {
     //        "id": limit,
