@@ -1,4 +1,4 @@
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 
 exports.run = async (client, msg, args, options) => {
 	try {

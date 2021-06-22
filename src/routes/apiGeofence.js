@@ -12,7 +12,7 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 
-		if (fastify.config.geocoding.staticProvider.toLowerCase() != 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
+		if (fastify.config.geocoding.staticProvider.toLowerCase() !== 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
 			return {
 				status: 'error',
 				message: 'Unsupported configuration for staticProvider',
@@ -44,7 +44,7 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 
-		if (fastify.config.geocoding.staticProvider.toLowerCase() != 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
+		if (fastify.config.geocoding.staticProvider.toLowerCase() !== 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
 			return {
 				status: 'error',
 				message: 'Unsupported configuration for staticProvider',
@@ -89,7 +89,7 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 
-		if (fastify.config.geocoding.staticProvider.toLowerCase() != 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
+		if (fastify.config.geocoding.staticProvider.toLowerCase() !== 'tileservercache' || !fastify.config.geocoding.staticProviderURL.startsWith('http')) {
 			return {
 				status: 'error',
 				message: 'Unsupported configuration for staticProvider',

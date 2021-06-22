@@ -1,6 +1,5 @@
-const helpCommand = require('./help.js')
-const trackedCommand = require('./tracked.js')
-const objectDiff = require('../../objectDiff')
+const helpCommand = require('./help')
+const trackedCommand = require('./tracked')
 
 exports.run = async (client, msg, args, options) => {
 	const logReference = Math.random().toString().slice(2, 11)
@@ -191,18 +190,18 @@ exports.run = async (client, msg, args, options) => {
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 
-		if (rarity != -1 && !['1', '2', '3', '4', '5', '6'].includes(rarity)) {
+		if (rarity !== -1 && !['1', '2', '3', '4', '5', '6'].includes(rarity)) {
 			rarity = client.translatorFactory.reverseTranslateCommand(rarity, true)
-			const rarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() == rarity.toLowerCase())
+			const rarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() === rarity.toLowerCase())
 			if (rarityLevel) {
 				rarity = rarityLevel
 			} else {
 				rarity = -1
 			}
 		}
-		if (maxRarity != 6 && !['1', '2', '3', '4', '5', '6'].includes(maxRarity)) {
+		if (maxRarity !== 6 && !['1', '2', '3', '4', '5', '6'].includes(maxRarity)) {
 			maxRarity = client.translatorFactory.reverseTranslateCommand(maxRarity, true)
-			const maxRarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() == maxRarity.toLowerCase())
+			const maxRarityLevel = Object.keys(client.GameData.utilData.rarity).find((x) => client.GameData.utilData.rarity[x].toLowerCase() === maxRarity.toLowerCase())
 			if (maxRarityLevel) {
 				maxRarity = maxRarityLevel
 			} else {
@@ -227,32 +226,32 @@ exports.run = async (client, msg, args, options) => {
 			profile_no: currentProfileNo,
 			pokemon_id: mon.id,
 			ping: pings,
-			distance,
-			min_iv: iv,
-			max_iv: maxiv,
-			min_cp: cp,
-			max_cp: maxcp,
-			min_level: level,
-			max_level: maxlevel,
-			atk,
-			def,
-			sta,
-			template,
-			min_weight: weight,
-			max_weight: maxweight,
+			distance: +distance,
+			min_iv: +iv,
+			max_iv: +maxiv,
+			min_cp: +cp,
+			max_cp: +maxcp,
+			min_level: +level,
+			max_level: +maxlevel,
+			atk: +atk,
+			def: +def,
+			sta: +sta,
+			template: template.toString(),
+			min_weight: +weight,
+			max_weight: +maxweight,
 			form: mon.form.id,
-			max_atk: maxAtk,
-			max_def: maxDef,
-			max_sta: maxSta,
-			gender,
-			clean,
-			great_league_ranking: greatLeague,
-			great_league_ranking_min_cp: greatLeagueCP,
-			ultra_league_ranking: ultraLeague,
-			ultra_league_ranking_min_cp: ultraLeagueCP,
-			rarity,
-			max_rarity: maxRarity,
-			min_time: minTime,
+			max_atk: +maxAtk,
+			max_def: +maxDef,
+			max_sta: +maxSta,
+			gender: +gender,
+			clean: +clean,
+			great_league_ranking: +greatLeague,
+			great_league_ranking_min_cp: +greatLeagueCP,
+			ultra_league_ranking: +ultraLeague,
+			ultra_league_ranking_min_cp: +ultraLeagueCP,
+			rarity: +rarity,
+			max_rarity: +maxRarity,
+			min_time: +minTime,
 		}))
 		if (!insert.length) {
 			return await msg.reply(translator.translate('404 No monsters found'))
@@ -265,8 +264,8 @@ exports.run = async (client, msg, args, options) => {
 		for (let i = insert.length - 1; i >= 0; i--) {
 			const toInsert = insert[i]
 
-			for (const existing of tracked.filter((x) => x.pokemon_id == toInsert.pokemon_id)) {
-				const differences = objectDiff.diff(existing, toInsert)
+			for (const existing of tracked.filter((x) => x.pokemon_id === toInsert.pokemon_id)) {
+				const differences = client.updatedDiff(existing, toInsert)
 
 				switch (Object.keys(differences).length) {
 					case 1:		// No differences (only UID)
@@ -305,12 +304,15 @@ exports.run = async (client, msg, args, options) => {
 			})
 		}
 
-		await client.query.insertQuery('monsters', insert)
-		for (const row of updates) {
-			await client.query.updateQuery('monsters', row, { uid: row.uid })
-		}
+		await client.query.deleteWhereInQuery('monsters', {
+			id: target.id,
+			profile_no: currentProfileNo,
+		},
+		updates.map((x) => x.uid),
+		'uid')
 
-		// const result = await client.query.insertOrUpdateQuery('monsters', insert)
+		await client.query.insertQuery('monsters', [...insert, ...updates])
+
 		reaction = insert.length ? '✅' : reaction
 		await msg.reply(message)
 		await msg.react(reaction)

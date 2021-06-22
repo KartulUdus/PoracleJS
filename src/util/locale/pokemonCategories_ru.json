@@ -222,7 +222,7 @@
 	"Coal Pokémon": "Покемон-Уголь",
 	"Bounce Pokémon": "Покемон-Подскок",
 	"Manipulate Pokémon": "Покемон-Манипулятор",
-	"Spot Panda Pokémon": "Покемон-Пятнистый Панда",
+	"Spot Panda Pokémon": "Покемон-Пятнистая Панда",
 	"Ant Pit Pokémon": "Покемон-Муравьиная Яма",
 	"Vibration Pokémon": "Покемон-Вибрация",
 	"Cactus Pokémon": "Покемон-Кактус",
@@ -422,7 +422,7 @@
 	"Scarf Pokémon": "Покемон-Шарф",
 	"Fixation Pokémon": "Покемон-Фиксация",
 	"Astral Body Pokémon": "Покемон-Астральное Тело",
-	"Cell Pokémon": "Покемон-Клетка",
+	"Cell Pokémon": "Клеточный Покемон",
 	"Mitosis Pokémon": "Покемон-Митоз",
 	"Multiplying Pokémon": "Умножающийся Покемон",
 	"White Bird Pokémon": "Покемон-Белая Птица",
@@ -530,5 +530,6 @@
 	"Blocking Pokémon": "Блокирующий Покемон",
 	"Viking Pokémon": "Покемон-Викинг",
 	"Comedian Pokémon": "Покемон-Комик",
-	"Grudge Pokémon": "Покемон-Злоба"
+	"Grudge Pokémon": "Покемон-Злоба",
+	"Hexpert Pokémon": "Hexpert Pokémon"
 }

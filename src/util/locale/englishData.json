@@ -279,6 +279,7 @@
 	"move_name_0340": "Techno Blast",
 	"move_name_0341": "Fly",
 	"move_name_0342": "V-create",
+	"move_name_0343": "Leaf Storm",
 	"move_name_0344": "Tri Attack",
 	"move_name_0345": "Gust",
 	"move_name_0346": "Incinerate",
@@ -2603,5 +2604,8 @@
 	"pokemon_name_0865": "Sirfetchd",
 	"pokemon_name_0866": "Mr. Rime",
 	"pokemon_name_0867": "Runerigus",
-	"move_name_0343": "Leaf Storm"
+	"pokemon_category_0199_2584": "Hexpert Pokémon",
+	"pokemon_desc_0079_2582": "Although this Pokémon is normally zoned out, its expression abruptly sharpens on occasion. The cause for this seems to lie in Slowpoke's diet.",
+	"pokemon_desc_0080_2583": "A Shellder bite set off a chemical reaction with the spices inside Slowbro's body, causing Slowbro to become a Poison-type Pokémon.",
+	"pokemon_desc_0199_2584": "A combination of toxins and the shock of evolving has increased Shellder’s intelligence to the point that Shellder now controls Slowking."
 }

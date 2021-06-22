@@ -25,7 +25,7 @@ class DiscordUtil {
 
 		const channelList = []
 		guild.channels.cache.forEach((x) => {
-			if (x.type == 'text') {
+			if (x.type === 'text') {
 				channelList.push({
 					id: x.id,
 					categoryId: x.parentID,
@@ -73,7 +73,11 @@ class DiscordUtil {
 				}
 			} catch (err) {
 				if (err instanceof DiscordAPIError) {
-					if (err.code == 10013) { // Unknown user
+					if (err.code === 10013) { // Unknown user
+						// eslint-disable-next-line no-continue
+						continue
+					}
+					if (err.code === 10007) { // Unknown member
 						// eslint-disable-next-line no-continue
 						continue
 					}

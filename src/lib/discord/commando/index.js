@@ -3,6 +3,8 @@ const fs = require('fs')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
 const hastebin = require('hastebin-gen')
+const { diff } = require('deep-object-diff')
+
 const emojiStrip = require('../../../util/emojiStrip')
 
 class DiscordCommando {
@@ -12,6 +14,7 @@ class DiscordCommando {
 		this.query = query
 		this.logs = logs
 		this.GameData = GameData
+		this.updatedDiff = diff
 		this.dts = dts
 		this.geofence = geofence
 		this.translatorFactory = translatorFactory
@@ -65,6 +68,7 @@ class DiscordCommando {
 			this.client.mustache = mustache
 			this.client.hastebin = hastebin
 			this.client.translatorFactory = this.translatorFactory
+			this.client.updatedDiff = diff
 			this.client.translator = this.translator
 			this.client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$])', 'igm')
 

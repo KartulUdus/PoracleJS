@@ -2,7 +2,7 @@ function calculateLocationRestrictions(config, communityMembership) {
 	const locationRestrictions = new Set()
 
 	for (const community of communityMembership) {
-		const communityName = Object.keys(config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
+		const communityName = Object.keys(config.areaSecurity.communities).find((x) => x.toLowerCase() === community)
 		if (communityName) {
 			const communityToAdd = config.areaSecurity.communities[communityName]
 			if (communityToAdd) {
@@ -22,7 +22,7 @@ function filterAreas(config, communityMembership, areas) {
 	const allowedAreas = []
 
 	for (const community of communityMembership) {
-		const communityName = Object.keys(config.areaSecurity.communities).find((x) => x.toLowerCase() == community)
+		const communityName = Object.keys(config.areaSecurity.communities).find((x) => x.toLowerCase() === community)
 		if (communityName) {
 			const communityToAdd = config.areaSecurity.communities[communityName]
 			if (communityToAdd) {
@@ -37,12 +37,13 @@ function filterAreas(config, communityMembership, areas) {
 }
 
 function addCommunity(config, existingCommunities, communityToAdd) {
+	const lowercaseCommunityToAdd = communityToAdd.toLowerCase()
 	const communityKeys = Object.keys(config.areaSecurity.communities)
 	const lowercaseCommunities = communityKeys.map((area) => area.toLowerCase())
 
 	let newCommunities = existingCommunities
-	if (!newCommunities.includes(communityToAdd)) {
-		newCommunities = [...newCommunities, communityToAdd]
+	if (!newCommunities.includes(lowercaseCommunityToAdd)) {
+		newCommunities = [...newCommunities, lowercaseCommunityToAdd]
 	}
 
 	return newCommunities.filter((x) => lowercaseCommunities.includes(x)).sort()
@@ -55,7 +56,7 @@ function removeCommunity(config, existingCommunities, communityToRemove) {
 	let newCommunities = existingCommunities
 	if (newCommunities.includes(communityToRemove)) {
 		newCommunities = existingCommunities
-			.filter((x) => x != communityToRemove)
+			.filter((x) => x !== communityToRemove)
 	}
 
 	return newCommunities.filter((x) => lowercaseCommunities.includes(x)).sort()
