@@ -324,6 +324,7 @@ async function processMessages(msgs) {
 
 		let queueMessage
 		let logMessage = null
+		let shameMessage = null
 
 		if (!rate.passMessage) {
 			if (rate.justBreached) {
@@ -354,6 +355,9 @@ async function processMessages(msgs) {
 						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
 
 						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type === 'discord:user' ? `<@${destinationId}>` : ''}`
+						if (msg.type === 'discord:user') {
+							shameMessage = userTranslator.translateFormat('<@{0}> has had their Poracle tracking disabled for exceeding the rate limit too many times!', destinationId)
+						}
 
 						try {
 							if (config.alertLimits.disableOnStop) {
@@ -393,6 +397,23 @@ async function processMessages(msgs) {
 					name: 'Log channel',
 					tth: { hours: 0, minutes: config.discord.dmLogChannelDeletionTime, seconds: 0 },
 					clean: config.discord.dmLogChannelDeletionTime > 0,
+					emoji: '',
+					logReference: queueMessage.logReference,
+					language: config.general.locale,
+				})
+			}
+			if (shameMessage && config.alertLimits.shameChannel) {
+				fastify.discordQueue.push({
+					lat: 0,
+					lon: 0,
+					message: {
+						content: shameMessage,
+					},
+					target: config.alertLimits.shameChannel,
+					type: 'discord:channel',
+					name: 'Shame channel',
+					tth: { hours: 0, minutes: 0, seconds: 0 },
+					clean: false,
 					emoji: '',
 					logReference: queueMessage.logReference,
 					language: config.general.locale,
@@ -718,16 +739,16 @@ async function currentStatus() {
 	log.verbose(`Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`)
 }
 
-const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-if (NODE_MAJOR_VERSION < 12) {
-	throw new Error('Requires Node 12 or 14')
-}
-// if (NODE_MAJOR_VERSION === 13) {
-//	throw new Error('Requires Node 12 or 14')
+// const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
+// if (NODE_MAJOR_VERSION < 12) {
+// 	throw new Error('Requires Node 12 or 14')
 // }
-if (NODE_MAJOR_VERSION > 14) {
-	throw new Error('Requires Node 12 or 14')
-}
+// // if (NODE_MAJOR_VERSION == 13) {
+// //	throw new Error('Requires Node 12 or 14')
+// // }
+// if (NODE_MAJOR_VERSION > 14) {
+// 	throw new Error('Requires Node 12 or 14')
+// }
 
 schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
 	try {
