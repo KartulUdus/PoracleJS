@@ -20,7 +20,7 @@ exports.run = async (client, msg, [args]) => {
 			areaName = areaName.toLowerCase()
 		}
 		const confAreas = client.geofence.map((area) => area.name.toLowerCase()).sort()
-		const isValidArea = confAreas.filter((x) => areaName == x)
+		const isValidArea = confAreas.filter((x) => areaName === x)
 		if (!isValidArea.length) {
 			areaName = ''
 		}
@@ -32,7 +32,7 @@ exports.run = async (client, msg, [args]) => {
 			languageName = client.translatorFactory.reverseTranslateCommand(languageName, true)
 		}
 		let newLanguage = languageName
-		const languageMatchByName = Object.keys(client.GameData.utilData.languageNames).find((x) => client.GameData.utilData.languageNames[x] == languageName)
+		const languageMatchByName = Object.keys(client.GameData.utilData.languageNames).find((x) => client.GameData.utilData.languageNames[x] === languageName)
 		if (languageMatchByName) {
 			newLanguage = languageMatchByName
 		}
@@ -62,8 +62,8 @@ exports.run = async (client, msg, [args]) => {
 			await msg.react('✅')
 			let reply = `${client.translator.translate('Channel added')}`
 			if (webhookName) reply = `${client.translator.translate('Webhook added')}`
-			if (areaName != '') reply = reply.concat(` ${client.translator.translate('with')} ${client.translator.translate('area')} ${areaName}`)
-			if (language) reply = reply.concat(` ${(areaName != '') ? client.translator.translate('and') : client.translator.translate('with')} ${client.translator.translate('language')} ${client.translator.translate(client.GameData.utilData.languageNames[language])}`)
+			if (areaName !== '') reply = reply.concat(` ${client.translator.translate('with')} ${client.translator.translate('area')} ${areaName}`)
+			if (language) reply = reply.concat(` ${(areaName !== '') ? client.translator.translate('and') : client.translator.translate('with')} ${client.translator.translate('language')} ${client.translator.translate(client.GameData.utilData.languageNames[language])}`)
 			await msg.reply(reply)
 		} else if (args.find((arg) => arg === 'remove')) {
 			if (webhookName) {

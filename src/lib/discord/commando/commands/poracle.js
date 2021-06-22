@@ -90,7 +90,7 @@ exports.run = async (client, msg) => {
 
 		client.logs.log.info(`${client.emojiStrip(msg.author.username)} Registered!`)
 
-		let greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.language == language)
+		let greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.language === language)
 		if (!greetingDts) {
 			greetingDts = client.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.default)
 		}
