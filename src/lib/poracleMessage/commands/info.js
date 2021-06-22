@@ -25,16 +25,17 @@ exports.run = async (client, msg, args, options) => {
 
 		switch (args[0]) {
 			case 'poracle': {
-				if (client.PoracleInfo.status) {
-					await msg.reply(`Queue info: ${client.PoracleInfo.status.queueInfo}\nCache info: ${client.PoracleInfo.status.cacheInfo}`)
-				} else {
-					await msg.reply('Status information not yet warmed up')
+				if (msg.isFromAdmin) {
+					if (client.PoracleInfo.status) {
+						await msg.reply(`Queue info: ${client.PoracleInfo.status.queueInfo}\nCache info: ${client.PoracleInfo.status.cacheInfo}`)
+					} else {
+						await msg.reply('Status information not yet warmed up')
+					}
 				}
 				break
 			}
 
 			case 'rarity': {
-				await msg.reply('Rarity info')
 				if (client.PoracleInfo.lastStatsBroadcast) {
 					let message = ''
 					// Miss out common and unseen
@@ -53,21 +54,22 @@ exports.run = async (client, msg, args, options) => {
 
 					await msg.reply(message)
 				} else {
-					await msg.reply('Rarity information not yet calculated')
+					await msg.reply(translator.translate('Rarity information not yet calculated - wait a few minutes and try again'))
 				}
 				break
 			}
 
 			case 'weather': {
-				await msg.reply('Weather info')
-
 				if (!client.PoracleInfo.lastWeatherBroadcast) {
-					return msg.reply('Weather information has not yet been received')
+					return msg.reply(translator.translate('Weather information is not yet available - wait a few minutes and try again'))
 				}
 
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 				const { latitude, longitude } = human
+				if (!longitude || !latitude) {
+					return msg.reply(translator.translateFormat('You have not set your location, use `!{0}{1}`', util.prefix, translator.translate('help')), { style: 'markdown' })
+				}
 				const weatherCellId = weatherTileGenerator.getWeatherCellId(latitude, longitude)
 				const weatherInfo = client.PoracleInfo.lastWeatherBroadcast[weatherCellId]
 
@@ -75,7 +77,7 @@ exports.run = async (client, msg, args, options) => {
 				const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
 
 				if (!weatherInfo || !weatherInfo[currentHourTimestamp]) {
-					return msg.reply('No weather information is available for this location')
+					return msg.reply(translator.translate('No weather information is available for this location'))
 				}
 
 				const weatherId = weatherInfo[currentHourTimestamp]
@@ -107,8 +109,6 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			default: {
-				await msg.reply('Info... about stuff')
-				await msg.react('✅')
 			}
 		}
 	} catch (err) {
