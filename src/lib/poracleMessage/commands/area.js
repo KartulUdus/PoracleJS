@@ -21,7 +21,12 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
-		let availableAreas = client.geofence.filter((area) => (area.userSelectable === undefined || area.userSelectable)).map((area) => ({
+		let selectableGeofence = client.geofence
+		// Note for Poracle admins we don't remove the userSelectable items
+		// But we do apply the filtering later based on the user/channel that is the target (targetIsAdmin used instead)
+		if (!msg.isFromAdmin) selectableGeofence = selectableGeofence.filter((area) => (area.userSelectable === undefined || area.userSelectable))
+
+		let availableAreas = selectableGeofence.map((area) => ({
 			name: area.name,
 			group: area.group || '',
 			description: area.description,
@@ -144,7 +149,7 @@ exports.run = async (client, msg, args, options) => {
 						confUse = confUse.concat(currentGroup, '\n')
 					}
 					const areaDisplayName = area.name.replace(/ /g, '_')
-					confUse = confUse.concat(`   ${areaDisplayName}${area.description ? ` - ${area.description}` : ''}\n`)
+					confUse = confUse.concat(`   ${areaDisplayName}${area.userSelectable === false ? '\uD83D\uDEAB' : ''}${area.description ? ` - ${area.description}` : ''}\n`)
 				}
 				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
 
