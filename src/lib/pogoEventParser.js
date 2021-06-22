@@ -53,13 +53,50 @@ class PogoEventParser {
 	 * @param lon
 	 * @returns {{reason: string, name, time}}
 	 */
-	eventOverlaps(startTime, disappearTime, lat, lon) {
+	eventChangesSpawn(startTime, disappearTime, lat, lon) {
 		if (!this.events) return
 
 		try {
 			const tz = geoTz(lat, lon).toString()
 
 			for (const event of this.events.filter((x) => x.spawns && x.spawns.length)) {
+				const eventStart = moment.tz(event.start, tz).unix()
+				const eventEnd = moment.tz(event.end, tz).unix()
+				if (startTime < eventStart && eventStart < disappearTime) {
+					return {
+						reason: 'start',
+						name: event.name,
+						time: event.start,
+					}
+				}
+				if (startTime < eventEnd && eventEnd < disappearTime) {
+					return {
+						reason: 'end',
+						name: event.name,
+						time: event.end,
+					}
+				}
+			}
+		} catch (err) {
+			this.log.error('PogoEvents: Error parsing event file', err)
+		}
+	}
+
+	/**
+	 * Determine if a given event (start time, end time) at a given (lat, lon) would be changed by event
+	 * @param startTime
+	 * @param disappearTime
+	 * @param lat
+	 * @param lon
+	 * @returns {{reason: string, name, time}}
+	 */
+	eventChangesQuest(startTime, disappearTime, lat, lon) {
+		if (!this.events) return
+
+		try {
+			const tz = geoTz(lat, lon).toString()
+
+			for (const event of this.events.filter((x) => x.has_quests)) {
 				const eventStart = moment.tz(event.start, tz).unix()
 				const eventEnd = moment.tz(event.end, tz).unix()
 				if (startTime < eventStart && eventStart < disappearTime) {

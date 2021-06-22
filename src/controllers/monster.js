@@ -385,7 +385,7 @@ class Monster extends Controller {
 				this.log.debug(`${logReference}: Pokemon ${data.pokemon_id} cell: ${weatherCellId} types ${JSON.stringify(data.types)} weather ${data.weather} Forecast ${weatherForecast.current} [boosted ${pokemonShouldBeBoosted} ${JSON.stringify(currentBoostedTypes)}] next ${weatherForecast.next} [boosted ${pokemonWillBeBoosted} ${JSON.stringify(forecastBoostedTypes)}]`)
 			}
 
-			const event = this.eventParser.eventOverlaps(moment().unix(), data.disappear_time, data.latitude, data.longitude)
+			const event = this.eventParser.eventChangesSpawn(moment().unix(), data.disappear_time, data.latitude, data.longitude)
 			if (event) {
 				data.futureEvent = true
 				data.futureEventTime = event.time
