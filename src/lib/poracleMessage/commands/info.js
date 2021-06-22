@@ -109,6 +109,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			default: {
+				await msg.react('🙅')
 			}
 		}
 	} catch (err) {
