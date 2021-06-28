@@ -1,11 +1,8 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+const Ohbem = require('ohbem')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
-
-const Ohbem = require('ohbem')
-
-// shouldn't do this here
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
