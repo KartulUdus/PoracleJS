@@ -248,7 +248,7 @@ class Monster extends Controller {
 			if (this.ohbem && data.iv >= 0) {
 				const obemstart = process.hrtime()
 
-				const ohbemCalc = this.ohbem.queryPvPRank(data.pokemonId, data.form, data.costume, data.gender, data.atk, data.def, data.sta, data.level)
+				const ohbemCalc = this.ohbem.queryPvPRank(+data.pokemonId, +data.form || 0, +data.costume, +data.gender, +data.atk, +data.def, +data.sta, +data.level)
 				this.log.debug(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
 				const obemend = process.hrtime(obemstart)
 				const obemms = obemend[1] / 1000000
@@ -258,15 +258,9 @@ class Monster extends Controller {
 				if (this.config.pvp.dataSource === 'internal') {
 					if (ohbemCalc.great) {
 						data.pvp_rankings_great_league = ohbemCalc.great
-						for (const rank of data.pvp_rankings_great_league) {
-							if (!rank.form) rank.form = data.form
-						}
 					} else delete data.pvp_rankings_great_league
 					if (ohbemCalc.ultra) {
 						data.pvp_rankings_ultra_league = ohbemCalc.ultra
-						for (const rank of data.pvp_rankings_ultra_league) {
-							if (!rank.form) rank.form = data.form
-						}
 					} else delete data.pvp_rankings_ultra_league
 				}
 			}
@@ -288,7 +282,7 @@ class Monster extends Controller {
 								rank: stats.rank,
 								percentage: stats.percentage,
 								pokemon: stats.pokemon,
-								form: stats.form,
+								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
 							}
@@ -298,7 +292,7 @@ class Monster extends Controller {
 									rank: stats.rank,
 									percentage: stats.percentage,
 									pokemon: stats.pokemon,
-									form: stats.form,
+									form: stats.form || 0,
 									level: stats.level,
 									cp: stats.cp,
 								},
@@ -324,7 +318,7 @@ class Monster extends Controller {
 								rank: stats.rank,
 								percentage: stats.percentage,
 								pokemon: stats.pokemon,
-								form: stats.form,
+								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
 							}
@@ -334,7 +328,7 @@ class Monster extends Controller {
 									rank: stats.rank,
 									percentage: stats.percentage,
 									pokemon: stats.pokemon,
-									form: stats.form,
+									form: stats.form || 0,
 									level: stats.level,
 									cp: stats.cp,
 								},
