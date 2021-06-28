@@ -139,10 +139,10 @@ class Gym extends Controller {
 			data.gymId = data.id || data.gym_id
 			data.teamId = data.team_id ? data.team_id : 0
 			data.oldTeamId = data.old_team_id >= 0 ? data.old_team_id : 0
-			data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
-			data.oldTeamNameEng = data.old_team_id ? this.GameData.utilData.teams[data.team_id].name : ''
-			data.teamEmojiEng = data.team_id ? this.GameData.utilData.teams[data.team_id].emoji : ''
-			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
+			data.teamNameEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].name : 'Unknown'
+			data.oldTeamNameEng = data.old_team_id >= 0 ? this.GameData.utilData.teams[data.old_team_id].name : ''
+			data.teamEmojiEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].emoji : ''
+			data.gymColor = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.slotsAvailable = data.slots_available
 			data.oldSlotsAvailable = data.old_slots_available
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)

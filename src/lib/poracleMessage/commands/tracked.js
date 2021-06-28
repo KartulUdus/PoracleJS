@@ -182,6 +182,7 @@ exports.run = async (client, msg, args, options) => {
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
 		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 		const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
+		const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
 		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
@@ -281,6 +282,16 @@ exports.run = async (client, msg, args, options) => {
 
 			nests.forEach((nest) => {
 				message = message.concat('\n', nestRowText(translator, client.GameData, nest))
+			})
+		}
+
+		if (!client.config.general.disableGym) {
+			if (gyms.length) {
+				message = message.concat('\n\n', translator.translate('You\'re tracking the following gyms:'), '\n')
+			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any gyms'))
+
+			gyms.forEach((gym) => {
+				message = message.concat('\n', gymRowText(translator, client.GameData, gym))
 			})
 		}
 

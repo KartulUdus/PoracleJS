@@ -705,8 +705,8 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.id}: Gym was sent again with same details, ignoring`)
 					break
 				}
-				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : ''
-				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : ''
+				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
+				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
 				fastify.cache.set(id, { team_id: hook.message.team_id, slots_available: hook.message.slots_available }, 0)
 				processHook = hook
 				break
