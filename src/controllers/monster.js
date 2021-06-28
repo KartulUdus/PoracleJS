@@ -3,12 +3,42 @@ const moment = require('moment-timezone')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
+const Ohbem = require('ohbem')
+
+// shouldn't do this here
+
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
 		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
 		const nonBoostingWeathers = [1, 2, 3, 4, 5, 6, 7].filter((weather) => !boostingWeathers.includes(weather))
 		if (boostStatus > 0) return nonBoostingWeathers
 		return boostingWeathers
+	}
+
+	async initialiseObem() {
+		const pokemonData = await Ohbem.fetchPokemonData()
+
+		this.ohbem = new Ohbem({
+			// all of the following options are optional and these (except for pokemonData) are the default values
+			// read the documentation for more information
+			leagues: {
+				little: 500,
+				great: 1500,
+				// alternative format
+				ultra: {
+					little: false,
+					cap: 2500,
+				},
+				// only detect functionally perfect IVs; caching does not apply
+				master: null,
+			},
+			levelCaps: [50], // [50, 51],
+			// The following field is required to use queryPvPRank
+			// You can skip populating it if you only want to use other helper methods
+			pokemonData,
+			// If you have installed lru-cache, uncomment the following to use cache:
+			cachingStrategy: Ohbem.cachingStrategies.memoryHeavy,
+		})
 	}
 
 	async monsterWhoCares(data) {
@@ -217,6 +247,34 @@ class Monster extends Controller {
 			data.pvpFormId = data.form
 			data.pvpEvolutionData = {}
 
+			// PVP TEST
+			if (this.ohbem && data.iv >= 0) {
+				const obemstart = process.hrtime()
+
+				const ohbemCalc = this.ohbem.queryPvPRank(data.pokemonId, data.form, data.costume, data.gender, data.atk, data.def, data.sta, data.level)
+				this.log.debug(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
+				const obemend = process.hrtime(obemstart)
+				const obemms = obemend[1] / 1000000
+
+				this.log.debug(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)} ${obemms}ms`)
+
+				if (this.config.pvp.dataSource === 'internal') {
+					if (ohbemCalc.great) {
+						data.pvp_rankings_great_league = ohbemCalc.great
+						for (const rank of data.pvp_rankings_great_league) {
+							if (!rank.form) rank.form = data.form
+						}
+					} else delete data.pvp_rankings_great_league
+					if (ohbemCalc.ultra) {
+						data.pvp_rankings_ultra_league = ohbemCalc.ultra
+						for (const rank of data.pvp_rankings_ultra_league) {
+							if (!rank.form) rank.form = data.form
+						}
+					} else delete data.pvp_rankings_ultra_league
+				}
+			}
+
+			// END PVP TEST
 			data.bestGreatLeagueRank = 4096
 			data.bestGreatLeagueRankCP = 0
 			if (data.pvp_rankings_great_league) {
