@@ -51,6 +51,7 @@ module.exports = (translatorFactory) => ({
 	tRe: createCommandRegex(translatorFactory, 't', '\\d{1,4}'),
 	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),
 	energyRe: createCommandRegex(translatorFactory, 'energy', '\\S+'),
+	candyRe: createCommandRegex(translatorFactory, 'candy', '\\S+'),
 	channelRe: createCommandRegex(translatorFactory, 'channel', '\\d{1,20}'),
 	guildRe: createCommandRegex(translatorFactory, 'guild', '\\d{1,20}'),
 	areaRe: createCommandRegex(translatorFactory, 'area', '.+'),

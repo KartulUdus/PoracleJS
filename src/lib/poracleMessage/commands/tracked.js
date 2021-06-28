@@ -69,11 +69,14 @@ function eggRowText(translator, GameData, egg) {
 function questRowText(translator, GameData, quest) {
 	let rewardThing = ''
 	if (quest.reward_type === 7) {
-		const monster = Object.values(GameData.monsters).find((m) => m.id === quest.reward)
+		const monster = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === quest.form)
 		if (monster) {
 			rewardThing = translator.translate(monster.name)
+			if (quest.form && monster.form.name) {
+				rewardThing = rewardThing.concat(` ${translator.translate(monster.form.name)}`)
+			}
 		} else {
-			rewardThing = `${translator.translate('Unknown monster')} ${quest.reward}`
+			rewardThing = `${translator.translate('Unknown monster')} ${quest.reward} ${quest.form}`
 		}
 	}
 	if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${translator.translate('or more stardust')}` : `${translator.translate('stardust')}`}`
@@ -89,11 +92,21 @@ function questRowText(translator, GameData, quest) {
 			rewardThing = `${translator.translate('mega energy')}`
 		} else {
 			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
-			const monsterName = mon ? translator.translate(mon.name) : 'energyMon'
+			const monsterName = mon ? translator.translate(mon.name) : `[energy] ${translator.translate('Unknown monster')} ${quest.reward}`
 			rewardThing = `${translator.translate('mega energy')} ${monsterName}`
 		}
 	}
-	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`
+
+	if (quest.reward_type === 4) {
+		if (quest.reward === 0) {
+			rewardThing = `${translator.translate('candy')}`
+		} else {
+			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
+			const monsterName = mon ? translator.translate(mon.name) : `[candy] ${translator.translate('Unknown monster')} ${quest.reward}`
+			rewardThing = `${translator.translate('candy')} ${monsterName}`
+		}
+	}
+	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.amount > 0 ? ` ${translator.translate('minimum')} ${quest.amount}` : ''}${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`
 }
 
 function invasionRowText(translator, GameData, invasion) {
