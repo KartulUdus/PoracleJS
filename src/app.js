@@ -23,6 +23,7 @@ const telegramController = require('./lib/telegram/middleware/controller')
 // const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 const DiscordReconciliation = require('./lib/discord/discordReconciliation')
 const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
+const PogoEventParser = require('./lib/pogoEventParser')
 
 const { Config } = require('./lib/configFetcher')
 
@@ -59,6 +60,7 @@ const re = require('./util/regex')(translatorFactory)
 const Query = require('./controllers/query')
 
 const query = new Query(logs.controller, knex, config, geofence)
+const pogoEventParser = new PogoEventParser(logs.log)
 
 logs.setWorkerId('MAIN')
 fastify.decorate('logger', logs.log)
@@ -231,6 +233,32 @@ function handleShutdown() {
 		})
 }
 
+const workers = []
+
+async function processPogoEvents() {
+	let file
+	log.info('PogoEvents: Fetching new event file')
+
+	try {
+		file = await pogoEventParser.download()
+	} catch (err) {
+		log.error('PogoEvents: Cannot download pogo event file', err)
+		setTimeout(processPogoEvents, 15 * 60 * 1000) // 15 mins
+		return
+	}
+
+	for (const relayWorker of workers) {
+		relayWorker.commandPort.postMessage(
+			{
+				type: 'eventBroadcast',
+				data: file,
+			},
+		)
+	}
+
+	setTimeout(processPogoEvents, 6 * 60 * 60 * 1000) // 6 hours
+}
+
 async function run() {
 	process.on('SIGINT', handleShutdown)
 	process.on('SIGTERM', handleShutdown)
@@ -238,6 +266,8 @@ async function run() {
 	if (config.general.persistDuplicateCache) {
 		await loadEventCache()
 	}
+
+	setTimeout(processPogoEvents, 30000)
 
 	if (config.discord.enabled) {
 		setInterval(() => {
@@ -311,7 +341,6 @@ const UserRateChecker = require('./userRateLimit')
 
 const rateChecker = new UserRateChecker(config)
 
-const workers = []
 const maxWorkers = config.tuning.webhookProcessingWorkers
 
 async function processMessages(msgs) {
