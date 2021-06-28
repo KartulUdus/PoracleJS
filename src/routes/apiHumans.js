@@ -31,7 +31,12 @@ module.exports = async (fastify, options, next) => {
 
 		return {
 			status: 'ok',
-			areas: fastify.geofence.filter((x) => allowedAreas.includes(x.name.toLowerCase())).filter((area) => (area.userSelectable === undefined || area.userSelectable)).map((x) => ({ name: x.name, group: x.group || '', description: x.description || '' })),
+			areas: fastify.geofence.filter((x) => allowedAreas.includes(x.name.toLowerCase())).map((x) => ({
+				name: x.name,
+				group: x.group || '',
+				description: x.description || '',
+				userSelectable: (x.userSelectable === undefined || x.userSelectable),
+			})),
 		}
 	})
 
