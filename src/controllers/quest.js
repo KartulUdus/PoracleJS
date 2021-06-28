@@ -224,6 +224,14 @@ class Quest extends Controller {
 
 			data.staticmap = data.staticMap // deprecated
 
+			const event = this.eventParser.eventChangesQuest(moment().unix(), data.disappear_time, data.latitude, data.longitude)
+			if (event) {
+				data.futureEvent = true
+				data.futureEventTime = event.time
+				data.futureEventName = event.name
+				data.futureEventTrigger = event.reason
+			}
+
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating quest alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
