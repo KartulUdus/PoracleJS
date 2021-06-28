@@ -296,6 +296,8 @@ class Weather extends Controller {
 
 			whoCares = caresCellData.cares || []
 
+			this.log.debug(`${data.s2_cell_id}: weather cares list ${JSON.stringify(whoCares)}`)
+
 			if (this.config.weather.showAlteredPokemon) {
 				// Removing whoCares who don't have a Pokemon affected by this weather change
 				whoCares = whoCares.filter((cares) => (('caredPokemons' in cares) ? cares.caredPokemons.find((pokemon) => pokemon.alteringWeathers.includes(currentInGameWeather)) : ''))
