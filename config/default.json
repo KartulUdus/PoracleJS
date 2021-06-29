@@ -159,7 +159,8 @@
   //   would match an eevee)
   //
   "pvp": {
-      "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
+    "dataSource": "webhook",                      // webhook - from hooks, internal - internal calculator
+    "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation
       "pvpDisplayMaxRank": 10,

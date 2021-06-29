@@ -34,7 +34,7 @@ class Monster extends Controller {
 			// You can skip populating it if you only want to use other helper methods
 			pokemonData,
 			// If you have installed lru-cache, uncomment the following to use cache:
-			cachingStrategy: Ohbem.cachingStrategies.memoryHeavy,
+			cachingStrategy: Ohbem.cachingStrategies.balanced,
 		})
 	}
 
