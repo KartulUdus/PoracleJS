@@ -196,7 +196,8 @@ class Raid extends Controller {
 			data.color = data.gymColor // deprecated
 			data.distime = data.disappearTime // deprecated
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
 			data.gameWeatherId = data.weather
@@ -333,7 +334,7 @@ class Raid extends Controller {
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
 						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
-						areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					}
 
 					let [platform] = cares.type.split(':')
