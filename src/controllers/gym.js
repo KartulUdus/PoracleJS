@@ -134,7 +134,8 @@ class Gym extends Controller {
 				return []
 			}
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gymId = data.id || data.gym_id
 			data.teamId = data.team_id ? data.team_id : 0
@@ -205,7 +206,7 @@ class Gym extends Controller {
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
 					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
 				let [platform] = cares.type.split(':')
