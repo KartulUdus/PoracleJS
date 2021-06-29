@@ -28,6 +28,13 @@ exports.run = async (client, msg, args, options) => {
 			return
 		}
 
+		// Check for basic 'everything' tracking with no other parameters
+		if (args.length === 1 && args[0] === 'everything' && !msg.isFromAdmin) {
+			await msg.reply(translator.translate('This would result in too many alerts. You need to provide additional filters to limit the number of valid candidates.'))
+			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+			return
+		}
+
 		const typeArray = Object.keys(client.GameData.utilData.types).map((o) => o.toLowerCase())
 
 		let reaction = '👌'

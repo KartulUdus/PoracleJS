@@ -1,5 +1,6 @@
 const fs = require('fs')
 const path = require('path')
+const importFresh = require('import-fresh')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -20,7 +21,7 @@ exports.run = async (client, msg, args, options) => {
 		if (!backupFiles.includes(args[0])) {
 			return msg.reply(`${args[0]} ${client.translator.translate('is not an existing backup \n')}${client.translator.translate('Available backups are')} \`\`\`\n${backupFiles.join(',\n')}\`\`\``)
 		}
-		const backup = require(path.join(__dirname, '../../../../backups', `${args[0]}.json`))
+		const backup = importFresh(path.join(__dirname, '../../../../backups', `${args[0]}.json`))
 		for (const key in backup) {
 			if (Object.prototype.hasOwnProperty.call(backup, key)) {
 				backup[key].map((track) => { track.id = target.id; track.profile_no = currentProfileNo })
