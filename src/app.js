@@ -702,7 +702,12 @@ async function processOne(hook) {
 
 				const cachedGymDetails = fastify.cache.get(id)
 				if (cachedGymDetails && cachedGymDetails.team_id === hook.message.team_id && cachedGymDetails.slots_available === hook.message.slots_available) {
-					fastify.controllerLog.debug(`${hook.message.id}: Gym was sent again with same details, ignoring`)
+					fastify.controllerLog.debug(`${id}: Gym was sent again with same details, ignoring`)
+					break
+				}
+
+				if (config.general.ignoreNeutralGyms && !hook.message.team_id) {
+					fastify.controllerLog.debug(`${id}: Gym was sent with neutral team, ignoring`)
 					break
 				}
 				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
