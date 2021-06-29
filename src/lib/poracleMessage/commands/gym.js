@@ -1,5 +1,5 @@
-const helpCommand = require('./help.js')
-const trackedCommand = require('./tracked.js')
+const helpCommand = require('./help')
+const trackedCommand = require('./tracked')
 
 exports.run = async (client, msg, args, options) => {
 	const logReference = Math.random().toString().slice(2, 11)
