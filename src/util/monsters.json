@@ -16902,9 +16902,81 @@
 	"250_0": {
 		"name": "Ho-Oh",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 250,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 244,
+			"baseStamina": 214
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"250_1343": {
+		"name": "Ho-Oh",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "HO_OH_NORMAL",
+			"id": 1343
+		},
+		"id": 250,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 244,
+			"baseStamina": 214
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"250_1344": {
+		"name": "Ho-Oh",
+		"form": {
+			"name": "Shadow",
+			"proto": "HO_OH_SHADOW",
+			"id": 1344
+		},
+		"id": 250,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 244,
+			"baseStamina": 214
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"250_1345": {
+		"name": "Ho-Oh",
+		"form": {
+			"name": "Purified",
+			"proto": "HO_OH_PURIFIED",
+			"id": 1345
 		},
 		"id": 250,
 		"stats": {

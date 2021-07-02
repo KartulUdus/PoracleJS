@@ -258,9 +258,16 @@ class Controller extends EventEmitter {
 		if (!this.geofence.length) return []
 		const matchAreas = []
 
-		this.geofence.forEach((areaObj) => {
-			if (inside(point, areaObj.path)) matchAreas.push(areaObj.name.toLowerCase())
-		})
+		for (const areaObj of this.geofence) {
+			if (inside(point, areaObj.path)) {
+				matchAreas.push({
+					name: areaObj.name,
+					description: areaObj.description,
+					displayInMatches: areaObj.displayInMatches === undefined || !!areaObj.displayInMatches,
+					group: areaObj.group,
+				})
+			}
+		}
 		return matchAreas
 	}
 
