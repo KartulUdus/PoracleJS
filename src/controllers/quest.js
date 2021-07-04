@@ -225,7 +225,7 @@ class Quest extends Controller {
 
 			data.staticmap = data.staticMap // deprecated
 
-			const event = this.eventParser.eventChangesQuest(moment().unix(), data.disappear_time, data.latitude, data.longitude)
+			const event = this.eventParser.eventChangesQuest(moment().unix(), data.disappear_time.unix(), data.latitude, data.longitude)
 			if (event) {
 				data.futureEvent = true
 				data.futureEventTime = event.time
