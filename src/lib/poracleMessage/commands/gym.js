@@ -81,6 +81,7 @@ exports.run = async (client, msg, args, options) => {
 				clean: +clean,
 				team: +teamId,
 				slot_changes: +slotChanges,
+				gym_id: null,
 			}))
 
 			const tracked = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
@@ -90,7 +91,7 @@ exports.run = async (client, msg, args, options) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of tracked.filter((x) => x.team_id === toInsert.team_id)) {
+				for (const existing of tracked.filter((x) => x.team === toInsert.team)) {
 					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
@@ -130,16 +131,15 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.deleteWhereInQuery('lures', {
+			await client.query.deleteWhereInQuery('gym', {
 				id: target.id,
 				profile_no: currentProfileNo,
 			},
 			updates.map((x) => x.uid),
 			'uid')
 
-			if (insert.length) {
-				await client.query.insertQuery('gym', insert)
-			}
+			await client.query.insertQuery('gym', [...insert, ...updates])
+
 			client.log.info(`${logReference}: ${target.name} started tracking gyms ${teams.join(', ')}`)
 			await msg.reply(message)
 
