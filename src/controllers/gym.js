@@ -138,10 +138,12 @@ class Gym extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gymId = data.id || data.gym_id
-			data.teamId = data.team_id ? data.team_id : 0
+			data.teamId = dCreata.team_id ? data.team_id : 0
 			data.oldTeamId = data.old_team_id >= 0 ? data.old_team_id : 0
+			data.previousControlId = data.last_owner_id >= 0 ? data.last_owner_id : 0
 			data.teamNameEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].name : 'Unknown'
 			data.oldTeamNameEng = data.old_team_id >= 0 ? this.GameData.utilData.teams[data.old_team_id].name : ''
+			data.previousControlNameEng = data.last_owner_id >= 0 ? this.GameData.utilData.teams[data.last_owner_id].name : ''
 			data.teamEmojiEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].emoji : ''
 			data.gymColor = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.slotsAvailable = data.slots_available
@@ -194,6 +196,7 @@ class Gym extends Controller {
 
 				data.teamName = translator.translate(data.teamNameEng)
 				data.oldTeamName = translator.translate(data.oldTeamNameEng)
+				data.previousControlName = translator.translate(data.previousControlNameEng)
 				data.teamEmoji = translator.translate(data.teamEmojiEng)
 
 				// full build

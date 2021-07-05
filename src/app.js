@@ -706,13 +706,15 @@ async function processOne(hook) {
 					break
 				}
 
-				if (config.general.ignoreNeutralGyms && !hook.message.team_id) {
-					fastify.controllerLog.debug(`${id}: Gym was sent with neutral team, ignoring`)
-					break
-				}
 				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
 				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
-				fastify.cache.set(id, { team_id: hook.message.team_id, slots_available: hook.message.slots_available }, 0)
+				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
+
+				fastify.cache.set(id, {
+					team_id: hook.message.team_id,
+					slots_available: hook.message.slots_available,
+					last_owner_id: hook.message.team_id || hook.message.last_owner_id,
+				}, 0)
 				processHook = hook
 				break
 			}

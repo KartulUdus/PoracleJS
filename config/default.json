@@ -22,7 +22,6 @@
       "environment": "production",              // leave as 'production'
       "alertMinimumTime" : 120,                 // time inside which alerts will not be generated (120s - 2mins before expiration no alert)
       "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
-      "ignoreNeutralGyms": true,                // neutral gyms ignored for gym hook processing
     // imgUrl - base url for poracle creation of {{imgUrl}} reference
       "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
     // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers
