@@ -138,7 +138,7 @@ class Gym extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gymId = data.id || data.gym_id
-			data.teamId = dCreata.team_id ? data.team_id : 0
+			data.teamId = data.team_id ? data.team_id : 0
 			data.oldTeamId = data.old_team_id >= 0 ? data.old_team_id : 0
 			data.previousControlId = data.last_owner_id >= 0 ? data.last_owner_id : 0
 			data.teamNameEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].name : 'Unknown'
