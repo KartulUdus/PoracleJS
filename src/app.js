@@ -802,11 +802,15 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 				const nowDow = nowForHuman.isoWeekday()
 				const yesterdayDow = +nowDow === 1 ? 7 : nowDow - 1
 
-				const active = timings.some((row) => (
-					(row.day === nowDow && row.hours === nowHour && nowMinutes >= row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
-					|| (nowMinutes < 10 && row.day === nowDow && row.hours === nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
-					|| (nowHour === 0 && nowMinutes < 10 && row.day === yesterdayDow && row.hours === 23 && row.mins > 50) // first 10 minutes of day
-				))
+				const active = timings.some((row) => {
+					const rowHours = +row.hours
+					const rowMins = +row.mins
+					const rowDay = +row.day
+
+					return (rowDay === nowDow && rowHours === nowHour && nowMinutes >= row.mins && (nowMinutes - rowMins) < 10) // within 10 minutes in same hour
+						|| (nowMinutes < 10 && rowDay === nowDow && rowHours === nowHour - 1 && rowMins > 50) // first 10 minutes of new hour
+						|| (nowHour === 0 && nowMinutes < 10 && rowDay === yesterdayDow && rowHours === 23 && rowMins > 50) // first 10 minutes of day
+				})
 
 				if (active) {
 					if (human.current_profile_no !== profile.profile_no) {
