@@ -58,7 +58,7 @@ class Controller extends EventEmitter {
 				// eslint-disable-next-line no-underscore-dangle
 				geocoder._geocoder._formatResult = ((original) => (result) => ({
 					...original(result),
-					suburb: result.address.suburb,
+					suburb: result.address.suburb || '',
 					// eslint-disable-next-line no-underscore-dangle
 				}))(geocoder._geocoder._formatResult)
 				return geocoder
