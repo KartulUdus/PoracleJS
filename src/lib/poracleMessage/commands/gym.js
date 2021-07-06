@@ -47,7 +47,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'instinct' || element === 'yellow') teams.push(3)
 			else if (element === 'valor' || element === 'red') teams.push(2)
 			else if (element === 'mystic' || element === 'blue') teams.push(1)
-			else if (element === 'harmony' || element === 'gray') teams.push(0)
+			else if (element === 'harmony' || element === 'gray' || element === 'uncontested') teams.push(0)
 			else if (element === 'everything') teams.push(...[0, 1, 2, 3])
 			else if (element === 'clean') clean = true
 			else if (element === 'slot changes') slotChanges = true
