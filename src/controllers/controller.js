@@ -74,6 +74,11 @@ class Controller extends EventEmitter {
 		}
 	}
 
+	setDts(dts) {
+		this.dtsCache = { }
+		this.dts = dts
+	}
+
 	getDts(logReference, templateType, platform, templateName, language) {
 		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
 		const key = `${templateType} ${platform} ${templateName} ${language}`
