@@ -52,9 +52,19 @@ class Monster extends Controller {
 			strictareastring = strictareastring.concat('))')
 		}
 		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
-		if (data.pvpEvoLookup) pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and (form = 0 or form = ${data.pvpFormId}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0))`
-		let pvpQueryString = `great_league_ranking>=${data.bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and ultra_league_ranking>=${data.bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP}`
-		if (data.pvpEvoLookup) pvpQueryString = `great_league_ranking>=${data.pvp_bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.pvp_bestGreatLeagueRankCP} and ultra_league_ranking>=${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.pvp_bestUltraLeagueRankCP}`
+		if (data.pvpEvoLookup) {
+			pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and (form = 0 or form = ${data.pvpFormId}) and (great_league_ranking < 4096 or ultra_league_ranking < 4096 or great_league_ranking_min_cp > 0 or ultra_league_ranking_min_cp > 0 or little_league_ranking < 4096 or little_league_ranking_min_cp > 0))`
+		}
+
+		let pvpQueryString = `great_league_ranking>=${data.bestGreatLeagueRank} and great_league_ranking_highest <= ${data.bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.bestGreatLeagueRankCP} and
+		                      ultra_league_ranking>=${data.bestUltraLeagueRank} and ultra_league_ranking_highest <= ${data.bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.bestUltraLeagueRankCP} and
+		                      little_league_ranking>=${data.bestLittleLeagueRank} and little_league_ranking_highest <= ${data.bestLittleLeagueRank} and little_league_ranking_min_cp<=${data.bestLittleLeagueRankCP}`
+		if (data.pvpEvoLookup) {
+			pvpQueryString = `great_league_ranking>=${data.pvp_bestGreatLeagueRank} and great_league_ranking_highest <= ${data.pvp_bestGreatLeagueRank} and great_league_ranking_min_cp<=${data.pvp_bestGreatLeagueRankCP} and 
+							  ultra_league_ranking>=${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_highest <= ${data.pvp_bestUltraLeagueRank} and ultra_league_ranking_min_cp<=${data.pvp_bestUltraLeagueRankCP} and
+							  little_league_ranking>=${data.pvp_bestLittleLeagueRank} and little_league_ranking_highest <= ${data.pvp_bestLittleLeagueRank} and little_league_ranking_min_cp<=${data.pvp_bestLittleLeagueRankCP}`
+		}
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking from monsters
 		join humans on (humans.id = monsters.id and humans.current_profile_no = monsters.profile_no)
@@ -244,24 +254,29 @@ class Monster extends Controller {
 			data.pvpFormId = data.form
 			data.pvpEvolutionData = {}
 
+			let ohbemms = 0
+
 			// PVP TEST
 			if (this.ohbem && data.iv >= 0) {
-				const obemstart = process.hrtime()
+				const ohbemstart = process.hrtime()
 
 				const ohbemCalc = this.ohbem.queryPvPRank(+data.pokemonId, +data.form || 0, +data.costume, +data.gender, +data.atk, +data.def, +data.sta, +data.level)
 				this.log.debug(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
-				const obemend = process.hrtime(obemstart)
-				const obemms = obemend[1] / 1000000
+				const ohbemend = process.hrtime(ohbemstart)
+				ohbemms = ohbemend[1] / 1000000
 
-				this.log.debug(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)} ${obemms}ms`)
+				this.log.debug(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)} ${ohbemms}ms`)
 
 				if (this.config.pvp.dataSource === 'internal') {
 					if (ohbemCalc.great) {
-						data.pvp_rankings_great_league = ohbemCalc.great
+						data.pvp_rankings_great_league = ohbemCalc.great.filter((x) => !x.evolution)
 					} else delete data.pvp_rankings_great_league
 					if (ohbemCalc.ultra) {
-						data.pvp_rankings_ultra_league = ohbemCalc.ultra
+						data.pvp_rankings_ultra_league = ohbemCalc.ultra.filter((x) => !x.evolution)
 					} else delete data.pvp_rankings_ultra_league
+					if (ohbemCalc.little) {
+						data.pvp_rankings_little_league = ohbemCalc.little.filter((x) => !x.evolution)
+					}
 				}
 			}
 
@@ -277,26 +292,16 @@ class Monster extends Controller {
 						data.bestGreatLeagueRankCP = stats.cp
 					}
 					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterGreatMinCP) {
-						if (data.pvpEvolutionData[stats.pokemon]) {
-							data.pvpEvolutionData[stats.pokemon].greatLeague = {
+						data.pvpEvolutionData[stats.pokemon] = {
+							...data.pvpEvolutionData[stats.pokemon],
+							greatLeague: {
 								rank: stats.rank,
 								percentage: stats.percentage,
 								pokemon: stats.pokemon,
 								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
-							}
-						} else {
-							data.pvpEvolutionData[stats.pokemon] = {
-								greatLeague: {
-									rank: stats.rank,
-									percentage: stats.percentage,
-									pokemon: stats.pokemon,
-									form: stats.form || 0,
-									level: stats.level,
-									cp: stats.cp,
-								},
-							}
+							},
 						}
 					}
 				}
@@ -313,26 +318,42 @@ class Monster extends Controller {
 						data.bestUltraLeagueRankCP = stats.cp
 					}
 					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterUltraMinCP) {
-						if (data.pvpEvolutionData[stats.pokemon]) {
-							data.pvpEvolutionData[stats.pokemon].ultraLeague = {
+						data.pvpEvolutionData[stats.pokemon] = {
+							...data.pvpEvolutionData[stats.pokemon],
+							ultraLeague: {
 								rank: stats.rank,
 								percentage: stats.percentage,
 								pokemon: stats.pokemon,
 								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
-							}
-						} else {
-							data.pvpEvolutionData[stats.pokemon] = {
-								ultraLeague: {
-									rank: stats.rank,
-									percentage: stats.percentage,
-									pokemon: stats.pokemon,
-									form: stats.form || 0,
-									level: stats.level,
-									cp: stats.cp,
-								},
-							}
+							},
+						}
+					}
+				}
+			}
+
+			data.bestLittleLeagueRank = 4096
+			data.bestLittleLeagueRankCP = 0
+			if (data.pvp_rankings_little_league) {
+				for (const stats of data.pvp_rankings_little_league) {
+					if (stats.rank && stats.rank < data.bestLittleLeagueRank) {
+						data.bestLittleLeagueRank = stats.rank
+						data.bestLittleLeagueRankCP = stats.cp || 0
+					} else if (stats.rank && stats.cp && stats.rank === data.bestLittleLeagueRank && stats.cp > data.bestLittleLeagueRankCP) {
+						data.bestLittleLeagueRank = stats.cp
+					}
+					if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= this.config.pvp.pvpFilterLittleMinCP) {
+						data.pvpEvolutionData[stats.pokemon] = {
+							...data.pvpEvolutionData[stats.pokemon],
+							littleLeague: {
+								rank: stats.rank,
+								percentage: stats.percentage,
+								pokemon: stats.pokemon,
+								form: stats.form || 0,
+								level: stats.level,
+								cp: stats.cp,
+							},
 						}
 					}
 				}
@@ -360,6 +381,9 @@ class Monster extends Controller {
 						pvpEvoData.pvp_bestGreatLeagueRankCP = pvpMon.greatLeague ? pvpMon.greatLeague.cp : 0
 						pvpEvoData.pvp_bestUltraLeagueRank = pvpMon.ultraLeague ? pvpMon.ultraLeague.rank : 4096
 						pvpEvoData.pvp_bestUltraLeagueRankCP = pvpMon.ultraLeague ? pvpMon.ultraLeague.cp : 0
+						pvpEvoData.pvp_bestLittleLeagueRank = pvpMon.littleLeague ? pvpMon.littleLeague.rank : 4096
+						pvpEvoData.pvp_bestLittleLeagueRankCP = pvpMon.littleLeague ? pvpMon.littleLeague.cp : 0
+
 						pvpEvoData.pvpEvoLookup = 1
 						const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
 						if (pvpWhoCares[0]) {
@@ -372,9 +396,9 @@ class Monster extends Controller {
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
 			if (whoCares.length) {
-				this.log.info(`${data.encounter_id}: ${monster.name} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+				this.log.info(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms}${this.ohbem ? `/${ohbemms}` : ''} ms)`)
 			} else {
-				this.log.verbose(`${data.encounter_id}: ${monster.name} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+				this.log.verbose(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms}${this.ohbem ? `/${ohbemms}` : ''} ms)`)
 			}
 
 			if (!whoCares.length) return []
@@ -556,6 +580,7 @@ class Monster extends Controller {
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
+					pvpDisplayLittleMinCP: this.config.pvp.pvpDisplayLittleMinCP,
 				}
 
 				let [platform] = cares.type.split(':')

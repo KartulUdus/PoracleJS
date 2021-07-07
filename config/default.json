@@ -166,11 +166,13 @@
       "pvpDisplayMaxRank": 10,
       "pvpDisplayGreatMinCP": 1450,
       "pvpDisplayUltraMinCP": 2450,
+      "pvpDisplayLittleMinCP": 450,
     // pvpFilter* - these filters are used as minimums on the track command to help users get
     //   PVP tracking right and to eliminate unexpectedly large tracks
       "pvpFilterMaxRank": 10,
       "pvpFilterGreatMinCP": 1450,
-      "pvpFilterUltraMinCP": 2450
+      "pvpFilterUltraMinCP": 2450,
+      "pvpFilterLittleMinCP": 450
   },
   //
   // tracking configuration - this section contains restrictions around tracking
