@@ -234,13 +234,13 @@
 		"min_trainer_level": 1
 	},
 	"1001": {
-		"name": "Pokemon Storage Upgrade",
+		"name": "Pokémon Storage",
 		"proto": "ITEM_POKEMON_STORAGE_UPGRADE",
 		"type": "Inventory Upgrade",
 		"category": "Inventory Upgrade"
 	},
 	"1002": {
-		"name": "Item Storage Upgrade",
+		"name": "Item Bag",
 		"proto": "ITEM_ITEM_STORAGE_UPGRADE",
 		"type": "Inventory Upgrade",
 		"category": "Inventory Upgrade"
