@@ -1,14 +1,15 @@
 {
   "name": "PoracleJS",
   "version": "4.0.5",
-  "description": "Webhook processing and personalised discord|telegram alarms",
+  "description": "Webhook processing and personalized discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
-    "start": "node .",
+    "start": "npm run generate && node .",
     "migrateV3": "node src/init/migrateV3.js",
-    "init": "node src/init/initConfig.js"
+    "init": "node src/init/initConfig.js",
+    "generate": "node src/util/generateData.js"
   },
   "repository": {
     "type": "git",

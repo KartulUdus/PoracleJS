@@ -137,7 +137,7 @@ class Monster extends Controller {
 				}
 			}
 			if (data.form === undefined || data.form === null) data.form = 0
-			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
 				this.log.warn(`${data.encounter_id}: Couldn't find monster in:`, data)
@@ -209,7 +209,7 @@ class Monster extends Controller {
 			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
-			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
+			data.types = monster.types.map((type) => type.id)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
 			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1
 			data.rarityNameEng = this.GameData.utilData.rarity[data.rarityGroup] ? this.GameData.utilData.rarity[data.rarityGroup] : ''

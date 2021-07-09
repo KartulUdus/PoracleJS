@@ -384,19 +384,6 @@ class Controller extends EventEmitter {
 		return this.config.discord.ivColors[colorIdx]
 	}
 
-	getPokemonTypes(pokemonId, formId) {
-		if (!+pokemonId) return ''
-		const monsterFamily = Object.values(this.GameData.monsters).filter((m) => m.id === +pokemonId)
-		const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
-		let types = ''
-		if (monster) {
-			types = monster.types.map((type) => type.id)
-		} else {
-			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map((type) => type.id)
-		}
-		return types
-	}
-
 	execPromise(command) {
 		return new Promise((resolve, reject) => {
 			this.cp.exec(command, (error, stdout) => {

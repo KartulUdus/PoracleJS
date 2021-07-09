@@ -215,7 +215,7 @@ class Pokestop extends Controller {
 						const gruntRewardsList = {}
 						gruntRewardsList.first = { chance: 100, monsters: [] }
 						if (gruntType.encounters) {
-							if (gruntType.second_reward && gruntType.encounters.second) {
+							if (gruntType.secondReward && gruntType.encounters.second) {
 								// one out of two rewards
 								gruntRewards = '85%: '
 								gruntRewardsList.first = { chance: 85, monsters: [] }
