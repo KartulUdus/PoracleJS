@@ -90,7 +90,7 @@ exports.up = async function migrationUp(knex) {
 		if (config.database.client !== 'sqlite' && config.database.client !== 'sqlite3') table.increments('uid')
 		table.string('id').notNullable()
 		table.foreign('id').references('humans.id').onDelete('CASCADE')
-		table.integer('profile_no').notNullable().defaultTo(0)
+		table.integer('profile_no').notNullable().defaultTo(1)
 		table.string('ping').notNullable()
 		table.boolean('clean').notNullable().defaultTo(false)
 		table.integer('distance').notNullable()

@@ -579,6 +579,40 @@
       "webpage_preview": true
      }
   },
+  {
+    "id": 1,
+    "type": "gym",
+    "language": "en",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Gym change at {{{gymName}}} {{#if previousControlName}}from {{previousControlName}} {{/if}}to {{teamName}}",
+        "description": "Slots available: {{slotsAvailable}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{gymUrl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "type": "gym",
+    "language": "en",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "webpage_preview": false,
+      "location": true,
+      "content": [
+        "***⚠️ Gym change ⚠️***",
+        "\nGym change at {{{gymName}}} {{#if previousControlName}}from {{previousControlName}} {{/if}}to {{teamName}}",
+        "\nSlots available: {{slotsAvailable}}",
+        "\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})"
+      ]
+    }
+  },
 {
   "id": 1,
   "language": "en",

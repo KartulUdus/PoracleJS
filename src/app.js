@@ -9,6 +9,7 @@ const util = require('util')
 const { S2 } = require('s2-geometry')
 const { Worker, MessageChannel } = require('worker_threads')
 const NodeCache = require('node-cache')
+const pcache = require('flat-cache')
 const fastify = require('fastify')({
 	bodyLimit: 5242880,
 	maxParamLength: 256,
@@ -63,6 +64,8 @@ const Query = require('./controllers/query')
 const query = new Query(logs.controller, knex, config, geofence)
 const pogoEventParser = new PogoEventParser(logs.log)
 
+const gymCache = pcache.load('gymCache', path.join(__dirname, '../.cache'))
+
 logs.setWorkerId('MAIN')
 fastify.decorate('logger', logs.log)
 fastify.decorate('controllerLog', logs.controller)
@@ -70,6 +73,7 @@ fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
+fastify.decorate('gymCache', gymCache)
 fastify.decorate('query', query)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
@@ -153,27 +157,6 @@ async function syncDiscordRole() {
 				config.reconciliation.discord.updateUserNames,
 				config.reconciliation.discord.removeInvalidUsers)
 		}
-
-		// let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
-		// usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
-		// let invalidUsers = []
-		// for (const guild of config.discord.guilds) {
-		// 	invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
-		// 	usersToCheck = invalidUsers
-		// }
-		// if (invalidUsers[0]) {
-		// 	log.info('Invalid users found, removing/disabling from dB...')
-		// 	for (const user of invalidUsers) {
-		// 		log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-		// 		if (config.general.roleCheckMode  !== 'ignore') {
-		// 			await removeInvalidUser(user)
-		// 		} else {
-		// 			log.info('config.general.roleCheckMode is set to ignore, not removing')
-		// 		}
-		// 	}
-		// } else {
-		// 	log.verbose('No invalid users found, all good!')
-		// }
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
@@ -225,6 +208,7 @@ function handleShutdown() {
 		workerSaves.push(saveEventCache())
 	}
 
+	gymCache.save(true)
 	Promise.all(workerSaves)
 		.then(() => {
 			process.exit()
@@ -692,6 +676,34 @@ async function processOne(hook) {
 
 				break
 			}
+			case 'gym':
+			case 'gym_details': {
+				const id = hook.message.id || hook.message.gym_id
+				if (config.general.disableGym) {
+					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
+					break
+				}
+				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
+
+				const cachedGymDetails = fastify.gymCache.getKey(id)
+				if (cachedGymDetails && cachedGymDetails.team_id === hook.message.team_id && cachedGymDetails.slots_available === hook.message.slots_available) {
+					fastify.controllerLog.debug(`${id}: Gym was sent again with same details, ignoring`)
+					break
+				}
+
+				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
+				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
+				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
+
+				fastify.gymCache.setKey(id, {
+					team_id: hook.message.team_id,
+					slots_available: hook.message.slots_available,
+					last_owner_id: hook.message.team_id || hook.message.last_owner_id,
+				}, 0)
+				processHook = hook
+				break
+			}
+
 			case 'nest': {
 				if (config.general.disableNest) {
 					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was received but set to be ignored in config`)
