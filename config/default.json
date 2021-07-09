@@ -239,6 +239,16 @@
       "delegatedAdministration": {
 
       },
+    // commandSecurity - list commands and users/roles that can execute these commands. If not specified no
+    // security is enforced for a command
+    // eg:
+    //   "commandSecurity": {
+    //      "track": [ "userid", "roleid" ],
+    //      "maxatk": { "roleid" ]
+    //   }
+      "commandSecurity": {
+
+      },
       "prefix": "!",                                  // prefix for poracle commands, usually '!'
     // ivColors - array of 6 color codes for pokemon IV rankings
       "ivColors": [

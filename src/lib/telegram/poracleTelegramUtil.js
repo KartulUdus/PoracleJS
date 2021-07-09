@@ -17,6 +17,14 @@ class PoracleTelegramUtil {
 		return channelIds.includes(postUserId)
 	}
 
+	/**
+	 * commandAllowed not supported by telegram
+	 */
+	// eslint-disable-next-line no-unused-vars
+	async commandAllowed(command) {
+		return true
+	}
+
 	async checkRegistrationStatus(target) {
 		let userHasLocation = false
 		let userHasArea = false

@@ -13,6 +13,11 @@ exports.run = async (client, msg, args, options) => {
 
 		if (!canContinue) return
 		const commandName = __filename.slice(__dirname.length + 1, -3)
+
+		if (!await util.commandAllowed(commandName)) {
+			return msg.react('🚫')
+		}
+
 		client.log.info(`${logReference} ${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
@@ -147,7 +152,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 		// Parse command elements to stuff
-		args.forEach((element) => {
+		for (const element of args) {
 			if (element.match(client.re.maxlevelRe)) [,, maxlevel] = element.match(client.re.maxlevelRe)
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.greatLeagueRe)) [,, greatLeague] = element.match(client.re.greatLeagueRe)
@@ -158,7 +163,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.maxivRe)) [,, maxiv] = element.match(client.re.maxivRe)
 			else if (element.match(client.re.maxweightRe)) [,, maxweight] = element.match(client.re.maxweightRe)
 			else if (element.match(client.re.maxRarityRe)) [,, maxRarity] = element.match(client.re.maxRarityRe)
-			else if (element.match(client.re.maxatkRe)) [,, maxAtk] = element.match(client.re.maxatkRe)
+			else if (element.match(client.re.maxatkRe) && await util.commandAllowed('maxatk')) [,, maxAtk] = element.match(client.re.maxatkRe)
 			else if (element.match(client.re.maxdefRe)) [,, maxDef] = element.match(client.re.maxdefRe)
 			else if (element.match(client.re.maxstaRe)) [,, maxSta] = element.match(client.re.maxstaRe)
 			else if (element.match(client.re.cpRe)) [,, cp] = element.match(client.re.cpRe)
@@ -175,7 +180,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'clean') clean = true
 			else if (element === 'male') gender = 1
 			else if (element === 'genderless') gender = 3
-		})
+		}
 		if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
