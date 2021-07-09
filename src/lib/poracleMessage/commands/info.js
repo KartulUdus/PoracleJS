@@ -1,7 +1,7 @@
 const moment = require('moment-timezone')
 const geoTz = require('geo-tz')
 
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 const weatherTileGenerator = require('../../weatherTileGenerator')
 
 exports.run = async (client, msg, args, options) => {
