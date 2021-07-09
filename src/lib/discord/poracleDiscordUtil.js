@@ -1,3 +1,5 @@
+const { DiscordAPIError } = require('discord.js')
+
 class PoracleDiscordUtil {
 	constructor(client, msg, options) {
 		this.client = client
@@ -112,6 +114,8 @@ class PoracleDiscordUtil {
 				? this.client.config.discord.delegatedAdministration.channelTracking : null
 
 			if (roleList) {
+				const userRoleMembership = await this.getUserRoles()
+
 				for (const id of Object.keys(roleList)) {
 					if (id === postChannelId || id === postGuildId || id === postChannelCategoryId) {
 						const checkUserAgainst = roleList[id]
