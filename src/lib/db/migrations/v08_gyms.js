@@ -16,7 +16,7 @@ exports.up = async function migrationUp(knex) {
 		table.string('gym_id').nullable()
 	})
 
-	log.info('Nests migration applied')
+	log.info('Gym migration applied')
 }
 
 exports.down = async function migrationDown(knex) {
