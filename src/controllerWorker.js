@@ -3,6 +3,7 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
+const PogoEventParser = require('./lib/pogoEventParser')
 
 const logs = require('./lib/logger')
 
@@ -30,6 +31,7 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const GymController = require('./controllers/gym')
 const PokestopLureController = require('./controllers/pokestop_lure')
 const NestController = require('./controllers/nest')
 const ControllerWeatherManager = require('./controllers/weatherData')
@@ -43,13 +45,15 @@ const rateLimitedUserCache = new NodeCache({ stdTTL: config.alertLimits.timingPe
 
 const controllerWeatherManager = new ControllerWeatherManager(config, log)
 const statsData = new StatsData(config, log)
+const pogoEventParser = new PogoEventParser(log)
 
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
+const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
 
 const hookQueue = []
 let queuePort
@@ -102,6 +106,16 @@ async function processOne(hook) {
 			}
 			case 'quest': {
 				const result = await questController.handle(hook.message)
+				if (result) {
+					queueAddition = result
+				} else {
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+				}
+				break
+			}
+			case 'gym':
+			case 'gym_details': {
+				const result = await gymController.handle(hook.message)
 				if (result) {
 					queueAddition = result
 				} else {
@@ -179,6 +193,11 @@ function receiveCommand(cmd) {
 			log.debug(`Worker ${workerId}: Received stats broadcast`, cmd.data)
 
 			statsData.receiveStatsBroadcast(cmd.data)
+		}
+		if (cmd.type === 'eventBroadcast') {
+			log.debug(`Worker ${workerId}: Received event broadcast`, cmd.data)
+
+			pogoEventParser.loadEvents(cmd.data)
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)

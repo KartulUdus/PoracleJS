@@ -8,8 +8,8 @@ const { Mutex } = require('async-mutex')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
-const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname}../../../.cache/`))
-const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
+const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../../.cache'))
+const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class Weather extends Controller {
 	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
@@ -295,6 +295,8 @@ class Weather extends Controller {
 			}
 
 			whoCares = caresCellData.cares || []
+
+			this.log.debug(`${data.s2_cell_id}: weather cares list ${JSON.stringify(whoCares)}`)
 
 			if (this.config.weather.showAlteredPokemon) {
 				// Removing whoCares who don't have a Pokemon affected by this weather change

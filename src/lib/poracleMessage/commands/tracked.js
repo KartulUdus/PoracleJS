@@ -44,6 +44,12 @@ function raidRowText(translator, GameData, raid) {
 	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
 }
 
+function gymRowText(translator, GameData, gym) {
+	const raidTeam = translator.translate(GameData.utilData.teams[gym.team].name)
+
+	return `**${raidTeam} ${translator.translate('gyms')}** ${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}`
+}
+
 function nestRowText(translator, GameData, nest) {
 	let monsterName
 	let formName
@@ -69,11 +75,14 @@ function eggRowText(translator, GameData, egg) {
 function questRowText(translator, GameData, quest) {
 	let rewardThing = ''
 	if (quest.reward_type === 7) {
-		const monster = Object.values(GameData.monsters).find((m) => m.id === quest.reward)
+		const monster = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === quest.form)
 		if (monster) {
 			rewardThing = translator.translate(monster.name)
+			if (quest.form && monster.form.name) {
+				rewardThing = rewardThing.concat(` ${translator.translate(monster.form.name)}`)
+			}
 		} else {
-			rewardThing = `${translator.translate('Unknown monster')} ${quest.reward}`
+			rewardThing = `${translator.translate('Unknown monster')} ${quest.reward} ${quest.form}`
 		}
 	}
 	if (quest.reward_type === 3) rewardThing = `${quest.reward > 0 ? `${quest.reward} ${translator.translate('or more stardust')}` : `${translator.translate('stardust')}`}`
@@ -89,11 +98,21 @@ function questRowText(translator, GameData, quest) {
 			rewardThing = `${translator.translate('mega energy')}`
 		} else {
 			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
-			const monsterName = mon ? translator.translate(mon.name) : 'energyMon'
+			const monsterName = mon ? translator.translate(mon.name) : `[energy] ${translator.translate('Unknown monster')} ${quest.reward}`
 			rewardThing = `${translator.translate('mega energy')} ${monsterName}`
 		}
 	}
-	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`
+
+	if (quest.reward_type === 4) {
+		if (quest.reward === 0) {
+			rewardThing = `${translator.translate('candy')}`
+		} else {
+			const mon = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === 0)
+			const monsterName = mon ? translator.translate(mon.name) : `[candy] ${translator.translate('Unknown monster')} ${quest.reward}`
+			rewardThing = `${translator.translate('candy')} ${monsterName}`
+		}
+	}
+	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.amount > 0 ? ` ${translator.translate('minimum')} ${quest.amount}` : ''}${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`
 }
 
 function invasionRowText(translator, GameData, invasion) {
@@ -128,6 +147,13 @@ function lureRowText(translator, GameData, lure) {
 	return `${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `
 }
 
+function currentAreaText(translator, geofence, areas) {
+	if (areas.length) {
+		return `${translator.translate('You are currently set to receive alarms in')} ${geofence.filter((x) => areas.includes(x.name.toLowerCase())).map((x) => x.name).join(', ')}`
+	}
+	return translator.translate('You have not selected any area yet')
+}
+
 exports.monsterRowText = monsterRowText
 exports.raidRowText = raidRowText
 exports.eggRowText = eggRowText
@@ -135,6 +161,8 @@ exports.questRowText = questRowText
 exports.invasionRowText = invasionRowText
 exports.nestRowText = nestRowText
 exports.lureRowText = lureRowText
+exports.gymRowText = gymRowText
+exports.currentAreaText = currentAreaText
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -162,11 +190,12 @@ exports.run = async (client, msg, args, options) => {
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
 		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 		const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
+		const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
 		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		if (args.includes('area')) {
-			return msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+			return msg.reply(currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 		}
 
 		let message = ''
@@ -187,11 +216,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${restartExplanation}${locationText}`, { style: 'markdown' })
 
-		if (human.area !== '[]') {
-			message = message.concat('\n\n', `${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
-		} else {
-			message = message.concat('\n\n', translator.translate('You have not selected any area yet'))
-		}
+		message = message.concat('\n\n', currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 
 		if (profile) {
 			message = message.concat('\n\n', `${translator.translate('Your profile is currently set to:')} ${profile.name}`)
@@ -261,6 +286,16 @@ exports.run = async (client, msg, args, options) => {
 
 			nests.forEach((nest) => {
 				message = message.concat('\n', nestRowText(translator, client.GameData, nest))
+			})
+		}
+
+		if (!client.config.general.disableGym) {
+			if (gyms.length) {
+				message = message.concat('\n\n', translator.translate('You\'re tracking the following gyms:'), '\n')
+			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any gyms'))
+
+			gyms.forEach((gym) => {
+				message = message.concat('\n', gymRowText(translator, client.GameData, gym))
 			})
 		}
 

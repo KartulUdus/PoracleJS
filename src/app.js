@@ -9,8 +9,10 @@ const util = require('util')
 const { S2 } = require('s2-geometry')
 const { Worker, MessageChannel } = require('worker_threads')
 const NodeCache = require('node-cache')
+const pcache = require('flat-cache')
 const fastify = require('fastify')({
 	bodyLimit: 5242880,
+	maxParamLength: 256,
 })
 const { Telegraf } = require('telegraf')
 
@@ -23,6 +25,7 @@ const telegramController = require('./lib/telegram/middleware/controller')
 // const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 const DiscordReconciliation = require('./lib/discord/discordReconciliation')
 const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
+const PogoEventParser = require('./lib/pogoEventParser')
 
 const { Config } = require('./lib/configFetcher')
 
@@ -63,6 +66,9 @@ const re = require('./util/regex')(translatorFactory)
 const Query = require('./controllers/query')
 
 const query = new Query(logs.controller, knex, config, geofence)
+const pogoEventParser = new PogoEventParser(logs.log)
+
+const gymCache = pcache.load('gymCache', path.join(__dirname, '../.cache'))
 
 logs.setWorkerId('MAIN')
 fastify.decorate('logger', logs.log)
@@ -71,6 +77,7 @@ fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
+fastify.decorate('gymCache', gymCache)
 fastify.decorate('query', query)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
@@ -154,27 +161,6 @@ async function syncDiscordRole() {
 				config.reconciliation.discord.updateUserNames,
 				config.reconciliation.discord.removeInvalidUsers)
 		}
-
-		// let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
-		// usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
-		// let invalidUsers = []
-		// for (const guild of config.discord.guilds) {
-		// 	invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
-		// 	usersToCheck = invalidUsers
-		// }
-		// if (invalidUsers[0]) {
-		// 	log.info('Invalid users found, removing/disabling from dB...')
-		// 	for (const user of invalidUsers) {
-		// 		log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-		// 		if (config.general.roleCheckMode  !== 'ignore') {
-		// 			await removeInvalidUser(user)
-		// 		} else {
-		// 			log.info('config.general.roleCheckMode is set to ignore, not removing')
-		// 		}
-		// 	}
-		// } else {
-		// 	log.verbose('No invalid users found, all good!')
-		// }
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
@@ -226,6 +212,7 @@ function handleShutdown() {
 		workerSaves.push(saveEventCache())
 	}
 
+	gymCache.save(true)
 	Promise.all(workerSaves)
 		.then(() => {
 			process.exit()
@@ -235,6 +222,32 @@ function handleShutdown() {
 		})
 }
 
+const workers = []
+
+async function processPogoEvents() {
+	let file
+	log.info('PogoEvents: Fetching new event file')
+
+	try {
+		file = await pogoEventParser.download()
+	} catch (err) {
+		log.error('PogoEvents: Cannot download pogo event file', err)
+		setTimeout(processPogoEvents, 15 * 60 * 1000) // 15 mins
+		return
+	}
+
+	for (const relayWorker of workers) {
+		relayWorker.commandPort.postMessage(
+			{
+				type: 'eventBroadcast',
+				data: file,
+			},
+		)
+	}
+
+	setTimeout(processPogoEvents, 6 * 60 * 60 * 1000) // 6 hours
+}
+
 async function run() {
 	process.on('SIGINT', handleShutdown)
 	process.on('SIGTERM', handleShutdown)
@@ -242,6 +255,8 @@ async function run() {
 	if (config.general.persistDuplicateCache) {
 		await loadEventCache()
 	}
+
+	setTimeout(processPogoEvents, 30000)
 
 	if (config.discord.enabled) {
 		setInterval(() => {
@@ -315,7 +330,6 @@ const UserRateChecker = require('./userRateLimit')
 
 const rateChecker = new UserRateChecker(config)
 
-const workers = []
 const maxWorkers = config.tuning.webhookProcessingWorkers
 
 async function processMessages(msgs) {
@@ -328,6 +342,7 @@ async function processMessages(msgs) {
 
 		let queueMessage
 		let logMessage = null
+		let shameMessage = null
 
 		if (!rate.passMessage) {
 			if (rate.justBreached) {
@@ -358,6 +373,9 @@ async function processMessages(msgs) {
 						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
 
 						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type === 'discord:user' ? `<@${destinationId}>` : ''}`
+						if (msg.type === 'discord:user') {
+							shameMessage = userTranslator.translateFormat('<@{0}> has had their Poracle tracking disabled for exceeding the rate limit too many times!', destinationId)
+						}
 
 						try {
 							if (config.alertLimits.disableOnStop) {
@@ -397,6 +415,23 @@ async function processMessages(msgs) {
 					name: 'Log channel',
 					tth: { hours: 0, minutes: config.discord.dmLogChannelDeletionTime, seconds: 0 },
 					clean: config.discord.dmLogChannelDeletionTime > 0,
+					emoji: '',
+					logReference: queueMessage.logReference,
+					language: config.general.locale,
+				})
+			}
+			if (shameMessage && config.alertLimits.shameChannel) {
+				fastify.discordQueue.push({
+					lat: 0,
+					lon: 0,
+					message: {
+						content: shameMessage,
+					},
+					target: config.alertLimits.shameChannel,
+					type: 'discord:channel',
+					name: 'Shame channel',
+					tth: { hours: 0, minutes: 0, seconds: 0 },
+					clean: false,
 					emoji: '',
 					logReference: queueMessage.logReference,
 					language: config.general.locale,
@@ -649,6 +684,34 @@ async function processOne(hook) {
 
 				break
 			}
+			case 'gym':
+			case 'gym_details': {
+				const id = hook.message.id || hook.message.gym_id
+				if (config.general.disableGym) {
+					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
+					break
+				}
+				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
+
+				const cachedGymDetails = fastify.gymCache.getKey(id)
+				if (cachedGymDetails && cachedGymDetails.team_id === hook.message.team_id && cachedGymDetails.slots_available === hook.message.slots_available) {
+					fastify.controllerLog.debug(`${id}: Gym was sent again with same details, ignoring`)
+					break
+				}
+
+				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
+				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
+				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
+
+				fastify.gymCache.setKey(id, {
+					team_id: hook.message.team_id,
+					slots_available: hook.message.slots_available,
+					last_owner_id: hook.message.team_id || hook.message.last_owner_id,
+				}, 0)
+				processHook = hook
+				break
+			}
+
 			case 'nest': {
 				if (config.general.disableNest) {
 					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was received but set to be ignored in config`)
@@ -732,16 +795,16 @@ async function currentStatus() {
 	}
 }
 
-const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-if (NODE_MAJOR_VERSION < 12) {
-	throw new Error('Requires Node 12 or 14')
-}
-// if (NODE_MAJOR_VERSION === 13) {
-//	throw new Error('Requires Node 12 or 14')
+// const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
+// if (NODE_MAJOR_VERSION < 12) {
+// 	throw new Error('Requires Node 12 or 14')
 // }
-if (NODE_MAJOR_VERSION > 14) {
-	throw new Error('Requires Node 12 or 14')
-}
+// // if (NODE_MAJOR_VERSION == 13) {
+// //	throw new Error('Requires Node 12 or 14')
+// // }
+// if (NODE_MAJOR_VERSION > 14) {
+// 	throw new Error('Requires Node 12 or 14')
+// }
 
 schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
 	try {
@@ -765,11 +828,15 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 				const nowDow = nowForHuman.isoWeekday()
 				const yesterdayDow = +nowDow === 1 ? 7 : nowDow - 1
 
-				const active = timings.some((row) => (
-					(row.day === nowDow && row.hours === nowHour && nowMinutes >= row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
-					|| (nowMinutes < 10 && row.day === nowDow && row.hours === nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
-					|| (nowHour === 0 && nowMinutes < 10 && row.day === yesterdayDow && row.hours === 23 && row.mins > 50) // first 10 minutes of day
-				))
+				const active = timings.some((row) => {
+					const rowHours = +row.hours
+					const rowMins = +row.mins
+					const rowDay = +row.day
+
+					return (rowDay === nowDow && rowHours === nowHour && nowMinutes >= row.mins && (nowMinutes - rowMins) < 10) // within 10 minutes in same hour
+						|| (nowMinutes < 10 && rowDay === nowDow && rowHours === nowHour - 1 && rowMins > 50) // first 10 minutes of new hour
+						|| (nowHour === 0 && nowMinutes < 10 && rowDay === yesterdayDow && rowHours === 23 && rowMins > 50) // first 10 minutes of day
+				})
 
 				if (active) {
 					if (human.current_profile_no !== profile.profile_no) {

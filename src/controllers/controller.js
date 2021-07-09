@@ -7,7 +7,7 @@ const fs = require('fs')
 
 const pcache = require('flat-cache')
 
-const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
+const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
 const emojiFlags = require('emoji-flags')
 
 const TileserverPregen = require('../lib/tileserverPregen')
@@ -15,7 +15,7 @@ const replaceAsync = require('../util/stringReplaceAsync')
 const urlShortener = require('../lib/urlShortener')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData) {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventParser) {
 		super()
 		this.db = db
 		this.cp = cp
@@ -31,6 +31,7 @@ class Controller extends EventEmitter {
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherData = weatherData
 		this.statsData = statsData
+		this.eventParser = eventParser
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.dtsCache = {}
@@ -47,12 +48,20 @@ class Controller extends EventEmitter {
 				})
 			}
 			case 'nominatim': {
-				return NodeGeocoder({
+				const geocoder = NodeGeocoder({
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressFormat,
 					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
+				// Hack in suburb support
+				// eslint-disable-next-line no-underscore-dangle
+				geocoder._geocoder._formatResult = ((original) => (result) => ({
+					...original(result),
+					suburb: result.address.suburb || '',
+					// eslint-disable-next-line no-underscore-dangle
+				}))(geocoder._geocoder._formatResult)
+				return geocoder
 			}
 			case 'google': {
 				return NodeGeocoder({
@@ -257,9 +266,16 @@ class Controller extends EventEmitter {
 		if (!this.geofence.length) return []
 		const matchAreas = []
 
-		this.geofence.forEach((areaObj) => {
-			if (inside(point, areaObj.path)) matchAreas.push(areaObj.name.toLowerCase())
-		})
+		for (const areaObj of this.geofence) {
+			if (inside(point, areaObj.path)) {
+				matchAreas.push({
+					name: areaObj.name,
+					description: areaObj.description,
+					displayInMatches: areaObj.displayInMatches === undefined || !!areaObj.displayInMatches,
+					group: areaObj.group,
+				})
+			}
+		}
 		return matchAreas
 	}
 

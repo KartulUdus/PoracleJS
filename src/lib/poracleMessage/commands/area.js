@@ -1,5 +1,6 @@
 const helpCommand = require('./help')
 const geofenceTileGenerator = require('../../geofenceTileGenerator')
+const trackedCommand = require('./tracked')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -20,8 +21,25 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
-		let availableAreas = client.geofence.map((area) => area.name)
-		let lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
+		let selectableGeofence = client.geofence
+		// Note for Poracle admins we don't remove the userSelectable items
+		// But we do apply the filtering later based on the user/channel that is the target (targetIsAdmin used instead)
+		if (!msg.isFromAdmin) selectableGeofence = selectableGeofence.filter((area) => (area.userSelectable === undefined || area.userSelectable))
+
+		let availableAreas = selectableGeofence.map((area) => ({
+			name: area.name,
+			group: area.group || '',
+			description: area.description,
+			lowerCaseName: area.name.toLowerCase(),
+		}))
+
+		availableAreas.sort((a, b) => {
+			const compare = a.group.localeCompare(b.group)
+			if (compare === 0) return a.name.localeCompare(b.name)
+			return compare
+		})
+
+		// let lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
 		const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 		if (client.config.areaSecurity.enabled && !targetIsAdmin) {
@@ -37,19 +55,19 @@ exports.run = async (client, msg, args, options) => {
 						}
 					}
 
-					availableAreas = availableAreas.filter((x) => calculatedAreas.includes(x.toLowerCase()))
-					lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
+					availableAreas = availableAreas.filter((x) => calculatedAreas.includes(x.lowerCaseName))
+					// lowercaseAreas = availableAreas.map((x) => x.toLowerCase())
 				} else {
 					availableAreas = []
-					lowercaseAreas = []
+					// lowercaseAreas = []
 				}
 			}
 		}
 
 		// Check target
-		const confAreas = lowercaseAreas.map((area) => area.replace(/ /gi, '_')).sort()
-		const confAreas2 = availableAreas.map((area) => area.replace(/ /gi, '_')).sort()
-		const confUse = confAreas2.join('\n')
+		//		const confAreas = lowercaseAreas.map((area) => area.replace(/ /gi, '_')).sort()
+		//		const confAreas2 = availableAreas.map((area) => area.replace(/ /gi, '_')).sort()
+		//		const confUse = confAreas2.join('\n')
 
 		let platform = target.type.split(':')[0]
 		if (platform === 'webhook') platform = 'discord'
@@ -61,48 +79,80 @@ exports.run = async (client, msg, args, options) => {
 			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
 		}
 
-		const areaArgs = args.map((a) => a.replace(/ /g, '_'))
+		//		const areaArgs = args.map((a) => a.replace(/ /g, '_'))
 		switch (args[0]) {
 			case 'add': {
-				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
-				const addAreas = validAreas.filter((x) => !oldArea.includes(x))
-				const newAreas = [...oldArea, ...addAreas].filter((area) => confAreas.includes(area)).map((area) => area.replace(/_/g, ' '))
-				if (!validAreas.length) {
-					return await msg.reply(`${translator.translate('no valid areas there, please use one of')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
-				}
-				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
+				const oldArea = JSON.parse(human.area)
 
-				if (addAreas.length) {
-					await msg.reply(`${translator.translate('Added areas:')} ${addAreas}`)
-				} else {
-					await msg.react('👌')
+				args.shift()
+				const addAreas = availableAreas.filter((x) => args.includes(x.lowerCaseName.replace(/_/g, ' ')))
+				const areasNotAlreadyInList = addAreas.filter((x) => !oldArea.includes(x.lowerCaseName))
+				const newAreas = [...oldArea, ...areasNotAlreadyInList.map((x) => x.lowerCaseName)]
+					// remove invalid entries
+					.filter((x) => availableAreas.some((y) => y.lowerCaseName === x))
+
+				const uniqueNewAreas = [...new Set(newAreas)]
+
+				if (!addAreas.length) {
+					await msg.reply(translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
+						{ style: 'markdown' })
 				}
-				await client.query.updateQuery('profiles', { area: JSON.stringify(newAreas) }, { id: target.id, profile_no: currentProfileNo })
+
+				await client.query.updateQuery('humans', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id })
+
+				if (areasNotAlreadyInList.length) {
+					await msg.reply(`${translator.translate('Added areas:')} ${areasNotAlreadyInList.map((x) => x.name).join(', ')}`)
+				}
+				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, uniqueNewAreas))
+
+				await client.query.updateQuery('profiles', { area: JSON.stringify(uniqueNewAreas) }, {
+					id: target.id,
+					profile_no: currentProfileNo,
+				})
 
 				break
 			}
 			case 'remove': {
-				const oldArea = JSON.parse(human.area.split()).map((area) => area.replace(/ /gi, '_'))
-				const validAreas = confAreas.filter((x) => areaArgs.includes(x))
-				const removeAreas = validAreas.filter((x) => oldArea.includes(x))
-				const newAreas = [...oldArea].filter((area) => confAreas.includes(area) && !removeAreas.includes(area)).map((area) => area.replace(/_/g, ' '))
-				if (!validAreas.length) {
-					return await msg.reply(`${translator.translate('no valid areas there, please use one of')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
-				}
-				await client.query.updateQuery('humans', { area: JSON.stringify(newAreas) }, { id: target.id })
+				const oldArea = JSON.parse(human.area)
 
-				if (removeAreas.length) {
-					await msg.reply(`${translator.translate('Removed areas:')} ${removeAreas}`)
-				} else {
-					await msg.react('👌')
+				args.shift()
+				const removeAreas = availableAreas.filter((x) => args.includes(x.lowerCaseName.replace(/_/g, ' ')))
+				const removeAreasPresent = removeAreas.filter((x) => oldArea.includes(x.lowerCaseName))
+
+				const newAreas = oldArea
+					.filter((x) => !removeAreas.some((y) => y.lowerCaseName === x))
+					.filter((x) => availableAreas.some((y) => y.lowerCaseName === x))
+
+				const uniqueNewAreas = [...new Set(newAreas)]
+
+				if (!removeAreas.length) {
+					await msg.reply(translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
+						{ style: 'markdown' })
 				}
 
-				await client.query.updateQuery('profiles', { area: JSON.stringify(newAreas) }, { id: target.id, profile_no: currentProfileNo })
+				await client.query.updateQuery('humans', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id })
+
+				if (removeAreasPresent.length) {
+					await msg.reply(`${translator.translate('Removed areas:')} ${removeAreasPresent.map((x) => x.name).join(', ')}`)
+				}
+				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, uniqueNewAreas))
+
+				await client.query.updateQuery('profiles', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id, profile_no: currentProfileNo })
 				break
 			}
 			case 'list': {
+				let confUse = ''
+				let currentGroup = ''
+				for (const area of availableAreas) {
+					if (currentGroup !== area.group) {
+						currentGroup = area.group
+						confUse = confUse.concat(currentGroup, '\n')
+					}
+					const areaDisplayName = area.name.replace(/ /g, '_')
+					confUse = confUse.concat(`   ${areaDisplayName}${area.userSelectable === false ? '\uD83D\uDEAB' : ''}${area.description ? ` - ${area.description}` : ''}\n`)
+				}
 				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
+
 				break
 			}
 			case 'overview': {
@@ -110,7 +160,7 @@ exports.run = async (client, msg, args, options) => {
 					const staticMap = await geofenceTileGenerator.generateGeofenceOverviewTile(
 						client.geofence,
 						client.query.tileserverPregen,
-						args,
+						args.length > 2 ? args : JSON.parse(human.area),
 					)
 					if (staticMap) {
 						await msg.replyWithImageUrl(translator.translateFormat('Overview display'),
@@ -155,7 +205,7 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			default: {
-				await msg.reply(`${translator.translate('You are currently set to receive alarms in')} ${human.area}`)
+				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 
 				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
 					{ style: 'markdown' })
