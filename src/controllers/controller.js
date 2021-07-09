@@ -7,7 +7,7 @@ const fs = require('fs')
 
 const pcache = require('flat-cache')
 
-const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
+const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
 const emojiFlags = require('emoji-flags')
 
 const TileserverPregen = require('../lib/tileserverPregen')
