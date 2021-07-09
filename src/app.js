@@ -679,6 +679,8 @@ async function processOne(hook) {
 			case 'gym':
 			case 'gym_details': {
 				const id = hook.message.id || hook.message.gym_id
+				const team = hook.message.team_id || hook.message.team
+
 				if (config.general.disableGym) {
 					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
 					break
@@ -686,7 +688,7 @@ async function processOne(hook) {
 				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
 
 				const cachedGymDetails = fastify.gymCache.getKey(id)
-				if (cachedGymDetails && cachedGymDetails.team_id === hook.message.team_id && cachedGymDetails.slots_available === hook.message.slots_available) {
+				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available) {
 					fastify.controllerLog.debug(`${id}: Gym was sent again with same details, ignoring`)
 					break
 				}
@@ -696,9 +698,9 @@ async function processOne(hook) {
 				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
 
 				fastify.gymCache.setKey(id, {
-					team_id: hook.message.team_id,
+					team_id: team,
 					slots_available: hook.message.slots_available,
-					last_owner_id: hook.message.team_id || hook.message.last_owner_id,
+					last_owner_id: team || hook.message.last_owner_id,
 				}, 0)
 				processHook = hook
 				break
