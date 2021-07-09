@@ -20,7 +20,7 @@ class PoracleTelegramUtil {
 	/**
 	 * commandAllowed not supported by telegram
 	 */
-	// eslint-disable-next-line no-unused-vars
+	// eslint-disable-next-line no-unused-vars,class-methods-use-this
 	async commandAllowed(command) {
 		return true
 	}
