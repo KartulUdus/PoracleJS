@@ -28,7 +28,7 @@ class Gym extends Controller {
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, gym.template, gym.distance, gym.clean, gym.ping from gym
 		join humans on (humans.id = gym.id and humans.current_profile_no = gym.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
-		gym.team = ${data.team_id}
+		gym.team = ${data.teamId}
 		${slotChangeQuery}
 		and
 		(gym.gym_id='${data.gymId}' `
@@ -138,7 +138,7 @@ class Gym extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gymId = data.id || data.gym_id
-			data.teamId = data.team_id ? data.team_id : 0
+			data.teamId = data.team_id || data.team
 			data.oldTeamId = data.old_team_id >= 0 ? data.old_team_id : 0
 			data.previousControlId = data.last_owner_id >= 0 ? data.last_owner_id : 0
 			data.teamNameEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].name : 'Unknown'
