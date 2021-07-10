@@ -21,7 +21,7 @@ class Gym extends Controller {
 			strictareastring = strictareastring.concat('))')
 		}
 		let slotChangeQuery = ''
-		if (data.old_team_id === data.team_id) {
+		if (data.old_team_id === data.teamId) {
 			slotChangeQuery = 'and gym.slot_changes = true'
 		}
 		let query = `
@@ -138,7 +138,7 @@ class Gym extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gymId = data.id || data.gym_id
-			data.teamId = data.team_id || data.team
+			data.teamId = data.team_id !== undefined ? data.team_id : data.team
 			data.oldTeamId = data.old_team_id >= 0 ? data.old_team_id : 0
 			data.previousControlId = data.last_owner_id >= 0 ? data.last_owner_id : 0
 			data.teamNameEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].name : 'Unknown'

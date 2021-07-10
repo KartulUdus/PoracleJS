@@ -679,7 +679,7 @@ async function processOne(hook) {
 			case 'gym':
 			case 'gym_details': {
 				const id = hook.message.id || hook.message.gym_id
-				const team = hook.message.team_id || hook.message.team
+				const team = hook.message.team_id !== undefined ? hook.message.team_id : hook.message.team
 
 				if (config.general.disableGym) {
 					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
