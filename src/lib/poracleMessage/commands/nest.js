@@ -166,7 +166,7 @@ exports.run = async (client, msg, args, options) => {
 			await client.query.insertQuery('nests', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking nests `)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			const monsterIds = monsters.map((mon) => mon.id)

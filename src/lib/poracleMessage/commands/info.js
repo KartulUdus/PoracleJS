@@ -49,10 +49,10 @@ exports.run = async (client, msg, args, options) => {
 								return mon.name
 							},
 						)
-						message = message.concat(`*${translator.translate(client.GameData.utilData.rarity[group])}*: ${monsters.join(', ')}`, '\n')
+						message = message.concat(`**${translator.translate(client.GameData.utilData.rarity[group])}**: ${monsters.join(', ')}`, '\n')
 					}
 
-					await msg.reply(message)
+					await msg.reply(message, { style: 'markdown' })
 				} else {
 					await msg.reply(translator.translate('Rarity information not yet calculated - wait a few minutes and try again'))
 				}

@@ -137,7 +137,7 @@ exports.run = async (client, msg, args, options) => {
 			await client.query.insertQuery('lures', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking lures ${lures.join(', ')}`)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 
 			reaction = insert.length ? '✅' : reaction
 		} else {

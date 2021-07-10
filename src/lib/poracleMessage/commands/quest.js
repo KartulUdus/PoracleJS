@@ -285,7 +285,7 @@ exports.run = async (client, msg, args, options) => {
 			client.log.info(`${target.name} added quest trackings`)
 
 			// const result = await client.query.insertOrUpdateQuery('quest', questTracks)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql

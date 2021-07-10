@@ -142,7 +142,7 @@ exports.run = async (client, msg, args, options) => {
 			await client.query.insertQuery('egg', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking level ${levels.join(', ')} eggs`)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			let result = 0
