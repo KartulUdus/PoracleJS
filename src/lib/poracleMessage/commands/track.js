@@ -14,10 +14,6 @@ exports.run = async (client, msg, args, options) => {
 		if (!canContinue) return
 		const commandName = __filename.slice(__dirname.length + 1, -3)
 
-		if (!await util.commandAllowed(commandName)) {
-			return msg.react('🚫')
-		}
-
 		client.log.info(`${logReference} ${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
@@ -25,6 +21,26 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		const translator = client.translatorFactory.Translator(language)
+
+		if (!await util.commandAllowed(commandName)) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
+		const securityCheck = [
+			['maxatk', client.re.maxatkRe],
+			['maxdef', client.re.maxdefRe],
+		]
+
+		for (const security of securityCheck) {
+			if (args.some((x) => x.match(security[1]))) {
+				if (!await util.commandAllowed(security[0])) {
+					await msg.react('🚫')
+					return msg.reply(translator.translateFormat('You do not have permission to use the `{0}` parameter',
+						translator.translate(security[0])))
+				}
+			}
+		}
 
 		if (args.length === 0) {
 			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`', util.prefix),
@@ -173,7 +189,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.maxivRe)) [,, maxiv] = element.match(client.re.maxivRe)
 			else if (element.match(client.re.maxweightRe)) [,, maxweight] = element.match(client.re.maxweightRe)
 			else if (element.match(client.re.maxRarityRe)) [,, maxRarity] = element.match(client.re.maxRarityRe)
-			else if (element.match(client.re.maxatkRe) && await util.commandAllowed('maxatk')) [,, maxAtk] = element.match(client.re.maxatkRe)
+			else if (element.match(client.re.maxatkRe)) [,, maxAtk] = element.match(client.re.maxatkRe)
 			else if (element.match(client.re.maxdefRe)) [,, maxDef] = element.match(client.re.maxdefRe)
 			else if (element.match(client.re.maxstaRe)) [,, maxSta] = element.match(client.re.maxstaRe)
 			else if (element.match(client.re.cpRe)) [,, cp] = element.match(client.re.cpRe)
