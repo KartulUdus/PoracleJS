@@ -778,6 +778,8 @@ async function handleAlarms() {
 
 async function currentStatus() {
 	let discordQueueLength = 0
+	const queueCount = (queue) => queue.map((x) => x.target).reduce((r, c) => (r[c] = (r[c] || 0) + 1, r), {})
+
 	for (const w of discordWorkers) {
 		discordQueueLength += w.discordQueue.length
 	}
@@ -789,6 +791,7 @@ async function currentStatus() {
 	log.info(infoMessage)
 	const cacheMessage = `Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`
 	log.verbose(cacheMessage)
+
 	PoracleInfo.status = {
 		queueInfo: infoMessage,
 		cacheInfo: cacheMessage,
