@@ -36,7 +36,7 @@ async function run() {
 			useTelegram = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Telegram (Y/N)')).toLowerCase())
 			if (useTelegram) {
 				telegramToken = reader.question('Please enter your tlegram token ')
-				if (!telegramToken.match(discordRe)) {
+				if (!telegramToken.match(telegramRe)) {
 					log.warn('that\'s not a telegrram token, try again:')
 				} else {
 					config.telegram.token = telegramToken
