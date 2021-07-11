@@ -22,9 +22,9 @@ async function run() {
 		while (!discordConfigFinished) {
 			useDiscord = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Discord (Y/N)')).toLowerCase())
 			if (useDiscord) {
-				discordToken = reader.question('Please enter your discord token ')
+				discordToken = reader.question('Please enter your Discord token ')
 				if (!discordToken.match(discordRe)) {
-					log.warn('that\'s not a discord token, try again: ')
+					log.warn('that\'s not a Discord token, try again: ')
 				} else {
 					config.discord.token = [discordToken]
 				}
@@ -35,9 +35,9 @@ async function run() {
 		while (!telegramConfigFinished) {
 			useTelegram = ['y', 'yes', 'yep', 'affirmative'].includes((reader.question('Would you like to use Telegram (Y/N)')).toLowerCase())
 			if (useTelegram) {
-				telegramToken = reader.question('Please enter your tlegram token ')
+				telegramToken = reader.question('Please enter your Telegram token ')
 				if (!telegramToken.match(discordRe)) {
-					log.warn('that\'s not a telegrram token, try again:')
+					log.warn('that\'s not a Telegram token, try again:')
 				} else {
 					config.telegram.token = telegramToken
 				}
