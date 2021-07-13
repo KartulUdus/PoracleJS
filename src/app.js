@@ -780,13 +780,34 @@ async function currentStatus() {
 	let discordQueueLength = 0
 	const queueCount = (queue) => queue.map((x) => x.target).reduce((r, c) => (r[c] = (r[c] || 0) + 1, r), {})
 
+	let queueSummary = {}
+
 	for (const w of discordWorkers) {
 		discordQueueLength += w.discordQueue.length
+		Object.assign(queueSummary, queueCount(w.discordQueue))
 	}
+
 	const telegramQueueLength = (telegram ? telegram.telegramQueue.length : 0)
 		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
 
+	if (telegram) {
+		queueSummary = {
+			...queueSummary,
+			...queueCount(telegram.telegramQueue),
+		}
+	}
+	if (telegramChannel) {
+		queueSummary = {
+			...queueSummary,
+			...queueCount(telegramChannel.telegramQueue),
+		}
+	}
 	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
+	Object.assign(queueSummary,
+		telegram ? queueCount(telegram.telegramQueue) : {},
+		telegramChannel ? queueCount(telegramChannel.telegramQueue) : {},
+		discordWebhookWorker ? queueCount(discordWebhookWorker.webhookQueue) : {})
+
 	const infoMessage = `[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`
 	log.info(infoMessage)
 	const cacheMessage = `Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`
@@ -795,6 +816,7 @@ async function currentStatus() {
 	PoracleInfo.status = {
 		queueInfo: infoMessage,
 		cacheInfo: cacheMessage,
+		queueSummary,
 	}
 }
 

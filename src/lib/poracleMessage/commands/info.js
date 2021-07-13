@@ -27,7 +27,7 @@ exports.run = async (client, msg, args, options) => {
 			case 'poracle': {
 				if (msg.isFromAdmin) {
 					if (client.PoracleInfo.status) {
-						await msg.reply(`Queue info: ${client.PoracleInfo.status.queueInfo}\nCache info: ${client.PoracleInfo.status.cacheInfo}`)
+						await msg.reply(`Queue info: ${client.PoracleInfo.status.queueInfo}\nQueue summary: ${JSON.stringify(client.PoracleInfo.status.queueSummary, null, ' ')}\nCache info: ${client.PoracleInfo.status.cacheInfo}`)
 					} else {
 						await msg.reply('Status information not yet warmed up')
 					}
@@ -64,11 +64,25 @@ exports.run = async (client, msg, args, options) => {
 					return msg.reply(translator.translate('Weather information is not yet available - wait a few minutes and try again'))
 				}
 
-				const human = await client.query.selectOneQuery('humans', { id: target.id })
+				let latitude; let
+					longitude
 
-				const { latitude, longitude } = human
-				if (!longitude || !latitude) {
-					return msg.reply(translator.translateFormat('You have not set your location, use `!{0}{1}`', util.prefix, translator.translate('help')), { style: 'markdown' })
+				if (args.length > 1) {
+					const matches = args[1].match(client.re.latlonRe)
+					if (matches !== null && matches.length >= 2) {
+						latitude = parseFloat(matches[1])
+						longitude = parseFloat(matches[2])
+					} else {
+						return msg.reply(translator.translateFormat('Could not understand the location'), { style: 'markdown' })
+					}
+				} else {
+					const human = await client.query.selectOneQuery('humans', { id: target.id })
+
+					latitude = human.latitude
+					longitude = human.longitude
+					if (!longitude || !latitude) {
+						return msg.reply(translator.translateFormat('You have not set your location, use `!{0}{1}`', util.prefix, translator.translate('help')), { style: 'markdown' })
+					}
 				}
 				const weatherCellId = weatherTileGenerator.getWeatherCellId(latitude, longitude)
 				const weatherInfo = client.PoracleInfo.lastWeatherBroadcast[weatherCellId]

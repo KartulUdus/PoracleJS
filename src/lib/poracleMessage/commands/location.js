@@ -44,7 +44,7 @@ exports.run = async (client, msg, args, options) => {
 		let staticMap
 		let message
 
-		const matches = search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
+		const matches = search.match(client.re.latlonRe)
 		if (matches !== null && matches.length >= 2) {
 			lat = parseFloat(matches[1])
 			lon = parseFloat(matches[2])
