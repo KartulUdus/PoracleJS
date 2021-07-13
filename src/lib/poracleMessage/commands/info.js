@@ -111,7 +111,7 @@ exports.run = async (client, msg, args, options) => {
 
 					const timeForHuman = moment.unix(currentTimestamp).tz(geoTz(latitude, longitude).toString()).format('HH:mm')
 
-					forecastString = forecastString.concat(timeForHuman, ' - ', translator.translate(client.GameData.utilData.weather[weatherId].name), ' ', translator.translate(client.GameData.utilData.weather[weatherId].emoji), '\n')
+					forecastString = forecastString.concat(timeForHuman, ' - ', translator.translate(client.GameData.utilData.weather[forecastInfo].name), ' ', translator.translate(client.GameData.utilData.weather[forecastInfo].emoji), '\n')
 					availableForecast = true
 				}
 
