@@ -778,6 +778,7 @@ async function handleAlarms() {
 
 async function currentStatus() {
 	let discordQueueLength = 0
+	// eslint-disable-next-line no-sequences
 	const queueCount = (queue) => queue.map((x) => x.target).reduce((r, c) => (r[c] = (r[c] || 0) + 1, r), {})
 
 	let queueSummary = {}
