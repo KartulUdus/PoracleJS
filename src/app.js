@@ -781,7 +781,7 @@ async function currentStatus() {
 	// eslint-disable-next-line no-sequences
 	const queueCount = (queue) => queue.map((x) => x.target).reduce((r, c) => (r[c] = (r[c] || 0) + 1, r), {})
 
-	let queueSummary = {}
+	const queueSummary = {}
 
 	for (const w of discordWorkers) {
 		discordQueueLength += w.discordQueue.length
@@ -791,18 +791,6 @@ async function currentStatus() {
 	const telegramQueueLength = (telegram ? telegram.telegramQueue.length : 0)
 		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
 
-	if (telegram) {
-		queueSummary = {
-			...queueSummary,
-			...queueCount(telegram.telegramQueue),
-		}
-	}
-	if (telegramChannel) {
-		queueSummary = {
-			...queueSummary,
-			...queueCount(telegramChannel.telegramQueue),
-		}
-	}
 	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
 	Object.assign(queueSummary,
 		telegram ? queueCount(telegram.telegramQueue) : {},
