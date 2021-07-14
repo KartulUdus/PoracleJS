@@ -118,7 +118,7 @@ class Monster extends Controller {
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
 					`)
 		}
-		this.log.debug(`${data.encounter_id}: Query ${query}`)
+		this.log.silly(`${data.encounter_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 
