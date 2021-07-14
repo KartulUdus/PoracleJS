@@ -31,6 +31,7 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const GymController = require('./controllers/gym')
 const PokestopLureController = require('./controllers/pokestop_lure')
 const NestController = require('./controllers/nest')
 const ControllerWeatherManager = require('./controllers/weatherData')
@@ -52,6 +53,7 @@ const questController = new QuestController(logs.controller, knex, config, dts, 
 const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
 const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
 const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
 
 const hookQueue = []
 let queuePort
@@ -104,6 +106,16 @@ async function processOne(hook) {
 			}
 			case 'quest': {
 				const result = await questController.handle(hook.message)
+				if (result) {
+					queueAddition = result
+				} else {
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+				}
+				break
+			}
+			case 'gym':
+			case 'gym_details': {
+				const result = await gymController.handle(hook.message)
 				if (result) {
 					queueAddition = result
 				} else {

@@ -7,7 +7,7 @@ const fs = require('fs')
 
 const pcache = require('flat-cache')
 
-const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
+const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
 const emojiFlags = require('emoji-flags')
 
 const TileserverPregen = require('../lib/tileserverPregen')
@@ -48,12 +48,20 @@ class Controller extends EventEmitter {
 				})
 			}
 			case 'nominatim': {
-				return NodeGeocoder({
+				const geocoder = NodeGeocoder({
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressFormat,
 					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
+				// Hack in suburb support
+				// eslint-disable-next-line no-underscore-dangle
+				geocoder._geocoder._formatResult = ((original) => (result) => ({
+					...original(result),
+					suburb: result.address.suburb || '',
+					// eslint-disable-next-line no-underscore-dangle
+				}))(geocoder._geocoder._formatResult)
+				return geocoder
 			}
 			case 'google': {
 				return NodeGeocoder({

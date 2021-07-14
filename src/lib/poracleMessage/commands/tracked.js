@@ -46,6 +46,12 @@ function raidRowText(translator, GameData, raid) {
 	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
 }
 
+function gymRowText(translator, GameData, gym) {
+	const raidTeam = translator.translate(GameData.utilData.teams[gym.team].name)
+
+	return `**${raidTeam} ${translator.translate('gyms')}** ${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}`
+}
+
 function nestRowText(translator, GameData, nest) {
 	let monsterName
 	let formName
@@ -157,6 +163,7 @@ exports.questRowText = questRowText
 exports.invasionRowText = invasionRowText
 exports.nestRowText = nestRowText
 exports.lureRowText = lureRowText
+exports.gymRowText = gymRowText
 exports.currentAreaText = currentAreaText
 
 exports.run = async (client, msg, args, options) => {
@@ -185,6 +192,7 @@ exports.run = async (client, msg, args, options) => {
 		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
 		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 		const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
+		const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
 		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
@@ -280,6 +288,16 @@ exports.run = async (client, msg, args, options) => {
 
 			nests.forEach((nest) => {
 				message = message.concat('\n', nestRowText(translator, client.GameData, nest))
+			})
+		}
+
+		if (!client.config.general.disableGym) {
+			if (gyms.length) {
+				message = message.concat('\n\n', translator.translate('You\'re tracking the following gyms:'), '\n')
+			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any gyms'))
+
+			gyms.forEach((gym) => {
+				message = message.concat('\n', gymRowText(translator, client.GameData, gym))
 			})
 		}
 

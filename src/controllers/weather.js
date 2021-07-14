@@ -8,8 +8,8 @@ const { Mutex } = require('async-mutex')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
-const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname}../../../.cache/`))
-const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
+const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../../.cache'))
+const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class Weather extends Controller {
 	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
