@@ -25,11 +25,21 @@ function monsterRowText(translator, GameData, monster) {
 	let minRarity = monster.rarity
 	if (minRarity === -1) minRarity = 1
 
-	const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking_highest > 1 ? `${monster.great_league_ranking_highest}-` : ''}${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
-	const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking_highest > 1 ? `${monster.ultra_league_ranking_highest}-` : ''}${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-	const littleLeague = monster.little_league_ranking >= 4096 ? translator.translate('any') : `top${monster.little_league_ranking_highest > 1 ? `${monster.little_league_ranking_highest}-` : ''}${monster.little_league_ranking} (@${monster.little_league_ranking_min_cp}+)`
+	const pvpString = monster.pvp_ranking_league
+		? translator.translate('pvp ranking:').concat(' ',
+			{
+				500: translator.translate('littlepvp'),
+				1500: translator.translate('greatpvp'),
+				2500: translator.translate('ultrapvp'),
+			}[monster.pvp_ranking_league].toString(),
+			` top${monster.pvp_ranking_best > 1 ? `${monster.great_league_ranking_best}-` : ''}${monster.pvp_ranking_worst} (@${monster.pvp_ranking_min_cp}+)`)
+		: ''
 
-	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('littlepvp')}: ${littleLeague} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`
+	// const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking_highest > 1 ? `${monster.great_league_ranking_highest}-` : ''}${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
+	// const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking_highest > 1 ? `${monster.ultra_league_ranking_highest}-` : ''}${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
+	// const littleLeague = monster.little_league_ranking >= 4096 ? translator.translate('any') : `top${monster.little_league_ranking_highest > 1 ? `${monster.little_league_ranking_highest}-` : ''}${monster.little_league_ranking} (@${monster.little_league_ranking_min_cp}+)`
+
+	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}${pvpString ? ` | ${pvpString}` : ''}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`
 }
 
 function raidRowText(translator, GameData, raid) {
