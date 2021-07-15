@@ -124,6 +124,7 @@ class PokestopLure extends Controller {
 
 			// should be moved after the fold as is more expensive now
 			data.imgUrl = await uicons.pokestopIcon(this.config.general.imgUrl, 'png', data.lureTypeId)
+			data.stickerUrl = await uicons.pokestopIcon(this.config.general.stickerUrl, 'webp', data.lureTypeId)
 
 			data.lureTypeEmoji = this.GameData.utilData.lures[data.lure_id].emoji
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color

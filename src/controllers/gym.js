@@ -152,6 +152,7 @@ class Gym extends Controller {
 			data.color = data.gymColor
 
 			data.imgUrl = await uicons.gymIcon(this.config.general.imgUrl, 'png', data.teamId, data.slotsAvailable, false, data.ex)
+			data.stickerUrl = await uicons.gymIcon(this.config.general.stickerUrl, 'webp', data.teamId, data.slotsAvailable, false, data.ex)
 
 			const whoCares = await this.gymWhoCares(data)
 

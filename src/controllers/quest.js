@@ -170,34 +170,40 @@ class Quest extends Controller {
 
 			if (data.rewardData.monsters.length > 0) {
 				data.imgUrl = await uicons.pokemonIcon(this.config.general.imgUrl, 'png', data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				data.stickerUrl = await uicons.pokemonIcon(this.config.general.stickerUrl, 'webp', data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
 				// data.imgUrl = data.rewardData.monsters.length > 0
 				// 	? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
 				// 	: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
-				data.stickerUrl = data.rewardData.monsters.length > 0
-					? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.webp`
-					: ''
+				// data.stickerUrl = data.rewardData.monsters.length > 0
+				// 	? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.webp`
+				// 	: ''
 			}
 
 			if (data.rewardData.items.length > 0) {
 				data.imgUrl = await uicons.rewardItemIcon(this.config.general.imgUrl, 'png', data.rewardData.items[0].id)
+				data.stickerUrl = await uicons.rewardItemIcon(this.config.general.stickerUrl, 'webp', data.rewardData.items[0].id)
+
 				// data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[0].id}_1.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[0].id}_1.webp`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[0].id}_1.webp`
 			}
 			if (data.dustAmount) {
 				data.imgUrl = await uicons.rewardStardustIcon(this.config.general.imgUrl, 'png', data.rewardData.dustAmount)
+				data.stickerUrl = await uicons.rewardStardustIcon(this.config.general.stickerUrl, 'webp', data.rewardData.dustAmount)
 				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_stardust.webp`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_stardust.webp`
 			}
 			if (data.rewardData.energyMonsters.length > 0) {
 				data.imgUrl = await uicons.rewardMegaEnergyIcon(this.config.general.imgUrl, 'png', data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				data.stickerUrl = await uicons.rewardMegaEnergyIcon(this.config.general.stickerUrl, 'webp', data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
 				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.webp`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.webp`
 			}
 			if (data.rewardData.candy.length > 0) {
 				data.imgUrl = await uicons.rewardCandyIcon(this.config.general.imgUrl, 'png', data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+				data.stickerUrl = await uicons.rewardCandyIcon(this.config.general.stickerUrl, 'webp', data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
 
 				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.webp`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.webp`
 			}
 
 			const whoCares = await this.questWhoCares(data)

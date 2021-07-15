@@ -228,8 +228,9 @@ class Raid extends Controller {
 				data.evolutionname = data.evolutionNameEng // deprecated
 				// should be moved after the fold as is more expensive now
 				data.imgUrl = await uicons.pokemonIcon(this.config.general.imgUrl, 'png', data.pokemon_id, data.form, data.evolution, data.gender, data.costume, false)
+				data.stickerUrl = await uicons.pokemonIcon(this.config.general.stickerUrl, 'webp', data.pokemon_id, data.form, data.evolution, data.gender, data.costume, false)
 				// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
+				// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 				data.quickMoveId = data.move_1 ? data.move_1 : ''
 				data.chargeMoveId = data.move_2 ? data.move_2 : ''
 				data.quickMoveNameEng = this.GameData.moves[data.move_1] ? this.GameData.moves[data.move_1].name : ''
@@ -393,8 +394,9 @@ class Raid extends Controller {
 			data.hatchtime = data.hatchTime // deprecated
 			// should be moved after the fold as is more expensive now
 			data.imgUrl = await uicons.eggIcon(this.config.general.imgUrl, 'png', data.level)
+			data.stickerUrl = await uicons.eggIcon(this.config.general.stickerUrl, 'webp', data.level)
 			// data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
-			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
+			// data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				this.log.debug(`${logReference}: Egg at ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)

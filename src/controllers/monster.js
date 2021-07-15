@@ -212,8 +212,9 @@ class Monster extends Controller {
 			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
 			// should be moved after the fold as is more expensive now
 			data.imgUrl = await uicons.pokemonIcon(this.config.general.imgUrl, 'png', data.pokemon_id, data.form, 0, data.gender, data.costume, false)
+			data.stickerUrl = await uicons.pokemonIcon(this.config.general.stickerUrl, 'webp', data.pokemon_id, data.form, 0, data.gender, data.costume, false)
 			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
+			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
 			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1

@@ -124,6 +124,7 @@ class Pokestop extends Controller {
 
 			// should be moved after the fold as is more expensive now
 			data.imgUrl = await uicons.invasionIcon(this.config.general.imgUrl, 'png', data.gruntTypeId)
+			data.stickerUrl = await uicons.invasionIcon(this.config.general.stickerUrl, 'webp', data.gruntTypeId)
 
 			data.gruntTypeEmoji = '❓'
 			data.gruntTypeColor = 'BABABA'
