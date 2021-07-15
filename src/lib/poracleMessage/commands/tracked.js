@@ -3,16 +3,16 @@ const path = require('path')
 const helpCommand = require('./help')
 
 function standardText(config, translator, row) {
-	let standardText = ''
+	let text = ''
 	if (row.template !== config.general.defaultTemplateName.toString()) {
-		standardText = standardText.concat(` ${translator.translate('template')}: ${row.template}`)
+		text = text.concat(` ${translator.translate('template')}: ${row.template}`)
 	}
 
 	if (row.clean) {
-		standardText = standardText.concat(` ${translator.translate('clean')}`)
+		text = text.concat(` ${translator.translate('clean')}`)
 	}
 
-	return standardText
+	return text
 }
 
 function monsterRowText(config, translator, GameData, monster) {
