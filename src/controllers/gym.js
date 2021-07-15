@@ -1,6 +1,7 @@
 // const geoTz = require('geo-tz')
 // const moment = require('moment-timezone')
 const Controller = require('./controller')
+const uicons = require('../lib/uicons')
 
 /**
  * Controller for processing gym webhooks
@@ -125,7 +126,6 @@ class Gym extends Controller {
 			//			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -150,6 +150,8 @@ class Gym extends Controller {
 			data.oldSlotsAvailable = data.old_slots_available
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.color = data.gymColor
+
+			data.imgUrl = await uicons.gymIcon(this.config.general.imgUrl, 'png', data.teamId, data.slotsAvailable, false, data.ex)
 
 			const whoCares = await this.gymWhoCares(data)
 

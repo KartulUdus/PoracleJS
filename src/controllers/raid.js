@@ -1,6 +1,7 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
+const uicons = require('../lib/uicons')
 
 class Raid extends Controller {
 	async raidWhoCares(data) {
@@ -225,8 +226,9 @@ class Raid extends Controller {
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.formname = data.formNameEng // deprecated
 				data.evolutionname = data.evolutionNameEng // deprecated
-				//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
-				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
+				// should be moved after the fold as is more expensive now
+				data.imgUrl = await uicons.pokemonIcon(this.config.general.imgUrl, 'png', data.pokemon_id, data.form, data.evolution, data.gender, data.costume, false)
+				// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 				data.quickMoveId = data.move_1 ? data.move_1 : ''
 				data.chargeMoveId = data.move_2 ? data.move_2 : ''
@@ -389,7 +391,9 @@ class Raid extends Controller {
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 			data.hatchTime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.hatchtime = data.hatchTime // deprecated
-			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+			// should be moved after the fold as is more expensive now
+			data.imgUrl = await uicons.eggIcon(this.config.general.imgUrl, 'png', data.level)
+			// data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {

@@ -3,6 +3,8 @@ const moment = require('moment-timezone')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
+const uicons = require('../lib/uicons')
+
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
 		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
@@ -84,7 +86,7 @@ class Monster extends Controller {
 					`)
 			//					group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.great_league_ranking, monsters.ultra_league_ranking
 		}
-		// this.log.silly(`${data.encounter_id}: Query ${query}`)
+		this.log.debug(`${data.encounter_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 
@@ -208,7 +210,9 @@ class Monster extends Controller {
 			data.mapurl = data.googleMapUrl // deprecated
 			data.ivcolor = data.ivColor // deprecated
 			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
-			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+			// should be moved after the fold as is more expensive now
+			data.imgUrl = await uicons.pokemonIcon(this.config.general.imgUrl, 'png', data.pokemon_id, data.form, 0, data.gender, data.costume, false)
+			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)

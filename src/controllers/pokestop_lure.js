@@ -1,7 +1,7 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-
+const uicons = require('../lib/uicons')
 /**
  * Controller for processing pokestop webhooks
  * Alerts on lures
@@ -106,7 +106,6 @@ class PokestopLure extends Controller {
 			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -122,6 +121,9 @@ class PokestopLure extends Controller {
 			if (data.lure_id) {
 				data.lureTypeId = data.lure_id
 			}
+
+			// should be moved after the fold as is more expensive now
+			data.imgUrl = await uicons.pokestopIcon(this.config.general.imgUrl, 'png', data.lureTypeId)
 
 			data.lureTypeEmoji = this.GameData.utilData.lures[data.lure_id].emoji
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
