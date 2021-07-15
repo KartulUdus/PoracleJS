@@ -23,9 +23,9 @@
       "alertMinimumTime" : 120,                 // time inside which alerts will not be generated (120s - 2mins before expiration no alert)
       "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
     // imgUrl - base url for poracle creation of {{imgUrl}} reference
-      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
+      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS",
     // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers
-      "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
+      "stickerUrl": "https://raw.githubusercontent.com/bbdoc/tgUICONS/main",
       "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
