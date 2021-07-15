@@ -265,13 +265,13 @@ class Monster extends Controller {
 
 				if (this.config.pvp.dataSource === 'internal') {
 					if (ohbemCalc.great) {
-						data.pvp_rankings_great_league = ohbemCalc.great.filter((x) => this.config.pvp.pvpEvolutionDirectTracking || !x.evolution)
+						data.pvp_rankings_great_league = ohbemCalc.great.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					} else delete data.pvp_rankings_great_league
 					if (ohbemCalc.ultra) {
-						data.pvp_rankings_ultra_league = ohbemCalc.ultra.filter((x) => this.config.pvp.pvpEvolutionDirectTracking || !x.evolution)
+						data.pvp_rankings_ultra_league = ohbemCalc.ultra.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					} else delete data.pvp_rankings_ultra_league
 					if (ohbemCalc.little) {
-						data.pvp_rankings_little_league = ohbemCalc.little.filter((x) => this.config.pvp.pvpEvolutionDirectTracking || !x.evolution)
+						data.pvp_rankings_little_league = ohbemCalc.little.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					}
 				}
 			}
