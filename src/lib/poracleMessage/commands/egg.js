@@ -122,13 +122,13 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((egg) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.eggRowText(client.config, translator, client.GameData, egg), '\n')
 				})
 				updates.forEach((egg) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.eggRowText(client.config, translator, client.GameData, egg), '\n')
 				})
 				insert.forEach((egg) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.eggRowText(client.config, translator, client.GameData, egg), '\n')
 				})
 			}
 
