@@ -32,7 +32,7 @@ function monsterRowText(translator, GameData, monster) {
 				1500: translator.translate('greatpvp'),
 				2500: translator.translate('ultrapvp'),
 			}[monster.pvp_ranking_league].toString(),
-			` top${monster.pvp_ranking_best > 1 ? `${monster.great_league_ranking_best}-` : ''}${monster.pvp_ranking_worst} (@${monster.pvp_ranking_min_cp}+)`)
+			` top${monster.pvp_ranking_best > 1 ? `${monster.pvp_ranking_best}-` : ''}${monster.pvp_ranking_worst} (@${monster.pvp_ranking_min_cp}+)`)
 		: ''
 
 	// const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking_highest > 1 ? `${monster.great_league_ranking_highest}-` : ''}${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
