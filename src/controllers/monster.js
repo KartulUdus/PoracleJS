@@ -539,14 +539,14 @@ class Monster extends Controller {
 							&& rank.cp >= minCp) {
 							const displayRank = {}
 
-							displayRank.rank = rank.rank
-							displayRank.formId = rank.form || 0
+							displayRank.rank = +rank.rank
+							displayRank.formId = +rank.form || 0
 							displayRank.evolution = rank.evolution
-							displayRank.level = rank.level
+							displayRank.level = +rank.level
 							displayRank.cap = rank.cap
 							displayRank.cp = rank.cp
-							displayRank.pokemonId = rank.pokemon
-							displayRank.percentage = (rank.percentage * 100).toFixed(2)
+							displayRank.pokemonId = +rank.pokemon
+							// displayRank.percentage = (rank.percentage * 100).toFixed(2)
 
 							let monsterName
 							let formName
