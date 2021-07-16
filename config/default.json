@@ -94,7 +94,8 @@
       "enableLogs": {
         "webhooks": false,                // turn on hourly webhook log (can be quite large)
         "discord": true,                  // turn on discord log (for outbound messages to discord users and channels)
-        "telegram": true                  // turn on telegram log (for outbound messages to telegram users, groups and channels)
+        "telegram": true,                 // turn on telegram log (for outbound messages to telegram users, groups and channels)
+        "pvp": false                      // whether to log pvp info/calculations (at verbose level)
       },
       "dailyLogLimit": 7,                 // the number of days to keep the daily logs (everything aside from webhooks)
       "webhookLogLimit": 12               // the number of hours to keep the webhook logs, if enabled

@@ -13,24 +13,25 @@ class Monster extends Controller {
 	}
 
 	async initialiseObem() {
-		const pokemonData = await Ohbem.fetchPokemonData()
+		if (this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'compare') {
+			const pokemonData = await Ohbem.fetchPokemonData()
 
-		this.ohbem = new Ohbem({
-			// all of the following options are optional and these (except for pokemonData) are the default values
-			// read the documentation for more information
-			leagues: {
-				little: 500,
-				great: 1500,
-				ultra: 2500,
-				master: null,
-			},
-			levelCaps: this.config.pvp.levelCaps,
-			// The following field is required to use queryPvPRank
-			// You can skip populating it if you only want to use other helper methods
-			pokemonData,
-			// If you have installed lru-cache, uncomment the following to use cache:
-			cachingStrategy: Ohbem.cachingStrategies.balanced,
-		})
+			this.ohbem = new Ohbem({
+				// all of the following options are optional and these (except for pokemonData) are the default values
+				// read the documentation for more information
+				leagues: {
+					little: 500,
+					great: 1500,
+					ultra: 2500,
+					master: null,
+				},
+				levelCaps: this.config.pvp.levelCaps,
+				// The following field is required to use queryPvPRank
+				// You can skip populating it if you only want to use other helper methods
+				pokemonData,
+				cachingStrategy: Ohbem.cachingStrategies.balanced,
+			})
+		}
 	}
 
 	async monsterWhoCares(data) {
@@ -253,15 +254,19 @@ class Monster extends Controller {
 
 			let ohbemms = 0
 
+			if (this.config.logger.enableLogs.pvp && data.iv >= 0) {
+				this.log.verbose(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
+			}
 			if (this.ohbem && data.iv >= 0) {
 				const ohbemstart = process.hrtime()
 
 				const ohbemCalc = this.ohbem.queryPvPRank(+data.pokemonId, +data.form || 0, +data.costume, +data.gender, +data.atk, +data.def, +data.sta, +data.level)
-				this.log.debug(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
 				const ohbemend = process.hrtime(ohbemstart)
 				ohbemms = ohbemend[1] / 1000000
 
-				this.log.debug(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)} ${ohbemms}ms`)
+				if (this.config.logger.enableLogs.pvp) {
+					this.log.verbose(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)} ${ohbemms}ms`)
+				}
 
 				if (this.config.pvp.dataSource === 'internal') {
 					if (ohbemCalc.great) {
