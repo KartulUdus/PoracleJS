@@ -552,15 +552,21 @@ class Monster extends Controller {
 							let formName
 							let stats
 
-							const mon = Object.values(this.GameData.monsters).find((m) => m.id === displayRank.pokemonId && m.form.id === displayRank.formId)
+							let mon = this.GameData.monsters[`${displayRank.pokemonId}_${displayRank.formId}`]
 							if (!mon) {
-								monsterName = `${translator.translate('Unknown monster')} ${monster.pokemonId}`
-								formName = `${monster.formId}`
-								stats = {
-									baseAttack: 0,
-									baseDefense: 0,
-									baseStamina: 0,
+								mon = this.GameData.monsters[`${displayRank.pokemonId}_0`]
+								if (!mon) {
+									monsterName = `${translator.translate('Unknown monster')} ${displayRank.pokemonId}`
+									stats = {
+										baseAttack: 0,
+										baseDefense: 0,
+										baseStamina: 0,
+									}
+								} else {
+									monsterName = mon.name
+									stats = monster.stats
 								}
+								formName = `${displayRank.formId}`
 							} else {
 								monsterName = mon.name
 								formName = mon.form.name
