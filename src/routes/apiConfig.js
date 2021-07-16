@@ -20,6 +20,7 @@ module.exports = async (fastify, options, next) => {
 			pvpFilterMaxRank: fastify.config.pvp.pvpFilterMaxRank,
 			pvpFilterGreatMinCP: fastify.config.pvp.pvpFilterGreatMinCP,
 			pvpFilterUltraMinCP: fastify.config.pvp.pvpFilterUltraMinCP,
+			pvpFilterLittleMinCP: fastify.config.pvp.pvpFilterLittleMinCP,
 			defaultTemplateName: fastify.config.general.defaultTemplateName || '1',
 			channelNotesContainsCategory: fastify.config.discord.checkRole && fastify.config.reconciliation.discord.updateChannelNotes,
 			admins: {
