@@ -180,8 +180,8 @@ class Quest extends Controller {
 			}
 
 			if (data.rewardData.items.length > 0) {
-				data.imgUrl = await uicons.rewardItemIcon(this.config.general.imgUrl, 'png', data.rewardData.items[0].id)
-				data.stickerUrl = await uicons.rewardItemIcon(this.config.general.stickerUrl, 'webp', data.rewardData.items[0].id)
+				data.imgUrl = await uicons.rewardItemIcon(this.config.general.imgUrl, 'png', data.rewardData.items[0].id, data.rewardData.items[0].amount)
+				data.stickerUrl = await uicons.rewardItemIcon(this.config.general.stickerUrl, 'webp', data.rewardData.items[0].id, data.rewardData.items[0].amount)
 
 				// data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[0].id}_1.png`
 				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[0].id}_1.webp`
