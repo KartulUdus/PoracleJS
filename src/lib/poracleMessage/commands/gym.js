@@ -121,13 +121,13 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((lure) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.gymRowText(translator, client.GameData, lure), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.gymRowText(client.config, translator, client.GameData, lure), '\n')
 				})
 				updates.forEach((lure) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.gymRowText(translator, client.GameData, lure), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.gymRowText(client.config, translator, client.GameData, lure), '\n')
 				})
 				insert.forEach((lure) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.gymRowText(translator, client.GameData, lure), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.gymRowText(client.config, translator, client.GameData, lure), '\n')
 				})
 			}
 
