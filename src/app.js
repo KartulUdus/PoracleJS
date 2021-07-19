@@ -17,6 +17,7 @@ const fastify = require('fastify')({
 const { Telegraf } = require('telegraf')
 
 const path = require('path')
+const chokidar = require('chokidar')
 const moment = require('moment-timezone')
 const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
@@ -257,6 +258,18 @@ async function run() {
 	}
 
 	setTimeout(processPogoEvents, 30000)
+
+	chokidar.watch([
+		path.join(__dirname, '../config/dts.json'),
+		path.join(__dirname, '../config/dts/'),
+	], {
+		awaitWriteFinish: true,
+	}).on('change', () => {
+		log.info('Change in DTS detected, triggering reload')
+		sendCommandToWorkers({
+			type: 'reloadDts',
+		})
+	})
 
 	if (config.discord.enabled) {
 		setInterval(() => {
@@ -502,6 +515,12 @@ function processMessageFromWeather(msg) {
 		for (const relayWorker of workers) {
 			relayWorker.commandPort.postMessage(msg)
 		}
+	}
+}
+
+function sendCommandToWorkers(msg) {
+	for (const relayWorker of workers) {
+		relayWorker.commandPort.postMessage(msg)
 	}
 }
 

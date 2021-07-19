@@ -170,6 +170,16 @@ function updateBadGuys(badguys) {
 	}
 }
 
+function reloadDts() {
+	const newDts = require('./lib/dtsloader').readDtsFiles()
+	monsterController.setDts(newDts)
+	raidController.setDts(newDts)
+	questController.setDts(newDts)
+	pokestopController.setDts(newDts)
+	nestController.setDts(newDts)
+	pokestopLureController.setDts(newDts)
+}
+
 function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
@@ -198,6 +208,12 @@ function receiveCommand(cmd) {
 			log.debug(`Worker ${workerId}: Received event broadcast`, cmd.data)
 
 			pogoEventParser.loadEvents(cmd.data)
+		}
+
+		if (cmd.type === 'reloadDts') {
+			log.debug(`Worker ${workerId}: Received dts reload request broadcast`)
+
+			reloadDts()
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)
