@@ -122,7 +122,6 @@ class Pokestop extends Controller {
 				data.gruntTypeId = data.grunt_type
 			}
 
-			data.gruntTypeEmoji = '❓'
 			data.gruntTypeColor = 'BABABA'
 
 			data.gender = 0
@@ -188,6 +187,10 @@ class Pokestop extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
+
+				data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup('grunt-unknown', platform))
 
 				// full build
 				if (data.gruntTypeId) {
@@ -204,7 +207,7 @@ class Pokestop extends Controller {
 							data.genderDataEng = { name: '', emoji: '' }
 						}
 						if (this.GameData.utilData.types[gruntType.type]) {
-							data.gruntTypeEmoji = translator.translate(this.GameData.utilData.types[gruntType.type].emoji)
+							data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[gruntType.type].emoji, platform))
 						}
 						if (gruntType.type in this.GameData.utilData.types) {
 							data.gruntTypeColor = this.GameData.utilData.types[gruntType.type].color
@@ -270,12 +273,9 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: data.genderDataEng ? { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) } : { name: '', emoji: '' },
+					genderData: data.genderDataEng ? { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)) } : { name: '', emoji: '' },
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts(logReference, 'invasion', platform, cares.template, language)
 				if (mustache) {

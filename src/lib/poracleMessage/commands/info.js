@@ -123,6 +123,10 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			default: {
+				await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`', util.prefix),
+					{ style: 'markdown' })
+				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+
 				await msg.react('🙅')
 			}
 		}
