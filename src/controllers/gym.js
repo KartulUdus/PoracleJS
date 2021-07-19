@@ -144,7 +144,6 @@ class Gym extends Controller {
 			data.teamNameEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].name : 'Unknown'
 			data.oldTeamNameEng = data.old_team_id >= 0 ? this.GameData.utilData.teams[data.old_team_id].name : ''
 			data.previousControlNameEng = data.last_owner_id >= 0 ? this.GameData.utilData.teams[data.last_owner_id].name : ''
-			data.teamEmojiEng = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].emoji : ''
 			data.gymColor = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.slotsAvailable = data.slots_available
 			data.oldSlotsAvailable = data.old_slots_available
@@ -193,10 +192,13 @@ class Gym extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				data.teamName = translator.translate(data.teamNameEng)
 				data.oldTeamName = translator.translate(data.oldTeamNameEng)
 				data.previousControlName = translator.translate(data.previousControlNameEng)
+				data.teamEmojiEng = data.team_id >= 0 ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
 				data.teamEmoji = translator.translate(data.teamEmojiEng)
 
 				// full build
@@ -211,9 +213,6 @@ class Gym extends Controller {
 					now: new Date(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts(logReference, 'gym', platform, cares.template, language)
 				if (mustache) {

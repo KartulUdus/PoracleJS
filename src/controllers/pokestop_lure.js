@@ -123,7 +123,6 @@ class PokestopLure extends Controller {
 				data.lureTypeId = data.lure_id
 			}
 
-			data.lureTypeEmoji = this.GameData.utilData.lures[data.lure_id].emoji
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
 			data.lureTypeNameEng = this.GameData.utilData.lures[data.lure_id].name
 
@@ -169,10 +168,13 @@ class PokestopLure extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				// full build
 				data.lureTypeName = translator.translate(data.lureTypeNameEng)
 				data.lureType = data.lureTypeName
+				data.lureTypeEmoji = this.emojiLookup.lookup(this.GameData.utilData.lures[data.lure_id].emoji, platform)
 
 				const view = {
 					...geoResult,
@@ -184,9 +186,6 @@ class PokestopLure extends Controller {
 					now: new Date(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts(logReference, 'lure', platform, cares.template, language)
 				if (mustache) {

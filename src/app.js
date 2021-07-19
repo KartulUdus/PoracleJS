@@ -891,6 +891,24 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 	}
 })
 
-run()
-setInterval(handleAlarms, 100)
-setInterval(currentStatus, 60000)
+knex.migrate.latest({
+	directory: path.join(__dirname, './lib/db/migrations'),
+	tableName: 'migrations',
+}).then(() => {
+	run()
+	setInterval(handleAlarms, 100)
+	setInterval(currentStatus, 60000)
+}).catch((err) => {
+	console.error(err)
+	console.error('Migration failed - exiting poracle')
+
+	log.error('Migration failed', err)
+
+	if (process.argv.includes('-force')) {
+		run()
+		setInterval(handleAlarms, 100)
+		setInterval(currentStatus, 60000)
+	} else {
+		process.exit(1)
+	}
+})

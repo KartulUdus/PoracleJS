@@ -13,7 +13,7 @@ const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.ca
 
 class Weather extends Controller {
 	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
-		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null)
+		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
 		this.controllerData = weatherCache.getKey('weatherCacheData') || {}
 		this.caresData = weatherCache.getKey('caredPokemon') || {}
 
@@ -344,10 +344,11 @@ class Weather extends Controller {
 
 			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
 			data.oldWeatherNameEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].name : ''
-			data.oldWeatherEmojiEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].emoji : ''
 			data.weatherId = data.condition ? data.condition : ''
 			data.weatherNameEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].name : ''
-			data.weatherEmojiEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].emoji : ''
+
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			const jobs = []
 			const now = moment.now()
@@ -397,10 +398,15 @@ class Weather extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				data.oldWeatherName = data.oldWeatherNameEng ? translator.translate(data.oldWeatherNameEng) : ''
+				data.oldWeatherEmojiEng = data.oldWeatherId ? this.emojiLookup.lookup(this.GameData.utilData.weather[data.oldWeatherId].emoji, platform) : ''
 				data.oldWeatherEmoji = data.oldWeatherNameEng ? translator.translate(data.oldWeatherEmojiEng) : ''
+				data.weatherCellId = data.s2_cell_id
 				data.weatherName = data.weatherNameEng ? translator.translate(data.weatherNameEng) : ''
+				data.weatherEmojiEng = data.weatherId ? this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherId].emoji, platform) : ''
 				data.weatherEmoji = data.weatherEmojiEng ? translator.translate(data.weatherEmojiEng) : ''
 				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
 					data.activePokemons.map((pok) => {
@@ -418,11 +424,9 @@ class Weather extends Controller {
 					...data,
 					...geoResult,
 					id: data.s2_cell_id,
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					now: new Date(),
 				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
 
 				const mustache = this.getDts(logReference, 'weatherchange', platform, cares.template, language)
 				if (mustache) {
