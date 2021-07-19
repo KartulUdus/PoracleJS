@@ -41,6 +41,10 @@ const GameData = {
 	grunts: require('./util/grunts.json'),
 }
 
+const PoracleInfo = {
+
+}
+
 const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token)// , { channelMode: true })
@@ -82,7 +86,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, dts, geofence, translatorFactory) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
@@ -100,10 +104,10 @@ if (config.discord.enabled) {
 }
 
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
+	telegram = new TelegramWorker('1', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker('2', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
+		telegramChannel = new TelegramWorker('2', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 }
 
@@ -493,6 +497,8 @@ function processMessageFromWeather(msg) {
 	// Relay broadcasts from weather to all controllers
 
 	if (msg.type === 'weatherBroadcast') {
+		PoracleInfo.lastWeatherBroadcast = msg.data
+
 		for (const relayWorker of workers) {
 			relayWorker.commandPort.postMessage(msg)
 		}
@@ -503,6 +509,8 @@ function processMessageFromStats(msg) {
 	// Relay broadcasts from stats to all controllers
 
 	if (msg.type === 'statsBroadcast') {
+		PoracleInfo.lastStatsBroadcast = msg.data
+
 		for (const relayWorker of workers) {
 			relayWorker.commandPort.postMessage(msg)
 		}
@@ -772,15 +780,35 @@ async function handleAlarms() {
 
 async function currentStatus() {
 	let discordQueueLength = 0
+	// eslint-disable-next-line no-sequences
+	const queueCount = (queue) => queue.map((x) => x.target).reduce((r, c) => (r[c] = (r[c] || 0) + 1, r), {})
+
+	const queueSummary = {}
+
 	for (const w of discordWorkers) {
 		discordQueueLength += w.discordQueue.length
+		Object.assign(queueSummary, queueCount(w.discordQueue))
 	}
+
 	const telegramQueueLength = (telegram ? telegram.telegramQueue.length : 0)
 		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
 
 	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
-	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`)
-	log.verbose(`Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`)
+	Object.assign(queueSummary,
+		telegram ? queueCount(telegram.telegramQueue) : {},
+		telegramChannel ? queueCount(telegramChannel.telegramQueue) : {},
+		discordWebhookWorker ? queueCount(discordWebhookWorker.webhookQueue) : {})
+
+	const infoMessage = `[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`
+	log.info(infoMessage)
+	const cacheMessage = `Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`
+	log.verbose(cacheMessage)
+
+	PoracleInfo.status = {
+		queueInfo: infoMessage,
+		cacheInfo: cacheMessage,
+		queueSummary,
+	}
 }
 
 // const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]

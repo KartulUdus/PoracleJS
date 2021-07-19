@@ -341,13 +341,13 @@ exports.run = async (client, msg, args, options) => {
 			message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 		} else {
 			alreadyPresent.forEach((monster) => {
-				message = message.concat(translator.translate('Unchanged: '), trackedCommand.monsterRowText(translator, client.GameData, monster), '\n')
+				message = message.concat(translator.translate('Unchanged: '), trackedCommand.monsterRowText(client.config, translator, client.GameData, monster), '\n')
 			})
 			updates.forEach((monster) => {
-				message = message.concat(translator.translate('Updated: '), trackedCommand.monsterRowText(translator, client.GameData, monster), '\n')
+				message = message.concat(translator.translate('Updated: '), trackedCommand.monsterRowText(client.config, translator, client.GameData, monster), '\n')
 			})
 			insert.forEach((monster) => {
-				message = message.concat(translator.translate('New: '), trackedCommand.monsterRowText(translator, client.GameData, monster), '\n')
+				message = message.concat(translator.translate('New: '), trackedCommand.monsterRowText(client.config, translator, client.GameData, monster), '\n')
 			})
 		}
 
@@ -361,7 +361,7 @@ exports.run = async (client, msg, args, options) => {
 		await client.query.insertQuery('monsters', [...insert, ...updates])
 
 		reaction = insert.length ? '✅' : reaction
-		await msg.reply(message)
+		await msg.reply(message, { style: 'markdown' })
 		await msg.react(reaction)
 
 		client.log.info(`${logReference} ${target.name} started tracking monsters: ${monsters.map((m) => m.name).join(', ')}`)
