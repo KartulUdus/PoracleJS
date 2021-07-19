@@ -116,13 +116,13 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((invasion) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.invasionRowText(client.config, translator, client.GameData, invasion), '\n')
 				})
 				updates.forEach((invasion) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.invasionRowText(client.config, translator, client.GameData, invasion), '\n')
 				})
 				insert.forEach((invasion) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.invasionRowText(client.config, translator, client.GameData, invasion), '\n')
 				})
 			}
 
