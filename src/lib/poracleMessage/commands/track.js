@@ -13,6 +13,7 @@ exports.run = async (client, msg, args, options) => {
 
 		if (!canContinue) return
 		const commandName = __filename.slice(__dirname.length + 1, -3)
+
 		client.log.info(`${logReference} ${target.name}/${target.type}-${target.id}: ${commandName} ${args}`)
 
 		if (args[0] === 'help') {
@@ -20,6 +21,26 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		const translator = client.translatorFactory.Translator(language)
+
+		if (!await util.commandAllowed(commandName)) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
+		const securityCheck = [
+			['maxatk', client.re.maxatkRe],
+			['maxdef', client.re.maxdefRe],
+		]
+
+		for (const security of securityCheck) {
+			if (args.some((x) => x.match(security[1]))) {
+				if (!await util.commandAllowed(security[0])) {
+					await msg.react('🚫')
+					return msg.reply(translator.translateFormat('You do not have permission to use the `{0}` parameter',
+						translator.translate(security[0])))
+				}
+			}
+		}
 
 		if (args.length === 0) {
 			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`', util.prefix),
@@ -147,7 +168,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 		// Parse command elements to stuff
-		args.forEach((element) => {
+		for (const element of args) {
 			if (element.match(client.re.maxlevelRe)) [,, maxlevel] = element.match(client.re.maxlevelRe)
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.greatLeagueRe)) [,, greatLeague] = element.match(client.re.greatLeagueRe)
@@ -175,7 +196,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'clean') clean = true
 			else if (element === 'male') gender = 1
 			else if (element === 'genderless') gender = 3
-		})
+		}
 		if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
 			await msg.react(translator.translate('🙅'))
 			return await msg.reply(`${translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
