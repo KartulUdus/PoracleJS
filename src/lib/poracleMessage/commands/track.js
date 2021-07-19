@@ -321,7 +321,7 @@ exports.run = async (client, msg, args, options) => {
 		await client.query.insertQuery('monsters', [...insert, ...updates])
 
 		reaction = insert.length ? '✅' : reaction
-		await msg.reply(message)
+		await msg.reply(message, { style: 'markdown' })
 		await msg.react(reaction)
 
 		client.log.info(`${logReference} ${target.name} started tracking monsters: ${monsters.map((m) => m.name).join(', ')}`)

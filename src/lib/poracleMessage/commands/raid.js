@@ -192,7 +192,7 @@ exports.run = async (client, msg, args, options) => {
 
 			//			const result = await client.query.insertOrUpdateQuery('raid', insert)
 			client.log.info(`${logReference}: ${target.name} started tracking level ${levels.join(', ')} raids`)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			const monsterIds = monsters.map((mon) => mon.id)
