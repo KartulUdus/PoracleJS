@@ -103,7 +103,7 @@ exports.run = async (client, msg, args, options) => {
 				individuallyAllowed	= true
 			}
 		}
-		const littleLeagueAllowed = this.config.pvp.dataSource === 'internal'
+		const littleLeagueAllowed = client.config.pvp.dataSource === 'internal'
 
 		// Substitute aliases
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
