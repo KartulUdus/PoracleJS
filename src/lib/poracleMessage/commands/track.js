@@ -103,6 +103,7 @@ exports.run = async (client, msg, args, options) => {
 				individuallyAllowed	= true
 			}
 		}
+		const littleLeagueAllowed = this.config.pvp.dataSource === 'internal'
 
 		// Substitute aliases
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
@@ -160,9 +161,9 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.ultraLeagueRe)) [,, ultraLeague] = element.match(client.re.ultraLeagueRe)
 			else if (element.match(client.re.ultraLeagueCPRe)) [,, ultraLeagueCP] = element.match(client.re.ultraLeagueCPRe)
 			else if (element.match(client.re.ultraLeagueHighestRe)) [,, ultraLeagueHighest] = element.match(client.re.ultraLeagueHighestRe)
-			else if (element.match(client.re.littleLeagueRe)) [,, littleLeague] = element.match(client.re.littleLeagueRe)
-			else if (element.match(client.re.littleLeagueCPRe)) [,, littleLeagueCP] = element.match(client.re.littleLeagueCPRe)
-			else if (element.match(client.re.littleLeagueHighestRe)) [,, littleLeagueHighest] = element.match(client.re.littleLeagueHighestRe)
+			else if (element.match(client.re.littleLeagueRe) && littleLeagueAllowed) [,, littleLeague] = element.match(client.re.littleLeagueRe)
+			else if (element.match(client.re.littleLeagueCPRe) && littleLeagueAllowed) [,, littleLeagueCP] = element.match(client.re.littleLeagueCPRe)
+			else if (element.match(client.re.littleLeagueHighestRe) && littleLeagueAllowed) [,, littleLeagueHighest] = element.match(client.re.littleLeagueHighestRe)
 			else if (element.match(client.re.maxcpRe)) [,, maxcp] = element.match(client.re.maxcpRe)
 			else if (element.match(client.re.maxivRe)) [,, maxiv] = element.match(client.re.maxivRe)
 			else if (element.match(client.re.maxweightRe)) [,, maxweight] = element.match(client.re.maxweightRe)
