@@ -52,7 +52,7 @@ class DiscordReconciliation {
 			await this.query.deleteQuery('humans', { id: user.id })
 			this.log.info(`Reconciliation (Discord) Delete user ${user.id} ${user.name}`)
 		} else {
-			this.log.info(`Reconciliation (Discord) Not removing user ${user.id}`)
+			this.log.info(`Reconciliation (Discord) Not removing invalid user ${user.id} [roleCheckMode is ignored]`)
 		}
 	}
 
