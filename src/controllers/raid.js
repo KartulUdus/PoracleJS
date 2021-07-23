@@ -287,7 +287,8 @@ class Raid extends Controller {
 					data.formName = translator.translate(data.formNameEng)
 					data.evolutionName = translator.translate(data.evolutionNameEng)
 					data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
-					data.teamName = data.team_id ? translator.translate(this.GameData.utilData.teams[data.team_id].name) : 'Harmony'
+					data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+					data.teamName = translator.translate(data.teamNameEng)
 					data.teamEmoji = data.team_id ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
 					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
 					data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji, platform)) : ''
@@ -341,48 +342,50 @@ class Raid extends Controller {
 						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					}
 
-					const mustache = this.getDts(logReference, 'raid', platform, cares.template, language)
+					const templateType = 'raid'
+					const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+					let message
 					if (mustache) {
 						let mustacheResult
-						let message
 						try {
 							mustacheResult = mustache(view, { data: { language } })
 						} catch (err) {
 							this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-							// eslint-disable-next-line no-continue
-							continue
 						}
-						mustacheResult = await this.urlShorten(mustacheResult)
-						try {
-							message = JSON.parse(mustacheResult)
-						} catch (err) {
-							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-							// eslint-disable-next-line no-continue
-							continue
-						}
-
-						if (cares.ping) {
-							if (!message.content) {
-								message.content = cares.ping
-							} else {
-								message.content += cares.ping
+						if (mustacheResult) {
+							mustacheResult = await this.urlShorten(mustacheResult)
+							try {
+								message = JSON.parse(mustacheResult)
+								if (cares.ping) {
+									if (!message.content) {
+										message.content = cares.ping
+									} else {
+										message.content += cares.ping
+									}
+								}
+							} catch (err) {
+								this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
 							}
 						}
-						const work = {
-							lat: data.latitude.toString().substring(0, 8),
-							lon: data.longitude.toString().substring(0, 8),
-							message,
-							target: cares.id,
-							type: cares.type,
-							name: cares.name,
-							tth: data.tth,
-							clean: cares.clean,
-							emoji: data.emoji,
-							logReference,
-							language,
-						}
-						jobs.push(work)
 					}
+
+					if (!message) {
+						message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+					}
+					const work = {
+						lat: data.latitude.toString().substring(0, 8),
+						lon: data.longitude.toString().substring(0, 8),
+						message,
+						target: cares.id,
+						type: cares.type,
+						name: cares.name,
+						tth: data.tth,
+						clean: cares.clean,
+						emoji: data.emoji,
+						logReference,
+						language,
+					}
+					jobs.push(work)
 				}
 				return jobs
 			}
@@ -444,7 +447,8 @@ class Raid extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 
-				data.teamName = data.team_id ? translator.translate(this.GameData.utilData.teams[data.team_id].name) : 'Harmony'
+				data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+				data.teamName = translator.translate(data.teamNameEng)
 				data.teamEmoji = data.team_id ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
 
 				const view = {
@@ -460,49 +464,50 @@ class Raid extends Controller {
 					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
 				}
 
-				const mustache = this.getDts(logReference, 'egg', platform, cares.template, language)
+				const templateType = 'egg'
+				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+				let message
 				if (mustache) {
 					let mustacheResult
-					let message
 					try {
 						mustacheResult = mustache(view, { data: { language } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
 					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
+					if (mustacheResult) {
+						mustacheResult = await this.urlShorten(mustacheResult)
+						try {
+							message = JSON.parse(mustacheResult)
+							if (cares.ping) {
+								if (!message.content) {
+									message.content = cares.ping
+								} else {
+									message.content += cares.ping
+								}
+							}
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
 						}
 					}
-
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: data.emoji,
-						logReference,
-						language,
-					}
-					jobs.push(work)
 				}
+
+				if (!message) {
+					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+				}
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: data.tth,
+					clean: cares.clean,
+					emoji: data.emoji,
+					logReference,
+					language,
+				}
+				jobs.push(work)
 			}
 			return jobs
 		} catch (e) {

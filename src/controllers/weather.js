@@ -96,21 +96,6 @@ class Weather extends Controller {
 	 * @returns {Promise<{next: number, current: number}>}
 	 */
 	async getWeather(id) {
-		// const res = {
-		// 	current: 0,
-		// 	next: 0,
-		// }
-		// // if (!this.config.weather.enableWeatherForecast
-		// 	|| moment().hour() >= moment(weatherObject.disappear * 1000).hour()
-		// 	&& !(moment().hour() === 23 && moment(weatherObject.disappear * 1000).hour() === 0)
-		// ) {
-		// 	this.log.info('weather forecast target will disappear in current hour')
-		// 	return res
-		// }
-		//
-		// const key = S2.latLngToKey(weatherObject.lat, weatherObject.lon, 10)
-		// const id = S2.keyToId(key)
-
 		this.log.debug(`Get weather ${id} before mutex`)
 		let weatherMutex = this.getWeatherMutex[id]
 		if (!weatherMutex) {
@@ -428,41 +413,50 @@ class Weather extends Controller {
 					now: new Date(),
 				}
 
-				const mustache = this.getDts(logReference, 'weatherchange', platform, cares.template, language)
+				const templateType = 'weatherchange'
+				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+				let message
 				if (mustache) {
 					let mustacheResult
-					let message
 					try {
 						mustacheResult = mustache(view, { data: { language } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
 					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
+					if (mustacheResult) {
+						mustacheResult = await this.urlShorten(mustacheResult)
+						try {
+							message = JSON.parse(mustacheResult)
+							if (cares.ping) {
+								if (!message.content) {
+									message.content = cares.ping
+								} else {
+									message.content += cares.ping
+								}
+							}
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+						}
 					}
-
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: weatherTth,
-						clean: cares.clean,
-						emoji: [],
-						logReference,
-						language,
-					}
-					jobs.push(work)
 				}
+
+				if (!message) {
+					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+				}
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: weatherTth,
+					clean: cares.clean,
+					emoji: [],
+					logReference,
+					language,
+				}
+				jobs.push(work)
 			}
 
 			this.log.info(`${logReference}: Weather alert generated and ${count} humans cared.`)
