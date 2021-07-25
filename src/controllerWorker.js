@@ -171,13 +171,18 @@ function updateBadGuys(badguys) {
 }
 
 function reloadDts() {
-	const newDts = require('./lib/dtsloader').readDtsFiles()
-	monsterController.setDts(newDts)
-	raidController.setDts(newDts)
-	questController.setDts(newDts)
-	pokestopController.setDts(newDts)
-	nestController.setDts(newDts)
-	pokestopLureController.setDts(newDts)
+	try {
+		const newDts = require('./lib/dtsloader').readDtsFiles()
+		monsterController.setDts(newDts)
+		raidController.setDts(newDts)
+		questController.setDts(newDts)
+		pokestopController.setDts(newDts)
+		nestController.setDts(newDts)
+		pokestopLureController.setDts(newDts)
+		log.info('DTS reloaded')
+	} catch (err) {
+		log.error('Error reloading dts', err)
+	}
 }
 
 function receiveCommand(cmd) {
