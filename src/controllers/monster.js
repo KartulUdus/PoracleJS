@@ -265,11 +265,17 @@ class Monster extends Controller {
 				const ohbemend = process.hrtime(ohbemstart)
 				ohbemms = ohbemend[1] / 1000000
 
+				data.ohbem_pvp = ohbemCalc
+			}
+
+			if (data.ohbem_pvp) {
+				const ohbemCalc = data.ohbem_pvp
+
 				if (this.config.logger.enableLogs.pvp) {
-					this.log.verbose(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)} ${ohbemms}ms`)
+					this.log.verbose(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)}`)
 				}
 
-				if (this.config.pvp.dataSource === 'internal') {
+				if (this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'internal2') {
 					if (ohbemCalc.great) {
 						data.pvp_rankings_great_league = ohbemCalc.great.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					} else delete data.pvp_rankings_great_league
