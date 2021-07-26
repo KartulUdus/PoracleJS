@@ -13,7 +13,9 @@ class Monster extends Controller {
 	}
 
 	async initialiseObem() {
-		if (this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'compare') {
+		// This per worker method will likely be removed
+
+		if (this.config.pvp.dataSource === 'internal2') {
 			const pokemonData = await Ohbem.fetchPokemonData()
 
 			this.ohbem = new Ohbem({
@@ -258,6 +260,7 @@ class Monster extends Controller {
 			if (this.config.logger.enableLogs.pvp && data.iv >= 0) {
 				this.log.verbose(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
 			}
+
 			if (this.ohbem && data.iv >= 0) {
 				const ohbemstart = process.hrtime()
 
@@ -269,21 +272,21 @@ class Monster extends Controller {
 			}
 
 			if (data.ohbem_pvp) {
-				const ohbemCalc = data.ohbem_pvp
+				const pvpData = data.ohbem_pvp
 
 				if (this.config.logger.enableLogs.pvp) {
-					this.log.verbose(`${data.encounter_id}: PVP From ohbem: ${JSON.stringify(ohbemCalc)}`)
+					this.log.verbose(`${data.encounter_id}: PVP From ohbem: ${JSON.stringify(pvpData)}`)
 				}
 
 				if (this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'internal2') {
-					if (ohbemCalc.great) {
-						data.pvp_rankings_great_league = ohbemCalc.great.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
+					if (pvpData.great) {
+						data.pvp_rankings_great_league = pvpData.great.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					} else delete data.pvp_rankings_great_league
-					if (ohbemCalc.ultra) {
-						data.pvp_rankings_ultra_league = ohbemCalc.ultra.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
+					if (pvpData.ultra) {
+						data.pvp_rankings_ultra_league = pvpData.ultra.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					} else delete data.pvp_rankings_ultra_league
-					if (ohbemCalc.little) {
-						data.pvp_rankings_little_league = ohbemCalc.little.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
+					if (pvpData.little) {
+						data.pvp_rankings_little_league = pvpData.little.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					}
 				}
 			}
