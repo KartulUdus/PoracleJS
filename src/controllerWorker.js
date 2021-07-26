@@ -179,6 +179,7 @@ function reloadDts() {
 		pokestopController.setDts(newDts)
 		nestController.setDts(newDts)
 		pokestopLureController.setDts(newDts)
+		gymController.setDts(newDts)
 		log.info('DTS reloaded')
 	} catch (err) {
 		log.error('Error reloading dts', err)
