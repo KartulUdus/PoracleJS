@@ -249,7 +249,7 @@ async function processPogoEvents() {
 }
 
 let ohbem
-async function initialiseObem() {
+async function initialiseOhbem() {
 	const pokemonData = await Ohbem.fetchPokemonData()
 
 	ohbem = new Ohbem({
@@ -278,7 +278,7 @@ async function run() {
 	}
 
 	if (config.pvp.dataSource === 'internal2') {
-		initialiseObem()
+		initialiseOhbem()
 	}
 
 	setTimeout(processPogoEvents, 30000)

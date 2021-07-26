@@ -272,7 +272,7 @@ class Monster extends Controller {
 				const ohbemCalc = data.ohbem_pvp
 
 				if (this.config.logger.enableLogs.pvp) {
-					this.log.verbose(`${data.encounter_id}: PVP From obhem: ${JSON.stringify(ohbemCalc)}`)
+					this.log.verbose(`${data.encounter_id}: PVP From ohbem: ${JSON.stringify(ohbemCalc)}`)
 				}
 
 				if (this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'internal2') {
