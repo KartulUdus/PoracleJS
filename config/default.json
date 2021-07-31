@@ -94,7 +94,8 @@
       "enableLogs": {
         "webhooks": false,                // turn on hourly webhook log (can be quite large)
         "discord": true,                  // turn on discord log (for outbound messages to discord users and channels)
-        "telegram": true                  // turn on telegram log (for outbound messages to telegram users, groups and channels)
+        "telegram": true,                 // turn on telegram log (for outbound messages to telegram users, groups and channels)
+        "pvp": false                      // whether to log pvp info/calculations (at verbose level)
       },
       "dailyLogLimit": 7,                 // the number of days to keep the daily logs (everything aside from webhooks)
       "webhookLogLimit": 12               // the number of hours to keep the webhook logs, if enabled
@@ -160,17 +161,22 @@
   //   would match an eevee)
   //
   "pvp": {
+      "dataSource": "webhook",                      // webhook - from hooks, internal - internal calculator
+      "levelCaps": [50],                            // level caps to be included in internal rank calculations - alternative could be [50, 51]
+      "includeMegaEvolution": false,                // whether to include mega evolutions in rank calculations
       "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation
       "pvpDisplayMaxRank": 10,
       "pvpDisplayGreatMinCP": 1450,
       "pvpDisplayUltraMinCP": 2450,
+      "pvpDisplayLittleMinCP": 450,
     // pvpFilter* - these filters are used as minimums on the track command to help users get
     //   PVP tracking right and to eliminate unexpectedly large tracks
       "pvpFilterMaxRank": 10,
       "pvpFilterGreatMinCP": 1450,
-      "pvpFilterUltraMinCP": 2450
+      "pvpFilterUltraMinCP": 2450,
+      "pvpFilterLittleMinCP": 450
   },
   //
   // tracking configuration - this section contains restrictions around tracking
