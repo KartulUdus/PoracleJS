@@ -59,13 +59,17 @@ exports.run = async (client, msg, args, options) => {
 		let maxweight = 9000000
 		let rarity = -1
 		let maxRarity = 6
+		let littleLeague = 4096
+		let littleLeagueHighest = 1
+		let littleLeagueCP = 0
 		let greatLeague = 4096
+		let greatLeagueHighest = 1
 		let greatLeagueCP = 0
 		let ultraLeague = 4096
+		let ultraLeagueHighest = 1
 		let ultraLeagueCP = 0
 		const pvpFilterMaxRank = Math.min(client.config.pvp.pvpFilterMaxRank, 4096)
-		const { pvpFilterGreatMinCP } = client.config.pvp
-		const { pvpFilterUltraMinCP } = client.config.pvp
+		const { pvpFilterGreatMinCP, pvpFilterUltraMinCP, pvpFilterLittleMinCP } = client.config.pvp
 		let template = client.config.general.defaultTemplateName
 		let clean = false
 		const pings = msg.getPings()
@@ -99,6 +103,7 @@ exports.run = async (client, msg, args, options) => {
 				individuallyAllowed	= true
 			}
 		}
+		const littleLeagueAllowed = client.config.pvp.dataSource === 'internal'
 
 		// Substitute aliases
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
@@ -152,8 +157,13 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.greatLeagueRe)) [,, greatLeague] = element.match(client.re.greatLeagueRe)
 			else if (element.match(client.re.greatLeagueCPRe)) [,, greatLeagueCP] = element.match(client.re.greatLeagueCPRe)
+			else if (element.match(client.re.greatLeagueHighestRe)) [,, greatLeagueHighest] = element.match(client.re.greatLeagueHighestRe)
 			else if (element.match(client.re.ultraLeagueRe)) [,, ultraLeague] = element.match(client.re.ultraLeagueRe)
 			else if (element.match(client.re.ultraLeagueCPRe)) [,, ultraLeagueCP] = element.match(client.re.ultraLeagueCPRe)
+			else if (element.match(client.re.ultraLeagueHighestRe)) [,, ultraLeagueHighest] = element.match(client.re.ultraLeagueHighestRe)
+			else if (element.match(client.re.littleLeagueRe) && littleLeagueAllowed) [,, littleLeague] = element.match(client.re.littleLeagueRe)
+			else if (element.match(client.re.littleLeagueCPRe) && littleLeagueAllowed) [,, littleLeagueCP] = element.match(client.re.littleLeagueCPRe)
+			else if (element.match(client.re.littleLeagueHighestRe) && littleLeagueAllowed) [,, littleLeagueHighest] = element.match(client.re.littleLeagueHighestRe)
 			else if (element.match(client.re.maxcpRe)) [,, maxcp] = element.match(client.re.maxcpRe)
 			else if (element.match(client.re.maxivRe)) [,, maxiv] = element.match(client.re.maxivRe)
 			else if (element.match(client.re.maxweightRe)) [,, maxweight] = element.match(client.re.maxweightRe)
@@ -176,23 +186,47 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'male') gender = 1
 			else if (element === 'genderless') gender = 3
 		})
-		if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
-			await msg.react(translator.translate('🙅'))
-			return await msg.reply(`${translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
+
+		const pvp = {}
+		if (greatLeague < 4096) {
+			Object.assign(pvp, { 1500: { minCp: Math.max(greatLeagueCP, pvpFilterGreatMinCP), worst: Math.min(greatLeague, pvpFilterMaxRank), best: greatLeagueHighest } })
+		}
+		if (ultraLeague < 4096) {
+			Object.assign(pvp, { 2500: { minCp: Math.max(ultraLeagueCP, pvpFilterUltraMinCP), worst: Math.min(ultraLeague, pvpFilterMaxRank), best: ultraLeagueHighest } })
+		}
+		if (littleLeague < 4096) {
+			Object.assign(pvp, { 500: { minCp: Math.max(littleLeagueCP, pvpFilterLittleMinCP), worst: Math.min(littleLeague, pvpFilterMaxRank), best: littleLeagueHighest } })
 		}
 
-		// if a value for great/ultra league rank was given, force it to be not greater than pvpFilterMaxRank
-		if (greatLeague < 4096 && greatLeague > pvpFilterMaxRank) greatLeague = pvpFilterMaxRank
-		if (ultraLeague < 4096 && ultraLeague > pvpFilterMaxRank) ultraLeague = pvpFilterMaxRank
-		// if a value for great/ultra league CP was given, force it to be not less than pvpFilterGreatMinCP/pvpFilterUltraMinCP
-		if (greatLeagueCP > 0 && greatLeagueCP < pvpFilterGreatMinCP) greatLeagueCP = pvpFilterGreatMinCP
-		if (ultraLeagueCP > 0 && ultraLeagueCP < pvpFilterUltraMinCP) ultraLeagueCP = pvpFilterUltraMinCP
-		// if a value for great/ultra league rank was given but none for great/ultra league CP, set the later implicitly to pvpFilterGreatMinCP/pvpFilterUltraMinCP
-		if (greatLeague < 4096 && greatLeagueCP === 0) greatLeagueCP = pvpFilterGreatMinCP
-		if (ultraLeague < 4096 && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
+		if (Object.keys(pvp).length > 1) {
+			await msg.react(translator.translate('🙅'))
+			return await msg.reply(`${translator.translate('Oops, more than one league PVP parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
+		}
+
+		// if (greatLeague < 4096 && ultraLeague < 4096 || greatLeague < 4096 && ultraLeagueCP > 0 || greatLeagueCP > 0 && ultraLeague < 4096 || greatLeagueCP > 0 && ultraLeagueCP > 0) {
+		// 	await msg.react(translator.translate('🙅'))
+		// 	return await msg.reply(`${translator.translate('Oops, both Great and Ultra league parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
+		// }
+
+		// // if a value for great/ultra league rank was given, force it to be not greater than pvpFilterMaxRank
+		// if (greatLeague < 4096 && greatLeague > pvpFilterMaxRank) greatLeague = pvpFilterMaxRank
+		// if (ultraLeague < 4096 && ultraLeague > pvpFilterMaxRank) ultraLeague = pvpFilterMaxRank
+		// if (littleLeague < 4096 && littleLeague > pvpFilterMaxRank) littleLeague = pvpFilterMaxRank
+		//
+		// // if a value for great/ultra league CP was given, force it to be not less than pvpFilterGreatMinCP/pvpFilterUltraMinCP
+		// if (greatLeagueCP > 0 && greatLeagueCP < pvpFilterGreatMinCP) greatLeagueCP = pvpFilterGreatMinCP
+		// if (ultraLeagueCP > 0 && ultraLeagueCP < pvpFilterUltraMinCP) ultraLeagueCP = pvpFilterUltraMinCP
+		// if (littleLeagueCP > 0 && littleLeagueCP < pvpFilterLittleMinCP) littleLeagueCP = pvpFilterLittleMinCP
+		//
+		// // if a value for great/ultra league rank was given but none for great/ultra league CP, set the later implicitly to pvpFilterGreatMinCP/pvpFilterUltraMinCP
+		// if (greatLeague < 4096 && greatLeagueCP === 0) greatLeagueCP = pvpFilterGreatMinCP
+		// if (ultraLeague < 4096 && ultraLeagueCP === 0) ultraLeagueCP = pvpFilterUltraMinCP
+		// if (littleLeague < 4096 && littleLeagueCP === 0) littleLeagueCP = pvpFilterLittleMinCP
+
 		// if a value for great/ultra league CP was given but none for great/ultra league rank, set the later implicitly to pvpFilterMaxRank
-		if (greatLeagueCP > 0 && greatLeague === 4096) greatLeague = pvpFilterMaxRank
-		if (ultraLeagueCP > 0 && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
+		// if (greatLeagueCP > 0 && greatLeague === 4096) greatLeague = pvpFilterMaxRank
+		// if (ultraLeagueCP > 0 && ultraLeague === 4096) ultraLeague = pvpFilterMaxRank
+		// if (littleLeagueCP > 0 && littleLeague === 4096) littleLeague = pvpFilterMaxRank
 
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
@@ -228,6 +262,9 @@ exports.run = async (client, msg, args, options) => {
 			await msg.reply(`${translator.translate('Warning: Admin command detected without distance set - using default distance')} ${client.config.tracking.defaultDistance}`)
 			distance = client.config.tracking.defaultDistance
 		}
+
+		const pvpLeague = Object.keys(pvp)[0] || 0
+
 		const insert = monsters.map((mon) => ({
 			id: target.id,
 			profile_no: currentProfileNo,
@@ -252,10 +289,14 @@ exports.run = async (client, msg, args, options) => {
 			max_sta: +maxSta,
 			gender: +gender,
 			clean: +clean,
-			great_league_ranking: +greatLeague,
-			great_league_ranking_min_cp: +greatLeagueCP,
-			ultra_league_ranking: +ultraLeague,
-			ultra_league_ranking_min_cp: +ultraLeagueCP,
+			great_league_ranking: (+pvpLeague === 1500) ? +pvp[pvpLeague].worst : 4096,				// deprecated
+			great_league_ranking_min_cp: (+pvpLeague === 1500) ? +pvp[pvpLeague].minCp : 0,			// deprecated
+			ultra_league_ranking: (+pvpLeague === 2500) ? +pvp[pvpLeague].worst : 4096,				// deprecated
+			ultra_league_ranking_min_cp: (+pvpLeague === 2500) ? +pvp[pvpLeague].minCp : 0,			// deprecated
+			pvp_ranking_league: +pvpLeague,
+			pvp_ranking_best: pvpLeague ? +pvp[pvpLeague].best : 1,
+			pvp_ranking_worst: pvpLeague ? +pvp[pvpLeague].worst : 4096,
+			pvp_ranking_min_cp: pvpLeague ? +pvp[pvpLeague].minCp : 0,
 			rarity: +rarity,
 			max_rarity: +maxRarity,
 			min_time: +minTime,

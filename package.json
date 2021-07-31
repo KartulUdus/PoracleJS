@@ -1,6 +1,6 @@
 {
   "name": "PoracleJS",
-  "version": "4.0.5",
+  "version": "4.1.0",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
@@ -47,6 +47,7 @@
     "hastebin-gen": "^2.0.5",
     "import-fresh": "^3.3.0",
     "knex": "^0.95.4",
+    "lru-cache": "^6.0.0",
     "moment-precise-range-plugin": "^1.3.0",
     "moment-timezone": "^0.5.33",
     "mysql2": "^2.2.5",
@@ -55,6 +56,7 @@
     "node-geocoder": "^3.27.0",
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
+    "ohbem": "^1.2.1",
     "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",
     "point-in-polygon": "^1.1.0",
     "readline-sync": "^1.4.10",

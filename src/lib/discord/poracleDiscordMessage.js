@@ -60,13 +60,20 @@ class PoracleDiscordMessage {
 
 	async reply(message) {
 		if (this.msg.channel.type === 'text') {
-			// This is a channel, do not reply but rather send to avoid @ reply
-			await split(message, async (msg) => this.msg.channel.send(msg))
-
+			if (message.embed) {
+				this.msg.channel.send(message)
+			} else {
+				// This is a channel, do not reply but rather send to avoid @ reply
+				await split(message, async (msg) => this.msg.channel.send(msg))
+			}
 			return
 		}
 
-		await split(message, async (msg) => this.msg.reply(msg))
+		if (message.embed) {
+			this.msg.reply(message)
+		} else {
+			await split(message, async (msg) => this.msg.reply(msg))
+		}
 	}
 
 	async replyWithImageUrl(title, message, url) {
