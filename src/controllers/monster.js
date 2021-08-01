@@ -554,6 +554,8 @@ class Monster extends Controller {
 							displayRank.evolution = rank.evolution
 							displayRank.level = +rank.level
 							displayRank.cap = rank.cap
+							displayRank.capped = rank.capped
+							displayRank.levelWithCap = displayRank.cap && !displayRank.capped ? `${displayRank.level}/${displayRank.cap}` : displayRank.level
 							displayRank.cp = rank.cp
 							displayRank.pokemonId = +rank.pokemon
 							// displayRank.percentage = (rank.percentage * 100).toFixed(2)
