@@ -50,7 +50,7 @@ exports.run = async (client, msg, args, options) => {
 								if (!mon) {
 									return `${translator.translate('Unknown monster')} ${x}`
 								}
-								return mon.name
+								return translator.translate(mon.name)
 							},
 						)
 						message = message.concat(`**${translator.translate(client.GameData.utilData.rarity[group])}**: ${monsters.join(', ')}`, '\n')
