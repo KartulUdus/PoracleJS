@@ -1,6 +1,6 @@
 const moment = require('moment-timezone')
 const geoTz = require('geo-tz')
-
+const EmojiLookup = require('../../emojiLookup')
 const helpCommand = require('./help')
 const weatherTileGenerator = require('../../weatherTileGenerator')
 
@@ -22,6 +22,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		const translator = client.translatorFactory.Translator(language)
+
+		const emojiLookup = new EmojiLookup(client.GameData.utilData.emojis)
+		let platform = target.type.split(':')[0]
+		if (platform === 'webhook') platform = 'discord'
 
 		switch (args[0]) {
 			case 'poracle': {
@@ -46,7 +50,7 @@ exports.run = async (client, msg, args, options) => {
 								if (!mon) {
 									return `${translator.translate('Unknown monster')} ${x}`
 								}
-								return mon.name
+								return translator.translate(mon.name)
 							},
 						)
 						message = message.concat(`**${translator.translate(client.GameData.utilData.rarity[group])}**: ${monsters.join(', ')}`, '\n')
@@ -111,11 +115,11 @@ exports.run = async (client, msg, args, options) => {
 
 					const timeForHuman = moment.unix(currentTimestamp).tz(geoTz(latitude, longitude).toString()).format('HH:mm')
 
-					forecastString = forecastString.concat(timeForHuman, ' - ', translator.translate(client.GameData.utilData.weather[forecastInfo].name), ' ', translator.translate(client.GameData.utilData.weather[forecastInfo].emoji), '\n')
+					forecastString = forecastString.concat(timeForHuman, ' - ', translator.translate(client.GameData.utilData.weather[forecastInfo].name), ' ', translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[forecastInfo].emoji, platform)), '\n')
 					availableForecast = true
 				}
 
-				await msg.replyWithImageUrl(translator.translateFormat('Current Weather: {0} {1}', translator.translate(client.GameData.utilData.weather[weatherId].name), translator.translate(client.GameData.utilData.weather[weatherId].emoji)),
+				await msg.replyWithImageUrl(translator.translateFormat('Current Weather: {0} {1}', translator.translate(client.GameData.utilData.weather[weatherId].name), translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weatherId].emoji, platform))),
 					availableForecast ? forecastString : translator.translate('No forecast available'),
 					staticMap)
 
@@ -123,7 +127,9 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			default: {
-				await msg.react('🙅')
+				await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`', util.prefix),
+					{ style: 'markdown' })
+				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			}
 		}
 	} catch (err) {

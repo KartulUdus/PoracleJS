@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
+const mustache = require('handlebars')
 const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
@@ -30,7 +31,7 @@ class Telegram {
 		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, this.config.tuning.concurrentTelegramDestinationsPerBot, ((entry) => entry.target))
 		this.bot
 			.use(commandParser(this.translatorFactory))
-			.use(controller(query, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip))
+			.use(controller(query, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip, mustache))
 
 		this.commands = {}
 
