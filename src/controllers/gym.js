@@ -144,8 +144,7 @@ class Gym extends Controller {
 			data.teamNameEng = data.teamId >= 0 ? this.GameData.utilData.teams[data.teamId].name : 'Unknown'
 			data.oldTeamNameEng = data.old_team_id >= 0 ? this.GameData.utilData.teams[data.old_team_id].name : ''
 			data.previousControlNameEng = data.last_owner_id >= 0 ? this.GameData.utilData.teams[data.last_owner_id].name : ''
-			data.teamEmojiEng = data.teamId >= 0 ? this.GameData.utilData.teams[data.teamId].emoji : ''
-			data.gymColor = data.teamId >= 0 ? this.GameData.utilData.teams[data.teamId].color : 'BABABA'
+			data.gymColor = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.slotsAvailable = data.slots_available
 			data.oldSlotsAvailable = data.old_slots_available
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
@@ -193,10 +192,13 @@ class Gym extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				data.teamName = translator.translate(data.teamNameEng)
 				data.oldTeamName = translator.translate(data.oldTeamNameEng)
 				data.previousControlName = translator.translate(data.previousControlNameEng)
+				data.teamEmojiEng = data.teamId >= 0 ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.teamId].emoji, platform) : ''
 				data.teamEmoji = translator.translate(data.teamEmojiEng)
 
 				// full build
@@ -212,52 +214,52 @@ class Gym extends Controller {
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
-				const mustache = this.getDts(logReference, 'gym', platform, cares.template, language)
+				const templateType = 'gym'
+				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+				let message
 				if (mustache) {
 					let mustacheResult
-					let message
 					try {
 						mustacheResult = mustache(view, { data: { language } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
 					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
+					if (mustacheResult) {
+						mustacheResult = await this.urlShorten(mustacheResult)
+						try {
+							message = JSON.parse(mustacheResult)
+							if (cares.ping) {
+								if (!message.content) {
+									message.content = cares.ping
+								} else {
+									message.content += cares.ping
+								}
+							}
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
 						}
 					}
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: data.emoji,
-						logReference,
-						language,
-					}
-
-					jobs.push(work)
 				}
+
+				if (!message) {
+					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+				}
+
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: data.tth,
+					clean: cares.clean,
+					emoji: data.emoji,
+					logReference,
+					language,
+				}
+
+				jobs.push(work)
 			}
 
 			return jobs
