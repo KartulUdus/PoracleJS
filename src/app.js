@@ -4,7 +4,6 @@ require('events').EventEmitter.prototype._maxListeners = 100
 const { writeHeapSnapshot } = require('v8')
 
 const fs = require('fs')
-const fsp = require('fs').promises
 const util = require('util')
 const { S2 } = require('s2-geometry')
 const { Worker, MessageChannel } = require('worker_threads')
@@ -168,39 +167,6 @@ async function syncDiscordRole() {
 	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
-async function saveEventCache() {
-	// eslint-disable-next-line no-underscore-dangle
-	fastify.cache._checkData(false)
-	return fsp.writeFile('.cache/webhook-events.json', JSON.stringify(fastify.cache.data), 'utf8')
-}
-
-async function loadEventCache() {
-	let loaddatatxt
-
-	try {
-		loaddatatxt = await fsp.readFile('.cache/webhook-events.json', 'utf8')
-	} catch {
-		return
-	}
-
-	const now = Date.now()
-
-	try {
-		const data = JSON.parse(loaddatatxt)
-		for (const key of Object.keys(data)) {
-			const msgData = data[key]
-
-			if (msgData.t > now) {
-				const newTtlms = Math.max(msgData.t - now, 2000)
-				const newTtl = Math.floor(newTtlms / 1000)
-				fastify.cache.set(key, msgData.v, newTtl)
-			}
-		}
-	} catch (err) {
-		log.info(`Error processing historic cache ${err}`)
-	}
-}
-
 function handleShutdown() {
 	const workerSaves = []
 	for (const worker of discordWorkers) {
@@ -209,9 +175,6 @@ function handleShutdown() {
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
 	if (discordWebhookWorker) workerSaves.push(discordWebhookWorker.saveTimeouts())
-	if (config.general.persistDuplicateCache) {
-		workerSaves.push(saveEventCache())
-	}
 
 	gymCache.save(true)
 	Promise.all(workerSaves)
@@ -848,10 +811,6 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 async function run() {
 	process.on('SIGINT', handleShutdown)
 	process.on('SIGTERM', handleShutdown)
-
-	if (config.general.persistDuplicateCache) {
-		await loadEventCache()
-	}
 
 	if (config.pvp.dataSource === 'internal' || config.pvp.dataSource === 'compare') {
 		initialiseOhbem()
