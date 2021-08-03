@@ -57,11 +57,7 @@
     //        },
       "availableLanguages": {
       },
-      "defaultTemplateName": 1,               // default template name/number to use when users add new trackings
-    // persistDuplicateCache - whether to store the webhook duplicate cache on exit. If you have a busy system
-    //   this could be very large and slow down shutdown (many gigabytes) and startup. This is stored in the .cache
-    //   directory
-      "persistDuplicateCache": false
+      "defaultTemplateName": 1                // default template name/number to use when users add new trackings
   },
   //
   // Configuration for the user reconciliation/role check function
@@ -189,7 +185,7 @@
     //    deny: users cannot track for everything and must track against individual pokemon
       "everythingFlagPermissions": "allow-any",
       "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
-      "maxDistance": 0                            // restrict users from having too large a tracking circle
+      "maxDistance": 0                            // restrict users from having too large a tracking circle (0 = no limit)
   },
   //
   // stats configuration

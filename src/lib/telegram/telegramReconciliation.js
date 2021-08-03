@@ -62,7 +62,7 @@ class TelegramReconciliation {
 			await this.query.deleteQuery('humans', { id: user.id })
 			this.log.info(`Reconciliation (Telegram) Delete user ${user.id} ${user.name}`)
 		} else {
-			this.log.info(`Reconciliation (Telegram) Not removing user ${user.id}`)
+			this.log.info(`Reconciliation (Telegram) Not removing invalid user ${user.id} [roleCheckMode is ignored]`)
 		}
 	}
 

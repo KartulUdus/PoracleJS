@@ -1,6 +1,7 @@
 const fs = require('fs')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
+const mustache = require('handlebars')
 const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
@@ -30,7 +31,7 @@ class Telegram {
 		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, this.config.tuning.concurrentTelegramDestinationsPerBot, ((entry) => entry.target))
 		this.bot
 			.use(commandParser(this.translatorFactory))
-			.use(controller(query, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip))
+			.use(controller(query, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip, mustache))
 
 		this.commands = {}
 
@@ -292,7 +293,14 @@ class Telegram {
 
 		const now = Date.now()
 
-		const data = JSON.parse(loaddatatxt)
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn(`Clean cache for Telegram tag ${this.bot.token} contains invalid data - ignoring`)
+			return
+		}
+
 		for (const key of Object.keys(data)) {
 			const msgData = data[key]
 

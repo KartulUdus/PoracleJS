@@ -122,7 +122,6 @@ class Pokestop extends Controller {
 				data.gruntTypeId = data.grunt_type
 			}
 
-			data.gruntTypeEmoji = '❓'
 			data.gruntTypeColor = 'BABABA'
 
 			data.gender = 0
@@ -188,6 +187,10 @@ class Pokestop extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
+
+				data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup('grunt-unknown', platform))
 
 				// full build
 				if (data.gruntTypeId) {
@@ -204,7 +207,7 @@ class Pokestop extends Controller {
 							data.genderDataEng = { name: '', emoji: '' }
 						}
 						if (this.GameData.utilData.types[gruntType.type]) {
-							data.gruntTypeEmoji = translator.translate(this.GameData.utilData.types[gruntType.type].emoji)
+							data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[gruntType.type].emoji, platform))
 						}
 						if (gruntType.type in this.GameData.utilData.types) {
 							data.gruntTypeColor = this.GameData.utilData.types[gruntType.type].color
@@ -227,7 +230,10 @@ class Pokestop extends Controller {
 									const firstReward = +fr
 									const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
 									gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
-									gruntRewardsList.first.monsters.push({ id: firstReward, name: translator.translate(firstRewardMonster.name) })
+									gruntRewardsList.first.monsters.push({
+										id: firstReward,
+										name: translator.translate(firstRewardMonster.name),
+									})
 								})
 								gruntRewards += '\\n15%: '
 								gruntRewardsList.second = { chance: 15, monsters: [] }
@@ -240,7 +246,10 @@ class Pokestop extends Controller {
 									const secondRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === secondReward && !mon.form.id)
 
 									gruntRewards += secondRewardMonster ? translator.translate(secondRewardMonster.name) : ''
-									gruntRewardsList.second.monsters.push({ id: secondReward, name: translator.translate(secondRewardMonster.name) })
+									gruntRewardsList.second.monsters.push({
+										id: secondReward,
+										name: translator.translate(secondRewardMonster.name),
+									})
 								})
 							} else {
 								// Single Reward 100% of encounter (might vary based on actual fight).
@@ -252,7 +261,10 @@ class Pokestop extends Controller {
 									const firstReward = +fr
 									const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
 									gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
-									gruntRewardsList.first.monsters.push({ id: firstReward, name: translator.translate(firstRewardMonster.name) })
+									gruntRewardsList.first.monsters.push({
+										id: firstReward,
+										name: translator.translate(firstRewardMonster.name),
+									})
 								})
 							}
 							data.gruntRewards = gruntRewards
@@ -270,55 +282,57 @@ class Pokestop extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					genderData: data.genderDataEng ? { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) } : { name: '', emoji: '' },
+					genderData: data.genderDataEng ? {
+						name: translator.translate(data.genderDataEng.name),
+						emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
+					} : { name: '', emoji: '' },
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
-				const mustache = this.getDts(logReference, 'invasion', platform, cares.template, language)
+				const templateType = 'invasion'
+				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+				let message
 				if (mustache) {
 					let mustacheResult
-					let message
 					try {
 						mustacheResult = mustache(view, { data: { language } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
 					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
+					if (mustacheResult) {
+						mustacheResult = await this.urlShorten(mustacheResult)
+						try {
+							message = JSON.parse(mustacheResult)
+							if (cares.ping) {
+								if (!message.content) {
+									message.content = cares.ping
+								} else {
+									message.content += cares.ping
+								}
+							}
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
 						}
 					}
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: data.emoji,
-						logReference,
-						language,
-					}
-					jobs.push(work)
 				}
+
+				if (!message) {
+					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+				}
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: data.tth,
+					clean: cares.clean,
+					emoji: data.emoji,
+					logReference,
+					language,
+				}
+				jobs.push(work)
 			}
 
 			return jobs

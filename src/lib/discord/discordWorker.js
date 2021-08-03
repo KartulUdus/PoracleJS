@@ -214,7 +214,14 @@ class Worker {
 
 		const now = Date.now()
 
-		const data = JSON.parse(loaddatatxt)
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn(`Clean cache for discord tag ${this.client.user.tag} contains invalid data - ignoring`)
+			return
+		}
+
 		for (const key of Object.keys(data)) {
 			const msgData = data[key]
 			let channel = null

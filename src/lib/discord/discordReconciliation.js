@@ -52,7 +52,7 @@ class DiscordReconciliation {
 			await this.query.deleteQuery('humans', { id: user.id })
 			this.log.info(`Reconciliation (Discord) Delete user ${user.id} ${user.name}`)
 		} else {
-			this.log.info(`Reconciliation (Discord) Not removing user ${user.id}`)
+			this.log.info(`Reconciliation (Discord) Not removing invalid user ${user.id} [roleCheckMode is ignored]`)
 		}
 	}
 
@@ -319,7 +319,7 @@ class DiscordReconciliation {
 
 	async syncDiscordRole(registerNewUsers, syncNames, removeInvalidUsers) {
 		try {
-			this.log.verbose('Reconciliation (Discord) User role membership to Poracle users starting...')
+			this.log.info('Reconciliation (Discord) User role membership to Poracle users starting...')
 			let usersToCheck = await this.query.selectAllQuery('humans', { type: 'discord:user' })
 			usersToCheck = usersToCheck.filter((user) => !this.config.discord.admins.includes(user.id))
 
