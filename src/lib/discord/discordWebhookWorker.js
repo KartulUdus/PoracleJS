@@ -203,7 +203,14 @@ class DiscordWebhookWorker {
 
 		const now = Date.now()
 
-		const data = JSON.parse(loaddatatxt)
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn('Clean cache for discord webhookWorker contains invalid data - ignoring')
+			return
+		}
+
 		for (const key of Object.keys(data)) {
 			const msgData = data[key]
 

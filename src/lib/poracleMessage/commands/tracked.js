@@ -2,7 +2,20 @@ const fs = require('fs')
 const path = require('path')
 const helpCommand = require('./help')
 
-function monsterRowText(translator, GameData, monster) {
+function standardText(config, translator, row) {
+	let text = ''
+	if (row.template !== config.general.defaultTemplateName.toString()) {
+		text = text.concat(` ${translator.translate('template')}: ${row.template}`)
+	}
+
+	if (row.clean) {
+		text = text.concat(` ${translator.translate('clean')}`)
+	}
+
+	return text
+}
+
+function monsterRowText(config, translator, GameData, monster) {
 	let monsterName
 	let formName
 
@@ -25,12 +38,24 @@ function monsterRowText(translator, GameData, monster) {
 	let minRarity = monster.rarity
 	if (minRarity === -1) minRarity = 1
 
-	const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
-	const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
-	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta} | ${translator.translate('greatpvp')}: ${greatLeague} | ${translator.translate('ultrapvp')}: ${ultraLeague}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''}`
+	const pvpString = monster.pvp_ranking_league
+		? translator.translate('pvp ranking:').concat(' ',
+			{
+				500: translator.translate('littlepvp'),
+				1500: translator.translate('greatpvp'),
+				2500: translator.translate('ultrapvp'),
+			}[monster.pvp_ranking_league].toString(),
+			` top${monster.pvp_ranking_best > 1 ? `${monster.pvp_ranking_best}-` : ''}${monster.pvp_ranking_worst} (@${monster.pvp_ranking_min_cp}+)`)
+		: ''
+
+	// const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking_highest > 1 ? `${monster.great_league_ranking_highest}-` : ''}${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
+	// const ultraLeague = monster.ultra_league_ranking >= 4096 ? translator.translate('any') : `top${monster.ultra_league_ranking_highest > 1 ? `${monster.ultra_league_ranking_highest}-` : ''}${monster.ultra_league_ranking} (@${monster.ultra_league_ranking_min_cp}+)`
+	// const littleLeague = monster.little_league_ranking >= 4096 ? translator.translate('any') : `top${monster.little_league_ranking_highest > 1 ? `${monster.little_league_ranking_highest}-` : ''}${monster.little_league_ranking} (@${monster.little_league_ranking_min_cp}+)`
+
+	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}${pvpString ? ` | ${pvpString}` : ''}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''} ${standardText(config, translator, monster)}`
 }
 
-function raidRowText(translator, GameData, raid) {
+function raidRowText(config, translator, GameData, raid) {
 	const mon = Object.values(GameData.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 	const monsterName = mon ? translator.translate(mon.name) : 'levelMon'
 	const raidTeam = translator.translate(GameData.utilData.teams[raid.team].name)
@@ -38,19 +63,19 @@ function raidRowText(translator, GameData, raid) {
 	if (!mon || formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
 
 	if (+raid.pokemon_id === 9000) {
-		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
+		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}`
 	}
 
-	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
+	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}`
 }
 
-function gymRowText(translator, GameData, gym) {
+function gymRowText(config, translator, GameData, gym) {
 	const raidTeam = translator.translate(GameData.utilData.teams[gym.team].name)
 
-	return `**${raidTeam} ${translator.translate('gyms')}** ${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}`
+	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)}`
 }
 
-function nestRowText(translator, GameData, nest) {
+function nestRowText(config, translator, GameData, nest) {
 	let monsterName
 	let formName
 
@@ -64,15 +89,15 @@ function nestRowText(translator, GameData, nest) {
 		if (!mon || formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
 	}
 
-	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${nest.distance ? ` | ${translator.translate('distance')}: ${nest.distance}m` : ''} ${nest.min_spawn_avg ? translator.translateFormat('Min avg. spawn {0}/hour', nest.min_spawn_avg) : ''}`
+	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${nest.distance ? ` | ${translator.translate('distance')}: ${nest.distance}m` : ''} ${nest.min_spawn_avg ? translator.translateFormat('Min avg. spawn {0}/hour', nest.min_spawn_avg) : ''} ${standardText(config, translator, nest)}`
 }
 
-function eggRowText(translator, GameData, egg) {
+function eggRowText(config, translator, GameData, egg) {
 	const raidTeam = translator.translate(GameData.utilData.teams[egg.team].name)
-	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''}`
+	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, egg)}`
 }
 
-function questRowText(translator, GameData, quest) {
+function questRowText(config, translator, GameData, quest) {
 	let rewardThing = ''
 	if (quest.reward_type === 7) {
 		const monster = Object.values(GameData.monsters).find((m) => m.id === quest.reward && m.form.id === quest.form)
@@ -112,10 +137,10 @@ function questRowText(translator, GameData, quest) {
 			rewardThing = `${translator.translate('candy')} ${monsterName}`
 		}
 	}
-	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.amount > 0 ? ` ${translator.translate('minimum')} ${quest.amount}` : ''}${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''}`
+	return `${translator.translate('reward').charAt(0).toUpperCase() + translator.translate('reward').slice(1)}: **${rewardThing}**${quest.amount > 0 ? ` ${translator.translate('minimum')} ${quest.amount}` : ''}${quest.distance ? ` | ${translator.translate('distance')}: ${quest.distance}m` : ''} ${standardText(config, translator, quest)}`
 }
 
-function invasionRowText(translator, GameData, invasion) {
+function invasionRowText(config, translator, GameData, invasion) {
 	let genderText = ''
 	let typeText = ''
 	if (!invasion.gender || invasion.gender === '') {
@@ -133,10 +158,10 @@ function invasionRowText(translator, GameData, invasion) {
 	return `${translator.translate('grunt type')
 		.charAt(0)
 		.toUpperCase() + translator.translate('grunt type')
-		.slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText}`
+		.slice(1)}: **${translator.translate(typeText, true)}**${invasion.distance ? ` | ${translator.translate('distance')}: ${invasion.distance}m` : ''} | ${translator.translate('gender')}: ${genderText} ${standardText(config, translator, invasion)}`
 }
 
-function lureRowText(translator, GameData, lure) {
+function lureRowText(config, translator, GameData, lure) {
 	let typeText = ''
 
 	if (lure.lure_id === 0) {
@@ -144,7 +169,7 @@ function lureRowText(translator, GameData, lure) {
 	} else {
 		typeText = GameData.utilData.lures[lure.lure_id].name
 	}
-	return `${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} `
+	return `${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} ${standardText(config, translator, lure)}`
 }
 
 function currentAreaText(translator, geofence, areas) {
@@ -231,7 +256,7 @@ exports.run = async (client, msg, args, options) => {
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any monsters'))
 
 			monsters.forEach((monster) => {
-				message = message.concat('\n', monsterRowText(translator, client.GameData, monster))
+				message = message.concat('\n', monsterRowText(client.config, translator, client.GameData, monster))
 			})
 		}
 
@@ -240,10 +265,10 @@ exports.run = async (client, msg, args, options) => {
 				message = message.concat('\n\n', translator.translate('You\'re tracking the following raids:'), '\n')
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any raids'))
 			raids.forEach((raid) => {
-				message = message.concat('\n', raidRowText(translator, client.GameData, raid))
+				message = message.concat('\n', raidRowText(client.config, translator, client.GameData, raid))
 			})
 			eggs.forEach((egg) => {
-				message = message.concat('\n', eggRowText(translator, client.GameData, egg))
+				message = message.concat('\n', eggRowText(client.config, translator, client.GameData, egg))
 			})
 		}
 
@@ -253,7 +278,7 @@ exports.run = async (client, msg, args, options) => {
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any quests'))
 
 			quests.forEach((quest) => {
-				message = message.concat('\n', questRowText(translator, client.GameData, quest))
+				message = message.concat('\n', questRowText(client.config, translator, client.GameData, quest))
 			})
 		}
 
@@ -264,7 +289,7 @@ exports.run = async (client, msg, args, options) => {
 				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any invasions'))
 
 				invasions.forEach((invasion) => {
-					message = message.concat('\n', invasionRowText(translator, client.GameData, invasion))
+					message = message.concat('\n', invasionRowText(client.config, translator, client.GameData, invasion))
 				})
 			}
 
@@ -274,7 +299,7 @@ exports.run = async (client, msg, args, options) => {
 				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
 
 				lures.forEach((lure) => {
-					message = message.concat('\n', lureRowText(translator, client.GameData, lure))
+					message = message.concat('\n', lureRowText(client.config, translator, client.GameData, lure))
 				})
 			}
 		}
@@ -285,7 +310,7 @@ exports.run = async (client, msg, args, options) => {
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any nests'))
 
 			nests.forEach((nest) => {
-				message = message.concat('\n', nestRowText(translator, client.GameData, nest))
+				message = message.concat('\n', nestRowText(client.config, translator, client.GameData, nest))
 			})
 		}
 
@@ -295,7 +320,7 @@ exports.run = async (client, msg, args, options) => {
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any gyms'))
 
 			gyms.forEach((gym) => {
-				message = message.concat('\n', gymRowText(translator, client.GameData, gym))
+				message = message.concat('\n', gymRowText(client.config, translator, client.GameData, gym))
 			})
 		}
 

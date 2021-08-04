@@ -171,13 +171,13 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((raid) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.raidRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 				updates.forEach((raid) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.raidRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 				insert.forEach((raid) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.raidRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 			}
 
@@ -192,7 +192,7 @@ exports.run = async (client, msg, args, options) => {
 
 			//			const result = await client.query.insertOrUpdateQuery('raid', insert)
 			client.log.info(`${logReference}: ${target.name} started tracking level ${levels.join(', ')} raids`)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			const monsterIds = monsters.map((mon) => mon.id)

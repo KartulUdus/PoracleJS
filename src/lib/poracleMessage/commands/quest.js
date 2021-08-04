@@ -263,13 +263,13 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((quest) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.questRowText(client.config, translator, client.GameData, quest), '\n')
 				})
 				updates.forEach((quest) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.questRowText(client.config, translator, client.GameData, quest), '\n')
 				})
 				insert.forEach((quest) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.questRowText(client.config, translator, client.GameData, quest), '\n')
 				})
 			}
 
@@ -285,7 +285,7 @@ exports.run = async (client, msg, args, options) => {
 			client.log.info(`${target.name} added quest trackings`)
 
 			// const result = await client.query.insertOrUpdateQuery('quest', questTracks)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql
