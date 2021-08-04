@@ -1,11 +1,7 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
-const monsters = require('../util/monsters.json')
-const {
-	cpMultipliers, types, powerUpCost,
-} = require('../util/util.json')
-const moves = require('../util/moves.json')
+const { GameData: { moves, monsters, utilData: { cpMultipliers, types, powerUpCost } } } = require('./GameData')
 
 const TranslatorFactory = require('../util/translatorFactory')
 

@@ -9,7 +9,7 @@
     "start": "npm run generate && node .",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",
-    "generate": "node src/util/generateData.js"
+    "generate": "node -e 'require(\"./src/util/generateData\").update()'"
   },
   "repository": {
     "type": "git",
@@ -56,7 +56,9 @@
     "node-geocoder": "^3.27.0",
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
+    "pogo-data-generator": "^1.0.9",
     "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",
+    "pogo-translations": "git+https://github.com/bschultz/pogo-translations.git",
     "point-in-polygon": "^1.1.0",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",

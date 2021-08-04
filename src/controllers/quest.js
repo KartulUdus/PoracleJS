@@ -8,8 +8,7 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
-
-const questTypes = require('../util/questTypes.json')
+const { GameData: { questTypes } } = require('../lib/GameData')
 // const itemList = require('../util/quests/items')
 const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
 const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)', 'Arlo', 'Cliff', 'Sierra', 'Giovanni']
@@ -494,8 +493,8 @@ class Quest extends Controller {
 							str = str.replace('Catch', 'Use').replace('pokémon with berrie(s)', 'berrie(s) to help catch Pokémon')
 						}
 						if (questinfo !== null) {
-						//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
-						//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
+							//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
+							//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
 							str = str.replace('berrie(s)', this.GameData.items[questinfo.item_id].name)
 							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.GameData.items[questinfo.item_id].name}`)
 						} else {

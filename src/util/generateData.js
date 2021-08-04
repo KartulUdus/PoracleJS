@@ -1,105 +1,131 @@
-const Fetch = require('node-fetch')
 const fs = require('fs')
-const util = require('./util.json')
+const { generate } = require('pogo-data-generator')
+const config = require('config')
 
-const fetchJson = (url) => new Promise((resolve) => {
-	Fetch(url)
-		.then((res) => res.json())
-		.then((json) => resolve(json))
-})
+const { log } = require('../lib/logger')
 
-const capital = (phrase) => phrase.split('_').map((word) => `${word.charAt(0).toUpperCase()}${word.slice(1).toLowerCase()}`).join(' ')
+module.exports.update = async function update() {
+	if (config.general.fetchGameMasterOnStartup) {
+		log.info('Generating latest GM...')
+		try {
+			const template = {
+				pokemon: {
+					enabled: true,
+					options: {
+						topLevelName: 'monsters',
+						keyJoiner: '_',
+						keys: {
+							main: 'pokedexId formId',
+						},
+						customFields: {
+							pokedexId: 'id',
+							formId: 'id',
+							pokemonName: 'name',
+							formName: 'name',
+							attack: 'baseAttack',
+							defense: 'baseDefense',
+							stamina: 'baseStamina',
+							forms: 'form',
+						},
+						customChildObj: {
+							attack: 'stats',
+							defense: 'stats',
+							stamina: 'stats',
+						},
+						skipNormalIfUnset: true,
+						processFormsSeparately: true,
+					},
+					template: {
+						pokemonName: true,
+						forms: {
+							formName: true,
+							formId: true,
+						},
+						pokedexId: true,
+						types: {
+							typeId: true,
+							typeName: true,
+						},
+						attack: true,
+						defense: true,
+						stamina: true,
+					},
+				},
+				items: {
+					enabled: true,
+					options: {
+						keys: {
+							main: 'itemId',
+						},
+						customFields: {
+							itemName: 'name',
+						},
+					},
+					template: {
+						itemName: true,
+					},
+				},
+				moves: {
+					enabled: true,
+					options: {
+						keys: {
+							main: 'moveId',
+						},
+						customFields: {
+							moveName: 'name',
+						},
+					},
+					template: {
+						moveName: true,
+					},
+				},
+				questTypes: {
+					enabled: true,
+					options: {
+						keys: {
+							main: 'id',
+						},
+						customFields: {
+							formatted: 'text',
+						},
+					},
+					template: {
+						formatted: true,
+					},
+				},
+				invasions: {
+					enabled: true,
+					options: {
+						topLevelName: 'grunts',
+						keys: {
+							main: 'id',
+							encounters: 'position',
+						},
+					},
+					template: {
+						type: true,
+						gender: true,
+						grunt: true,
+						secondReward: true,
+						encounters: 'id',
+					},
+				},
+			}
 
-const formatGrunts = (character) => {
-	const type = capital(character.template
-		.replace('CHARACTER_', '')
-		.replace('EXECUTIVE_', '')
-		.replace('_GRUNT', '')
-		.replace('_MALE', '')
-		.replace('_FEMALE', ''))
-		.replace('Npc', 'NPC')
-	const grunt = capital(character.template
-		.replace('CHARACTER_', '')
-		.replace('_MALE', '')
-		.replace('_FEMALE', ''))
-		.replace('Npc', 'NPC')
-	return {
-		type: type === 'Grunt' ? 'Mixed' : type,
-		gender: character.gender ? 1 : 2,
-		grunt,
+			const data = await generate({ template, safe: config.general.fetchSafeGameMaster })
+
+			Object.keys(data).forEach((category) => {
+				fs.writeFile(
+					`./src/util/${category}.json`,
+					JSON.stringify(data[category], null, 2),
+					'utf8',
+					() => { },
+				)
+			})
+		} catch (e) {
+			log.info('Could not fetch latest GM, using existing...')
+		}
+	} else {
+		log.info('Skipping GM generation, make sure you have ran "npm run generate" recently to keep up with the latest updates!')
 	}
 }
-
-((async function generate() {
-	try {
-		const masterfile = await fetchJson('https://raw.githubusercontent.com/WatWowMap/Masterfile-Generator/master/master-latest.json')
-		const invasions = await fetchJson('https://raw.githubusercontent.com/ccev/pogoinfo/v2/active/grunts.json')
-
-		const newMasterfile = {
-			monsters: {},
-			moves: {},
-			items: masterfile.items,
-			questTypes: masterfile.quest_types,
-			grunts: {},
-		}
-
-		Object.entries(invasions).forEach((gruntType) => {
-			const [type, info] = gruntType
-			const newGrunt = formatGrunts(info.character)
-			if (info.active) {
-				newGrunt.secondReward = info.lineup.rewards.length === 2
-				newGrunt.encounters = { first: [], second: [], third: [] }
-				Object.keys(newGrunt.encounters).forEach((position, i) => {
-					info.lineup.team[i].forEach((pokemon) => {
-						newGrunt.encounters[position].push(pokemon.id)
-					})
-				})
-			}
-			newMasterfile.grunts[type] = newGrunt
-		})
-
-		for (const [id, move] of Object.entries(masterfile.moves)) {
-			if (move.proto) {
-				newMasterfile.moves[id] = masterfile.moves[id]
-			}
-		}
-
-		const skipForms = ['Purified', 'Shadow']
-		for (const [i, pkmn] of Object.entries(masterfile.pokemon)) {
-			for (const [j, form] of Object.entries(pkmn.forms)) {
-				if (pkmn.pokedex_id && !skipForms.includes(form.name)) {
-					const id = form.name === 'Normal' ? `${i}_0` : `${i}_${j}`
-					const relevantTypes = form.types || pkmn.types
-
-					newMasterfile.monsters[id] = {
-						id: parseInt(i, 10),
-						name: pkmn.name.replace(' ', '-'),
-						form: {
-							name: form.name,
-							proto: form.proto,
-							id: id.endsWith('_0') ? 0 : parseInt(j, 10),
-						},
-						stats: {
-							baseAttack: form.attack || pkmn.attack,
-							baseDefense: form.defense || pkmn.defense,
-							baseStamina: form.stamina || pkmn.stamina,
-						},
-						types: relevantTypes.map((type) => ({ id: util.types[type].id, name: type })),
-					}
-				}
-			}
-		}
-
-		Object.keys(newMasterfile).forEach((category) => {
-			fs.writeFile(
-				`./src/util/${category}.json`,
-				JSON.stringify(newMasterfile[category], null, 2),
-				'utf8',
-				() => { },
-			)
-		})
-	} catch (e) {
-		// eslint-disable-next-line no-console
-		console.warn(e, '\nUnable to generate new masterfile, using existing.')
-	}
-})())

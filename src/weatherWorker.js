@@ -9,18 +9,12 @@ const { log } = logs
 
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
+const { GameData } = require('./lib/GameData')
 
 const {
 	config, knex, dts, geofence, translatorFactory,
 } = Config(false)
 
-const GameData = {
-	monsters: require('./util/monsters.json'),
-	utilData: require('./util/util.json'),
-	moves: require('./util/moves.json'),
-	items: require('./util/items.json'),
-	grunts: require('./util/grunts.json'),
-}
 const WeatherController = require('./controllers/weather')
 
 const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
