@@ -9,7 +9,7 @@ const pcache = require('flat-cache')
 
 const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
 const emojiFlags = require('emoji-flags')
-
+const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
 const urlShortener = require('../lib/urlShortener')
@@ -36,6 +36,8 @@ class Controller extends EventEmitter {
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
+		this.imgUicons = new Uicons(this.config.general.imgUrl, 'png', this.log)
+		this.stickerUicons = new Uicons(this.config.general.stickerUrl, 'webp', this.log)
 		this.dtsCache = {}
 	}
 

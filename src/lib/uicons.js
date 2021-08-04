@@ -85,7 +85,7 @@ function resolveItemIcon(itemAvail, imageType, id, amount = 0) {
 
 const maxAge = 60 * 60 * 1000
 
-async function getAvailableIcons(baseUrl) {
+async function getAvailableIcons(log, baseUrl) {
 	let currentSet
 
 	try {
@@ -120,70 +120,67 @@ async function getAvailableIcons(baseUrl) {
 			})
 		}
 	} catch (e) {
-		console.warn(e)
+		log.warn(`Cannot load UICONS file from ${baseUrl}`, e)
 	}
 	return currentSet
 }
 
-async function pokemonIcon(baseUrl, imageType, pokemonId, form = 0, evolution = 0, female = false, costume = 0, shiny = false) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/pokemon/${resolvePokemonIcon(currentSet.pokemon, imageType, pokemonId, form, evolution, female, costume, shiny)}` : null
+class Uicons {
+	constructor(url, imageType, log) {
+		this.url = url
+		this.imageType = imageType || 'png'
+		this.log = log || console
+	}
+
+	async pokemonIcon(pokemonId, form = 0, evolution = 0, female = false, costume = 0, shiny = false) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, female, costume, shiny)}` : null
+	}
+
+	async eggIcon(level, hatched = false, ex = false) {
+		const currentSet = await getAvailableIcons(this.url)
+		return currentSet ? `${this.url}/raid/egg/${resolveEggIcon(currentSet.raid.egg, this.imageType, level, hatched, ex)}` : null
+	}
+
+	async invasionIcon(gruntType) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/invasion/${resolveInvasionIcon(currentSet.invasion, this.imageType, gruntType)}` : null
+	}
+
+	async rewardItemIcon(itemId) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/reward/item/${resolveItemIcon(currentSet.reward.item, this.imageType, itemId)}` : null
+	}
+
+	async rewardStardustIcon(amount) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/reward/stardust/${resolveItemIcon(currentSet.reward.stardust, this.imageType, amount)}` : null
+	}
+
+	async rewardMegaEnergyIcon(itemId) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, this.imageType, itemId)}` : null
+	}
+
+	async rewardCandyIcon(pokemonId, amount) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/reward/candy/${resolveItemIcon(currentSet.reward.candy, this.imageType, pokemonId, amount)}` : null
+	}
+
+	async rewardXlCandyIcon(pokemonId, amount) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/reward/xl_candy/${resolveItemIcon(currentSet.reward.xl_candy, this.imageType, pokemonId, amount)}` : null
+	}
+
+	async gymIcon(teamId, trainerCount = 0, inBattle = false, ex = false) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/gym/${resolveGymIcon(currentSet.gym, this.imageType, teamId, trainerCount, inBattle, ex)}` : null
+	}
+
+	async pokestopIcon(lureId = 0, invasionActive = false, questActive = false) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/pokestop/${resolvePokestopIcon(currentSet.pokestop, this.imageType, lureId, invasionActive, questActive)}` : null
+	}
 }
 
-async function eggIcon(baseUrl, imageType, level, hatched = false, ex = false) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/raid/egg/${resolveEggIcon(currentSet.raid.egg, imageType, level, hatched, ex)}` : null
-}
-
-async function invasionIcon(baseUrl, imageType, gruntType) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/invasion/${resolveInvasionIcon(currentSet.invasion, imageType, gruntType)}` : null
-}
-
-async function rewardItemIcon(baseUrl, imageType, itemId) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/reward/item/${resolveItemIcon(currentSet.reward.item, imageType, itemId)}` : null
-}
-
-async function rewardStardustIcon(baseUrl, imageType, amount) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/reward/stardust/${resolveItemIcon(currentSet.reward.stardust, imageType, amount)}` : null
-}
-
-async function rewardMegaEnergyIcon(baseUrl, imageType, itemId) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, imageType, itemId)}` : null
-}
-
-async function rewardCandyIcon(baseUrl, imageType, pokemonId, amount) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/reward/candy/${resolveItemIcon(currentSet.reward.candy, imageType, pokemonId, amount)}` : null
-}
-
-async function rewardXlCandyIcon(baseUrl, imageType, pokemonId, amount) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/reward/xl_candy/${resolveItemIcon(currentSet.reward.xl_candy, imageType, pokemonId, amount)}` : null
-}
-
-async function gymIcon(baseUrl, imageType, teamId, trainerCount = 0, inBattle = false, ex = false) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/gym/${resolveGymIcon(currentSet.gym, imageType, teamId, trainerCount, inBattle, ex)}` : null
-}
-
-async function pokestopIcon(baseUrl, imageType, lureId = 0, invasionActive = false, questActive = false) {
-	const currentSet = await getAvailableIcons(baseUrl)
-	return currentSet ? `${baseUrl}/pokestop/${resolvePokestopIcon(currentSet.pokestop, imageType, lureId, invasionActive, questActive)}` : null
-}
-
-module.exports = {
-	pokemonIcon,
-	eggIcon,
-	invasionIcon,
-	rewardItemIcon,
-	rewardStardustIcon,
-	rewardMegaEnergyIcon,
-	rewardCandyIcon,
-	rewardXlCandyIcon,
-	gymIcon,
-	pokestopIcon,
-}
+module.exports = Uicons

@@ -1,7 +1,6 @@
 // const geoTz = require('geo-tz')
 // const moment = require('moment-timezone')
 const Controller = require('./controller')
-const uicons = require('../lib/uicons')
 
 /**
  * Controller for processing gym webhooks
@@ -150,8 +149,8 @@ class Gym extends Controller {
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.color = data.gymColor
 
-			data.imgUrl = await uicons.gymIcon(this.config.general.imgUrl, 'png', data.teamId, data.slotsAvailable, false, data.ex)
-			data.stickerUrl = await uicons.gymIcon(this.config.general.stickerUrl, 'webp', data.teamId, data.slotsAvailable, false, data.ex)
+			data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
+			data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
 
 			const whoCares = await this.gymWhoCares(data)
 

@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-const uicons = require('../lib/uicons')
 /**
  * Controller for processing pokestop webhooks
  * Alerts on lures
@@ -122,10 +121,6 @@ class PokestopLure extends Controller {
 				data.lureTypeId = data.lure_id
 			}
 
-			// should be moved after the fold as is more expensive now
-			data.imgUrl = await uicons.pokestopIcon(this.config.general.imgUrl, 'png', data.lureTypeId)
-			data.stickerUrl = await uicons.pokestopIcon(this.config.general.stickerUrl, 'webp', data.lureTypeId)
-
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
 			data.lureTypeNameEng = this.GameData.utilData.lures[data.lure_id].name
 
@@ -149,6 +144,9 @@ class PokestopLure extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
+			data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []

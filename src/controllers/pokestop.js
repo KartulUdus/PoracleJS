@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-const uicons = require('../lib/uicons')
 
 class Pokestop extends Controller {
 	async invasionWhoCares(obj) {
@@ -122,10 +121,6 @@ class Pokestop extends Controller {
 				data.gruntTypeId = data.grunt_type
 			}
 
-			// should be moved after the fold as is more expensive now
-			data.imgUrl = await uicons.invasionIcon(this.config.general.imgUrl, 'png', data.gruntTypeId)
-			data.stickerUrl = await uicons.invasionIcon(this.config.general.stickerUrl, 'webp', data.gruntTypeId)
-
 			data.gruntTypeColor = 'BABABA'
 
 			data.gender = 0
@@ -169,6 +164,9 @@ class Pokestop extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId)
+			data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
