@@ -26,6 +26,8 @@ module.exports.update = async function update() {
 							defense: 'baseDefense',
 							stamina: 'baseStamina',
 							forms: 'form',
+							typeName: 'name',
+							typeId: 'id',
 						},
 						customChildObj: {
 							attack: 'stats',

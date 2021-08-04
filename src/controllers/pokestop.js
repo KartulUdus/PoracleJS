@@ -139,7 +139,7 @@ class Pokestop extends Controller {
 				data.gruntRewards = ''
 				if (data.gruntTypeId in this.GameData.grunts) {
 					const gruntType = this.GameData.grunts[data.gruntTypeId]
-					data.gruntName = gruntType.grunt
+					data.gruntName = `${gruntType.type} ${gruntType.grunt}`
 					data.gender = gruntType.gender
 					data.gruntType = gruntType.type
 				}
@@ -200,7 +200,7 @@ class Pokestop extends Controller {
 					data.gruntRewards = ''
 					if (data.gruntTypeId in this.GameData.grunts) {
 						const gruntType = this.GameData.grunts[data.gruntTypeId]
-						data.gruntName = translator.translate(gruntType.grunt)
+						data.gruntName = translator.translate(`${gruntType.type} ${gruntType.grunt}`)
 						data.gender = gruntType.gender
 						data.genderDataEng = this.GameData.utilData.genders[data.gender]
 						if (!data.genderDataEng) {
