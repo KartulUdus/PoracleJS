@@ -4,8 +4,8 @@ const config = require('config')
 
 const { log } = require('../lib/logger')
 
-module.exports.update = async function update() {
-	if (config.general.fetchGameMasterOnStartup) {
+module.exports.update = async function update(manual) {
+	if (config.general.fetchGameMasterOnStartup || manual) {
 		log.info('Generating latest GM...')
 		try {
 			const template = {

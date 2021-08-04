@@ -6,10 +6,11 @@
   "scripts": {
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
-    "start": "npm run generate && node .",
+    "start": "npm run autoGen && node .",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",
-    "generate": "node -e 'require(\"./src/util/generateData\").update()'"
+    "autoGen": "node -e 'require(\"./src/util/generateData\").update(false)'",
+    "generate": "node -e 'require(\"./src/util/generateData\").update(true)'"
   },
   "repository": {
     "type": "git",
