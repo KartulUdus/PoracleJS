@@ -5,7 +5,7 @@ const Controller = require('./controller')
  * Controller for processing pokestop webhooks
  * Alerts on lures
  */
-class PokestopLure extends Controller {
+class Lure extends Controller {
 	async lureWhoCares(obj) {
 		const data = obj
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
@@ -242,4 +242,4 @@ class PokestopLure extends Controller {
 	}
 }
 
-module.exports = PokestopLure
+module.exports = Lure

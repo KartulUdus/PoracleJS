@@ -2,7 +2,8 @@ const axios = require('axios')
 const { Mutex } = require('async-mutex')
 
 const mutex = new Mutex()
-const availablePokemon = {}
+const uiconsIndex = {}
+const lastRetrieved = {}
 
 function resolvePokemonIcon(availPokemon, imageType, pokemonId, form = 0, evolution = 0, gender = 0, costume = 0,
 	shiny = false) {
@@ -83,63 +84,90 @@ function resolveItemIcon(itemAvail, imageType, id, amount = 0) {
 	return `0.${imageType}` // substitute
 }
 
-const maxAge = 60 * 60 * 1000
+const maxAge = 60 * 60 * 1000	// 1 hour
 
 async function getAvailableIcons(log, baseUrl) {
 	let currentSet
-
+	let lastRetrievedDate
 	try {
-		currentSet = availablePokemon[baseUrl]
-		if (currentSet === undefined || Date.now() - currentSet.lastRetrieved > maxAge) {
+		currentSet = uiconsIndex[baseUrl]
+		lastRetrievedDate = lastRetrieved[baseUrl]
+		if (currentSet === undefined || lastRetrievedDate === undefined || Date.now() - lastRetrievedDate > maxAge) {
 			await mutex.runExclusive(async () => {
-				currentSet = availablePokemon[baseUrl]
-				if (currentSet === undefined || Date.now() - currentSet.lastRetrieved > maxAge) {
-					const response = await axios.get(`${baseUrl}/index.json`)
-					const results = response.data
-					currentSet = {
-						raid: {
-							egg: new Set(results.raid ? results.raid.egg : []),
-						},
-						gym: new Set(results.gym),
-						team: new Set(results.team),
-						weather: new Set(results.weather),
-						pokestop: new Set(results.pokestop),
-						reward: {
-							item: new Set(results.reward ? results.reward.item : []),
-							stardust: new Set(results.reward ? results.reward.stardust : []),
-							candy: new Set(results.reward ? results.reward.candy : []),
-							xl_candy: new Set(results.reward ? results.reward.xl_candy : []),
-							mega_resource: new Set(results.reward ? results.reward.mega_resource : []),
-						},
-						invasion: new Set(results.invasion),
-						pokemon: new Set(results.pokemon),
+				currentSet = uiconsIndex[baseUrl]
+				lastRetrievedDate = lastRetrieved[baseUrl]
+				if (currentSet === undefined || lastRetrievedDate === undefined || Date.now() - lastRetrievedDate > maxAge) {
+					const response = await axios({
+						method: 'get',
+						url: `${baseUrl}/index.json`,
+						validateStatus: ((status) => status < 500),
+					})
+					switch (response.status) {
+						case 404: {
+							log.verbose(`Got 404 for UICONS data file from ${baseUrl}`)
+							uiconsIndex[baseUrl] = null
+							break
+						}
+						case 200: {
+							const results = response.data
+							currentSet = {
+								raid: {
+									egg: new Set(results.raid ? results.raid.egg : []),
+								},
+								gym: new Set(results.gym),
+								team: new Set(results.team),
+								weather: new Set(results.weather),
+								pokestop: new Set(results.pokestop),
+								reward: {
+									item: new Set(results.reward ? results.reward.item : []),
+									stardust: new Set(results.reward ? results.reward.stardust : []),
+									candy: new Set(results.reward ? results.reward.candy : []),
+									xl_candy: new Set(results.reward ? results.reward.xl_candy : []),
+									mega_resource: new Set(results.reward ? results.reward.mega_resource : []),
+								},
+								invasion: new Set(results.invasion),
+								pokemon: new Set(results.pokemon),
+							}
+							uiconsIndex[baseUrl] = currentSet
+							break
+						}
+						default: {
+							log.warn(`Cannot load UICONS file from ${baseUrl} code ${response.status} ${response.statusText}`)
+						}
 					}
-					currentSet.lastRetrieved = Date.now()
-					availablePokemon[baseUrl] = currentSet
+
+					lastRetrieved[baseUrl] = Date.now()
 				}
 			})
 		}
 	} catch (e) {
+		uiconsIndex[baseUrl] = null
+		lastRetrieved[baseUrl] = Date.now()
 		log.warn(`Cannot load UICONS file from ${baseUrl}`, e)
 	}
 	return currentSet
 }
 
 class Uicons {
-	constructor(url, imageType, log) {
-		this.url = url
+	constructor(url, imageType, log, fallback) {
+		this.url = url.endsWith('/') ? url.slice(0, -1) : url
 		this.imageType = imageType || 'png'
+		this.fallback = fallback === undefined ? true : fallback
 		this.log = log || console
 	}
 
 	async pokemonIcon(pokemonId, form = 0, evolution = 0, female = false, costume = 0, shiny = false) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		return currentSet ? `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, female, costume, shiny)}` : null
+		if (currentSet) return `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, female, costume, shiny)}`
+		if (this.fallback) return `${this.url}/pokemon_icon_${pokemonId.toString().padStart(3, '0')}_${form ? form.toString() : '00'}${evolution > 0 ? `_${evolution.toString()}` : ''}.${this.imageType}`
+		return null
 	}
 
 	async eggIcon(level, hatched = false, ex = false) {
 		const currentSet = await getAvailableIcons(this.url)
-		return currentSet ? `${this.url}/raid/egg/${resolveEggIcon(currentSet.raid.egg, this.imageType, level, hatched, ex)}` : null
+		if (currentSet) return `${this.url}/raid/egg/${resolveEggIcon(currentSet.raid.egg, this.imageType, level, hatched, ex)}`
+		if (this.fallback) return `${this.url}/egg${level}.${this.imageType}`
+		return null
 	}
 
 	async invasionIcon(gruntType) {
@@ -149,22 +177,30 @@ class Uicons {
 
 	async rewardItemIcon(itemId) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		return currentSet ? `${this.url}/reward/item/${resolveItemIcon(currentSet.reward.item, this.imageType, itemId)}` : null
+		if (currentSet) return `${this.url}/reward/item/${resolveItemIcon(currentSet.reward.item, this.imageType, itemId)}`
+		if (this.fallback) return `${this.url}/rewards/reward_${itemId}_1.${this.imageType}`
+		return null
 	}
 
 	async rewardStardustIcon(amount) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		return currentSet ? `${this.url}/reward/stardust/${resolveItemIcon(currentSet.reward.stardust, this.imageType, amount)}` : null
+		if (currentSet) return `${this.url}/reward/stardust/${resolveItemIcon(currentSet.reward.stardust, this.imageType, amount)}`
+		if (this.fallback) return `${this.url}/rewards/reward_stardust.${this.imageType}`
+		return null
 	}
 
 	async rewardMegaEnergyIcon(itemId) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		return currentSet ? `${this.url}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, this.imageType, itemId)}` : null
+		if (currentSet) return `${this.url}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, this.imageType, itemId)}`
+		if (this.fallback) return `${this.url}/rewards/reward_mega_energy_${itemId}.${this.imageType}`
+		return null
 	}
 
 	async rewardCandyIcon(pokemonId, amount) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		return currentSet ? `${this.url}/reward/candy/${resolveItemIcon(currentSet.reward.candy, this.imageType, pokemonId, amount)}` : null
+		if (currentSet) return `${this.url}/reward/candy/${resolveItemIcon(currentSet.reward.candy, this.imageType, pokemonId, amount)}`
+		if (this.fallback) return `${this.url}/rewards/reward_candy_${pokemonId}.${this.imageType}`
+		return null
 	}
 
 	async rewardXlCandyIcon(pokemonId, amount) {

@@ -26,9 +26,9 @@
       "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS",
     // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers (uicons repository)
       "stickerUrl": "https://raw.githubusercontent.com/bbdoc/tgUICONS/main/Shuffle",
-    // images/stickers - override uicons repository per controller
+    // images/stickers - override uicons repository for each alert type
     //  "controllerType": "repositoryUrl"
-    //  controllerType one of monster, gym, nest, pokestop, pokestop_lure, quest, raid, weather
+    //  controllerType one of monster, gym, nest, invasion, lure, quest, raid, weather
       "images": {
       },
       "stickers": {

@@ -149,9 +149,6 @@ class Gym extends Controller {
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.color = data.gymColor
 
-			data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
-			data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
-
 			const whoCares = await this.gymWhoCares(data)
 
 			if (whoCares.length) {
@@ -172,6 +169,9 @@ class Gym extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
+			data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []

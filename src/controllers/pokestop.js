@@ -2,7 +2,7 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 
-class Pokestop extends Controller {
+class Invasion extends Controller {
 	async invasionWhoCares(obj) {
 		const data = obj
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
@@ -344,4 +344,4 @@ class Pokestop extends Controller {
 	}
 }
 
-module.exports = Pokestop
+module.exports = Invasion
