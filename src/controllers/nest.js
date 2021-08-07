@@ -1,7 +1,7 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-const uicons = require('../lib/uicons')
+
 /**
  * Controller for processing nest webhooks
  */
@@ -110,7 +110,6 @@ class Nest extends Controller {
 
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -134,11 +133,6 @@ class Nest extends Controller {
 			data.nameEng = monster.name
 			data.formId = monster.form.id
 			data.formNameEng = monster.form.name
-			// should be moved after the fold as is more expensive now
-			data.imgUrl = await uicons.pokemonIcon(this.config.general.imgUrl, 'png', data.pokemon_id, data.form)
-			data.stickerUrl = await uicons.pokemonIcon(this.config.general.stickerUrl, 'webp', data.pokemon_id, data.form)
-			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.pokemonCount = data.pokemon_count
 			data.pokemonSpawnAvg = data.pokemon_avg
@@ -163,6 +157,11 @@ class Nest extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form)
+			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form)
+			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
