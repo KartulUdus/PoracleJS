@@ -164,7 +164,7 @@ class Uicons {
 	}
 
 	async eggIcon(level, hatched = false, ex = false) {
-		const currentSet = await getAvailableIcons(this.url)
+		const currentSet = await getAvailableIcons(this.log, this.url)
 		if (currentSet) return `${this.url}/raid/egg/${resolveEggIcon(currentSet.raid.egg, this.imageType, level, hatched, ex)}`
 		if (this.fallback) return `${this.url}/egg${level}.${this.imageType}`
 		return null

@@ -192,7 +192,7 @@ class Quest extends Controller {
 
 			if (data.rewardData.monsters.length > 0) {
 				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
-				data.stickerUrl = await this.stickerUicons.pokemonIcon(this.config.general.stickerUrl, 'webp', data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
 				// data.imgUrl = data.rewardData.monsters.length > 0
 				// 	? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
 				// 	: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
