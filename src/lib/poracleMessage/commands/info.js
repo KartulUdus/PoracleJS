@@ -190,7 +190,7 @@ exports.run = async (client, msg, args, options) => {
 							message = message.concat(`**Very strong against**: ${strong}\n`)
 						}
 
-						for (const level of [20, 25, 40, 50]) {
+						for (const level of [15, 20, 25, 40, 50]) {
 							const cpMulti = client.GameData.utilData.cpMultipliers[level]
 							const atk = mon.stats.baseAttack
 							const def = mon.stats.baseDefense
