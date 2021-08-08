@@ -127,9 +127,44 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			default: {
-				await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`', util.prefix),
-					{ style: 'markdown' })
-				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+				let found = false
+				if (args.length === 1) {
+					const monsters = Object.values(client.GameData.monsters).filter((mon) => args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
+					if (monsters) {
+						let message = ''
+						found = true
+
+						for (const form of monsters) {
+							message = message.concat(`${form.name} ${form.form.name ? `form:${form.form.name.replace(/ /g, '_')}` : ''}\n`)
+						}
+
+						const monster = monsters[0]
+
+						for (const level of [20, 25, 40, 50]) {
+							const cpMulti = client.GameData.utilData.cpMultipliers[level]
+							const atk = monster.stats.baseAttack
+							const def = monster.stats.baseDefense
+							const sta = monster.stats.baseStamina
+
+							const cp = Math.max(10, Math.floor(
+								(15 + atk)
+								* (15 + def) ** 0.5
+								* (15 + sta) ** 0.5
+								* cpMulti ** 2
+								/ 10,
+							))
+							message = message.concat(`Level ${level} CP ${cp}\n`)
+						}
+
+						await msg.reply(message)
+					}
+				}
+
+				if (!found) {
+					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`', util.prefix),
+						{ style: 'markdown' })
+					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+				}
 			}
 		}
 	} catch (err) {
