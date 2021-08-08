@@ -1,8 +1,15 @@
 const moment = require('moment-timezone')
 const geoTz = require('geo-tz')
+const pokeTypes = require('poke-types')
 const EmojiLookup = require('../../emojiLookup')
 const helpCommand = require('./help')
 const weatherTileGenerator = require('../../weatherTileGenerator')
+
+function capitalize(s) {
+	if (typeof s !== 'string') return ''
+	s = s.replace(/_/gi, ' ').toLowerCase()
+	return s.charAt(0).toUpperCase() + s.slice(1)
+}
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -138,13 +145,56 @@ exports.run = async (client, msg, args, options) => {
 							message = message.concat(`${form.name} ${form.form.name ? `form:${form.form.name.replace(/ /g, '_')}` : ''}\n`)
 						}
 
-						const monster = monsters[0]
+						const mon = monsters[0]
+						const typeData = client.GameData.utilData.types
+						const types = mon.types.map((type) => type.name)
+						const typeString = mon.types.map((type) => `${typeData[type.name].emoji} ${type.name}`)
+						const allWeakness = pokeTypes.getTypeWeaknesses.apply(null, types)
+						const allStrength = {}
+						const superEffective = []
+						const ultraEffective = []
+						const superWeakness = []
+						const ultraWeakness = []
+
+						types.forEach((type) => {
+							const strengths = pokeTypes.getTypeStrengths(type)
+							Object.keys(strengths).forEach((t) => {
+								if (strengths[t] > allStrength[t] || !allStrength[t]) allStrength[t] = strengths[t]
+							})
+						})
+
+						for (const type of Object.keys(allStrength)) {
+							const capType = capitalize(type)
+							if (allStrength[type] === 2) superEffective.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
+							if (allStrength[type] > 2) ultraEffective.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
+						}
+
+						for (const type of Object.keys(allWeakness)) {
+							const capType = capitalize(type)
+							if (allWeakness[type] === 2) superWeakness.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
+							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
+						}
+
+						message = message.concat(`Types: ${typeString}\n`)
+
+						for (const weak of superWeakness) {
+							message = message.concat(`**Weak against**: ${weak}\n`)
+						}
+						for (const weak of ultraWeakness) {
+							message = message.concat(`**Very weak against**: ${weak}\n`)
+						}
+						for (const strong of superEffective) {
+							message = message.concat(`**Strong against**: ${strong}\n`)
+						}
+						for (const strong of ultraEffective) {
+							message = message.concat(`**Very strong against**: ${strong}\n`)
+						}
 
 						for (const level of [20, 25, 40, 50]) {
 							const cpMulti = client.GameData.utilData.cpMultipliers[level]
-							const atk = monster.stats.baseAttack
-							const def = monster.stats.baseDefense
-							const sta = monster.stats.baseStamina
+							const atk = mon.stats.baseAttack
+							const def = mon.stats.baseDefense
+							const sta = mon.stats.baseStamina
 
 							const cp = Math.max(10, Math.floor(
 								(15 + atk)
