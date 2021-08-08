@@ -175,20 +175,16 @@ exports.run = async (client, msg, args, options) => {
 							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
 						}
 
-						message = message.concat(`Types: ${typeString}\n`)
+						message = message.concat(`Type: ${typeString}\n`)
 
-						for (const weak of superWeakness) {
-							message = message.concat(`**Weak against**: ${weak}\n`)
-						}
-						for (const weak of ultraWeakness) {
-							message = message.concat(`**Very weak against**: ${weak}\n`)
-						}
-						for (const strong of superEffective) {
-							message = message.concat(`**Strong against**: ${strong}\n`)
-						}
-						for (const strong of ultraEffective) {
-							message = message.concat(`**Very strong against**: ${strong}\n`)
-						}
+						const boosted = Object.entries(client.GameData.utilData.weatherTypeBoost).filter(([, weatherTypes]) => weatherTypes.some((t) => mon.types.map((t2) => t2.id).includes(t))).map(([weather]) => `${translator.translate(client.GameData.utilData.weather[weather].name)} ${translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weather].emoji, platform))}`)
+
+						if (boosted.length) message = message.concat(`Boosted by: ${boosted.join(', ')}\n`)
+
+						if (superWeakness.length) message = message.concat(`**Weak against**: ${superWeakness.join(', ')}\n`)
+						if (ultraWeakness.length) message = message.concat(`**Very weak against**: ${ultraWeakness.join(', ')}\n`)
+						if (superEffective.length) message = message.concat(`**Strong against**: ${superEffective.join(', ')}\n`)
+						if (ultraEffective.length) message = message.concat(`**Very strong against**: ${ultraEffective.join(', ')}\n`)
 
 						for (const level of [15, 20, 25, 40, 50]) {
 							const cpMulti = client.GameData.utilData.cpMultipliers[level]
