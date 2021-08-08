@@ -148,7 +148,7 @@ exports.run = async (client, msg, args, options) => {
 						const mon = monsters[0]
 						const typeData = client.GameData.utilData.types
 						const types = mon.types.map((type) => type.name)
-						const typeString = mon.types.map((type) => `${typeData[type.name].emoji} ${type.name}`)
+						const typeString = mon.types.map((type) => `${emojiLookup.lookup(typeData[type.name].emoji)} ${type.name}`)
 						const allWeakness = pokeTypes.getTypeWeaknesses.apply(null, types)
 						const allStrength = {}
 						const superEffective = []
@@ -165,14 +165,14 @@ exports.run = async (client, msg, args, options) => {
 
 						for (const type of Object.keys(allStrength)) {
 							const capType = capitalize(type)
-							if (allStrength[type] === 2) superEffective.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
-							if (allStrength[type] > 2) ultraEffective.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
+							if (allStrength[type] === 2) superEffective.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
+							if (allStrength[type] > 2) ultraEffective.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
 						}
 
 						for (const type of Object.keys(allWeakness)) {
 							const capType = capitalize(type)
-							if (allWeakness[type] === 2) superWeakness.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
-							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? typeData[capType].emoji : ''} ${capType}`)
+							if (allWeakness[type] === 2) superWeakness.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
+							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
 						}
 
 						message = message.concat(`Types: ${typeString}\n`)
