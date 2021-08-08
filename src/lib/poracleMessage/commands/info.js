@@ -137,7 +137,7 @@ exports.run = async (client, msg, args, options) => {
 				let found = false
 				if (args.length === 1) {
 					const monsters = Object.values(client.GameData.monsters).filter((mon) => args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
-					if (monsters) {
+					if (monsters.length) {
 						let message = ''
 						found = true
 
