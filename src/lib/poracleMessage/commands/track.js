@@ -129,10 +129,7 @@ exports.run = async (client, msg, args, options) => {
 			great: 1500,
 			ultra: 2500,
 		}
-
-		if (littleLeagueAllowed) {
-			leagues.little = 500
-		}
+		if (littleLeagueAllowed) leagues.little = 500
 
 		Object.keys(leagues).forEach((league) => {
 			parameterDefinition[league] = client.re[`${league}LeagueRe`]
