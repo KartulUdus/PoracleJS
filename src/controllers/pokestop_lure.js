@@ -1,12 +1,11 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-
 /**
  * Controller for processing pokestop webhooks
  * Alerts on lures
  */
-class PokestopLure extends Controller {
+class Lure extends Controller {
 	async lureWhoCares(obj) {
 		const data = obj
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
@@ -106,7 +105,6 @@ class PokestopLure extends Controller {
 			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -146,6 +144,9 @@ class PokestopLure extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
+			data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
@@ -241,4 +242,4 @@ class PokestopLure extends Controller {
 	}
 }
 
-module.exports = PokestopLure
+module.exports = Lure
