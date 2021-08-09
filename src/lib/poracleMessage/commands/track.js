@@ -45,7 +45,12 @@ exports.run = async (client, msg, args, options) => {
 
 		let reaction = '👌'
 		const pvpFilterMaxRank = Math.min(client.config.pvp.pvpFilterMaxRank, 4096)
-		const { pvpFilterGreatMinCP, pvpFilterUltraMinCP, pvpFilterLittleMinCP } = client.config.pvp
+		const leagueMinCp = {
+			little: client.config.pvp.pvpFilterLittleMinCP,
+			great: client.config.pvp.pvpFilterGreatMinCP,
+			ultra: client.config.pvp.pvpFilterUltraMinCP,
+		}
+
 		let monsters
 
 		let disableEverythingTracking
@@ -126,13 +131,20 @@ exports.run = async (client, msg, args, options) => {
 		if (!disableEverythingTracking || msg.isFromAdmin) parameterDefinition.everything = '^everything$'
 		if (individuallyAllowed || msg.isFromAdmin) parameterDefinition.individually = '^individually$'
 
-		if (littleLeagueAllowed) {
-			Object.assign(parameterDefinition, {
-				little: client.re.littleLeagueRe,
-				littlecp: client.re.littleLeagueCPRe,
-				littlehigh: client.re.littleLeagueHighestRe,
-			})
+		const leagues = {
+			great: 1500,
+			ultra: 2500,
 		}
+
+		if (littleLeagueAllowed) {
+			leagues.little = 500
+		}
+
+		Object.keys(leagues).forEach((league) => {
+			parameterDefinition[league] = client.re[`${league}LeagueRe`]
+			parameterDefinition[`${league}cp`] = client.re[`${league}LeagueCPRe`]
+			parameterDefinition[`${league}high`] = client.re[`${league}LeagueHighestRe`]
+		})
 
 		const parameterValues = {
 
@@ -228,27 +240,23 @@ exports.run = async (client, msg, args, options) => {
 		let distance = +defaultTo(parameterValues.distance, 0)
 		let rarity = +defaultTo(parameterValues.rarity, -1)
 		let maxRarity = +defaultTo(parameterValues.maxrarity, 6)
-		const littleLeague = +defaultTo(parameterValues.little, 4096)
-		const littleLeagueHighest = +defaultTo(parameterValues.littlehigh, 1)
-		const littleLeagueCP = +defaultTo(parameterValues.littlecp, 0)
-		const greatLeague = +defaultTo(parameterValues.great, 4096)
-		const greatLeagueHighest = +defaultTo(parameterValues.greathigh, 1)
-		const greatLeagueCP = +defaultTo(parameterValues.greatcp, 0)
-		const ultraLeague = +defaultTo(parameterValues.ultra, 4096)
-		const ultraLeagueHighest = +defaultTo(parameterValues.ultrahigh, 1)
-		const ultraLeagueCP = +defaultTo(parameterValues.ultracp, 0)
 		const pings = msg.getPings()
 
 		const pvp = {}
-		if (greatLeague < 4096) {
-			Object.assign(pvp, { 1500: { minCp: Math.max(greatLeagueCP, pvpFilterGreatMinCP), worst: Math.min(greatLeague, pvpFilterMaxRank), best: greatLeagueHighest } })
-		}
-		if (ultraLeague < 4096) {
-			Object.assign(pvp, { 2500: { minCp: Math.max(ultraLeagueCP, pvpFilterUltraMinCP), worst: Math.min(ultraLeague, pvpFilterMaxRank), best: ultraLeagueHighest } })
-		}
-		if (littleLeague < 4096) {
-			Object.assign(pvp, { 500: { minCp: Math.max(littleLeagueCP, pvpFilterLittleMinCP), worst: Math.min(littleLeague, pvpFilterMaxRank), best: littleLeagueHighest } })
-		}
+
+		Object.entries(leagues).forEach(([league, rank]) => {
+			const leagueLowest = +defaultTo(parameterValues[league], 4096)
+			const leagueHighest = +defaultTo(parameterValues[`${league}high`], 1)
+			const leagueCP = +defaultTo(parameterValues[`${league}cp`], 0)
+
+			if (leagueLowest < 4096) {
+				pvp[rank] = {
+					minCp: Math.max(leagueCP, leagueMinCp[league]),
+					worst: Math.min(leagueLowest, pvpFilterMaxRank),
+					best: leagueHighest,
+				}
+			}
+		})
 
 		if (Object.keys(pvp).length > 1) {
 			await msg.react(translator.translate('🙅'))
