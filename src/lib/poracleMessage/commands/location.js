@@ -19,6 +19,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName)) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		if (args.length === 0) {
 			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}location <lat>,<lon>`, `{0}location <your address>`', util.prefix),
 				{ style: 'markdown' })

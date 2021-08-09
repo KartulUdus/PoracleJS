@@ -16,6 +16,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed('start')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		let platform = target.type.split(':')[0]
 		if (platform === 'webhook') platform = 'discord'
 

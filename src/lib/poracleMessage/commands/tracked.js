@@ -207,6 +207,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName)) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		const monsters = await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo })
 		const raids = await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo })
 		const eggs = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })

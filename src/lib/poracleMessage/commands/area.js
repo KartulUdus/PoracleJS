@@ -21,6 +21,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName)) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		let selectableGeofence = client.geofence
 		// Note for Poracle admins we don't remove the userSelectable items
 		// But we do apply the filtering later based on the user/channel that is the target (targetIsAdmin used instead)
