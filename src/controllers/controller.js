@@ -36,8 +36,8 @@ class Controller extends EventEmitter {
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
-		this.imgUicons = new Uicons(this.config.general.images[this.constructor.name.toLowerCase()] || this.config.general.imgUrl, 'png', this.log)
-		this.stickerUicons = new Uicons(this.config.general.stickers[this.constructor.name.toLowerCase()] || this.config.general.stickerUrl, 'webp', this.log)
+		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
+		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
 		this.dtsCache = {}
 	}
 
