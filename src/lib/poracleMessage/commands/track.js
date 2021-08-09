@@ -204,7 +204,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (typeList.length) {
-			const validMonsters = Object.values(client.GameData.monsters).filter((mon) => mon.types.map((t) => t.name.toLowerCase()).find((t) => typeList.includes(t)))
+			const validMonsters = Object.values(client.GameData.monsters).filter((mon) => mon.types.map((t) => t.name.toLowerCase()).some((t) => typeList.includes(t)))
 			if (monsterList.size) {
 				monsterList = new Set([...monsterList].filter((id) => validMonsters.some((mon) => mon.id === id)))
 			} else {
@@ -219,7 +219,7 @@ exports.run = async (client, msg, args, options) => {
 		} else if (monsterArray.includes(0)) {
 			monsters = [{ id: 0, form: { id: 0 } }]
 		} else {
-			monsters = Object.values(client.GameData.monsters).filter((mon) => !mon.form.id && monsterArray.includes(mon.id))
+			monsters = monsterArray.map((id) => ({ id, form: { id: 0 } }))
 		}
 
 		const defaultTo = ((value, x) => ((value === undefined) ? x : value))
