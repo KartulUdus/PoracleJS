@@ -187,7 +187,7 @@ class Raid extends Controller {
 			data.teamId = data.team_id ? data.team_id : 0
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
-			data.gymUrl = data.gym_url ? data.gym_url : ''
+			data.gymUrl = data.gym_url || data.url || ''
 			data.disappearTime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
