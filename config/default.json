@@ -253,7 +253,7 @@
     // eg:
     //   "commandSecurity": {
     //      "track": [ "userid", "roleid" ],
-    //      "maxatk": { "roleid" ]
+    //      "maxatk": [ "roleid" ]
     //   }
       "commandSecurity": {
 
