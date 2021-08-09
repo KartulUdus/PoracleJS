@@ -125,7 +125,6 @@ class Gym extends Controller {
 			//			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -170,6 +169,9 @@ class Gym extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
+			data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
