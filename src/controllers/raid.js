@@ -341,7 +341,7 @@ class Raid extends Controller {
 						tths: data.tth.seconds,
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
-						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
+						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)) },
 						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					}
 
@@ -351,7 +351,7 @@ class Raid extends Controller {
 					if (mustache) {
 						let mustacheResult
 						try {
-							mustacheResult = mustache(view, { data: { language } })
+							mustacheResult = mustache(view, { data: { language, platform } })
 						} catch (err) {
 							this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 						}
@@ -477,7 +477,7 @@ class Raid extends Controller {
 				if (mustache) {
 					let mustacheResult
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 					}
