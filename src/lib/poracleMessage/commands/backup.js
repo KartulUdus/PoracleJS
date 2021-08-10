@@ -38,6 +38,8 @@ exports.run = async (client, msg, args, options) => {
 			invasion: await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo }),
 			weather: await client.query.selectAllQuery('weather', { id: target.id, profile_no: currentProfileNo }),
 			lures: await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo }),
+			gym: await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo }),
+			nests: await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo }),
 		}
 		backup.monsters.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
 		backup.raid.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
@@ -46,6 +48,8 @@ exports.run = async (client, msg, args, options) => {
 		backup.invasion.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
 		backup.weather.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
 		backup.lures.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.gym.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
+		backup.nests.map((x) => { x.id = 0; delete x.uid; x.profile_no = 0 })
 
 		fs.writeFileSync(path.join(__dirname, '../../../../backups', `${args[0]}.json`), JSON.stringify(backup, null, '\t'))
 		msg.react(client.translator.translate('✅'))
