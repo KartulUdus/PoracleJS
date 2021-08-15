@@ -1,16 +1,18 @@
 const fs = require('fs')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
+const mustache = require('handlebars')
 const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
 const noop = () => {}
 
 class Telegram {
-	constructor(id, config, logs, GameData, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
+	constructor(id, config, logs, GameData, PoracleInfo, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
 		this.config = config
 		this.logs = logs
 		this.GameData = GameData
+		this.PoracleInfo = PoracleInfo
 		this.geofence = geofence
 		this.translatorFactory = translatorFactory
 		this.translator = translatorFactory.default
@@ -29,7 +31,7 @@ class Telegram {
 		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, this.config.tuning.concurrentTelegramDestinationsPerBot, ((entry) => entry.target))
 		this.bot
 			.use(commandParser(this.translatorFactory))
-			.use(controller(query, dts, logs, GameData, geofence, config, re, translatorFactory, emojiStrip))
+			.use(controller(query, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip, mustache))
 
 		this.commands = {}
 
@@ -63,7 +65,7 @@ class Telegram {
 
 				const translatedCommands = this.translatorFactory.translateCommand(commandName)
 				for (const translatedCommand of translatedCommands) {
-					if (translatedCommand != commandName) {
+					if (translatedCommand !== commandName) {
 						this.enabledCommands.push(translatedCommand)
 						this.commands[translatedCommand] = this.tempProps
 					}
@@ -105,7 +107,7 @@ class Telegram {
 	async processCommand(ctx) {
 		const { command } = ctx.state
 		if (!command) return
-		if (command.bot && command.bot.toLowerCase() != ctx.botInfo.username.toLowerCase()) return
+		if (command.bot && command.bot.toLowerCase() !== ctx.botInfo.username.toLowerCase()) return
 		if (Object.keys(this.commands).includes(command.command)) {
 			return this.commands[command.command](ctx)
 		}
@@ -171,12 +173,12 @@ class Telegram {
 			try {
 				res = await fn()
 			} catch (err) {
-				if (err.code == 429) {
+				if (err.code === 429) {
 					const retryAfter = (err.response && err.response.parameters) ? err.response.parameters.retry_after : 30
 					this.logs.telegram.warn(`${senderId} 429 Rate limit [Telegram] - wait for ${retryAfter} retry count ${retryCount}`)
 					await this.sleep(retryAfter * 1000)
 					retry = true
-					if (retryCount++ == 5) {
+					if (retryCount++ === 5) {
 						throw err
 					}
 				} else {
@@ -291,7 +293,14 @@ class Telegram {
 
 		const now = Date.now()
 
-		const data = JSON.parse(loaddatatxt)
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn(`Clean cache for Telegram tag ${this.bot.token} contains invalid data - ignoring`)
+			return
+		}
+
 		for (const key of Object.keys(data)) {
 			const msgData = data[key]
 

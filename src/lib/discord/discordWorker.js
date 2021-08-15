@@ -214,16 +214,23 @@ class Worker {
 
 		const now = Date.now()
 
-		const data = JSON.parse(loaddatatxt)
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn(`Clean cache for discord tag ${this.client.user.tag} contains invalid data - ignoring`)
+			return
+		}
+
 		for (const key of Object.keys(data)) {
 			const msgData = data[key]
 			let channel = null
 			try {
-				if (msgData.v.type == 'user') {
+				if (msgData.v.type === 'user') {
 					const user = await this.client.users.fetch(msgData.v.id)
 					channel = await user.createDM()
 				}
-				if (msgData.v.type == 'channel') {
+				if (msgData.v.type === 'channel') {
 					channel = await this.client.channels.fetch(msgData.v.id)
 				}
 				if (channel) {

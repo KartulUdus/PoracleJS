@@ -1,12 +1,11 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-
 /**
  * Controller for processing pokestop webhooks
  * Alerts on lures
  */
-class PokestopLure extends Controller {
+class Lure extends Controller {
 	async lureWhoCares(obj) {
 		const data = obj
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
@@ -106,7 +105,6 @@ class PokestopLure extends Controller {
 			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -115,14 +113,14 @@ class PokestopLure extends Controller {
 				return []
 			}
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.lureTypeId = 0
 			if (data.lure_id) {
 				data.lureTypeId = data.lure_id
 			}
 
-			data.lureTypeEmoji = this.GameData.utilData.lures[data.lure_id].emoji
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
 			data.lureTypeNameEng = this.GameData.utilData.lures[data.lure_id].name
 
@@ -147,6 +145,9 @@ class PokestopLure extends Controller {
 				return []
 			}
 
+			data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
+			data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
+
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
@@ -168,10 +169,13 @@ class PokestopLure extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				// full build
 				data.lureTypeName = translator.translate(data.lureTypeNameEng)
 				data.lureType = data.lureTypeName
+				data.lureTypeEmoji = this.emojiLookup.lookup(this.GameData.utilData.lures[data.lure_id].emoji, platform)
 
 				const view = {
 					...geoResult,
@@ -181,55 +185,54 @@ class PokestopLure extends Controller {
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
 					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
-				const mustache = this.getDts(logReference, 'lure', platform, cares.template, language)
+				const templateType = 'lure'
+				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+				let message
 				if (mustache) {
 					let mustacheResult
-					let message
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
 					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
+					if (mustacheResult) {
+						mustacheResult = await this.urlShorten(mustacheResult)
+						try {
+							message = JSON.parse(mustacheResult)
+							if (cares.ping) {
+								if (!message.content) {
+									message.content = cares.ping
+								} else {
+									message.content += cares.ping
+								}
+							}
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
 						}
 					}
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: data.emoji,
-						logReference,
-						language,
-					}
-
-					jobs.push(work)
 				}
+
+				if (!message) {
+					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+				}
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: data.tth,
+					clean: cares.clean,
+					emoji: data.emoji,
+					logReference,
+					language,
+				}
+
+				jobs.push(work)
 			}
 
 			return jobs
@@ -239,4 +242,4 @@ class PokestopLure extends Controller {
 	}
 }
 
-module.exports = PokestopLure
+module.exports = Lure

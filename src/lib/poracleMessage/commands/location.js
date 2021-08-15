@@ -1,4 +1,4 @@
-const helpCommand = require('./help.js')
+const helpCommand = require('./help')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -44,17 +44,17 @@ exports.run = async (client, msg, args, options) => {
 		let staticMap
 		let message
 
-		const matches = search.match(/^([-+]?(?:[1-8]?\d(?:\.\d+)?|90(?:\.0+)?)),\s*([-+]?(?:180(\.0+)?|(?:(?:1[0-7]\d)|(?:[1-9]?\d))(?:\.\d+)?))$/)
-		if (matches != null && matches.length >= 2) {
+		const matches = search.match(client.re.latlonRe)
+		if (matches !== null && matches.length >= 2) {
 			lat = parseFloat(matches[1])
 			lon = parseFloat(matches[2])
 		} else {
-			if (args.length == 1 && search.match(/^\d{1,5}$/) == null) {
+			if (args.length === 1 && search.match(/^\d{1,5}$/) === null) {
 				await msg.react(translator.translate('🙅'))
 				return await msg.reply(`${translator.translate('Oops, you need to specify more than just a city name to locate accurately your position')}`)
 			}
 			const locations = await client.query.geolocate(search)
-			if (locations === undefined || locations.length == 0) {
+			if (locations === undefined || locations.length === 0) {
 				return await msg.react(translator.translate('🙅'))
 			}
 			lat = locations[0].latitude

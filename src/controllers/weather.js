@@ -8,12 +8,12 @@ const { Mutex } = require('async-mutex')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
-const weatherKeyCache = pcache.load('weatherKeyCache', path.resolve(`${__dirname}../../../.cache/`))
-const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
+const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../../.cache'))
+const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class Weather extends Controller {
 	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
-		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null)
+		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
 		this.controllerData = weatherCache.getKey('weatherCacheData') || {}
 		this.caresData = weatherCache.getKey('caredPokemon') || {}
 
@@ -22,7 +22,7 @@ class Weather extends Controller {
 	}
 
 	async getLaziestWeatherKey() {
-		if (this.config.weather.apiKeyAccuWeather.length == 0) {
+		if (this.config.weather.apiKeyAccuWeather.length === 0) {
 			this.log.error('no AccuWeather API key provided in config')
 			return ''
 		}
@@ -96,21 +96,6 @@ class Weather extends Controller {
 	 * @returns {Promise<{next: number, current: number}>}
 	 */
 	async getWeather(id) {
-		// const res = {
-		// 	current: 0,
-		// 	next: 0,
-		// }
-		// // if (!this.config.weather.enableWeatherForecast
-		// 	|| moment().hour() >= moment(weatherObject.disappear * 1000).hour()
-		// 	&& !(moment().hour() == 23 && moment(weatherObject.disappear * 1000).hour() == 0)
-		// ) {
-		// 	this.log.info('weather forecast target will disappear in current hour')
-		// 	return res
-		// }
-		//
-		// const key = S2.latLngToKey(weatherObject.lat, weatherObject.lon, 10)
-		// const id = S2.keyToId(key)
-
 		this.log.debug(`Get weather ${id} before mutex`)
 		let weatherMutex = this.getWeatherMutex[id]
 		if (!weatherMutex) {
@@ -272,7 +257,7 @@ class Weather extends Controller {
 			const updateHourTimestamp = data.time_changed - (data.time_changed % 3600)
 			const previousHourTimestamp = updateHourTimestamp - 3600
 
-			this.log.verbose(`${data.s2_cell_id}: weather received ${data.source == 'fromMonster' ? ' from Monster' : ''} - weather ${currentInGameWeather}`)
+			this.log.verbose(`${data.s2_cell_id}: weather received ${data.source === 'fromMonster' ? ' from Monster' : ''} - weather ${currentInGameWeather}`)
 
 			if (!this.controllerData[data.s2_cell_id]) this.controllerData[data.s2_cell_id] = {}
 			if (!this.caresData[data.s2_cell_id]) this.caresData[data.s2_cell_id] = {}
@@ -296,12 +281,14 @@ class Weather extends Controller {
 
 			whoCares = caresCellData.cares || []
 
+			this.log.debug(`${data.s2_cell_id}: weather cares list ${JSON.stringify(whoCares)}`)
+
 			if (this.config.weather.showAlteredPokemon) {
 				// Removing whoCares who don't have a Pokemon affected by this weather change
 				whoCares = whoCares.filter((cares) => (('caredPokemons' in cares) ? cares.caredPokemons.find((pokemon) => pokemon.alteringWeathers.includes(currentInGameWeather)) : ''))
 			}
 
-			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] != currentInGameWeather || weatherCellData.lastCurrentWeatherCheck < updateHourTimestamp) {
+			if (!weatherCellData[updateHourTimestamp] || weatherCellData[updateHourTimestamp] && weatherCellData[updateHourTimestamp] !== currentInGameWeather || weatherCellData.lastCurrentWeatherCheck < updateHourTimestamp) {
 				weatherCellData[updateHourTimestamp] = currentInGameWeather
 				weatherCellData.lastCurrentWeatherCheck = updateHourTimestamp
 
@@ -316,13 +303,13 @@ class Weather extends Controller {
 			}
 
 			if (previousWeather === data.condition || whoCares.length === 0) {
-				this.log.verbose(`${data.s2_cell_id}: weather of ${data.condition}${data.source == 'fromMonster' ? ' triggered from Monster' : ''} has not changed or nobody cares.`)
+				this.log.verbose(`${data.s2_cell_id}: weather of ${data.condition}${data.source === 'fromMonster' ? ' triggered from Monster' : ''} has not changed or nobody cares.`)
 				return []
 			}
 
-			this.log.info(`${data.s2_cell_id}: weather${data.source == 'fromMonster' ? ' triggered from Monster' : ''} has changed to ${data.condition} from ${previousWeather} and someone might care`)
+			this.log.info(`${data.s2_cell_id}: weather${data.source === 'fromMonster' ? ' triggered from Monster' : ''} has changed to ${data.condition} from ${previousWeather} and someone might care`)
 
-			if (data.source == 'fromMonster') {
+			if (data.source === 'fromMonster') {
 				const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(data.s2_cell_id))
 				const s2cellCenter = S2ts.S2LatLng.fromPoint(s2cell.getCenter())
 				data.latitude = s2cellCenter.latRadians * 180 / Math.PI
@@ -342,10 +329,11 @@ class Weather extends Controller {
 
 			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
 			data.oldWeatherNameEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].name : ''
-			data.oldWeatherEmojiEng = data.oldWeatherId ? this.GameData.utilData.weather[data.oldWeatherId].emoji : ''
 			data.weatherId = data.condition ? data.condition : ''
 			data.weatherNameEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].name : ''
-			data.weatherEmojiEng = data.weatherId ? this.GameData.utilData.weather[data.weatherId].emoji : ''
+
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			const jobs = []
 			const now = moment.now()
@@ -366,23 +354,23 @@ class Weather extends Controller {
 
 				if (cares.caresUntil < nowTimestamp) {
 					this.log.debug(`${data.s2_cell_id}: last tracked pokemon despawned before weather changed`)
-					caresCellData.cares = caresCellData.cares.filter((caring) => caring.id != cares.id)
+					caresCellData.cares = caresCellData.cares.filter((caring) => caring.id !== cares.id)
 					// eslint-disable-next-line no-continue
 					continue
 				}
-				if (cares.lastChangeAlert == currentHourTimestamp) {
+				if (cares.lastChangeAlert === currentHourTimestamp) {
 					this.log.debug(`${data.s2_cell_id}: user already alerted for this weather change`)
 					// eslint-disable-next-line no-continue
 					continue
 				}
 
-				const userStillCares = caresCellData.cares.find((caring) => caring.id == cares.id)
+				const userStillCares = caresCellData.cares.find((caring) => caring.id === cares.id)
 				if (userStillCares) {
 					userStillCares.lastChangeAlert = currentHourTimestamp
 				}
 
 				if (this.config.weather.showAlteredPokemon) {
-					// const activePokemons = caresCellData.cares.filter((caring) => caring.id == cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
+					// const activePokemons = caresCellData.cares.filter((caring) => caring.id === cares.id)[0].caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 					const activePokemons = cares.caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
@@ -395,10 +383,15 @@ class Weather extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				data.oldWeatherName = data.oldWeatherNameEng ? translator.translate(data.oldWeatherNameEng) : ''
+				data.oldWeatherEmojiEng = data.oldWeatherId ? this.emojiLookup.lookup(this.GameData.utilData.weather[data.oldWeatherId].emoji, platform) : ''
 				data.oldWeatherEmoji = data.oldWeatherNameEng ? translator.translate(data.oldWeatherEmojiEng) : ''
+				data.weatherCellId = data.s2_cell_id
 				data.weatherName = data.weatherNameEng ? translator.translate(data.weatherNameEng) : ''
+				data.weatherEmojiEng = data.weatherId ? this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherId].emoji, platform) : ''
 				data.weatherEmoji = data.weatherEmojiEng ? translator.translate(data.weatherEmojiEng) : ''
 				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
 					data.activePokemons.map((pok) => {
@@ -416,47 +409,54 @@ class Weather extends Controller {
 					...data,
 					...geoResult,
 					id: data.s2_cell_id,
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					now: new Date(),
 				}
 
-				let [platform] = cares.type.split(':')
-				if (platform == 'webhook') platform = 'discord'
-
-				const mustache = this.getDts(logReference, 'weatherchange', platform, cares.template, language)
+				const templateType = 'weatherchange'
+				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+				let message
 				if (mustache) {
 					let mustacheResult
-					let message
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
 					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
+					if (mustacheResult) {
+						mustacheResult = await this.urlShorten(mustacheResult)
+						try {
+							message = JSON.parse(mustacheResult)
+							if (cares.ping) {
+								if (!message.content) {
+									message.content = cares.ping
+								} else {
+									message.content += cares.ping
+								}
+							}
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+						}
 					}
-
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: weatherTth,
-						clean: cares.clean,
-						emoji: [],
-						logReference,
-						language,
-					}
-					jobs.push(work)
 				}
+
+				if (!message) {
+					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+				}
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: weatherTth,
+					clean: cares.clean,
+					emoji: [],
+					logReference,
+					language,
+				}
+				jobs.push(work)
 			}
 
 			this.log.info(`${logReference}: Weather alert generated and ${count} humans cared.`)

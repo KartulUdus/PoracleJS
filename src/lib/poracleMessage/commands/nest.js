@@ -1,6 +1,5 @@
-const helpCommand = require('./help.js')
-const trackedCommand = require('./tracked.js')
-const objectDiff = require('../../objectDiff')
+const helpCommand = require('./help')
+const trackedCommand = require('./tracked')
 
 exports.run = async (client, msg, args, options) => {
 	const logReference = Math.random().toString().slice(2, 11)
@@ -101,12 +100,12 @@ exports.run = async (client, msg, args, options) => {
 			const insert = monsters.map((mon) => ({
 				id: target.id,
 				profile_no: currentProfileNo,
-				pokemon_id: mon.id,
+				pokemon_id: +mon.id,
 				ping: pings,
-				min_spawn_avg: minSpawn,
-				template,
-				distance,
-				clean,
+				min_spawn_avg: +minSpawn,
+				template: template.toString(),
+				distance: +distance,
+				clean: +clean,
 				form: mon.form.id,
 			}))
 
@@ -117,8 +116,8 @@ exports.run = async (client, msg, args, options) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of tracked.filter((x) => x.pokemon_id == toInsert.pokemon_id)) {
-					const differences = objectDiff.diff(existing, toInsert)
+				for (const existing of tracked.filter((x) => x.pokemon_id === toInsert.pokemon_id)) {
+					const differences = client.updatedDiff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
 						case 1:		// No differences (only UID)
@@ -147,25 +146,27 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((raid) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.nestRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.nestRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 				updates.forEach((raid) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.nestRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.nestRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 				insert.forEach((raid) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.nestRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.nestRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 			}
 
-			if (insert.length) {
-				await client.query.insertQuery('nests', insert)
-			}
-			for (const row of updates) {
-				await client.query.updateQuery('nests', row, { uid: row.uid })
-			}
+			await client.query.deleteWhereInQuery('nests', {
+				id: target.id,
+				profile_no: currentProfileNo,
+			},
+			updates.map((x) => x.uid),
+			'uid')
+
+			await client.query.insertQuery('nests', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking nests `)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			const monsterIds = monsters.map((mon) => mon.id)
@@ -185,7 +186,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 			msg.reply(
 				''.concat(
-					result == 1 ? translator.translate('I removed 1 entry')
+					result === 1 ? translator.translate('I removed 1 entry')
 						: translator.translateFormat('I removed {0} entries', result),
 					', ',
 					translator.translateFormat('use `{0}{1}` to see what you are currently tracking', util.prefix, translator.translate('tracked')),

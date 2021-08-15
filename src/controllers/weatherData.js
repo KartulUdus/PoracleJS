@@ -4,7 +4,7 @@ const EventEmitter = require('events')
 const path = require('path')
 const pcache = require('flat-cache')
 
-const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
+const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class WeatherData extends EventEmitter {
 	constructor(config, log) {
@@ -49,7 +49,7 @@ class WeatherData extends EventEmitter {
 				const localCellData = this.localWeatherData[weatherCellId]
 
 				if (weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) currentCellWeather = weatherCellData[currentHourTimestamp]
-				if (localCellData && localCellData.currentHourTimestamp == currentHourTimestamp) currentCellWeather = localCellData.monsterWeather // We have discovered weather locally, use that
+				if (localCellData && localCellData.currentHourTimestamp === currentHourTimestamp) currentCellWeather = localCellData.monsterWeather // We have discovered weather locally, use that
 			}
 		}
 
@@ -86,13 +86,13 @@ class WeatherData extends EventEmitter {
 			if (!weatherCellData.lastCurrentWeatherCheck) weatherCellData.lastCurrentWeatherCheck = previousHourTimestamp
 
 			// If the weather that we see agrees with latest up-to-date broadcast, reset counters
-			if (monsterWeather == weatherCellData[currentHourTimestamp] && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) {
+			if (monsterWeather === weatherCellData[currentHourTimestamp] && weatherCellData.lastCurrentWeatherCheck >= currentHourTimestamp) {
 				localWeatherCellData.weatherFromBoost = [0, 0, 0, 0, 0, 0, 0, 0]
 			}
 
-			if ((monsterWeather !== weatherCellData[currentHourTimestamp] || (monsterWeather == weatherCellData[currentHourTimestamp] && weatherCellData.lastCurrentWeatherCheck < currentHourTimestamp))) {
+			if ((monsterWeather !== weatherCellData[currentHourTimestamp] || (monsterWeather === weatherCellData[currentHourTimestamp] && weatherCellData.lastCurrentWeatherCheck < currentHourTimestamp))) {
 				localWeatherCellData.weatherFromBoost = localWeatherCellData.weatherFromBoost.map((value, index) => {
-					if (index == monsterWeather) return value + 1
+					if (index === monsterWeather) return value + 1
 					return value - 1
 				})
 				if (localWeatherCellData.weatherFromBoost.some((x) => x > 4)) {

@@ -3,6 +3,7 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
+const PogoEventParser = require('./lib/pogoEventParser')
 
 const logs = require('./lib/logger')
 
@@ -19,17 +20,18 @@ const {
 } = Config(false)
 
 const GameData = {
-	monsters: require('./util/monsters'),
-	utilData: require('./util/util'),
-	moves: require('./util/moves'),
-	items: require('./util/items'),
-	grunts: require('./util/grunts'),
+	monsters: require('./util/monsters.json'),
+	utilData: require('./util/util.json'),
+	moves: require('./util/moves.json'),
+	items: require('./util/items.json'),
+	grunts: require('./util/grunts.json'),
 }
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const GymController = require('./controllers/gym')
 const PokestopLureController = require('./controllers/pokestop_lure')
 const NestController = require('./controllers/nest')
 const ControllerWeatherManager = require('./controllers/weatherData')
@@ -43,13 +45,15 @@ const rateLimitedUserCache = new NodeCache({ stdTTL: config.alertLimits.timingPe
 
 const controllerWeatherManager = new ControllerWeatherManager(config, log)
 const statsData = new StatsData(config, log)
+const pogoEventParser = new PogoEventParser(log)
 
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
-const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData)
+const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
 
 const hookQueue = []
 let queuePort
@@ -109,6 +113,16 @@ async function processOne(hook) {
 				}
 				break
 			}
+			case 'gym':
+			case 'gym_details': {
+				const result = await gymController.handle(hook.message)
+				if (result) {
+					queueAddition = result
+				} else {
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+				}
+				break
+			}
 			case 'nest': {
 				const result = await nestController.handle(hook.message)
 				if (result) {
@@ -156,29 +170,56 @@ function updateBadGuys(badguys) {
 	}
 }
 
+function reloadDts() {
+	try {
+		const newDts = require('./lib/dtsloader').readDtsFiles()
+		monsterController.setDts(newDts)
+		raidController.setDts(newDts)
+		questController.setDts(newDts)
+		pokestopController.setDts(newDts)
+		nestController.setDts(newDts)
+		pokestopLureController.setDts(newDts)
+		gymController.setDts(newDts)
+		log.info('DTS reloaded')
+	} catch (err) {
+		log.error('Error reloading dts', err)
+	}
+}
+
 function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
 
-		if (cmd.type == 'heapdump') {
+		if (cmd.type === 'heapdump') {
 			writeHeapSnapshot()
 			return
 		}
 
-		if (cmd.type == 'badguys') {
+		if (cmd.type === 'badguys') {
 			log.debug(`Worker ${workerId}: Received badguys`, cmd.badguys)
 
 			updateBadGuys(cmd.badguys)
 		}
-		if (cmd.type == 'weatherBroadcast') {
+		if (cmd.type === 'weatherBroadcast') {
 			log.debug(`Worker ${workerId}: Received weather broadcast`, cmd.data)
 
 			controllerWeatherManager.receiveWeatherBroadcast(cmd.data)
 		}
-		if (cmd.type == 'statsBroadcast') {
+		if (cmd.type === 'statsBroadcast') {
 			log.debug(`Worker ${workerId}: Received stats broadcast`, cmd.data)
 
 			statsData.receiveStatsBroadcast(cmd.data)
+		}
+		if (cmd.type === 'eventBroadcast') {
+			log.debug(`Worker ${workerId}: Received event broadcast`, cmd.data)
+
+			pogoEventParser.loadEvents(cmd.data)
+		}
+
+		if (cmd.type === 'reloadDts') {
+			log.debug(`Worker ${workerId}: Received dts reload request broadcast`)
+
+			reloadDts()
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)
@@ -215,7 +256,7 @@ if (!isMainThread) {
 	})
 
 	parentPort.on('message', (msg) => {
-		if (msg.type == 'queuePort') {
+		if (msg.type === 'queuePort') {
 			queuePort = msg.queuePort
 			commandPort = msg.commandPort
 
@@ -229,4 +270,5 @@ if (!isMainThread) {
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
 	setInterval(currentStatus, 60000)
+	setImmediate(async () => monsterController.initialiseObem())
 }

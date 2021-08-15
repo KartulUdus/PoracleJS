@@ -44,13 +44,21 @@ module.exports = (translatorFactory) => ({
 	weightRe: createCommandRegex(translatorFactory, 'weight', '\\d{1,8}'),
 	rarityRe: createCommandRegex(translatorFactory, 'rarity', '.+'),
 	greatLeagueRe: createCommandRegex(translatorFactory, 'great', '\\d{1,4}'),
+	greatLeagueHighestRe: createCommandRegex(translatorFactory, 'greathigh', '\\d{1,4}'),
 	greatLeagueCPRe: createCommandRegex(translatorFactory, 'greatcp', '\\d{1,5}'),
+
 	ultraLeagueRe: createCommandRegex(translatorFactory, 'ultra', '\\d{1,4}'),
+	ultraLeagueHighestRe: createCommandRegex(translatorFactory, 'ultrahigh', '\\d{1,4}'),
 	ultraLeagueCPRe: createCommandRegex(translatorFactory, 'ultracp', '\\d{1,5}'),
+	littleLeagueRe: createCommandRegex(translatorFactory, 'little', '\\d{1,4}'),
+	littleLeagueHighestRe: createCommandRegex(translatorFactory, 'littlehigh', '\\d{1,4}'),
+	littleLeagueCPRe: createCommandRegex(translatorFactory, 'littlecp', '\\d{1,5}'),
+
 	dRe: createCommandRegex(translatorFactory, 'd', '[\\d.]{1,}'),
 	tRe: createCommandRegex(translatorFactory, 't', '\\d{1,4}'),
 	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),
 	energyRe: createCommandRegex(translatorFactory, 'energy', '\\S+'),
+	candyRe: createCommandRegex(translatorFactory, 'candy', '\\S+'),
 	channelRe: createCommandRegex(translatorFactory, 'channel', '\\d{1,20}'),
 	guildRe: createCommandRegex(translatorFactory, 'guild', '\\d{1,20}'),
 	areaRe: createCommandRegex(translatorFactory, 'area', '.+'),
@@ -65,5 +73,7 @@ module.exports = (translatorFactory) => ({
 	weekdayRe: createCommandRegex(translatorFactory, 'weekday', '(\\d\\d?)?(:?)(\\d\\d?)?'),
 	weekendRe: createCommandRegex(translatorFactory, 'weekend', '(\\d\\d?)?(:?)(\\d\\d?)?'),
 	minspawnRe: createCommandRegex(translatorFactory, 'minspawn', '(\\d\\d?)?(:?)(\\d\\d?)?'),
+
+	latlonRe: '^([-+]?(?:[1-8]?\\d(?:\\.\\d+)?|90(?:\\.0+)?)),\\s*([-+]?(?:180(\\.0+)?|(?:(?:1[0-7]\\d)|(?:[1-9]?\\d))(?:\\.\\d+)?))$',
 }
 )

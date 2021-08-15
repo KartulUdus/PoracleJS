@@ -1,3 +1,4 @@
+const { diff } = require('deep-object-diff')
 const mustache = require('handlebars')
 const hastebin = require('hastebin-gen')
 const PoracleTelegramUtil = require('./poracleTelegramUtil')
@@ -9,6 +10,7 @@ class PoracleTelegramState {
 		this.dts = ctx.state.controller.dts
 		this.log = ctx.state.controller.logs.command
 		this.GameData = ctx.state.controller.GameData
+		this.PoracleInfo = ctx.state.controller.PoracleInfo
 		this.query = ctx.state.controller.query
 		this.geofence = ctx.state.controller.geofence
 		this.re = ctx.state.controller.re
@@ -17,6 +19,7 @@ class PoracleTelegramState {
 		this.config = ctx.state.controller.config
 		this.mustache = mustache
 		this.hastebin = hastebin
+		this.updatedDiff = diff
 	}
 
 	createMessage(msg) {

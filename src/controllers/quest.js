@@ -8,8 +8,7 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
-
-const questTypeList = require('../util/questTypeList')
+const questTypeList = require('../util/questTypeList.json')
 // const itemList = require('../util/quests/items')
 const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
 const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)', 'Arlo', 'Cliff', 'Sierra', 'Giovanni']
@@ -24,11 +23,35 @@ class Quest extends Controller {
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on (humans.id = quest.id and humans.current_profile_no = quest.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
-		(((reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 1 and ${data.isShiny}=1) or (reward_type=7 and reward in (${data.rewardData.monsters}) and shiny = 0))
-		or (reward_type = 2 and reward in (${data.rewardData.items}))
-		or (reward_type = 3 and reward <= ${data.dustAmount})
-		or (reward_type = 12 and reward in (${data.energyMonsters}) and ${data.rewardData.energyAmount}>0))
-`
+		(0 = 1`
+
+		if (data.rewardData.monsters.length) {
+			for (const monster of data.rewardData.monsters) {
+				if (monster.shiny) {
+					query = query.concat(` or (reward_type=7 and reward = ${monster.pokemonId} and (form = 0 or form=${monster.formId}) and shiny = 1)`)
+				}
+				query = query.concat(` or (reward_type=7 and reward = ${monster.pokemonId} and (form = 0 or form=${monster.formId}) and shiny = 0)`)
+			}
+		}
+		if (data.rewardData.items.length) {
+			for (const item of data.rewardData.items) {
+				query = query.concat(` or (reward_type = 2 and reward = ${item.id} and ${item.amount} >= amount  )`)
+			}
+		}
+		if (data.rewardData.dustAmount > 0) {
+			query = query.concat(` or (reward_type = 3 and reward <= ${data.rewardData.dustAmount})`)
+		}
+		if (data.rewardData.energyMonsters.length > 0) {
+			for (const monster of data.rewardData.energyMonsters) {
+				query = query.concat(` or (reward_type = 12 and (reward = ${monster.pokemonId} or reward = 0) and ${monster.amount} >= amount)`)
+			}
+		}
+		if (data.rewardData.candy.length > 0) {
+			for (const monster of data.rewardData.candy) {
+				query = query.concat(` or (reward_type = 4 and (reward = ${monster.pokemonId} or reward = 0) and ${monster.amount} >= amount)`)
+			}
+		}
+		query = query.concat(')')
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -126,38 +149,21 @@ class Quest extends Controller {
 			}
 
 			data.questStringEng = await this.getQuest(data)
-			data.rewardData = await this.getReward(data)
-			// this.log.error('[DEBUG] Quest : data.questString: '+data.questString)
-			// this.log.error('[DEBUG] Quest : data.rewardData: ', data.rewardData)
+			data.rewardData = await this.getReward(logReference, data)
+			this.log.debug(`${logReference} Quest: data.questString: ${data.questStringEng}, data.rewardData: ${JSON.stringify(data.rewardData)}`)
 			data.dustAmount = data.rewardData.dustAmount
-			data.isShiny = data.rewardData.isShiny
+			data.isShiny = data.rewardData.monsters.length > 0 ? data.rewardData.monsters[0].shiny : 0
 			data.itemAmount = data.rewardData.itemAmount
-			data.monsters = data.rewardData.monsters
-			data.monsterData = data.rewardData.monsterData
-			data.items = data.rewardData.items
-			data.energyAmount = data.rewardData.energyAmount
-			data.energyMonsters = data.rewardData.energyMonsters
+			//			data.monsters = data.rewardData.monsters
+			//			data.monsterData = data.rewardData.monsterData
+			//			data.items = data.rewardData.items
+			data.energyAmount = data.rewardData.energyMonsters.length > 0 ? data.rewardData.energyMonsters[0].amount : 0 // deprecated
+			data.candyAmount = data.rewardData.candy.length > 0 ? data.rewardData.candy[0].amount : 0 // deprecated
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
-			data.imgUrl = data.rewardData.monsters[1]
-				? `${this.config.general.imgUrl}pokemon_icon_${data.monsterData.pokemonId.toString().padStart(3, '0')}_${data.monsterData.formId.toString().padStart(2, '0')}.png`
-				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
-			data.stickerUrl = data.rewardData.monsters[1]
-				? `${this.config.general.stickerUrl}pokemon_icon_${data.monsterData.pokemonId.toString().padStart(3, '0')}_${data.monsterData.formId.toString().padStart(2, '0')}.webp`
-				: ''
+			// data.energyMonsters = data.rewardData.energyMonsters.map((mon) => mon.pokemonId) // deprecated
 
-			if (data.rewardData.items[1]) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[1]}_1.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
-			}
-			if (data.dustAmount) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[1]}_1.webp`
-			}
-			if (data.energyAmount) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.energyMonsters[1]}.webp`
-			}
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			const whoCares = await this.questWhoCares(data)
 			if (whoCares.length) {
@@ -181,6 +187,47 @@ class Quest extends Controller {
 				return []
 			}
 
+			data.imgUrl = 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
+			data.stickerUrl = ''
+
+			if (data.rewardData.monsters.length > 0) {
+				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				// data.imgUrl = data.rewardData.monsters.length > 0
+				// 	? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
+				// 	: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
+				// data.stickerUrl = data.rewardData.monsters.length > 0
+				// 	? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.webp`
+				// 	: ''
+			}
+
+			if (data.rewardData.items.length > 0) {
+				data.imgUrl = await this.imgUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
+				data.stickerUrl = await this.stickerUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
+
+				// data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[0].id}_1.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[0].id}_1.webp`
+			}
+			if (data.dustAmount) {
+				data.imgUrl = await this.imgUicons.rewardStardustIcon(data.rewardData.dustAmount)
+				data.stickerUrl = await this.stickerUicons.rewardStardustIcon(data.rewardData.dustAmount)
+				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_stardust.webp`
+			}
+			if (data.rewardData.energyMonsters.length > 0) {
+				data.imgUrl = await this.imgUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				data.stickerUrl = await this.stickerUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.webp`
+			}
+			if (data.rewardData.candy.length > 0) {
+				data.imgUrl = await this.imgUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+				data.stickerUrl = await this.stickerUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+
+				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.webp`
+			}
+
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
@@ -188,11 +235,20 @@ class Quest extends Controller {
 				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
 			}
 
-			if (data.monsters.length == 2) {
-				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && data.monsterData.formId == mon.form.id)[0].stats : ''
-				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.monsterData.pokemonId == mon.id && !mon.form.id)[0].stats : ''
+			if (data.rewardData.monsters.length > 0) {
+				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters.formId === mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters[0].formId === mon.form.id)[0].stats : ''
+				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && !mon.form.id)[0].stats : ''
 			}
+
 			data.staticmap = data.staticMap // deprecated
+
+			const event = this.eventParser.eventChangesQuest(moment().unix(), data.disappearTime.unix(), data.latitude, data.longitude)
+			if (event) {
+				data.futureEvent = true
+				data.futureEventTime = event.time
+				data.futureEventName = event.name
+				data.futureEventTrigger = event.reason
+			}
 
 			for (const cares of whoCares) {
 				this.log.debug(`${logReference}: Creating quest alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
@@ -209,26 +265,101 @@ class Quest extends Controller {
 				const translator = this.translatorFactory.Translator(language)
 
 				data.questString = translator.translate(data.questStringEng)
-				data.monsterNames = Object.values(this.GameData.monsters).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
-				data.monsterNamesEng = Object.values(this.GameData.monsters).filter((mon) => data.monsters.includes(mon.id) && !mon.form.id).map((m) => m.name).join(', ')
-				data.itemNames = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => translator.translate(this.GameData.items[i].name)).join(', ')
-				data.itemNamesEng = Object.keys(this.GameData.items).filter((item) => data.items.includes(item)).map((i) => this.GameData.items[i].name).join(', ')
-				data.energyMonstersNames = Object.values(this.GameData.monsters).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => translator.translate(m.name)).join(', ')
-				data.energyMonstersNamesEng = Object.values(this.GameData.monsters).filter((mon) => data.energyMonsters.includes(mon.id) && !mon.form.id).map((m) => m.name).join(', ')
-				data.rewardString = data.monsterNames
-				data.rewardString = data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : data.rewardString
-				data.rewardString = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNames}` : data.rewardString
-				data.rewardString = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNames} ${translator.translate('Mega Energy')}` : data.rewardString
-				data.rewardStringEng = data.monsterNamesEng
-				data.rewardStringEng = data.dustAmount > 0 ? `${data.dustAmount} Stardust` : data.rewardStringEng
-				data.rewardStringEng = data.itemAmount > 0 ? `${data.itemAmount} ${data.itemNamesEng}` : data.rewardStringEng
-				data.rewardStringEng = data.energyAmount > 0 ? `${data.energyAmount} ${data.energyMonstersNamesEng} Mega Energy` : data.rewardStringEng
+
+				for (const monster of data.rewardData.monsters) {
+					let monsterName
+					let formName
+
+					const mon = Object.values(this.GameData.monsters).find((m) => m.id === monster.pokemonId && m.form.id === monster.formId)
+					if (!mon) {
+						monsterName = `${translator.translate('Unknown monster')} ${monster.pokemonId}`
+						formName = `${monster.formId}`
+					} else {
+						monsterName = mon.name
+						formName = mon.form.name
+						if (formName === undefined || formName === 'Normal') formName = ''
+					}
+
+					monster.nameEng = monsterName
+					monster.formEng = formName
+					monster.name = translator.translate(monsterName)
+					monster.form = translator.translate(formName)
+					monster.fullNameEng = monster.nameEng.concat(monster.formEng ? ' ' : '', monster.formEng)
+					monster.fullName = monster.name.concat(monster.form ? ' ' : '', monster.form)
+				}
+
+				data.monsterNames = data.rewardData.monsters.map((mon) => mon.fullName).join(', ')
+				data.monsterNamesEng = data.rewardData.monsters.map((mon) => mon.fullNameEng).join(', ')
+
+				for (const item of data.rewardData.items) {
+					const i = this.GameData.items[item.id]
+					let itemName
+					if (!i) {
+						itemName = `${translator.translate('Unknown item')} ${item.id}`
+					} else {
+						itemName = i.name
+					}
+					item.nameEng = itemName
+					item.name = translator.translate(itemName)
+				}
+
+				data.itemNames = data.rewardData.items.map((item) => `${item.amount} ${item.name}`).join(', ')
+				data.itemNamesEng = data.rewardData.items.map((item) => `${item.amount} ${item.nameEng}`).join(', ')
+
+				for (const monster of data.rewardData.energyMonsters) {
+					let monsterName
+
+					const mon = Object.values(this.GameData.monsters).find((m) => m.id === monster.pokemonId && !m.form.id)
+					if (!mon) {
+						monsterName = `${translator.translate('Unknown monster')} ${monster.pokemonId}`
+					} else {
+						monsterName = mon.name
+					}
+
+					monster.nameEng = monsterName
+					monster.name = translator.translate(monsterName)
+				}
+
+				data.energyMonstersNames = data.rewardData.energyMonsters.map((item) => `${item.amount} ${item.name} ${translator.translate('Mega Energy')}`).join(', ')
+				data.energyMonstersNamesEng = data.rewardData.energyMonsters.map((item) => `${item.amount} ${item.nameEng} Mega Energy`).join(', ')
+
+				for (const monster of data.rewardData.candy) {
+					let monsterName
+
+					const mon = Object.values(this.GameData.monsters).find((m) => m.id === monster.pokemonId && !m.form.id)
+					if (!mon) {
+						monsterName = `${translator.translate('Unknown monster')} ${monster.pokemonId}`
+					} else {
+						monsterName = mon.name
+					}
+
+					monster.nameEng = monsterName
+					monster.name = translator.translate(monsterName)
+				}
+
+				data.candyMonstersNames = data.rewardData.candy.map((item) => `${item.amount} ${item.name}  ${translator.translate('Candy')}`).join(', ')
+				data.candyMonstersNamesEng = data.rewardData.candy.map((item) => `${item.amount} ${item.nameEng} Candy`).join(', ')
+
+				data.rewardString = [
+					data.monsterNames,
+					data.dustAmount > 0 ? `${data.dustAmount} ${translator.translate('Stardust')}` : '',
+					data.itemNames,
+					data.energyMonstersNames,
+					data.candyMonstersNames,
+				].filter((x) => x).join(', ')
+
+				data.rewardStringEng = [
+					data.monsterNamesEng,
+					data.dustAmount > 0 ? `${data.dustAmount} Stardust` : '',
+					data.itemNamesEng,
+					data.energyMonstersNamesEng,
+					data.candyMonstersNamesEng,
+				].filter((x) => x).join(', ')
 
 				const view = {
 					...geoResult,
 					...data,
 					...data.rewardData,
-					id: data.pokemon_id,
 					lat: +data.latitude.toFixed(4),
 					lon: +data.longitude.toFixed(4),
 					time: data.disappearTime,
@@ -237,54 +368,55 @@ class Quest extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
 				let [platform] = cares.type.split(':')
-				if (platform == 'webhook') platform = 'discord'
+				if (platform === 'webhook') platform = 'discord'
 
-				const mustache = this.getDts(logReference, 'quest', platform, cares.template, language)
+				const templateType = 'quest'
+				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
+				let message
 				if (mustache) {
 					let mustacheResult
-					let message
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
 					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
+					if (mustacheResult) {
+						mustacheResult = await this.urlShorten(mustacheResult)
+						try {
+							message = JSON.parse(mustacheResult)
+							if (cares.ping) {
+								if (!message.content) {
+									message.content = cares.ping
+								} else {
+									message.content += cares.ping
+								}
+							}
+						} catch (err) {
+							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
 						}
 					}
-
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						logReference,
-						language,
-					}
-					jobs.push(work)
 				}
+
+				if (!message) {
+					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+				}
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: data.tth,
+					clean: cares.clean,
+					logReference,
+					language,
+				}
+				jobs.push(work)
 			}
 
 			return jobs
@@ -317,7 +449,7 @@ class Quest extends Controller {
 								if (first) {
 									tstr += `${pokemonTypes[typeId]}`
 								} else {
-									tstr += (index == questinfo.pokemon_type_ids.length - 1) ? ` or ${pokemonTypes[typeId]}` : `, ${pokemonTypes[typeId]}`
+									tstr += (index === questinfo.pokemon_type_ids.length - 1) ? ` or ${pokemonTypes[typeId]}` : `, ${pokemonTypes[typeId]}`
 								}
 								first = false
 							}
@@ -337,7 +469,7 @@ class Quest extends Controller {
 								if (first) {
 									pstr += `${this.GameData.monsters[`${id}_0`].name}`
 								} else {
-									pstr += (index == questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
+									pstr += (index === questinfo.pokemon_ids.length - 1) ? ` or ${this.GameData.monsters[`${id}_0`].name}` : `, ${this.GameData.monsters[`${id}_0`].name}`
 								}
 								first = false
 							}
@@ -418,7 +550,7 @@ class Quest extends Controller {
 								if (first) {
 									gstr += `${gruntCharacterTypes[charId]}`
 								} else {
-									gstr += (index == questinfo.character_category_ids.length - 1) ? ` or ${gruntCharacterTypes[charId]}` : `, ${gruntCharacterTypes[charId]}`
+									gstr += (index === questinfo.character_category_ids.length - 1) ? ` or ${gruntCharacterTypes[charId]}` : `, ${gruntCharacterTypes[charId]}`
 								}
 								first = false
 							}
@@ -467,34 +599,41 @@ class Quest extends Controller {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	async getReward(item) {
-		const monsters = [0]
-		const monsterData = { pokemonId: 0, formId: 0 }
-		const items = [0]
-		let itemAmount = 0
+	async getReward(logReference, item) {
+		const monsters = []
+		const items = []
 		let dustAmount = 0
-		let isShiny = 0
-		let energyAmount = 0
-		const energyMonsters = [0]
+		const energyMonsters = []
+		const candy = []
 
 		item.rewards.forEach((reward) => {
 			if (reward.type === 2) {
-				items.push(reward.info.item_id.toString())
-				itemAmount = reward.info.amount
+				items.push({
+					id: reward.info.item_id.toString(),
+					amount: reward.info.amount,
+				})
 			} else if (reward.type === 3) {
 				dustAmount = reward.info.amount
+			} else if (reward.type === 4) {
+				candy.push({
+					pokemonId: reward.info.pokemon_id,
+					amount: reward.info.amount,
+				})
 			} else if (reward.type === 7) {
-				if (reward.info.shiny) isShiny = 1
-				monsters.push(reward.info.pokemon_id)
-				monsterData.pokemonId = reward.info.pokemon_id
-				monsterData.formId = reward.info.form_id
+				monsters.push({
+					pokemonId: reward.info.pokemon_id,
+					formId: reward.info.form_id,
+					shiny: reward.info.shiny,
+				})
 			} else if (reward.type === 12) {
-				energyAmount = reward.info.amount
-				energyMonsters.push(reward.info.pokemon_id)
+				energyMonsters.push({
+					pokemonId: reward.info.pokemon_id,
+					amount: reward.info.amount,
+				})
 			}
 		})
 		return {
-			monsters, monsterData, items, itemAmount, dustAmount, isShiny, energyAmount, energyMonsters,
+			items, dustAmount, energyMonsters, candy, monsters,
 		}
 	}
 }

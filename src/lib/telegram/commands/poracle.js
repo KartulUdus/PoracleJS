@@ -41,7 +41,7 @@ module.exports = async (ctx) => {
 
 		if (client.config.general.availableLanguages) {
 			for (const [key, availableLanguage] of Object.entries(client.config.general.availableLanguages)) {
-				if (availableLanguage.poracle == ctx.state.command.command) {
+				if (availableLanguage.poracle === ctx.state.command.command) {
 					language = key
 					break
 				}
@@ -95,7 +95,7 @@ module.exports = async (ctx) => {
 				name: client.emojiStrip(userName || ''),
 				language,
 				area: '[]',
-				community_membership: communityToAdd ? JSON.stringify([communityToAdd]) : '[]',
+				community_membership: communityToAdd ? JSON.stringify([communityToAdd.toLowerCase()]) : '[]',
 				area_restriction: communityToAdd ? JSON.stringify(communityLogic.calculateLocationRestrictions(client.config, [communityToAdd])) : null,
 			})
 			await ctx.reply('✅')

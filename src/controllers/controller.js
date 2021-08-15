@@ -7,15 +7,16 @@ const fs = require('fs')
 
 const pcache = require('flat-cache')
 
-const geoCache = pcache.load('geoCache', path.resolve(`${__dirname}../../../.cache/`))
+const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
 const emojiFlags = require('emoji-flags')
-
+const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
 const urlShortener = require('../lib/urlShortener')
+const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData) {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventParser) {
 		super()
 		this.db = db
 		this.cp = cp
@@ -31,8 +32,12 @@ class Controller extends EventEmitter {
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherData = weatherData
 		this.statsData = statsData
+		this.eventParser = eventParser
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
+		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
+		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
+		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
 		this.dtsCache = {}
 	}
 
@@ -47,12 +52,20 @@ class Controller extends EventEmitter {
 				})
 			}
 			case 'nominatim': {
-				return NodeGeocoder({
+				const geocoder = NodeGeocoder({
 					provider: 'openstreetmap',
 					osmServer: this.config.geocoding.providerURL,
 					formatterPattern: this.config.locale.addressFormat,
 					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
+				// Hack in suburb support
+				// eslint-disable-next-line no-underscore-dangle
+				geocoder._geocoder._formatResult = ((original) => (result) => ({
+					...original(result),
+					suburb: result.address.suburb || '',
+					// eslint-disable-next-line no-underscore-dangle
+				}))(geocoder._geocoder._formatResult)
+				return geocoder
 			}
 			case 'google': {
 				return NodeGeocoder({
@@ -73,6 +86,11 @@ class Controller extends EventEmitter {
 		}
 	}
 
+	setDts(dts) {
+		this.dtsCache = { }
+		this.dts = dts
+	}
+
 	getDts(logReference, templateType, platform, templateName, language) {
 		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
 		const key = `${templateType} ${platform} ${templateName} ${language}`
@@ -81,7 +99,7 @@ class Controller extends EventEmitter {
 		}
 
 		// Exact match
-		let findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language == language)
+		let findDts = this.dts.find((template) => template.type === templateType && template.id && template.id.toString().toLowerCase() === templateName.toString() && template.platform === platform && template.language === language)
 
 		// First right template and platform and no language (likely backward compatible choice)
 		if (!findDts) {
@@ -90,7 +108,7 @@ class Controller extends EventEmitter {
 
 		// Default of right template type, platform and language
 		if (!findDts) {
-			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language == language)
+			findDts = this.dts.find((template) => template.type === templateType && template.default && template.platform === platform && template.language === language)
 		}
 
 		// First default of right template type and platform with empty language
@@ -173,7 +191,7 @@ class Controller extends EventEmitter {
 	}
 
 	async geolocate(locationString) {
-		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+		if (this.config.geocoding.provider.toLowerCase() === 'none') {
 			return []
 		}
 
@@ -208,11 +226,11 @@ class Controller extends EventEmitter {
 	}
 
 	async getAddress(locationObject) {
-		if (this.config.geocoding.provider.toLowerCase() == 'none') {
+		if (this.config.geocoding.provider.toLowerCase() === 'none') {
 			return { addr: 'Unknown', flag: '' }
 		}
 
-		if (this.config.geocoding.cacheDetail == 0) {
+		if (this.config.geocoding.cacheDetail === 0) {
 			try {
 				const geocoder = this.getGeocoder()
 				const [result] = await geocoder.reverse(locationObject)
@@ -257,9 +275,16 @@ class Controller extends EventEmitter {
 		if (!this.geofence.length) return []
 		const matchAreas = []
 
-		this.geofence.forEach((areaObj) => {
-			if (inside(point, areaObj.path)) matchAreas.push(areaObj.name.toLowerCase())
-		})
+		for (const areaObj of this.geofence) {
+			if (inside(point, areaObj.path)) {
+				matchAreas.push({
+					name: areaObj.name,
+					description: areaObj.description,
+					displayInMatches: areaObj.displayInMatches === undefined || !!areaObj.displayInMatches,
+					group: areaObj.group,
+				})
+			}
+		}
 		return matchAreas
 	}
 
@@ -308,6 +333,7 @@ class Controller extends EventEmitter {
 	}
 
 	async insertQuery(table, values) {
+		if (Array.isArray(values) && !values.length) return
 		try {
 			return await this.db.insert(values).into(table)
 		} catch (err) {

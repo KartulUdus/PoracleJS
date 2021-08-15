@@ -1,15 +1,17 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
-const monsters = require('../util/monsters')
+const monsters = require('../util/monsters.json')
 const {
-	cpMultipliers, types, powerUpCost,
-} = require('../util/util')
-const moves = require('../util/moves')
+	cpMultipliers, types, powerUpCost, emojis,
+} = require('../util/util.json')
+const moves = require('../util/moves.json')
 
 const TranslatorFactory = require('../util/translatorFactory')
+const EmojiLookup = require('./emojiLookup')
 
 const translatorFactory = new TranslatorFactory(config)
+const emojiLookup = new EmojiLookup(emojis)
 
 require('handlebars-helpers')({
 	handlebars,
@@ -17,6 +19,10 @@ require('handlebars-helpers')({
 
 function userTranslator(options) {
 	return options.data.language ? translatorFactory.Translator(options.data.language) : translatorFactory.default
+}
+
+function emoji(options, emojiText) {
+	return emojiLookup.lookup(emojiText, options.data.platform)
 }
 
 function translatorAlt() {
@@ -52,15 +58,15 @@ module.exports = () => {
 	handlebars.registerHelper('moveTypeEng', (value) => (moves[value] ? moves[value].type : ''))
 	handlebars.registerHelper('moveEmoji', (value, options) => {
 		if (!moves[value]) return ''
-		return types[moves[value].type] ? userTranslator(options).translate(types[moves[value].type].emoji) : ''
+		return types[moves[value].type] ? userTranslator(options).translate(emoji(options, types[moves[value].type].emoji)) : ''
 	})
-	handlebars.registerHelper('moveEmojiAlt', (value) => {
+	handlebars.registerHelper('moveEmojiAlt', (value, options) => {
 		if (!moves[value]) return ''
-		return types[moves[value].type] ? translatorAlt.translate(types[moves[value].type].emoji) : ''
+		return types[moves[value].type] ? translatorAlt.translate(emoji(options, types[moves[value].type].emoji)) : ''
 	})
-	handlebars.registerHelper('moveEmojiEng', (value) => {
+	handlebars.registerHelper('moveEmojiEng', (value, options) => {
 		if (!moves[value]) return ''
-		return types[moves[value].type] ? types[moves[value].type].emoji : ''
+		return types[moves[value].type] ? emoji(options, types[moves[value].type].emoji) : ''
 	})
 
 	handlebars.registerHelper('pokemonName', (value, options) => {

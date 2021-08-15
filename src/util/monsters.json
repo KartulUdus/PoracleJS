@@ -1915,6 +1915,86 @@
 			}
 		]
 	},
+	"25_2675": {
+		"name": "Pikachu",
+		"form": {
+			"name": "Kariyushi",
+			"proto": "PIKACHU_KARIYUSHI",
+			"id": 2675
+		},
+		"id": 25,
+		"stats": {
+			"baseAttack": 112,
+			"baseDefense": 96,
+			"baseStamina": 111
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"25_2676": {
+		"name": "Pikachu",
+		"form": {
+			"name": "Pop Star",
+			"proto": "PIKACHU_POP_STAR",
+			"id": 2676
+		},
+		"id": 25,
+		"stats": {
+			"baseAttack": 112,
+			"baseDefense": 96,
+			"baseStamina": 111
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"25_2677": {
+		"name": "Pikachu",
+		"form": {
+			"name": "Rock Star",
+			"proto": "PIKACHU_ROCK_STAR",
+			"id": 2677
+		},
+		"id": 25,
+		"stats": {
+			"baseAttack": 112,
+			"baseDefense": 96,
+			"baseStamina": 111
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"25_2678": {
+		"name": "Pikachu",
+		"form": {
+			"name": "Flying 5th Anniv",
+			"proto": "PIKACHU_FLYING_5TH_ANNIV",
+			"id": 2678
+		},
+		"id": 25,
+		"stats": {
+			"baseAttack": 112,
+			"baseDefense": 96,
+			"baseStamina": 111
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
 	"26_0": {
 		"name": "Raichu",
 		"form": {
@@ -16902,9 +16982,81 @@
 	"250_0": {
 		"name": "Ho-Oh",
 		"form": {
-			"name": "Normal",
-			"proto": "",
+			"name": "",
 			"id": 0
+		},
+		"id": 250,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 244,
+			"baseStamina": 214
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"250_1343": {
+		"name": "Ho-Oh",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "HO_OH_NORMAL",
+			"id": 1343
+		},
+		"id": 250,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 244,
+			"baseStamina": 214
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"250_1344": {
+		"name": "Ho-Oh",
+		"form": {
+			"name": "Shadow",
+			"proto": "HO_OH_SHADOW",
+			"id": 1344
+		},
+		"id": 250,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 244,
+			"baseStamina": 214
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"250_1345": {
+		"name": "Ho-Oh",
+		"form": {
+			"name": "Purified",
+			"proto": "HO_OH_PURIFIED",
+			"id": 1345
 		},
 		"id": 250,
 		"stats": {

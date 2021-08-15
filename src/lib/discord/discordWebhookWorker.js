@@ -133,7 +133,7 @@ class DiscordWebhookWorker {
 			}
 			this.logs.discord.silly(`${logReference}: ${data.name} WEBHOOK results ${data.target} ${res.statusText} ${res.status}`, res.headers)
 
-			if (data.clean && res.status == 200) {
+			if (data.clean && res.status === 200) {
 				const msgId = res.data.id
 				this.webhookTimeouts.set(msgId, data.target, Math.floor(msgDeletionMs / 1000) + 1)
 
@@ -203,7 +203,14 @@ class DiscordWebhookWorker {
 
 		const now = Date.now()
 
-		const data = JSON.parse(loaddatatxt)
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn('Clean cache for discord webhookWorker contains invalid data - ignoring')
+			return
+		}
+
 		for (const key of Object.keys(data)) {
 			const msgData = data[key]
 

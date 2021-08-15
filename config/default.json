@@ -22,11 +22,18 @@
       "environment": "production",              // leave as 'production'
       "alertMinimumTime" : 120,                 // time inside which alerts will not be generated (120s - 2mins before expiration no alert)
       "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
-    // imgUrl - base url for poracle creation of {{imgUrl}} reference
-      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
-    // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers
-      "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
-      "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
+    // imgUrl - base url for poracle creation of {{imgUrl}} reference (uicons repository)
+      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS",
+    // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers (uicons repository)
+      "stickerUrl": "https://raw.githubusercontent.com/bbdoc/tgUICONS/main/Shuffle",
+    // images/stickers - override uicons repository for each alert type
+    //  "controllerType": "repositoryUrl"
+    //  controllerType one of monster, gym, nest, invasion, lure, quest, raid, weather
+      "images": {
+      },
+      "stickers": {
+      },
+        "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
     // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
@@ -39,6 +46,7 @@
       "disableQuest": false,
       "disableWeather": false,
       "disableNest": false,
+      "disableGym": false,
     // roleCheckMode (case sensitive)
     // "ignore" - log and don't delete/disable users once required roles/channel membership are removed
     // "delete" - delete user from database along with trackings once required role is removed
@@ -56,11 +64,7 @@
     //        },
       "availableLanguages": {
       },
-      "defaultTemplateName": 1,               // default template name/number to use when users add new trackings
-    // persistDuplicateCache - whether to store the webhook duplicate cache on exit. If you have a busy system
-    //   this could be very large and slow down shutdown (many gigabytes) and startup. This is stored in the .cache
-    //   directory
-      "persistDuplicateCache": false
+      "defaultTemplateName": 1                // default template name/number to use when users add new trackings
   },
   //
   // Configuration for the user reconciliation/role check function
@@ -93,7 +97,8 @@
       "enableLogs": {
         "webhooks": false,                // turn on hourly webhook log (can be quite large)
         "discord": true,                  // turn on discord log (for outbound messages to discord users and channels)
-        "telegram": true                  // turn on telegram log (for outbound messages to telegram users, groups and channels)
+        "telegram": true,                 // turn on telegram log (for outbound messages to telegram users, groups and channels)
+        "pvp": false                      // whether to log pvp info/calculations (at verbose level)
       },
       "dailyLogLimit": 7,                 // the number of days to keep the daily logs (everything aside from webhooks)
       "webhookLogLimit": 12               // the number of hours to keep the webhook logs, if enabled
@@ -159,17 +164,22 @@
   //   would match an eevee)
   //
   "pvp": {
+      "dataSource": "webhook",                      // webhook - from hooks, internal - internal calculator
+      "levelCaps": [50],                            // level caps to be included in internal rank calculations - alternative could be [50, 51]
+      "includeMegaEvolution": false,                // whether to include mega evolutions in rank calculations
       "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation
       "pvpDisplayMaxRank": 10,
       "pvpDisplayGreatMinCP": 1450,
       "pvpDisplayUltraMinCP": 2450,
+      "pvpDisplayLittleMinCP": 450,
     // pvpFilter* - these filters are used as minimums on the track command to help users get
     //   PVP tracking right and to eliminate unexpectedly large tracks
       "pvpFilterMaxRank": 10,
       "pvpFilterGreatMinCP": 1450,
-      "pvpFilterUltraMinCP": 2450
+      "pvpFilterUltraMinCP": 2450,
+      "pvpFilterLittleMinCP": 450
   },
   //
   // tracking configuration - this section contains restrictions around tracking
@@ -182,7 +192,7 @@
     //    deny: users cannot track for everything and must track against individual pokemon
       "everythingFlagPermissions": "allow-any",
       "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
-      "maxDistance": 0                            // restrict users from having too large a tracking circle
+      "maxDistance": 0                            // restrict users from having too large a tracking circle (0 = no limit)
   },
   //
   // stats configuration
@@ -308,6 +318,7 @@
     "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
     "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
     "disableOnStop": false,       // whether user should be admin disabled rather than just stopped (require admin assistance for restart)
+    "shameChannel": "",     // name and shame stopped/disabled users to this discord channel
     // allow override for specific channel ids in - id can be a channel/user id or a webhook name
     //    "limitOverride": {
     //        "id": limit,
@@ -400,7 +411,8 @@
         "quest": "staticMap",
         "weather": "staticMap",
         "location": "staticMap",
-        "nest": "staticMap"
+        "nest": "staticMap",
+        "gym": "staticMap"
       },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],

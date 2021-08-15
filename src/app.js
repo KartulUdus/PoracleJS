@@ -4,17 +4,19 @@ require('events').EventEmitter.prototype._maxListeners = 100
 const { writeHeapSnapshot } = require('v8')
 
 const fs = require('fs')
-const fsp = require('fs').promises
 const util = require('util')
 const { S2 } = require('s2-geometry')
 const { Worker, MessageChannel } = require('worker_threads')
 const NodeCache = require('node-cache')
+const pcache = require('flat-cache')
 const fastify = require('fastify')({
 	bodyLimit: 5242880,
+	maxParamLength: 256,
 })
 const { Telegraf } = require('telegraf')
-
+const Ohbem = require('ohbem')
 const path = require('path')
+const chokidar = require('chokidar')
 const moment = require('moment-timezone')
 const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
@@ -23,6 +25,7 @@ const telegramController = require('./lib/telegram/middleware/controller')
 // const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 const DiscordReconciliation = require('./lib/discord/discordReconciliation')
 const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
+const PogoEventParser = require('./lib/pogoEventParser')
 
 const { Config } = require('./lib/configFetcher')
 
@@ -31,11 +34,15 @@ const {
 } = Config()
 
 const GameData = {
-	monsters: require('./util/monsters'),
-	utilData: require('./util/util'),
-	moves: require('./util/moves'),
-	items: require('./util/items'),
-	grunts: require('./util/grunts'),
+	monsters: require('./util/monsters.json'),
+	utilData: require('./util/util.json'),
+	moves: require('./util/moves.json'),
+	items: require('./util/items.json'),
+	grunts: require('./util/grunts.json'),
+}
+
+const PoracleInfo = {
+
 }
 
 const readDir = util.promisify(fs.readdir)
@@ -59,6 +66,9 @@ const re = require('./util/regex')(translatorFactory)
 const Query = require('./controllers/query')
 
 const query = new Query(logs.controller, knex, config, geofence)
+const pogoEventParser = new PogoEventParser(logs.log)
+
+const gymCache = pcache.load('gymCache', path.join(__dirname, '../.cache'))
 
 logs.setWorkerId('MAIN')
 fastify.decorate('logger', logs.log)
@@ -67,6 +77,7 @@ fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
+fastify.decorate('gymCache', gymCache)
 fastify.decorate('query', query)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
@@ -75,7 +86,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, dts, geofence, translatorFactory) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
@@ -93,10 +104,10 @@ if (config.discord.enabled) {
 }
 
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker('1', config, logs, GameData, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
+	telegram = new TelegramWorker('1', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker('2', config, logs, GameData, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
+		telegramChannel = new TelegramWorker('2', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 }
 
@@ -150,67 +161,14 @@ async function syncDiscordRole() {
 				config.reconciliation.discord.updateUserNames,
 				config.reconciliation.discord.removeInvalidUsers)
 		}
-
-		// let usersToCheck = await query.selectAllQuery('humans', { type: 'discord:user', admin_disable: 0 })
-		// usersToCheck = usersToCheck.filter((user) => !config.discord.admins.includes(user.id))
-		// let invalidUsers = []
-		// for (const guild of config.discord.guilds) {
-		// 	invalidUsers = await roleWorker.checkRole(guild, usersToCheck, config.discord.userRole)
-		// 	usersToCheck = invalidUsers
-		// }
-		// if (invalidUsers[0]) {
-		// 	log.info('Invalid users found, removing/disabling from dB...')
-		// 	for (const user of invalidUsers) {
-		// 		log.info(`Removing ${user.name} - ${user.id} from Poracle dB`)
-		// 		if (config.general.roleCheckMode != 'ignore') {
-		// 			await removeInvalidUser(user)
-		// 		} else {
-		// 			log.info('config.general.roleCheckMode is set to ignore, not removing')
-		// 		}
-		// 	}
-		// } else {
-		// 	log.verbose('No invalid users found, all good!')
-		// }
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
 	setTimeout(syncDiscordRole, config.discord.checkRoleInterval * 3600000)
 }
 
-async function saveEventCache() {
-	// eslint-disable-next-line no-underscore-dangle
-	fastify.cache._checkData(false)
-	return fsp.writeFile('.cache/webhook-events.json', JSON.stringify(fastify.cache.data), 'utf8')
-}
-
-async function loadEventCache() {
-	let loaddatatxt
-
-	try {
-		loaddatatxt = await fsp.readFile('.cache/webhook-events.json', 'utf8')
-	} catch {
-		return
-	}
-
-	const now = Date.now()
-
-	try {
-		const data = JSON.parse(loaddatatxt)
-		for (const key of Object.keys(data)) {
-			const msgData = data[key]
-
-			if (msgData.t > now) {
-				const newTtlms = Math.max(msgData.t - now, 2000)
-				const newTtl = Math.floor(newTtlms / 1000)
-				fastify.cache.set(key, msgData.v, newTtl)
-			}
-		}
-	} catch (err) {
-		log.info(`Error processing historic cache ${err}`)
-	}
-}
-
 function handleShutdown() {
+	log.info('Poracle shutdown - starting save of cache')
 	const workerSaves = []
 	for (const worker of discordWorkers) {
 		workerSaves.push(worker.saveTimeouts())
@@ -218,112 +176,86 @@ function handleShutdown() {
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
 	if (discordWebhookWorker) workerSaves.push(discordWebhookWorker.saveTimeouts())
-	if (config.general.persistDuplicateCache) {
-		workerSaves.push(saveEventCache())
-	}
 
+	gymCache.save(true)
 	Promise.all(workerSaves)
 		.then(() => {
+			log.info('Poracle shutdown - complete')
 			process.exit()
 		}).catch((err) => {
-			log.error(`Error saving files ${err}`)
+			log.error(`Poracle shutdown - Error saving files ${err}`)
 			process.exit()
 		})
 }
 
-async function run() {
-	process.on('SIGINT', handleShutdown)
-	process.on('SIGTERM', handleShutdown)
+const workers = []
 
-	if (config.general.persistDuplicateCache) {
-		await loadEventCache()
+async function processPogoEvents() {
+	let file
+	log.info('PogoEvents: Fetching new event file')
+
+	try {
+		file = await pogoEventParser.download()
+	} catch (err) {
+		log.error('PogoEvents: Cannot download pogo event file', err)
+		setTimeout(processPogoEvents, 15 * 60 * 1000) // 15 mins
+		return
 	}
 
-	if (config.discord.enabled) {
-		setInterval(() => {
-			if (!fastify.discordQueue.length) {
-				return
-			}
-
-			// Dequeue onto individual queues as fast as possible
-			while (fastify.discordQueue.length) {
-				const { target, type } = fastify.discordQueue[0]
-				let worker
-				if (type == 'webhook') {
-					worker = discordWebhookWorker
-				} else {
-					// see if target has dedicated worker
-					worker = discordWorkers.find((workerr) => workerr.users.includes(target))
-					if (!worker) {
-						let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-						let laziestWorkerId
-						Object.keys(discordWorkers).map((i) => {
-							if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
-								busyestWorkerHumanCount = discordWorkers[i].userCount
-								laziestWorkerId = i
-							}
-						})
-						busyestWorkerHumanCount = Number.POSITIVE_INFINITY
-						worker = discordWorkers[laziestWorkerId]
-						worker.addUser(target)
-					}
-				}
-
-				worker.work(fastify.discordQueue.shift())
-			}
-		}, 100)
-
-		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guilds) {
-			setTimeout(syncDiscordRole, 10000)
-		}
+	for (const relayWorker of workers) {
+		relayWorker.commandPort.postMessage(
+			{
+				type: 'eventBroadcast',
+				data: file,
+			},
+		)
 	}
 
-	if (config.telegram.enabled) {
-		setInterval(() => {
-			if (!fastify.telegramQueue.length) {
-				return
-			}
+	setTimeout(processPogoEvents, 6 * 60 * 60 * 1000) // 6 hours
+}
 
-			while (fastify.telegramQueue.length) {
-				let worker = telegram
-				if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
-					worker = telegramChannel
-				}
+let ohbem
+async function initialiseOhbem() {
+	try {
+		const pokemonData = await Ohbem.fetchPokemonData()
 
-				worker.work(fastify.telegramQueue.shift())
-			}
-		}, 100)
-
-		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
-			setTimeout(syncTelegramMembership, 30000)
-		}
+		ohbem = new Ohbem({
+			// all of the following options are optional and these (except for pokemonData) are the default values
+			// read the documentation for more information
+			leagues: {
+				little: 500,
+				great: 1500,
+				ultra: 2500,
+				//	master: null,
+			},
+			levelCaps: config.pvp.levelCaps,
+			// The following field is required to use queryPvPRank
+			// You can skip populating it if you only want to use other helper methods
+			pokemonData,
+			cachingStrategy: config.pvp.cacheStrategy === 'memoryheavy' ? Ohbem.cachingStrategies.memoryHeavy : Ohbem.cachingStrategies.balanced,
+		})
+	} catch (err) {
+		log.error('Error initialising ohbem', err)
 	}
-
-	const routeFiles = await readDir(`${__dirname}/routes/`)
-	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
-
-	routes.forEach((route) => fastify.register(require(route)))
-	await fastify.listen(config.server.port, config.server.host)
-	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 }
 
 const UserRateChecker = require('./userRateLimit')
 
 const rateChecker = new UserRateChecker(config)
 
-const workers = []
 const maxWorkers = config.tuning.webhookProcessingWorkers
 
 async function processMessages(msgs) {
 	let newRateLimits = false
 
 	for (const msg of msgs) {
-		const destinationId = msg.type == 'webhook' ? msg.name : msg.target
+		const destinationId = msg.type === 'webhook' ? msg.name : msg.target
 		const destinationType = msg.type
 		const rate = rateChecker.validateMessage(destinationId, destinationType)
 
 		let queueMessage
 		let logMessage = null
+		let shameMessage = null
 
 		if (!rate.passMessage) {
 			if (rate.justBreached) {
@@ -353,7 +285,10 @@ async function processMessages(msgs) {
 
 						log.info(`${msg.logReference}: Stopping alerts [until restart] (Rate limit) for ${msg.type} ${msg.target} ${msg.name}`)
 
-						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type == 'discord:user' ? `<@${destinationId}>` : ''}`
+						logMessage = `Stopped alerts (rate-limit exceeded too many times) for target ${destinationType} ${destinationId} ${msg.name} ${msg.type === 'discord:user' ? `<@${destinationId}>` : ''}`
+						if (msg.type === 'discord:user') {
+							shameMessage = userTranslator.translateFormat('<@{0}> has had their Poracle tracking disabled for exceeding the rate limit too many times!', destinationId)
+						}
 
 						try {
 							if (config.alertLimits.disableOnStop) {
@@ -393,6 +328,23 @@ async function processMessages(msgs) {
 					name: 'Log channel',
 					tth: { hours: 0, minutes: config.discord.dmLogChannelDeletionTime, seconds: 0 },
 					clean: config.discord.dmLogChannelDeletionTime > 0,
+					emoji: '',
+					logReference: queueMessage.logReference,
+					language: config.general.locale,
+				})
+			}
+			if (shameMessage && config.alertLimits.shameChannel) {
+				fastify.discordQueue.push({
+					lat: 0,
+					lon: 0,
+					message: {
+						content: shameMessage,
+					},
+					target: config.alertLimits.shameChannel,
+					type: 'discord:channel',
+					name: 'Shame channel',
+					tth: { hours: 0, minutes: 0, seconds: 0 },
+					clean: false,
 					emoji: '',
 					logReference: queueMessage.logReference,
 					language: config.general.locale,
@@ -448,29 +400,35 @@ const statsWorker = {
 
 function processMessageFromControllers(msg) {
 	// Relay commands of weather type to weather controller
-	if (msg.type == 'weather') {
+	if (msg.type === 'weather') {
 		weatherWorker.commandPort.postMessage(msg)
 	}
 	// No commands from controllers to stats, but would be relayed here
 }
 
+function sendCommandToWorkers(msg) {
+	for (const relayWorker of workers) {
+		relayWorker.commandPort.postMessage(msg)
+	}
+}
+
 function processMessageFromWeather(msg) {
 	// Relay broadcasts from weather to all controllers
 
-	if (msg.type == 'weatherBroadcast') {
-		for (const relayWorker of workers) {
-			relayWorker.commandPort.postMessage(msg)
-		}
+	if (msg.type === 'weatherBroadcast') {
+		PoracleInfo.lastWeatherBroadcast = msg.data
+
+		sendCommandToWorkers(msg)
 	}
 }
 
 function processMessageFromStats(msg) {
 	// Relay broadcasts from stats to all controllers
 
-	if (msg.type == 'statsBroadcast') {
-		for (const relayWorker of workers) {
-			relayWorker.commandPort.postMessage(msg)
-		}
+	if (msg.type === 'statsBroadcast') {
+		PoracleInfo.lastStatsBroadcast = msg.data
+
+		sendCommandToWorkers(msg)
 	}
 }
 
@@ -553,6 +511,21 @@ async function processOne(hook) {
 
 				fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
+				if (ohbem) {
+					const data = hook.message
+					const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
+						|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+						|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+
+					if (encountered) {
+						const ohbemstart = process.hrtime()
+						const ohbemCalc = ohbem.queryPvPRank(+data.pokemon_id, +data.form || 0, +data.costume, +data.gender, +data.individual_attack, +data.individual_defense, +data.individual_stamina, +data.pokemon_level)
+						data.ohbem_pvp = ohbemCalc
+						const ohbemend = process.hrtime(ohbemstart)
+						const ohbemms = ohbemend[1] / 1000000
+						fastify.controllerLog.debug(`${hook.message.encounter_id}: PVP time: ${ohbemms}ms`)
+					}
+				}
 				processHook = hook
 
 				// also post directly to stats controller
@@ -641,6 +614,36 @@ async function processOne(hook) {
 
 				break
 			}
+			case 'gym':
+			case 'gym_details': {
+				const id = hook.message.id || hook.message.gym_id
+				const team = hook.message.team_id !== undefined ? hook.message.team_id : hook.message.team
+
+				if (config.general.disableGym) {
+					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
+					break
+				}
+				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
+
+				const cachedGymDetails = fastify.gymCache.getKey(id)
+				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available) {
+					fastify.controllerLog.debug(`${id}: Gym was sent again with same details, ignoring`)
+					break
+				}
+
+				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
+				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
+				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
+
+				fastify.gymCache.setKey(id, {
+					team_id: team,
+					slots_available: hook.message.slots_available,
+					last_owner_id: team || hook.message.last_owner_id,
+				}, 0)
+				processHook = hook
+				break
+			}
+
 			case 'nest': {
 				if (config.general.disableNest) {
 					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was received but set to be ignored in config`)
@@ -707,26 +710,35 @@ async function handleAlarms() {
 
 async function currentStatus() {
 	let discordQueueLength = 0
+	// eslint-disable-next-line no-sequences
+	const queueCount = (queue) => queue.map((x) => x.target).reduce((r, c) => (r[c] = (r[c] || 0) + 1, r), {})
+
+	const queueSummary = {}
+
 	for (const w of discordWorkers) {
 		discordQueueLength += w.discordQueue.length
+		Object.assign(queueSummary, queueCount(w.discordQueue))
 	}
+
 	const telegramQueueLength = (telegram ? telegram.telegramQueue.length : 0)
 		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
 
 	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
-	log.info(`[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`)
-	log.verbose(`Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`)
-}
+	Object.assign(queueSummary,
+		telegram ? queueCount(telegram.telegramQueue) : {},
+		telegramChannel ? queueCount(telegramChannel.telegramQueue) : {},
+		discordWebhookWorker ? queueCount(discordWebhookWorker.webhookQueue) : {})
 
-const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-if (NODE_MAJOR_VERSION < 12) {
-	throw new Error('Requires Node 12 or 14')
-}
-// if (NODE_MAJOR_VERSION == 13) {
-//	throw new Error('Requires Node 12 or 14')
-// }
-if (NODE_MAJOR_VERSION > 14) {
-	throw new Error('Requires Node 12 or 14')
+	const infoMessage = `[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`
+	log.info(infoMessage)
+	const cacheMessage = `Duplicate cache stats: ${JSON.stringify(fastify.cache.getStats())}`
+	log.verbose(cacheMessage)
+
+	PoracleInfo.status = {
+		queueInfo: infoMessage,
+		cacheInfo: cacheMessage,
+		queueSummary,
+	}
 }
 
 schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
@@ -737,28 +749,32 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 
 		let lastId
 		for (const profile of profilesToCheck) {
-			const human = humans.find((x) => x.id == profile.id)
+			const human = humans.find((x) => x.id === profile.id)
 
 			let nowForHuman = moment()
 			if (human.latitude) {
 				nowForHuman = moment().tz(geoTz(human.latitude, human.longitude).toString())
 			}
 
-			if (profile.id != lastId) {
+			if (profile.id !== lastId) {
 				const timings = JSON.parse(profile.active_hours)
 				const nowHour = nowForHuman.hour()
 				const nowMinutes = nowForHuman.minutes()
 				const nowDow = nowForHuman.isoWeekday()
-				const yesterdayDow = nowDow == 1 ? 7 : nowDow - 1
+				const yesterdayDow = +nowDow === 1 ? 7 : nowDow - 1
 
-				const active = timings.some((row) => (
-					(row.day == nowDow && row.hours == nowHour && nowMinutes >= row.mins && (nowMinutes - row.mins) < 10) // within 10 minutes in same hour
-					|| (nowMinutes < 10 && row.day == nowDow && row.hours == nowHour - 1 && row.mins > 50) // first 10 minutes of new hour
-					|| (nowHour == 0 && nowMinutes < 10 && row.day == yesterdayDow && row.hours == 23 && row.mins > 50) // first 10 minutes of day
-				))
+				const active = timings.some((row) => {
+					const rowHours = +row.hours
+					const rowMins = +row.mins
+					const rowDay = +row.day
+
+					return (rowDay === nowDow && rowHours === nowHour && nowMinutes >= row.mins && (nowMinutes - rowMins) < 10) // within 10 minutes in same hour
+						|| (nowMinutes < 10 && rowDay === nowDow && rowHours === nowHour - 1 && rowMins > 50) // first 10 minutes of new hour
+						|| (nowHour === 0 && nowMinutes < 10 && rowDay === yesterdayDow && rowHours === 23 && rowMins > 50) // first 10 minutes of day
+				})
 
 				if (active) {
-					if (human.current_profile_no != profile.profile_no) {
+					if (human.current_profile_no !== profile.profile_no) {
 						const userTranslator = translatorFactory.Translator(human.language || config.general.locale)
 
 						const job = {
@@ -794,6 +810,119 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 	}
 })
 
-run()
-setInterval(handleAlarms, 100)
-setInterval(currentStatus, 60000)
+async function run() {
+	process.on('SIGINT', handleShutdown)
+	process.on('SIGTERM', handleShutdown)
+
+	if (config.pvp.dataSource === 'internal' || config.pvp.dataSource === 'compare') {
+		initialiseOhbem()
+	}
+
+	setTimeout(processPogoEvents, 30000)
+
+	chokidar.watch([
+		path.join(__dirname, '../config/dts.json'),
+		path.join(__dirname, '../config/dts/'),
+	], {
+		awaitWriteFinish: true,
+	}).on('change', () => {
+		log.info('Change in DTS detected, triggering reload')
+		sendCommandToWorkers({
+			type: 'reloadDts',
+		})
+	})
+
+	if (config.discord.enabled) {
+		setInterval(() => {
+			if (!fastify.discordQueue.length) {
+				return
+			}
+
+			// Dequeue onto individual queues as fast as possible
+			while (fastify.discordQueue.length) {
+				const { target, type } = fastify.discordQueue[0]
+				let discordWorker
+				if (type === 'webhook') {
+					discordWorker = discordWebhookWorker
+				} else {
+					// see if target has dedicated worker
+					discordWorker = discordWorkers.find((workerr) => workerr.users.includes(target))
+					if (!discordWorker) {
+						let busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						let laziestWorkerId
+						Object.keys(discordWorkers).map((i) => {
+							if (discordWorkers[i].userCount < busyestWorkerHumanCount) {
+								busyestWorkerHumanCount = discordWorkers[i].userCount
+								laziestWorkerId = i
+							}
+						})
+						busyestWorkerHumanCount = Number.POSITIVE_INFINITY
+						discordWorker = discordWorkers[laziestWorkerId]
+						discordWorker.addUser(target)
+					}
+				}
+
+				discordWorker.work(fastify.discordQueue.shift())
+			}
+		}, 100)
+
+		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guilds) {
+			setTimeout(syncDiscordRole, 10000)
+		}
+	}
+
+	if (config.telegram.enabled) {
+		setInterval(() => {
+			if (!fastify.telegramQueue.length) {
+				return
+			}
+
+			while (fastify.telegramQueue.length) {
+				let telegramWorker = telegram
+				if (telegramChannel && ['telegram:channel', 'telegram:group'].includes(fastify.telegramQueue[0].type)) {
+					telegramWorker = telegramChannel
+				}
+
+				telegramWorker.work(fastify.telegramQueue.shift())
+			}
+		}, 100)
+
+		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
+			setTimeout(syncTelegramMembership, 30000)
+		}
+	}
+
+	const routeFiles = await readDir(`${__dirname}/routes/`)
+	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
+
+	routes.forEach((route) => fastify.register(require(route)))
+	await fastify.listen(config.server.port, config.server.host)
+	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
+}
+
+function startPoracle() {
+	run()
+	setInterval(handleAlarms, 100)
+	setInterval(currentStatus, 60000)
+}
+
+knex.migrate.latest({
+	directory: path.join(__dirname, './lib/db/migrations'),
+	tableName: 'migrations',
+}).then(() => {
+	startPoracle()
+}).catch((err) => {
+	// eslint-disable-next-line no-console
+	console.error(err)
+
+	log.error('Migration failed', err)
+
+	if (process.argv.includes('--force')) {
+		startPoracle()
+	} else {
+		// eslint-disable-next-line no-console
+		console.error('Migration failed - exiting PoracleJS')
+
+		process.exit(1)
+	}
+})

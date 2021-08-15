@@ -44,7 +44,7 @@ class TelegramReconciliation {
 	}
 
 	async disableUser(user) {
-		if (this.config.general.roleCheckMode == 'disable-user') {
+		if (this.config.general.roleCheckMode === 'disable-user') {
 			if (!user.admin_disable) {
 				await this.query.updateQuery('humans', {
 					admin_disable: 1,
@@ -52,7 +52,7 @@ class TelegramReconciliation {
 				}, { id: user.id })
 				this.log.info(`Reconciliation (Telegram) Disable user ${user.id} ${user.name}`)
 			}
-		} else if (this.config.general.roleCheckMode == 'delete') {
+		} else if (this.config.general.roleCheckMode === 'delete') {
 			await this.query.deleteQuery('egg', { id: user.id })
 			await this.query.deleteQuery('monsters', { id: user.id })
 			await this.query.deleteQuery('raid', { id: user.id })
@@ -62,7 +62,7 @@ class TelegramReconciliation {
 			await this.query.deleteQuery('humans', { id: user.id })
 			this.log.info(`Reconciliation (Telegram) Delete user ${user.id} ${user.name}`)
 		} else {
-			this.log.info(`Reconciliation (Telegram) Not removing user ${user.id}`)
+			this.log.info(`Reconciliation (Telegram) Not removing invalid user ${user.id} [roleCheckMode is ignored]`)
 		}
 	}
 
@@ -149,11 +149,11 @@ class TelegramReconciliation {
 				}
 				if (before && after) {
 					const updates = {}
-					if (syncNames && user.name != name) { // check if we should update name
+					if (syncNames && user.name !== name) { // check if we should update name
 						updates.name = name
 					}
 
-					// if (user.notes != notes) {
+					// if (user.notes  !== notes) {
 					// 	updates.notes = notes
 					// }
 

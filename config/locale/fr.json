@@ -518,5 +518,6 @@
 	"use `{0}{1}` to see what you are currently tracking": "utiliser {0}{1} pour voir vos suivis configurés",
 	"Mega {0}": "Méga-{0}",
 	"Mega {0} X": "Méga-{0} X",
-	"Mega {0} Y": "Méga-{0} Y"
+	"Mega {0} Y": "Méga-{0} Y",
+	"This would result in too many alerts. You need to provide additional filters to limit the number of valid candidates.": "Cela donnerait beaucoup trop d'alertes. Il faut préciser des filtres supplémentaires pour limiter le nombre de candidats valides."
 }

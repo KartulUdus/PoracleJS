@@ -31,7 +31,12 @@ module.exports = async (fastify, options, next) => {
 
 		return {
 			status: 'ok',
-			areas: fastify.geofence.filter((x) => allowedAreas.includes(x.name.toLowerCase())).map((x) => ({ name: x.name, group: x.group || '' })),
+			areas: fastify.geofence.filter((x) => allowedAreas.includes(x.name.toLowerCase())).map((x) => ({
+				name: x.name,
+				group: x.group || '',
+				description: x.description || '',
+				userSelectable: (x.userSelectable === undefined || x.userSelectable),
+			})),
 		}
 	})
 
@@ -87,11 +92,11 @@ module.exports = async (fastify, options, next) => {
 							}
 							for (const guild of fastify.config.discord.guilds) {
 								if (channels[guild]) {
-									if (channels[guild].some((x) => x.categoryId == id)) {
+									if (channels[guild].some((x) => x.categoryId === id)) {
 										// push whole category
-										result.discord.channels.push(...channels[guild].filter((x) => x.categoryId == id).map((x) => x.id))
+										result.discord.channels.push(...channels[guild].filter((x) => x.categoryId === id).map((x) => x.id))
 									}
-									if (channels[guild].some((x) => x.id == id)) {
+									if (channels[guild].some((x) => x.id === id)) {
 										result.discord.channels.push(id)
 									}
 								}

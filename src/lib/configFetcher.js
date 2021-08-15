@@ -20,14 +20,19 @@ function getGeofenceFromGEOjson(file) {
 	const outGeofence = []
 	for (let i = 0; i < geofenceGEOjson.length; i++) {
 		if (geofenceGEOjson[i].type === 'Feature' && geofenceGEOjson[i].geometry.type === 'Polygon') {
-			const name = geofenceGEOjson[i].properties.name || config.defaultGeofenceName + i.toString()
-			const color = geofenceGEOjson[i].properties.color || config.defaultGeofenceColor
+			const { properties } = geofenceGEOjson[i]
+			const name = properties.name || config.defaultGeofenceName + i.toString()
+			const color = properties.color || config.defaultGeofenceColor
+
 			outGeofence[i] = {
 				name,
 				id: i,
 				color,
 				path: [],
-				group: geofenceGEOjson[i].properties.group || '',
+				group: properties.group || '',
+				description: properties.description || '',
+				userSelectable: properties.userSelectable === undefined || properties.userSelectable,
+				displayInMatches: properties.displayInMatches === undefined || properties.displayInMatches,
 			}
 			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
 		}
@@ -78,10 +83,6 @@ module.exports = {
 		translator = translatorFactory.default
 
 		if (performChecks) {
-			knex.migrate.latest({
-				directory: path.join(__dirname, './db/migrations'),
-				tableName: 'migrations',
-			})
 			configChecker.checkConfig(config)
 			configChecker.checkDts(dts, config)
 			configChecker.checkGeofence(geofence)
