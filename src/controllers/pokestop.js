@@ -297,7 +297,7 @@ class Invasion extends Controller {
 				if (mustache) {
 					let mustacheResult
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 					}

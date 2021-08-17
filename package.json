@@ -57,7 +57,7 @@
     "node-geocoder": "^3.27.0",
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
-    "ohbem": "^1.2.1",
+    "ohbem": "^1.2.3",
     "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",
     "point-in-polygon": "^1.1.0",
     "readline-sync": "^1.4.10",
