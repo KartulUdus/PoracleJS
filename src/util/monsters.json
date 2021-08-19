@@ -36251,6 +36251,78 @@
 			}
 		]
 	},
+	"720_0": {
+		"name": "Hoopa",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 720,
+		"stats": {
+			"baseAttack": 261,
+			"baseDefense": 187,
+			"baseStamina": 173
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"720_2651": {
+		"name": "Hoopa",
+		"default_form": true,
+		"form": {
+			"name": "Confined",
+			"proto": "HOOPA_CONFINED",
+			"id": 2651
+		},
+		"id": 720,
+		"stats": {
+			"baseAttack": 261,
+			"baseDefense": 187,
+			"baseStamina": 173
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"720_2652": {
+		"name": "Hoopa",
+		"form": {
+			"name": "Unbound",
+			"proto": "HOOPA_UNBOUND",
+			"id": 2652
+		},
+		"id": 720,
+		"stats": {
+			"baseAttack": 311,
+			"baseDefense": 191,
+			"baseStamina": 173
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
 	"808_0": {
 		"name": "Meltan",
 		"form": {
@@ -36288,6 +36360,1246 @@
 			{
 				"id": 9,
 				"name": "Steel"
+			}
+		]
+	},
+	"810_0": {
+		"name": "Grookey",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 810,
+		"stats": {
+			"baseAttack": 122,
+			"baseDefense": 91,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"811_0": {
+		"name": "Thwackey",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 811,
+		"stats": {
+			"baseAttack": 165,
+			"baseDefense": 134,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"812_0": {
+		"name": "Rillaboom",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 812,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 168,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"813_0": {
+		"name": "Scorbunny",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 813,
+		"stats": {
+			"baseAttack": 132,
+			"baseDefense": 79,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"814_0": {
+		"name": "Raboot",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 814,
+		"stats": {
+			"baseAttack": 170,
+			"baseDefense": 125,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"815_0": {
+		"name": "Cinderace",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 815,
+		"stats": {
+			"baseAttack": 238,
+			"baseDefense": 163,
+			"baseStamina": 190
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"816_0": {
+		"name": "Sobble",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 816,
+		"stats": {
+			"baseAttack": 132,
+			"baseDefense": 79,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"817_0": {
+		"name": "Drizzile",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 817,
+		"stats": {
+			"baseAttack": 186,
+			"baseDefense": 113,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"818_0": {
+		"name": "Inteleon",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 818,
+		"stats": {
+			"baseAttack": 262,
+			"baseDefense": 142,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"819_0": {
+		"name": "Skwovet",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 819,
+		"stats": {
+			"baseAttack": 95,
+			"baseDefense": 86,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"820_0": {
+		"name": "Greedent",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 820,
+		"stats": {
+			"baseAttack": 160,
+			"baseDefense": 156,
+			"baseStamina": 260
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"821_0": {
+		"name": "Rookidee",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 821,
+		"stats": {
+			"baseAttack": 88,
+			"baseDefense": 67,
+			"baseStamina": 116
+		},
+		"types": [
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"822_0": {
+		"name": "Corvisquire",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 822,
+		"stats": {
+			"baseAttack": 129,
+			"baseDefense": 110,
+			"baseStamina": 169
+		},
+		"types": [
+			{
+				"id": 3,
+				"name": "Flying"
+			}
+		]
+	},
+	"823_0": {
+		"name": "Corviknight",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 823,
+		"stats": {
+			"baseAttack": 163,
+			"baseDefense": 192,
+			"baseStamina": 221
+		},
+		"types": [
+			{
+				"id": 3,
+				"name": "Flying"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"824_0": {
+		"name": "Blipbug",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 824,
+		"stats": {
+			"baseAttack": 46,
+			"baseDefense": 67,
+			"baseStamina": 93
+		},
+		"types": [
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"825_0": {
+		"name": "Dottler",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 825,
+		"stats": {
+			"baseAttack": 87,
+			"baseDefense": 157,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 7,
+				"name": "Bug"
+			},
+			{
+				"id": 14,
+				"name": "Psychic"
+			}
+		]
+	},
+	"826_0": {
+		"name": "Orbeetle",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 826,
+		"stats": {
+			"baseAttack": 156,
+			"baseDefense": 240,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 7,
+				"name": "Bug"
+			},
+			{
+				"id": 14,
+				"name": "Psychic"
+			}
+		]
+	},
+	"827_0": {
+		"name": "Nickit",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 827,
+		"stats": {
+			"baseAttack": 85,
+			"baseDefense": 82,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"828_0": {
+		"name": "Thievul",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 828,
+		"stats": {
+			"baseAttack": 172,
+			"baseDefense": 164,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"829_0": {
+		"name": "Gossifleur",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 829,
+		"stats": {
+			"baseAttack": 70,
+			"baseDefense": 104,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"830_0": {
+		"name": "Eldegoss",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 830,
+		"stats": {
+			"baseAttack": 148,
+			"baseDefense": 211,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"831_0": {
+		"name": "Wooloo",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 831,
+		"stats": {
+			"baseAttack": 76,
+			"baseDefense": 97,
+			"baseStamina": 123
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"832_0": {
+		"name": "Dubwool",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 832,
+		"stats": {
+			"baseAttack": 159,
+			"baseDefense": 198,
+			"baseStamina": 176
+		},
+		"types": [
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"833_0": {
+		"name": "Chewtle",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 833,
+		"stats": {
+			"baseAttack": 114,
+			"baseDefense": 85,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"834_0": {
+		"name": "Drednaw",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 834,
+		"stats": {
+			"baseAttack": 213,
+			"baseDefense": 164,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			},
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"835_0": {
+		"name": "Yamper",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 835,
+		"stats": {
+			"baseAttack": 80,
+			"baseDefense": 90,
+			"baseStamina": 153
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"836_0": {
+		"name": "Boltund",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 836,
+		"stats": {
+			"baseAttack": 197,
+			"baseDefense": 131,
+			"baseStamina": 170
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"837_0": {
+		"name": "Rolycoly",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 837,
+		"stats": {
+			"baseAttack": 73,
+			"baseDefense": 91,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"838_0": {
+		"name": "Carkol",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 838,
+		"stats": {
+			"baseAttack": 114,
+			"baseDefense": 157,
+			"baseStamina": 190
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"839_0": {
+		"name": "Coalossal",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 839,
+		"stats": {
+			"baseAttack": 146,
+			"baseDefense": 198,
+			"baseStamina": 242
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			},
+			{
+				"id": 10,
+				"name": "Fire"
+			}
+		]
+	},
+	"840_0": {
+		"name": "Applin",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 840,
+		"stats": {
+			"baseAttack": 71,
+			"baseDefense": 116,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"841_0": {
+		"name": "Flapple",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 841,
+		"stats": {
+			"baseAttack": 214,
+			"baseDefense": 144,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"842_0": {
+		"name": "Appletun",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 842,
+		"stats": {
+			"baseAttack": 214,
+			"baseDefense": 144,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 12,
+				"name": "Grass"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"843_0": {
+		"name": "Silicobra",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 843,
+		"stats": {
+			"baseAttack": 103,
+			"baseDefense": 123,
+			"baseStamina": 141
+		},
+		"types": [
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"844_0": {
+		"name": "Sandaconda",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 844,
+		"stats": {
+			"baseAttack": 202,
+			"baseDefense": 207,
+			"baseStamina": 176
+		},
+		"types": [
+			{
+				"id": 5,
+				"name": "Ground"
+			}
+		]
+	},
+	"845_0": {
+		"name": "Cramorant",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 845,
+		"stats": {
+			"baseAttack": 173,
+			"baseDefense": 163,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 3,
+				"name": "Flying"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"846_0": {
+		"name": "Arrokuda",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 846,
+		"stats": {
+			"baseAttack": 118,
+			"baseDefense": 72,
+			"baseStamina": 121
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"847_0": {
+		"name": "Barraskewda",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 847,
+		"stats": {
+			"baseAttack": 258,
+			"baseDefense": 127,
+			"baseStamina": 156
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"848_0": {
+		"name": "Toxel",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 848,
+		"stats": {
+			"baseAttack": 97,
+			"baseDefense": 65,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 4,
+				"name": "Poison"
+			}
+		]
+	},
+	"849_0": {
+		"name": "Toxtricity",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 849,
+		"stats": {
+			"baseAttack": 224,
+			"baseDefense": 140,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 4,
+				"name": "Poison"
+			}
+		]
+	},
+	"849_2463": {
+		"name": "Toxtricity",
+		"default_form": true,
+		"form": {
+			"name": "Low Key",
+			"proto": "TOXTRICITY_LOW_KEY",
+			"id": 2463
+		},
+		"id": 849,
+		"stats": {
+			"baseAttack": 224,
+			"baseDefense": 140,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 4,
+				"name": "Poison"
+			}
+		]
+	},
+	"849_2464": {
+		"name": "Toxtricity",
+		"form": {
+			"name": "Amped",
+			"proto": "TOXTRICITY_AMPED",
+			"id": 2464
+		},
+		"id": 849,
+		"stats": {
+			"baseAttack": 224,
+			"baseDefense": 140,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 4,
+				"name": "Poison"
+			}
+		]
+	},
+	"850_0": {
+		"name": "Sizzlipede",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 850,
+		"stats": {
+			"baseAttack": 118,
+			"baseDefense": 90,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"851_0": {
+		"name": "Centiskorch",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 851,
+		"stats": {
+			"baseAttack": 220,
+			"baseDefense": 158,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 10,
+				"name": "Fire"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"852_0": {
+		"name": "Clobbopus",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 852,
+		"stats": {
+			"baseAttack": 121,
+			"baseDefense": 103,
+			"baseStamina": 137
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"853_0": {
+		"name": "Grapploct",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 853,
+		"stats": {
+			"baseAttack": 209,
+			"baseDefense": 162,
+			"baseStamina": 190
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"854_0": {
+		"name": "Sinistea",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 854,
+		"stats": {
+			"baseAttack": 134,
+			"baseDefense": 96,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"854_2477": {
+		"name": "Sinistea",
+		"default_form": true,
+		"form": {
+			"name": "Phony",
+			"proto": "SINISTEA_PHONY",
+			"id": 2477
+		},
+		"id": 854,
+		"stats": {
+			"baseAttack": 134,
+			"baseDefense": 96,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"854_2478": {
+		"name": "Sinistea",
+		"form": {
+			"name": "Antique",
+			"proto": "SINISTEA_ANTIQUE",
+			"id": 2478
+		},
+		"id": 854,
+		"stats": {
+			"baseAttack": 134,
+			"baseDefense": 96,
+			"baseStamina": 120
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"855_0": {
+		"name": "Polteageist",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 855,
+		"stats": {
+			"baseAttack": 248,
+			"baseDefense": 189,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"855_2480": {
+		"name": "Polteageist",
+		"default_form": true,
+		"form": {
+			"name": "Phony",
+			"proto": "POLTEAGEIST_PHONY",
+			"id": 2480
+		},
+		"id": 855,
+		"stats": {
+			"baseAttack": 248,
+			"baseDefense": 189,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"855_2481": {
+		"name": "Polteageist",
+		"form": {
+			"name": "Antique",
+			"proto": "POLTEAGEIST_ANTIQUE",
+			"id": 2481
+		},
+		"id": 855,
+		"stats": {
+			"baseAttack": 248,
+			"baseDefense": 189,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"856_0": {
+		"name": "Hatenna",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 856,
+		"stats": {
+			"baseAttack": 98,
+			"baseDefense": 93,
+			"baseStamina": 123
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			}
+		]
+	},
+	"857_0": {
+		"name": "Hattrem",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 857,
+		"stats": {
+			"baseAttack": 153,
+			"baseDefense": 133,
+			"baseStamina": 149
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			}
+		]
+	},
+	"858_0": {
+		"name": "Hatterene",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 858,
+		"stats": {
+			"baseAttack": 237,
+			"baseDefense": 182,
+			"baseStamina": 149
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"859_0": {
+		"name": "Impidimp",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 859,
+		"stats": {
+			"baseAttack": 103,
+			"baseDefense": 69,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			},
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"860_0": {
+		"name": "Morgrem",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 860,
+		"stats": {
+			"baseAttack": 145,
+			"baseDefense": 102,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			},
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"861_0": {
+		"name": "Grimmsnarl",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 861,
+		"stats": {
+			"baseAttack": 227,
+			"baseDefense": 139,
+			"baseStamina": 216
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			},
+			{
+				"id": 18,
+				"name": "Fairy"
 			}
 		]
 	},
@@ -36464,6 +37776,86 @@
 			{
 				"id": 9,
 				"name": "Steel"
+			}
+		]
+	},
+	"864_0": {
+		"name": "Cursola",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 864,
+		"stats": {
+			"baseAttack": 253,
+			"baseDefense": 182,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"864_2507": {
+		"name": "Cursola",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "CURSOLA_NORMAL",
+			"id": 2507
+		},
+		"id": 864,
+		"stats": {
+			"baseAttack": 253,
+			"baseDefense": 182,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"864_2508": {
+		"name": "Cursola",
+		"form": {
+			"name": "Shadow",
+			"proto": "CURSOLA_SHADOW",
+			"id": 2508
+		},
+		"id": 864,
+		"stats": {
+			"baseAttack": 253,
+			"baseDefense": 182,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"864_2509": {
+		"name": "Cursola",
+		"form": {
+			"name": "Purified",
+			"proto": "CURSOLA_PURIFIED",
+			"id": 2509
+		},
+		"id": 864,
+		"stats": {
+			"baseAttack": 253,
+			"baseDefense": 182,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
 			}
 		]
 	},
@@ -36732,6 +38124,1086 @@
 			{
 				"id": 5,
 				"name": "Ground"
+			},
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"868_0": {
+		"name": "Milcery",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 868,
+		"stats": {
+			"baseAttack": 90,
+			"baseDefense": 97,
+			"baseStamina": 128
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"869_0": {
+		"name": "Alcremie",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 869,
+		"stats": {
+			"baseAttack": 203,
+			"baseDefense": 203,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"870_0": {
+		"name": "Falinks",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 870,
+		"stats": {
+			"baseAttack": 193,
+			"baseDefense": 170,
+			"baseStamina": 163
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"871_0": {
+		"name": "Pincurchin",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 871,
+		"stats": {
+			"baseAttack": 176,
+			"baseDefense": 161,
+			"baseStamina": 134
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"872_0": {
+		"name": "Snom",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 872,
+		"stats": {
+			"baseAttack": 76,
+			"baseDefense": 59,
+			"baseStamina": 102
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"873_0": {
+		"name": "Frosmoth",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 873,
+		"stats": {
+			"baseAttack": 230,
+			"baseDefense": 155,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			},
+			{
+				"id": 7,
+				"name": "Bug"
+			}
+		]
+	},
+	"874_0": {
+		"name": "Stonjourner",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 874,
+		"stats": {
+			"baseAttack": 222,
+			"baseDefense": 182,
+			"baseStamina": 225
+		},
+		"types": [
+			{
+				"id": 6,
+				"name": "Rock"
+			}
+		]
+	},
+	"875_0": {
+		"name": "Eiscue",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 875,
+		"stats": {
+			"baseAttack": 148,
+			"baseDefense": 195,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			}
+		]
+	},
+	"875_2540": {
+		"name": "Eiscue",
+		"default_form": true,
+		"form": {
+			"name": "Ice",
+			"proto": "EISCUE_ICE",
+			"id": 2540
+		},
+		"id": 875,
+		"stats": {
+			"baseAttack": 148,
+			"baseDefense": 195,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			}
+		]
+	},
+	"875_2541": {
+		"name": "Eiscue",
+		"form": {
+			"name": "Noice",
+			"proto": "EISCUE_NOICE",
+			"id": 2541
+		},
+		"id": 875,
+		"stats": {
+			"baseAttack": 173,
+			"baseDefense": 139,
+			"baseStamina": 181
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			}
+		]
+	},
+	"876_0": {
+		"name": "Indeedee",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 876,
+		"stats": {
+			"baseAttack": 208,
+			"baseDefense": 166,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"876_2542": {
+		"name": "Indeedee",
+		"default_form": true,
+		"form": {
+			"name": "Male",
+			"proto": "INDEEDEE_MALE",
+			"id": 2542
+		},
+		"id": 876,
+		"stats": {
+			"baseAttack": 208,
+			"baseDefense": 166,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"876_2543": {
+		"name": "Indeedee",
+		"form": {
+			"name": "Female",
+			"proto": "INDEEDEE_FEMALE",
+			"id": 2543
+		},
+		"id": 876,
+		"stats": {
+			"baseAttack": 184,
+			"baseDefense": 184,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 1,
+				"name": "Normal"
+			}
+		]
+	},
+	"877_0": {
+		"name": "Morpeko",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 877,
+		"stats": {
+			"baseAttack": 192,
+			"baseDefense": 121,
+			"baseStamina": 151
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"877_2544": {
+		"name": "Morpeko",
+		"default_form": true,
+		"form": {
+			"name": "Full Belly",
+			"proto": "MORPEKO_FULL_BELLY",
+			"id": 2544
+		},
+		"id": 877,
+		"stats": {
+			"baseAttack": 192,
+			"baseDefense": 121,
+			"baseStamina": 151
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"877_2545": {
+		"name": "Morpeko",
+		"form": {
+			"name": "Hangry",
+			"proto": "MORPEKO_HANGRY",
+			"id": 2545
+		},
+		"id": 877,
+		"stats": {
+			"baseAttack": 192,
+			"baseDefense": 121,
+			"baseStamina": 151
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"878_0": {
+		"name": "Cufant",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 878,
+		"stats": {
+			"baseAttack": 140,
+			"baseDefense": 91,
+			"baseStamina": 176
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"879_0": {
+		"name": "Copperajah",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 879,
+		"stats": {
+			"baseAttack": 226,
+			"baseDefense": 126,
+			"baseStamina": 263
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"880_0": {
+		"name": "Dracozolt",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 880,
+		"stats": {
+			"baseAttack": 195,
+			"baseDefense": 165,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"881_0": {
+		"name": "Arctozolt",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 881,
+		"stats": {
+			"baseAttack": 190,
+			"baseDefense": 166,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			},
+			{
+				"id": 15,
+				"name": "Ice"
+			}
+		]
+	},
+	"882_0": {
+		"name": "Dracovish",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 882,
+		"stats": {
+			"baseAttack": 175,
+			"baseDefense": 185,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"883_0": {
+		"name": "Arctovish",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 883,
+		"stats": {
+			"baseAttack": 171,
+			"baseDefense": 185,
+			"baseStamina": 207
+		},
+		"types": [
+			{
+				"id": 11,
+				"name": "Water"
+			},
+			{
+				"id": 15,
+				"name": "Ice"
+			}
+		]
+	},
+	"884_0": {
+		"name": "Duraludon",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 884,
+		"stats": {
+			"baseAttack": 239,
+			"baseDefense": 185,
+			"baseStamina": 172
+		},
+		"types": [
+			{
+				"id": 9,
+				"name": "Steel"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"885_0": {
+		"name": "Dreepy",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 885,
+		"stats": {
+			"baseAttack": 117,
+			"baseDefense": 61,
+			"baseStamina": 99
+		},
+		"types": [
+			{
+				"id": 16,
+				"name": "Dragon"
+			},
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"886_0": {
+		"name": "Drakloak",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 886,
+		"stats": {
+			"baseAttack": 163,
+			"baseDefense": 105,
+			"baseStamina": 169
+		},
+		"types": [
+			{
+				"id": 16,
+				"name": "Dragon"
+			},
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"887_0": {
+		"name": "Dragapult",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 887,
+		"stats": {
+			"baseAttack": 266,
+			"baseDefense": 170,
+			"baseStamina": 204
+		},
+		"types": [
+			{
+				"id": 16,
+				"name": "Dragon"
+			},
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"888_0": {
+		"name": "Zacian",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 888,
+		"stats": {
+			"baseAttack": 254,
+			"baseDefense": 236,
+			"baseStamina": 192
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"888_2577": {
+		"name": "Zacian",
+		"default_form": true,
+		"form": {
+			"name": "Hero",
+			"proto": "ZACIAN_HERO",
+			"id": 2577
+		},
+		"id": 888,
+		"stats": {
+			"baseAttack": 254,
+			"baseDefense": 236,
+			"baseStamina": 192
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			}
+		]
+	},
+	"888_2576": {
+		"name": "Zacian",
+		"form": {
+			"name": "Crowned Sword",
+			"proto": "ZACIAN_CROWNED_SWORD",
+			"id": 2576
+		},
+		"id": 888,
+		"stats": {
+			"baseAttack": 332,
+			"baseDefense": 240,
+			"baseStamina": 192
+		},
+		"types": [
+			{
+				"id": 18,
+				"name": "Fairy"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"889_0": {
+		"name": "Zamazenta",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 889,
+		"stats": {
+			"baseAttack": 254,
+			"baseDefense": 236,
+			"baseStamina": 192
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"889_2579": {
+		"name": "Zamazenta",
+		"default_form": true,
+		"form": {
+			"name": "Hero",
+			"proto": "ZAMAZENTA_HERO",
+			"id": 2579
+		},
+		"id": 889,
+		"stats": {
+			"baseAttack": 254,
+			"baseDefense": 236,
+			"baseStamina": 192
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"889_2578": {
+		"name": "Zamazenta",
+		"form": {
+			"name": "Crowned Shield",
+			"proto": "ZAMAZENTA_CROWNED_SHIELD",
+			"id": 2578
+		},
+		"id": 889,
+		"stats": {
+			"baseAttack": 250,
+			"baseDefense": 292,
+			"baseStamina": 192
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			},
+			{
+				"id": 9,
+				"name": "Steel"
+			}
+		]
+	},
+	"890_0": {
+		"name": "Eternatus",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 890,
+		"stats": {
+			"baseAttack": 278,
+			"baseDefense": 192,
+			"baseStamina": 268
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"890_2581": {
+		"name": "Eternatus",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "ETERNATUS_NORMAL",
+			"id": 2581
+		},
+		"id": 890,
+		"stats": {
+			"baseAttack": 278,
+			"baseDefense": 192,
+			"baseStamina": 268
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"890_2580": {
+		"name": "Eternatus",
+		"form": {
+			"name": "Eternamax",
+			"proto": "ETERNATUS_ETERNAMAX",
+			"id": 2580
+		},
+		"id": 890,
+		"stats": {
+			"baseAttack": 251,
+			"baseDefense": 505,
+			"baseStamina": 452
+		},
+		"types": [
+			{
+				"id": 4,
+				"name": "Poison"
+			},
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"891_0": {
+		"name": "Kubfu",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 891,
+		"stats": {
+			"baseAttack": 170,
+			"baseDefense": 112,
+			"baseStamina": 155
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"892_0": {
+		"name": "Urshifu",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 892,
+		"stats": {
+			"baseAttack": 231,
+			"baseDefense": 162,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			}
+		]
+	},
+	"892_2723": {
+		"name": "Urshifu",
+		"default_form": true,
+		"form": {
+			"name": "Single Strike",
+			"proto": "URSHIFU_SINGLE_STRIKE",
+			"id": 2723
+		},
+		"id": 892,
+		"stats": {
+			"baseAttack": 231,
+			"baseDefense": 162,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			},
+			{
+				"id": 17,
+				"name": "Dark"
+			}
+		]
+	},
+	"892_2724": {
+		"name": "Urshifu",
+		"form": {
+			"name": "Rapid Strike",
+			"proto": "URSHIFU_RAPID_STRIKE",
+			"id": 2724
+		},
+		"id": 892,
+		"stats": {
+			"baseAttack": 231,
+			"baseDefense": 162,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 2,
+				"name": "Fighting"
+			},
+			{
+				"id": 11,
+				"name": "Water"
+			}
+		]
+	},
+	"893_0": {
+		"name": "Zarude",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 893,
+		"stats": {
+			"baseAttack": 242,
+			"baseDefense": 215,
+			"baseStamina": 233
+		},
+		"types": [
+			{
+				"id": 17,
+				"name": "Dark"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"894_0": {
+		"name": "Regieleki",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 894,
+		"stats": {
+			"baseAttack": 228,
+			"baseDefense": 114,
+			"baseStamina": 173
+		},
+		"types": [
+			{
+				"id": 13,
+				"name": "Electric"
+			}
+		]
+	},
+	"895_0": {
+		"name": "Regidrago",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 895,
+		"stats": {
+			"baseAttack": 184,
+			"baseDefense": 92,
+			"baseStamina": 364
+		},
+		"types": [
+			{
+				"id": 16,
+				"name": "Dragon"
+			}
+		]
+	},
+	"896_0": {
+		"name": "Glastrier",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 896,
+		"stats": {
+			"baseAttack": 224,
+			"baseDefense": 203,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 15,
+				"name": "Ice"
+			}
+		]
+	},
+	"897_0": {
+		"name": "Spectrier",
+		"form": {
+			"name": "Normal",
+			"proto": "",
+			"id": 0
+		},
+		"id": 897,
+		"stats": {
+			"baseAttack": 273,
+			"baseDefense": 146,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 8,
+				"name": "Ghost"
+			}
+		]
+	},
+	"898_0": {
+		"name": "Calyrex",
+		"form": {
+			"name": "",
+			"id": 0
+		},
+		"id": 898,
+		"stats": {
+			"baseAttack": 147,
+			"baseDefense": 147,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"898_2725": {
+		"name": "Calyrex",
+		"default_form": true,
+		"form": {
+			"name": "Normal",
+			"proto": "CALYREX_NORMAL",
+			"id": 2725
+		},
+		"id": 898,
+		"stats": {
+			"baseAttack": 147,
+			"baseDefense": 147,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 12,
+				"name": "Grass"
+			}
+		]
+	},
+	"898_2726": {
+		"name": "Calyrex",
+		"form": {
+			"name": "Ice Rider",
+			"proto": "CALYREX_ICE_RIDER",
+			"id": 2726
+		},
+		"id": 898,
+		"stats": {
+			"baseAttack": 268,
+			"baseDefense": 246,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
+			},
+			{
+				"id": 15,
+				"name": "Ice"
+			}
+		]
+	},
+	"898_2727": {
+		"name": "Calyrex",
+		"form": {
+			"name": "Shadow Rider",
+			"proto": "CALYREX_SHADOW_RIDER",
+			"id": 2727
+		},
+		"id": 898,
+		"stats": {
+			"baseAttack": 324,
+			"baseDefense": 194,
+			"baseStamina": 205
+		},
+		"types": [
+			{
+				"id": 14,
+				"name": "Psychic"
 			},
 			{
 				"id": 8,
