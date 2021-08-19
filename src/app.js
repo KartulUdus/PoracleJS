@@ -168,6 +168,7 @@ async function syncDiscordRole() {
 }
 
 function handleShutdown() {
+	log.info('Poracle shutdown - starting save of cache')
 	const workerSaves = []
 	for (const worker of discordWorkers) {
 		workerSaves.push(worker.saveTimeouts())
@@ -179,9 +180,10 @@ function handleShutdown() {
 	gymCache.save(true)
 	Promise.all(workerSaves)
 		.then(() => {
+			log.info('Poracle shutdown - complete')
 			process.exit()
 		}).catch((err) => {
-			log.error(`Error saving files ${err}`)
+			log.error(`Poracle shutdown - Error saving files ${err}`)
 			process.exit()
 		})
 }
