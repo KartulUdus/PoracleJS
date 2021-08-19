@@ -25,7 +25,7 @@ module.exports = (translatorFactory) => ({
 	nameRe: createCommandRegex(translatorFactory, 'name', '\\S+'),
 	userRe: createCommandRegex(translatorFactory, 'user', '-?\\d{1,20}'),
 	formRe: createCommandRegex(translatorFactory, 'form', '.+'),
-	genRe: createCommandRegex(translatorFactory, 'gen', '[1-7]+'),
+	genRe: createCommandRegex(translatorFactory, 'gen', '[1-8]+'),
 	maxlevelRe: createCommandRegex(translatorFactory, 'maxlevel', '\\d{1,2}'),
 	templateRe: createCommandRegex(translatorFactory, 'template', '.+'),
 	maxcpRe: createCommandRegex(translatorFactory, 'maxcp', '\\d{1,5}'),
