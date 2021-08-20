@@ -1,6 +1,6 @@
 {
   "name": "PoracleJS",
-  "version": "4.1.5",
+  "version": "4.1.6",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
@@ -60,6 +60,7 @@
     "ohbem": "^1.2.3",
     "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",
     "point-in-polygon": "^1.1.0",
+    "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",
     "strip-json-comments": "^3.1.1",
