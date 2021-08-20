@@ -198,7 +198,7 @@
   // stats configuration
   //
   "stats": {
-    "maxPokemonId": 810,              // current max Pokemon Id to consider in lists
+    "maxPokemonId": 898,              // current max Pokemon Id to consider in lists
     "minSampleSize": 10000,           // minimum number of Pokemon to process before broadcasting stats to the controllers
     "pokemonCountToKeep": 8,          // period for stats calculation in hours
     "rarityRefreshInterval": 5,       // interval for rarity stats broadcast to controllers in minutes
