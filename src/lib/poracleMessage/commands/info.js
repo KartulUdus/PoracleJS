@@ -138,7 +138,7 @@ exports.run = async (client, msg, args, options) => {
 				if (args.length === 1) {
 					const monsters = Object.values(client.GameData.monsters).filter((mon) => args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
 					if (monsters.length) {
-						let message = '*Available forms:*\n'
+						let message = `*${translator.translate('Available forms')}:*\n`
 						found = true
 
 						for (const form of monsters) {
@@ -148,7 +148,7 @@ exports.run = async (client, msg, args, options) => {
 						const mon = monsters[0]
 						const typeData = client.GameData.utilData.types
 						const types = mon.types.map((type) => type.name)
-						const typeString = mon.types.map((type) => `${emojiLookup.lookup(typeData[type.name].emoji)} ${type.name}`)
+						const typeString = mon.types.map((type) => `${translator.translate(emojiLookup.lookup(typeData[type.name].emoji, platform))} ${translator.translate(type.name)}`)
 						const allWeakness = pokeTypes.getTypeWeaknesses.apply(null, types)
 						const allStrength = {}
 						const superEffective = []
@@ -165,26 +165,26 @@ exports.run = async (client, msg, args, options) => {
 
 						for (const type of Object.keys(allStrength)) {
 							const capType = capitalize(type)
-							if (allStrength[type] === 2) superEffective.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
-							if (allStrength[type] > 2) ultraEffective.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
+							if (allStrength[type] === 2) superEffective.push(`${typeData[capType] ? translator.translate(emojiLookup.lookup(typeData[capType].emoji, platform)) : ''} ${translator.translate(capType)}`)
+							if (allStrength[type] > 2) ultraEffective.push(`${typeData[capType] ? translator.translate(emojiLookup.lookup(typeData[capType].emoji, platform)) : ''} ${translator.translate(capType)}`)
 						}
 
 						for (const type of Object.keys(allWeakness)) {
 							const capType = capitalize(type)
-							if (allWeakness[type] === 2) superWeakness.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
-							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? emojiLookup.lookup(typeData[capType].emoji) : ''} ${capType}`)
+							if (allWeakness[type] === 2) superWeakness.push(`${typeData[capType] ? translator.translate(emojiLookup.lookup(typeData[capType].emoji, platform)) : ''} ${translator.translate(capType)}`)
+							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? translator.translate(emojiLookup.lookup(typeData[capType].emoji, platform)) : ''} ${translator.translate(capType)}`)
 						}
 
 						message = message.concat(`\n*Type*: ${typeString}\n`)
 
-						const boosted = Object.entries(client.GameData.utilData.weatherTypeBoost).filter(([, weatherTypes]) => weatherTypes.some((t) => mon.types.map((t2) => t2.id).includes(t))).map(([weather]) => `${translator.translate(client.GameData.utilData.weather[weather].name)} ${translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weather].emoji, platform))}`)
+						const boosted = Object.entries(client.GameData.utilData.weatherTypeBoost).filter(([, weatherTypes]) => weatherTypes.some((t) => mon.types.map((t2) => t2.id).includes(t))).map(([weather]) => `${translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weather].emoji, platform))} ${translator.translate(client.GameData.utilData.weather[weather].name)}`)
 
-						if (boosted.length) message = message.concat(`*Boosted by:* ${boosted.join(', ')}\n`)
+						if (boosted.length) message = message.concat(`*${translator.translate('Boosted by')}:* ${boosted.join(', ')}\n`)
 
-						if (superWeakness.length) message = message.concat(`*Weak against*: ${superWeakness.join(', ')}\n`)
-						if (ultraWeakness.length) message = message.concat(`*Very weak against*: ${ultraWeakness.join(', ')}\n`)
-						if (superEffective.length) message = message.concat(`*Strong against*: ${superEffective.join(', ')}\n`)
-						if (ultraEffective.length) message = message.concat(`*Very strong against*: ${ultraEffective.join(', ')}\n`)
+						if (superWeakness.length) message = message.concat(`*${translator.translate('Weak against')}*: ${superWeakness.join(', ')}\n`)
+						if (ultraWeakness.length) message = message.concat(`*${translator.translate('Very weak against')}*: ${ultraWeakness.join(', ')}\n`)
+						if (superEffective.length) message = message.concat(`*${translator.translate('Strong against')}*: ${superEffective.join(', ')}\n`)
+						if (ultraEffective.length) message = message.concat(`*${translator.translate('Very strong against')}*: ${ultraEffective.join(', ')}\n`)
 
 						message = message.concat('\n💯:\n')
 						for (const level of [15, 20, 25, 40, 50]) {
@@ -200,7 +200,7 @@ exports.run = async (client, msg, args, options) => {
 								* cpMulti ** 2
 								/ 10,
 							))
-							message = message.concat(`Level ${level} CP ${cp}\n`)
+							message = message.concat(`${translator.translateFormat('Level {0} CP {1}', level, cp)}\n`)
 						}
 
 						await msg.reply(message, { style: 'markdown' })
@@ -208,7 +208,7 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				if (!found) {
-					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`', util.prefix),
+					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info bulbasaur`', util.prefix),
 						{ style: 'markdown' })
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 				}
