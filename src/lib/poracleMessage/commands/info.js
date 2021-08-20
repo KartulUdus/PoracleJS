@@ -135,8 +135,13 @@ exports.run = async (client, msg, args, options) => {
 
 			default: {
 				let found = false
-				if (args.length === 1) {
-					const monsters = Object.values(client.GameData.monsters).filter((mon) => args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
+				if (args.length >= 1) {
+					const formArgs = args.filter((arg) => arg.match(client.re.formRe))
+					const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []
+
+					const monsters = Object.values(client.GameData.monsters).filter((mon) => (args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
+						&& (!formNames.length || formNames.includes(mon.form.name.toLowerCase())))
+
 					if (monsters.length) {
 						let message = `*${translator.translate('Available forms')}:*\n`
 						found = true
