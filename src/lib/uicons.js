@@ -66,6 +66,13 @@ function resolveEggIcon(availEgg, imageType, level, hatched = false, ex = false)
 	return `0.${imageType}` // substitute
 }
 
+function resolveWeatherIcon(availWeather, imageType, weatherId) {
+	const result = `${weatherId}.${imageType}`
+	if (availWeather.has(result)) return result
+
+	return `0.${imageType}` // substitute
+}
+
 function resolveInvasionIcon(availInvasion, imageType, gruntType) {
 	const result = `${gruntType}.${imageType}`
 	if (availInvasion.has(result)) return result
@@ -189,10 +196,10 @@ class Uicons {
 		return null
 	}
 
-	async rewardMegaEnergyIcon(itemId) {
+	async rewardMegaEnergyIcon(pokemonId, amount) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		if (currentSet) return `${this.url}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, this.imageType, itemId)}`
-		if (this.fallback) return `${this.url}/rewards/reward_mega_energy_${itemId}.${this.imageType}`
+		if (currentSet) return `${this.url}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, this.imageType, pokemonId, amount)}`
+		if (this.fallback) return `${this.url}/rewards/reward_mega_energy_${pokemonId}.${this.imageType}`
 		return null
 	}
 
@@ -211,6 +218,11 @@ class Uicons {
 	async gymIcon(teamId, trainerCount = 0, inBattle = false, ex = false) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
 		return currentSet ? `${this.url}/gym/${resolveGymIcon(currentSet.gym, this.imageType, teamId, trainerCount, inBattle, ex)}` : null
+	}
+
+	async weatherIcon(weatherId) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/weather/${resolveWeatherIcon(currentSet.weather, this.imageType, weatherId)}` : null
 	}
 
 	async pokestopIcon(lureId = 0, invasionActive = false, questActive = false) {
