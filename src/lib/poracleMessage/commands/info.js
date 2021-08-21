@@ -147,7 +147,7 @@ exports.run = async (client, msg, args, options) => {
 						found = true
 
 						for (const form of monsters) {
-							message = message.concat(`${form.name} ${form.form.name ? `form:${form.form.name.replace(/ /g, '\\_')}` : ''}\n`)
+							message = message.concat(`${translator.translate(form.name)} ${form.form.name ? `${translator.translate('form')}:${translator.translate(form.form.name).replace(/ /g, '\\_')}` : ''}\n`)
 						}
 
 						const mon = monsters[0]
@@ -180,7 +180,7 @@ exports.run = async (client, msg, args, options) => {
 							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? translator.translate(emojiLookup.lookup(typeData[capType].emoji, platform)) : ''} ${translator.translate(capType)}`)
 						}
 
-						message = message.concat(`\n*Type*: ${typeString}\n`)
+						message = message.concat(`\n*${translator.translate('Type')}*: ${typeString}\n`)
 
 						const boosted = Object.entries(client.GameData.utilData.weatherTypeBoost).filter(([, weatherTypes]) => weatherTypes.some((t) => mon.types.map((t2) => t2.id).includes(t))).map(([weather]) => `${translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weather].emoji, platform))} ${translator.translate(client.GameData.utilData.weather[weather].name)}`)
 
