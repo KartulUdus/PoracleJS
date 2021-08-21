@@ -1,17 +1,6 @@
-const stripJsonComments = require('strip-json-comments')
-const fs = require('fs')
-const path = require('path')
 const PoracleDiscordMessage = require('../../poracleDiscordMessage')
 const PoracleDiscordState = require('../../poracleDiscordState')
-
-function format(str, args) {
-	let newStr = str
-	let i = args.length
-	while (i--) {
-		newStr = newStr.replace(new RegExp(`\\{${i}\\}`, 'gm'), args[i])
-	}
-	return newStr
-}
+const Uicons = require('../../../uicons')
 
 exports.run = async (client, msg, [args]) => {
 	try {
@@ -50,18 +39,86 @@ exports.run = async (client, msg, [args]) => {
 		// console.log(res)
 		// await msg.reply(`Created new emoji ${res.name} ${res.id}`)
 
+		const imgUicons = new Uicons(client.config.general.imgUrl, 'png', client.logs.log)
+
+		if (!await imgUicons.isUiconsRepository()) {
+			return await msg.reply('Currently configured imgUrl is not a uicons repository')
+		}
+
+		// Load emojis from discord
 		const emojis = {}
-		let s = '```\n'
 		for (const emoji of guild.emojis.cache.values()) {
-			s += `fred - "<:${emoji.name}:${emoji.id}>"\n`
 			emojis[emoji.name] = emoji
 		}
-		s += '\n```'
+
+		// Identify and update poracle emojis
+		const poracleEmoji = {}
+
+		const setEmoji = async (name, url) => {
+			const discordEmojiName = `poracle-${name}`.replace(/-/g, '_')
+
+			if (url && !url.endsWith('/0.png')) {
+				if (emojis[discordEmojiName]) {
+					console.log(`emoji url is ${emojis[discordEmojiName].url}`)
+					if (emojis[discordEmojiName].url !== url) {
+						await emojis[discordEmojiName].delete()
+						emojis[discordEmojiName] = await guild.emojis.create(url, discordEmojiName)
+					}
+				} else {
+					console.log(`${url} ${discordEmojiName}`)
+
+					emojis[discordEmojiName] = await guild.emojis.create(url, discordEmojiName)
+				}
+			}
+
+			if (emojis[discordEmojiName]) {
+				poracleEmoji[name] = { name: discordEmojiName, id: emojis[discordEmojiName].id }
+			}
+		}
+
+		// Types
+
+		for (const type of Object.values(client.GameData.utilData.types)) {
+			if (type.emoji) {
+				const url = await imgUicons.typeIcon(type.id)
+				await setEmoji(url, type.emoji)
+			}
+		}
+
+		// Weather
+		// for (const [id, details] of Object.entries(client.GameData.utilData.weather)) {
+		// 	if (details.emoji) {
+		// 		const url = await imgUicons.weatherIcon(id)
+		// 		await setEmoji(url, details.emoji)
+		// 	}
+		// }
+
+		// Lure
+		for (const [id, details] of Object.entries(client.GameData.utilData.lures)) {
+			if (details.emoji) {
+				const url = await imgUicons.rewardItemIcon(id)
+				await setEmoji(url, details.emoji)
+			}
+		}
+
+		// Team
+		for (const [id, details] of Object.entries(client.GameData.utilData.teams)) {
+			if (details.emoji) {
+				const url = await imgUicons.teamIcon(id)
+				await setEmoji(url, details.emoji)
+			}
+		}
+
+		let s = '```\n{\n  "discord": {'
+
+		let first = true
+		for (const [poracleName, discordDetails] of Object.entries(poracleEmoji)) {
+			if (first) { first = false } else { s += ',' }
+			s += `"\n    ${poracleName}":"<:${discordDetails.name}:${discordDetails.id}>"`
+		}
+		s += '\n  }\n}\n```'
 
 		await msg.reply(s)
-
-		// can't change url - logic should be to check the URL and change only if URL is different
-		// await emojis.rip.edit({ url: 'https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/Pokemon%20-%20256x256/Addressable%20Assets/pm1.cJAN_2020_NOEVOLVE.icon.png' })
 	} catch (err) {
 		await msg.reply('Failed to run emoji upload, check logs')
 		client.logs.log.error(`Poracle-emoji-upload command "${msg.content}" unhappy:`, err)
