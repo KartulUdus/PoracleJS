@@ -1,3 +1,5 @@
+const path = require('path')
+const fs = require('fs')
 const Uicons = require('../../../uicons')
 
 exports.run = async (client, msg, [args]) => {
@@ -105,16 +107,19 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 
-		let s = '```\n{\n  "discord": {'
+		let s = '{\n  "discord": {'
 
 		let first = true
 		for (const [poracleName, discordDetails] of Object.entries(poracleEmoji)) {
 			if (first) { first = false } else { s += ',' }
 			s += `\n    "${poracleName}":"<:${discordDetails.name}:${discordDetails.id}>"`
 		}
-		s += '\n  }\n}\n```'
+		s += '\n  }\n}\n'
 
-		await msg.reply(s)
+		const filepath = path.join(__dirname, './emoji.json')
+		fs.writeFileSync(filepath, s)
+		await msg.reply('Here\'s a nice new emoji.json for you!', { files: [filepath] })
+		fs.unlinkSync(filepath)
 	} catch (err) {
 		await msg.reply('Failed to run emoji upload, check logs')
 		client.logs.log.error(`Poracle-emoji command "${msg.content}" unhappy:`, err)
