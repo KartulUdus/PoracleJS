@@ -111,7 +111,7 @@ exports.run = async (client, msg, args, options) => {
 				// Build forecast information
 
 				let currentTimestamp = currentHourTimestamp
-				let forecastString = `**${translator.translate('Forecast:')}**\n`
+				let forecastString = `**${translator.translate('Forecast')}:**\n`
 				let availableForecast = false
 
 				// eslint-disable-next-line no-constant-condition
