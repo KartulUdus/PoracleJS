@@ -240,7 +240,7 @@ exports.run = async (client, msg, args, options) => {
 			const leagueHighest = +defaultTo(parameterValues[`${league}high`], 1)
 			const leagueCP = +defaultTo(parameterValues[`${league}cp`], 0)
 
-			if (leagueLowest < 4096) {
+			if (leagueLowest < 4096 || leagueCP > 0) {
 				pvp[rank] = {
 					minCp: Math.max(leagueCP, leagueMinCp[league]),
 					worst: Math.min(leagueLowest, pvpFilterMaxRank),
