@@ -126,7 +126,7 @@ class Controller extends EventEmitter {
 			return null
 		}
 
-		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
+		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.id}`)
 
 		let template
 		if (findDts.templateFile) {
