@@ -22,11 +22,18 @@
       "environment": "production",              // leave as 'production'
       "alertMinimumTime" : 120,                 // time inside which alerts will not be generated (120s - 2mins before expiration no alert)
       "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
-    // imgUrl - base url for poracle creation of {{imgUrl}} reference
-      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/",
-    // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers
-      "stickerUrl": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/telegram/",
-      "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
+    // imgUrl - base url for poracle creation of {{imgUrl}} reference (uicons repository)
+      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS",
+    // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers (uicons repository)
+      "stickerUrl": "https://raw.githubusercontent.com/bbdoc/tgUICONS/main/Shuffle",
+    // images/stickers - override uicons repository for each alert type
+    //  "controllerType": "repositoryUrl"
+    //  controllerType one of monster, gym, nest, invasion, lure, quest, raid, weather
+      "images": {
+      },
+      "stickers": {
+      },
+        "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
     // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
@@ -197,7 +204,7 @@
   // stats configuration
   //
   "stats": {
-    "maxPokemonId": 810,              // current max Pokemon Id to consider in lists
+    "maxPokemonId": 898,              // current max Pokemon Id to consider in lists
     "minSampleSize": 10000,           // minimum number of Pokemon to process before broadcasting stats to the controllers
     "pokemonCountToKeep": 8,          // period for stats calculation in hours
     "rarityRefreshInterval": 5,       // interval for rarity stats broadcast to controllers in minutes

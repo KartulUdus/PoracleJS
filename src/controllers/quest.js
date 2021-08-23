@@ -9,6 +9,7 @@ const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
 const { GameData: { questTypes } } = require('../lib/GameData')
+
 // const itemList = require('../util/quests/items')
 const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
 const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)', 'Arlo', 'Cliff', 'Sierra', 'Giovanni']
@@ -164,29 +165,6 @@ class Quest extends Controller {
 
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
-			data.imgUrl = data.rewardData.monsters.length > 0
-				? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
-				: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
-			data.stickerUrl = data.rewardData.monsters.length > 0
-				? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.webp`
-				: ''
-
-			if (data.rewardData.items.length > 0) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[0].id}_1.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[0].id}_1.webp`
-			}
-			if (data.dustAmount) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_stardust.webp`
-			}
-			if (data.rewardData.energyMonsters.length > 0) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.webp`
-			}
-			if (data.rewardData.candy.length > 0) {
-				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.webp`
-			}
 
 			const whoCares = await this.questWhoCares(data)
 			if (whoCares.length) {
@@ -208,6 +186,47 @@ class Quest extends Controller {
 				})
 
 				return []
+			}
+
+			data.imgUrl = 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
+			data.stickerUrl = ''
+
+			if (data.rewardData.monsters.length > 0) {
+				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				// data.imgUrl = data.rewardData.monsters.length > 0
+				// 	? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
+				// 	: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
+				// data.stickerUrl = data.rewardData.monsters.length > 0
+				// 	? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.webp`
+				// 	: ''
+			}
+
+			if (data.rewardData.items.length > 0) {
+				data.imgUrl = await this.imgUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
+				data.stickerUrl = await this.stickerUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
+
+				// data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[0].id}_1.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[0].id}_1.webp`
+			}
+			if (data.dustAmount) {
+				data.imgUrl = await this.imgUicons.rewardStardustIcon(data.rewardData.dustAmount)
+				data.stickerUrl = await this.stickerUicons.rewardStardustIcon(data.rewardData.dustAmount)
+				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_stardust.webp`
+			}
+			if (data.rewardData.energyMonsters.length > 0) {
+				data.imgUrl = await this.imgUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				data.stickerUrl = await this.stickerUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.webp`
+			}
+			if (data.rewardData.candy.length > 0) {
+				data.imgUrl = await this.imgUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+				data.stickerUrl = await this.stickerUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+
+				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.webp`
 			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
@@ -362,7 +381,7 @@ class Quest extends Controller {
 				if (mustache) {
 					let mustacheResult
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 					}

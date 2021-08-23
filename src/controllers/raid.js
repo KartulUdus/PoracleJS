@@ -187,7 +187,7 @@ class Raid extends Controller {
 			data.teamId = data.team_id ? data.team_id : 0
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
-			data.gymUrl = data.gym_url ? data.gym_url : ''
+			data.gymUrl = data.gym_url || data.url || ''
 			data.disappearTime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
@@ -223,9 +223,6 @@ class Raid extends Controller {
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.formname = data.formNameEng // deprecated
 				data.evolutionname = data.evolutionNameEng // deprecated
-				//				data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
-				data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
-				data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 				data.quickMoveId = data.move_1 ? data.move_1 : ''
 				data.chargeMoveId = data.move_2 ? data.move_2 : ''
 				data.quickMoveNameEng = this.GameData.moves[data.move_1] ? this.GameData.moves[data.move_1].name : ''
@@ -259,6 +256,12 @@ class Raid extends Controller {
 
 					return []
 				}
+
+				data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, false)
+				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, false)
+				// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
+				// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
+
 				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 				const jobs = []
 
@@ -338,7 +341,7 @@ class Raid extends Controller {
 						tths: data.tth.seconds,
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
-						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(data.genderDataEng.emoji) },
+						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)) },
 						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					}
 
@@ -348,7 +351,7 @@ class Raid extends Controller {
 					if (mustache) {
 						let mustacheResult
 						try {
-							mustacheResult = mustache(view, { data: { language } })
+							mustacheResult = mustache(view, { data: { language, platform } })
 						} catch (err) {
 							this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 						}
@@ -393,8 +396,6 @@ class Raid extends Controller {
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
 			data.hatchTime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.hatchtime = data.hatchTime // deprecated
-			data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
-			data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				this.log.debug(`${logReference}: Egg at ${data.gymName} already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -423,6 +424,12 @@ class Raid extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.eggIcon(data.level)
+			data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
+			// data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+			// data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
+
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
@@ -461,7 +468,7 @@ class Raid extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
 				const templateType = 'egg'
@@ -470,7 +477,7 @@ class Raid extends Controller {
 				if (mustache) {
 					let mustacheResult
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 					}

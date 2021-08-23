@@ -334,6 +334,8 @@ class Weather extends Controller {
 
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
+			data.imgUrl = await this.imgUicons.weatherIcon(data.condition)
+			data.stickerUrl = await this.stickerUicons.weatherIcon(data.condition)
 
 			const jobs = []
 			const now = moment.now()
@@ -419,7 +421,7 @@ class Weather extends Controller {
 				if (mustache) {
 					let mustacheResult
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 					}

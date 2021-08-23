@@ -2,7 +2,7 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 
-class Pokestop extends Controller {
+class Invasion extends Controller {
 	async invasionWhoCares(obj) {
 		const data = obj
 		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
@@ -103,7 +103,6 @@ class Pokestop extends Controller {
 			data.disappearTime = moment(incidentExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -165,6 +164,9 @@ class Pokestop extends Controller {
 
 				return []
 			}
+
+			data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId)
+			data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
@@ -295,7 +297,7 @@ class Pokestop extends Controller {
 				if (mustache) {
 					let mustacheResult
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 					}
@@ -342,4 +344,4 @@ class Pokestop extends Controller {
 	}
 }
 
-module.exports = Pokestop
+module.exports = Invasion

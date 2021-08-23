@@ -188,13 +188,13 @@ exports.run = async (client, msg, args, options) => {
 		})
 
 		const pvp = {}
-		if (greatLeague < 4096) {
+		if (greatLeague < 4096 || greatLeagueCP > 0) {
 			Object.assign(pvp, { 1500: { minCp: Math.max(greatLeagueCP, pvpFilterGreatMinCP), worst: Math.min(greatLeague, pvpFilterMaxRank), best: greatLeagueHighest } })
 		}
-		if (ultraLeague < 4096) {
+		if (ultraLeague < 4096 || ultraLeagueCP > 0) {
 			Object.assign(pvp, { 2500: { minCp: Math.max(ultraLeagueCP, pvpFilterUltraMinCP), worst: Math.min(ultraLeague, pvpFilterMaxRank), best: ultraLeagueHighest } })
 		}
-		if (littleLeague < 4096) {
+		if (littleLeague < 4096 || littleLeagueCP > 0) {
 			Object.assign(pvp, { 500: { minCp: Math.max(littleLeagueCP, pvpFilterLittleMinCP), worst: Math.min(littleLeague, pvpFilterMaxRank), best: littleLeagueHighest } })
 		}
 

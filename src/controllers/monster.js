@@ -121,7 +121,7 @@ class Monster extends Controller {
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
 					`)
 		}
-		this.log.silly(`${data.encounter_id}: Query ${query}`)
+		// this.log.silly(`${data.encounter_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 
@@ -191,8 +191,8 @@ class Monster extends Controller {
 			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+        || !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+        || !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			if (data.pokestop_name) data.pokestop_name = this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.pokestop_name
@@ -245,8 +245,6 @@ class Monster extends Controller {
 			data.mapurl = data.googleMapUrl // deprecated
 			data.ivcolor = data.ivColor // deprecated
 			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
-			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.types = monster.types.map((type) => type.id)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
 			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1
@@ -400,6 +398,11 @@ class Monster extends Controller {
 				return []
 			}
 
+			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, false)
+			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, false)
+			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
+			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
+
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
@@ -548,7 +551,7 @@ class Monster extends Controller {
 					const displayList = []
 					for (const rank of leagueData) {
 						if (rank.rank <= maxRank
-							&& rank.cp >= minCp) {
+              && rank.cp >= minCp) {
 							const displayRank = {}
 
 							displayRank.rank = +rank.rank
@@ -634,7 +637,7 @@ class Monster extends Controller {
 				if (mustache) {
 					let mustacheResult
 					try {
-						mustacheResult = mustache(view, { data: { language } })
+						mustacheResult = mustache(view, { data: { language, platform } })
 					} catch (err) {
 						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
 					}

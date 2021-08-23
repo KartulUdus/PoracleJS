@@ -1,6 +1,6 @@
 {
   "name": "PoracleJS",
-  "version": "4.1.1",
+  "version": "4.1.6",
   "description": "Webhook processing and personalized discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
@@ -59,9 +59,10 @@
     "node-geocoder": "^3.27.0",
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
-    "ohbem": "^1.2.1",
-    "pogo-data-generator": "^1.0.9",
+    "ohbem": "^1.2.3",
+    "pogo-data-generator": "^1.1.7",
     "point-in-polygon": "^1.1.0",
+    "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",
     "strip-json-comments": "^3.1.1",
