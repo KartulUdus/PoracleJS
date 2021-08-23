@@ -64,11 +64,8 @@
     //        },
       "availableLanguages": {
       },
-      "defaultTemplateName": 1,               // default template name/number to use when users add new trackings
-    // persistDuplicateCache - whether to store the webhook duplicate cache on exit. If you have a busy system
-    //   this could be very large and slow down shutdown (many gigabytes) and startup. This is stored in the .cache
-    //   directory
-      "persistDuplicateCache": false
+     // default template name/number to use when users add new trackings
+     "defaultTemplateName": 1               
   },
   //
   // Configuration for the user reconciliation/role check function
