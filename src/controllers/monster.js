@@ -613,6 +613,8 @@ class Monster extends Controller {
 				data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
 				data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
 
+				data.distance = cares.longitude ? this.getDistance({ lat: cares.latitude, lon: cares.longitude }, { lat: data.latitude, lon: data.longitude }) : ''
+
 				const view = {
 					...geoResult,
 					...data,
