@@ -96,6 +96,9 @@ class Lure extends Controller {
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			data.scannerUrl = this.config.general.scannerUrl
+			data.scannerIconUrl = this.config.general.scannerIconUrl
+			data.discordInviteUrl = this.config.general.discordInviteUrl
 			data.name = this.escapeJsonString(data.name)
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
