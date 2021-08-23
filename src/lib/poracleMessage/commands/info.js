@@ -1,15 +1,8 @@
 const moment = require('moment-timezone')
 const geoTz = require('geo-tz')
-const pokeTypes = require('poke-types')
 const EmojiLookup = require('../../emojiLookup')
 const helpCommand = require('./help')
 const weatherTileGenerator = require('../../weatherTileGenerator')
-
-function capitalize(s) {
-	if (typeof s !== 'string') return ''
-	s = s.replace(/_/gi, ' ').toLowerCase()
-	return s.charAt(0).toUpperCase() + s.slice(1)
-}
 
 exports.run = async (client, msg, args, options) => {
 	try {
