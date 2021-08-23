@@ -245,7 +245,7 @@ class Monster extends Controller {
 			data.mapurl = data.googleMapUrl // deprecated
 			data.ivcolor = data.ivColor // deprecated
 			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
-			data.types = monster.types.map((type) => type.id)
+			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
 			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1
 			data.rarityNameEng = this.GameData.utilData.rarity[data.rarityGroup] ? this.GameData.utilData.rarity[data.rarityGroup] : ''
