@@ -68,9 +68,7 @@
     // persistDuplicateCache - whether to store the webhook duplicate cache on exit. If you have a busy system
     //   this could be very large and slow down shutdown (many gigabytes) and startup. This is stored in the .cache
     //   directory
-      "persistDuplicateCache": false,
-      "fetchGameMasterOnStartup": true,       // fetches a fresh game master on startup, must be called manually with 'npm generate' if set to false
-      "fetchSafeGameMaster": true             // whether to fetch known safe gamemaster data, this may not have the latest mined updates
+      "persistDuplicateCache": false
   },
   //
   // Configuration for the user reconciliation/role check function
