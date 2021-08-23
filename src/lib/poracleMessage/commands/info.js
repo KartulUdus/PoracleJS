@@ -111,7 +111,7 @@ exports.run = async (client, msg, args, options) => {
 				// Build forecast information
 
 				let currentTimestamp = currentHourTimestamp
-				let forecastString = `**${translator.translate('Forecast:')}**\n`
+				let forecastString = `**${translator.translate('Forecast')}:**\n`
 				let availableForecast = false
 
 				// eslint-disable-next-line no-constant-condition
@@ -135,14 +135,19 @@ exports.run = async (client, msg, args, options) => {
 
 			default: {
 				let found = false
-				if (args.length === 1) {
-					const monsters = Object.values(client.GameData.monsters).filter((mon) => args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
+				if (args.length >= 1) {
+					const formArgs = args.filter((arg) => arg.match(client.re.formRe))
+					const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []
+
+					const monsters = Object.values(client.GameData.monsters).filter((mon) => (args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
+						&& (!formNames.length || formNames.includes(mon.form.name.toLowerCase())))
+
 					if (monsters.length) {
 						let message = `*${translator.translate('Available forms')}:*\n`
 						found = true
 
 						for (const form of monsters) {
-							message = message.concat(`${form.name} ${form.form.name ? `form:${form.form.name.replace(/ /g, '\\_')}` : ''}\n`)
+							message = message.concat(`${translator.translate(form.name)} ${form.form.name ? `${translator.translate('form')}:${translator.translate(form.form.name).replace(/ /g, '\\_')}` : ''}\n`)
 						}
 
 						const mon = monsters[0]
@@ -175,7 +180,7 @@ exports.run = async (client, msg, args, options) => {
 							if (allWeakness[type] > 2) ultraWeakness.push(`${typeData[capType] ? translator.translate(emojiLookup.lookup(typeData[capType].emoji, platform)) : ''} ${translator.translate(capType)}`)
 						}
 
-						message = message.concat(`\n*Type*: ${typeString}\n`)
+						message = message.concat(`\n*${translator.translate('Type')}*: ${typeString}\n`)
 
 						const boosted = Object.entries(client.GameData.utilData.weatherTypeBoost).filter(([, weatherTypes]) => weatherTypes.some((t) => mon.types.map((t2) => t2.id).includes(t))).map(([weather]) => `${translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weather].emoji, platform))} ${translator.translate(client.GameData.utilData.weather[weather].name)}`)
 
