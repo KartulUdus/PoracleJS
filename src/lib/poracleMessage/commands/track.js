@@ -120,6 +120,7 @@ exports.run = async (client, msg, args, options) => {
 			female: '^female$',
 			genderless: '^genderless$',
 			clean: '^clean$',
+			ping: '^<@.*',				// will not be used but stops it being listed as invalid parameter
 		}
 
 		if (!disableEverythingTracking || msg.isFromAdmin) parameterDefinition.everything = '^everything$'
@@ -184,7 +185,7 @@ exports.run = async (client, msg, args, options) => {
 				else if (typeArray.includes(element)) typeList.push(element)
 				else {
 					await msg.react('🙅')
-					return msg.reply(translator.translateFormat('Invalid parameter {0}', element))
+					return msg.reply(translator.translateFormat('I do not understand this option: {0}', element))
 				}
 			}
 		}
