@@ -32,8 +32,10 @@ src/lib/db/poracle.sqlite
 backups/*.json
 .weather*
 
-monsters.json
-moves.json
-questTypes.json
-grunts.json
-items.json
+/src/util/monsters.json
+/src/util/moves.json
+/src/util/questTypes.json
+/src/util/grunts.json
+/src/util/items.json
+/src/util/typeInfo.json
+/src/util/locale/*.json

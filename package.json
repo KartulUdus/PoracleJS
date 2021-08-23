@@ -6,11 +6,11 @@
   "scripts": {
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
-    "start": "npm run autoGen && node .",
+    "start": "npm run generate && node .",
+    "dev": "node .",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",
-    "autoGen": "node -e 'require(\"./src/util/generateData\").update(false)'",
-    "generate": "node -e 'require(\"./src/util/generateData\").update(true)'"
+    "generate": "node -e 'require(\"./src/util/generateData\").update()'"
   },
   "repository": {
     "type": "git",
@@ -62,7 +62,6 @@
     "ohbem": "^1.2.3",
     "pogo-data-generator": "^1.1.7",
     "point-in-polygon": "^1.1.0",
-    "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",
     "strip-json-comments": "^3.1.1",

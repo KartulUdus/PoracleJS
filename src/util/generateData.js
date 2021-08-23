@@ -1,110 +1,59 @@
 const fs = require('fs')
 const { generate } = require('pogo-data-generator')
-const config = require('config')
+const Fetch = require('node-fetch')
 
 const { log } = require('../lib/logger')
 
-module.exports.update = async function update(manual) {
-	if (config.general.fetchGameMasterOnStartup || manual) {
-		log.info('Generating latest GM...')
-		try {
-			const template = {
-				pokemon: {
-					enabled: true,
-					options: {
-						topLevelName: 'monsters',
-						keyJoiner: '_',
-						keys: {
-							main: 'pokedexId formId',
-						},
-						customFields: {
-							pokedexId: 'id',
-							formId: 'id',
-							pokemonName: 'name',
-							formName: 'name',
-							attack: 'baseAttack',
-							defense: 'baseDefense',
-							stamina: 'baseStamina',
-							forms: 'form',
-							typeName: 'name',
-							typeId: 'id',
-						},
-						customChildObj: {
-							attack: 'stats',
-							defense: 'stats',
-							stamina: 'stats',
-						},
-						skipNormalIfUnset: true,
-						processFormsSeparately: true,
-					},
-					template: {
-						pokemonName: true,
-						forms: {
-							formName: true,
-							formId: true,
-						},
-						pokedexId: true,
-						types: {
-							typeId: true,
-							typeName: true,
-						},
-						attack: true,
-						defense: true,
-						stamina: true,
-					},
-				},
-				items: {
-					enabled: true,
-					options: {
-						keys: {
-							main: 'itemId',
-						},
-						customFields: {
-							itemName: 'name',
-						},
-					},
-					template: {
-						itemName: true,
-					},
-				},
-				moves: {
-					enabled: true,
-					options: {
-						keys: {
-							main: 'moveId',
-						},
-						customFields: {
-							moveName: 'name',
-						},
-					},
-					template: {
-						moveName: true,
-					},
-				},
-				questTypes: {
-					enabled: true,
-					options: {
-						keys: {
-							main: 'id',
-						},
-						customFields: {
-							formatted: 'text',
-						},
-					},
-					template: {
-						formatted: true,
-					},
+const fetch = async (url) => new Promise((resolve) => {
+	Fetch(url)
+		.then((res) => res.json())
+		.then((json) => resolve(json))
+})
+
+module.exports.update = async function update() {
+	try {
+		log.info('Fetching latest Game Master...')
+		const gameMaster = await fetch('https://raw.githubusercontent.com/WatWowMap/Masterfile-Generator/master/master-latest-poracle.json')
+
+		// Write monsters/moves/items/questTypes
+		log.info('Creating new Game Master...')
+		Object.keys(gameMaster).forEach((category) => {
+			fs.writeFile(
+				`./src/util/${category}.json`,
+				JSON.stringify(gameMaster[category], null, 2),
+				'utf8',
+				() => { },
+			)
+		})
+	} catch (e) {
+		log.info('Could not fetch latest GM, using existing...')
+	}
+
+	try {
+		log.info('Fetching latest invasions and locales...')
+		const { translations, invasions } = await generate({
+			template: {
+				globalOptions: {
+					includeProtos: true,
 				},
 				invasions: {
 					enabled: true,
 					options: {
-						topLevelName: 'grunts',
+						topLevelName: 'invasions',
 						keys: {
 							main: 'id',
 							encounters: 'position',
 						},
+						includeBalloons: true,
+						customFields: {
+							first: 'first',
+							second: 'second',
+							third: 'third',
+						},
+						placeholderData: true,
 					},
 					template: {
+						id: false,
 						type: true,
 						gender: true,
 						grunt: true,
@@ -112,22 +61,77 @@ module.exports.update = async function update(manual) {
 						encounters: 'id',
 					},
 				},
-			}
+				translations: {
+					enabled: true,
+					options: {
+						useLanguageAsRef: 'en',
+						manualTranslations: true,
+						prefix: {},
+					},
+					locales: {
+						de: true,
+						en: true,
+						es: true,
+						fr: true,
+						it: true,
+						ja: true,
+						ko: true,
+						'pt-br': true,
+						ru: true,
+						th: true,
+						'zh-tw': true,
+					},
+					template: {
+						pokemon: {
+							names: true,
+							forms: true,
+							descriptions: true,
+						},
+						moves: true,
+						items: true,
+						types: true,
+						characters: true,
+						weather: true,
+						misc: true,
+						pokemonCategories: true,
+						quests: true,
+					},
+				},
+			},
+		})
 
-			const data = await generate({ template, safe: config.general.fetchSafeGameMaster })
-
-			Object.keys(data).forEach((category) => {
-				fs.writeFile(
-					`./src/util/${category}.json`,
-					JSON.stringify(data[category], null, 2),
-					'utf8',
-					() => { },
-				)
+		// Write locales
+		log.info('Creating new locales...')
+		Object.keys(translations).forEach((locale) => {
+			Object.keys(translations[locale]).forEach((category) => {
+				let name
+				switch (category) {
+					case 'descriptions': name = 'pokemonDescriptions'; break
+					case 'pokemonCategories': name = 'pokemonCategories'; break
+					case 'moves': name = 'moveNames'; break
+					case 'pokemon': name = 'pokemonNames'; break
+					default: break
+				}
+				if (name) {
+					fs.writeFile(
+						`./src/util/locale/${name}_${locale}.json`,
+						JSON.stringify(translations[locale][category], null, 2),
+						'utf8',
+						() => { },
+					)
+				}
 			})
-		} catch (e) {
-			log.info('Could not fetch latest GM, using existing...')
-		}
-	} else {
-		log.info('Skipping GM generation, make sure you have ran "npm run generate" recently to keep up with the latest updates!')
+		})
+
+		// Write grunts
+		log.info('Creating new grunts...')
+		fs.writeFile(
+			'./src/util/grunts.json',
+			JSON.stringify(invasions, null, 2),
+			'utf8',
+			() => { },
+		)
+	} catch (e) {
+		log.info('Could not generate new locales, using existing...')
 	}
 }
