@@ -3,7 +3,7 @@ const fsp = require('fs').promises
 const NodeCache = require('node-cache')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
-const noop = () => {}
+const noop = () => { }
 
 class Worker {
 	constructor(token, id, config, logs, rehydrateTimeouts = false) {
@@ -63,7 +63,10 @@ class Worker {
 		try {
 			await this.setListeners()
 			await this.client.login(this.token)
-			await this.client.user.setStatus('invisible')
+			if (this.token !== this.config.discord.token[0]) {
+				await this.client.user.setStatus(this.config.discord.workerStatus)
+				await this.client.user.setActivity(this.config.discord.workerActivity)
+			}
 		} catch (err) {
 			this.logs.log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)
@@ -138,7 +141,7 @@ class Worker {
 
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => { })
 				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true
