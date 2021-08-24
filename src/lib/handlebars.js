@@ -188,11 +188,5 @@ module.exports = () => {
 		return f.map[value]
 	})
 
-	handlebars.registerHelper('pokemonLevelCap', (value) => {
-		let result = value.level
-		if (value.cap !== undefined && value.capped !== true) result += `/${value.cap}`
-		return result
-	})
-
 	return handlebars
 }
