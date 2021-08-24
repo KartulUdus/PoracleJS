@@ -6,7 +6,7 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 const noop = () => { }
 
 class Worker {
-	constructor(token, id, config, logs, rehydrateTimeouts = false, statusActivity = { status: 'available', activity: 'PoracleJS' }) {
+	constructor(token, id, config, logs, rehydrateTimeouts = false, statusActivity) {
 		this.id = id
 		this.token = token
 		this.config = config
