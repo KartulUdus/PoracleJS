@@ -312,6 +312,7 @@ class Monster extends Controller {
 								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
+								cap: stats.cap,
 							}
 							data.pvpEvolutionData[stats.pokemon] = {
 								...data.pvpEvolutionData[stats.pokemon],
@@ -328,6 +329,13 @@ class Monster extends Controller {
 				return {
 					rank: bestRank,
 					cp: bestCP,
+				}
+			}
+
+			if (data.pvp) {
+				// For Chuck parsers
+				for (const league of Object.keys(data.pvp)) {
+					data[`pvp_rankings_${league}_league`] = data.pvp[league]
 				}
 			}
 
