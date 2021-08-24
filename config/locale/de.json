@@ -478,6 +478,7 @@
     "Therian":"Tiergeistform",
     "These users are registered with Poracle:":"Folgende Nutzer sind bei Poracle registriert:",
     "This would result in too many alerts. You need to provide additional filters to limit the number of valid candidates.": "Dies würde zu zu vielen Meldungen führen. Du musst zusätzliche Filter wählen, um die Anzahl gültiger Kandidaten zu begrenzen.",
+    "To add a channel, provide both a name and an channel id":"Um einen Kanal hinzuzufügen, geben Sie sowohl einen Namen als auch eine Channel-ID an, `/channel add -100XXXXXXXXXX nameXXX`",
     "track":"beobachte",
     "tracked":"status",
     "Tracking list is long, but Hastebin is also down. ☹️ \nTracking list made into a file:":"Beobachtungsliste ist zu umfangreich für direkte Ausgabe. Sie wird stattdessen als Datei zur Verfügung gestellt:",
