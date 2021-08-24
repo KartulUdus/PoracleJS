@@ -6,7 +6,7 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 const noop = () => { }
 
 class Worker {
-	constructor(token, id, config, logs, rehydrateTimeouts = false) {
+	constructor(token, id, config, logs, rehydrateTimeouts = false, statusActivity = { status: 'available', activity: 'PoracleJS' }) {
 		this.id = id
 		this.token = token
 		this.config = config
@@ -19,6 +19,8 @@ class Worker {
 		this.discordMessageTimeouts = new NodeCache()
 		this.discordQueue = []
 		this.queueProcessor = new FairPromiseQueue(this.discordQueue, this.config.tuning.concurrentDiscordDestinationsPerBot, ((entry) => entry.target))
+		this.status = statusActivity.status
+		this.activity = statusActivity.activity
 		this.bounceWorker()
 	}
 
@@ -63,10 +65,8 @@ class Worker {
 		try {
 			await this.setListeners()
 			await this.client.login(this.token)
-			if (this.token !== this.config.discord.token[0]) {
-				await this.client.user.setStatus(this.config.discord.workerStatus)
-				await this.client.user.setActivity(this.config.discord.workerActivity)
-			}
+			await this.client.user.setStatus(this.status)
+			await this.client.user.setActivity(this.activity)
 		} catch (err) {
 			this.logs.log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)

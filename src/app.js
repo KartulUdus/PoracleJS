@@ -96,7 +96,7 @@ let telegramChannel
 if (config.discord.enabled) {
 	for (let key = 0; key < config.discord.token.length; key++) {
 		if (config.discord.token[key]) {
-			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
+			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, config.discord.botStatusActivity[key]))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])

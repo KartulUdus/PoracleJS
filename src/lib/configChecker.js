@@ -65,6 +65,7 @@ function checkConfig(config) {
 
 	if (typeof config.discord.limitSec !== 'undefined') logs.log.warn('Config Check: legacy option “discord.limitSec” given and ignored, replace with “alertLimits.timingPeriod”')
 	if (typeof config.discord.limitAmount !== 'undefined') logs.log.warn('Config Check: legacy option “discord.limitAmount” given and ignored, replace with “alertLimits.dmLimit/channelLimit”')
+	if (typeof config.discord.activity !== 'undefined') logs.log.warn('Config Check: legacy option “discord.activity” given and ignored, replace with “botActivityStatus array, see default.json for an example”')
 
 	// check whether tracking.everythingFlagPermissions has a valid value
 	if (!['allow-any', 'allow-and-always-individually', 'allow-and-ignore-individually', 'deny'].includes(config.tracking.everythingFlagPermissions)) {
