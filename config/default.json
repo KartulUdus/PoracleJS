@@ -64,7 +64,10 @@
     //        },
       "availableLanguages": {
       },
-      "defaultTemplateName": 1                // default template name/number to use when users add new trackings
+    // default template name/number to use when users add new trackings
+      "defaultTemplateName": 1,
+    // library of custom DTS templates
+      "dtsDictionary": {}
   },
   //
   // Configuration for the user reconciliation/role check function

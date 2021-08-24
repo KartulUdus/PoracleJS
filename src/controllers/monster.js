@@ -225,6 +225,7 @@ class Monster extends Controller {
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
