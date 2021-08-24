@@ -88,7 +88,7 @@ class Raid extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on (humans.id = egg.id and humans.current_profile_no = egg.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%raid%') and
 		egg.level = ${data.level} and
 		(egg.team = ${data.team_id} or egg.team = 4) and
 		(egg.exclusive = ${data.ex} or egg.exclusive = 0)
