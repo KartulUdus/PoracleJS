@@ -223,6 +223,8 @@ exports.run = async (client, msg, args, options) => {
 		const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
 		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
+		const blocked = human.blocked_alerts ? JSON.parse(human.blocked_alerts) : []
+
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
 		if (args.includes('area')) {
 			return msg.reply(currentAreaText(translator, client.geofence, JSON.parse(human.area)))
@@ -256,39 +258,55 @@ exports.run = async (client, msg, args, options) => {
 		message = ''
 
 		if (!client.config.general.disablePokemon) {
-			if (monsters.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following monsters:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any monsters'))
+			if (blocked.includes('monster')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track monsters'))
+			} else {
+				if (monsters.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following monsters:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any monsters'))
 
-			monsters.forEach((monster) => {
-				message = message.concat('\n', monsterRowText(client.config, translator, client.GameData, monster))
-			})
+				monsters.forEach((monster) => {
+					message = message.concat('\n', monsterRowText(client.config, translator, client.GameData, monster))
+				})
+			}
 		}
 
 		if (!client.config.general.disableRaid) {
-			if (raids.length || eggs.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following raids:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any raids'))
-			raids.forEach((raid) => {
-				message = message.concat('\n', raidRowText(client.config, translator, client.GameData, raid))
-			})
-			eggs.forEach((egg) => {
-				message = message.concat('\n', eggRowText(client.config, translator, client.GameData, egg))
-			})
+			if (blocked.includes('raid')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track raids'))
+			} else if (blocked.includes('egg')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track eggs'))
+			} else {
+				if (raids.length || eggs.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following raids:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any raids'))
+				raids.forEach((raid) => {
+					message = message.concat('\n', raidRowText(client.config, translator, client.GameData, raid))
+				})
+				eggs.forEach((egg) => {
+					message = message.concat('\n', eggRowText(client.config, translator, client.GameData, egg))
+				})
+			}
 		}
 
 		if (!client.config.general.disableQuest) {
-			if (quests.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following quests:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any quests'))
+			if (blocked.includes('quest')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track quests'))
+			} else {
+				if (quests.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following quests:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any quests'))
 
-			quests.forEach((quest) => {
-				message = message.concat('\n', questRowText(client.config, translator, client.GameData, quest))
-			})
+				quests.forEach((quest) => {
+					message = message.concat('\n', questRowText(client.config, translator, client.GameData, quest))
+				})
+			}
 		}
 
 		if (!client.config.general.disablePokestop) {
-			if (!client.config.general.disableInvasion) {
+			if (blocked.includes('invasion')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track invasions'))
+			} else if (!client.config.general.disableInvasion) {
 				if (invasions.length) {
 					message = message.concat('\n\n', translator.translate('You\'re tracking the following invasions:'), '\n')
 				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any invasions'))
@@ -299,34 +317,46 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			if (!client.config.general.disableLure) {
-				if (lures.length) {
-					message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
-				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
+				if (blocked.includes('lure')) {
+					message = message.concat('\n\n', translator.translate('You do not have permission to track lures'))
+				} else {
+					if (lures.length) {
+						message = message.concat('\n\n', translator.translate('You\'re tracking the following lures:'), '\n')
+					} else message = message.concat('\n\n', translator.translate('You\'re not tracking any lures'))
 
-				lures.forEach((lure) => {
-					message = message.concat('\n', lureRowText(client.config, translator, client.GameData, lure))
-				})
+					lures.forEach((lure) => {
+						message = message.concat('\n', lureRowText(client.config, translator, client.GameData, lure))
+					})
+				}
 			}
 		}
 
 		if (!client.config.general.disableNest) {
-			if (nests.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following nests:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any nests'))
+			if (blocked.includes('nest')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track nests'))
+			} else {
+				if (nests.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following nests:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any nests'))
 
-			nests.forEach((nest) => {
-				message = message.concat('\n', nestRowText(client.config, translator, client.GameData, nest))
-			})
+				nests.forEach((nest) => {
+					message = message.concat('\n', nestRowText(client.config, translator, client.GameData, nest))
+				})
+			}
 		}
 
 		if (!client.config.general.disableGym) {
-			if (gyms.length) {
-				message = message.concat('\n\n', translator.translate('You\'re tracking the following gyms:'), '\n')
-			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any gyms'))
+			if (blocked.includes('gym')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track gyms'))
+			} else {
+				if (gyms.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following gyms:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any gyms'))
 
-			gyms.forEach((gym) => {
-				message = message.concat('\n', gymRowText(client.config, translator, client.GameData, gym))
-			})
+				gyms.forEach((gym) => {
+					message = message.concat('\n', gymRowText(client.config, translator, client.GameData, gym))
+				})
+			}
 		}
 
 		if (message.length < 4000) {

@@ -125,7 +125,18 @@ class DiscordReconciliation {
 
 			const roleList = discordUser ? discordUser.roles : []
 			const name = discordUser ? discordUser.name : ''
-			// const notes = ''
+
+			let blocked = null
+			if (this.config.discord.commandSecurity && Object.keys(this.config.discord.commandSecurity).length) {
+				const blockedList = []
+				for (const command of ['raid', 'monster', 'gym', 'lure', 'nest', 'gym', 'egg']) {
+					const permissions = this.config.discord.commandSecurity[command === 'monster' ? 'track' : command]
+					if (permissions && !permissions.includes(id) && !permissions.some((x) => roleList.includes(x))) {
+						blockedList.push(command)
+					}
+				}
+				if (blockedList.length) blocked = JSON.stringify(blockedList)
+			}
 
 			if (!this.config.areaSecurity.enabled) {
 				if (this.config.discord.userRole && this.config.discord.userRole.length) {
@@ -142,6 +153,7 @@ class DiscordReconciliation {
 								name,
 								area: '[]',
 								community_membership: '[]',
+								blocked_alerts: blocked,
 							})
 							await this.sendGreetings(id)
 						} else if (user.admin_disable && user.disabled_date) {
@@ -150,6 +162,7 @@ class DiscordReconciliation {
 							await this.query.updateQuery('humans', {
 								admin_disable: 0,
 								disabled_date: null,
+								blocked_alerts: blocked,
 							}, { id })
 
 							await this.sendGreetings(id)
@@ -169,9 +182,10 @@ class DiscordReconciliation {
 							updates.name = name
 						}
 
-						// if (user.notes  !== notes) {
-						// 	updates.notes = notes
-						// }
+						if (user.blocked_alerts !== blocked) {
+							updates.blocked_alerts = blocked
+						}
+
 						if (Object.keys(updates).length) {
 							await this.query.updateQuery('humans', updates, { id })
 							this.log.info(`Reconciliation (Discord) Update user ${id} ${name}`)
@@ -203,6 +217,7 @@ class DiscordReconciliation {
 							area: '[]',
 							area_restriction: JSON.stringify(areaRestriction),
 							community_membership: JSON.stringify(communityList),
+							blocked_alerts: blocked,
 						})
 						await this.sendGreetings(id)
 						this.log.info(`Reconciliation (Discord) Create user ${id} ${name} with communities ${communityList}`)
@@ -212,6 +227,7 @@ class DiscordReconciliation {
 							disabled_date: null,
 							area_restriction: JSON.stringify(areaRestriction),
 							community_membership: JSON.stringify(communityList),
+							blocked_alerts: blocked,
 						}, { id })
 						this.log.info(`Reconciliation (Discord) Reactivate user ${id} ${name} with communities ${communityList}`)
 						await this.sendGreetings(id)
@@ -231,9 +247,9 @@ class DiscordReconciliation {
 						updates.name = name
 					}
 
-					// if (user.notes  !== notes) {
-					// 	updates.notes = notes
-					// }
+					if (user.blocked_alerts !== blocked) {
+						updates.blocked_alerts = blocked
+					}
 
 					if (!user.area_restriction
 						|| !haveSameContents(areaRestriction, JSON.parse(user.area_restriction))) {
