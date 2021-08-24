@@ -70,7 +70,7 @@ class Monster extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.pvp_ranking_worst from monsters
 		join humans on (humans.id = monsters.id and humans.current_profile_no = monsters.profile_no)
-		where humans.enabled = true and humans.admin_disable = false and
+		where humans.enabled = true and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%monster%') and
 		(${pokemonQueryString}) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
