@@ -171,12 +171,12 @@ class Raid extends Controller {
 				}
 			}
 
+			for (const entry of Object.keys(this.config.general.dtsDictionary)) {
+				data[entry] = this.config.general.dtsDictionary[entry]
+			}
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			data.scannerUrl = this.config.general.scannerUrl
-			data.scannerIconUrl = this.config.general.scannerIconUrl
-			data.discordInviteUrl = this.config.general.discordInviteUrl
 
 			if (!data.team_id) data.team_id = 0
 			if (data.name) {

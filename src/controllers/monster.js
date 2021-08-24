@@ -225,12 +225,12 @@ class Monster extends Controller {
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
+			for (const entry of Object.keys(this.config.general.dtsDictionary)) {
+				data[entry] = this.config.general.dtsDictionary[entry]
+			}
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			data.scannerUrl = this.config.general.scannerUrl
-			data.scannerIconUrl = this.config.general.scannerIconUrl
-			data.discordInviteUrl = this.config.general.discordInviteUrl
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivColor = this.findIvColor(data.iv)
 			data.tthSeconds = data.disappear_time - Date.now() / 1000
