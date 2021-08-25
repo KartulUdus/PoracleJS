@@ -42,7 +42,7 @@ exports.run = async (client, msg, args, options) => {
 		let team = 4
 		let template = client.config.general.defaultTemplateName
 		let clean = false
-		let levels = []
+		const levelSet = new Set()
 		const pings = msg.getPings()
 		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase())
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
@@ -75,14 +75,14 @@ exports.run = async (client, msg, args, options) => {
 
 		args.forEach((element) => {
 			if (element === 'ex') exclusive = 1
-			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[2])
+			else if (element.match(client.re.levelRe)) levelSet.add(+element.match(client.re.levelRe)[2])
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'instinct' || element === 'yellow') team = 3
 			else if (element === 'valor' || element === 'red') team = 2
 			else if (element === 'mystic' || element === 'blue') team = 1
 			else if (element === 'harmony' || element === 'gray') team = 0
-			else if (element === 'everything' && !formNames.length) levels = [1, 2, 3, 4, 5, 6]
+			else if (element === 'everything') [1, 2, 3, 4, 5, 6].forEach((x) => levelSet.add(x))
 			else if (element === 'clean') clean = true
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
@@ -99,6 +99,8 @@ exports.run = async (client, msg, args, options) => {
 			await msg.reply(`${translator.translate('Warning: Admin command detected without distance set - using default distance')} ${client.config.tracking.defaultDistance}`)
 			distance = client.config.tracking.defaultDistance
 		}
+
+		const levels = [...levelSet]
 		if (!levels.length && !monsters.length) {
 			return await msg.reply(translator.translate('404 no valid tracks found'))
 		}
