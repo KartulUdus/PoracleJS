@@ -38,7 +38,6 @@ exports.run = async (client, msg, args, options) => {
 		let team = 4
 		let template = client.config.general.defaultTemplateName
 		let clean = false
-		//		let levels = []
 		const levelSet = new Set()
 		const pings = msg.getPings()
 
