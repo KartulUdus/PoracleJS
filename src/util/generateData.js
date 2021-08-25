@@ -102,6 +102,11 @@ module.exports.update = async function update() {
 
 		// Write locales
 		log.info('Creating new locales...')
+
+		fs.mkdir('./src/util/locale', (error) => (error
+			? log.info('Locale folder already exists, skipping.')
+			: log.info('Locale folder created.')))
+
 		Object.keys(translations).forEach((locale) => {
 			Object.keys(translations[locale]).forEach((category) => {
 				let name

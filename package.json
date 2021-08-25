@@ -60,7 +60,7 @@
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
     "ohbem": "^1.2.3",
-    "pogo-data-generator": "^1.1.7",
+    "pogo-data-generator": "^1.1.8",
     "point-in-polygon": "^1.1.0",
     "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",
