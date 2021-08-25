@@ -66,7 +66,7 @@ class Worker {
 			await this.setListeners()
 			await this.client.login(this.token)
 			await this.client.user.setStatus(this.status)
-			await this.client.user.setActivity(this.activity)
+			if (this.activity) await this.client.user.setActivity(this.activity)
 		} catch (err) {
 			this.logs.log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)
