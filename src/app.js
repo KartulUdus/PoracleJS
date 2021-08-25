@@ -96,7 +96,9 @@ let telegramChannel
 if (config.discord.enabled) {
 	for (let key = 0; key < config.discord.token.length; key++) {
 		if (config.discord.token[key]) {
-			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
+			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, (key
+				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity || 'PoracleHelper' }
+				: { status: 'available', activity: config.discord.activity || 'PoracleJS' })))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
@@ -120,7 +122,7 @@ async function syncTelegramMembership() {
 		}
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		if (config.reconciliation.telegram.updateUserNames || config.reconciliation.telegram.removeInvalidUsers)	{
+		if (config.reconciliation.telegram.updateUserNames || config.reconciliation.telegram.removeInvalidUsers) {
 			await telegramReconciliation.syncTelegramUsers(
 				config.reconciliation.discord.updateUserNames,
 				config.reconciliation.discord.removeInvalidUsers,
@@ -156,7 +158,7 @@ async function syncDiscordRole() {
 		// "updateUserNames": true,
 		// "removeInvalidUsers": true,
 		// "registerNewUsers": true,
-		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers)	{
+		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers) {
 			await discordReconciliation.syncDiscordRole(config.reconciliation.discord.registerNewUsers,
 				config.reconciliation.discord.updateUserNames,
 				config.reconciliation.discord.removeInvalidUsers)
@@ -445,9 +447,9 @@ statsWorker.queuePort.on('message', (res) => {
 for (let w = 0; w < maxWorkers; w++) {
 	worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
 		workerData:
-			{
-				workerId: w + 1,
-			},
+		{
+			workerId: w + 1,
+		},
 	})
 
 	queueChannel = new MessageChannel()

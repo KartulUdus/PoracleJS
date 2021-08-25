@@ -225,6 +225,7 @@ class Monster extends Controller {
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
@@ -311,6 +312,7 @@ class Monster extends Controller {
 								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
+								cap: stats.cap,
 							}
 							data.pvpEvolutionData[stats.pokemon] = {
 								...data.pvpEvolutionData[stats.pokemon],
@@ -327,6 +329,13 @@ class Monster extends Controller {
 				return {
 					rank: bestRank,
 					cp: bestCP,
+				}
+			}
+
+			if (data.pvp) {
+				// For Chuck parsers
+				for (const league of Object.keys(data.pvp)) {
+					data[`pvp_rankings_${league}_league`] = data.pvp[league]
 				}
 			}
 
@@ -612,6 +621,7 @@ class Monster extends Controller {
 				data.pvpGreat = data.pvp_rankings_great_league ? createPvpDisplay(data.pvp_rankings_great_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayGreatMinCP) : null
 				data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
 				data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
+				data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
 
 				data.distance = cares.longitude ? this.getDistance({ lat: cares.latitude, lon: cares.longitude }, { lat: data.latitude, lon: data.longitude }) : ''
 
