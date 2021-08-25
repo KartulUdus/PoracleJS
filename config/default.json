@@ -217,7 +217,9 @@
   //
   "discord": {
       "enabled": true,                                // is discord enabled?
-      "activity": "PoracleJS",                        // activity to set ('Playing PoracleJS'), blank to none
+      "activity": "PoracleJS",                        // Bot Activity
+      "workerStatus": "invisible",                          // Worker Status - available, dnd, idle, invisible
+      "workerActivity": "PoracleJS Helper",           // Worker Activity
       "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
     // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
     //   hours, deleting them if not (note general.roleCheckMode must be set to
