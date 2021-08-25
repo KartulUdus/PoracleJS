@@ -97,8 +97,8 @@ if (config.discord.enabled) {
 	for (let key = 0; key < config.discord.token.length; key++) {
 		if (config.discord.token[key]) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, (key
-				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity || 'PoracleHelper' }
-				: { status: 'available', activity: config.discord.activity || 'PoracleJS' })))
+				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity === undefined ? 'PoracleHelper' : config.discord.workerActivity }
+				: { status: 'available', activity: config.discord.activity === undefined ? 'PoracleJS' : config.discord.activity })))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
