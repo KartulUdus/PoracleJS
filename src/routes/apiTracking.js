@@ -32,7 +32,7 @@ module.exports = async (fastify, options, next) => {
 		}
 	})
 
-	fastify.delete('/api/tracking/gym/:id/:uid', options, async (req) => {
+	fastify.delete('/api/tracking/gym/:id/byUid/:uid', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
@@ -44,6 +44,37 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		await fastify.query.deleteQuery('gym', { id: req.params.id, uid: req.params.uid })
+
+		return {
+			status: 'ok',
+		}
+	})
+
+	fastify.delete('/api/tracking/gym/:id/byGym/:gym_id', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+
+		if (!human) {
+			return {
+				status: 'error',
+				message: 'User not found',
+			}
+		}
+
+		await fastify.query.deleteQuery('gym', {
+			id: req.params.id,
+			gym_id: req.params.gym_id,
+			profile_no: human.current_profile_no,
+		})
 
 		return {
 			status: 'ok',
