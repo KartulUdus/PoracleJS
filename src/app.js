@@ -30,7 +30,7 @@ const PogoEventParser = require('./lib/pogoEventParser')
 const { Config } = require('./lib/configFetcher')
 
 const {
-	config, knex, dts, geofence, translator, translatorFactory,
+	config, knex, dts, geofence, translatorFactory,
 } = Config()
 
 const GameData = {
@@ -78,10 +78,11 @@ fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
 fastify.decorate('gymCache', gymCache)
+fastify.decorate('GameData', GameData)
 fastify.decorate('query', query)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
-fastify.decorate('translator', translator)
+fastify.decorate('translatorFactory', translatorFactory)
 fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
