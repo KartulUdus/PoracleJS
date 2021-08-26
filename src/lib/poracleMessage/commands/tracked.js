@@ -268,6 +268,10 @@ exports.run = async (client, msg, args, options) => {
 				monsters.forEach((monster) => {
 					message = message.concat('\n', monsterRowText(client.config, translator, client.GameData, monster))
 				})
+
+				if (blocked.includes('pvp')) {
+					message = message.concat('\n', translator.translate('Your permission level means you will not get results from PVP tracking'))
+				}
 			}
 		}
 

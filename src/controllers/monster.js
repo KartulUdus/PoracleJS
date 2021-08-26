@@ -55,15 +55,29 @@ class Monster extends Controller {
 		}
 
 		let pvpQueryString = ''
+		const pvpSecurityEnabled = this.config.discord.commandSecurity && this.config.discord.commandSecurity.pvp
 		if (!data.pvpEvoLookup) {
 			pvpQueryString = 'pvp_ranking_league = 0'
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat(' or ((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (1 = 0')
+			}
 			for (const [league, leagueData] of Object.entries(data.pvpBestRank)) {
 				pvpQueryString = pvpQueryString.concat(` or (pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp})`)
 			}
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat('))')
+			}
 		} else {
-			pvpQueryString = '1 = 0'
+			if (pvpSecurityEnabled) {
+				pvpQueryString = '(humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (1 = 0'
+			} else {
+				pvpQueryString = '1 = 0'
+			}
 			for (const [league, leagueData] of Object.entries(data.pvpEvoLookup)) {
 				pvpQueryString = pvpQueryString.concat(` or ((form = 0 or form = ${leagueData.form}) and pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp})`)
+			}
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat(')')
 			}
 		}
 
@@ -121,7 +135,7 @@ class Monster extends Controller {
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
 					`)
 		}
-		// this.log.silly(`${data.encounter_id}: Query ${query}`)
+		this.log.silly(`${data.encounter_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 

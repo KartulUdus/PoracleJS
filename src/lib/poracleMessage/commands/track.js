@@ -22,7 +22,7 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
-		if (!await util.commandAllowed(commandName)) {
+		if (!await util.commandAllowed('monster')) {
 			await msg.react('🚫')
 			return msg.reply(translator.translate('You do not have permission to execute this command'))
 		}
@@ -132,10 +132,15 @@ exports.run = async (client, msg, args, options) => {
 		}
 		if (littleLeagueAllowed) leagues.little = 500
 
+		const parameterPermissionsLink = {
+			pvp: [],
+		}
+
 		Object.keys(leagues).forEach((league) => {
 			parameterDefinition[league] = client.re[`${league}LeagueRe`]
 			parameterDefinition[`${league}cp`] = client.re[`${league}LeagueCPRe`]
 			parameterDefinition[`${league}high`] = client.re[`${league}LeagueHighestRe`]
+			parameterPermissionsLink.pvp.push(...[league, `${league}cp`, `${league}high`])
 		})
 
 		const parameterValues = {
@@ -152,7 +157,9 @@ exports.run = async (client, msg, args, options) => {
 
 			if (matches.length) {
 				const paramName = matches[0]
-				if (!await util.commandAllowed(paramName)) {
+				const permissionName = Object.entries(parameterPermissionsLink).filter(([, commands]) => commands.includes(paramName)).map(([perm]) => perm)
+
+				if (permissionName.length && !await util.commandAllowed(permissionName[0])) {
 					await msg.react('🚫')
 					return msg.reply(translator.translateFormat('You do not have permission to use the `{0}` parameter',
 						translator.translate(paramName)))

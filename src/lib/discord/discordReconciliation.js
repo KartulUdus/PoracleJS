@@ -129,7 +129,7 @@ class DiscordReconciliation {
 			let blocked = null
 			if (this.config.discord.commandSecurity && Object.keys(this.config.discord.commandSecurity).length) {
 				const blockedList = []
-				for (const command of ['raid', 'monster', 'gym', 'lure', 'nest', 'gym', 'egg']) {
+				for (const command of ['raid', 'monster', 'gym', 'lure', 'nest', 'gym', 'egg', 'invasion', 'pvp']) {
 					const permissions = this.config.discord.commandSecurity[command === 'monster' ? 'track' : command]
 					if (permissions && !permissions.includes(id) && !permissions.some((x) => roleList.includes(x))) {
 						blockedList.push(command)

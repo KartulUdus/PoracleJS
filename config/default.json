@@ -255,10 +255,11 @@
       },
     // commandSecurity - list commands and users/roles that can execute these commands. If not specified no
     // security is enforced for a command
+    // Valid permissions that be restricted: monster, pvp, gym, invasion, lure, nest, ...
     // eg:
     //   "commandSecurity": {
-    //      "track": [ "userid", "roleid" ],
-    //      "maxatk": [ "roleid" ]
+    //      "monster": [ "userid", "roleid" ],
+    //      "pvp": [ "roleid" ]
     //   }
       "commandSecurity": {
 
