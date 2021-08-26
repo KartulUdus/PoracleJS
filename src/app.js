@@ -22,15 +22,15 @@ const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
-// const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 const DiscordReconciliation = require('./lib/discord/discordReconciliation')
 const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
 const PogoEventParser = require('./lib/pogoEventParser')
+const scannerFactory = require('./lib/scanner/scannerFactory')
 
 const { Config } = require('./lib/configFetcher')
 
 const {
-	config, knex, dts, geofence, translatorFactory,
+	config, knex, scannerKnex, dts, geofence, translatorFactory,
 } = Config()
 
 const GameData = {
@@ -49,6 +49,8 @@ const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token)// , { channelMode: true })
 const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken)/* , { channelMode: true }) */ : null
+
+const scannerQuery = scannerFactory.createScanner(scannerKnex, config.database.scannerType)
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
@@ -80,6 +82,7 @@ fastify.decorate('cache', cache)
 fastify.decorate('gymCache', gymCache)
 fastify.decorate('GameData', GameData)
 fastify.decorate('query', query)
+fastify.decorate('scannerQuery', scannerQuery)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
 fastify.decorate('translatorFactory', translatorFactory)
@@ -87,7 +90,7 @@ fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, scannerQuery, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
@@ -107,10 +110,10 @@ if (config.discord.enabled) {
 }
 
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker('1', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
+	telegram = new TelegramWorker('1', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, scannerQuery, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker('2', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
+		telegramChannel = new TelegramWorker('2', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, scannerQuery, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 }
 

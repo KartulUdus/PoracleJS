@@ -118,6 +118,13 @@
           "user": "poracleuser",
           "password": "poraclepassword",
           "port": 3306
+      },
+    "scannerType": "none",
+      "scanner": {
+          "host": "127.0.0.1",
+         "user": "poracleuser",
+         "password": "poraclepassword",
+          "port": 3306
       }
   },
   //

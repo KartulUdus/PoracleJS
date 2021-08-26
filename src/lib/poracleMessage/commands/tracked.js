@@ -69,10 +69,13 @@ function raidRowText(config, translator, GameData, raid) {
 	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}`
 }
 
-function gymRowText(config, translator, GameData, gym) {
+async function gymRowText(config, translator, GameData, gym, scannerQuery) {
 	const raidTeam = translator.translate(GameData.utilData.teams[gym.team].name)
 
-	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)} ${gym.gym_id ? `${translator.translate('at gym ')} ${gym.gym_id}` : ''}`
+	let gymNameText = null
+	if (gym.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(gym.gym_id) || gym.gym_id : gym.gym_id
+
+	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)} ${gym.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
 }
 
 function nestRowText(config, translator, GameData, nest) {
@@ -277,9 +280,9 @@ exports.run = async (client, msg, args, options) => {
 				message = message.concat('\n\n', translator.translate('You\'re tracking the following quests:'), '\n')
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any quests'))
 
-			quests.forEach((quest) => {
+			for (const quest of quests) {
 				message = message.concat('\n', questRowText(client.config, translator, client.GameData, quest))
-			})
+			}
 		}
 
 		if (!client.config.general.disablePokestop) {
@@ -319,9 +322,9 @@ exports.run = async (client, msg, args, options) => {
 				message = message.concat('\n\n', translator.translate('You\'re tracking the following gyms:'), '\n')
 			} else message = message.concat('\n\n', translator.translate('You\'re not tracking any gyms'))
 
-			gyms.forEach((gym) => {
-				message = message.concat('\n', gymRowText(client.config, translator, client.GameData, gym))
-			})
+			for (const gym of gyms) {
+				message = message.concat('\n', await gymRowText(client.config, translator, client.GameData, gym, client.scannerQuery))
+			}
 		}
 
 		if (message.length < 4000) {

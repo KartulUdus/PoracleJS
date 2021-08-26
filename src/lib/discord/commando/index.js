@@ -8,10 +8,11 @@ const { diff } = require('deep-object-diff')
 const emojiStrip = require('../../../util/emojiStrip')
 
 class DiscordCommando {
-	constructor(token, query, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) {
+	constructor(token, query, scannerQuery, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) {
 		this.token = token
 		this.config = config
 		this.query = query
+		this.scannerQuery = scannerQuery
 		this.logs = logs
 		this.GameData = GameData
 		this.PoracleInfo = PoracleInfo
@@ -60,6 +61,7 @@ class DiscordCommando {
 			this.client.config = this.config
 			this.client.S2 = S2
 			this.client.query = this.query
+			this.client.scannerQuery = this.scannerQuery
 			this.client.emojiStrip = emojiStrip
 			this.client.logs = this.logs
 			this.client.dts = this.dts

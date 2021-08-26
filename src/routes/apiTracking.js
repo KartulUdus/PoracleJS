@@ -136,15 +136,15 @@ module.exports = async (fastify, options, next) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', '!', /* util.prefix, */ translator.translate('tracked'))
 			} else {
-				alreadyPresent.forEach((lure) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, lure), '\n')
-				})
-				updates.forEach((lure) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, lure), '\n')
-				})
-				insert.forEach((lure) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, lure), '\n')
-				})
+				for (const lure of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, lure, fastify.scannerQuery), '\n')
+				}
+				for (const lure of updates) {
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, lure, fastify.scannerQuery), '\n')
+				}
+				for (const lure of insert) {
+					message = message.concat(translator.translate('New: '), await trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, lure, fastify.scannerQuery), '\n')
+				}
 			}
 
 			await fastify.query.deleteWhereInQuery('gym', {
