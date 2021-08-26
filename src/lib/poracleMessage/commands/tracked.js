@@ -72,7 +72,7 @@ function raidRowText(config, translator, GameData, raid) {
 function gymRowText(config, translator, GameData, gym) {
 	const raidTeam = translator.translate(GameData.utilData.teams[gym.team].name)
 
-	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)}`
+	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)} ${gym.gym_id ? `${translator.translate('at gym ')} ${gym.gym_id}` : ''}`
 }
 
 function nestRowText(config, translator, GameData, nest) {
