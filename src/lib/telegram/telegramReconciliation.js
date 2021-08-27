@@ -270,6 +270,39 @@ class TelegramReconciliation {
 			this.log.error('Reconciliation (Telegram) Load telegram channels failed', err)
 		}
 	}
+
+	/**
+	 * Update telegram channel list according to community changes
+	 */
+	async updateTelegramChannels() {
+		try {
+			this.log.info('Reconciliation (Telegram) Channel membership to Poracle users starting...')
+			const channelsToCheck = await this.query.selectAllQuery('humans', { type: 'telegram:channel', admin_disable: 0 })
+			const groupsToCheck = await this.query.selectAllQuery('humans', { type: 'telegram:group', admin_disable: 0 })
+
+			for (const user of [...channelsToCheck, ...groupsToCheck]) {
+				this.log.verbose(`Reconciliation (Telegram) Check channel ${user.id} ${user.name}`)
+
+				const updates = { }
+
+				// If there is currently an area restriction for a channel, ensure the location restrictions are correct
+				if (user.area_restriction && user.community_membership) {
+					const areaRestriction = communityLogic.calculateLocationRestrictions(this.config, JSON.parse(user.community_membership))
+					if (!haveSameContents(areaRestriction, JSON.parse(user.area_restriction))) {
+						updates.area_restriction = JSON.stringify(areaRestriction)
+					}
+				}
+
+				if (Object.keys(updates).length) {
+					await this.query.updateQuery('humans', updates, { id: user.id })
+					this.log.info(`Reconciliation (Telegram) Update channel ${user.id} ${user.name}`)
+				}
+			}
+			this.log.verbose('Reconciliation (Telegram) Channel membership to Poracle users complete...')
+		} catch (err) {
+			this.log.error('Verification of Poracle channels failed with', err)
+		}
+	}
 }
 
 module.exports = TelegramReconciliation
