@@ -91,8 +91,6 @@ exports.run = async (client, msg, args, options) => {
 							community_membership: JSON.stringify(newCommunities),
 						}, { id })
 					}
-
-					break
 				}
 				break
 			case 'remove':
@@ -109,8 +107,6 @@ exports.run = async (client, msg, args, options) => {
 							community_membership: JSON.stringify(newCommunities),
 						}, { id })
 					}
-
-					break
 				}
 
 				break
@@ -121,8 +117,6 @@ exports.run = async (client, msg, args, options) => {
 					if (human) {
 						msg.reply(`User target ${id} ${human.name} has communities ${human.community_membership} location restrictions ${human.area_restriction ? human.area_restriction : 'none'}`)
 					}
-
-					break
 				}
 				break
 		}
