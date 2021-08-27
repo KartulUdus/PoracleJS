@@ -123,9 +123,9 @@ module.exports = async (ctx) => {
 			fields.forEach((field) => {
 				messageText = messageText.concat(`\n\n${field.name}\n\n${field.value}`)
 			})
-			await ctx.telegram.sendMessage(user.id, messageText, { parse_mode: 'Markdown' })
+			await ctx.telegram.sendMessage(telegramUser.id, messageText, { parse_mode: 'Markdown' })
 		}
-		await ctx.telegram.sendMessage(user.id, 'You are now registered with Poracle', { parse_mode: 'Markdown' })
+		await ctx.telegram.sendMessage(telegramUser.id, 'You are now registered with Poracle', { parse_mode: 'Markdown' })
 
 		client.logs.telegram.info(`${userName} Registered!`)
 	} catch (err) {
