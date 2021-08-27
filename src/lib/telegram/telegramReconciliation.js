@@ -233,6 +233,18 @@ class TelegramReconciliation {
 				try {
 					telegramUser = await this.telegraf.telegram.getChatMember(group, id)
 				} catch (err) {
+					if (err.response && err.response.error_code === 400) {
+						if (err.response.description === 'Bad Request: user not found') {
+							// User is not in chat group
+
+							// eslint-disable-next-line no-continue
+							continue
+						} else {
+							this.log.warn(`Reconciliation (Telegram) Load telegram channels for user failed - chat id '${group}' user id '${id}' code 400 - ${err.response.description}`)
+							// eslint-disable-next-line no-continue
+							continue
+						}
+					}
 					this.log.error(`Reconciliation (Telegram) Load telegram channels failed - chat id '${group}'`, err)
 
 					// eslint-disable-next-line no-continue
