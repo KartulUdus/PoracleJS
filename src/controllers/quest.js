@@ -266,6 +266,8 @@ class Quest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				data.questString = translator.translate(data.questStringEng)
 
@@ -327,9 +329,6 @@ class Quest extends Controller {
 				data.energyMonstersNamesEng = data.rewardData.energyMonsters.map((item) => `${item.amount} ${item.nameEng} Mega Energy`).join(', ')
 
 				for (const monster of data.rewardData.candy) {
-					let [platform] = cares.type.split(':')
-					if (platform === 'webhook') platform = 'discord'
-
 					let monsterName
 
 					const mon = Object.values(this.GameData.monsters).find((m) => m.id === monster.pokemonId && !m.form.id)
