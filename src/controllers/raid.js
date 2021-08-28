@@ -304,6 +304,7 @@ class Raid extends Controller {
 					data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
 					data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
 					data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+					data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 
 					data.quickMove = data.quickMoveName // deprecated
 					data.chargeMove = data.chargeMoveName // deprecated
