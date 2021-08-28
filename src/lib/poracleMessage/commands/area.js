@@ -150,7 +150,7 @@ exports.run = async (client, msg, args, options) => {
 						currentGroup = area.group
 						if ((currentGroup.length + confUse.length) > maxLen) {
 							confUse += '```'
-							await msg.reply(confUse)
+							await msg.reply(confUse, { style: 'markdown' })
 							confUse = '```\n'
 						}
 						confUse += `${currentGroup}\n`
@@ -160,7 +160,7 @@ exports.run = async (client, msg, args, options) => {
 
 					if ((areaDisplayLine.length + confUse.length) > maxLen) {
 						confUse += '```'
-						await msg.reply(confUse)
+						await msg.reply(confUse, { style: 'markdown' })
 						confUse = '```\n'
 					}
 					confUse += areaDisplayLine
@@ -168,7 +168,7 @@ exports.run = async (client, msg, args, options) => {
 
 				confUse += '```'
 
-				await msg.reply(confUse)
+				await msg.reply(confUse, { style: 'markdown' })
 
 				break
 			}
