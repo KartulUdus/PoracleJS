@@ -107,7 +107,7 @@ class PoracleTelegramMessage {
 
 	// eslint-disable-next-line class-methods-use-this
 	get maxLength() {
-		return 4096
+		return 4095
 	}
 }
 
