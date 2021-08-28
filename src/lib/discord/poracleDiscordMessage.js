@@ -54,6 +54,10 @@ class PoracleDiscordMessage {
 		return (this.client.config.discord.admins.includes(this.msg.author.id))
 	}
 
+	get isFromCommunityAdmin() {
+		return false
+	}
+
 	get isDM() {
 		return !(this.msg.channel.type === 'text')
 	}
