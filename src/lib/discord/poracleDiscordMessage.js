@@ -54,6 +54,7 @@ class PoracleDiscordMessage {
 		return (this.client.config.discord.admins.includes(this.msg.author.id))
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	get isFromCommunityAdmin() {
 		return false
 	}
