@@ -104,6 +104,11 @@ class PoracleTelegramMessage {
 	async send(target, message, options = {}) {
 		return this.ctx.telegram.sendMessage(target, options.style !== 'markdown' ? this.convertSafe(message) : message)
 	}
+
+	// eslint-disable-next-line class-methods-use-this
+	get maxLength() {
+		return 4096
+	}
 }
 
 module.exports = PoracleTelegramMessage

@@ -111,6 +111,11 @@ class PoracleDiscordMessage {
 	async replyByDM(message) {
 		return this.msg.author.send(message)
 	}
+
+	// eslint-disable-next-line class-methods-use-this
+	get maxLength() {
+		return maxLength
+	}
 }
 
 module.exports = PoracleDiscordMessage
