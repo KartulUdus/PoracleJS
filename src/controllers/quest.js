@@ -327,6 +327,9 @@ class Quest extends Controller {
 				data.energyMonstersNamesEng = data.rewardData.energyMonsters.map((item) => `${item.amount} ${item.nameEng} Mega Energy`).join(', ')
 
 				for (const monster of data.rewardData.candy) {
+					let [platform] = cares.type.split(':')
+					if (platform === 'webhook') platform = 'discord'
+
 					let monsterName
 
 					const mon = Object.values(this.GameData.monsters).find((m) => m.id === monster.pokemonId && !m.form.id)
@@ -375,9 +378,6 @@ class Quest extends Controller {
 					now: new Date(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
 
 				const templateType = 'quest'
 				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
