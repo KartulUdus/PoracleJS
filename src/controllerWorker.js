@@ -4,7 +4,7 @@ const { writeHeapSnapshot } = require('v8')
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
 const PogoEventParser = require('./lib/pogoEventParser')
-
+const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
 
 const { log } = logs
@@ -46,14 +46,20 @@ const rateLimitedUserCache = new NodeCache({ stdTTL: config.alertLimits.timingPe
 const controllerWeatherManager = new ControllerWeatherManager(config, log)
 const statsData = new StatsData(config, log)
 const pogoEventParser = new PogoEventParser(log)
+const shinyPossible = new ShinyPossible(log)
 
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const eventParsers = {
+	shinyPossible,
+	pogoEvents: pogoEventParser,
+}
+
+const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 
 const hookQueue = []
 let queuePort
@@ -214,6 +220,12 @@ function receiveCommand(cmd) {
 			log.debug(`Worker ${workerId}: Received event broadcast`, cmd.data)
 
 			pogoEventParser.loadEvents(cmd.data)
+		}
+
+		if (cmd.type === 'shinyBroadcast') {
+			log.debug(`Worker ${workerId}: Received shiny broadcast`, cmd.data)
+
+			shinyPossible.loadMap(cmd.data)
 		}
 
 		if (cmd.type === 'reloadDts') {
