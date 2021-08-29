@@ -223,6 +223,7 @@ class Monster extends Controller {
 			data.height = encountered && data.height ? data.height.toFixed(2) : 0
 			data.weight = encountered && data.weight ? data.weight.toFixed(2) : 0
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
+			data.genderNameEng = data.genderDataEng.name
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
 			Object.assign(data, this.config.general.dtsDictionary)
@@ -511,6 +512,8 @@ class Monster extends Controller {
 					name: translator.translate(data.genderDataEng.name),
 					emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
 				}
+				data.genderName = data.genderData.name
+				data.genderEmoji = data.genderData.emoji
 				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 				data.rarityName = translator.translate(data.rarityNameEng)
 				data.quickMoveName = data.weight && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
