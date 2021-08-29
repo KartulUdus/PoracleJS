@@ -11,11 +11,11 @@ const fetch = async (url) => new Promise((resolve) => {
 })
 
 module.exports.update = async function update() {
+	// Write monsters/moves/items/questTypes
 	try {
 		log.info('Fetching latest Game Master...')
 		const gameMaster = await fetch('https://raw.githubusercontent.com/WatWowMap/Masterfile-Generator/master/master-latest-poracle.json')
 
-		// Write monsters/moves/items/questTypes
 		log.info('Creating new Game Master...')
 		Object.keys(gameMaster).forEach((category) => {
 			fs.writeFile(
@@ -29,13 +29,11 @@ module.exports.update = async function update() {
 		log.info('Could not fetch latest GM, using existing...')
 	}
 
+	// Write grunts
 	try {
-		log.info('Fetching latest invasions and locales...')
-		const { translations, invasions } = await generate({
+		log.info('Fetching latest invasions...')
+		const { invasions } = await generate({
 			template: {
-				globalOptions: {
-					includeProtos: true,
-				},
 				invasions: {
 					enabled: true,
 					options: {
@@ -61,82 +59,66 @@ module.exports.update = async function update() {
 						encounters: 'id',
 					},
 				},
-				translations: {
-					enabled: true,
-					options: {
-						useLanguageAsRef: 'en',
-						manualTranslations: true,
-						prefix: {},
-					},
-					locales: {
-						de: true,
-						en: true,
-						es: true,
-						fr: true,
-						it: true,
-						ja: true,
-						ko: true,
-						'pt-br': true,
-						ru: true,
-						th: true,
-						'zh-tw': true,
-					},
-					template: {
-						pokemon: {
-							names: true,
-							forms: true,
-							descriptions: true,
-						},
-						moves: true,
-						items: true,
-						types: true,
-						characters: true,
-						weather: true,
-						misc: true,
-						pokemonCategories: true,
-						quests: true,
-					},
-				},
 			},
 		})
-
-		// Write locales
-		log.info('Creating new locales...')
-
-		fs.mkdir('./src/util/locale', (error) => (error
-			? log.info('Locale folder already exists, skipping.')
-			: log.info('Locale folder created.')))
-
-		Object.keys(translations).forEach((locale) => {
-			Object.keys(translations[locale]).forEach((category) => {
-				let name
-				switch (category) {
-					case 'descriptions': name = 'pokemonDescriptions'; break
-					case 'pokemonCategories': name = 'pokemonCategories'; break
-					case 'moves': name = 'moveNames'; break
-					case 'pokemon': name = 'pokemonNames'; break
-					default: break
-				}
-				if (name) {
-					fs.writeFile(
-						`./src/util/locale/${name}_${locale}.json`,
-						JSON.stringify(translations[locale][category], null, 2),
-						'utf8',
-						() => { },
-					)
-				}
-			})
-		})
-
-		// Write grunts
-		log.info('Creating new grunts...')
 		fs.writeFile(
 			'./src/util/grunts.json',
 			JSON.stringify(invasions, null, 2),
 			'utf8',
 			() => { },
 		)
+		log.info('Latest grunts saved...')
 	} catch (e) {
-		log.info('Could not generate new locales, using existing...')
+		log.warn('Could not generate new invasions, using existing...')
+	}
+
+	// Write locales
+	try {
+		log.info('Creating new locales...')
+
+		const available = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/index.json')
+
+		const englishRef = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/en.json')
+
+		fs.mkdir('./src/util/locale', (error) => (error
+			? log.info('Locale folder already exists, skipping.')
+			: log.info('Locale folder created.')))
+
+		await Promise.all(available.map(async (locale) => {
+			try {
+				const trimmed = {
+					pokemonNames: { },
+					pokemonCategories: { },
+					pokemonDescriptions: { },
+					moveNames: { },
+				}
+				const remoteFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/${locale}`)
+
+				Object.keys(remoteFiles).forEach((key) => {
+					if (key.startsWith('poke_')) {
+						trimmed.pokemonNames[englishRef[key]] = remoteFiles[key]
+					} else if (key.startsWith('move_')) {
+						trimmed.moveNames[englishRef[key]] = remoteFiles[key]
+					} else if (key.startsWith('desc_')) {
+						trimmed.pokemonDescriptions[englishRef[key]] = remoteFiles[key]
+					} else if (key.startsWith('pokemon_category_')) {
+						trimmed.pokemonCategories[englishRef[key]] = remoteFiles[key]
+					}
+				})
+				Object.keys(trimmed).forEach((category) => {
+					fs.writeFile(
+						`./src/util/locale/${category}_${locale}`,
+						JSON.stringify(trimmed[category], null, 2),
+						'utf8',
+						() => { },
+					)
+				})
+				log.info(`${locale}`, 'file saved.')
+			} catch (e) {
+				log.warn(e, '\n', locale)
+			}
+		}))
+	} catch (e) {
+		log.warn('Could not generate new locales, using existing...')
 	}
 }
