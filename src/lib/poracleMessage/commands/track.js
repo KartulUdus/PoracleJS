@@ -236,7 +236,7 @@ exports.run = async (client, msg, args, options) => {
 		const defaultTo = ((value, x) => ((value === undefined) ? x : value))
 		// Set defaults
 
-		let distance = +defaultTo(parameterValues.distance, 0)
+		let distance = +defaultTo(parameterValues.d, 0)
 		let rarity = +defaultTo(parameterValues.rarity, -1)
 		let maxRarity = +defaultTo(parameterValues.maxrarity, 6)
 		const pings = msg.getPings()
