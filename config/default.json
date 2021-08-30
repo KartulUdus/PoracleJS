@@ -33,7 +33,8 @@
       },
       "stickers": {
       },
-        "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
+      "requestShinyImages": false,
+      "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
     // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
@@ -259,6 +260,17 @@
     //        }
     //      }
       "delegatedAdministration": {
+
+      },
+    // commandSecurity - list commands and users/roles that can execute these commands. If not specified no
+    // security is enforced for a command
+    // Valid permissions that be restricted: monster, pvp, gym, invasion, lure, nest, ...
+    // eg:
+    //   "commandSecurity": {
+    //      "monster": [ "userid", "roleid" ],
+    //      "pvp": [ "roleid" ]
+    //   }
+      "commandSecurity": {
 
       },
       "prefix": "!",                                  // prefix for poracle commands, usually '!'
