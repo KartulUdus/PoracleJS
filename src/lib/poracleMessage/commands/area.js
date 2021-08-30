@@ -146,17 +146,34 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			case 'list': {
-				let confUse = ''
+				let confUse = translator.translate('Current configured areas are:').concat('\n```\n')
 				let currentGroup = ''
+				const maxLen = msg.maxLength - 10
+
 				for (const area of availableAreas) {
 					if (currentGroup !== area.group) {
 						currentGroup = area.group
-						confUse = confUse.concat(currentGroup, '\n')
+						if ((currentGroup.length + confUse.length) > maxLen) {
+							confUse += '```'
+							await msg.reply(confUse, { style: 'markdown' })
+							confUse = '```\n'
+						}
+						confUse += `${currentGroup}\n`
 					}
 					const areaDisplayName = area.name.replace(/ /g, '_')
-					confUse = confUse.concat(`   ${areaDisplayName}${area.userSelectable === false ? '\uD83D\uDEAB' : ''}${area.description ? ` - ${area.description}` : ''}\n`)
+					const areaDisplayLine = `   ${areaDisplayName}${area.userSelectable === false ? '\uD83D\uDEAB' : ''}${area.description ? ` - ${area.description}` : ''}\n`
+
+					if ((areaDisplayLine.length + confUse.length) > maxLen) {
+						confUse += '```'
+						await msg.reply(confUse, { style: 'markdown' })
+						confUse = '```\n'
+					}
+					confUse += areaDisplayLine
 				}
-				await msg.reply(`${translator.translate('Current configured areas are:')}\n\`\`\`\n${confUse}\`\`\` `, { style: 'markdown' })
+
+				confUse += '```'
+
+				await msg.reply(confUse, { style: 'markdown' })
 
 				break
 			}

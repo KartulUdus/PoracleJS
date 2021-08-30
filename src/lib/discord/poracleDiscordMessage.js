@@ -54,6 +54,11 @@ class PoracleDiscordMessage {
 		return (this.client.config.discord.admins.includes(this.msg.author.id))
 	}
 
+	// eslint-disable-next-line class-methods-use-this
+	get isFromCommunityAdmin() {
+		return false
+	}
+
 	get isDM() {
 		return !(this.msg.channel.type === 'text')
 	}
@@ -105,6 +110,11 @@ class PoracleDiscordMessage {
 
 	async replyByDM(message) {
 		return this.msg.author.send(message)
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	get maxLength() {
+		return maxLength
 	}
 }
 

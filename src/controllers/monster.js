@@ -213,7 +213,9 @@ class Monster extends Controller {
 			data.pokemonId = data.pokemon_id
 			data.encounterId = data.encounter_id
 			// eslint-disable-next-line prefer-destructuring
-			data.generation = Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
+			data.generation = this.GameData.utilData.genException[`${data.pokemon_id}_${data.form}`] || Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
+			data.generationNameEng = this.GameData.utilData.genData[data.generation].name
+			data.generationRoman = this.GameData.utilData.genData[data.generation].roman
 			data.nameEng = monster.name
 			data.formNameEng = monster.form.name
 			data.formId = data.form
@@ -237,6 +239,7 @@ class Monster extends Controller {
 			data.height = encountered && data.height ? data.height.toFixed(2) : 0
 			data.weight = encountered && data.weight ? data.weight.toFixed(2) : 0
 			data.genderDataEng = this.GameData.utilData.genders[data.gender]
+			data.genderNameEng = data.genderDataEng.name
 			if (data.boosted_weather) data.weather = data.boosted_weather
 			if (!data.weather) data.weather = 0
 			Object.assign(data, this.config.general.dtsDictionary)
@@ -267,6 +270,7 @@ class Monster extends Controller {
 			data.pvpPokemonId = data.pokemon_id
 			data.pvpFormId = data.form
 			data.pvpEvolutionData = {}
+			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 
 			let ohbemms = 0
 
@@ -421,8 +425,8 @@ class Monster extends Controller {
 				return []
 			}
 
-			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, false)
-			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, false)
+			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 
@@ -524,12 +528,16 @@ class Monster extends Controller {
 					name: translator.translate(data.genderDataEng.name),
 					emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
 				}
+				data.genderName = data.genderData.name
+				data.genderEmoji = data.genderData.emoji
+				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 				data.rarityName = translator.translate(data.rarityNameEng)
 				data.quickMoveName = data.weight && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
 				data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji, platform)) : ''
 				data.chargeMoveName = data.weight && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
 				data.chargeMoveEmoji = this.GameData.moves[data.chargeMoveId] && this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type].emoji, platform)) : ''
 				data.boosted = !!data.weather
+				data.generationName = translator.translate(data.generationNameEng)
 				data.boostWeatherId = data.weather ? data.weather : ''
 				data.boostWeatherName = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
 				data.boostWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''

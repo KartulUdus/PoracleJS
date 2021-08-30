@@ -1,8 +1,11 @@
 exports.run = async (client, msg, args, options) => {
 	try {
-		if (!msg.isFromAdmin) {
-			return await msg.react('🙅')
-		}
+		let communityFilter = null
+
+		const communityAdmin = msg.isFromCommunityAdmin
+		if (communityAdmin) communityFilter = communityAdmin
+		if (msg.isFromAdmin) communityFilter = []
+		if (!communityFilter) return await msg.react('🙅')
 
 		// Check target
 		const util = client.createUtil(msg, options)
@@ -28,6 +31,18 @@ exports.run = async (client, msg, args, options) => {
 		if (args.includes('user')) humans = humans.filter((x) => x.type.includes('user'))
 		if (args.includes('group')) humans = humans.filter((x) => x.type.includes('group'))
 		if (args.includes('channel')) humans = humans.filter((x) => x.type.includes('channel'))
+
+		if (client.config.areaSecurity.enabled) {
+			args.forEach((arg) => {
+				const communityName = Object.keys(client.config.areaSecurity.communities).find((x) => x.toLowerCase() === arg)
+
+				if (communityName) {
+					communityFilter.push(communityName.toLowerCase())
+				}
+			})
+		}
+
+		if (communityFilter.length) humans = humans.filter((x) => x.community_membership && JSON.parse(x.community_membership).some((community) => communityFilter.includes(community)))
 
 		humans.sort((a, b) => {
 			const compare = a.type.localeCompare(b.type)
