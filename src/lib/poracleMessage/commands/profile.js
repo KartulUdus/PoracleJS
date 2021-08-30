@@ -33,7 +33,7 @@ exports.run = async (client, msg, args, options) => {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 				const name = args[1]
-				if (!name || name.match(client.re.allRe)) {
+				if (!name || name === 'all') {
 					await msg.react('🙅')
 					await msg.reply(translator.translate('That is not a valid profile name'))
 					return
