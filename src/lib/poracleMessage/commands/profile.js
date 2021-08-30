@@ -33,7 +33,7 @@ exports.run = async (client, msg, args, options) => {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 				const name = args[1]
-				if (!name) {
+				if (!name || name.match(client.re.allRe)) {
 					await msg.react('🙅')
 					await msg.reply(translator.translate('That is not a valid profile name'))
 					return
@@ -221,7 +221,51 @@ exports.run = async (client, msg, args, options) => {
 
 				break
 			}
+			case 'apply': {
+				const tempBackup = {
+					monsters: await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo }),
+					raid: await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo }),
+					egg: await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo }),
+					quest: await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo }),
+					invasion: await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo }),
+					weather: await client.query.selectAllQuery('weather', { id: target.id, profile_no: currentProfileNo }),
+					lures: await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo }),
+					gym: await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo }),
+					nests: await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo }),
+				}
+				const valid = []
+				const invalid = []
 
+				for (const profile of profiles) {
+					if (profile.profile_no !== currentProfileNo) {
+						if (args.some((arg) => arg.match(client.re.allRe) || arg === profile.name)) {
+							valid.push(profile.name)
+							for (const category of Object.keys(tempBackup)) {
+								if (tempBackup[category].length > 0) {
+									await client.query.deleteQuery(category, { id: target.id, profile_no: profile.profile_no })
+									await client.query.insertQuery(category, tempBackup[category].map((x) => ({ ...x, profile_no: profile.profile_no, uid: undefined })))
+								}
+							}
+						}
+					}
+				}
+				args.forEach((arg) => {
+					if (arg !== 'apply' && !profiles.some((profile) => profile.name === arg) && !arg.match(client.re.allRe)) {
+						invalid.push(arg)
+					}
+				})
+				let message = ''
+				if (valid.length) {
+					await msg.react('✅')
+					message = message.concat(translator.translate('Current profile applied to: '), valid.join(', '))
+				} else {
+					await msg.react('🙅')
+				}
+				if (invalid.length) {
+					message = message.concat(translator.translate('\nThese profiles were invalid: '), invalid.join(', '))
+				}
+				await msg.reply(message, { style: 'markdown' })
+			} break
 			default: {
 				if (args.length === 0) {
 					const profile = profiles.find((x) => x.profile_no === currentProfileNo)
@@ -231,7 +275,7 @@ exports.run = async (client, msg, args, options) => {
 						await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 					}
 
-					await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`', util.prefix),
+					await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`, `{0}profile apply <name>`', util.prefix),
 						{ style: 'markdown' })
 
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
