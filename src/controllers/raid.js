@@ -229,6 +229,10 @@ class Raid extends Controller {
 				data.quickMoveNameEng = this.GameData.moves[data.move_1] ? this.GameData.moves[data.move_1].name : ''
 				data.chargeMoveNameEng = this.GameData.moves[data.move_2] ? this.GameData.moves[data.move_2].name : ''
 				data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
+				// eslint-disable-next-line prefer-destructuring
+				data.generation = this.GameData.utilData.genException[`${data.pokemon_id}_${data.form}`] || Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
+				data.generationNameEng = this.GameData.utilData.genData[data.generation].name
+				data.generationRoman = this.GameData.utilData.genData[data.generation].roman
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -305,6 +309,7 @@ class Raid extends Controller {
 					data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
 					data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
 					data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
+					data.generationName = translator.translate(data.generationNameEng)
 
 					data.quickMove = data.quickMoveName // deprecated
 					data.chargeMove = data.chargeMoveName // deprecated
