@@ -32,6 +32,14 @@ class PoracleTelegramUtil {
 		return false
 	}
 
+	/**
+	 * commandAllowed not supported by telegram
+	 */
+	// eslint-disable-next-line no-unused-vars,class-methods-use-this
+	async commandAllowed(command) {
+		return true
+	}
+
 	async checkRegistrationStatus(target) {
 		let userHasLocation = false
 		let userHasArea = false

@@ -16,11 +16,18 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed('language')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		// Remove arguments that we don't want to keep for processing
 		for (let i = args.length - 1; i >= 0; i--) {
-			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
-			else if (args[i].match(client.re.channelRe)) args.splice(i, 1)
-			else if (args[i].match(client.re.userRe)) args.splice(i, 1)
+			if (args[i].match(client.re.nameRe)
+        || args[i].match(client.re.channelRe)
+        || args[i].match(client.re.userRe)) {
+				args.splice(i, 1)
+			}
 		}
 
 		const currentLanguageName = client.GameData.utilData.languageNames[language]

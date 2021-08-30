@@ -55,22 +55,36 @@ class Monster extends Controller {
 		}
 
 		let pvpQueryString = ''
+		const pvpSecurityEnabled = this.config.discord.commandSecurity && this.config.discord.commandSecurity.pvp
 		if (!data.pvpEvoLookup) {
 			pvpQueryString = 'pvp_ranking_league = 0'
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat(' or ((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (1 = 0')
+			}
 			for (const [league, leagueData] of Object.entries(data.pvpBestRank)) {
 				pvpQueryString = pvpQueryString.concat(` or (pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp})`)
 			}
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat('))')
+			}
 		} else {
-			pvpQueryString = '1 = 0'
+			if (pvpSecurityEnabled) {
+				pvpQueryString = '(humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (1 = 0'
+			} else {
+				pvpQueryString = '1 = 0'
+			}
 			for (const [league, leagueData] of Object.entries(data.pvpEvoLookup)) {
 				pvpQueryString = pvpQueryString.concat(` or ((form = 0 or form = ${leagueData.form}) and pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp})`)
+			}
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat(')')
 			}
 		}
 
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.pvp_ranking_worst from monsters
 		join humans on (humans.id = monsters.id and humans.current_profile_no = monsters.profile_no)
-		where humans.enabled = true and humans.admin_disable = false and
+		where humans.enabled = true and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%monster%') and
 		(${pokemonQueryString}) and
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
@@ -121,7 +135,7 @@ class Monster extends Controller {
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
 					`)
 		}
-		// this.log.silly(`${data.encounter_id}: Query ${query}`)
+		this.log.silly(`${data.encounter_id}: Query ${query}`)
 
 		let result = await this.db.raw(query)
 
@@ -630,6 +644,8 @@ class Monster extends Controller {
 				data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
 				data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
 				data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
+
+				data.distance = cares.longitude ? this.getDistance({ lat: cares.latitude, lon: cares.longitude }, { lat: data.latitude, lon: data.longitude }) : ''
 
 				const view = {
 					...geoResult,

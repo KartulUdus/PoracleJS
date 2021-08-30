@@ -21,6 +21,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName) && !args.find((arg) => arg === 'remove')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		if (args.length === 0) {
 			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}gym everything`, `{0}gym mystic slot_changes`', util.prefix),
 				{ style: 'markdown' })
