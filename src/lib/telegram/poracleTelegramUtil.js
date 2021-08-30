@@ -1,3 +1,5 @@
+const communityLogic = require('../communityLogic')
+
 class PoracleTelegramUtil {
 	constructor(client, msg, options) {
 		this.client = client
@@ -7,14 +9,27 @@ class PoracleTelegramUtil {
 		this.prefix = '/'
 	}
 
-	canAdminChannel(id) {
+	async canAdminChannel(id) {
 		const postUserId = this.msg.userId.toString()
 
 		const channelIds = this.client.config.telegram.delegatedAdministration
 		&& this.client.config.telegram.delegatedAdministration.channelTracking
 			? this.client.config.telegram.delegatedAdministration.channelTracking[id.toString()] : null
-		if (!channelIds) return false
-		return channelIds.includes(postUserId)
+
+		if (channelIds && channelIds.includes(postUserId)) return true
+
+		if (this.client.config.areaSecurity.enabled && parseInt(id, 10)) {
+			const communityAdmins = communityLogic.isTelegramCommunityAdmin(this.client.config, postUserId)
+			if (communityAdmins) {
+				const channel = await this.client.query.selectOneQuery('humans', { id, type: 'telegram:group' })
+				if (channel) {
+					const channelCommunities = JSON.parse(channel.community_membership)
+					if (channelCommunities.some((community) => communityAdmins.includes(community))) return true
+				}
+			}
+		}
+
+		return false
 	}
 
 	async checkRegistrationStatus(target) {
@@ -48,7 +63,7 @@ class PoracleTelegramUtil {
 	}
 
 	async buildTarget(args) {
-		if (!this.msg.isFromAdmin && !this.msg.isDM && !this.canAdminChannel(this.msg.ctx.update.message.chat.id)) {
+		if (!this.msg.isFromAdmin && !this.msg.isDM && !await this.canAdminChannel(this.msg.ctx.update.message.chat.id)) {
 			await this.msg.replyByDM(this.client.translator.translate('Please run commands in Direct Messages'))
 
 			return { canContinue: false }
@@ -76,7 +91,7 @@ class PoracleTelegramUtil {
 			let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
 			if (userIdOverride) [, , userIdOverride] = userIdOverride.match(this.client.re.userRe)
 
-			if (!this.msg.isDM && (this.msg.isFromAdmin || this.canAdminChannel(this.msg.ctx.update.message.chat.id))) {
+			if (!this.msg.isDM && (this.msg.isFromAdmin || await this.canAdminChannel(this.msg.ctx.update.message.chat.id))) {
 				target = {
 					id: this.msg.ctx.update.message.chat.id.toString(),
 					type: 'telegram:group',
@@ -89,7 +104,7 @@ class PoracleTelegramUtil {
 				target.id = userIdOverride
 			}
 
-			if (channelName && (this.msg.isFromAdmin || this.canAdminChannel(channelName))) {
+			if (channelName && (this.msg.isFromAdmin || await this.canAdminChannel(channelName))) {
 				target = {
 					name: channelName,
 					type: 'telegram:channel',
@@ -104,7 +119,7 @@ class PoracleTelegramUtil {
 				return { canContinue: false }
 			}
 
-			if (!status.isRegistered && (this.msg.isFromAdmin || this.canAdminChannel(this.msg.ctx.update.message.chat.id)) && !this.msg.isDM) {
+			if (!status.isRegistered && (this.msg.isFromAdmin || await this.canAdminChannel(this.msg.ctx.update.message.chat.id)) && !this.msg.isDM) {
 				await this.msg.reply(`${this.msg.ctx.update.message.chat.title} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.msg.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
 				return { canContinue: false }
 			}
