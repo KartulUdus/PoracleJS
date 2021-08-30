@@ -221,16 +221,18 @@ exports.run = async (client, msg, args, options) => {
 
 				break
 			}
-			case 'apply': {
+			case 'copyto': {
+				const currentName = profiles.find((profile) => profile.profile_no === currentProfileNo).name
 				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests']
 				const tempBackup = { }
 				const valid = []
 				const invalid = []
 
 				for (const arg of args) {
-					if (profiles.some((profile) => profile.name === arg) || arg.match(client.re.allRe)) {
+					const isValid = profiles.find((profile) => profile.name === arg)
+					if ((isValid || arg === 'all') && currentName !== arg) {
 						valid.push(arg)
-					} else if (arg !== 'apply') {
+					} else if (arg !== 'copyto') {
 						invalid.push(arg)
 					}
 				}
@@ -238,6 +240,7 @@ exports.run = async (client, msg, args, options) => {
 					tempBackup[category] = await client.query.selectAllQuery(category, { id: target.id, profile_no: currentProfileNo })
 					for (const profile of profiles) {
 						if (profile.profile_no !== currentProfileNo && (valid.includes(profile.name) || valid.includes('all'))) {
+							if (!valid.includes(profile.name)) valid.push(profile.name)
 							await client.query.deleteQuery(category, { id: target.id, profile_no: profile.profile_no })
 							await client.query.insertQuery(category, tempBackup[category].map((x) => ({ ...x, profile_no: profile.profile_no, uid: undefined })))
 						}
@@ -246,12 +249,14 @@ exports.run = async (client, msg, args, options) => {
 				let message = ''
 				if (valid.length) {
 					await msg.react('✅')
-					message = message.concat(translator.translate('Current profile applied to: '), valid.join(', '))
+					message = message.concat(translator.translate('Current profile copied to: '), valid.filter((x) => x !== 'all').join(', '), '.')
+					if (valid.includes('all')) message = message.concat(translator.translate(' (all)'))
 				} else {
 					await msg.react('🙅')
 				}
 				if (invalid.length) {
-					message = message.concat(translator.translate('\nThese profiles were invalid: '), invalid.join(', '))
+					message = message.concat(translator.translate('\nThese profiles were invalid: '), invalid.join(', '), '.')
+					if (invalid.includes(currentName)) message = message.concat(translator.translate('\nCannot copy over the currently active profile.'))
 				}
 				await msg.reply(message, { style: 'markdown' })
 			} break
@@ -264,7 +269,7 @@ exports.run = async (client, msg, args, options) => {
 						await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 					}
 
-					await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`, `{0}profile apply <name>`', util.prefix),
+					await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`, `{0}profile copyto <name>`', util.prefix),
 						{ style: 'markdown' })
 
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
