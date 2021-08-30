@@ -1,5 +1,6 @@
 const path = require('path')
 const fs = require('fs')
+const { Permissions } = require('discord.js')
 const Uicons = require('../../../uicons')
 
 exports.run = async (client, msg, [args]) => {
@@ -28,7 +29,7 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.reply('No guild has been set, either execute inside a channel or specify guild<id>')
 		}
 
-		if (!guild.me.hasPermission('MANAGE_EMOJIS_AND_STICKERS')) {
+		if (!guild.me.hasPermission(Permissions.FLAGS.MANAGE_EMOJIS)) {
 			return await msg.reply('I have not been allowed to manage emojis and stickers!')
 		}
 
