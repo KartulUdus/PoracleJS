@@ -15,7 +15,7 @@ class Lure extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, lures.template, lures.distance, lures.clean, lures.ping from lures
 		join humans on (humans.id = lures.id and humans.current_profile_no = lures.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%lure%') and
 		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0) `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
@@ -93,6 +93,7 @@ class Lure extends Controller {
 				}
 			}
 
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`

@@ -19,6 +19,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName)) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		const profiles = await client.query.selectAllQuery('profiles', { id: target.id })
 
 		// Remove arguments that we don't want to keep for area processing

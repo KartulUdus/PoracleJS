@@ -16,7 +16,7 @@ const urlShortener = require('../lib/urlShortener')
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventParser) {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
 		super()
 		this.db = db
 		this.cp = cp
@@ -32,7 +32,8 @@ class Controller extends EventEmitter {
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherData = weatherData
 		this.statsData = statsData
-		this.eventParser = eventParser
+		this.eventParser = eventProviders && eventProviders.pogoEvents
+		this.shinyPossible = eventProviders && eventProviders.shinyPossible
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)

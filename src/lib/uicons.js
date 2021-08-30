@@ -184,9 +184,9 @@ class Uicons {
 		return !!currentSet
 	}
 
-	async pokemonIcon(pokemonId, form = 0, evolution = 0, female = false, costume = 0, shiny = false) {
+	async pokemonIcon(pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, shiny = false) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		if (currentSet) return `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, female, costume, shiny)}`
+		if (currentSet) return `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, gender, costume, shiny)}`
 		if (this.fallback) return `${this.url}/pokemon_icon_${pokemonId.toString().padStart(3, '0')}_${form ? form.toString() : '00'}${evolution > 0 ? `_${evolution.toString()}` : ''}.${this.imageType}`
 		return null
 	}

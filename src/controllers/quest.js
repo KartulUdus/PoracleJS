@@ -22,7 +22,7 @@ class Quest extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on (humans.id = quest.id and humans.current_profile_no = quest.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%quest%') and
 		(0 = 1`
 
 		if (data.rewardData.monsters.length) {
@@ -127,6 +127,7 @@ class Quest extends Controller {
 				}
 			}
 
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
@@ -153,6 +154,8 @@ class Quest extends Controller {
 			this.log.debug(`${logReference} Quest: data.questString: ${data.questStringEng}, data.rewardData: ${JSON.stringify(data.rewardData)}`)
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.monsters.length > 0 ? data.rewardData.monsters[0].shiny : 0
+			data.shinyPossible = data.rewardData.monsters.length > 0 ? this.shinyPossible.isShinyPossible(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId) : false
+
 			data.itemAmount = data.rewardData.itemAmount
 			//			data.monsters = data.rewardData.monsters
 			//			data.monsterData = data.rewardData.monsterData
@@ -191,8 +194,8 @@ class Quest extends Controller {
 			data.stickerUrl = ''
 
 			if (data.rewardData.monsters.length > 0) {
-				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
-				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
+				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
 				// data.imgUrl = data.rewardData.monsters.length > 0
 				// 	? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
 				// 	: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
@@ -236,7 +239,7 @@ class Quest extends Controller {
 			}
 
 			if (data.rewardData.monsters.length > 0) {
-				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters.formId === mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters[0].formId === mon.form.id)[0].stats : ''
+				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters[0].formId === mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters[0].formId === mon.form.id)[0].stats : ''
 				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && !mon.form.id)[0].stats : ''
 			}
 
@@ -263,6 +266,8 @@ class Quest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				data.questString = translator.translate(data.questStringEng)
 
@@ -356,6 +361,8 @@ class Quest extends Controller {
 					data.candyMonstersNamesEng,
 				].filter((x) => x).join(', ')
 
+				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
+
 				const view = {
 					...geoResult,
 					...data,
@@ -370,9 +377,6 @@ class Quest extends Controller {
 					now: new Date(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
 
 				const templateType = 'quest'
 				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
