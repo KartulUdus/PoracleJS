@@ -222,38 +222,27 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			case 'apply': {
-				const tempBackup = {
-					monsters: await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo }),
-					raid: await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo }),
-					egg: await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo }),
-					quest: await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo }),
-					invasion: await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo }),
-					weather: await client.query.selectAllQuery('weather', { id: target.id, profile_no: currentProfileNo }),
-					lures: await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo }),
-					gym: await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo }),
-					nests: await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo }),
-				}
+				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests']
+				const tempBackup = { }
 				const valid = []
 				const invalid = []
 
-				for (const profile of profiles) {
-					if (profile.profile_no !== currentProfileNo) {
-						if (args.some((arg) => arg.match(client.re.allRe) || arg === profile.name)) {
-							valid.push(profile.name)
-							for (const category of Object.keys(tempBackup)) {
-								if (tempBackup[category].length > 0) {
-									await client.query.deleteQuery(category, { id: target.id, profile_no: profile.profile_no })
-									await client.query.insertQuery(category, tempBackup[category].map((x) => ({ ...x, profile_no: profile.profile_no, uid: undefined })))
-								}
-							}
+				for (const arg of args) {
+					if (profiles.some((profile) => profile.name === arg) || arg.match(client.re.allRe)) {
+						valid.push(arg)
+					} else if (arg !== 'apply') {
+						invalid.push(arg)
+					}
+				}
+				for (const category of categories) {
+					tempBackup[category] = await client.query.selectAllQuery(category, { id: target.id, profile_no: currentProfileNo })
+					for (const profile of profiles) {
+						if (profile.profile_no !== currentProfileNo && (valid.includes(profile.name) || valid.includes('all'))) {
+							await client.query.deleteQuery(category, { id: target.id, profile_no: profile.profile_no })
+							await client.query.insertQuery(category, tempBackup[category].map((x) => ({ ...x, profile_no: profile.profile_no, uid: undefined })))
 						}
 					}
 				}
-				args.forEach((arg) => {
-					if (arg !== 'apply' && !profiles.some((profile) => profile.name === arg) && !arg.match(client.re.allRe)) {
-						invalid.push(arg)
-					}
-				})
 				let message = ''
 				if (valid.length) {
 					await msg.react('✅')
