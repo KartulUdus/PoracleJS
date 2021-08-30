@@ -57,15 +57,19 @@ exports.run = async (client, msg, [args]) => {
 		const setEmoji = async (url, name) => {
 			const discordEmojiName = `poracle-${name}`.replace(/-/g, '_')
 
-			if (url && !url.endsWith('/0.png')) {
-				if (emojis[discordEmojiName] && overwrite) {
-					await emojis[discordEmojiName].delete()
-				}
+			if (url) {
+				if (!url.endsWith('/0.png')) {
+					if (emojis[discordEmojiName] && overwrite) {
+						await emojis[discordEmojiName].delete()
+					}
 
-				if (!emojis[discordEmojiName] || overwrite) {
-					await msg.reply(`Uploading ${discordEmojiName} from ${url}`)
+					if (!emojis[discordEmojiName] || overwrite) {
+						await msg.reply(`Uploading ${discordEmojiName} from ${url}`)
 
-					emojis[discordEmojiName] = await guild.emojis.create(url, discordEmojiName)
+						emojis[discordEmojiName] = await guild.emojis.create(url, discordEmojiName)
+					}
+				} else {
+					await msg.reply(`Repository does not have a suitable emoji for ${discordEmojiName}`)
 				}
 			}
 
