@@ -224,25 +224,23 @@ exports.run = async (client, msg, args, options) => {
 			case 'copyto': {
 				const currentName = profiles.find((profile) => profile.profile_no === currentProfileNo).name
 				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests']
-				const tempBackup = { }
 				const valid = []
 				const invalid = []
 
 				for (const arg of args) {
-					const isValid = profiles.find((profile) => profile.name === arg)
-					if ((isValid || arg === 'all') && currentName !== arg) {
+					if ((arg === 'all' || profiles.some((profile) => profile.name === arg)) && currentName !== arg) {
 						valid.push(arg)
 					} else if (arg !== 'copyto') {
 						invalid.push(arg)
 					}
 				}
 				for (const category of categories) {
-					tempBackup[category] = await client.query.selectAllQuery(category, { id: target.id, profile_no: currentProfileNo })
+					const tempBackup = await client.query.selectAllQuery(category, { id: target.id, profile_no: currentProfileNo })
 					for (const profile of profiles) {
 						if (profile.profile_no !== currentProfileNo && (valid.includes(profile.name) || valid.includes('all'))) {
 							if (!valid.includes(profile.name)) valid.push(profile.name)
 							await client.query.deleteQuery(category, { id: target.id, profile_no: profile.profile_no })
-							await client.query.insertQuery(category, tempBackup[category].map((x) => ({ ...x, profile_no: profile.profile_no, uid: undefined })))
+							await client.query.insertQuery(category, tempBackup.map((x) => ({ ...x, profile_no: profile.profile_no, uid: undefined })))
 						}
 					}
 				}
