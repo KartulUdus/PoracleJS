@@ -1,4 +1,5 @@
 const fs = require('fs')
+const communityLogic = require('../communityLogic')
 
 class PoracleTelegramMessage {
 	constructor(ctx) {
@@ -31,6 +32,10 @@ class PoracleTelegramMessage {
 
 	get isFromAdmin() {
 		return (this.config.telegram.admins.includes(this.userId.toString()))
+	}
+
+	get isFromCommunityAdmin() {
+		return this.config.areaSecurity.enabled && communityLogic.isTelegramCommunityAdmin(this.config, this.userId.toString())
 	}
 
 	get isDM() {
@@ -98,6 +103,11 @@ class PoracleTelegramMessage {
 
 	async send(target, message, options = {}) {
 		return this.ctx.telegram.sendMessage(target, options.style !== 'markdown' ? this.convertSafe(message) : message)
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	get maxLength() {
+		return 4095
 	}
 }
 

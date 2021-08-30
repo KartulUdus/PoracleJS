@@ -119,7 +119,9 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				const weatherId = weatherInfo[currentHourTimestamp]
-				const staticMap = await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId)
+				const staticMap = client.config.geocoding.staticProvider === 'tileservercache'
+					? await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId)
+					: null
 
 				// Build forecast information
 

@@ -130,6 +130,9 @@ async function syncTelegramMembership() {
 				config.reconciliation.discord.removeInvalidUsers,
 			)
 		}
+		if (config.areaSecurity.enabled) {
+			await telegramReconciliation.updateTelegramChannels()
+		}
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
 	}
