@@ -8,7 +8,7 @@ exports.run = async (client, msg, args, options) => {
 		const util = client.createUtil(msg, options)
 
 		const {
-			canContinue, target, language, currentProfileNo,
+			canContinue, target, language,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
@@ -26,264 +26,280 @@ exports.run = async (client, msg, args, options) => {
 			return msg.reply(translator.translate('You do not have permission to execute this command'))
 		}
 
-		const monsters = await client.query.selectAllQuery('monsters', { id: target.id, profile_no: currentProfileNo })
-		const raids = await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo })
-		const eggs = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
-		const human = (await client.query.selectAllQuery('humans', { id: target.id }))[0]
-		const quests = await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo })
-		const invasions = await client.query.selectAllQuery('invasion', { id: target.id, profile_no: currentProfileNo })
-		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
-		const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
-		const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
-		// const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
+		const human = (await client.query.selectOneQuery('humans', { id: target.id }))
 
-		let message = ''
+		const profiles = await client.query.selectAllQuery('profiles', { id: target.id })
+
 		// should allow user to override prefix
 		const { prefix } = util
 		// select everything for noew
 		const everything = true
 
-		if (human.latitude) message += `${prefix}location ${human.latitude},${human.longitude}\n`
-		const areas = JSON.parse(human.area)
-		if (areas.length) message += `${prefix}area add ${areas.map((x) => x.replace(/ /g, '_')).join(' ')}\n`
+		let message = ''
 
-		const gender = ['', 'male', 'female', 'genderless']
+		for (const profile of profiles) {
+			const currentProfileNo = profile.profile_no
 
-		if (everything || args.includes('monsters')) {
-			const monsterParameters = {
-				iv: ['min_iv', -1],
-				maxiv: ['max_iv', 100],
-				mincp: ['min_cp', 0],
-				macxp: ['max_cp', 9000],
-				level: ['min_level', 0],
-				maxlevel: ['max_level', 40],
-				atk: ['atk', 0],
-				def: ['def', 0],
-				sta: ['sta', 0],
-				maxatk: ['max_atk', 15],
-				maxsta: ['max_sta', 15],
-				maxdef: ['max_def', 15],
-				weight: ['min_weight', 0],
-				maxweight: ['max_weight', 9000000],
-				rarity: ['rarity', -1],
-				maxrarity: ['max_rarity', 6],
-				t: ['min_time', 0],
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				d: ['distance', 0],
-			}
-			for (const monster of monsters) {
-				const mon = client.GameData.monsters[`${monster.pokemon_id}_${monster.form}`]
+			message += `${prefix}profile add ${profile.name}\n`
+			message += `${prefix}profile ${profile.name}\n`
 
-				message += `${prefix}track ${monster.pokemon_id ? mon.name.replace(/ /g, '_') : 'everything'}`
-				if (monster.form) message += ` form:${mon.form.name.replace(/ /g, '_')}`
+			if (profile.latitude) message += `${prefix}location ${profile.latitude},${profile.longitude}\n`
+			const areas = JSON.parse(profile.area)
+			if (areas.length) message += `${prefix}area add ${areas.map((x) => x.replace(/ /g, '_')).join(' ')}\n`
 
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(monsterParameters)) {
-					if (monster[dbFieldName] !== defaultValue) message += ` ${param}:${monster[dbFieldName]}`
+			const monsters = await client.query.selectAllQuery('monsters', {
+				id: target.id,
+				profile_no: currentProfileNo,
+			})
+			const raids = await client.query.selectAllQuery('raid', { id: target.id, profile_no: currentProfileNo })
+			const eggs = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
+			const quests = await client.query.selectAllQuery('quest', { id: target.id, profile_no: currentProfileNo })
+			const invasions = await client.query.selectAllQuery('invasion', {
+				id: target.id,
+				profile_no: currentProfileNo,
+			})
+			const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
+			const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
+			const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
+
+			const gender = ['', 'male', 'female', 'genderless']
+
+			if (everything || args.includes('monsters')) {
+				const monsterParameters = {
+					iv: ['min_iv', -1],
+					maxiv: ['max_iv', 100],
+					mincp: ['min_cp', 0],
+					macxp: ['max_cp', 9000],
+					level: ['min_level', 0],
+					maxlevel: ['max_level', 40],
+					atk: ['atk', 0],
+					def: ['def', 0],
+					sta: ['sta', 0],
+					maxatk: ['max_atk', 15],
+					maxsta: ['max_sta', 15],
+					maxdef: ['max_def', 15],
+					weight: ['min_weight', 0],
+					maxweight: ['max_weight', 9000000],
+					rarity: ['rarity', -1],
+					maxrarity: ['max_rarity', 6],
+					t: ['min_time', 0],
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
 				}
+				for (const monster of monsters) {
+					const mon = client.GameData.monsters[`${monster.pokemon_id}_${monster.form}`]
 
-				if (monster.clean) message += ' clean'
-				if (monster.gender) message += ` ${gender[monster.gender]}`
+					message += `${prefix}track ${monster.pokemon_id ? mon.name.replace(/ /g, '_') : 'everything'}`
+					if (monster.form) message += ` form:${mon.form.name.replace(/ /g, '_')}`
 
-				if (monster.pvp_ranking_league) {
-					const leagues = {
-						500: 'little',
-						1500: 'great',
-						2500: 'ultra',
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(monsterParameters)) {
+						if (monster[dbFieldName] !== defaultValue) message += ` ${param}:${monster[dbFieldName]}`
 					}
-					const leagueName = leagues[monster.pvp_ranking_league]
-					message += ` ${leagueName}:${monster.pvp_ranking_worst} ${leagueName}cp:${monster.pvp_ranking_min_cp}`
-					if (monster.pvp_ranking_best > 1) message += ` ${leagueName}high:${monster.pvp_ranking_best}`
-				}
-				// league
 
-				message += '\n'
-			}
-		}
+					if (monster.clean) message += ' clean'
+					if (monster.gender) message += ` ${gender[monster.gender]}`
 
-		if (everything || args.includes('raid')) {
-			const raidParameters = {
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				d: ['distance', 0],
-			}
-			const raidTeams = ['harmony', 'mystic', 'valour', 'instinct']
-
-			for (const raid of raids) {
-				message += `${prefix}raid `
-				if (raid.pokemon_id === 9000) {
-					message += `level:${raid.level}`
-				} else {
-					const mon = client.GameData.monsters[`${raid.pokemon_id}_${raid.form}`]
-
-					message += `${mon.name}`
-					if (raid.form) message += ` form:${mon.form.name}` // will not work
-				}
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(raidParameters)) {
-					if (raid[dbFieldName] !== defaultValue) message += ` ${param}:${raid[dbFieldName]}`
-				}
-				if (raid.team !== 4) message += ` team:${raidTeams[raid.team]}`
-				if (raid.exclusive) message += ' ex'
-				if (raid.clean) message += ' clean'
-
-				message += '\n'
-			}
-		}
-
-		if (everything || args.includes('eggs')) {
-			const eggParameters = {
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				d: ['distance', 0],
-			}
-			const raidTeams = ['harmony', 'mystic', 'valour', 'instinct']
-
-			for (const egg of eggs) {
-				message += `${prefix}egg level:${egg.level}`
-
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(eggParameters)) {
-					if (egg[dbFieldName] !== defaultValue) message += ` ${param}:${egg[dbFieldName]}`
-				}
-				if (egg.team !== 4) message += ` team:${raidTeams[egg.team]}`
-				if (egg.exclusive) message += ' ex'
-				if (egg.clean) message += ' clean'
-
-				message += '\n'
-			}
-		}
-
-		if (everything || args.includes('invasion')) {
-			const invasionParameters = {
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				d: ['distance', 0],
-			}
-
-			for (const invasion of invasions) {
-				message += `${prefix}invasion ${invasion.grunt_type.replace(/ /g, '_')}`
-				if (invasion.gender) message += ` ${gender[invasion.gender]}`
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(invasionParameters)) {
-					if (invasion[dbFieldName] !== defaultValue) message += ` ${param}:${invasion[dbFieldName]}`
-				}
-				if (invasion.clean) message += ' clean'
-			}
-		}
-
-		if (everything || args.includes('quest')) {
-			const questParameters = {
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				d: ['distance', 0],
-			}
-			for (const quest of quests) {
-				message += `${prefix}quest`
-				switch (quest.reward_type) {
-					case 3: {
-						if (quest.reward) message += ` stardust:${quest.reward}`
-						else message += ' stardust'
-						break
-					}
-					case 12: {
-						if (quest.reward) {
-							const mon = client.GameData.monsters[`${quest.reward}_0`]
-							message += ` energy:${mon.name.replace(/ /g, '_')}`
-						} else message += ' energy'
-						break
-					}
-					case 4: {
-						if (quest.reward) {
-							const mon = client.GameData.monsters[`${quest.reward}_0`]
-							message += ` candy:${mon.name.replace(/ /g, '_')}`
-						} else message += ' candy'
-						break
-					}
-					case 7: {
-						const mon = client.GameData.monsters[`${quest.reward}_${quest.form}`]
-						message += ` ${mon.name.replace(/ /g, '_')}`
-						if (quest.form) {
-							message += ` form:${mon.form.name.replace(/ /g, '_')}`
+					if (monster.pvp_ranking_league) {
+						const leagues = {
+							500: 'little',
+							1500: 'great',
+							2500: 'ultra',
 						}
-						break
+						const leagueName = leagues[monster.pvp_ranking_league]
+						message += ` ${leagueName}:${monster.pvp_ranking_worst} ${leagueName}cp:${monster.pvp_ranking_min_cp}`
+						if (monster.pvp_ranking_best > 1) message += ` ${leagueName}high:${monster.pvp_ranking_best}`
 					}
-					case 2: {
-						message += ` ${client.GameData.items[quest.reward].name.replace(/ /g, '_')}`
-						break
+					// league
+
+					message += '\n'
+				}
+			}
+
+			if (everything || args.includes('raid')) {
+				const raidParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
+				}
+				const raidTeams = ['harmony', 'mystic', 'valour', 'instinct']
+
+				for (const raid of raids) {
+					message += `${prefix}raid `
+					if (raid.pokemon_id === 9000) {
+						message += `level:${raid.level}`
+					} else {
+						const mon = client.GameData.monsters[`${raid.pokemon_id}_${raid.form}`]
+
+						message += `${mon.name}`
+						if (raid.form) message += ` form:${mon.form.name}` // will not work
 					}
-					default:
-						break
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(raidParameters)) {
+						if (raid[dbFieldName] !== defaultValue) message += ` ${param}:${raid[dbFieldName]}`
+					}
+					if (raid.team !== 4) message += ` team:${raidTeams[raid.team]}`
+					if (raid.exclusive) message += ' ex'
+					if (raid.clean) message += ' clean'
+
+					message += '\n'
+				}
+			}
+
+			if (everything || args.includes('eggs')) {
+				const eggParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
+				}
+				const raidTeams = ['harmony', 'mystic', 'valour', 'instinct']
+
+				for (const egg of eggs) {
+					message += `${prefix}egg level:${egg.level}`
+
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(eggParameters)) {
+						if (egg[dbFieldName] !== defaultValue) message += ` ${param}:${egg[dbFieldName]}`
+					}
+					if (egg.team !== 4) message += ` team:${raidTeams[egg.team]}`
+					if (egg.exclusive) message += ' ex'
+					if (egg.clean) message += ' clean'
+
+					message += '\n'
+				}
+			}
+
+			if (everything || args.includes('invasion')) {
+				const invasionParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
 				}
 
-				if (quest.shiny) message += ' shiny'
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(questParameters)) {
-					if (quest[dbFieldName] !== defaultValue) message += ` ${param}:${quest[dbFieldName]}`
+				for (const invasion of invasions) {
+					message += `${prefix}invasion ${invasion.grunt_type.replace(/ /g, '_')}`
+					if (invasion.gender) message += ` ${gender[invasion.gender]}`
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(invasionParameters)) {
+						if (invasion[dbFieldName] !== defaultValue) message += ` ${param}:${invasion[dbFieldName]}`
+					}
+					if (invasion.clean) message += ' clean'
+				}
+			}
+
+			if (everything || args.includes('quest')) {
+				const questParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
+				}
+				for (const quest of quests) {
+					message += `${prefix}quest`
+					switch (quest.reward_type) {
+						case 3: {
+							if (quest.reward) message += ` stardust:${quest.reward}`
+							else message += ' stardust'
+							break
+						}
+						case 12: {
+							if (quest.reward) {
+								const mon = client.GameData.monsters[`${quest.reward}_0`]
+								message += ` energy:${mon.name.replace(/ /g, '_')}`
+							} else message += ' energy'
+							break
+						}
+						case 4: {
+							if (quest.reward) {
+								const mon = client.GameData.monsters[`${quest.reward}_0`]
+								message += ` candy:${mon.name.replace(/ /g, '_')}`
+							} else message += ' candy'
+							break
+						}
+						case 7: {
+							const mon = client.GameData.monsters[`${quest.reward}_${quest.form}`]
+							message += ` ${mon.name.replace(/ /g, '_')}`
+							if (quest.form) {
+								message += ` form:${mon.form.name.replace(/ /g, '_')}`
+							}
+							break
+						}
+						case 2: {
+							message += ` ${client.GameData.items[quest.reward].name.replace(/ /g, '_')}`
+							break
+						}
+						default:
+							break
+					}
+
+					if (quest.shiny) message += ' shiny'
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(questParameters)) {
+						if (quest[dbFieldName] !== defaultValue) message += ` ${param}:${quest[dbFieldName]}`
+					}
+
+					if (quest.clean) message += ' clean'
+
+					message += '\n'
+				}
+			}
+
+			if (everything || args.includes('gym')) {
+				const gymParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
+				}
+				const teamNames = ['uncontested', 'mystic', 'valor', 'instinct']
+				for (const gym of gyms) {
+					message += `${prefix}gym ${teamNames[gym.team]}`
+
+					if (gym.slot_changes) message += ' slot_changes'
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(gymParameters)) {
+						if (gym[dbFieldName] !== defaultValue) message += ` ${param}:${gym[dbFieldName]}`
+					}
+
+					if (gym.clean) message += ' clean'
+
+					message += '\n'
+				}
+			}
+
+			if (everything || args.includes('lure')) {
+				const lureParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
 				}
 
-				if (quest.clean) message += ' clean'
-
-				message += '\n'
-			}
-		}
-
-		if (everything || args.includes('gym')) {
-			const gymParameters = {
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				d: ['distance', 0],
-			}
-			const teamNames = ['uncontested', 'mystic', 'valor', 'instinct']
-			for (const gym of gyms) {
-				message += `${prefix}gym ${teamNames[gym.team]}`
-
-				if (gym.slot_changes) message += ' slot_changes'
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(gymParameters)) {
-					if (gym[dbFieldName] !== defaultValue) message += ` ${param}:${gym[dbFieldName]}`
+				const lureTypes = {
+					0: 'everything',
+					501: 'normal',
+					502: 'glacial',
+					503: 'mossy',
+					504: 'magnetic',
+					505: 'rainy',
 				}
 
-				if (gym.clean) message += ' clean'
+				for (const lure of lures) {
+					message += `${prefix}lure ${lureTypes[lure.lure_id]}`
 
-				message += '\n'
-			}
-		}
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(lureParameters)) {
+						if (lure[dbFieldName] !== defaultValue) message += ` ${param}:${lure[dbFieldName]}`
+					}
 
-		if (everything || args.includes('lure')) {
-			const lureParameters = {
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				d: ['distance', 0],
-			}
+					if (lure.clean) message += ' clean'
 
-			const lureTypes = {
-				0: 'everything',
-				501: 'normal',
-				502: 'glacial',
-				503: 'mossy',
-				504: 'magnetic',
-				505: 'rainy',
-			}
-
-			for (const lure of lures) {
-				message += `${prefix}lure ${lureTypes[lure.lure_id]}`
-
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(lureParameters)) {
-					if (lure[dbFieldName] !== defaultValue) message += ` ${param}:${lure[dbFieldName]}`
+					message += '\n'
 				}
-
-				if (lure.clean) message += ' clean'
-
-				message += '\n'
 			}
-		}
 
-		if (everything || args.includes('nests')) {
-			const nestParameters = {
-				template: ['template', client.config.general.defaultTemplateName.toString()],
-				minspawn: ['min_spawn_avg', 0],
-				d: ['distance', 0],
-			}
-			for (const nest of nests) {
-				const mon = client.GameData.monsters[`${nest.pokemon_id}_0`]
-
-				message += `${prefix}nest ${nest.pokemon_id ? mon.name.replace(/ /g, '_') : 'everything'}`
-
-				for (const [param, [dbFieldName, defaultValue]] of Object.entries(nestParameters)) {
-					if (nest[dbFieldName] !== defaultValue) message += ` ${param}:${nest[dbFieldName]}`
+			if (everything || args.includes('nests')) {
+				const nestParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					minspawn: ['min_spawn_avg', 0],
+					d: ['distance', 0],
 				}
+				for (const nest of nests) {
+					const mon = client.GameData.monsters[`${nest.pokemon_id}_0`]
 
-				if (nest.clean) message += ' clean'
-				message += '\n'
+					message += `${prefix}nest ${nest.pokemon_id ? mon.name.replace(/ /g, '_') : 'everything'}`
+
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(nestParameters)) {
+						if (nest[dbFieldName] !== defaultValue) message += ` ${param}:${nest[dbFieldName]}`
+					}
+
+					if (nest.clean) message += ' clean'
+					message += '\n'
+				}
 			}
 		}
 
