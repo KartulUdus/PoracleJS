@@ -102,7 +102,7 @@ exports.run = async (client, msg, args, options) => {
 			gen: client.re.genRe,
 			iv: client.re.ivRe,
 			maxiv: client.re.maxivRe,
-			levelRe: client.re.levelRe,
+			level: client.re.levelRe,
 			maxlevel: client.re.maxlevelRe,
 			cp: client.re.cpRe,
 			maxcp: client.re.maxcpRe,
