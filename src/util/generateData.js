@@ -51,7 +51,6 @@ module.exports.update = async function update() {
 						placeholderData: true,
 					},
 					template: {
-						id: false,
 						type: true,
 						gender: true,
 						grunt: true,

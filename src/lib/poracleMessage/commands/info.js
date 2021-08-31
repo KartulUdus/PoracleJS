@@ -22,6 +22,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		const translator = client.translatorFactory.Translator(language)
+		const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1)
 
 		const emojiLookup = new EmojiLookup(client.GameData.utilData.emojis)
 		let platform = target.type.split(':')[0]
@@ -172,48 +173,67 @@ exports.run = async (client, msg, args, options) => {
 						const mon = monsters[0]
 						const typeData = client.GameData.utilData.types
 						const types = mon.types.map((type) => type.name)
-						const typeString = mon.types.map((type) => `${translator.translate(emojiLookup.lookup(typeData[type.name].emoji, platform))} ${translator.translate(type.name)}`)
-						const typeObj = {
-							strengths: { types: [], text: 'Super effective against' },
-							strengthsUltra: { types: [], text: '2x Super Effective against' },
-							weaknesses: { types: [], text: 'Vulnerable to' },
-							weaknessesUltra: { types: [], text: 'Very vulnerable to' },
-							immune: { types: [], text: 'Immune to' },
-							immuneUltra: { types: [], text: 'Very immune to' },
-							resists: { types: [], text: 'Resistant to' },
-							resistsUltra: { types: [], text: 'Very resistant to' },
-						}
-						const pkmnTypeObj = {
-							weaknesses: types.map((type) => typeInfo[type].weaknesses),
-							strengths: types.map((type) => typeInfo[type].strengths),
-							immune: types.map((type) => typeInfo[type].immunes),
-							resists: types.map((type) => typeInfo[type].resistances),
-						}
+						const strengths = { }
+						const weaknesses = { }
 
-						for (const [status, twoDArr] of Object.entries(pkmnTypeObj)) {
-							if (twoDArr[1]) {
-								twoDArr[1].forEach((type) => (twoDArr[0].includes(type)
-									? typeObj[`${status}Ultra`].types.push(type)
-									: typeObj[status].types.push(type)
-								))
-							}
-							twoDArr[0].forEach((type) => {
-								if (!typeObj[status].types.includes(type)) typeObj[status].types.push(type)
+						for (const type of types) {
+							strengths[type] = []
+							typeInfo[type].strengths.forEach((x) => {
+								strengths[type].push(x)
+							})
+							typeInfo[type].weaknesses.forEach((x) => {
+								if (!weaknesses[x]) weaknesses[x] = 1
+								weaknesses[x] *= 2
+							})
+							typeInfo[type].resistances.forEach((x) => {
+								if (!weaknesses[x]) weaknesses[x] = 1
+								weaknesses[x] *= 0.5
+							})
+							typeInfo[type].immunes.forEach((x) => {
+								if (!weaknesses[x]) weaknesses[x] = 1
+								weaknesses[x] *= 0.25
 							})
 						}
 
-						message = message.concat(`\n*${translator.translate('Type')}*: ${typeString}\n`)
+						const typeEmojiName = (type) => `${typeData[type]
+							? translator.translate(emojiLookup.lookup(typeData[type].emoji, platform))
+							: ''} ${translator.translate(type)}`
 
-						const boosted = Object.entries(client.GameData.utilData.weatherTypeBoost).filter(([, weatherTypes]) => weatherTypes.some((t) => mon.types.map((t2) => t2.id).includes(t))).map(([weather]) => `${translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weather].emoji, platform))} ${translator.translate(client.GameData.utilData.weather[weather].name)}`)
+						Object.entries(strengths).forEach(([name, tyepss], i) => {
+							message = message.concat(`\n**${translator.translate(i ? 'Secondary Type' : 'Primary Type')}**:  ${typeEmojiName(name)}`)
 
-						if (boosted.length) message = message.concat(`*${translator.translate('Boosted by')}:* ${boosted.join(', ')}\n\n`)
-						for (const [status, info] of Object.entries(typeObj)) {
-							if (typeObj[status].types.length) {
-								const translated = typeObj[status].types.map((type) => `${typeData[type]
-									? translator.translate(emojiLookup.lookup(typeData[type].emoji, platform))
-									: ''} ${translator.translate(type)}`)
-								message = message.concat(`*${translator.translate(info.text)}*: ${translated.join(', ')}\n`)
+							const { name: weatherName, emoji: weatherEmoji } = client.GameData.utilData.weather[Object.keys(client.GameData.utilData.weatherTypeBoost).find((weather) => client.GameData.utilData.weatherTypeBoost[weather].includes(client.GameData.utilData.types[name].id))]
+
+							message = message.concat(`\n${translator.translate('Boosted by')}: ${translator.translate(emojiLookup.lookup(weatherEmoji, platform))} ${capitalize(translator.translate(weatherName))}`)
+
+							message = message.concat(`\n*${translator.translate('Super Effective Against')}*: ${tyepss.map((x) => typeEmojiName(x)).join(',  ')}\n`)
+						})
+
+						message = message.concat('\n')
+
+						const typeObj = {
+							weak: { types: [], text: 'Vulnerable to' },
+							extraWeak: { types: [], text: 'Very vulnerable to' },
+							resist: { types: [], text: 'Resistant to' },
+							immune: { types: [], text: 'Very resistant to' },
+							extraImmune: { types: [], text: 'Extremely resistant to' },
+						}
+
+						for (const [name, value] of Object.entries(weaknesses)) {
+							const translated = `${typeData[name]
+								? translator.translate(emojiLookup.lookup(typeData[name].emoji, platform))
+								: ''} ${translator.translate(name)}`
+							switch (value) {
+								case 0.125: typeObj.extraImmune.types.push(translated); break
+								case 0.25: typeObj.immune.types.push(translated); break
+								case 0.5: typeObj.resist.types.push(translated); break
+								case 2: typeObj.weak.types.push(translated); break
+								case 4: typeObj.extraWeak.types.push(translated); break
+								default: break
 							}
+						}
+						for (const info of Object.values(typeObj)) {
+							if (info.types.length) message = message.concat(`*${translator.translate(info.text)}*: ${info.types.join(',  ')}\n`)
 						}
 
 						message = message.concat('\n💯:\n')
