@@ -79,7 +79,7 @@ class PoracleDiscordUtil {
 	}
 
 	async commandAllowed(command) {
-		const roleList = this.client.config.discord.commandSecurity[command]
+		const roleList = this.client.config.discord.commandSecurity && this.client.config.discord.commandSecurity[command]
 		if (!roleList) return true
 
 		const postUserId = this.msg.msg.author.id
