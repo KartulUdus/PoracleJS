@@ -1,3 +1,9 @@
+/**
+ * Calculate location restrictions based on community membership
+ * @param config
+ * @param communityMembership
+ * @returns {any[]}
+ */
 function calculateLocationRestrictions(config, communityMembership) {
 	const locationRestrictions = new Set()
 
@@ -18,6 +24,13 @@ function calculateLocationRestrictions(config, communityMembership) {
 	return [...locationRestrictions]
 }
 
+/**
+ * Filter area list based on community membership
+ * @param config
+ * @param communityMembership
+ * @param areas
+ * @returns {*}
+ */
 function filterAreas(config, communityMembership, areas) {
 	const allowedAreas = []
 
@@ -36,6 +49,13 @@ function filterAreas(config, communityMembership, areas) {
 	return areas.filter((x) => allowedAreas.includes(x))
 }
 
+/**
+ * Add community to community list, and validate communities
+ * @param config
+ * @param existingCommunities
+ * @param communityToAdd
+ * @returns {*[]}
+ */
 function addCommunity(config, existingCommunities, communityToAdd) {
 	const lowercaseCommunityToAdd = communityToAdd.toLowerCase()
 	const communityKeys = Object.keys(config.areaSecurity.communities)
@@ -62,6 +82,24 @@ function removeCommunity(config, existingCommunities, communityToRemove) {
 	return newCommunities.filter((x) => lowercaseCommunities.includes(x)).sort()
 }
 
+/**
+ * Determine whether given user id is a telegram community admin, and if so return community list
+ * @param config
+ * @param id
+ * @returns {boolean|*[]}
+ */
+function isTelegramCommunityAdmin(config, id) {
+	const communityList = []
+
+	for (const [communityName, entry] of Object.entries(config.areaSecurity.communities)) {
+		if (entry.telegram && entry.telegram.admins && entry.telegram.admins.includes(id.toString())) {
+			communityList.push(communityName.toLowerCase())
+		}
+	}
+	if (communityList.length) return communityList
+	return false
+}
+
 module.exports = {
-	calculateLocationRestrictions, addCommunity, removeCommunity, filterAreas,
+	calculateLocationRestrictions, addCommunity, removeCommunity, filterAreas, isTelegramCommunityAdmin,
 }

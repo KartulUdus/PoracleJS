@@ -33,7 +33,8 @@
       },
       "stickers": {
       },
-        "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
+      "requestShinyImages": false,
+      "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
     // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
@@ -65,7 +66,9 @@
       "availableLanguages": {
       },
      // default template name/number to use when users add new trackings
-     "defaultTemplateName": 1               
+     "defaultTemplateName": 1,
+    // library of custom DTS templates
+      "dtsDictionary": {}
   },
   //
   // Configuration for the user reconciliation/role check function
@@ -215,7 +218,9 @@
   //
   "discord": {
       "enabled": true,                                // is discord enabled?
-      "activity": "PoracleJS",                        // activity to set ('Playing PoracleJS'), blank to none
+      "activity": "PoracleJS",                        // Bot Activity
+      "workerStatus": "invisible",                          // Worker Status - available, dnd, idle, invisible
+      "workerActivity": "PoracleJS Helper",           // Worker Activity
       "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
     // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
     //   hours, deleting them if not (note general.roleCheckMode must be set to
@@ -247,6 +252,17 @@
     //        }
     //      }
       "delegatedAdministration": {
+
+      },
+    // commandSecurity - list commands and users/roles that can execute these commands. If not specified no
+    // security is enforced for a command
+    // Valid permissions that be restricted: monster, pvp, gym, invasion, lure, nest, ...
+    // eg:
+    //   "commandSecurity": {
+    //      "monster": [ "userid", "roleid" ],
+    //      "pvp": [ "roleid" ]
+    //   }
+      "commandSecurity": {
 
       },
       "prefix": "!",                                  // prefix for poracle commands, usually '!'

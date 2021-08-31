@@ -35,6 +35,30 @@ exports.run = async (client, msg, args, options) => {
 					} else {
 						await msg.reply('Status information not yet warmed up')
 					}
+
+					const format = (seconds) => {
+						const pad = (s) => ((s < 10 ? '0' : '') + s)
+
+						const days = Math.floor(seconds / (24 * 60 * 60))
+						const hours = Math.floor(seconds % (24 * 60 * 60) / (60 * 60))
+						const minutes = Math.floor(seconds % (60 * 60) / 60)
+						seconds = Math.floor(seconds % 60)
+
+						return `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+					}
+
+					await msg.reply(`Poracle has been up for ${format(process.uptime())}`)
+				}
+				break
+			}
+			case 'dts': {
+				if (msg.isFromAdmin) {
+					let s = 'Your loaded DTS looks like this:\n'
+					for (const dts of client.dts) {
+						s += `type: ${dts.type} platform: ${dts.platform} id: ${dts.id} language: ${dts.language}\n`
+					}
+
+					await msg.reply(s)
 				}
 				break
 			}
@@ -99,7 +123,9 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				const weatherId = weatherInfo[currentHourTimestamp]
-				const staticMap = await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId)
+				const staticMap = client.config.geocoding.staticProvider === 'tileservercache'
+					? await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId)
+					: null
 
 				// Build forecast information
 

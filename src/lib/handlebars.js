@@ -190,5 +190,20 @@ module.exports = () => {
 		return f.map[value]
 	})
 
+	handlebars.registerHelper('map2', (name, value, value2, options) => {
+		const r = require('./customMap')
+
+		let f = r.find((x) => (x.name === name && x.language === options.data.language))
+		if (!f) {
+			f = r.find((x) => (x.name === name))
+		}
+
+		if (options.fn) {
+			return options.fn(f.map[value] || f.map[value2])
+		}
+
+		return f.map[value] || f.map[value2]
+	})
+
 	return handlebars
 }

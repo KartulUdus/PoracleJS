@@ -1,3 +1,5 @@
+const { Permissions } = require('discord.js')
+
 exports.run = async (client, msg, [args]) => {
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
@@ -7,7 +9,7 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
-		if (!msg.guild.me.hasPermission('MANAGE_WEBHOOKS')) {
+		if (!msg.guild.me.hasPermission(Permissions.FLAGS.MANAGE_WEBHOOKS)) {
 			return await msg.reply('I have not been allowed to make webhooks!')
 		}
 

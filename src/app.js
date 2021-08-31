@@ -26,6 +26,7 @@ const telegramController = require('./lib/telegram/middleware/controller')
 const DiscordReconciliation = require('./lib/discord/discordReconciliation')
 const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
 const PogoEventParser = require('./lib/pogoEventParser')
+const ShinyPossible = require('./lib/shinyLoader')
 
 const { Config } = require('./lib/configFetcher')
 const { GameData } = require('./lib/GameData')
@@ -58,6 +59,7 @@ const Query = require('./controllers/query')
 
 const query = new Query(logs.controller, knex, config, geofence)
 const pogoEventParser = new PogoEventParser(logs.log)
+const shinyPossible = new ShinyPossible(logs.log)
 
 const gymCache = pcache.load('gymCache', path.join(__dirname, '../.cache'))
 
@@ -87,7 +89,9 @@ let telegramChannel
 if (config.discord.enabled) {
 	for (let key = 0; key < config.discord.token.length; key++) {
 		if (config.discord.token[key]) {
-			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true))
+			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, (key
+				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity === undefined ? 'PoracleHelper' : config.discord.workerActivity }
+				: { status: 'available', activity: config.discord.activity === undefined ? 'PoracleJS' : config.discord.activity })))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
@@ -111,11 +115,14 @@ async function syncTelegramMembership() {
 		}
 		log.verbose('Verification of Telegram group membership for Poracle users starting...')
 
-		if (config.reconciliation.telegram.updateUserNames || config.reconciliation.telegram.removeInvalidUsers)	{
+		if (config.reconciliation.telegram.updateUserNames || config.reconciliation.telegram.removeInvalidUsers) {
 			await telegramReconciliation.syncTelegramUsers(
 				config.reconciliation.discord.updateUserNames,
 				config.reconciliation.discord.removeInvalidUsers,
 			)
+		}
+		if (config.areaSecurity.enabled) {
+			await telegramReconciliation.updateTelegramChannels()
 		}
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
@@ -147,7 +154,7 @@ async function syncDiscordRole() {
 		// "updateUserNames": true,
 		// "removeInvalidUsers": true,
 		// "registerNewUsers": true,
-		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers)	{
+		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers) {
 			await discordReconciliation.syncDiscordRole(config.reconciliation.discord.registerNewUsers,
 				config.reconciliation.discord.updateUserNames,
 				config.reconciliation.discord.removeInvalidUsers)
@@ -203,6 +210,30 @@ async function processPogoEvents() {
 	}
 
 	setTimeout(processPogoEvents, 6 * 60 * 60 * 1000) // 6 hours
+}
+
+async function processPossibleShiny() {
+	let file
+	log.info('ShinyPossible: Fetching new shiny file')
+
+	try {
+		file = await shinyPossible.download()
+	} catch (err) {
+		log.error('ShinyPossible: Cannot shiny file', err)
+		setTimeout(processPossibleShiny, 15 * 60 * 1000) // 15 mins
+		return
+	}
+
+	for (const relayWorker of workers) {
+		relayWorker.commandPort.postMessage(
+			{
+				type: 'shinyBroadcast',
+				data: file,
+			},
+		)
+	}
+
+	setTimeout(processPossibleShiny, 6 * 60 * 60 * 1000) // 6 hours
 }
 
 let ohbem
@@ -403,6 +434,10 @@ function sendCommandToWorkers(msg) {
 	}
 }
 
+function sendCommandToWeather(msg) {
+	weatherWorker.commandPort.postMessage(msg)
+}
+
 function processMessageFromWeather(msg) {
 	// Relay broadcasts from weather to all controllers
 
@@ -436,9 +471,9 @@ statsWorker.queuePort.on('message', (res) => {
 for (let w = 0; w < maxWorkers; w++) {
 	worker = new Worker(path.join(__dirname, './controllerWorker.js'), {
 		workerData:
-			{
-				workerId: w + 1,
-			},
+		{
+			workerId: w + 1,
+		},
 	})
 
 	queueChannel = new MessageChannel()
@@ -810,6 +845,7 @@ async function run() {
 	}
 
 	setTimeout(processPogoEvents, 30000)
+	setTimeout(processPossibleShiny, 30000)
 
 	chokidar.watch([
 		path.join(__dirname, '../config/dts.json'),
@@ -818,9 +854,20 @@ async function run() {
 		awaitWriteFinish: true,
 	}).on('change', () => {
 		log.info('Change in DTS detected, triggering reload')
-		sendCommandToWorkers({
-			type: 'reloadDts',
-		})
+		try {
+			sendCommandToWorkers({
+				type: 'reloadDts',
+			})
+			sendCommandToWeather({
+				type: 'reloadDts',
+			})
+
+			// This splice mechanism replaces array in place
+			const newDts = require('./lib/dtsloader').readDtsFiles()
+			dts.splice(0, dts.length, ...newDts)
+		} catch (err) {
+			log.error('Error reloading dts', err)
+		}
 	})
 
 	if (config.discord.enabled) {
