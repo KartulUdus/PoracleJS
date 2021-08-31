@@ -35,11 +35,12 @@ exports.run = async (client, msg, args, options) => {
 		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 		const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
 		const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
-		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
+		// const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
 		let message = ''
-		// allow user to override prefix
+		// should allow user to override prefix
 		const { prefix } = util
+		// select everything for noew
 		const everything = true
 
 		if (human.latitude) message += `${prefix}location ${human.latitude},${human.longitude}\n`
@@ -91,7 +92,7 @@ exports.run = async (client, msg, args, options) => {
 					}
 					const leagueName = leagues[monster.pvp_ranking_league]
 					message += ` ${leagueName}:${monster.pvp_ranking_worst} ${leagueName}cp:${monster.pvp_ranking_min_cp}`
-					if (monster.pvp_ranking_worst > 1) message += ` ${leagueName}high:${monster.pvp_ranking_best}`
+					if (monster.pvp_ranking_best > 1) message += ` ${leagueName}high:${monster.pvp_ranking_best}`
 				}
 				// league
 
@@ -201,6 +202,7 @@ exports.run = async (client, msg, args, options) => {
 					}
 					case 2: {
 						message += ` ${client.GameData.items[quest.reward].name.replace(/ /g, '_')}`
+						break
 					}
 					default:
 						break
@@ -211,35 +213,79 @@ exports.run = async (client, msg, args, options) => {
 					if (quest[dbFieldName] !== defaultValue) message += ` ${param}:${quest[dbFieldName]}`
 				}
 
+				if (quest.clean) message += ' clean'
+
 				message += '\n'
 			}
 		}
 
 		if (everything || args.includes('gym')) {
+			const gymParameters = {
+				template: ['template', client.config.general.defaultTemplateName.toString()],
+				d: ['distance', 0],
+			}
+			const teamNames = ['uncontested', 'mystic', 'valor', 'instinct']
 			for (const gym of gyms) {
-				message += `${prefix}gym`
+				message += `${prefix}gym ${teamNames[gym.team]}`
 
 				if (gym.slot_changes) message += ' slot_changes'
+				for (const [param, [dbFieldName, defaultValue]] of Object.entries(gymParameters)) {
+					if (gym[dbFieldName] !== defaultValue) message += ` ${param}:${gym[dbFieldName]}`
+				}
+
+				if (gym.clean) message += ' clean'
+
 				message += '\n'
 			}
 		}
 
 		if (everything || args.includes('lure')) {
+			const lureParameters = {
+				template: ['template', client.config.general.defaultTemplateName.toString()],
+				d: ['distance', 0],
+			}
+
+			const lureTypes = {
+				0: 'everything',
+				501: 'normal',
+				502: 'glacial',
+				503: 'mossy',
+				504: 'magnetic',
+				505: 'rainy',
+			}
+
 			for (const lure of lures) {
-				message += `${prefix}lure`
+				message += `${prefix}lure ${lureTypes[lure.lure_id]}`
+
+				for (const [param, [dbFieldName, defaultValue]] of Object.entries(lureParameters)) {
+					if (lure[dbFieldName] !== defaultValue) message += ` ${param}:${lure[dbFieldName]}`
+				}
+
+				if (lure.clean) message += ' clean'
 
 				message += '\n'
 			}
 		}
 
 		if (everything || args.includes('nests')) {
+			const nestParameters = {
+				template: ['template', client.config.general.defaultTemplateName.toString()],
+				minspawn: ['min_spawn_avg', 0],
+				d: ['distance', 0],
+			}
 			for (const nest of nests) {
-				message += `${prefix}nest`
+				const mon = client.GameData.monsters[`${nest.pokemon_id}_0`]
 
+				message += `${prefix}nest ${nest.pokemon_id ? mon.name.replace(/ /g, '_') : 'everything'}`
+
+				for (const [param, [dbFieldName, defaultValue]] of Object.entries(nestParameters)) {
+					if (nest[dbFieldName] !== defaultValue) message += ` ${param}:${nest[dbFieldName]}`
+				}
+
+				if (nest.clean) message += ' clean'
 				message += '\n'
 			}
 		}
-		// msg.reply(message)
 
 		if (args.includes('link')) {
 			try {
