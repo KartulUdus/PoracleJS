@@ -534,7 +534,7 @@ class Monster extends Controller {
 
 				data.name = translator.translate(monster.name)
 				data.formName = translator.translate(monster.form.name)
-				if (data.disguisePokemonNameEng) data.disguisePokemonName = translator.translate(data.disguisePokemonName)
+				if (data.disguisePokemonNameEng) data.disguisePokemonName = translator.translate(data.disguisePokemonNameEng)
 				if (data.disguiseFormNameEng) data.disguiseFormName = translator.translate(data.disguiseFormNameEng)
 
 				data.genderData = {
