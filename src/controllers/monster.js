@@ -425,6 +425,16 @@ class Monster extends Controller {
 				return []
 			}
 
+			if (data.display_pokemon_id) {
+				if (data.display_form === undefined || data.display_form === null) data.display_form = 0
+				const displayMonster = this.GameData.monsters[`${data.display_pokemon_id}_${data.display_form}`] || this.GameData.monsters[`${data.display_pokemon_id}_0`]
+
+				if (displayMonster) {
+					data.disguisePokemonNameEng = displayMonster.name
+					if (displayMonster.form) data.disguideFormNameEng = displayMonster.form.name
+				}
+			}
+
 			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
@@ -524,6 +534,9 @@ class Monster extends Controller {
 
 				data.name = translator.translate(monster.name)
 				data.formName = translator.translate(monster.form.name)
+				if (data.disguisePokemonNameEng) data.disguisePokemonName = translator.translate(data.disguisePokemonName)
+				if (data.disguiseFormNameEng) data.disguiseFormName = translator.translate(data.disguiseFormNameEng)
+
 				data.genderData = {
 					name: translator.translate(data.genderDataEng.name),
 					emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
