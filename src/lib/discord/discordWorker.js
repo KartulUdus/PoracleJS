@@ -50,7 +50,18 @@ class Worker {
 		})
 		this.client.on('rateLimit', (info) => {
 			const tag = (this.client && this.client.user) ? this.client.user.tag : ''
-			this.logs.discord.warn(`#${this.id} Discord worker [${tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
+			let channelId
+			if (info.route) {
+				const channelMatch = info.route.match(/\/channels\/(\d+)\//)
+				if (channelMatch[1]) {
+					const channel = this.client.channels.cache.get(channelMatch[1])
+					if (channel) {
+						channelId = channel.recipient && `DM:${channel.recipient.id}:${channel.recipient.username}`
+							|| `${channel.id}:#${channel.name}`
+					}
+				}
+			}
+			this.logs.discord.warn(`#${this.id} Discord worker [${tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}${channelId ? ` (probably ${channelId})` : ''}`)
 		})
 	}
 
