@@ -158,7 +158,6 @@ class Monster extends Controller {
 	}
 
 	async handle(obj) {
-		const pregenerateTile = false
 		const data = obj
 		try {
 			let hrstart = process.hrtime()
@@ -423,6 +422,7 @@ class Monster extends Controller {
 							data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data, this.config.geocoding.staticMapType.pokemon)
 						}
 					}
+					break
 				}
 
 				case 'google': {
@@ -441,8 +441,7 @@ class Monster extends Controller {
 					data.staticMap = ''
 				}
 			}
-
-	 		data.staticmap = data.staticMap // deprecated
+			data.staticmap = data.staticMap // deprecated
 
 			// get Weather Forecast information
 
