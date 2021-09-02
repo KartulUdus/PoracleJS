@@ -48,7 +48,18 @@ class DiscordCommando {
 				this.bounceWorker()
 			})
 			this.client.on('rateLimit', (info) => {
-				this.logs.log.warn(`#${this.id} Discord commando worker - will not be responding to commands -  429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
+				let channelId
+				if (info.route) {
+					const channelMatch = info.route.match(/\/channels\/(\d+)\//)
+					if (channelMatch[1]) {
+						const channel = this.client.channels.cache.get(channelMatch[1])
+						if (channel) {
+							channelId = channel.recipient && `DM:${channel.recipient.id}:${channel.recipient.username}`
+								|| `${channel.id}:#${channel.name}`
+						}
+					}
+				}
+				this.logs.log.warn(`#${this.id} Discord commando worker - 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}${channelId ? ` (probably ${channelId})` : ''}`)
 			})
 			this.client.on('ready', () => {
 				this.logs.log.info(`#${this.id} Discord commando - ${this.client.user.tag} ready for action`)
