@@ -153,6 +153,7 @@ async function processOne(hook) {
 }
 
 const PromiseQueue = require('./lib/PromiseQueue')
+const path = require('path')
 
 const alarmProcessor = new PromiseQueue(hookQueue, config.tuning.concurrentWebhookProcessorsPerWorker)
 
@@ -189,6 +190,22 @@ function reloadDts() {
 		log.info('DTS reloaded')
 	} catch (err) {
 		log.error('Error reloading dts', err)
+	}
+}
+
+function reloadGeofence() {
+	try {
+		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		monsterController.setGeofence(newGeofence)
+		raidController.setGeofence(newGeofence)
+		questController.setGeofence(newGeofence)
+		pokestopController.setGeofence(newGeofence)
+		nestController.setGeofence(newGeofence)
+		pokestopLureController.setGeofence(newGeofence)
+		gymController.setGeofence(newGeofence)
+		log.info('Geofence reloaded')
+	} catch (err) {
+		log.error('Error reloading geofence', err)
 	}
 }
 
@@ -232,6 +249,12 @@ function receiveCommand(cmd) {
 			log.debug(`Worker ${workerId}: Received dts reload request broadcast`)
 
 			reloadDts()
+		}
+
+		if (cmd.type === 'reloadGeofence') {
+			log.debug(`Worker ${workerId}: Received geofence reload request broadcast`)
+
+			reloadGeofence()
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)
