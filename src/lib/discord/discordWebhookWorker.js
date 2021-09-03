@@ -113,7 +113,7 @@ class DiscordWebhookWorker {
 
 				if (this.config.discord.uploadEmbedImages && data.message.embeds && data.message.embeds.length && data.message.embeds[0].image && data.message.embeds[0].image.url) {
 					const copyMessage = JSON.parse(JSON.stringify(data.message))
-					const imageUrl = data.message.embed.image.url
+					const imageUrl = copyMessage.embeds[0].image.url
 					copyMessage.embeds[0].image.url = 'attachment://map.png'
 
 					const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
