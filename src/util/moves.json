@@ -1412,10 +1412,40 @@
 		"type": "Fire",
 		"power": 15
 	},
+	"347": {
+		"name": "Dark Void",
+		"proto": "DARK_VOID",
+		"type": "Dark",
+		"power": 0
+	},
 	"348": {
 		"name": "Feather Dance",
 		"proto": "FEATHER_DANCE",
 		"type": "Flying",
 		"power": 35
+	},
+	"349": {
+		"name": "Fiery Dance",
+		"proto": "FIERY_DANCE",
+		"type": "Fire",
+		"power": 0
+	},
+	"350": {
+		"name": "Fairy Wind",
+		"proto": "FAIRY_WIND_FAST",
+		"type": "Fairy",
+		"power": 0
+	},
+	"351": {
+		"name": "Relic Song",
+		"proto": "RELIC_SONG",
+		"type": "Normal",
+		"power": 0
+	},
+	"352": {
+		"name": "Weather Ball",
+		"proto": "WEATHER_BALL_NORMAL",
+		"type": "Normal",
+		"power": 55
 	}
 }
