@@ -3,6 +3,7 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
+const path = require('path')
 const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
@@ -26,6 +27,7 @@ const GameData = {
 	items: require('./util/items.json'),
 	grunts: require('./util/grunts.json'),
 }
+const PromiseQueue = require('./lib/PromiseQueue')
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
@@ -151,9 +153,6 @@ async function processOne(hook) {
 		log.error(`Worker ${workerId}: Hook processor error (something wasn't caught higher)`, err)
 	}
 }
-
-const PromiseQueue = require('./lib/PromiseQueue')
-const path = require('path')
 
 const alarmProcessor = new PromiseQueue(hookQueue, config.tuning.concurrentWebhookProcessorsPerWorker)
 
