@@ -155,6 +155,10 @@
     "prototext": "",
     "text": "Use Incense {0} times"
   },
+  "42": {
+    "prototext": "QUEST_WALK",
+    "text": "Walk {0} Km(s)"
+  },
   "43": {
     "prototext": "",
     "text": "Mega-Evolve {0} Pokemon"
