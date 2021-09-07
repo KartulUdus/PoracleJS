@@ -75,59 +75,48 @@ module.exports.update = async function update() {
 	try {
 		log.info('Creating new locales...')
 
-		const available = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/index.json')
-
-		const englishRef = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/en.json')
-
 		fs.mkdir('./src/util/locale', (error) => (error
 			? log.info('Locale folder already exists, skipping.')
 			: log.info('Locale folder created.')))
 
-		await Promise.all(available.map(async (locale) => {
-			try {
-				const trimmed = {
-					pokemonNames: {},
-					// pokemonCategories: {},
-					// pokemonDescriptions: {},
-					moveNames: {},
-					itemNames: {},
-					evoQuests: {},
-				}
-				const remoteFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/${locale}`)
+		const interested = [
+			// { remote: 'characterCategories', locale: 'characterCategories' },
+			// { remote: 'costumes', local: 'costumes' },
+			// { remote: 'descriptions', local: 'pokemonDescriptions' },
+			{ remote: 'evolutionQuests', local: 'evoQuests' },
+			// { remote: 'forms', local: 'pokemonForms' },
+			// { remote: 'grunts', local: 'gruntNames' },
+			{ remote: 'items', local: 'itemNames' },
+			// { remote: 'lures', local: 'lures' },
+			// { remote: 'misc', local: 'misc' },
+			{ remote: 'moves', local: 'moveNames' },
+			{ remote: 'pokemon', local: 'pokemonNames' },
+			// { remote: 'pokemonCategories', local: 'pokemonCategories' },
+			// { remote: 'questTypes', local: 'questTypes' },
+			// { remote: 'questConditions', local: 'questConditions' },
+			// { remote: 'questRewardTypes', local: 'questRewardTypes' },
+			// { remote: 'types', local: 'pokemonTypes' },
+			// { remote: 'weather', local: 'weather' },
+		]
 
-				Object.keys(remoteFiles).forEach((key) => {
-					if (key.startsWith('poke_')) {
-						trimmed.pokemonNames[englishRef[key]] = remoteFiles[key]
-					} else if (key.startsWith('move_')) {
-						trimmed.moveNames[englishRef[key]] = remoteFiles[key]
-						// } else if (key.startsWith('desc_')) {
-						// 	trimmed.pokemonDescriptions[englishRef[key]] = remoteFiles[key]
-						// } else if (key.startsWith('pokemon_category_')) {
-						// trimmed.pokemonCategories[englishRef[key]] = remoteFiles[key]
-					} else if (key.startsWith('item_')) {
-						trimmed.itemNames[englishRef[key]] = remoteFiles[key]
-					} else if (key.endsWith('singular') || key.endsWith('plural')) {
-						trimmed.evoQuests[englishRef[key]
-							.replace(/%\{/g, '{{')
-							.replace(/\}/g, '}}')
-						] = remoteFiles[key]
-							.replace(/%\{/g, '{{')
-							.replace(/\}/g, '}}')
-					}
-				})
-				Object.keys(trimmed).forEach((category) => {
+		const availableLocales = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/index.json')
+
+		for (const locale of availableLocales) {
+			try {
+				await Promise.all(interested.map(async (category) => {
+					const remoteFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/englishRef/${category.remote}_${locale}`)
 					fs.writeFile(
-						`./src/util/locale/${category}_${locale}`,
-						JSON.stringify(trimmed[category], null, 2),
+						`./src/util/locale/${category.local}_${locale}`,
+						JSON.stringify(remoteFiles, null, 2),
 						'utf8',
 						() => { },
 					)
-				})
-				log.info(`${locale}`, 'file saved.')
+				}))
 			} catch (e) {
-				log.warn(e, '\n', locale)
+				log.warn(`Could not process ${locale}`)
 			}
-		}))
+			log.info(`${locale}`, 'file saved.')
+		}
 	} catch (e) {
 		log.warn('Could not generate new locales, using existing...')
 	}
