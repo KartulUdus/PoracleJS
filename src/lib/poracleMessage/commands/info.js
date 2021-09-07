@@ -8,7 +8,7 @@ exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
 		const util = client.createUtil(msg, options)
-		const { typeInfo } = client.GameData
+		const { types: typeInfo } = client.GameData
 		const {
 			canContinue, target, language,
 		} = await util.buildTarget(args)
@@ -163,7 +163,7 @@ exports.run = async (client, msg, args, options) => {
 						&& (!formNames.length || formNames.includes(mon.form.name.toLowerCase())))
 
 					if (monsters.length) {
-						let message = `*${translator.translate('Available forms')}:*\n`
+						let message = `**${translator.translate('Available forms')}:**\n`
 						found = true
 
 						for (const form of monsters) {
@@ -173,25 +173,25 @@ exports.run = async (client, msg, args, options) => {
 						const mon = monsters[0]
 						const typeData = client.GameData.utilData.types
 						const types = mon.types.map((type) => type.name)
-						const strengths = { }
-						const weaknesses = { }
+						const strengths = {}
+						const weaknesses = {}
 
 						for (const type of types) {
 							strengths[type] = []
 							typeInfo[type].strengths.forEach((x) => {
-								strengths[type].push(x)
+								strengths[type].push(x.typeName)
 							})
 							typeInfo[type].weaknesses.forEach((x) => {
-								if (!weaknesses[x]) weaknesses[x] = 1
-								weaknesses[x] *= 2
+								if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+								weaknesses[x.typeName] *= 2
 							})
 							typeInfo[type].resistances.forEach((x) => {
-								if (!weaknesses[x]) weaknesses[x] = 1
-								weaknesses[x] *= 0.5
+								if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+								weaknesses[x.typeName] *= 0.5
 							})
 							typeInfo[type].immunes.forEach((x) => {
-								if (!weaknesses[x]) weaknesses[x] = 1
-								weaknesses[x] *= 0.25
+								if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+								weaknesses[x.typeName] *= 0.25
 							})
 						}
 
@@ -200,13 +200,13 @@ exports.run = async (client, msg, args, options) => {
 							: ''} ${translator.translate(type)}`
 
 						Object.entries(strengths).forEach(([name, tyepss], i) => {
-							message = message.concat(`\n**${translator.translate(i ? 'Secondary Type' : 'Primary Type')}**:  ${typeEmojiName(name)}`)
+							message = message.concat(`\n**${translator.translate(i ? 'Secondary Type' : 'Primary Type')}:**  ${typeEmojiName(name)}`)
 
 							const { name: weatherName, emoji: weatherEmoji } = client.GameData.utilData.weather[Object.keys(client.GameData.utilData.weatherTypeBoost).find((weather) => client.GameData.utilData.weatherTypeBoost[weather].includes(client.GameData.utilData.types[name].id))]
 
 							message = message.concat(`\n${translator.translate('Boosted by')}: ${translator.translate(emojiLookup.lookup(weatherEmoji, platform))} ${capitalize(translator.translate(weatherName))}`)
 
-							message = message.concat(`\n*${translator.translate('Super Effective Against')}*: ${tyepss.map((x) => typeEmojiName(x)).join(',  ')}\n`)
+							if (tyepss.length) message = message.concat(`\n*${translator.translate('Super Effective Against')}:* ${tyepss.map((x) => typeEmojiName(x)).join(',  ')}\n`)
 						})
 
 						message = message.concat('\n')
@@ -233,7 +233,25 @@ exports.run = async (client, msg, args, options) => {
 							}
 						}
 						for (const info of Object.values(typeObj)) {
-							if (info.types.length) message = message.concat(`*${translator.translate(info.text)}*: ${info.types.join(',  ')}\n`)
+							if (info.types.length) message = message.concat(`*${translator.translate(info.text)}:* ${info.types.join(',  ')}\n`)
+						}
+
+						if (mon.thirdMoveStardust && mon.thirdMoveCandy) {
+							message = message.concat(`\n**${translator.translate('Third Move Cost')}:**\n${mon.thirdMoveCandy} ${translator.translate('Candies')}\n${new Intl.NumberFormat(language).format(mon.thirdMoveStardust)} ${translator.translate('Stardust')}\n`)
+						}
+
+						if (mon.evolutions) {
+							message = message.concat(`\n**${translator.translate('Evolutions')}:**`)
+							for (const evolution of mon.evolutions) {
+								message = message.concat(`\n${translator.translate(`${client.GameData.monsters[`${evolution.evoId}_${evolution.id}`].name}`)} (${evolution.candyCost} ${translator.translate('Candies')})`)
+								if (evolution.itemRequirement) message = message.concat(`\n- ${translator.translate('Needed Item')}: ${translator.translate(evolution.itemRequirement)}`)
+								if (evolution.mustBeBuddy) message = message.concat(`\n- ${translator.translate('Must Be Buddy')} :white_check_mark:`)
+								if (evolution.onlyNighttime) message = message.concat(`\n- ${translator.translate('Only Nighttime')} :white_check_mark:`)
+								if (evolution.onlyDaytime) message = message.concat(`\n- ${translator.translate('Only Daytime')} :white_check_mark:`)
+								message.concat('\n')
+								if (evolution.questRequirement) message = message.concat(`\n${translator.translate('Special Requirement')}: ${translator.translate(evolution.questRequirement.i18n).replace('{{amount}}', evolution.questRequirement.target)}`)
+								message = message.concat('\n')
+							}
 						}
 
 						message = message.concat('\n💯:\n')

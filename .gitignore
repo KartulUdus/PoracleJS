@@ -37,5 +37,5 @@ backups/*.json
 /src/util/questTypes.json
 /src/util/grunts.json
 /src/util/items.json
-/src/util/typeInfo.json
+/src/util/types.json
 /src/util/locale/*.json

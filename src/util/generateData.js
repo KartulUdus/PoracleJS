@@ -86,10 +86,12 @@ module.exports.update = async function update() {
 		await Promise.all(available.map(async (locale) => {
 			try {
 				const trimmed = {
-					pokemonNames: { },
-					pokemonCategories: { },
-					pokemonDescriptions: { },
-					moveNames: { },
+					pokemonNames: {},
+					// pokemonCategories: {},
+					// pokemonDescriptions: {},
+					moveNames: {},
+					itemNames: {},
+					evoQuests: {},
 				}
 				const remoteFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/${locale}`)
 
@@ -98,10 +100,19 @@ module.exports.update = async function update() {
 						trimmed.pokemonNames[englishRef[key]] = remoteFiles[key]
 					} else if (key.startsWith('move_')) {
 						trimmed.moveNames[englishRef[key]] = remoteFiles[key]
-					} else if (key.startsWith('desc_')) {
-						trimmed.pokemonDescriptions[englishRef[key]] = remoteFiles[key]
-					} else if (key.startsWith('pokemon_category_')) {
-						trimmed.pokemonCategories[englishRef[key]] = remoteFiles[key]
+						// } else if (key.startsWith('desc_')) {
+						// 	trimmed.pokemonDescriptions[englishRef[key]] = remoteFiles[key]
+						// } else if (key.startsWith('pokemon_category_')) {
+						// trimmed.pokemonCategories[englishRef[key]] = remoteFiles[key]
+					} else if (key.startsWith('item_')) {
+						trimmed.itemNames[englishRef[key]] = remoteFiles[key]
+					} else if (key.endsWith('singular') || key.endsWith('plural')) {
+						trimmed.evoQuests[englishRef[key]
+							.replace(/%\{/g, '{{')
+							.replace(/\}/g, '}}')
+						] = remoteFiles[key]
+							.replace(/%\{/g, '{{')
+							.replace(/\}/g, '}}')
 					}
 				})
 				Object.keys(trimmed).forEach((category) => {
