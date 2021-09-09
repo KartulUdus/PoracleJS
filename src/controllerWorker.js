@@ -3,6 +3,7 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
+const path = require('path')
 const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
@@ -26,6 +27,7 @@ const GameData = {
 	items: require('./util/items.json'),
 	grunts: require('./util/grunts.json'),
 }
+const PromiseQueue = require('./lib/PromiseQueue')
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
@@ -152,8 +154,6 @@ async function processOne(hook) {
 	}
 }
 
-const PromiseQueue = require('./lib/PromiseQueue')
-
 const alarmProcessor = new PromiseQueue(hookQueue, config.tuning.concurrentWebhookProcessorsPerWorker)
 
 function receiveQueue(msg) {
@@ -189,6 +189,22 @@ function reloadDts() {
 		log.info('DTS reloaded')
 	} catch (err) {
 		log.error('Error reloading dts', err)
+	}
+}
+
+function reloadGeofence() {
+	try {
+		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		monsterController.setGeofence(newGeofence)
+		raidController.setGeofence(newGeofence)
+		questController.setGeofence(newGeofence)
+		pokestopController.setGeofence(newGeofence)
+		nestController.setGeofence(newGeofence)
+		pokestopLureController.setGeofence(newGeofence)
+		gymController.setGeofence(newGeofence)
+		log.info('Geofence reloaded')
+	} catch (err) {
+		log.error('Error reloading geofence', err)
 	}
 }
 
@@ -232,6 +248,12 @@ function receiveCommand(cmd) {
 			log.debug(`Worker ${workerId}: Received dts reload request broadcast`)
 
 			reloadDts()
+		}
+
+		if (cmd.type === 'reloadGeofence') {
+			log.debug(`Worker ${workerId}: Received geofence reload request broadcast`)
+
+			reloadGeofence()
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)

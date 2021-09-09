@@ -3,6 +3,7 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
+const path = require('path')
 const logs = require('./lib/logger')
 
 const { log } = logs
@@ -92,6 +93,16 @@ function reloadDts() {
 	}
 }
 
+function reloadGeofence() {
+	try {
+		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		weatherController.setGeofence(newGeofence)
+		log.info('Geofence reloaded')
+	} catch (err) {
+		log.error('Error reloading geofence', err)
+	}
+}
+
 async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
@@ -108,6 +119,12 @@ async function receiveCommand(cmd) {
 			log.debug(`Worker ${workerId}: Received dts reload request broadcast`)
 
 			reloadDts()
+		}
+
+		if (cmd.type === 'reloadGeofence') {
+			log.debug(`Worker ${workerId}: Received geofence reload request broadcast`)
+
+			reloadGeofence()
 		}
 
 		if (cmd.type === 'weather') {
