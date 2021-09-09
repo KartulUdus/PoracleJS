@@ -26,6 +26,12 @@ exports.run = async (client, msg, args, options) => {
 			return msg.reply(translator.translate('You do not have permission to execute this command'))
 		}
 
+		if (!args.length) {
+			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}script everything`, `{0}script pokemon raids eggs lures invasions nests`, `{0}script everything allprofiles`, `{0}script everything link`', util.prefix),
+				{ style: 'markdown' })
+			return
+		}
+
 		const human = (await client.query.selectOneQuery('humans', { id: target.id }))
 
 		const profiles = await client.query.selectAllQuery('profiles', { id: target.id })
@@ -33,20 +39,11 @@ exports.run = async (client, msg, args, options) => {
 		// should allow user to override prefix
 		const { prefix } = util
 		// select everything for noew
-		const everything = true
+		const everything = args.includes('everything')
 
 		let message = ''
 
-		for (const profile of profiles) {
-			const currentProfileNo = profile.profile_no
-
-			message += `${prefix}profile add ${profile.name}\n`
-			message += `${prefix}profile ${profile.name}\n`
-
-			if (profile.latitude) message += `${prefix}location ${profile.latitude},${profile.longitude}\n`
-			const areas = JSON.parse(profile.area)
-			if (areas.length) message += `${prefix}area add ${areas.map((x) => x.replace(/ /g, '_')).join(' ')}\n`
-
+		const addProfile = async (currentProfileNo) => {
 			const monsters = await client.query.selectAllQuery('monsters', {
 				id: target.id,
 				profile_no: currentProfileNo,
@@ -64,7 +61,7 @@ exports.run = async (client, msg, args, options) => {
 
 			const gender = ['', 'male', 'female', 'genderless']
 
-			if (everything || args.includes('monsters')) {
+			if (everything || args.includes('pokemon')) {
 				const monsterParameters = {
 					iv: ['min_iv', -1],
 					maxiv: ['max_iv', 100],
@@ -115,7 +112,7 @@ exports.run = async (client, msg, args, options) => {
 				}
 			}
 
-			if (everything || args.includes('raid')) {
+			if (everything || args.includes('raids')) {
 				const raidParameters = {
 					template: ['template', client.config.general.defaultTemplateName.toString()],
 					d: ['distance', 0],
@@ -301,6 +298,23 @@ exports.run = async (client, msg, args, options) => {
 					message += '\n'
 				}
 			}
+		}
+
+		if 	(args.includes('allprofiles')) {
+			for (const profile of profiles) {
+				const currentProfileNo = profile.profile_no
+
+				message += `${prefix}profile add ${profile.name}\n`
+				message += `${prefix}profile ${profile.name}\n`
+
+				if (profile.latitude) message += `${prefix}location ${profile.latitude},${profile.longitude}\n`
+				const areas = JSON.parse(profile.area)
+				if (areas.length) message += `${prefix}area add ${areas.map((x) => x.replace(/ /g, '_')).join(' ')}\n`
+
+				await addProfile(currentProfileNo)
+			}
+		} else {
+			await addProfile(human.current_profile_no)
 		}
 
 		if (args.includes('link')) {
