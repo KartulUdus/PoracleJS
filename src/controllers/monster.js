@@ -577,6 +577,7 @@ class Monster extends Controller {
 				data.typeNameEng = n
 				data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
 				data.emojiString = e.join('')
+				data.typeEmoji = data.emojiString
 
 				const createPvpDisplay = (leagueData, maxRank, minCp) => {
 					const displayList = []
