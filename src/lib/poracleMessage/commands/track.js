@@ -245,8 +245,8 @@ exports.run = async (client, msg, args, options) => {
 		// Set defaults
 
 		let distance = +defaultTo(parameterValues.d, 0)
-		let rarity = +defaultTo(parameterValues.rarity, -1)
-		let maxRarity = +defaultTo(parameterValues.maxrarity, 6)
+		let rarity = defaultTo(parameterValues.rarity, -1)
+		let maxRarity = defaultTo(parameterValues.maxrarity, 6)
 		const pings = msg.getPings()
 
 		const pvp = {}
