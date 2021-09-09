@@ -25,7 +25,7 @@ class Raid extends Controller {
 		(raid.exclusive = ${data.ex} or raid.exclusive = 0) and
 		(raid.form = ${data.form} or raid.form = 0) and
 		(raid.evolution = 9000 or raid.evoluation = ${data.evolution}) and
-		(raid.move = 0 or raid.move = ${data.move_1} or raid.move = ${data.move_2}) and
+		(raid.move = 0 or raid.move = ${data.move_1} or raid.move = ${data.move_2})
 		${strictareastring}
 		and
 		(raid.gym_id='${data.gym_id}' or (raid.gym_id is NULL and `
