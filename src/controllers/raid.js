@@ -23,12 +23,15 @@ class Raid extends Controller {
 		(pokemon_id=${data.pokemon_id} or (pokemon_id=9000 and raid.level=${data.level})) and
 		(raid.team = ${data.team_id} or raid.team = 4) and
 		(raid.exclusive = ${data.ex} or raid.exclusive = 0) and
-		(raid.form = ${data.form} or raid.form = 0)
-		${strictareastring}`
+		(raid.form = ${data.form} or raid.form = 0) and
+		(raid.evolution = 9000 or raid.evoluation = ${data.evolution}) and
+		(raid.move = 0 or raid.move = ${data.move_1} or raid.move = ${data.move_2}) and
+		${strictareastring}
+		and
+		(raid.gym_id='${data.gym_id}' or (raid.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-			and
 			(
 				(
 					round(
@@ -45,6 +48,7 @@ class Raid extends Controller {
 						raid.distance = 0 and (${areastring})
 					)
 			)
+			))
 			`)
 			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 		} else {
@@ -92,11 +96,12 @@ class Raid extends Controller {
 		egg.level = ${data.level} and
 		(egg.team = ${data.team_id} or egg.team = 4) and
 		(egg.exclusive = ${data.ex} or egg.exclusive = 0)
-		${strictareastring}`
+		${strictareastring}
+		and
+		(egg.gym_id='${data.gym_id}' or (egg.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-			and
 			(
 				(
 					round(
@@ -113,6 +118,7 @@ class Raid extends Controller {
 						egg.distance = 0 and (${areastring})
 					)
 			)
+			))
 			`)
 			//				group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping
 		} else {
@@ -185,6 +191,7 @@ class Raid extends Controller {
 				data.gym_name = this.escapeJsonString(data.gym_name)
 				data.gymName = data.gym_name
 			}
+			data.gymId = data.gym_id
 			data.teamId = data.team_id ? data.team_id : 0
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
