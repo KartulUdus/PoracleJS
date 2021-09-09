@@ -177,15 +177,15 @@ exports.run = async (client, msg, args, options) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
-				alreadyPresent.forEach((raid) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
-				})
-				updates.forEach((raid) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
-				})
-				insert.forEach((raid) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
-				})
+				for (const raid of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.raidRowText(client.config, translator, client.GameData, raid, client.scannerQuery), '\n')
+				}
+				for (const raid of updates) {
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.raidRowText(client.config, translator, client.GameData, raid, client.scannerQuery), '\n')
+				}
+				for (const raid of insert) {
+					message = message.concat(translator.translate('New: '), await trackedCommand.raidRowText(client.config, translator, client.GameData, raid, client.scannerQuery), '\n')
+				}
 			}
 
 			await client.query.deleteWhereInQuery('raid', {

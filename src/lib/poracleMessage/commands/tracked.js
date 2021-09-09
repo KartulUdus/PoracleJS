@@ -55,18 +55,21 @@ function monsterRowText(config, translator, GameData, monster) {
 	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}${pvpString ? ` | ${pvpString}` : ''}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''} ${standardText(config, translator, monster)}`
 }
 
-function raidRowText(config, translator, GameData, raid) {
+async function raidRowText(config, translator, GameData, raid, scannerQuery) {
 	const mon = Object.values(GameData.monsters).find((m) => m.id === raid.pokemon_id && m.form.id === raid.form)
 	const monsterName = mon ? translator.translate(mon.name) : 'levelMon'
 	const raidTeam = translator.translate(GameData.utilData.teams[raid.team].name)
 	let formName = mon ? translator.translate(mon.form.name) : 'levelMonForm'
 	if (!mon || formName === undefined || mon.form.id === 0 && formName === 'Normal') formName = ''
 
+	let gymNameText = null
+	if (raid.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(raid.gym_id) || raid.gym_id : raid.gym_id
+
 	if (+raid.pokemon_id === 9000) {
-		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}`
+		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)} ${raid.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
 	}
 
-	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}`
+	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)} ${raid.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
 }
 
 async function gymRowText(config, translator, GameData, gym, scannerQuery) {
@@ -95,9 +98,13 @@ function nestRowText(config, translator, GameData, nest) {
 	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${nest.distance ? ` | ${translator.translate('distance')}: ${nest.distance}m` : ''} ${nest.min_spawn_avg ? translator.translateFormat('Min avg. spawn {0}/hour', nest.min_spawn_avg) : ''} ${standardText(config, translator, nest)}`
 }
 
-function eggRowText(config, translator, GameData, egg) {
+async function eggRowText(config, translator, GameData, egg, scannerQuery) {
 	const raidTeam = translator.translate(GameData.utilData.teams[egg.team].name)
-	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, egg)}`
+
+	let gymNameText = null
+	if (egg.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(egg.gym_id) || egg.gym_id : egg.gym_id
+
+	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, egg)} ${egg.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
 }
 
 function questRowText(config, translator, GameData, quest) {
@@ -287,12 +294,12 @@ exports.run = async (client, msg, args, options) => {
 				if (raids.length || eggs.length) {
 					message = message.concat('\n\n', translator.translate('You\'re tracking the following raids:'), '\n')
 				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any raids'))
-				raids.forEach((raid) => {
-					message = message.concat('\n', raidRowText(client.config, translator, client.GameData, raid))
-				})
-				eggs.forEach((egg) => {
-					message = message.concat('\n', eggRowText(client.config, translator, client.GameData, egg))
-				})
+				for (const raid of raids) {
+					message = message.concat('\n', await raidRowText(client.config, translator, client.GameData, raid, client.scannerQuery))
+				}
+				for (const egg of eggs) {
+					message = message.concat('\n', await eggRowText(client.config, translator, client.GameData, egg, client.scannerQuery))
+				}
 			}
 		}
 
