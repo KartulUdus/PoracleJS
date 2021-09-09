@@ -58,6 +58,17 @@ exports.run = async (client, msg, args, options) => {
 				}
 				break
 			}
+			case 'dts': {
+				if (msg.isFromAdmin) {
+					let s = 'Your loaded DTS looks like this:\n'
+					for (const dts of client.dts) {
+						s += `type: ${dts.type} platform: ${dts.platform} id: ${dts.id} language: ${dts.language}\n`
+					}
+
+					await msg.reply(s)
+				}
+				break
+			}
 
 			case 'rarity': {
 				if (client.PoracleInfo.lastStatsBroadcast) {

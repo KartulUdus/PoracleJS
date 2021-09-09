@@ -459,14 +459,14 @@
   // concurrent senders will reduce chance of hitting the global rate limit (probably) which is why we haven't defaulted too high here
   //
   // maxDatabaseConnections - This is the max number of database connections Poracle can have (per worker)
-  // webhookProcessingWorkers - Number of threads to run inbound webhook workers.  Two is enough for very big systems, going too high is probably
+  // webhookProcessingWorkers - Number of threads to run inbound webhook workers.  Five is enough for very big systems, going too high is probably
   //     counter productive so talk to me before playing with this one
   // concurrentWebhookProcessorsPerWorker - Number of inbound webhooks that can be processed at once per worker thread. Since each requires a database
   //     connection for a query this should be lower than the maxDatabaseConnections
   // concurrentDiscordDestinationsPerBot - How many concurrent messages should be queued for sending by the discord.js based bots. Discord rate limits
-  //     by route as well as a global limit so this will message 5 people at once
+  //     by route as well as a global limit so this will message 10 people at once
   // concurrentTelegramDestinationsPerBot - How many concurrent messages should be queued for sending by the Telegram/telegraf based bots. Telegram rate
-  //     limits by route as well as a global limit so this will message 5 people at once
+  //     limits by route as well as a global limit so this will message 10 people at once
   // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
   //
   "tuning": {

@@ -447,6 +447,10 @@ function sendCommandToWorkers(msg) {
 	}
 }
 
+function sendCommandToWeather(msg) {
+	weatherWorker.commandPort.postMessage(msg)
+}
+
 function processMessageFromWeather(msg) {
 	// Relay broadcasts from weather to all controllers
 
@@ -863,9 +867,20 @@ async function run() {
 		awaitWriteFinish: true,
 	}).on('change', () => {
 		log.info('Change in DTS detected, triggering reload')
-		sendCommandToWorkers({
-			type: 'reloadDts',
-		})
+		try {
+			sendCommandToWorkers({
+				type: 'reloadDts',
+			})
+			sendCommandToWeather({
+				type: 'reloadDts',
+			})
+
+			// This splice mechanism replaces array in place
+			const newDts = require('./lib/dtsloader').readDtsFiles()
+			dts.splice(0, dts.length, ...newDts)
+		} catch (err) {
+			log.error('Error reloading dts', err)
+		}
 	})
 
 	if (config.discord.enabled) {
