@@ -425,7 +425,7 @@ class Monster extends Controller {
 				return []
 			}
 
-			if (data.display_pokemon_id) {
+			if (data.display_pokemon_id && data.display_pokemon_id !== data.pokemon_id) {
 				if (data.display_form === undefined || data.display_form === null) data.display_form = 0
 				const displayMonster = this.GameData.monsters[`${data.display_pokemon_id}_${data.display_form}`] || this.GameData.monsters[`${data.display_pokemon_id}_0`]
 
