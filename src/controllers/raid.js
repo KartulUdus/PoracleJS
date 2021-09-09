@@ -24,7 +24,7 @@ class Raid extends Controller {
 		(raid.team = ${data.team_id} or raid.team = 4) and
 		(raid.exclusive = ${data.ex} or raid.exclusive = 0) and
 		(raid.form = ${data.form} or raid.form = 0) and
-		(raid.evolution = 9000 or raid.evoluation = ${data.evolution}) and
+		(raid.evolution = 9000 or raid.evolution = ${data.evolution}) and
 		(raid.move = 0 or raid.move = ${data.move_1} or raid.move = ${data.move_2})
 		${strictareastring}
 		and

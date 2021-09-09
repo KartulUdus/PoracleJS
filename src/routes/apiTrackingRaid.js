@@ -92,9 +92,9 @@ module.exports = async (fastify, options, next) => {
 				profile_no: currentProfileNo,
 				ping: '',
 				template: (row.template || fastify.config.general.defaultTemplateName).toString(),
-				pokemon_id: defaultTo(+row.pokemon_id, 9000),
-				exclusive: defaultTo(+row.exclusive, 0),
-				distance: defaultTo(+row.distance, 0),
+				pokemon_id: +defaultTo(row.pokemon_id, 9000),
+				exclusive: +defaultTo(row.exclusive, 0),
+				distance: +defaultTo(row.distance, 0),
 				team: row.team >= 0 && row.team <= 4 ? row.team : 4, // carefully chosen to get nulls/undefined to 4 but allow 0
 				clean: +defaultTo(+row.clean, 0),
 				level: +level,

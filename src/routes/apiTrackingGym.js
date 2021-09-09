@@ -88,10 +88,10 @@ module.exports = async (fastify, options, next) => {
 				profile_no: currentProfileNo,
 				ping: '',
 				template: (row.template || fastify.config.general.defaultTemplateName).toString(),
-				distance: defaultTo(+row.distance, 0),
-				clean: defaultTo(+row.clean, 0),
+				distance: +defaultTo(row.distance, 0),
+				clean: +defaultTo(row.clean, 0),
 				team,
-				slot_changes: defaultTo(+row.slot_changes, 0),
+				slot_changes: +defaultTo(row.slot_changes, 0),
 				gym_id: row.gym_id,
 			}
 		})
