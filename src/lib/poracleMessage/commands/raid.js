@@ -127,6 +127,7 @@ exports.run = async (client, msg, args, options) => {
 				form: mon.form.id,
 				evolution: +evolution,
 				move: +move,
+				gym_id: null,
 			}))
 
 			levels.forEach((level) => {
@@ -144,6 +145,7 @@ exports.run = async (client, msg, args, options) => {
 					form: 0,
 					evolution: +evolution,
 					move: +move,
+					gym_id: null,
 				})
 			})
 

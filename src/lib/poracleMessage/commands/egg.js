@@ -90,6 +90,7 @@ exports.run = async (client, msg, args, options) => {
 				team: +team,
 				clean: +clean,
 				level: +lvl,
+				gym_id: null,
 			}))
 
 			const tracked = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
