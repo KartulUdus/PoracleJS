@@ -848,6 +848,28 @@ async function run() {
 	setTimeout(processPossibleShiny, 30000)
 
 	chokidar.watch([
+		path.join(__dirname, `../${config.geofence.path}`),
+	], {
+		awaitWriteFinish: true,
+	}).on('change', () => {
+		log.info('Change in geofence detected, triggering reload')
+		try {
+			sendCommandToWorkers({
+				type: 'reloadGeofence',
+			})
+			sendCommandToWeather({
+				type: 'reloadGeofence',
+			})
+
+			// This splice mechanism replaces array in place (relies on no caching)
+			const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+			geofence.splice(0, geofence.length, ...newGeofence)
+		} catch (err) {
+			log.error('Error reloading dts', err)
+		}
+	})
+
+	chokidar.watch([
 		path.join(__dirname, '../config/dts.json'),
 		path.join(__dirname, '../config/dts/'),
 	], {
@@ -862,7 +884,7 @@ async function run() {
 				type: 'reloadDts',
 			})
 
-			// This splice mechanism replaces array in place
+			// This splice mechanism replaces array in place (relies on no caching)
 			const newDts = require('./lib/dtsloader').readDtsFiles()
 			dts.splice(0, dts.length, ...newDts)
 		} catch (err) {
