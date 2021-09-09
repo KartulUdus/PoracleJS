@@ -5,6 +5,7 @@ const moment = require('moment-timezone')
 const TranslatorFactory = require('../util/translatorFactory')
 const dtsLoader = require('./dtsloader')
 const configChecker = require('./configChecker')
+const geofenceLoader = require('./geofenceLoader')
 
 let config
 let knex
@@ -13,32 +14,6 @@ let geofence
 let translator
 let translatorFactory
 
-function getGeofenceFromGEOjson(file) {
-	const rawdata = importFresh(file)
-	if (rawdata.type !== 'FeatureCollection' || !rawdata.features) return
-	const geofenceGEOjson = rawdata.features
-	const outGeofence = []
-	for (let i = 0; i < geofenceGEOjson.length; i++) {
-		if (geofenceGEOjson[i].type === 'Feature' && geofenceGEOjson[i].geometry.type === 'Polygon') {
-			const { properties } = geofenceGEOjson[i]
-			const name = properties.name || config.defaultGeofenceName + i.toString()
-			const color = properties.color || config.defaultGeofenceColor
-
-			outGeofence[i] = {
-				name,
-				id: i,
-				color,
-				path: [],
-				group: properties.group || '',
-				description: properties.description || '',
-				userSelectable: properties.userSelectable === undefined || properties.userSelectable,
-				displayInMatches: properties.displayInMatches === undefined || properties.displayInMatches,
-			}
-			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
-		}
-	}
-	return outGeofence
-}
 function getKnex(conf) {
 	switch (conf.database.client) {
 		case 'mysql': {
@@ -76,8 +51,7 @@ module.exports = {
 	Config: (performChecks = true) => {
 		config = importFresh('config')
 		dts = dtsLoader.readDtsFiles()
-		geofence = importFresh(path.join(__dirname, `../../${config.geofence.path}`))
-		if (geofence.type === 'FeatureCollection') geofence = getGeofenceFromGEOjson(path.join(__dirname, `../../${config.geofence.path}`))
+		geofence = geofenceLoader.readGeofenceFile(config, path.join(__dirname, `../../${config.geofence.path}`))
 		knex = getKnex(config)
 		translatorFactory = new TranslatorFactory(config)
 		translator = translatorFactory.default
