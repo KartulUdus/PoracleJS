@@ -48,7 +48,7 @@ exports.run = async (client, msg, args, options) => {
 		let template = client.config.general.defaultTemplateName
 		let clean = false
 		const evolution = 0
-		const move = 9000
+		let move = 9000
 		const levelSet = new Set()
 		const pings = msg.getPings()
 		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase())
@@ -85,7 +85,16 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.levelRe)) levelSet.add(+element.match(client.re.levelRe)[2])
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
-			else if (element === 'instinct' || element === 'yellow') team = 3
+			else if (element.match(client.re.moveRe)) {
+				const [,, moveName] = element.match(client.re.moveRe)
+				const englishMoveName = client.translatorFactory.reverseTranslateCommand(moveName, true).toLowerCase()
+				const moveData = Object.entries(client.GameData.moves).find(([, data]) => data.name.toLowerCase() === englishMoveName)
+				if (!moveData) {
+					msg.react('🙅')
+					return msg.reply(translator.translateFormat('Unrecognised move name {0}', moveName))
+				}
+				[move] = moveData
+			} else if (element === 'instinct' || element === 'yellow') team = 3
 			else if (element === 'valor' || element === 'red') team = 2
 			else if (element === 'mystic' || element === 'blue') team = 1
 			else if (element === 'harmony' || element === 'gray') team = 0

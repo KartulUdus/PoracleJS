@@ -65,11 +65,13 @@ async function raidRowText(config, translator, GameData, raid, scannerQuery) {
 	let gymNameText = null
 	if (raid.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(raid.gym_id) || raid.gym_id : raid.gym_id
 
+	const moveName = raid.move && GameData.moves[raid.move] ? translator.translate(GameData.moves[raid.move].name) : ''
+
 	if (+raid.pokemon_id === 9000) {
-		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)} ${raid.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
+		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${moveName ? ` | ${translator.translate('with move')} ${moveName}` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}${raid.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
 	}
 
-	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)} ${raid.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
+	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${moveName ? ` | ${translator.translate('with move')} ${moveName}` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}${raid.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
 }
 
 async function gymRowText(config, translator, GameData, gym, scannerQuery) {
@@ -78,7 +80,7 @@ async function gymRowText(config, translator, GameData, gym, scannerQuery) {
 	let gymNameText = null
 	if (gym.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(gym.gym_id) || gym.gym_id : gym.gym_id
 
-	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)} ${gym.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
+	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)}${gym.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
 }
 
 function nestRowText(config, translator, GameData, nest) {
@@ -104,7 +106,7 @@ async function eggRowText(config, translator, GameData, egg, scannerQuery) {
 	let gymNameText = null
 	if (egg.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(egg.gym_id) || egg.gym_id : egg.gym_id
 
-	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, egg)} ${egg.gym_id ? `${translator.translate('at gym ')} ${gymNameText}` : ''}`
+	return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, egg)}${egg.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
 }
 
 function questRowText(config, translator, GameData, quest) {
