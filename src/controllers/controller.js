@@ -106,6 +106,10 @@ class Controller extends EventEmitter {
 		this.dts = dts
 	}
 
+	setGeofence(geofence) {
+		this.geofence = geofence
+	}
+
 	getDts(logReference, templateType, platform, templateName, language) {
 		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
 		const key = `${templateType} ${platform} ${templateName} ${language}`

@@ -159,8 +159,10 @@ class Nest extends Controller {
 				return []
 			}
 
-			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form)
-			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form)
+			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
+
+			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
 			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 
@@ -193,10 +195,13 @@ class Nest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				// full build
 				data.name = translator.translate(data.nameEng)
 				data.formName = translator.translate(data.formNameEng)
+				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 
 				const view = {
 					...geoResult,
@@ -209,9 +214,6 @@ class Nest extends Controller {
 					now: new Date(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
 
 				const templateType = 'nest'
 				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
