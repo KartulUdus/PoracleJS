@@ -82,7 +82,7 @@ module.exports = async (fastify, options, next) => {
 			let level = 9000
 			if (row.pokemon_id) {
 				level = +row.level
-				if (level < 1 || level > 6) {
+				if (row.level === undefined || level < 1 || level > 6) {
 					throw new Error('Invalid level (must be specified if no pokemon_id')
 				}
 			}
