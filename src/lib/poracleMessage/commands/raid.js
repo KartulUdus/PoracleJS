@@ -47,6 +47,8 @@ exports.run = async (client, msg, args, options) => {
 		let team = 4
 		let template = client.config.general.defaultTemplateName
 		let clean = false
+		const evolution = 0
+		const move = 9000
 		const levelSet = new Set()
 		const pings = msg.getPings()
 		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase())
@@ -123,6 +125,8 @@ exports.run = async (client, msg, args, options) => {
 				clean: +clean,
 				level: 9000,
 				form: mon.form.id,
+				evolution: +evolution,
+				move: +move,
 			}))
 
 			levels.forEach((level) => {
@@ -138,6 +142,8 @@ exports.run = async (client, msg, args, options) => {
 					clean: +clean,
 					level: +level,
 					form: 0,
+					evolution: +evolution,
+					move: +move,
 				})
 			})
 

@@ -99,6 +99,8 @@ module.exports = async (fastify, options, next) => {
 				clean: +defaultTo(+row.clean, 0),
 				level: +level,
 				form: 0,
+				move: +defaultTo(row.move, 0),
+				evolution: +defaultTo(row.evolution, 9000),
 			}
 		})
 
