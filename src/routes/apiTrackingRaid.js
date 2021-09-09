@@ -80,7 +80,7 @@ module.exports = async (fastify, options, next) => {
 
 		const insert = insertReq.map((row) => {
 			let level = 9000
-			if (row.pokemon_id) {
+			if (!row.pokemon_id) {
 				level = +row.level
 				if (row.level === undefined || level < 1 || level > 6) {
 					throw new Error('Invalid level (must be specified if no pokemon_id')
