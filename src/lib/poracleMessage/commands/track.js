@@ -84,6 +84,14 @@ exports.run = async (client, msg, args, options) => {
 		}
 		const littleLeagueAllowed = client.config.pvp.dataSource === 'internal' || client.config.pvp.dataSource === 'chuck'
 
+		// Remove arguments that we don't want to keep for processing
+		for (let i = args.length - 1; i >= 0; i--) {
+			if (args[i].match(client.re.nameRe)
+				|| args[i].match(client.re.channelRe)
+				|| args[i].match(client.re.userRe)) {
+				args.splice(i, 1)
+			}
+		}
 		// Substitute aliases
 		const pokemonAlias = require('../../../../config/pokemonAlias.json')
 		for (let i = args.length - 1; i >= 0; i--) {
@@ -237,8 +245,8 @@ exports.run = async (client, msg, args, options) => {
 		// Set defaults
 
 		let distance = +defaultTo(parameterValues.d, 0)
-		let rarity = +defaultTo(parameterValues.rarity, -1)
-		let maxRarity = +defaultTo(parameterValues.maxrarity, 6)
+		let rarity = defaultTo(parameterValues.rarity, -1)
+		let maxRarity = defaultTo(parameterValues.maxrarity, 6)
 		const pings = msg.getPings()
 
 		const pvp = {}

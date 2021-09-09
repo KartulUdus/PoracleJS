@@ -607,7 +607,7 @@ class Monster extends Controller {
 							displayRank.levelWithCap = displayRank.cap && !displayRank.capped ? `${displayRank.level}/${displayRank.cap}` : displayRank.level
 							displayRank.cp = rank.cp
 							displayRank.pokemonId = +rank.pokemon
-							displayRank.percentage = rank.percentage < 1 ? (rank.percentage * 100).toFixed(2) : rank.percentage.toFixed(2)
+							displayRank.percentage = rank.percentage <= 1 ? (rank.percentage * 100).toFixed(2) : rank.percentage.toFixed(2)
 
 							let monsterName
 							let formName
