@@ -285,6 +285,7 @@ class Invasion extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
+					nowISO: new Date().toISOString(),
 					genderData: data.genderDataEng ? {
 						name: translator.translate(data.genderDataEng.name),
 						emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
