@@ -7,7 +7,7 @@ const path = require('path')
 const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
-const { GameData } = require('./lib/GameData')
+const GameData = require('./lib/GameData')
 
 const { log } = logs
 

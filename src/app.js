@@ -29,7 +29,7 @@ const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 
 const { Config } = require('./lib/configFetcher')
-const { GameData } = require('./lib/GameData')
+const GameData = require('./lib/GameData')
 
 const {
 	config, knex, dts, geofence, translator, translatorFactory,

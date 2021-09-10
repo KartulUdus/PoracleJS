@@ -2,10 +2,8 @@ const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
 const {
-	GameData: {
-		moves, monsters, utilData: {
-			cpMultipliers, types, powerUpCost, emojis,
-		},
+	moves, monsters, utilData: {
+		cpMultipliers, types, powerUpCost, emojis,
 	},
 } = require('./GameData')
 
@@ -127,10 +125,10 @@ module.exports = () => {
 
 		return Math.max(10, Math.floor(
 			(atk + +ivAttack)
-              * (def + +ivDefense) ** 0.5
-              * (sta + +ivStamina) ** 0.5
-              * cpMulti ** 2
-              / 10,
+			* (def + +ivDefense) ** 0.5
+			* (sta + +ivStamina) ** 0.5
+			* cpMulti ** 2
+			/ 10,
 		))
 	})
 

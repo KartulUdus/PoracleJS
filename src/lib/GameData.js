@@ -13,4 +13,4 @@ neededFiles.forEach((file) => {
 	}
 })
 
-module.exports = { GameData }
+module.exports = GameData

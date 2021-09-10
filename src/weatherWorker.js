@@ -10,7 +10,7 @@ const { log } = logs
 
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
-const { GameData } = require('./lib/GameData')
+const GameData = require('./lib/GameData')
 
 const {
 	config, knex, dts, geofence, translatorFactory,
