@@ -143,7 +143,6 @@ class Raid extends Controller {
 	}
 
 	async handle(obj) {
-		const pregenerateTile = false
 		const data = obj
 		const minTth = this.config.general.alertMinimumTime || 0
 
