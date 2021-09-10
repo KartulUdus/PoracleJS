@@ -10,7 +10,7 @@ class Translator {
 		const defaultData = fs.existsSync(path.join(__dirname, `../../config/locale/${region}.json`)) ? require(path.join(__dirname, `../../config/locale/${region}.json`)) : {}
 		const dataAddition = fs.existsSync(path.join(__dirname, `../../config/custom.${region}.json`)) ? require(path.join(__dirname, `../../config/custom.${region}.json`)) : {}
 		this.data = {
-			...moveNames, ...pokemonNames, ...defaultData, ...dataAddition, ...itemNames, ...evoQuests,
+			...moveNames, ...pokemonNames, ...itemNames, ...evoQuests, ...defaultData, ...dataAddition,
 		}
 
 		// remove duplicates
