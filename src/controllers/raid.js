@@ -249,37 +249,7 @@ class Raid extends Controller {
 				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 				const jobs = []
 
-				switch (this.config.geocoding.staticProvider.toLowerCase()) {
-					case 'tileservercache': {
-						if (this.config.geocoding.staticMapType.raid) {
-							if (this.config.geocoding.staticMapType.raid.startsWith('*')) {
-								data.staticMap = await this.tileserverPregen.getTileURL(logReference, 'raid',
-									Object.fromEntries(Object.entries(data).filter(([field]) => ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'].includes(field))),
-									this.config.geocoding.staticMapType.raid.substring(1))
-							} else {
-								data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
-							}
-						}
-						break
-					}
-
-					case 'google': {
-						data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-						break
-					}
-					case 'osm': {
-						data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-						break
-					}
-					case 'mapbox': {
-						data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-						break
-					}
-					default: {
-						data.staticMap = ''
-					}
-				}
-
+				await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
 				data.staticmap = data.staticMap // deprecated
 
 				for (const cares of whoCares) {
@@ -360,35 +330,8 @@ class Raid extends Controller {
 					}
 
 					const templateType = 'raid'
-					const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
-					let message
-					if (mustache) {
-						let mustacheResult
-						try {
-							mustacheResult = mustache(view, { data: { language, platform } })
-						} catch (err) {
-							this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						}
-						if (mustacheResult) {
-							mustacheResult = await this.urlShorten(mustacheResult)
-							try {
-								message = JSON.parse(mustacheResult)
-								if (cares.ping) {
-									if (!message.content) {
-										message.content = cares.ping
-									} else {
-										message.content += cares.ping
-									}
-								}
-							} catch (err) {
-								this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-							}
-						}
-					}
+					const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
-					if (!message) {
-						message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
-					}
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
@@ -447,37 +390,7 @@ class Raid extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'tileservercache': {
-					if (this.config.geocoding.staticMapType.raid) {
-						if (this.config.geocoding.staticMapType.raid.startsWith('*')) {
-							data.staticMap = await this.tileserverPregen.getTileURL(logReference, 'raid',
-								Object.fromEntries(Object.entries(data).filter(([field]) => ['latitude', 'longitude', 'level', 'imgUrl'].includes(field))),
-								this.config.geocoding.staticMapType.raid.substring(1))
-						} else {
-							data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
-						}
-					}
-					break
-				}
-
-				case 'google': {
-					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'osm': {
-					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'mapbox': {
-					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				default: {
-					data.staticMap = ''
-				}
-			}
-
+			await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
@@ -514,35 +427,8 @@ class Raid extends Controller {
 				}
 
 				const templateType = 'egg'
-				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
-				let message
-				if (mustache) {
-					let mustacheResult
-					try {
-						mustacheResult = mustache(view, { data: { language, platform } })
-					} catch (err) {
-						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-					}
-					if (mustacheResult) {
-						mustacheResult = await this.urlShorten(mustacheResult)
-						try {
-							message = JSON.parse(mustacheResult)
-							if (cares.ping) {
-								if (!message.content) {
-									message.content = cares.ping
-								} else {
-									message.content += cares.ping
-								}
-							}
-						} catch (err) {
-							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						}
-					}
-				}
+				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
-				if (!message) {
-					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
-				}
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
 					lon: data.longitude.toString().substring(0, 8),
