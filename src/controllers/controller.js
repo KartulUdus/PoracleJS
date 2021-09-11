@@ -190,6 +190,7 @@ class Controller extends EventEmitter {
 
 		if (!message) {
 			message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+			this.log.warn(`${logReference}: Invalid or missing message template ref: ${logReference}\nid: '${template}' type: '${templateType}' platform: '${platform}' language: '${language}'`)
 		}
 
 		return message
