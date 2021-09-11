@@ -169,7 +169,7 @@ class Controller extends EventEmitter {
 			try {
 				mustacheResult = mustache(view, { data: { language, platform } })
 			} catch (err) {
-				this.log.error(`${logReference}: Error generating mustache results for ${platform}/${template}/${language}`, err, view)
+				this.log.error(`${logReference}: Error generating mustache results for ${platform}/${templateType}:${template}/${language}`, err, view)
 			}
 			if (mustacheResult) {
 				mustacheResult = await this.urlShorten(mustacheResult)
@@ -189,7 +189,7 @@ class Controller extends EventEmitter {
 		}
 
 		if (!message) {
-			message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+			message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
 		}
 
 		return message
