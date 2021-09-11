@@ -270,8 +270,10 @@ exports.run = async (client, msg, args, options) => {
 			return await msg.reply(`${translator.translate('Oops, more than one league PVP parameters were set in command! - check the')} \`${util.prefix}${translator.translate('help')}\``)
 		}
 
-		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
-		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
+		if (!msg.isFromAdmin) {
+			distance = distance || client.config.tracking.defaultDistance || 0
+			distance = Math.min(distance, client.config.tracking.maxDistance || 40000000) // circumference of Earth
+		}
 
 		if (rarity !== -1 && !['1', '2', '3', '4', '5', '6'].includes(rarity)) {
 			rarity = client.translatorFactory.reverseTranslateCommand(rarity, true)
