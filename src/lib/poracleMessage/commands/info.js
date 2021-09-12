@@ -267,7 +267,7 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				if (!found) {
-					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info bulbasaur`', util.prefix),
+					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`', util.prefix),
 						{ style: 'markdown' })
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 				}
