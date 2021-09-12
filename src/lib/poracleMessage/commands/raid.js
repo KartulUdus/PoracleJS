@@ -86,9 +86,11 @@ exports.run = async (client, msg, args, options) => {
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element.match(client.re.moveRe)) {
-				const [,, moveName] = element.match(client.re.moveRe)
+				const [,, moveText] = element.match(client.re.moveRe)
+				const [moveName, typeName] = moveText.split('/')
 				const englishMoveName = client.translatorFactory.reverseTranslateCommand(moveName, true).toLowerCase()
-				const moveData = Object.entries(client.GameData.moves).find(([, data]) => data.name.toLowerCase() === englishMoveName)
+				const englishTypeName = typeName ? client.translatorFactory.reverseTranslateCommand(typeName, true).toLowerCase() : null
+				const moveData = Object.entries(client.GameData.moves).find(([, data]) => data.name.toLowerCase() === englishMoveName && (!englishTypeName || data.type.toLowerCase() === englishTypeName))
 				if (!moveData) {
 					msg.react('🙅')
 					return msg.reply(translator.translateFormat('Unrecognised move name {0}', moveName))

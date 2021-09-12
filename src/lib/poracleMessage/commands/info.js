@@ -95,10 +95,16 @@ exports.run = async (client, msg, args, options) => {
 			}
 			case 'moves': {
 				let message = `${translator.translate('Recognised moves:')}\n`
-				const moveList = Object.values(client.GameData.moves).map((x) => x.name).sort()
-				for (const moveName of moveList) {
-					const translatedName = translator.translate(moveName)
-					message += `${moveName.replace(/ /g, '\\_')}${translatedName !== moveName ? ` / ${translatedName.replace(/ /g, '\\_')}` : ''}\n`
+				const moveList = Object.values(client.GameData.moves).sort((a, b) => a.name.localeCompare(b.name))
+				for (const move of moveList) {
+					let displayText = move.name
+					let translatedDisplayText = translator.translate(move.name)
+					if (moveList.filter((x) => x.name === move.name).length > 1) {
+						displayText += `/${move.type}`
+						translatedDisplayText += `/${translator.translate(move.type)}`
+					}
+
+					message += `${displayText.replace(/ /g, '\\_')}${translatedDisplayText !== displayText ? ` or ${translatedDisplayText.replace(/ /g, '\\_')}` : ''}\n`
 				}
 
 				await msg.reply(message, { style: 'markdown' })
@@ -109,7 +115,7 @@ exports.run = async (client, msg, args, options) => {
 				const itemList = Object.values(client.GameData.items).map((x) => x.name).sort()
 				for (const itemName of itemList) {
 					const translatedName = translator.translate(itemName)
-					message += `${itemName.replace(/ /g, '\\_')}${translatedName !== itemName ? ` / ${translatedName.replace(/ /g, '\\_')}` : ''}\n`
+					message += `${itemName.replace(/ /g, '\\_')}${translatedName !== itemName ? ` or ${translatedName.replace(/ /g, '\\_')}` : ''}\n`
 				}
 
 				await msg.reply(message, { style: 'markdown' })
