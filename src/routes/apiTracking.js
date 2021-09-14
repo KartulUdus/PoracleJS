@@ -47,7 +47,7 @@ module.exports = async (fastify, options, next) => {
 		}
 	})
 
-	fastify.get('/api/tracking/allprofiles/:id', options, async (req) => {
+	fastify.get('/api/tracking/allProfiles/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
@@ -76,7 +76,7 @@ module.exports = async (fastify, options, next) => {
 		const lure = await fastify.query.selectAllQuery('lures', { id })
 		const nest = await fastify.query.selectAllQuery('nests', { id })
 		const gym = await fastify.query.selectAllQuery('gym', { id })
-		const profile = await fastify.query.selectOneQuery('profiles', { id })
+		const profile = await fastify.query.selectAllQuery('profiles', { id })
 
 		const language = human.language || fastify.config.general.locale
 		const translator = fastify.translatorFactory.Translator(language)
