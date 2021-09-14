@@ -260,7 +260,7 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		const profileNo = req.params.profile
-		const profile = await fastify.query.selectAllQuery('profiles', { id: req.params.id, profile_no: profileNo })
+		const profile = await fastify.query.selectOneQuery('profiles', { id: req.params.id, profile_no: profileNo })
 
 		if (!profile) {
 			return {
@@ -328,6 +328,31 @@ module.exports = async (fastify, options, next) => {
 		return {
 			status: 'ok',
 			setAreas: [...uniqueNewAreas],
+		}
+	})
+
+	fastify.get('/api/humans/one/:id', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+
+		if (!human) {
+			return {
+				status: 'error',
+				message: 'User not found',
+			}
+		}
+
+		return {
+			status: 'ok',
+			human,
 		}
 	})
 
