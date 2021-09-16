@@ -215,11 +215,12 @@ module.exports = async (fastify, options, next) => {
 					coordinates: [[]],
 				},
 			}
+			const outPath = []
 			for (let j = 0; j < inGeofence.path.length; j++) {
 				const coord = inGeofence.path[j]
-				inGeofence.path[j] = [coord[1], coord[0]]
+				outPath.push([coord[1], coord[0]])
 			}
-			outGeofence.geometry.coordinates[0] = inGeofence.path
+			outGeofence.geometry.coordinates[0] = outPath
 			outGeoJSON.features.push(outGeofence)
 		}
 
