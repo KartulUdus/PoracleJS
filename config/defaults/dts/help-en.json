@@ -26,7 +26,7 @@
     "template": {
       "embed": {
         "title": "Poracle Help",
-        "description": "Thank you for registering \nPlease set a location `{{prefix}}location name of place` or add ares where to receive alarms from",
+        "description": "Thank you for registering \nPlease set a location `{{prefix}}location name of place` or add areas where to receive alarms from",
         "fields": [
           {
             "name": "Monster tracking commands",
@@ -102,7 +102,7 @@
         "fields": [
           {
             "name": "Invasion tracking commands",
-            "value": "`{{prefix}}invasion template3 d500 dragon mixed`: Any arguments are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove` Removes tracking for all Team Rocket Incidents."
+            "value": "`{{prefix}}invasion template3 d500 dragon mixed`: Any arguments are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove everything` Removes tracking for all Team Rocket Incidents."
           }
         ]
       }
@@ -138,7 +138,25 @@
         "fields": [
           {
             "name": "Quest tracking commands",
-            "value": "`{{prefix}}quest porygon pikachu poke ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokeballs as rewards \n `{{prefix}}quest remove all items` Removes tracking for all item based quests. Can also use `all pokemon` or `stardust`"
+            "value": "`{{prefix}}quest porygon pikachu poké_ball d500 `: Any arguments are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu or pokéballs as rewards \n `{{prefix}}quest remove all_items` Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "gym",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Gym tracking commands",
+            "value": "`{{prefix}}gym instinct slot_changes`: Any arguments are optional, this command would alert you about gyms inside an added area. The set filters require the Gym to be controlled by team Instinct and slot changes occur\n`{{prefix}}gym remove instinct`: Removes tracking for all gyms controlled by team Instinct"
           }
         ]
       }

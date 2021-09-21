@@ -413,6 +413,7 @@ class Weather extends Controller {
 					id: data.s2_cell_id,
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					now: new Date(),
+					nowISO: new Date().toISOString(),
 				}
 
 				const templateType = 'weatherchange'

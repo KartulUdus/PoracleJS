@@ -356,6 +356,7 @@ class Raid extends Controller {
 						tths: data.tth.seconds,
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
+						nowISO: new Date().toISOString(),
 						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)) },
 						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					}
@@ -483,6 +484,7 @@ class Raid extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
+					nowISO: new Date().toISOString(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
