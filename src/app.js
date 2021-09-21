@@ -565,7 +565,7 @@ async function processOne(hook) {
 							const ohbemms = ohbemend[1] / 1000000
 							fastify.controllerLog.debug(`${hook.message.encounter_id}: PVP time: ${ohbemms}ms`)
 						} catch (err) {
-							fastify.controllerLog.error(`${hook.message.encounter_id}: Ohbem exception - params ohbem.queryPvPRank(${+data.pokemon_id}, ${+data.form || 0}, ${+data.costume}, ${+data.gender}, ${+data.individual_attack}, ${+data.individual_defense}, +${data.individual_stamina}, ${+data.pokemon_level}) - continuing`, err)
+							fastify.controllerLog.error(`${hook.message.encounter_id}: Ohbem exception - params ohbem.queryPvPRank(${+data.pokemon_id}, ${+data.form || 0}, ${+data.costume}, ${+data.gender}, ${+data.individual_attack}, ${+data.individual_defense}, ${+data.individual_stamina}, ${+data.pokemon_level}) - continuing`, err)
 						}
 					}
 				}
