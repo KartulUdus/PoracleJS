@@ -73,7 +73,7 @@ class Invasion extends Controller {
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			data.name = this.escapeJsonString(data.name)
+			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
 
@@ -261,6 +261,7 @@ class Invasion extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
+					nowISO: new Date().toISOString(),
 					genderData: data.genderDataEng ? {
 						name: translator.translate(data.genderDataEng.name),
 						emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
