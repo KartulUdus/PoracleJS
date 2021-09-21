@@ -512,18 +512,15 @@ async function processOne(hook) {
 				fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 				if (ohbem) {
-					const data = hook.message
-					const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-						|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-						|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
-
-					if (encountered) {
+					try {
 						const ohbemstart = process.hrtime()
 						const ohbemCalc = ohbem.queryPvPRank(+data.pokemon_id, +data.form || 0, +data.costume, +data.gender, +data.individual_attack, +data.individual_defense, +data.individual_stamina, +data.pokemon_level)
 						data.ohbem_pvp = ohbemCalc
 						const ohbemend = process.hrtime(ohbemstart)
 						const ohbemms = ohbemend[1] / 1000000
 						fastify.controllerLog.debug(`${hook.message.encounter_id}: PVP time: ${ohbemms}ms`)
+					} catch (err) {
+						fastify.controllerLog.error(`${hook.message.encounter_id}: Ohbem exception - params ohbem.queryPvPRank(${+data.pokemon_id}, ${+data.form || 0}, ${+data.costume}, ${+data.gender}, ${+data.individual_attack}, ${+data.individual_defense}, +${data.individual_stamina}, ${+data.pokemon_level}) - continuing`, err)
 					}
 				}
 				processHook = hook
