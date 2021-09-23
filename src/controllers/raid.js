@@ -188,7 +188,7 @@ class Raid extends Controller {
 
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
-				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
+				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 				if (!monster) {
 					this.log.warn(`${logReference}: Couldn't find monster in:`, data)
 					return
