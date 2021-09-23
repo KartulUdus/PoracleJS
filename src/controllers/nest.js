@@ -123,7 +123,7 @@ class Nest extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			if (data.form === undefined || data.form === null) data.form = 0
-			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 			if (!monster) {
 				this.log.warn(`${logReference}: Couldn't find monster in:`, data)
 				return

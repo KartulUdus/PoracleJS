@@ -188,7 +188,7 @@ class Monster extends Controller {
 				}
 			}
 			if (data.form === undefined || data.form === null) data.form = 0
-			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
 				this.log.warn(`${data.encounter_id}: Couldn't find monster in:`, data)
@@ -205,8 +205,8 @@ class Monster extends Controller {
 			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+        || !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+        || !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			if (data.pokestop_name) data.pokestop_name = this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.pokestop_name
@@ -263,7 +263,7 @@ class Monster extends Controller {
 			data.mapurl = data.googleMapUrl // deprecated
 			data.ivcolor = data.ivColor // deprecated
 			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
-			data.types = this.getPokemonTypes(data.pokemon_id, data.form)
+			data.types = monster.types.map((type) => type.id)
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
 			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1
 			data.rarityNameEng = this.GameData.utilData.rarity[data.rarityGroup] ? this.GameData.utilData.rarity[data.rarityGroup] : ''
@@ -590,12 +590,13 @@ class Monster extends Controller {
 				data.typeNameEng = n
 				data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
 				data.emojiString = e.join('')
+				data.typeEmoji = data.emojiString
 
 				const createPvpDisplay = (leagueData, maxRank, minCp) => {
 					const displayList = []
 					for (const rank of leagueData) {
 						if (rank.rank <= maxRank
-							&& rank.cp >= minCp) {
+              && rank.cp >= minCp) {
 							const displayRank = {}
 
 							displayRank.rank = +rank.rank
