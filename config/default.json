@@ -65,8 +65,8 @@
     //        },
       "availableLanguages": {
       },
-    // default template name/number to use when users add new trackings
-      "defaultTemplateName": 1,
+     // default template name/number to use when users add new trackings
+     "defaultTemplateName": 1,
     // library of custom DTS templates
       "dtsDictionary": {},
     // Short link provider - supported hideuri, shlink

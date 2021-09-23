@@ -29,22 +29,13 @@ const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 
 const { Config } = require('./lib/configFetcher')
+const GameData = require('./lib/GameData')
 
 const {
 	config, knex, dts, geofence, translator, translatorFactory,
 } = Config()
 
-const GameData = {
-	monsters: require('./util/monsters.json'),
-	utilData: require('./util/util.json'),
-	moves: require('./util/moves.json'),
-	items: require('./util/items.json'),
-	grunts: require('./util/grunts.json'),
-}
-
-const PoracleInfo = {
-
-}
+const PoracleInfo = {}
 
 const readDir = util.promisify(fs.readdir)
 
@@ -80,6 +71,7 @@ fastify.decorate('config', config)
 fastify.decorate('knex', knex)
 fastify.decorate('cache', cache)
 fastify.decorate('gymCache', gymCache)
+fastify.decorate('GameData', GameData)
 fastify.decorate('query', query)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
