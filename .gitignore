@@ -31,3 +31,11 @@ src/lib/db/poracle.sqlite
 /.cache/cache/
 backups/*.json
 .weather*
+
+/src/util/monsters.json
+/src/util/moves.json
+/src/util/questTypes.json
+/src/util/grunts.json
+/src/util/items.json
+/src/util/types.json
+/src/util/locale/*.json

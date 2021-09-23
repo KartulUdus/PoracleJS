@@ -7,6 +7,7 @@ const path = require('path')
 const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
+const GameData = require('./lib/GameData')
 
 const { log } = logs
 
@@ -20,13 +21,6 @@ const {
 	config, knex, dts, geofence, translatorFactory,
 } = Config(false)
 
-const GameData = {
-	monsters: require('./util/monsters.json'),
-	utilData: require('./util/util.json'),
-	moves: require('./util/moves.json'),
-	items: require('./util/items.json'),
-	grunts: require('./util/grunts.json'),
-}
 const PromiseQueue = require('./lib/PromiseQueue')
 
 const MonsterController = require('./controllers/monster')

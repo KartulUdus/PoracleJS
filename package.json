@@ -1,14 +1,16 @@
 {
   "name": "PoracleJS",
   "version": "4.2.2",
-  "description": "Webhook processing and personalised discord|telegram alarms",
+  "description": "Webhook processing and personalized discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
-    "start": "node .",
+    "start": "npm run generate && node .",
+    "dev": "node .",
     "migrateV3": "node src/init/migrateV3.js",
-    "init": "node src/init/initConfig.js"
+    "init": "node src/init/initConfig.js",
+    "generate": "node -e 'require(\"./src/util/generateData\").update()'"
   },
   "repository": {
     "type": "git",
@@ -58,7 +60,7 @@
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
     "ohbem": "^1.2.3",
-    "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",
+    "pogo-data-generator": "^1.2.2",
     "point-in-polygon": "^1.1.0",
     "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",
