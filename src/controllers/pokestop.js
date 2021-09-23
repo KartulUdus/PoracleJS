@@ -139,7 +139,7 @@ class Invasion extends Controller {
 				data.gruntRewards = ''
 				if (data.gruntTypeId in this.GameData.grunts) {
 					const gruntType = this.GameData.grunts[data.gruntTypeId]
-					data.gruntName = gruntType.grunt
+					data.gruntName = `${gruntType.type} ${gruntType.grunt}`
 					data.gender = gruntType.gender
 					data.gruntType = gruntType.type
 				}
@@ -203,7 +203,7 @@ class Invasion extends Controller {
 					data.gruntRewards = ''
 					if (data.gruntTypeId in this.GameData.grunts) {
 						const gruntType = this.GameData.grunts[data.gruntTypeId]
-						data.gruntName = translator.translate(gruntType.grunt)
+						data.gruntName = translator.translate(`${gruntType.type} ${gruntType.grunt}`)
 						data.gender = gruntType.gender
 						data.genderDataEng = this.GameData.utilData.genders[data.gender]
 						if (!data.genderDataEng) {
@@ -221,7 +221,7 @@ class Invasion extends Controller {
 						const gruntRewardsList = {}
 						gruntRewardsList.first = { chance: 100, monsters: [] }
 						if (gruntType.encounters) {
-							if (gruntType.second_reward && gruntType.encounters.second) {
+							if (gruntType.secondReward && gruntType.encounters.second) {
 								// one out of two rewards
 								gruntRewards = '85%: '
 								gruntRewardsList.first = { chance: 85, monsters: [] }

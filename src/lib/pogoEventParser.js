@@ -59,7 +59,7 @@ class PogoEventParser {
 		try {
 			const tz = geoTz(lat, lon).toString()
 
-			for (const event of this.events.filter((x) => (x.spawns && x.spawns.length) || x.type === 'community-day')) {
+			for (const event of this.events.filter((x) => (x.spawns && x.spawns.length) || x.type === 'community-day' || x.type === 'spotlight-hour')) {
 				const eventStart = moment.tz(event.start, tz).unix()
 				const eventEnd = moment.tz(event.end, tz).unix()
 				if (startTime < eventStart && eventStart < disappearTime) {

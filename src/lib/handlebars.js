@@ -1,11 +1,11 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
-const monsters = require('../util/monsters.json')
 const {
-	cpMultipliers, types, powerUpCost, emojis,
-} = require('../util/util.json')
-const moves = require('../util/moves.json')
+	moves, monsters, utilData: {
+		cpMultipliers, types, powerUpCost, emojis,
+	},
+} = require('./GameData')
 
 const TranslatorFactory = require('../util/translatorFactory')
 const EmojiLookup = require('./emojiLookup')
@@ -125,10 +125,10 @@ module.exports = () => {
 
 		return Math.max(10, Math.floor(
 			(atk + +ivAttack)
-              * (def + +ivDefense) ** 0.5
-              * (sta + +ivStamina) ** 0.5
-              * cpMulti ** 2
-              / 10,
+			* (def + +ivDefense) ** 0.5
+			* (sta + +ivStamina) ** 0.5
+			* cpMulti ** 2
+			/ 10,
 		))
 	})
 

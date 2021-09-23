@@ -29,22 +29,13 @@ const scannerFactory = require('./lib/scanner/scannerFactory')
 const ShinyPossible = require('./lib/shinyLoader')
 
 const { Config } = require('./lib/configFetcher')
+const GameData = require('./lib/GameData')
 
 const {
 	config, knex, scannerKnex, dts, geofence, translatorFactory,
 } = Config()
 
-const GameData = {
-	monsters: require('./util/monsters.json'),
-	utilData: require('./util/util.json'),
-	moves: require('./util/moves.json'),
-	items: require('./util/items.json'),
-	grunts: require('./util/grunts.json'),
-}
-
-const PoracleInfo = {
-
-}
+const PoracleInfo = {}
 
 const readDir = util.promisify(fs.readdir)
 
