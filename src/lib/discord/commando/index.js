@@ -51,7 +51,7 @@ class DiscordCommando {
 				let channelId
 				if (info.route) {
 					const channelMatch = info.route.match(/\/channels\/(\d+)\//)
-					if (channelMatch[1]) {
+					if (channelMatch && channelMatch[1]) {
 						const channel = this.client.channels.cache.get(channelMatch[1])
 						if (channel) {
 							channelId = channel.recipient && `DM:${channel.recipient.id}:${channel.recipient.username}`
