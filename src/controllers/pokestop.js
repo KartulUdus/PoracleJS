@@ -220,7 +220,7 @@ class Invasion extends Controller {
 						let gruntRewards = ''
 						const gruntRewardsList = {}
 						gruntRewardsList.first = { chance: 100, monsters: [] }
-						if (gruntType.encounters) {
+						if (gruntType.encounters && gruntType.encounters.first) {
 							if (gruntType.secondReward && gruntType.encounters.second) {
 								// one out of two rewards
 								gruntRewards = '85%: '
