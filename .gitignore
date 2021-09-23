@@ -6,6 +6,7 @@ config/locale/*.json
 docker-compose.yml
 .cache/*
 .idea
+.idea/*
 .vscode
 *.heapsnapshot
 
