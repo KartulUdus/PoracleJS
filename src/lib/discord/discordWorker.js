@@ -127,6 +127,12 @@ class Worker {
 
 			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message`, data.message)
 
+			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
+				const { url } = data.message.embed.image
+				data.message.embed.image.url = 'attachment://map.png'
+				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+			}
+
 			const msg = await user.send(data.message.content || '', data.message)
 			if (data.clean) {
 				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(noop)
@@ -149,6 +155,12 @@ class Worker {
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000 + this.config.discord.messageDeleteDelay
 			if (!channel) return this.logs.discord.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL not found`)
 			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending discord message`, data.message)
+
+			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
+				const { url } = data.message.embed.image
+				data.message.embed.image.url = 'attachment://map.png'
+				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+			}
 
 			const msg = await channel.send(data.message.content || '', data.message)
 			if (data.clean) {
