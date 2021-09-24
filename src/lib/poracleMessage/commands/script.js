@@ -317,6 +317,10 @@ exports.run = async (client, msg, args, options) => {
 			await addProfile(human.current_profile_no)
 		}
 
+		if (!message.length) {
+			return await msg.reply('The script specified is empty')
+		}
+
 		if (args.includes('link')) {
 			try {
 				const hastelink = await client.hastebin(message)
