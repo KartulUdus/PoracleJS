@@ -208,7 +208,7 @@ class Controller extends EventEmitter {
 							Object.fromEntries(Object.entries(data).filter(([field]) => keys.includes(field))),
 							this.config.geocoding.staticMapType[configTemplate].substring(1))
 					} else {
-						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType.raid)
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType[configTemplate])
 					}
 				}
 				break
