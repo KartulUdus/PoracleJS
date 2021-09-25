@@ -376,6 +376,11 @@ class Weather extends Controller {
 					const activePokemons = cares.caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
+					if (data.activePokemons) {
+						for (const mon of data.activePokemons) {
+							mon.imgUrl = await this.imgUicons.pokemonIcon(mon.pokemon_id, mon.form)
+						}
+					}
 				}
 				if (pregenerateTile && this.config.geocoding.staticMapType.weather && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
 					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
