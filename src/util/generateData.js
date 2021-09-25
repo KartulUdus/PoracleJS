@@ -1,5 +1,5 @@
 const fs = require('fs')
-const { generate } = require('pogo-data-generator')
+const { invasions } = require('pogo-data-generator')
 const Fetch = require('node-fetch')
 
 const { log } = require('../lib/logger')
@@ -32,37 +32,9 @@ module.exports.update = async function update() {
 	// Write grunts
 	try {
 		log.info('Fetching latest invasions...')
-		const { invasions } = await generate({
-			template: {
-				invasions: {
-					enabled: true,
-					options: {
-						topLevelName: 'invasions',
-						keys: {
-							main: 'id',
-							encounters: 'position',
-						},
-						includeBalloons: true,
-						customFields: {
-							first: 'first',
-							second: 'second',
-							third: 'third',
-						},
-						placeholderData: true,
-					},
-					template: {
-						type: true,
-						gender: true,
-						grunt: true,
-						secondReward: true,
-						encounters: 'id',
-					},
-				},
-			},
-		})
 		fs.writeFile(
 			'./src/util/grunts.json',
-			JSON.stringify(invasions, null, 2),
+			JSON.stringify(await invasions(), null, 2),
 			'utf8',
 			() => { },
 		)
