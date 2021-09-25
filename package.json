@@ -61,7 +61,7 @@
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
     "ohbem": "^1.3.0",
-    "pogo-data-generator": "^1.2.2",
+    "pogo-data-generator": "^1.2.5",
     "point-in-polygon": "^1.1.0",
     "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",
@@ -78,6 +78,6 @@
     "eslint-config-airbnb-base": "^14.2.1",
     "eslint-plugin-import": "^2.22.1",
     "husky": "^4.2.3",
-    "mocha": "^6.2.2"
+    "mocha": "^9.1.2"
   }
 }
