@@ -8,7 +8,7 @@
   "scale": 1,
   "markers": [
     {
-      "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/gyms/gym_#(teamId).png",
+      "url": "#(imgUrl)",
       "latitude": #(latitude),
       "longitude": #(longitude),
       "width": 50,
