@@ -3,6 +3,7 @@ const geoTz = require('geo-tz')
 const EmojiLookup = require('../../emojiLookup')
 const helpCommand = require('./help')
 const weatherTileGenerator = require('../../weatherTileGenerator')
+const Uicons = require('../../uicons')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -124,9 +125,12 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				const weatherId = weatherInfo[currentHourTimestamp]
-				const staticMap = client.config.geocoding.staticProvider === 'tileservercache'
-					? await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId)
-					: null
+				let staticMap = null
+				if (client.config.geocoding.staticProvider === 'tileservercache') {
+					const imgUicons = new Uicons(client.config.general.imgUrl, 'png', client.log)
+
+					staticMap = await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId, imgUicons)
+				}
 
 				// Build forecast information
 
