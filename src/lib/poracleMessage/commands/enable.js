@@ -17,12 +17,12 @@ exports.run = async (client, msg, args, options) => {
 		// Make list of ids
 		const mentions = msg.getMentions()
 		const targets = mentions.map((x) => x.id)
-		targets.push(args.filter((x) => parseInt(x, 10)))
+		targets.push(...(args.filter((x) => parseInt(x, 10))))
 
 		for (const id of targets) {
 			client.log.info(`Enable ${id}`)
 
-			await client.query.updateQuery('humans', { admin_disable: 0, disabled_date: null }, { id })
+			await client.query.updateQuery('humans', { admin_disable: 0, disabled_date: null }, { id: id })
 		}
 		await msg.react('✅')
 	} catch (err) {
