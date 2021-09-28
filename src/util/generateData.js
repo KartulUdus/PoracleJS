@@ -56,7 +56,7 @@ module.exports.update = async function update() {
 			// { remote: 'costumes', local: 'costumes' },
 			// { remote: 'descriptions', local: 'pokemonDescriptions' },
 			{ remote: 'evolutionQuests', local: 'evoQuests' },
-			// { remote: 'forms', local: 'pokemonForms' },
+			{ remote: 'forms', local: 'pokemonForms' },
 			// { remote: 'grunts', local: 'gruntNames' },
 			{ remote: 'items', local: 'itemNames' },
 			// { remote: 'lures', local: 'lures' },
@@ -67,8 +67,8 @@ module.exports.update = async function update() {
 			// { remote: 'questTypes', local: 'questTypes' },
 			// { remote: 'questConditions', local: 'questConditions' },
 			// { remote: 'questRewardTypes', local: 'questRewardTypes' },
-			// { remote: 'types', local: 'pokemonTypes' },
-			// { remote: 'weather', local: 'weather' },
+			{ remote: 'types', local: 'pokemonTypes' },
+			{ remote: 'weather', local: 'weather' },
 		]
 
 		const availableLocales = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/index.json')
