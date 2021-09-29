@@ -249,6 +249,7 @@ class Monster extends Controller {
 			data.pvpFormId = data.form
 			data.pvpEvolutionData = {}
 			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
+			data.shinyStats = this.statsData.shinyData[data.pokemonId] ? this.statsData.shinyData[data.pokemonId].ratio.toFixed(0) : null
 
 			let ohbemms = 0
 
