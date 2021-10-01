@@ -169,8 +169,9 @@
   //
   "pvp": {
       "dataSource": "webhook",                      // webhook - from hooks, internal - internal calculator
-      "levelCaps": [50],                            // level caps to be included in internal rank calculations - alternative could be [50, 51]
-      "includeMegaEvolution": false,                // whether to include mega evolutions in rank calculations
+      "levelCaps": [50],                            // internal: level caps to be included in internal rank calculations - alternative could be [50, 51]
+      "includeMegaEvolution": false,                // internal: whether to include mega evolutions in rank calculations
+      "littleLeagueCanEvolve": false,               // internal: whether little league mons that are evolved are included
       "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation
