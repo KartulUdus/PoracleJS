@@ -10,7 +10,7 @@
     "dev": "node .",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",
-    "generate": "node -e 'require(\"./src/util/generateData\").update()'"
+    "generate": "node src/util/generateData.js"
   },
   "repository": {
     "type": "git",

@@ -10,7 +10,7 @@ const fetch = async (url) => new Promise((resolve) => {
 		.then((json) => resolve(json))
 })
 
-module.exports.update = async function update() {
+let update = async function update() {
 	// Write monsters/moves/items/questTypes
 	try {
 		log.info('Fetching latest Game Master...')
@@ -92,4 +92,10 @@ module.exports.update = async function update() {
 	} catch (e) {
 		log.warn('Could not generate new locales, using existing...')
 	}
+}
+
+module.exports.update = update;
+
+if (require.main === module) {
+	update().then(() => { console.log("OK") } );
 }
