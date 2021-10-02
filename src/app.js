@@ -246,7 +246,10 @@ async function initialiseOhbem() {
 			// all of the following options are optional and these (except for pokemonData) are the default values
 			// read the documentation for more information
 			leagues: {
-				little: 500,
+				little: {
+					little: !config.pvp.littleLeagueCanEvolve,
+					cap: 500,
+				},
 				great: 1500,
 				ultra: 2500,
 				//	master: null,
