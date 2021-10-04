@@ -173,8 +173,9 @@
   //
   "pvp": {
       "dataSource": "webhook",                      // webhook - from hooks, internal - internal calculator
-      "levelCaps": [50],                            // level caps to be included in internal rank calculations - alternative could be [50, 51]
-      "includeMegaEvolution": false,                // whether to include mega evolutions in rank calculations
+      "levelCaps": [50],                            // internal: level caps to be included in internal rank calculations - alternative could be [50, 51]
+      "includeMegaEvolution": false,                // internal: whether to include mega evolutions in rank calculations
+      "littleLeagueCanEvolve": false,               // internal: whether little league mons that are evolved are included
       "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation
@@ -226,6 +227,7 @@
       "workerStatus": "invisible",                          // Worker Status - available, dnd, idle, invisible
       "workerActivity": "PoracleJS Helper",           // Worker Activity
       "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
+      "uploadEmbedImages": false,                     // whether Poracle will retrieve and upload images direct to discord CDN
     // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
     //   hours, deleting them if not (note general.roleCheckMode must be set to
     //   actually carry out the deletions rather than just logging them)

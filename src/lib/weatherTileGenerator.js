@@ -6,10 +6,14 @@ function getWeatherCellId(lat, lon) {
 	return S2.keyToId(weatherCellKey)
 }
 
-async function generateWeatherTile(tileserverPregen, cellId, weatherId) {
+async function generateWeatherTile(tileserverPregen, cellId, weatherId, imgUicons) {
 	const data = {}
 
 	data.condition = weatherId
+	if (imgUicons) {
+		data.imgUrl = await imgUicons.weatherIcon(data.condition)
+	}
+
 	const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(cellId))
 	const s2cellCenter = S2ts.S2LatLng.fromPoint(s2cell.getCenter())
 	data.latitude = s2cellCenter.latRadians * 180 / Math.PI
