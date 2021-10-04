@@ -1,6 +1,5 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-const Ohbem = require('ohbem')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
@@ -10,30 +9,6 @@ class Monster extends Controller {
 		const nonBoostingWeathers = [1, 2, 3, 4, 5, 6, 7].filter((weather) => !boostingWeathers.includes(weather))
 		if (boostStatus > 0) return nonBoostingWeathers
 		return boostingWeathers
-	}
-
-	async initialiseObem() {
-		// This per worker method will likely be removed
-
-		if (this.config.pvp.dataSource === 'internal2') {
-			const pokemonData = await Ohbem.fetchPokemonData()
-
-			this.ohbem = new Ohbem({
-				// all of the following options are optional and these (except for pokemonData) are the default values
-				// read the documentation for more information
-				leagues: {
-					little: 500,
-					great: 1500,
-					ultra: 2500,
-					master: null,
-				},
-				levelCaps: this.config.pvp.levelCaps,
-				// The following field is required to use queryPvPRank
-				// You can skip populating it if you only want to use other helper methods
-				pokemonData,
-				cachingStrategy: Ohbem.cachingStrategies.balanced,
-			})
-		}
 	}
 
 	async monsterWhoCares(data) {
@@ -158,7 +133,6 @@ class Monster extends Controller {
 	}
 
 	async handle(obj) {
-		let pregenerateTile = false
 		const data = obj
 		try {
 			let hrstart = process.hrtime()
@@ -166,27 +140,6 @@ class Monster extends Controller {
 
 			const minTth = this.config.general.alertMinimumTime || 0
 
-			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'tileservercache': {
-					pregenerateTile = true
-					break
-				}
-				case 'google': {
-					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'osm': {
-					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'mapbox': {
-					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				default: {
-					data.staticMap = ''
-				}
-			}
 			if (data.form === undefined || data.form === null) data.form = 0
 			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 
@@ -272,20 +225,8 @@ class Monster extends Controller {
 			data.pvpEvolutionData = {}
 			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 
-			let ohbemms = 0
-
 			if (this.config.logger.enableLogs.pvp && data.iv >= 0) {
 				this.log.verbose(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
-			}
-
-			if (this.ohbem && data.iv >= 0) {
-				const ohbemstart = process.hrtime()
-
-				const ohbemCalc = this.ohbem.queryPvPRank(+data.pokemonId, +data.form || 0, +data.costume, +data.gender, +data.atk, +data.def, +data.sta, +data.level)
-				const ohbemend = process.hrtime(ohbemstart)
-				ohbemms = ohbemend[1] / 1000000
-
-				data.ohbem_pvp = ohbemCalc
 			}
 
 			if (data.ohbem_pvp) {
@@ -295,7 +236,7 @@ class Monster extends Controller {
 					this.log.verbose(`${data.encounter_id}: PVP From ohbem: ${JSON.stringify(pvpData)}`)
 				}
 
-				if (this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'internal2') {
+				if (this.config.pvp.dataSource === 'internal') {
 					if (pvpData.great) {
 						data.pvp_rankings_great_league = pvpData.great.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					} else delete data.pvp_rankings_great_league
@@ -398,9 +339,9 @@ class Monster extends Controller {
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
 			if (whoCares.length) {
-				this.log.info(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms}${this.ohbem ? `/${ohbemms}` : ''} ms)`)
+				this.log.info(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 			} else {
-				this.log.verbose(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms}${this.ohbem ? `/${ohbemms}` : ''} ms)`)
+				this.log.verbose(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 			}
 
 			if (!whoCares.length) return []
@@ -443,9 +384,7 @@ class Monster extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.pokemon) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'monster', data, this.config.geocoding.staticMapType.pokemon)
-			}
+			await this.getStaticMapUrl(logReference, data, 'monster', ['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl'])
 			data.staticmap = data.staticMap // deprecated
 
 			// get Weather Forecast information
@@ -681,35 +620,7 @@ class Monster extends Controller {
 				}
 
 				const templateType = (data.iv === -1) ? 'monsterNoIv' : 'monster'
-				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
-				let message
-				if (mustache) {
-					let mustacheResult
-					try {
-						mustacheResult = mustache(view, { data: { language, platform } })
-					} catch (err) {
-						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-					}
-					if (mustacheResult) {
-						mustacheResult = await this.urlShorten(mustacheResult)
-						try {
-							message = JSON.parse(mustacheResult)
-							if (cares.ping) {
-								if (!message.content) {
-									message.content = cares.ping
-								} else {
-									message.content += cares.ping
-								}
-							}
-						} catch (err) {
-							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						}
-					}
-				}
-
-				if (!message) {
-					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
-				}
+				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),

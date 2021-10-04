@@ -10,7 +10,7 @@
     "dev": "node .",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",
-    "generate": "node -e 'require(\"./src/util/generateData\").update()'"
+    "generate": "node src/util/generateData.js"
   },
   "repository": {
     "type": "git",
@@ -34,6 +34,7 @@
   },
   "homepage": "https://github.com/KartulUdus/reference#readme",
   "dependencies": {
+    "form-data": "^4.0.0",
     "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
     "chokidar": "^3.5.2",
@@ -59,8 +60,8 @@
     "node-geocoder": "^3.27.0",
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
-    "ohbem": "^1.2.3",
-    "pogo-data-generator": "^1.2.2",
+    "ohbem": "^1.3.0",
+    "pogo-data-generator": "^1.2.5",
     "point-in-polygon": "^1.1.0",
     "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",

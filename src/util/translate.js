@@ -3,14 +3,11 @@ const path = require('path')
 
 class Translator {
 	constructor(region) {
-		const moveNames = fs.existsSync(path.join(__dirname, `locale/moveNames_${region}.json`)) ? require(path.join(__dirname, `locale/moveNames_${region}.json`)) : {}
-		const pokemonNames = fs.existsSync(path.join(__dirname, `locale/pokemonNames_${region}.json`)) ? require(path.join(__dirname, `locale/pokemonNames_${region}.json`)) : {}
-		const itemNames = fs.existsSync(path.join(__dirname, `locale/itemNames_${region}.json`)) ? require(path.join(__dirname, `locale/itemNames_${region}.json`)) : {}
-		const evoQuests = fs.existsSync(path.join(__dirname, `locale/evoQuests_${region}.json`)) ? require(path.join(__dirname, `locale/evoQuests_${region}.json`)) : {}
+		const remote = fs.existsSync(path.join(__dirname, `locale/${region}.json`)) ? require(path.join(__dirname, `locale/${region}.json`)) : {}
 		const defaultData = fs.existsSync(path.join(__dirname, `../../config/locale/${region}.json`)) ? require(path.join(__dirname, `../../config/locale/${region}.json`)) : {}
 		const dataAddition = fs.existsSync(path.join(__dirname, `../../config/custom.${region}.json`)) ? require(path.join(__dirname, `../../config/custom.${region}.json`)) : {}
 		this.data = {
-			...moveNames, ...pokemonNames, ...itemNames, ...evoQuests, ...defaultData, ...dataAddition,
+			...remote, ...defaultData, ...dataAddition,
 		}
 
 		// remove duplicates

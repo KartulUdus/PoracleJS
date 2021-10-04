@@ -298,5 +298,4 @@ if (!isMainThread) {
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
 	setInterval(currentStatus, 60000)
-	setImmediate(async () => monsterController.initialiseObem())
 }

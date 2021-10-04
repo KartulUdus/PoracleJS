@@ -162,6 +162,76 @@ class Controller extends EventEmitter {
 		return mustache
 	}
 
+	async createMessage(logReference, templateType, platform, template, language, ping, view) {
+		const mustache = this.getDts(logReference, templateType, platform, template, language)
+		let message
+		if (mustache) {
+			let mustacheResult
+			try {
+				mustacheResult = mustache(view, { data: { language, platform } })
+			} catch (err) {
+				this.log.error(`${logReference}: Error generating mustache results for ${platform}/${templateType}:${template}/${language}`, err, view)
+			}
+			if (mustacheResult) {
+				mustacheResult = await this.urlShorten(mustacheResult)
+				try {
+					message = JSON.parse(mustacheResult)
+					if (ping) {
+						if (!message.content) {
+							message.content = ping
+						} else {
+							message.content += ping
+						}
+					}
+				} catch (err) {
+					this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+				}
+			}
+		}
+
+		if (!message) {
+			message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+			this.log.warn(`${logReference}: Invalid or missing message template ref: ${logReference}\nid: '${template}' type: '${templateType}' platform: '${platform}' language: '${language}'`)
+		}
+
+		return message
+	}
+
+	async getStaticMapUrl(logReference, data, maptype, keys) {
+		const tileTemplate = maptype
+		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
+		switch (this.config.geocoding.staticProvider.toLowerCase()) {
+			case 'tileservercache': {
+				if (this.config.geocoding.staticMapType[configTemplate]) {
+					if (this.config.geocoding.staticMapType[configTemplate].startsWith('*')) {
+						data.staticMap = await this.tileserverPregen.getTileURL(logReference, tileTemplate,
+							Object.fromEntries(Object.entries(data).filter(([field]) => keys.includes(field))),
+							this.config.geocoding.staticMapType[configTemplate].substring(1))
+					} else {
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType[configTemplate])
+					}
+				}
+				break
+			}
+
+			case 'google': {
+				data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+				break
+			}
+			case 'osm': {
+				data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+				break
+			}
+			case 'mapbox': {
+				data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+				break
+			}
+			default: {
+				data.staticMap = ''
+			}
+		}
+	}
+
 	getDistance(start, end) {
 		if (typeof (Number.prototype.toRad) === 'undefined') {
 			// eslint-disable-next-line no-extend-native
