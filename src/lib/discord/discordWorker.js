@@ -1,6 +1,7 @@
 const { Client, DiscordAPIError } = require('discord.js')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
+const { performance } = require('perf_hooks')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
 const noop = () => { }
@@ -133,7 +134,11 @@ class Worker {
 				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
 			}
 
+			const startTime = performance.now()
 			const msg = await user.send(data.message.content || '', data.message)
+			const endTime = performance.now();
+			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)
+
 			if (data.clean) {
 				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(noop)
 				this.discordMessageTimeouts.set(msg.id, { type: 'user', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
@@ -162,7 +167,11 @@ class Worker {
 				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
 			}
 
+			const startTime = performance.now()
 			const msg = await channel.send(data.message.content || '', data.message)
+			const endTime = performance.now();
+			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL (${endTime - startTime} ms)`)
+
 			if (data.clean) {
 				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => { })
 				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)

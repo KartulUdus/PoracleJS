@@ -4,6 +4,7 @@ const cp = require('child_process')
 const EventEmitter = require('events')
 const path = require('path')
 const fs = require('fs')
+const { performance } = require('perf_hooks')
 
 const pcache = require('flat-cache')
 
@@ -306,10 +307,14 @@ class Controller extends EventEmitter {
 			return { addr: 'Unknown', flag: '' }
 		}
 
-		if (this.config.geocoding.cacheDetail === 0) {
+		const doGeolocate = async () => {
 			try {
+				const startTime = performance.now()
 				const geocoder = this.getGeocoder()
 				const [result] = await geocoder.reverse(locationObject)
+				const endTime = performance.now();
+				(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`Geocode ${locationObject.lat},${locationObject.lon} (${endTime - startTime} ms)`)
+
 				const flag = emojiFlags[result.countryCode]
 				if (!this.addressDts) {
 					this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
@@ -324,27 +329,15 @@ class Controller extends EventEmitter {
 			}
 		}
 
+		if (this.config.geocoding.cacheDetail === 0) {
+			return doGeolocate()
+		}
+
 		const cacheKey = `${String(+locationObject.lat.toFixed(this.config.geocoding.cacheDetail))}-${String(+locationObject.lon.toFixed(this.config.geocoding.cacheDetail))}`
 		const cachedResult = geoCache.getKey(cacheKey)
 		if (cachedResult) return this.escapeAddress(cachedResult)
 
-		try {
-			const geocoder = this.getGeocoder()
-			const [result] = await geocoder.reverse(locationObject)
-			const flag = emojiFlags[result.countryCode]
-			if (!this.addressDts) {
-				this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
-			}
-			result.addr = this.addressDts(result)
-			result.flag = flag ? flag.emoji : ''
-			geoCache.setKey(cacheKey, result)
-			geoCache.save(true)
-
-			return this.escapeAddress(result)
-		} catch (err) {
-			this.log.error('getAddress: failed to fetch data', err)
-			return { addr: 'Unknown', flag: '' }
-		}
+		return doGeolocate()
 	}
 
 	pointInArea(point) {
