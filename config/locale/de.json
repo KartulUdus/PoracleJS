@@ -612,6 +612,7 @@
     "You have not set your location, use `!{0}{1}`":"Es wurde noch kein Standort festgelegt, verwende `!{0}{1}`",
     "You have reached the limit of {0} messages over {1} seconds":"Das Limit von {0} Benachrichtigungen innerhalb von {1} Sekunden wurde erreicht.",
     "Your alerts are currently":"Benachrichtigungen sind aktuell",
+    "Your loaded DTS looks like this:\n":"Deine geladene DTS sieht so aus:\n",
     "Your location is currently set to":"Folgender Standort ist gesetzt:",
     "Your profile is currently set to:":"Aktuell gewähltes Profil:",
     "Your tracking is now activated, send {0}{1} for more information about available commands":"Benachrichtigungen sind nun aktiv. {0}{1} für weitere Informationen zu vefügbaren Befehlen",
