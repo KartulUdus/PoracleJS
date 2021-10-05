@@ -301,14 +301,14 @@
 		"grunt": "Ice Grunt"
 	},
 	"28": {
-		"type": "Metal",
+		"type": "Steel",
 		"gender": 2,
-		"grunt": "Metal Grunt"
+		"grunt": "Steel Grunt"
 	},
 	"29": {
-		"type": "Metal",
+		"type": "Steel",
 		"gender": 1,
-		"grunt": "Metal Grunt"
+		"grunt": "Steel Grunt"
 	},
 	"30": {
 		"type": "Normal",
