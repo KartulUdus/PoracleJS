@@ -2,7 +2,6 @@ logs/*
 config/*.json
 config/customMaps/*
 config/dts/*.json
-config/locale/*.json
 docker-compose.yml
 .cache/*
 .idea
@@ -10,8 +9,6 @@ docker-compose.yml
 .vscode
 *.heapsnapshot
 
-!config/locale/fr.json
-!config/locale/de.json
 nominatimData/*
 !nominatimData/.gitkeep
 !nominatimData/postgres/.gitkeep
