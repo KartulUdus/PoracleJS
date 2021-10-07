@@ -12,7 +12,7 @@ const fetch = async (url) => {
 		}
 		return await data.json()
 	} catch (e) {
-		console.error(e, `Unable to fetch ${url}`)
+		log.warn(e, `Unable to fetch ${url}`)
 	}
 }
 
@@ -81,5 +81,5 @@ const update = async function update() {
 module.exports.update = update
 
 if (require.main === module) {
-	update().then(() => { console.log('OK') })
+	update().then(() => { log.info('OK') })
 }
