@@ -68,7 +68,12 @@
      // default template name/number to use when users add new trackings
      "defaultTemplateName": 1,
     // library of custom DTS templates
-      "dtsDictionary": {}
+      "dtsDictionary": {},
+    // Short link provider - supported hideuri, shlink
+      "shortlinkProvider": "hideuri",
+      "shortlinkProviderURL": "",
+      "shortlinkProviderKey": "",
+      "shortlinkProviderDomain": ""           // if supported, select domain to be used
   },
   //
   // Configuration for the user reconciliation/role check function

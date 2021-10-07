@@ -12,7 +12,9 @@ const emojiFlags = require('emoji-flags')
 const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
-const urlShortener = require('../lib/urlShortener')
+const HideUriShortener = require('../lib/hideuriUrlShortener')
+const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
+
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
@@ -40,6 +42,7 @@ class Controller extends EventEmitter {
 		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
 		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
 		this.dtsCache = {}
+		this.shortener = this.getShortener()
 	}
 
 	getGeocoder() {
@@ -84,6 +87,17 @@ class Controller extends EventEmitter {
 					formatterPattern: this.config.locale.addressFormat,
 					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
+			}
+		}
+	}
+
+	getShortener() {
+		switch (this.config.general.shortlinkProvider) {
+			case 'shlink': {
+				return new ShlinkUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general.shortlinkProviderKey, this.config.general.shortlinkProviderDomain)
+			}
+			default: {
+				return new HideUriShortener(this.log)
 			}
 		}
 	}
@@ -298,7 +312,7 @@ class Controller extends EventEmitter {
 	// eslint-disable-next-line class-methods-use-this
 	async urlShorten(s) {
 		return replaceAsync(s, /<S<(.*?)>S>/g,
-			async (match, name) => urlShortener(name))
+			async (match, name) => this.shortener.getShortlink(name))
 	}
 
 	async getAddress(locationObject) {
