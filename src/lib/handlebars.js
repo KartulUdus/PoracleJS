@@ -144,6 +144,8 @@ module.exports = () => {
 		}
 	})
 
+	handlebars.registerHelper('getEmoji', (emojiName, options) => userTranslator(options).translate(emoji(options, emojiName)))
+
 	handlebars.registerHelper('getPowerUpCost', (levelStart, levelEnd, options) => {
 		const translator = userTranslator(options)
 
