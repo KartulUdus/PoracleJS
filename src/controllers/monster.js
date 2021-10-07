@@ -639,7 +639,7 @@ class Monster extends Controller {
 			}
 			hrend = process.hrtime(hrstart)
 			const hrendprocessing = hrend[1] / 1000000
-			this.log.debug(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
+			this.log.verbose(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql + ${hrendprocessing} ms processing dts)`)
 
 			return jobs
 		} catch (e) {

@@ -12,11 +12,11 @@ const fetch = async (url) => {
 		}
 		return await data.json()
 	} catch (e) {
-		console.error(e, `Unable to fetch ${url}`)
+		log.warn(e, `Unable to fetch ${url}`)
 	}
 }
 
-let update = async function update() {
+const update = async function update() {
 	// Write monsters/moves/items/questTypes
 	try {
 		log.info('Fetching latest Game Master...')
@@ -78,8 +78,8 @@ let update = async function update() {
 	}
 }
 
-module.exports.update = update;
+module.exports.update = update
 
 if (require.main === module) {
-	update().then(() => { console.log("OK") } );
+	update().then(() => { log.info('OK') })
 }

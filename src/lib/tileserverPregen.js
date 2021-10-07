@@ -42,8 +42,8 @@ class TileserverPregen {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. Got invalid response from tileserver - ${result.data}`)
 				return null
 			}
-			const tileResult = result.data.startsWith('http') ? result.data : `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`
-			this.log.debug(`${logReference}: Tile generated ${tileResult} (${hrendms} ms)`)
+			const tileResult = result.data.startsWith('http') ? result.data : `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`;
+			(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`${logReference}: Tile generated ${tileResult} (${hrendms} ms)`)
 
 			return tileResult
 		} catch (error) {
