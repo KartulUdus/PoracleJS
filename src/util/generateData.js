@@ -16,7 +16,7 @@ const fetch = async (url) => {
 	}
 }
 
-let update = async function update() {
+const update = async function update() {
 	// Write monsters/moves/items/questTypes
 	try {
 		log.info('Fetching latest Game Master...')
@@ -78,8 +78,8 @@ let update = async function update() {
 	}
 }
 
-module.exports.update = update;
+module.exports.update = update
 
 if (require.main === module) {
-	update().then(() => { console.log("OK") } );
+	update().then(() => { console.log('OK') })
 }
