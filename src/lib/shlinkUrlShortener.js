@@ -1,10 +1,11 @@
 const axios = require('axios')
 
 class ShlinkUrlShortener {
-	constructor(log, shlinkUrl, apiKey) {
+	constructor(log, shlinkUrl, apiKey, domain) {
 		this.shlinkUrl = shlinkUrl
 		this.apiKey = apiKey
 		this.log = log
+		this.domain = domain
 	}
 
 	async getShortlink(url) {
@@ -26,6 +27,7 @@ class ShlinkUrlShortener {
 				data: {
 					longUrl: url,
 					findIfExists: true,
+					domain: this.domain || null,
 				},
 				cancelToken: source.token,
 			})

@@ -72,7 +72,8 @@
     // Short link provider - supported hideuri, shlink
       "shortlinkProvider": "hideuri",
       "shortlinkProviderURL": "",
-      "shortlinkProviderKey": ""
+      "shortlinkProviderKey": "",
+      "shortlinkProviderDomain": ""           // if supported, select domain to be used
   },
   //
   // Configuration for the user reconciliation/role check function
