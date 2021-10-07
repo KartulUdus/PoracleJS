@@ -1,6 +1,7 @@
 const { diff } = require('deep-object-diff')
 
 const trackedCommand = require('../lib/poracleMessage/commands/tracked')
+const tracked = require('../lib/poracleMessage/commands/tracked')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/tracking/pokemon/:id', options, async (req) => {
@@ -14,6 +15,8 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+		const language = human.language || fastify.config.general.locale
+		const translator = fastify.translatorFactory.Translator(language)
 
 		if (!human) {
 			return {
@@ -22,11 +25,11 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
-		const monsters = await fastify.query.selectAllQuery('monster', { id: req.params.id, profile_no: human.current_profile_no })
+		const monsters = await fastify.query.selectAllQuery('monsters', { id: req.params.id, profile_no: human.current_profile_no })
 
 		return {
 			status: 'ok',
-			pokemon: monsters,
+			pokemon: monsters.map((row) => ({ ...row, description: tracked.monsterRowText(fastify.config, translator, fastify.GameData, row) })),
 		}
 	})
 
@@ -41,7 +44,7 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 
-		await fastify.query.deleteQuery('monster', { id: req.params.id, uid: req.params.uid })
+		await fastify.query.deleteQuery('monsters', { id: req.params.id, uid: req.params.uid })
 
 		return {
 			status: 'ok',
@@ -91,7 +94,7 @@ module.exports = async (fastify, options, next) => {
 				profile_no: currentProfileNo,
 				ping: '',
 				template: (row.template || fastify.config.general.defaultTemplateName).toString(),
-				pokemon_id: row.pokemon_id,
+				pokemon_id: +row.pokemon_id,
 				distance: +distance,
 				min_iv: +defaultTo(row.min_iv, -1),
 				max_iv: +defaultTo(row.max_iv, 100),
@@ -121,7 +124,7 @@ module.exports = async (fastify, options, next) => {
 		})
 
 		try {
-			const tracked = await fastify.query.selectAllQuery('monster', { id, profile_no: currentProfileNo })
+			const trackedMonsters = await fastify.query.selectAllQuery('monsters', { id, profile_no: currentProfileNo })
 
 			const updates = []
 			const alreadyPresent = []
@@ -129,7 +132,7 @@ module.exports = async (fastify, options, next) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of tracked.filter((x) => x.team === toInsert.team)) {
+				for (const existing of trackedMonsters.filter((x) => x.team === toInsert.team)) {
 					const differences = diff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
@@ -169,14 +172,14 @@ module.exports = async (fastify, options, next) => {
 				}
 			}
 
-			await fastify.query.deleteWhereInQuery('monster', {
+			await fastify.query.deleteWhereInQuery('monsters', {
 				id,
 				profile_no: currentProfileNo,
 			},
 			updates.map((x) => x.uid),
 			'uid')
 
-			await fastify.query.insertQuery('monster', [...insert, ...updates])
+			await fastify.query.insertQuery('monsters', [...insert, ...updates])
 
 			// Send message to user
 
