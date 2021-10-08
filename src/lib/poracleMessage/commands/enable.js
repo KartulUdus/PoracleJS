@@ -17,7 +17,14 @@ exports.run = async (client, msg, args, options) => {
 		// Make list of ids
 		const mentions = msg.getMentions()
 		const targets = mentions.map((x) => x.id)
-		targets.push(...(args.filter((x) => parseInt(x, 10))))
+		for (const arg of args) {
+			const id = parseInt(arg, 10)
+			if (id) targets.push(arg)
+			else {
+				const human = await client.query.selectOneQuery('humans', { name: arg, type: 'webhook' })
+				if (human) targets.push(human.id)
+			}
+		}
 
 		for (const id of targets) {
 			client.log.info(`Enable ${id}`)
