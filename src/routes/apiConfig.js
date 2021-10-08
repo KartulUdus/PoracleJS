@@ -55,12 +55,12 @@ module.exports = async (fastify, options, next) => {
 
 		const typesForPlatform = (platform) => [...new Set(fastify.dts.filter((x) => !x.hidden && x.platform === platform).map((x) => x.type))]
 		const languagesForType = (platform, type) => [...new Set(fastify.dts.filter((x) => !x.hidden && x.platform === platform && x.type === type).map((x) => x.language || '%'))]
-		const templatesForLanguage = (platform, type, language) => [...new Set(fastify.dts.filter((x) => !x.hidden && x.platform === platform && x.type === type && ((language === '%' && x.language === undefined) || x.language === language)).map((x) => x.id))]
+		const templatesForLanguage = (platform, type, language, names) => [...new Set(fastify.dts.filter((x) => !x.hidden && x.platform === platform && x.type === type && ((language === '%' && x.language === undefined) || x.language === language)).map((x) => (names ? { id: x.id, name: x.name } : x.id)))]
 
 		return {
 			status: 'ok',
-			discord: Object.fromEntries(typesForPlatform('discord').map((x) => [x, Object.fromEntries(languagesForType('discord', x).map((y) => [y, templatesForLanguage('discord', x, y)]))])),
-			telegram: Object.fromEntries(typesForPlatform('telegram').map((x) => [x, Object.fromEntries(languagesForType('telegram', x).map((y) => [y, templatesForLanguage('telegram', x, y)]))])),
+			discord: Object.fromEntries(typesForPlatform('discord').map((x) => [x, Object.fromEntries(languagesForType('discord', x).map((y) => [y, templatesForLanguage('discord', x, y, req.query.names)]))])),
+			telegram: Object.fromEntries(typesForPlatform('telegram').map((x) => [x, Object.fromEntries(languagesForType('telegram', x).map((y) => [y, templatesForLanguage('telegram', x, y, req.query.names)]))])),
 		}
 	})
 

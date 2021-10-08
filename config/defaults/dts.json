@@ -1,5 +1,6 @@
 [{
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "monster",
   "default": true,
@@ -17,6 +18,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "fr",
   "type": "monster",
   "default": false,
@@ -34,6 +36,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "monster",
   "default": false,
@@ -51,6 +54,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "monster",
   "default": true,
@@ -64,6 +68,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "monster",
   "default": false,
@@ -77,6 +82,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "monsterNoIv",
   "default": true,
@@ -94,6 +100,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "fr",
   "type": "monsterNoIv",
   "default": false,
@@ -111,6 +118,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "monsterNoIv",
   "default": false,
@@ -128,6 +136,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "monsterNoIv",
   "default": true,
@@ -141,6 +150,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "monsterNoIv",
   "default": false,
@@ -154,6 +164,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "raid",
   "default": true,
@@ -175,6 +186,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "fr",
   "type": "raid",
   "default": false,
@@ -196,6 +208,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "raid",
   "default": false,
@@ -217,6 +230,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "raid",
   "default": true,
@@ -230,6 +244,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "raid",
   "default": false,
@@ -243,6 +258,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "egg",
   "default": true,
@@ -264,6 +280,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "fr",
   "type": "egg",
   "default": false,
@@ -285,6 +302,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "egg",
   "default": false,
@@ -306,6 +324,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "egg",
   "default": true,
@@ -319,6 +338,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "egg",
   "default": false,
@@ -332,6 +352,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "quest",
   "default": true,
@@ -349,6 +370,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "fr",
   "type": "quest",
   "default": false,
@@ -366,6 +388,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "quest",
   "default": false,
@@ -383,6 +406,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "quest",
   "default": true,
@@ -396,6 +420,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "quest",
   "default": false,
@@ -409,6 +434,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "invasion",
   "default": true,
@@ -427,6 +453,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "fr",
   "type": "invasion",
   "default": false,
@@ -445,6 +472,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "invasion",
   "default": false,
@@ -463,6 +491,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "invasion",
   "default": true,
@@ -476,6 +505,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "invasion",
   "default": false,
@@ -489,6 +519,7 @@
 },
   {
     "id": 1,
+    "name": "Base",
     "language": "en",
     "type": "lure",
     "default": true,
@@ -512,6 +543,7 @@
   },
   {
     "id": 1,
+    "name": "Base",
     "language": "fr",
     "type": "lure",
     "default": true,
@@ -535,6 +567,7 @@
   },
   {
     "id":1,
+    "name": "Base",
     "language":"en",
     "type":"lure",
     "default":true,
@@ -548,6 +581,7 @@
   },
  {
     "id": 1,
+    "name": "Base",
     "type": "nest",
     "language": "en",
     "default": true,
@@ -568,6 +602,7 @@
   },
   {
     "id": 1,
+    "name": "Base",
     "type": "nest",
     "language": "en",
     "default": true,
@@ -581,6 +616,7 @@
   },
   {
     "id": 1,
+    "name": "Base",
     "type": "gym",
     "language": "en",
     "default": true,
@@ -598,6 +634,7 @@
   },
   {
     "id": 1,
+    "name": "Base",
     "type": "gym",
     "language": "en",
     "default": true,
@@ -615,6 +652,7 @@
   },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "weatherchange",
   "default": true,
@@ -631,6 +669,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "fr",
   "type": "weatherchange",
   "default": false,
@@ -647,6 +686,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "weatherchange",
   "default": false,
@@ -663,6 +703,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "weatherchange",
   "default": true,
@@ -676,6 +717,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "de",
   "type": "weatherchange",
   "default": false,
@@ -689,6 +731,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "greeting",
   "default": true,
@@ -744,6 +787,7 @@
 },
 {
   "id": 1,
+  "name": "Base",
   "language": "en",
   "type": "greeting",
   "default": true,
