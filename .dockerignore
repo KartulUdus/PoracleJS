@@ -1,10 +1,6 @@
 .git/
 **/logs/*.json
 **/config/*.json
-**/config/locale/*.json
-
-!**/config/locale/fr.json
-!**/config/locale/de.json
 
 !**/config/default.json
 

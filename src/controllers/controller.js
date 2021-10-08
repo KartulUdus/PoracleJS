@@ -4,6 +4,7 @@ const cp = require('child_process')
 const EventEmitter = require('events')
 const path = require('path')
 const fs = require('fs')
+const { performance } = require('perf_hooks')
 
 const pcache = require('flat-cache')
 
@@ -12,7 +13,9 @@ const emojiFlags = require('emoji-flags')
 const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
-const urlShortener = require('../lib/urlShortener')
+const HideUriShortener = require('../lib/hideuriUrlShortener')
+const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
+
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
@@ -40,6 +43,7 @@ class Controller extends EventEmitter {
 		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
 		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
 		this.dtsCache = {}
+		this.shortener = this.getShortener()
 	}
 
 	getGeocoder() {
@@ -84,6 +88,17 @@ class Controller extends EventEmitter {
 					formatterPattern: this.config.locale.addressFormat,
 					timeout: this.config.tuning.geocodingTimeout || 5000,
 				})
+			}
+		}
+	}
+
+	getShortener() {
+		switch (this.config.general.shortlinkProvider) {
+			case 'shlink': {
+				return new ShlinkUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general.shortlinkProviderKey, this.config.general.shortlinkProviderDomain)
+			}
+			default: {
+				return new HideUriShortener(this.log)
 			}
 		}
 	}
@@ -208,7 +223,7 @@ class Controller extends EventEmitter {
 							Object.fromEntries(Object.entries(data).filter(([field]) => keys.includes(field))),
 							this.config.geocoding.staticMapType[configTemplate].substring(1))
 					} else {
-						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType.raid)
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType[configTemplate])
 					}
 				}
 				break
@@ -298,7 +313,7 @@ class Controller extends EventEmitter {
 	// eslint-disable-next-line class-methods-use-this
 	async urlShorten(s) {
 		return replaceAsync(s, /<S<(.*?)>S>/g,
-			async (match, name) => urlShortener(name))
+			async (match, name) => this.shortener.getShortlink(name))
 	}
 
 	async getAddress(locationObject) {
@@ -306,10 +321,14 @@ class Controller extends EventEmitter {
 			return { addr: 'Unknown', flag: '' }
 		}
 
-		if (this.config.geocoding.cacheDetail === 0) {
+		const doGeolocate = async () => {
 			try {
+				const startTime = performance.now()
 				const geocoder = this.getGeocoder()
 				const [result] = await geocoder.reverse(locationObject)
+				const endTime = performance.now();
+				(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`Geocode ${locationObject.lat},${locationObject.lon} (${endTime - startTime} ms)`)
+
 				const flag = emojiFlags[result.countryCode]
 				if (!this.addressDts) {
 					this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
@@ -324,27 +343,15 @@ class Controller extends EventEmitter {
 			}
 		}
 
+		if (this.config.geocoding.cacheDetail === 0) {
+			return doGeolocate()
+		}
+
 		const cacheKey = `${String(+locationObject.lat.toFixed(this.config.geocoding.cacheDetail))}-${String(+locationObject.lon.toFixed(this.config.geocoding.cacheDetail))}`
 		const cachedResult = geoCache.getKey(cacheKey)
 		if (cachedResult) return this.escapeAddress(cachedResult)
 
-		try {
-			const geocoder = this.getGeocoder()
-			const [result] = await geocoder.reverse(locationObject)
-			const flag = emojiFlags[result.countryCode]
-			if (!this.addressDts) {
-				this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
-			}
-			result.addr = this.addressDts(result)
-			result.flag = flag ? flag.emoji : ''
-			geoCache.setKey(cacheKey, result)
-			geoCache.save(true)
-
-			return this.escapeAddress(result)
-		} catch (err) {
-			this.log.error('getAddress: failed to fetch data', err)
-			return { addr: 'Unknown', flag: '' }
-		}
+		return doGeolocate()
 	}
 
 	pointInArea(point) {

@@ -68,7 +68,12 @@
      // default template name/number to use when users add new trackings
      "defaultTemplateName": 1,
     // library of custom DTS templates
-      "dtsDictionary": {}
+      "dtsDictionary": {},
+    // Short link provider - supported hideuri, shlink
+      "shortlinkProvider": "hideuri",
+      "shortlinkProviderURL": "",
+      "shortlinkProviderKey": "",
+      "shortlinkProviderDomain": ""           // if supported, select domain to be used
   },
   //
   // Configuration for the user reconciliation/role check function
@@ -104,6 +109,7 @@
         "telegram": true,                 // turn on telegram log (for outbound messages to telegram users, groups and channels)
         "pvp": false                      // whether to log pvp info/calculations (at verbose level)
       },
+      "timingStats": false,               // whether to increase log level of key timing stats to 'verbose' (from debug)
       "dailyLogLimit": 7,                 // the number of days to keep the daily logs (everything aside from webhooks)
       "webhookLogLimit": 12               // the number of hours to keep the webhook logs, if enabled
   },
@@ -169,8 +175,9 @@
   //
   "pvp": {
       "dataSource": "webhook",                      // webhook - from hooks, internal - internal calculator
-      "levelCaps": [50],                            // level caps to be included in internal rank calculations - alternative could be [50, 51]
-      "includeMegaEvolution": false,                // whether to include mega evolutions in rank calculations
+      "levelCaps": [50],                            // internal: level caps to be included in internal rank calculations - alternative could be [50, 51]
+      "includeMegaEvolution": false,                // internal: whether to include mega evolutions in rank calculations
+      "littleLeagueCanEvolve": false,               // internal: whether little league mons that are evolved are included
       "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation

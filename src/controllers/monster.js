@@ -1,6 +1,5 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-const Ohbem = require('ohbem')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
 
@@ -10,30 +9,6 @@ class Monster extends Controller {
 		const nonBoostingWeathers = [1, 2, 3, 4, 5, 6, 7].filter((weather) => !boostingWeathers.includes(weather))
 		if (boostStatus > 0) return nonBoostingWeathers
 		return boostingWeathers
-	}
-
-	async initialiseObem() {
-		// This per worker method will likely be removed
-
-		if (this.config.pvp.dataSource === 'internal2') {
-			const pokemonData = await Ohbem.fetchPokemonData()
-
-			this.ohbem = new Ohbem({
-				// all of the following options are optional and these (except for pokemonData) are the default values
-				// read the documentation for more information
-				leagues: {
-					little: 500,
-					great: 1500,
-					ultra: 2500,
-					master: null,
-				},
-				levelCaps: this.config.pvp.levelCaps,
-				// The following field is required to use queryPvPRank
-				// You can skip populating it if you only want to use other helper methods
-				pokemonData,
-				cachingStrategy: Ohbem.cachingStrategies.balanced,
-			})
-		}
 	}
 
 	async monsterWhoCares(data) {
@@ -251,20 +226,8 @@ class Monster extends Controller {
 			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 			data.shinyStats = this.statsData.shinyData[data.pokemonId] ? this.statsData.shinyData[data.pokemonId].ratio.toFixed(0) : null
 
-			let ohbemms = 0
-
 			if (this.config.logger.enableLogs.pvp && data.iv >= 0) {
 				this.log.verbose(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
-			}
-
-			if (this.ohbem && data.iv >= 0) {
-				const ohbemstart = process.hrtime()
-
-				const ohbemCalc = this.ohbem.queryPvPRank(+data.pokemonId, +data.form || 0, +data.costume, +data.gender, +data.atk, +data.def, +data.sta, +data.level)
-				const ohbemend = process.hrtime(ohbemstart)
-				ohbemms = ohbemend[1] / 1000000
-
-				data.ohbem_pvp = ohbemCalc
 			}
 
 			if (data.ohbem_pvp) {
@@ -274,7 +237,7 @@ class Monster extends Controller {
 					this.log.verbose(`${data.encounter_id}: PVP From ohbem: ${JSON.stringify(pvpData)}`)
 				}
 
-				if (this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'internal2') {
+				if (this.config.pvp.dataSource === 'internal') {
 					if (pvpData.great) {
 						data.pvp_rankings_great_league = pvpData.great.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 					} else delete data.pvp_rankings_great_league
@@ -377,9 +340,9 @@ class Monster extends Controller {
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
 			if (whoCares.length) {
-				this.log.info(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms}${this.ohbem ? `/${ohbemms}` : ''} ms)`)
+				this.log.info(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 			} else {
-				this.log.verbose(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms}${this.ohbem ? `/${ohbemms}` : ''} ms)`)
+				this.log.verbose(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
 			}
 
 			if (!whoCares.length) return []
@@ -677,7 +640,7 @@ class Monster extends Controller {
 			}
 			hrend = process.hrtime(hrstart)
 			const hrendprocessing = hrend[1] / 1000000
-			this.log.debug(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql ${hrendprocessing} ms processing dts)`)
+			this.log.verbose(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql + ${hrendprocessing} ms processing dts)`)
 
 			return jobs
 		} catch (e) {

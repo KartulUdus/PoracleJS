@@ -1,16 +1,22 @@
 const fs = require('fs')
-const { generate } = require('pogo-data-generator')
+const { invasions } = require('pogo-data-generator')
 const Fetch = require('node-fetch')
 
 const { log } = require('../lib/logger')
 
-const fetch = async (url) => new Promise((resolve) => {
-	Fetch(url)
-		.then((res) => res.json())
-		.then((json) => resolve(json))
-})
+const fetch = async (url) => {
+	try {
+		const data = await Fetch(url)
+		if (!data.ok) {
+			throw new Error(`${data.status} ${data.statusText} URL: ${url}`)
+		}
+		return await data.json()
+	} catch (e) {
+		log.warn(e, `Unable to fetch ${url}`)
+	}
+}
 
-module.exports.update = async function update() {
+const update = async function update() {
 	// Write monsters/moves/items/questTypes
 	try {
 		log.info('Fetching latest Game Master...')
@@ -32,37 +38,9 @@ module.exports.update = async function update() {
 	// Write grunts
 	try {
 		log.info('Fetching latest invasions...')
-		const { invasions } = await generate({
-			template: {
-				invasions: {
-					enabled: true,
-					options: {
-						topLevelName: 'invasions',
-						keys: {
-							main: 'id',
-							encounters: 'position',
-						},
-						includeBalloons: true,
-						customFields: {
-							first: 'first',
-							second: 'second',
-							third: 'third',
-						},
-						placeholderData: true,
-					},
-					template: {
-						type: true,
-						gender: true,
-						grunt: true,
-						secondReward: true,
-						encounters: 'id',
-					},
-				},
-			},
-		})
 		fs.writeFile(
 			'./src/util/grunts.json',
-			JSON.stringify(invasions, null, 2),
+			JSON.stringify(await invasions(), null, 2),
 			'utf8',
 			() => { },
 		)
@@ -79,45 +57,29 @@ module.exports.update = async function update() {
 			? log.info('Locale folder already exists, skipping.')
 			: log.info('Locale folder created.')))
 
-		const interested = [
-			// { remote: 'characterCategories', locale: 'characterCategories' },
-			// { remote: 'costumes', local: 'costumes' },
-			// { remote: 'descriptions', local: 'pokemonDescriptions' },
-			{ remote: 'evolutionQuests', local: 'evoQuests' },
-			// { remote: 'forms', local: 'pokemonForms' },
-			// { remote: 'grunts', local: 'gruntNames' },
-			{ remote: 'items', local: 'itemNames' },
-			// { remote: 'lures', local: 'lures' },
-			// { remote: 'misc', local: 'misc' },
-			{ remote: 'moves', local: 'moveNames' },
-			{ remote: 'pokemon', local: 'pokemonNames' },
-			// { remote: 'pokemonCategories', local: 'pokemonCategories' },
-			// { remote: 'questTypes', local: 'questTypes' },
-			// { remote: 'questConditions', local: 'questConditions' },
-			// { remote: 'questRewardTypes', local: 'questRewardTypes' },
-			// { remote: 'types', local: 'pokemonTypes' },
-			// { remote: 'weather', local: 'weather' },
-		]
-
 		const availableLocales = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/index.json')
 
-		for (const locale of availableLocales) {
+		await Promise.all(availableLocales.map(async (locale) => {
 			try {
-				await Promise.all(interested.map(async (category) => {
-					const remoteFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/englishRef/${category.remote}_${locale}`)
-					fs.writeFile(
-						`./src/util/locale/${category.local}_${locale}`,
-						JSON.stringify(remoteFiles, null, 2),
-						'utf8',
-						() => { },
-					)
-				}))
+				const remoteFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/enRefMerged/${locale}`)
+				fs.writeFile(
+					`./src/util/locale/${locale}`,
+					JSON.stringify(remoteFiles, null, 2),
+					'utf8',
+					() => { },
+				)
+				log.info(`${locale}`, 'file saved.')
 			} catch (e) {
 				log.warn(`Could not process ${locale}`)
 			}
-			log.info(`${locale}`, 'file saved.')
-		}
+		}))
 	} catch (e) {
 		log.warn('Could not generate new locales, using existing...')
 	}
+}
+
+module.exports.update = update
+
+if (require.main === module) {
+	update().then(() => { log.info('OK') })
 }
