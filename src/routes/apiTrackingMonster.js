@@ -132,7 +132,7 @@ module.exports = async (fastify, options, next) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of trackedMonsters.filter((x) => x.team === toInsert.team)) {
+				for (const existing of trackedMonsters.filter((x) => x.pokemon_id === toInsert.pokemon_id)) {
 					const differences = diff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
