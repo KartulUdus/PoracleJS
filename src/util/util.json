@@ -404,7 +404,8 @@
 		"pl": "polish",
 		"ru": "russian",
 		"fi": "finnish",
-		"se": "swedish"
+		"se": "swedish",
+		"nb-no": "norwegian"
 	},
 	"cpMultipliers": {
 		"1": 0.0939999967813492,

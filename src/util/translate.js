@@ -4,7 +4,7 @@ const path = require('path')
 class Translator {
 	constructor(region) {
 		const remote = fs.existsSync(path.join(__dirname, `locale/${region}.json`)) ? require(path.join(__dirname, `locale/${region}.json`)) : {}
-		const defaultData = fs.existsSync(path.join(__dirname, `../../config/locale/${region}.json`)) ? require(path.join(__dirname, `../../config/locale/${region}.json`)) : {}
+		const defaultData = fs.existsSync(path.join(__dirname, `../../locale/${region}.json`)) ? require(path.join(__dirname, `../../locale/${region}.json`)) : {}
 		const dataAddition = fs.existsSync(path.join(__dirname, `../../config/custom.${region}.json`)) ? require(path.join(__dirname, `../../config/custom.${region}.json`)) : {}
 		this.data = {
 			...remote, ...defaultData, ...dataAddition,
