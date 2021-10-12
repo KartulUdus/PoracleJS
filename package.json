@@ -7,6 +7,7 @@
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
     "start": "npm run generate && node .",
+    "latest": "npm run generate latest && node .",
     "dev": "node .",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",

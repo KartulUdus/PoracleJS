@@ -36,17 +36,19 @@ const update = async function update() {
 	}
 
 	// Write grunts
-	try {
-		log.info('Fetching latest invasions...')
-		fs.writeFile(
-			'./src/util/grunts.json',
-			JSON.stringify(await invasions(), null, 2),
-			'utf8',
-			() => { },
-		)
-		log.info('Latest grunts saved...')
-	} catch (e) {
-		log.warn('Could not generate new invasions, using existing...')
+	if (process.argv[2] === 'latest') {
+		try {
+			log.info('Fetching latest invasions...')
+			fs.writeFile(
+				'./src/util/grunts.json',
+				JSON.stringify(await invasions(), null, 2),
+				'utf8',
+				() => { },
+			)
+			log.info('Latest grunts saved...')
+		} catch (e) {
+			log.warn('Could not generate new invasions, using existing...')
+		}
 	}
 
 	// Write locales
