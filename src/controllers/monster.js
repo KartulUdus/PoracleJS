@@ -256,13 +256,16 @@ class Monster extends Controller {
 				let bestCP = 0
 				if (leagueData) {
 					for (const stats of leagueData) {
+						let newBest = false
 						if (stats.rank && stats.rank < bestRank) {
 							bestRank = stats.rank
 							bestCP = stats.cp || 0
+							newBest = true
 						} else if (stats.rank && stats.cp && stats.rank === bestRank && stats.cp > bestCP) {
 							bestCP = stats.cp
+							newBest = true
 						}
-						if (this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
+						if (newBest && !stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
 							const leagueStats = {}
 							leagueStats[league] = {
 								rank: stats.rank,
