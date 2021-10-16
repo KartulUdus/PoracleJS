@@ -333,10 +333,10 @@ exports.run = async (client, msg, args, options) => {
 			max_sta: +defaultTo(parameterValues.maxsta, 15),
 			gender: +defaultTo(parameterValues.gender, 0),
 			clean: +defaultTo(parameterValues.clean, 0),
-			great_league_ranking: (+pvpLeague === 1500) ? +pvp[pvpLeague].worst : 4096,				// deprecated
-			great_league_ranking_min_cp: (+pvpLeague === 1500) ? +pvp[pvpLeague].minCp : 0,			// deprecated
-			ultra_league_ranking: (+pvpLeague === 2500) ? +pvp[pvpLeague].worst : 4096,				// deprecated
-			ultra_league_ranking_min_cp: (+pvpLeague === 2500) ? +pvp[pvpLeague].minCp : 0,			// deprecated
+			// great_league_ranking: (+pvpLeague === 1500) ? +pvp[pvpLeague].worst : 4096,				// deprecated
+			// great_league_ranking_min_cp: (+pvpLeague === 1500) ? +pvp[pvpLeague].minCp : 0,			// deprecated
+			// ultra_league_ranking: (+pvpLeague === 2500) ? +pvp[pvpLeague].worst : 4096,				// deprecated
+			// ultra_league_ranking_min_cp: (+pvpLeague === 2500) ? +pvp[pvpLeague].minCp : 0,			// deprecated
 			pvp_ranking_league: +pvpLeague,
 			pvp_ranking_best: pvpLeague ? +pvp[pvpLeague].best : 1,
 			pvp_ranking_worst: pvpLeague ? +pvp[pvpLeague].worst : 4096,
