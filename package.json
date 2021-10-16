@@ -1,5 +1,5 @@
 {
-  "name": "PoracleJS",
+  "name": "poracle",
   "version": "4.2.7",
   "description": "Webhook processing and personalized discord|telegram alarms",
   "main": "src/app.js",
