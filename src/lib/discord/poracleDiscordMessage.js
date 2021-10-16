@@ -60,11 +60,11 @@ class PoracleDiscordMessage {
 	}
 
 	get isDM() {
-		return !(this.msg.channel.type === 'text')
+		return !(this.msg.channel.type === 'GUILD_TEXT')
 	}
 
 	async reply(message) {
-		//		if (this.msg.channel.type === 'GUILD_TEXT') {
+		// Don't actually reply, but send to channel to avoid Discord reply text
 		if (message.embed) {
 			message.embeds = [message.embed]
 			delete message.embed
@@ -73,14 +73,6 @@ class PoracleDiscordMessage {
 			// This is a channel, do not reply but rather send to avoid @ reply
 			await split(message, async (msg) => this.msg.channel.send(msg))
 		}
-
-		//		}
-
-		// if (message.embed) {
-		// 	this.msg.reply(message)
-		// } else {
-		// 	await split(message, async (msg) => this.msg.reply(msg))
-		// }
 	}
 
 	async replyWithImageUrl(title, message, url) {
