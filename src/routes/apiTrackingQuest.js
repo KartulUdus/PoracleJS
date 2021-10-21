@@ -80,7 +80,7 @@ module.exports = async (fastify, options, next) => {
 
 		const insert = insertReq.map((row) => {
 			const rewardType = +row.reward_type
-			if ([3, 12, 4, 7, 2].includes(rewardType)) {
+			if (![3, 12, 4, 7, 2].includes(rewardType)) {
 				throw new Error('Unrecognised reward_type value')
 			}
 			return {
