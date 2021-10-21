@@ -90,7 +90,7 @@ module.exports = async (fastify, options, next) => {
 				distance: +defaultTo(row.distance, 0),
 				clean: +defaultTo(row.clean, 0),
 				gender: +defaultTo(row.clean, 0),
-				grunt_type: row.grun_type,
+				grunt_type: row.grunt_type,
 			}
 		})
 
