@@ -5,7 +5,7 @@ exports.run = async (client, msg, [args]) => {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
 
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 

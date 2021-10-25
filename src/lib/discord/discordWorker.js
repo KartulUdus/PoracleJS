@@ -1,4 +1,8 @@
-const { Client, DiscordAPIError } = require('discord.js')
+const {
+	Client, DiscordAPIError,
+	Intents,
+	Options,
+} = require('discord.js')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
 const { performance } = require('perf_hooks')
@@ -68,12 +72,19 @@ class Worker {
 
 	async bounceWorker() {
 		delete this.client
+
+		const intents = new Intents()
+		intents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_PRESENCES)
+
 		this.client = new Client({
-			messageCacheMaxSize: 1,
-			messsageCacheLifetime: 60,
-			messageSweepInterval: 120,
-			messageEditHistoryMaxSize: 1,
+			intents,
+			partials: ['CHANNEL', 'MESSAGE'], // , 'GUILD_MEMBER'],
+			makeCache: Options.cacheWithLimits({
+				MessageManager: 1,
+				PresenceManager: 0,
+			}),
 		})
+
 		try {
 			await this.setListeners()
 			await this.client.login(this.token)
@@ -131,16 +142,22 @@ class Worker {
 			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
 				const { url } = data.message.embed.image
 				data.message.embed.image.url = 'attachment://map.png'
-				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+				data.message.files = [{ attachment: url, name: 'map.png' }]
 			}
 
 			const startTime = performance.now()
-			const msg = await user.send(data.message.content || '', data.message)
+			if (data.message.embed) {
+				data.message.embeds = [data.message.embed]
+				delete data.message.embed
+			}
+			const msg = await user.send(/* data.message.content || '', */ data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)
 
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(noop)
+				setTimeout(() => {
+					msg.delete().catch(noop)
+				}, msgDeletionMs)
 				this.discordMessageTimeouts.set(msg.id, { type: 'user', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true
@@ -164,16 +181,22 @@ class Worker {
 			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
 				const { url } = data.message.embed.image
 				data.message.embed.image.url = 'attachment://map.png'
-				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+				data.message.files = [{ attachment: url, name: 'map.png' }]
 			}
 
 			const startTime = performance.now()
-			const msg = await channel.send(data.message.content || '', data.message)
+			if (data.message.embed) {
+				data.message.embeds = [data.message.embed]
+				delete data.message.embed
+			}
+			const msg = await channel.send(data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL (${endTime - startTime} ms)`)
 
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => { })
+				setTimeout(() => {
+					msg.delete().catch(noop)
+				}, msgDeletionMs)
 				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true

@@ -8,7 +8,7 @@ exports.run = async (client, msg, [args]) => {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
 
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
@@ -29,7 +29,7 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.reply('No guild has been set, either execute inside a channel or specify guild<id>')
 		}
 
-		if (!guild.me.hasPermission(Permissions.FLAGS.MANAGE_EMOJIS)) {
+		if (!guild.me.hasPermission(Permissions.FLAGS.MANAGE_EMOJIS_AND_STICKERS)) {
 			return await msg.reply('I have not been allowed to manage emojis and stickers!')
 		}
 

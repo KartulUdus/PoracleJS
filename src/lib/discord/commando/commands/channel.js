@@ -40,7 +40,7 @@ exports.run = async (client, msg, [args]) => {
 			language = newLanguage
 		}
 
-		if (msg.channel.type === 'text' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
+		if (msg.channel.type === 'GUILD_TEXT' && !target.webhook) target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 
 		if (args.find((arg) => arg === 'add')) {
 			if (webhookName && !webhookLink || !webhookName && webhookLink) return await msg.reply('To add webhooks, provide both a name using the `name` parameter and an url')
@@ -78,7 +78,7 @@ exports.run = async (client, msg, [args]) => {
 
 			const isRegistered = await client.query.countQuery('humans', { id: target.id })
 
-			if (!isRegistered && msg.channel.type === 'text') {
+			if (!isRegistered && msg.channel.type === 'GUILD_TEXT') {
 				return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('channel')} ${client.translator.translate('add')}`)
 			}
 			if (isRegistered) {
