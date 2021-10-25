@@ -6,6 +6,7 @@ class StatsData {
 		this.config = config
 		this.log = log
 		this.rarityGroups = {}
+		this.shinyData = {}
 	}
 
 	/**
@@ -13,7 +14,8 @@ class StatsData {
 	 * @param data
 	 */
 	receiveStatsBroadcast(data) {
-		this.rarityGroups = data
+		this.rarityGroups = data.rarity
+		this.shinyData = data.shiny
 	}
 }
 
