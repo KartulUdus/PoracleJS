@@ -277,9 +277,10 @@ exports.run = async (client, msg, args, options) => {
 							for (const evolution of mon.evolutions) {
 								message = message.concat(`\n${translator.translate(`${client.GameData.monsters[`${evolution.evoId}_${evolution.id}`].name}`)} (${evolution.candyCost} ${translator.translate('Candies')})`)
 								if (evolution.itemRequirement) message = message.concat(`\n- ${translator.translate('Needed Item')}: ${translator.translate(evolution.itemRequirement)}`)
-								if (evolution.mustBeBuddy) message = message.concat(`\n- ${translator.translate('Must Be Buddy')} :white_check_mark:`)
-								if (evolution.onlyNighttime) message = message.concat(`\n- ${translator.translate('Only Nighttime')} :white_check_mark:`)
-								if (evolution.onlyDaytime) message = message.concat(`\n- ${translator.translate('Only Daytime')} :white_check_mark:`)
+								if (evolution.mustBeBuddy) message = message.concat(`\n\u2705 ${translator.translate('Must Be Buddy')}`)
+								if (evolution.onlyNighttime) message = message.concat(`\n\u2705 ${translator.translate('Only Nighttime')}`)
+								if (evolution.onlyDaytime) message = message.concat(`\n\u2705 ${translator.translate('Only Daytime')}`)
+								if (evolution.tradeBonus) message = message.concat(`\n\u2705 ${translator.translate('Trade Bonus')}`)
 								message.concat('\n')
 								if (evolution.questRequirement) message = message.concat(`\n${translator.translate('Special Requirement')}: ${translator.translate(evolution.questRequirement.i18n).replace('{{amount}}', evolution.questRequirement.target)}`)
 								message = message.concat('\n')
