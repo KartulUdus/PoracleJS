@@ -98,6 +98,7 @@ class Stats extends EventEmitter {
 
 			const minSeenForShiny = 100
 			const shinyStats = Object.fromEntries(Object.entries(totalPokemonCount).filter(([, total]) => total.ivScanned > minSeenForShiny && total.shinyScanned).map(([pokemonId, total]) => [pokemonId, {
+				total: total.ivScanned,
 				ratio: total.ivScanned / total.shinyScanned,
 				seen: total.shinyScanned,
 			}]))

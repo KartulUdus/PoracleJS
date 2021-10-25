@@ -222,6 +222,12 @@ exports.run = async (client, msg, args, options) => {
 							? translator.translate(emojiLookup.lookup(typeData[type].emoji, platform))
 							: ''} ${translator.translate(type)}`
 
+						if (client.PoracleInfo.lastStatsBroadcast) {
+							const { shiny } = client.PoracleInfo.lastStatsBroadcast
+							if (shiny[mon.id]) {
+								message = message.concat(`\n**${translator.translate('Shiny Rate')}**: ${shiny[mon.id].total} / ${shiny[mon.id].seen} (${shiny[mon.id].ratio})\n`)
+							}
+						}
 						Object.entries(strengths).forEach(([name, tyepss], i) => {
 							message = message.concat(`\n**${translator.translate(i ? 'Secondary Type' : 'Primary Type')}:**  ${typeEmojiName(name)}`)
 
