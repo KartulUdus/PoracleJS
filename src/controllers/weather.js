@@ -334,6 +334,8 @@ class Weather extends Controller {
 
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
+			data.imgUrl = await this.imgUicons.weatherIcon(data.condition)
+			data.stickerUrl = await this.stickerUicons.weatherIcon(data.condition)
 
 			const jobs = []
 			const now = moment.now()
@@ -374,6 +376,11 @@ class Weather extends Controller {
 					const activePokemons = cares.caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
+					if (data.activePokemons) {
+						for (const mon of data.activePokemons) {
+							mon.imgUrl = await this.imgUicons.pokemonIcon(mon.pokemon_id, mon.form)
+						}
+					}
 				}
 				if (pregenerateTile && this.config.geocoding.staticMapType.weather && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
 					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
@@ -411,6 +418,7 @@ class Weather extends Controller {
 					id: data.s2_cell_id,
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					now: new Date(),
+					nowISO: new Date().toISOString(),
 				}
 
 				const templateType = 'weatherchange'

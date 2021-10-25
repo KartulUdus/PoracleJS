@@ -3,12 +3,13 @@ const geoTz = require('geo-tz')
 const EmojiLookup = require('../../emojiLookup')
 const helpCommand = require('./help')
 const weatherTileGenerator = require('../../weatherTileGenerator')
+const Uicons = require('../../uicons')
 
 exports.run = async (client, msg, args, options) => {
 	try {
 		// Check target
 		const util = client.createUtil(msg, options)
-
+		const { types: typeInfo } = client.GameData
 		const {
 			canContinue, target, language,
 		} = await util.buildTarget(args)
@@ -22,6 +23,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		const translator = client.translatorFactory.Translator(language)
+		const capitalize = (word) => word.charAt(0).toUpperCase() + word.slice(1)
 
 		const emojiLookup = new EmojiLookup(client.GameData.utilData.emojis)
 		let platform = target.type.split(':')[0]
@@ -35,6 +37,30 @@ exports.run = async (client, msg, args, options) => {
 					} else {
 						await msg.reply('Status information not yet warmed up')
 					}
+
+					const format = (seconds) => {
+						const pad = (s) => ((s < 10 ? '0' : '') + s)
+
+						const days = Math.floor(seconds / (24 * 60 * 60))
+						const hours = Math.floor(seconds % (24 * 60 * 60) / (60 * 60))
+						const minutes = Math.floor(seconds % (60 * 60) / 60)
+						seconds = Math.floor(seconds % 60)
+
+						return `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`
+					}
+
+					await msg.reply(`Poracle has been up for ${format(process.uptime())}`)
+				}
+				break
+			}
+			case 'dts': {
+				if (msg.isFromAdmin) {
+					let s = 'Your loaded DTS looks like this:\n'
+					for (const dts of client.dts) {
+						s += `type: ${dts.type} platform: ${dts.platform} id: ${dts.id} language: ${dts.language}\n`
+					}
+
+					await msg.reply(s)
 				}
 				break
 			}
@@ -99,12 +125,17 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				const weatherId = weatherInfo[currentHourTimestamp]
-				const staticMap = await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId)
+				let staticMap = null
+				if (client.config.geocoding.staticProvider === 'tileservercache') {
+					const imgUicons = new Uicons(client.config.general.imgUrl, 'png', client.log)
+
+					staticMap = await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId, imgUicons)
+				}
 
 				// Build forecast information
 
 				let currentTimestamp = currentHourTimestamp
-				let forecastString = `**${translator.translate('Forecast:')}**\n`
+				let forecastString = `**${translator.translate('Forecast')}:**\n`
 				let availableForecast = false
 
 				// eslint-disable-next-line no-constant-condition
@@ -127,9 +158,133 @@ exports.run = async (client, msg, args, options) => {
 			}
 
 			default: {
-				await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`', util.prefix),
-					{ style: 'markdown' })
-				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+				let found = false
+				if (args.length >= 1) {
+					const formArgs = args.filter((arg) => arg.match(client.re.formRe))
+					const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []
+
+					const monsters = Object.values(client.GameData.monsters).filter((mon) => (args[0] === mon.name.toLowerCase() || args[0] === mon.id.toString())
+						&& (!formNames.length || formNames.includes(mon.form.name.toLowerCase())))
+
+					if (monsters.length) {
+						let message = `**${translator.translate('Available forms')}:**\n`
+						found = true
+
+						for (const form of monsters) {
+							message = message.concat(`${translator.translate(form.name)} ${form.form.name ? `${translator.translate('form')}:${translator.translate(form.form.name).replace(/ /g, '\\_')}` : ''}\n`)
+						}
+
+						const mon = monsters[0]
+						const typeData = client.GameData.utilData.types
+						const types = mon.types.map((type) => type.name)
+						const strengths = {}
+						const weaknesses = {}
+
+						for (const type of types) {
+							strengths[type] = []
+							typeInfo[type].strengths.forEach((x) => {
+								strengths[type].push(x.typeName)
+							})
+							typeInfo[type].weaknesses.forEach((x) => {
+								if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+								weaknesses[x.typeName] *= 2
+							})
+							typeInfo[type].resistances.forEach((x) => {
+								if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+								weaknesses[x.typeName] *= 0.5
+							})
+							typeInfo[type].immunes.forEach((x) => {
+								if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+								weaknesses[x.typeName] *= 0.25
+							})
+						}
+
+						const typeEmojiName = (type) => `${typeData[type]
+							? translator.translate(emojiLookup.lookup(typeData[type].emoji, platform))
+							: ''} ${translator.translate(type)}`
+
+						Object.entries(strengths).forEach(([name, tyepss], i) => {
+							message = message.concat(`\n**${translator.translate(i ? 'Secondary Type' : 'Primary Type')}:**  ${typeEmojiName(name)}`)
+
+							const { name: weatherName, emoji: weatherEmoji } = client.GameData.utilData.weather[Object.keys(client.GameData.utilData.weatherTypeBoost).find((weather) => client.GameData.utilData.weatherTypeBoost[weather].includes(client.GameData.utilData.types[name].id))]
+
+							message = message.concat(`\n${translator.translate('Boosted by')}: ${translator.translate(emojiLookup.lookup(weatherEmoji, platform))} ${capitalize(translator.translate(weatherName))}`)
+
+							if (tyepss.length) message = message.concat(`\n*${translator.translate('Super Effective Against')}:* ${tyepss.map((x) => typeEmojiName(x)).join(',  ')}\n`)
+						})
+
+						message = message.concat('\n')
+
+						const typeObj = {
+							weak: { types: [], text: 'Vulnerable to' },
+							extraWeak: { types: [], text: 'Very vulnerable to' },
+							resist: { types: [], text: 'Resistant to' },
+							immune: { types: [], text: 'Very resistant to' },
+							extraImmune: { types: [], text: 'Extremely resistant to' },
+						}
+
+						for (const [name, value] of Object.entries(weaknesses)) {
+							const translated = `${typeData[name]
+								? translator.translate(emojiLookup.lookup(typeData[name].emoji, platform))
+								: ''} ${translator.translate(name)}`
+							switch (value) {
+								case 0.125: typeObj.extraImmune.types.push(translated); break
+								case 0.25: typeObj.immune.types.push(translated); break
+								case 0.5: typeObj.resist.types.push(translated); break
+								case 2: typeObj.weak.types.push(translated); break
+								case 4: typeObj.extraWeak.types.push(translated); break
+								default: break
+							}
+						}
+						for (const info of Object.values(typeObj)) {
+							if (info.types.length) message = message.concat(`*${translator.translate(info.text)}:* ${info.types.join(',  ')}\n`)
+						}
+
+						if (mon.thirdMoveStardust && mon.thirdMoveCandy) {
+							message = message.concat(`\n**${translator.translate('Third Move Cost')}:**\n${mon.thirdMoveCandy} ${translator.translate('Candies')}\n${new Intl.NumberFormat(language).format(mon.thirdMoveStardust)} ${translator.translate('Stardust')}\n`)
+						}
+
+						if (mon.evolutions) {
+							message = message.concat(`\n**${translator.translate('Evolutions')}:**`)
+							for (const evolution of mon.evolutions) {
+								message = message.concat(`\n${translator.translate(`${client.GameData.monsters[`${evolution.evoId}_${evolution.id}`].name}`)} (${evolution.candyCost} ${translator.translate('Candies')})`)
+								if (evolution.itemRequirement) message = message.concat(`\n- ${translator.translate('Needed Item')}: ${translator.translate(evolution.itemRequirement)}`)
+								if (evolution.mustBeBuddy) message = message.concat(`\n\u2705 ${translator.translate('Must Be Buddy')}`)
+								if (evolution.onlyNighttime) message = message.concat(`\n\u2705 ${translator.translate('Only Nighttime')}`)
+								if (evolution.onlyDaytime) message = message.concat(`\n\u2705 ${translator.translate('Only Daytime')}`)
+								if (evolution.tradeBonus) message = message.concat(`\n\u2705 ${translator.translate('Trade Bonus')}`)
+								message.concat('\n')
+								if (evolution.questRequirement) message = message.concat(`\n${translator.translate('Special Requirement')}: ${translator.translate(evolution.questRequirement.i18n).replace('{{amount}}', evolution.questRequirement.target)}`)
+								message = message.concat('\n')
+							}
+						}
+
+						message = message.concat('\n💯:\n')
+						for (const level of [15, 20, 25, 40, 50]) {
+							const cpMulti = client.GameData.utilData.cpMultipliers[level]
+							const atk = mon.stats.baseAttack
+							const def = mon.stats.baseDefense
+							const sta = mon.stats.baseStamina
+
+							const cp = Math.max(10, Math.floor(
+								(15 + atk)
+								* (15 + def) ** 0.5
+								* (15 + sta) ** 0.5
+								* cpMulti ** 2
+								/ 10,
+							))
+							message = message.concat(`${translator.translateFormat('Level {0} CP {1}', level, cp)}\n`)
+						}
+
+						await msg.reply(message, { style: 'markdown' })
+					}
+				}
+
+				if (!found) {
+					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info bulbasaur`', util.prefix),
+						{ style: 'markdown' })
+					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
+				}
 			}
 		}
 	} catch (err) {

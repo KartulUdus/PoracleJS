@@ -19,7 +19,7 @@ class Raid extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
 		join humans on (humans.id = raid.id and humans.current_profile_no = raid.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%raid%') and
 		(pokemon_id=${data.pokemon_id} or (pokemon_id=9000 and raid.level=${data.level})) and
 		(raid.team = ${data.team_id} or raid.team = 4) and
 		(raid.exclusive = ${data.ex} or raid.exclusive = 0) and
@@ -88,7 +88,7 @@ class Raid extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on (humans.id = egg.id and humans.current_profile_no = egg.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%egg%') and
 		egg.level = ${data.level} and
 		(egg.team = ${data.team_id} or egg.team = 4) and
 		(egg.exclusive = ${data.ex} or egg.exclusive = 0)
@@ -143,34 +143,13 @@ class Raid extends Controller {
 	}
 
 	async handle(obj) {
-		let pregenerateTile = false
 		const data = obj
 		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
 			const logReference = data.gym_id
-			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'tileservercache': {
-					pregenerateTile = true
-					break
-				}
-				case 'google': {
-					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'osm': {
-					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'mapbox': {
-					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				default: {
-					data.staticMap = ''
-				}
-			}
 
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
@@ -209,7 +188,7 @@ class Raid extends Controller {
 
 			if (data.pokemon_id) {
 				if (data.form === undefined || data.form === null) data.form = 0
-				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
+				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 				if (!monster) {
 					this.log.warn(`${logReference}: Couldn't find monster in:`, data)
 					return
@@ -227,6 +206,11 @@ class Raid extends Controller {
 				data.chargeMoveId = data.move_2 ? data.move_2 : ''
 				data.quickMoveNameEng = this.GameData.moves[data.move_1] ? this.GameData.moves[data.move_1].name : ''
 				data.chargeMoveNameEng = this.GameData.moves[data.move_2] ? this.GameData.moves[data.move_2].name : ''
+				data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
+				// eslint-disable-next-line prefer-destructuring
+				data.generation = this.GameData.utilData.genException[`${data.pokemon_id}_${data.form}`] || Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
+				data.generationNameEng = this.GameData.utilData.genData[data.generation].name
+				data.generationRoman = this.GameData.utilData.genData[data.generation].roman
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -257,17 +241,15 @@ class Raid extends Controller {
 					return []
 				}
 
-				data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, false)
-				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, false)
+				data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 				// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
 				// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 
 				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 				const jobs = []
 
-				if (pregenerateTile && this.config.geocoding.staticMapType.raid) {
-					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
-				}
+				await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
 				data.staticmap = data.staticMap // deprecated
 
 				for (const cares of whoCares) {
@@ -292,16 +274,15 @@ class Raid extends Controller {
 					data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
 					data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
 					data.teamName = translator.translate(data.teamNameEng)
-					data.teamEmoji = data.team_id ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
+					data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
 					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
 					data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji, platform)) : ''
 					data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
 					data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji, platform)) : ''
-					data.boostWeatherId = data.boosted ? data.weather : ''
-					data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
-					data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
 					data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
 					data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+					data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
+					data.generationName = translator.translate(data.generationNameEng)
 
 					data.quickMove = data.quickMoveName // deprecated
 					data.chargeMove = data.chargeMoveName // deprecated
@@ -328,6 +309,9 @@ class Raid extends Controller {
 					data.boostingWeathers = data.types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
 					data.boosted = !!data.boostingWeathers.includes(data.weather)
 					data.boostWeatherNameEng = data.boosted ? this.GameData.utilData.weather[data.weather].name : ''
+					data.boostWeatherId = data.boosted ? data.weather : ''
+					data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
+					data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
 
 					const view = {
 						...geoResult,
@@ -341,40 +325,14 @@ class Raid extends Controller {
 						tths: data.tth.seconds,
 						confirmedTime: data.disappear_time_verified,
 						now: new Date(),
+						nowISO: new Date().toISOString(),
 						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)) },
 						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 					}
 
 					const templateType = 'raid'
-					const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
-					let message
-					if (mustache) {
-						let mustacheResult
-						try {
-							mustacheResult = mustache(view, { data: { language, platform } })
-						} catch (err) {
-							this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						}
-						if (mustacheResult) {
-							mustacheResult = await this.urlShorten(mustacheResult)
-							try {
-								message = JSON.parse(mustacheResult)
-								if (cares.ping) {
-									if (!message.content) {
-										message.content = cares.ping
-									} else {
-										message.content += cares.ping
-									}
-								}
-							} catch (err) {
-								this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-							}
-						}
-					}
+					const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
-					if (!message) {
-						message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
-					}
 					const work = {
 						lat: data.latitude.toString().substring(0, 8),
 						lon: data.longitude.toString().substring(0, 8),
@@ -433,9 +391,7 @@ class Raid extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.raid) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'raid', data, this.config.geocoding.staticMapType.raid)
-			}
+			await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
@@ -468,39 +424,13 @@ class Raid extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					nowISO: new Date().toISOString(),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
 				const templateType = 'egg'
-				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
-				let message
-				if (mustache) {
-					let mustacheResult
-					try {
-						mustacheResult = mustache(view, { data: { language, platform } })
-					} catch (err) {
-						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-					}
-					if (mustacheResult) {
-						mustacheResult = await this.urlShorten(mustacheResult)
-						try {
-							message = JSON.parse(mustacheResult)
-							if (cares.ping) {
-								if (!message.content) {
-									message.content = cares.ping
-								} else {
-									message.content += cares.ping
-								}
-							}
-						} catch (err) {
-							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						}
-					}
-				}
+				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
-				if (!message) {
-					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
-				}
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
 					lon: data.longitude.toString().substring(0, 8),

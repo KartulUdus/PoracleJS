@@ -4,6 +4,7 @@ const cp = require('child_process')
 const EventEmitter = require('events')
 const path = require('path')
 const fs = require('fs')
+const { performance } = require('perf_hooks')
 
 const pcache = require('flat-cache')
 
@@ -12,11 +13,13 @@ const emojiFlags = require('emoji-flags')
 const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
-const urlShortener = require('../lib/urlShortener')
+const HideUriShortener = require('../lib/hideuriUrlShortener')
+const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
+
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventParser) {
+	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
 		super()
 		this.db = db
 		this.cp = cp
@@ -32,13 +35,15 @@ class Controller extends EventEmitter {
 		this.earthRadius = 6371 * 1000 // m
 		this.weatherData = weatherData
 		this.statsData = statsData
-		this.eventParser = eventParser
+		this.eventParser = eventProviders && eventProviders.pogoEvents
+		this.shinyPossible = eventProviders && eventProviders.shinyPossible
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
 		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
 		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
 		this.dtsCache = {}
+		this.shortener = this.getShortener()
 	}
 
 	getGeocoder() {
@@ -63,6 +68,8 @@ class Controller extends EventEmitter {
 				geocoder._geocoder._formatResult = ((original) => (result) => ({
 					...original(result),
 					suburb: result.address.suburb || '',
+					town: result.address.town || '',
+					village: result.address.village || '',
 					// eslint-disable-next-line no-underscore-dangle
 				}))(geocoder._geocoder._formatResult)
 				return geocoder
@@ -86,9 +93,24 @@ class Controller extends EventEmitter {
 		}
 	}
 
+	getShortener() {
+		switch (this.config.general.shortlinkProvider) {
+			case 'shlink': {
+				return new ShlinkUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general.shortlinkProviderKey, this.config.general.shortlinkProviderDomain)
+			}
+			default: {
+				return new HideUriShortener(this.log)
+			}
+		}
+	}
+
 	setDts(dts) {
 		this.dtsCache = { }
 		this.dts = dts
+	}
+
+	setGeofence(geofence) {
+		this.geofence = geofence
 	}
 
 	getDts(logReference, templateType, platform, templateName, language) {
@@ -126,7 +148,7 @@ class Controller extends EventEmitter {
 			return null
 		}
 
-		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
+		this.log.debug(`${logReference}: Matched to DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.id}`)
 
 		let template
 		if (findDts.templateFile) {
@@ -154,6 +176,76 @@ class Controller extends EventEmitter {
 
 		this.dtsCache[key] = mustache
 		return mustache
+	}
+
+	async createMessage(logReference, templateType, platform, template, language, ping, view) {
+		const mustache = this.getDts(logReference, templateType, platform, template, language)
+		let message
+		if (mustache) {
+			let mustacheResult
+			try {
+				mustacheResult = mustache(view, { data: { language, platform } })
+			} catch (err) {
+				this.log.error(`${logReference}: Error generating mustache results for ${platform}/${templateType}:${template}/${language}`, err, view)
+			}
+			if (mustacheResult) {
+				mustacheResult = await this.urlShorten(mustacheResult)
+				try {
+					message = JSON.parse(mustacheResult)
+					if (ping) {
+						if (!message.content) {
+							message.content = ping
+						} else {
+							message.content += ping
+						}
+					}
+				} catch (err) {
+					this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
+				}
+			}
+		}
+
+		if (!message) {
+			message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
+			this.log.warn(`${logReference}: Invalid or missing message template ref: ${logReference}\nid: '${template}' type: '${templateType}' platform: '${platform}' language: '${language}'`)
+		}
+
+		return message
+	}
+
+	async getStaticMapUrl(logReference, data, maptype, keys) {
+		const tileTemplate = maptype
+		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
+		switch (this.config.geocoding.staticProvider.toLowerCase()) {
+			case 'tileservercache': {
+				if (this.config.geocoding.staticMapType[configTemplate]) {
+					if (this.config.geocoding.staticMapType[configTemplate].startsWith('*')) {
+						data.staticMap = await this.tileserverPregen.getTileURL(logReference, tileTemplate,
+							Object.fromEntries(Object.entries(data).filter(([field]) => keys.includes(field))),
+							this.config.geocoding.staticMapType[configTemplate].substring(1))
+					} else {
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType[configTemplate])
+					}
+				}
+				break
+			}
+
+			case 'google': {
+				data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+				break
+			}
+			case 'osm': {
+				data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+				break
+			}
+			case 'mapbox': {
+				data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
+				break
+			}
+			default: {
+				data.staticMap = ''
+			}
+		}
 	}
 
 	getDistance(start, end) {
@@ -222,7 +314,7 @@ class Controller extends EventEmitter {
 	// eslint-disable-next-line class-methods-use-this
 	async urlShorten(s) {
 		return replaceAsync(s, /<S<(.*?)>S>/g,
-			async (match, name) => urlShortener(name))
+			async (match, name) => this.shortener.getShortlink(name))
 	}
 
 	async getAddress(locationObject) {
@@ -230,10 +322,14 @@ class Controller extends EventEmitter {
 			return { addr: 'Unknown', flag: '' }
 		}
 
-		if (this.config.geocoding.cacheDetail === 0) {
+		const doGeolocate = async () => {
 			try {
+				const startTime = performance.now()
 				const geocoder = this.getGeocoder()
 				const [result] = await geocoder.reverse(locationObject)
+				const endTime = performance.now();
+				(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`Geocode ${locationObject.lat},${locationObject.lon} (${endTime - startTime} ms)`)
+
 				const flag = emojiFlags[result.countryCode]
 				if (!this.addressDts) {
 					this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
@@ -248,27 +344,15 @@ class Controller extends EventEmitter {
 			}
 		}
 
+		if (this.config.geocoding.cacheDetail === 0) {
+			return doGeolocate()
+		}
+
 		const cacheKey = `${String(+locationObject.lat.toFixed(this.config.geocoding.cacheDetail))}-${String(+locationObject.lon.toFixed(this.config.geocoding.cacheDetail))}`
 		const cachedResult = geoCache.getKey(cacheKey)
 		if (cachedResult) return this.escapeAddress(cachedResult)
 
-		try {
-			const geocoder = this.getGeocoder()
-			const [result] = await geocoder.reverse(locationObject)
-			const flag = emojiFlags[result.countryCode]
-			if (!this.addressDts) {
-				this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
-			}
-			result.addr = this.addressDts(result)
-			result.flag = flag ? flag.emoji : ''
-			geoCache.setKey(cacheKey, result)
-			geoCache.save(true)
-
-			return this.escapeAddress(result)
-		} catch (err) {
-			this.log.error('getAddress: failed to fetch data', err)
-			return { addr: 'Unknown', flag: '' }
-		}
+		return doGeolocate()
 	}
 
 	pointInArea(point) {
@@ -391,19 +475,6 @@ class Controller extends EventEmitter {
 		else if (iv < 100) colorIdx = 4 // purple epic
 
 		return this.config.discord.ivColors[colorIdx]
-	}
-
-	getPokemonTypes(pokemonId, formId) {
-		if (!+pokemonId) return ''
-		const monsterFamily = Object.values(this.GameData.monsters).filter((m) => m.id === +pokemonId)
-		const monster = Object.values(monsterFamily).find((m) => m.form.id === +formId)
-		let types = ''
-		if (monster) {
-			types = monster.types.map((type) => type.id)
-		} else {
-			types = Object.values(monsterFamily).find((m) => m.form.id === +0).types.map((type) => type.id)
-		}
-		return types
 	}
 
 	execPromise(command) {

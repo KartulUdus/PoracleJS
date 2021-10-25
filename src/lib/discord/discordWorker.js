@@ -1,12 +1,13 @@
 const { Client, DiscordAPIError } = require('discord.js')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
+const { performance } = require('perf_hooks')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
-const noop = () => {}
+const noop = () => { }
 
 class Worker {
-	constructor(token, id, config, logs, rehydrateTimeouts = false) {
+	constructor(token, id, config, logs, rehydrateTimeouts = false, statusActivity) {
 		this.id = id
 		this.token = token
 		this.config = config
@@ -19,6 +20,8 @@ class Worker {
 		this.discordMessageTimeouts = new NodeCache()
 		this.discordQueue = []
 		this.queueProcessor = new FairPromiseQueue(this.discordQueue, this.config.tuning.concurrentDiscordDestinationsPerBot, ((entry) => entry.target))
+		this.status = statusActivity.status
+		this.activity = statusActivity.activity
 		this.bounceWorker()
 	}
 
@@ -48,7 +51,18 @@ class Worker {
 		})
 		this.client.on('rateLimit', (info) => {
 			const tag = (this.client && this.client.user) ? this.client.user.tag : ''
-			this.logs.discord.warn(`#${this.id} Discord worker [${tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}`)
+			let channelId
+			if (info.route) {
+				const channelMatch = info.route.match(/\/channels\/(\d+)\//)
+				if (channelMatch && channelMatch[1]) {
+					const channel = this.client.channels.cache.get(channelMatch[1])
+					if (channel) {
+						channelId = channel.recipient && `DM:${channel.recipient.id}:${channel.recipient.username}`
+							|| `${channel.id}:#${channel.name}`
+					}
+				}
+			}
+			this.logs.discord.warn(`#${this.id} Discord worker [${tag}] 429 rate limit hit - in timeout ${info.timeout ? info.timeout : 'Unknown timeout '} route ${info.route}${channelId ? ` (probably ${channelId})` : ''}`)
 		})
 	}
 
@@ -63,7 +77,8 @@ class Worker {
 		try {
 			await this.setListeners()
 			await this.client.login(this.token)
-			await this.client.user.setStatus('invisible')
+			await this.client.user.setStatus(this.status)
+			if (this.activity) await this.client.user.setActivity(this.activity)
 		} catch (err) {
 			this.logs.log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)
@@ -113,7 +128,17 @@ class Worker {
 
 			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message`, data.message)
 
+			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
+				const { url } = data.message.embed.image
+				data.message.embed.image.url = 'attachment://map.png'
+				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+			}
+
+			const startTime = performance.now()
 			const msg = await user.send(data.message.content || '', data.message)
+			const endTime = performance.now();
+			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)
+
 			if (data.clean) {
 				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(noop)
 				this.discordMessageTimeouts.set(msg.id, { type: 'user', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
@@ -136,9 +161,19 @@ class Worker {
 			if (!channel) return this.logs.discord.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL not found`)
 			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending discord message`, data.message)
 
+			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
+				const { url } = data.message.embed.image
+				data.message.embed.image.url = 'attachment://map.png'
+				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+			}
+
+			const startTime = performance.now()
 			const msg = await channel.send(data.message.content || '', data.message)
+			const endTime = performance.now();
+			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL (${endTime - startTime} ms)`)
+
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => { })
 				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true

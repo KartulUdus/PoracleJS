@@ -1,14 +1,17 @@
 {
   "name": "PoracleJS",
-  "version": "4.1.5",
-  "description": "Webhook processing and personalised discord|telegram alarms",
+  "version": "4.2.7",
+  "description": "Webhook processing and personalized discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
-    "start": "node .",
+    "start": "npm run generate && node .",
+    "latest": "npm run generate latest && node .",
+    "dev": "node .",
     "migrateV3": "node src/init/migrateV3.js",
-    "init": "node src/init/initConfig.js"
+    "init": "node src/init/initConfig.js",
+    "generate": "node src/util/generateData.js"
   },
   "repository": {
     "type": "git",
@@ -32,6 +35,7 @@
   },
   "homepage": "https://github.com/KartulUdus/reference#readme",
   "dependencies": {
+    "form-data": "^4.0.0",
     "async-mutex": "^0.3.1",
     "axios": "^0.21.1",
     "chokidar": "^3.5.2",
@@ -57,9 +61,10 @@
     "node-geocoder": "^3.27.0",
     "node-schedule": "^2.0.0",
     "nodes2ts": "^2.0.0",
-    "ohbem": "^1.2.3",
-    "pogo-protos": "git+https://github.com/Furtif/pogo-protos.git",
+    "ohbem": "^1.3.0",
+    "pogo-data-generator": "^1.2.5",
     "point-in-polygon": "^1.1.0",
+    "poke-types": "^1.0.22",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",
     "strip-json-comments": "^3.1.1",

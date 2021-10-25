@@ -1,11 +1,11 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
-const monsters = require('../util/monsters.json')
 const {
-	cpMultipliers, types, powerUpCost, emojis,
-} = require('../util/util.json')
-const moves = require('../util/moves.json')
+	moves, monsters, utilData: {
+		cpMultipliers, types, powerUpCost, emojis,
+	},
+} = require('./GameData')
 
 const TranslatorFactory = require('../util/translatorFactory')
 const EmojiLookup = require('./emojiLookup')
@@ -125,10 +125,10 @@ module.exports = () => {
 
 		return Math.max(10, Math.floor(
 			(atk + +ivAttack)
-              * (def + +ivDefense) ** 0.5
-              * (sta + +ivStamina) ** 0.5
-              * cpMulti ** 2
-              / 10,
+			* (def + +ivDefense) ** 0.5
+			* (sta + +ivStamina) ** 0.5
+			* cpMulti ** 2
+			/ 10,
 		))
 	})
 
@@ -143,6 +143,8 @@ module.exports = () => {
 			baseStamina: 0,
 		}
 	})
+
+	handlebars.registerHelper('getEmoji', (emojiName, options) => userTranslator(options).translate(emoji(options, emojiName)))
 
 	handlebars.registerHelper('getPowerUpCost', (levelStart, levelEnd, options) => {
 		const translator = userTranslator(options)
@@ -186,6 +188,21 @@ module.exports = () => {
 		}
 
 		return f.map[value]
+	})
+
+	handlebars.registerHelper('map2', (name, value, value2, options) => {
+		const r = require('./customMap')
+
+		let f = r.find((x) => (x.name === name && x.language === options.data.language))
+		if (!f) {
+			f = r.find((x) => (x.name === name))
+		}
+
+		if (options.fn) {
+			return options.fn(f.map[value] || f.map[value2])
+		}
+
+		return f.map[value] || f.map[value2]
 	})
 
 	return handlebars

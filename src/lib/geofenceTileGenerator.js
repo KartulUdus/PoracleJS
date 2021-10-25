@@ -1,5 +1,6 @@
 async function generateGeofenceTile(geofence, tileserverPregen, area) {
-	const fence = geofence.find((x) => x.name.toLowerCase() === area.toLowerCase())
+	// replace _ to space always so this is matched either way
+	const fence = geofence.find((x) => x.name.replace(/_/g, ' ').toLowerCase() === area.replace(/_/g, ' ').toLowerCase())
 
 	if (!fence) return null
 
@@ -21,8 +22,9 @@ async function generateGeofenceTile(geofence, tileserverPregen, area) {
 
 async function generateGeofenceOverviewTile(geofence, tileserverPregen, areas) {
 	// find fences but preserve order (because of the colour)
-	const fences = areas.filter((x) => geofence.some((f) => f.name.toLowerCase() === x))
-		.map((x) => geofence.find((f) => f.name.toLowerCase() === x))
+	// replace _ to space always so this is matched either way
+	const fences = areas.map((x) => x.replace(/_/g, ' ')).filter((x) => geofence.some((f) => f.name.replace(/_/g, ' ').toLowerCase() === x))
+		.map((x) => geofence.find((f) => f.name.replace(/_/g, ' ').toLowerCase() === x))
 	if (!fences || !fences.length) return null
 
 	const position = tileserverPregen.autoposition({

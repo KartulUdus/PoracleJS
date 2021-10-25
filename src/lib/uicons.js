@@ -66,9 +66,30 @@ function resolveEggIcon(availEgg, imageType, level, hatched = false, ex = false)
 	return `0.${imageType}` // substitute
 }
 
+function resolveWeatherIcon(availWeather, imageType, weatherId) {
+	const result = `${weatherId}.${imageType}`
+	if (availWeather.has(result)) return result
+
+	return `0.${imageType}` // substitute
+}
+
 function resolveInvasionIcon(availInvasion, imageType, gruntType) {
 	const result = `${gruntType}.${imageType}`
 	if (availInvasion.has(result)) return result
+
+	return `0.${imageType}` // substitute
+}
+
+function resolveTypeIcon(availTypes, imageType, typeId) {
+	const result = `${typeId}.${imageType}`
+	if (availTypes.has(result)) return result
+
+	return `0.${imageType}` // substitute
+}
+
+function resolveTeamIcon(availTeams, imageType, teamId) {
+	const result = `${teamId}.${imageType}`
+	if (availTeams.has(result)) return result
 
 	return `0.${imageType}` // substitute
 }
@@ -127,6 +148,7 @@ async function getAvailableIcons(log, baseUrl) {
 								},
 								invasion: new Set(results.invasion),
 								pokemon: new Set(results.pokemon),
+								type: new Set(results.type),
 							}
 							uiconsIndex[baseUrl] = currentSet
 							break
@@ -156,9 +178,15 @@ class Uicons {
 		this.log = log || console
 	}
 
-	async pokemonIcon(pokemonId, form = 0, evolution = 0, female = false, costume = 0, shiny = false) {
+	async isUiconsRepository() {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		if (currentSet) return `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, female, costume, shiny)}`
+
+		return !!currentSet
+	}
+
+	async pokemonIcon(pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, shiny = false) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		if (currentSet) return `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, gender, costume, shiny)}`
 		if (this.fallback) return `${this.url}/pokemon_icon_${pokemonId.toString().padStart(3, '0')}_${form ? form.toString() : '00'}${evolution > 0 ? `_${evolution.toString()}` : ''}.${this.imageType}`
 		return null
 	}
@@ -175,6 +203,16 @@ class Uicons {
 		return currentSet ? `${this.url}/invasion/${resolveInvasionIcon(currentSet.invasion, this.imageType, gruntType)}` : null
 	}
 
+	async typeIcon(typeId) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/type/${resolveTypeIcon(currentSet.type, this.imageType, typeId)}` : null
+	}
+
+	async teamIcon(teamId) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/team/${resolveTeamIcon(currentSet.type, this.imageType, teamId)}` : null
+	}
+
 	async rewardItemIcon(itemId) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
 		if (currentSet) return `${this.url}/reward/item/${resolveItemIcon(currentSet.reward.item, this.imageType, itemId)}`
@@ -189,10 +227,10 @@ class Uicons {
 		return null
 	}
 
-	async rewardMegaEnergyIcon(itemId) {
+	async rewardMegaEnergyIcon(pokemonId, amount) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		if (currentSet) return `${this.url}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, this.imageType, itemId)}`
-		if (this.fallback) return `${this.url}/rewards/reward_mega_energy_${itemId}.${this.imageType}`
+		if (currentSet) return `${this.url}/reward/mega_resource/${resolveItemIcon(currentSet.reward.mega_resource, this.imageType, pokemonId, amount)}`
+		if (this.fallback) return `${this.url}/rewards/reward_mega_energy_${pokemonId}.${this.imageType}`
 		return null
 	}
 
@@ -211,6 +249,11 @@ class Uicons {
 	async gymIcon(teamId, trainerCount = 0, inBattle = false, ex = false) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
 		return currentSet ? `${this.url}/gym/${resolveGymIcon(currentSet.gym, this.imageType, teamId, trainerCount, inBattle, ex)}` : null
+	}
+
+	async weatherIcon(weatherId) {
+		const currentSet = await getAvailableIcons(this.log, this.url)
+		return currentSet ? `${this.url}/weather/${resolveWeatherIcon(currentSet.weather, this.imageType, weatherId)}` : null
 	}
 
 	async pokestopIcon(lureId = 0, invasionActive = false, questActive = false) {

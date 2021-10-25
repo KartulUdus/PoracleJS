@@ -15,7 +15,7 @@ class Nest extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, nests.template, nests.distance, nests.clean, nests.ping from nests
 		join humans on (humans.id = nests.id and humans.current_profile_no = nests.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%nest%')and
 		((nests.pokemon_id = 0 or nests.pokemon_id='${data.pokemon_id}') and nests.min_spawn_avg <= ${data.pokemon_avg}) and
 		(nests.form = ${data.form} or nests.form = 0)`
 
@@ -96,6 +96,7 @@ class Nest extends Controller {
 				}
 			}
 
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
@@ -122,7 +123,7 @@ class Nest extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			if (data.form === undefined || data.form === null) data.form = 0
-			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 			if (!monster) {
 				this.log.warn(`${logReference}: Couldn't find monster in:`, data)
 				return
@@ -158,8 +159,10 @@ class Nest extends Controller {
 				return []
 			}
 
-			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form)
-			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form)
+			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
+
+			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
 			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
 			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 
@@ -192,10 +195,13 @@ class Nest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				// full build
 				data.name = translator.translate(data.nameEng)
 				data.formName = translator.translate(data.formNameEng)
+				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 
 				const view = {
 					...geoResult,
@@ -206,42 +212,12 @@ class Nest extends Controller {
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
 					now: new Date(),
+					nowISO: new Date().toISOString(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
 				const templateType = 'nest'
-				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
-				let message
-				if (mustache) {
-					let mustacheResult
-					try {
-						mustacheResult = mustache(view, { data: { language, platform } })
-					} catch (err) {
-						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-					}
-					if (mustacheResult) {
-						mustacheResult = await this.urlShorten(mustacheResult)
-						try {
-							message = JSON.parse(mustacheResult)
-							if (cares.ping) {
-								if (!message.content) {
-									message.content = cares.ping
-								} else {
-									message.content += cares.ping
-								}
-							}
-						} catch (err) {
-							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						}
-					}
-				}
-
-				if (!message) {
-					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
-				}
+				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),

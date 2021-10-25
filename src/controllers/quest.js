@@ -8,7 +8,8 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
-const questTypeList = require('../util/questTypeList.json')
+const { questTypes } = require('../lib/GameData')
+
 // const itemList = require('../util/quests/items')
 const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
 const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)', 'Arlo', 'Cliff', 'Sierra', 'Giovanni']
@@ -22,7 +23,7 @@ class Quest extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on (humans.id = quest.id and humans.current_profile_no = quest.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%quest%') and
 		(0 = 1`
 
 		if (data.rewardData.monsters.length) {
@@ -99,34 +100,13 @@ class Quest extends Controller {
 	}
 
 	async handle(obj) {
-		let pregenerateTile = false
 		const data = obj
 		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
 			const logReference = data.pokestop_id
-			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'tileservercache': {
-					pregenerateTile = true
-					break
-				}
-				case 'google': {
-					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'osm': {
-					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'mapbox': {
-					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				default: {
-					data.staticMap = ''
-				}
-			}
 
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
@@ -153,6 +133,8 @@ class Quest extends Controller {
 			this.log.debug(`${logReference} Quest: data.questString: ${data.questStringEng}, data.rewardData: ${JSON.stringify(data.rewardData)}`)
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.monsters.length > 0 ? data.rewardData.monsters[0].shiny : 0
+			data.shinyPossible = data.rewardData.monsters.length > 0 ? this.shinyPossible.isShinyPossible(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId) : false
+
 			data.itemAmount = data.rewardData.itemAmount
 			//			data.monsters = data.rewardData.monsters
 			//			data.monsterData = data.rewardData.monsterData
@@ -191,8 +173,8 @@ class Quest extends Controller {
 			data.stickerUrl = ''
 
 			if (data.rewardData.monsters.length > 0) {
-				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
-				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId)
+				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
+				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
 				// data.imgUrl = data.rewardData.monsters.length > 0
 				// 	? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
 				// 	: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
@@ -231,16 +213,13 @@ class Quest extends Controller {
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.quest) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'quest', data, this.config.geocoding.staticMapType.quest)
-			}
+			await this.getStaticMapUrl(logReference, data, 'quest', ['latitude', 'longitude', 'imgUrl'])
+			data.staticmap = data.staticMap // deprecated
 
 			if (data.rewardData.monsters.length > 0) {
-				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters.formId === mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters[0].formId === mon.form.id)[0].stats : ''
+				data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters[0].formId === mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && data.rewardData.monsters[0].formId === mon.form.id)[0].stats : ''
 				if (!data.baseStats) data.baseStats = Object.values(this.GameData.monsters).some((mon) => data.rewardData.monsters[0].pokemonId === mon.id && !mon.form.id) ? Object.values(this.GameData.monsters).filter((mon) => data.rewardData.monsters[0].pokemonId === mon.id && !mon.form.id)[0].stats : ''
 			}
-
-			data.staticmap = data.staticMap // deprecated
 
 			const event = this.eventParser.eventChangesQuest(moment().unix(), data.disappearTime.unix(), data.latitude, data.longitude)
 			if (event) {
@@ -263,6 +242,8 @@ class Quest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				data.questString = translator.translate(data.questStringEng)
 
@@ -356,6 +337,8 @@ class Quest extends Controller {
 					data.candyMonstersNamesEng,
 				].filter((x) => x).join(', ')
 
+				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
+
 				const view = {
 					...geoResult,
 					...data,
@@ -368,42 +351,13 @@ class Quest extends Controller {
 					tths: data.tth.seconds,
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
+					nowISO: new Date().toISOString(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
 				}
 
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
 				const templateType = 'quest'
-				const mustache = this.getDts(logReference, templateType, platform, cares.template, language)
-				let message
-				if (mustache) {
-					let mustacheResult
-					try {
-						mustacheResult = mustache(view, { data: { language, platform } })
-					} catch (err) {
-						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-					}
-					if (mustacheResult) {
-						mustacheResult = await this.urlShorten(mustacheResult)
-						try {
-							message = JSON.parse(mustacheResult)
-							if (cares.ping) {
-								if (!message.content) {
-									message.content = cares.ping
-								} else {
-									message.content += cares.ping
-								}
-							}
-						} catch (err) {
-							this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						}
-					}
-				}
+				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
-				if (!message) {
-					message = { content: `*Poracle*: An alert was triggered with invalid or missing message template - ref: ${logReference}\nid: '${cares.template}' type: '${templateType}' platform: '${platform}' language: '${language}'` }
-				}
 				const work = {
 					lat: data.latitude.toString().substring(0, 8),
 					lon: data.longitude.toString().substring(0, 8),
@@ -438,7 +392,7 @@ class Quest extends Controller {
 			const questinfo = item.conditions[0] ? item.conditions[0].info : ''
 			// this.log.error('[DEBUG] Quest : item[conditions]: ', item.conditions)
 			// this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
-			const questStr = questTypeList[item.type]
+			const questStr = questTypes[item.type]
 			str = questStr.text
 			if (item.conditions[0] && item.conditions[0].type > 0) {
 				switch (item.conditions[0].type) {
@@ -512,8 +466,8 @@ class Quest extends Controller {
 							str = str.replace('Catch', 'Use').replace('pokémon with berrie(s)', 'berrie(s) to help catch Pokémon')
 						}
 						if (questinfo !== null) {
-						//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
-						//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
+							//												str = str.replace('berrie(s)', itemList[questinfo['item_id']].name)
+							//												str = str.replace('Evolve {0} pokémon', 'Evolve {0} pokémon with a ' + itemList[questinfo['item_id']].name)
 							str = str.replace('berrie(s)', this.GameData.items[questinfo.item_id].name)
 							str = str.replace('Evolve {0} pokémon', `Evolve {0} pokémon with a ${this.GameData.items[questinfo.item_id].name}`)
 						} else {

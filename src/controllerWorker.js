@@ -3,9 +3,11 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
+const path = require('path')
 const PogoEventParser = require('./lib/pogoEventParser')
-
+const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
+const GameData = require('./lib/GameData')
 
 const { log } = logs
 
@@ -19,13 +21,7 @@ const {
 	config, knex, dts, geofence, translatorFactory,
 } = Config(false)
 
-const GameData = {
-	monsters: require('./util/monsters.json'),
-	utilData: require('./util/util.json'),
-	moves: require('./util/moves.json'),
-	items: require('./util/items.json'),
-	grunts: require('./util/grunts.json'),
-}
+const PromiseQueue = require('./lib/PromiseQueue')
 
 const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
@@ -46,14 +42,20 @@ const rateLimitedUserCache = new NodeCache({ stdTTL: config.alertLimits.timingPe
 const controllerWeatherManager = new ControllerWeatherManager(config, log)
 const statsData = new StatsData(config, log)
 const pogoEventParser = new PogoEventParser(log)
+const shinyPossible = new ShinyPossible(log)
 
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
-const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, pogoEventParser)
+const eventParsers = {
+	shinyPossible,
+	pogoEvents: pogoEventParser,
+}
+
+const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 
 const hookQueue = []
 let queuePort
@@ -146,8 +148,6 @@ async function processOne(hook) {
 	}
 }
 
-const PromiseQueue = require('./lib/PromiseQueue')
-
 const alarmProcessor = new PromiseQueue(hookQueue, config.tuning.concurrentWebhookProcessorsPerWorker)
 
 function receiveQueue(msg) {
@@ -186,6 +186,22 @@ function reloadDts() {
 	}
 }
 
+function reloadGeofence() {
+	try {
+		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		monsterController.setGeofence(newGeofence)
+		raidController.setGeofence(newGeofence)
+		questController.setGeofence(newGeofence)
+		pokestopController.setGeofence(newGeofence)
+		nestController.setGeofence(newGeofence)
+		pokestopLureController.setGeofence(newGeofence)
+		gymController.setGeofence(newGeofence)
+		log.info('Geofence reloaded')
+	} catch (err) {
+		log.error('Error reloading geofence', err)
+	}
+}
+
 function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
@@ -216,10 +232,22 @@ function receiveCommand(cmd) {
 			pogoEventParser.loadEvents(cmd.data)
 		}
 
+		if (cmd.type === 'shinyBroadcast') {
+			log.debug(`Worker ${workerId}: Received shiny broadcast`, cmd.data)
+
+			shinyPossible.loadMap(cmd.data)
+		}
+
 		if (cmd.type === 'reloadDts') {
 			log.debug(`Worker ${workerId}: Received dts reload request broadcast`)
 
 			reloadDts()
+		}
+
+		if (cmd.type === 'reloadGeofence') {
+			log.debug(`Worker ${workerId}: Received geofence reload request broadcast`)
+
+			reloadGeofence()
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)
@@ -270,5 +298,4 @@ if (!isMainThread) {
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
 	setInterval(currentStatus, 60000)
-	setImmediate(async () => monsterController.initialiseObem())
 }

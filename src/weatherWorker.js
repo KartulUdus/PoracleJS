@@ -3,24 +3,19 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
+const path = require('path')
 const logs = require('./lib/logger')
 
 const { log } = logs
 
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
+const GameData = require('./lib/GameData')
 
 const {
 	config, knex, dts, geofence, translatorFactory,
 } = Config(false)
 
-const GameData = {
-	monsters: require('./util/monsters.json'),
-	utilData: require('./util/util.json'),
-	moves: require('./util/moves.json'),
-	items: require('./util/items.json'),
-	grunts: require('./util/grunts.json'),
-}
 const WeatherController = require('./controllers/weather')
 
 const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
@@ -82,6 +77,26 @@ function updateBadGuys(badguys) {
 	}
 }
 
+function reloadDts() {
+	try {
+		const newDts = require('./lib/dtsloader').readDtsFiles()
+		weatherController.setDts(newDts)
+		log.info('DTS reloaded')
+	} catch (err) {
+		log.error('Error reloading dts', err)
+	}
+}
+
+function reloadGeofence() {
+	try {
+		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		weatherController.setGeofence(newGeofence)
+		log.info('Geofence reloaded')
+	} catch (err) {
+		log.error('Error reloading geofence', err)
+	}
+}
+
 async function receiveCommand(cmd) {
 	try {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
@@ -93,6 +108,19 @@ async function receiveCommand(cmd) {
 		if (cmd.type === 'badguys') {
 			updateBadGuys(cmd.badguys)
 		}
+
+		if (cmd.type === 'reloadDts') {
+			log.debug(`Worker ${workerId}: Received dts reload request broadcast`)
+
+			reloadDts()
+		}
+
+		if (cmd.type === 'reloadGeofence') {
+			log.debug(`Worker ${workerId}: Received geofence reload request broadcast`)
+
+			reloadGeofence()
+		}
+
 		if (cmd.type === 'weather') {
 			log.debug(`Worker ${workerId}: receiveCommand<weather> ${cmd.weatherCommand}`)
 
@@ -109,7 +137,6 @@ async function receiveCommand(cmd) {
 			}
 			if (cmd.weatherCommand === 'weatherForecastRequested') {
 				await weatherController.getWeather(cmd.data)
-				//				weatherController.handleMonsterWeatherChange(cmd.data)
 			}
 		}
 	} catch (err) {
