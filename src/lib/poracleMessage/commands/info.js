@@ -225,7 +225,7 @@ exports.run = async (client, msg, args, options) => {
 						if (client.PoracleInfo.lastStatsBroadcast) {
 							const { shiny } = client.PoracleInfo.lastStatsBroadcast
 							if (shiny[mon.id]) {
-								message = message.concat(`\n**${translator.translate('Shiny Rate')}**: ${shiny[mon.id].total} / ${shiny[mon.id].seen} (${shiny[mon.id].ratio})\n`)
+								message = message.concat(`\n**${translator.translate('Shiny Rate')}**: ${shiny[mon.id].seen}/${shiny[mon.id].total}  (1:${shiny[mon.id].ratio})\n`)
 							}
 						}
 						Object.entries(strengths).forEach(([name, tyepss], i) => {
