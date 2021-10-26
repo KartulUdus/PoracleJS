@@ -22,11 +22,16 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
+		const language = human.language || fastify.config.general.locale
+		const translator = fastify.translatorFactory.Translator(language)
+
 		const eggs = await fastify.query.selectAllQuery('egg', { id: req.params.id, profile_no: human.current_profile_no })
+
+		const eggWithDesc = await Promise.all(eggs.map(async (row) => ({ ...row, description: await trackedCommand.eggRowText(fastify.config, translator, fastify.GameData, row, fastify.scannerQuery) })))
 
 		return {
 			status: 'ok',
-			egg: eggs,
+			egg: eggWithDesc,
 		}
 	})
 

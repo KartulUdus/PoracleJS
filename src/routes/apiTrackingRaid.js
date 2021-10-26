@@ -21,12 +21,16 @@ module.exports = async (fastify, options, next) => {
 				message: 'User not found',
 			}
 		}
+		const language = human.language || fastify.config.general.locale
+		const translator = fastify.translatorFactory.Translator(language)
 
 		const raids = await fastify.query.selectAllQuery('raid', { id: req.params.id, profile_no: human.current_profile_no })
 
+		const raidWithDesc = await Promise.all(raids.map(async (row) => ({ ...row, description: await trackedCommand.raidRowText(fastify.config, translator, fastify.GameData, row, fastify.scannerQuery) })))
+
 		return {
 			status: 'ok',
-			raid: raids,
+			raid: raidWithDesc,
 		}
 	})
 

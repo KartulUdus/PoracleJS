@@ -92,7 +92,7 @@ module.exports = async (fastify, options, next) => {
 				clean: +defaultTo(row.clean, 0),
 				reward_type: rewardType,
 				reward: +defaultTo(row.reward, 0),
-				amount: +defaultTo(row.award, 0),
+				amount: +defaultTo(row.amount, 0),
 				form: +defaultTo(row.form, 0),
 			}
 		})
