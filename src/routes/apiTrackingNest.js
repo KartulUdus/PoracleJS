@@ -86,7 +86,7 @@ module.exports = async (fastify, options, next) => {
 			distance: +defaultTo(row.distance, 0),
 			clean: +defaultTo(row.clean, 0),
 			pokemon_id: +defaultTo(row.pokemon_id),
-			min_spawn_avg: +defaultTo(row.min_spawn_age, 0),
+			min_spawn_avg: +defaultTo(row.min_spawn_avg, 0),
 			form: +defaultTo(row.form, 0),
 		}))
 
