@@ -21,12 +21,16 @@ module.exports = async (fastify, options, next) => {
 				message: 'User not found',
 			}
 		}
+		const language = human.language || fastify.config.general.locale
+		const translator = fastify.translatorFactory.Translator(language)
 
 		const gyms = await fastify.query.selectAllQuery('gym', { id: req.params.id, profile_no: human.current_profile_no })
 
+		const gymWithDesc = await Promise.all(gyms.map(async (row) => ({ ...row, description: await trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, row, fastify.scannerQuery) })))
+
 		return {
 			status: 'ok',
-			gym: gyms,
+			gym: gymWithDesc,
 		}
 	})
 
