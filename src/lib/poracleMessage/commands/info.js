@@ -67,14 +67,14 @@ exports.run = async (client, msg, args, options) => {
 
 			case 'shiny': {
 				if (client.PoracleInfo.lastStatsBroadcast) {
-					let message = '**Shiny Stats (Last few hours)**\n'
+					let message = `**${translator.translate('Shiny Stats (Last few hours)')}**\n`
 					const { shiny } = client.PoracleInfo.lastStatsBroadcast
 
 					Object.entries(shiny).forEach(([pokemonId, shinyInfo]) => {
 						const mon = client.GameData.monsters[`${pokemonId}_0`]
 						const monName = mon ? translator.translate(mon.name) : `${translator.translate('Unknown monster')} ${pokemonId}`
 
-						message = message.concat(`${monName}: Seen ${shinyInfo.seen} - Ratio 1:${shinyInfo.ratio.toFixed(0)}\n`)
+						message = message.concat(`${monName}: ${translator.translate('Seen')} ${shinyInfo.seen} - ${translator.translate('Ratio')} 1:${shinyInfo.ratio.toFixed(0)}\n`)
 					})
 
 					await msg.reply(message, { style: 'markdown' })
@@ -225,7 +225,7 @@ exports.run = async (client, msg, args, options) => {
 						if (client.PoracleInfo.lastStatsBroadcast) {
 							const { shiny } = client.PoracleInfo.lastStatsBroadcast
 							if (shiny[mon.id]) {
-								message = message.concat(`\n**${translator.translate('Shiny Rate')}**: ${shiny[mon.id].seen}/${shiny[mon.id].total}  (1:${shiny[mon.id].ratio})\n`)
+								message = message.concat(`\n**${translator.translate('Shiny Rate')}**: ${shiny[mon.id].seen}/${shiny[mon.id].total}  (1:${shiny[mon.id].ratio.toFixed(0)})\n`)
 							}
 						}
 						Object.entries(strengths).forEach(([name, tyepss], i) => {
