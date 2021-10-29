@@ -51,6 +51,29 @@ module.exports = async (fastify, options, next) => {
 		}
 	})
 
+	fastify.post('/api/tracking/pokemon/:id/delete', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		let deleteUids = req.body
+		if (!Array.isArray(deleteUids)) deleteUids = [deleteUids]
+
+		await fastify.query.deleteWhereInQuery('monsters', {
+			id: req.params.id,
+		}, deleteUids, 'uid')
+
+		return {
+			status: 'ok',
+		}
+	})
+
 	fastify.post('/api/tracking/pokemon/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
 
@@ -81,7 +104,7 @@ module.exports = async (fastify, options, next) => {
 
 		const defaultTo = ((value, x) => ((value === undefined) ? x : value))
 
-		const insert = insertReq.map((row) => {
+		const cleanRow = (row) => {
 			if (row.pokemon_id === undefined) {
 				throw new Error('Pokemon id must be specified')
 			}
@@ -89,9 +112,9 @@ module.exports = async (fastify, options, next) => {
 			let distance = +row.distance || fastify.config.tracking.defaultDistance || 0
 			distance = Math.min(distance, fastify.config.tracking.maxDistance || 40000000) // circumference of Earth
 
-			return {
+			const newRow = {
 				id,
-				profile_no: currentProfileNo,
+				profile_no: +defaultTo(row.profile_no, +currentProfileNo),
 				ping: '',
 				template: (row.template || fastify.config.general.defaultTemplateName).toString(),
 				pokemon_id: +row.pokemon_id,
@@ -121,12 +144,18 @@ module.exports = async (fastify, options, next) => {
 				max_rarity: +defaultTo(row.max_rarity, 0),
 				min_time: +defaultTo(row.min_time, 0),
 			}
-		})
+			if (row.uid) {
+				newRow.uid = +row.uid
+			}
+			return newRow
+		}
+
+		const insert = insertReq.filter((row) => !row.uid).map(cleanRow)
+		const updates = insertReq.filter((row) => row.uid).map(cleanRow)
 
 		try {
 			const trackedMonsters = await fastify.query.selectAllQuery('monsters', { id, profile_no: currentProfileNo })
 
-			const updates = []
 			const alreadyPresent = []
 
 			for (let i = insert.length - 1; i >= 0; i--) {
@@ -172,14 +201,20 @@ module.exports = async (fastify, options, next) => {
 				}
 			}
 
-			await fastify.query.deleteWhereInQuery('monsters', {
-				id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			// await fastify.query.deleteWhereInQuery('monsters', {
+			// 	id,
+			// 	profile_no: currentProfileNo,
+			// },
+			// updates.map((x) => x.uid),
+			// 'uid')
+			// await fastify.query.insertQuery('monsters', [...insert, ...updates])
 
-			await fastify.query.insertQuery('monsters', [...insert, ...updates])
+			if (insert.length) {
+				await fastify.query.insertQuery('monsters', insert)
+			}
+			for (const row of updates) {
+				await fastify.query.updateQuery('monsters', row, { uid: row.uid })
+			}
 
 			// Send message to user
 

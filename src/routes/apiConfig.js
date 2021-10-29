@@ -31,6 +31,7 @@ module.exports = async (fastify, options, next) => {
 			},
 			maxDistance: fastify.config.tracking.maxDistance,
 			everythingFlagPermissions: fastify.config.tracking.everythingFlagPermissions,
+
 		}
 	})
 
