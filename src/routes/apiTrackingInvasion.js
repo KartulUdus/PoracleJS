@@ -89,7 +89,7 @@ module.exports = async (fastify, options, next) => {
 				template: (row.template || fastify.config.general.defaultTemplateName).toString(),
 				distance: +defaultTo(row.distance, 0),
 				clean: +defaultTo(row.clean, 0),
-				gender: +defaultTo(row.clean, 0),
+				gender: +defaultTo(row.gender, 0),
 				grunt_type: row.grunt_type,
 			}
 		})

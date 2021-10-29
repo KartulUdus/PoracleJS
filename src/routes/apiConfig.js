@@ -17,6 +17,7 @@ module.exports = async (fastify, options, next) => {
 			locale: fastify.config.general.locale,
 			prefix: fastify.config.discord.prefix,
 			providerURL: fastify.config.geocoding.providerURL,
+			addressFormat: fastify.config.locale.addressFormat,
 			staticKey: fastify.config.geocoding.staticKey,
 			pvpFilterMaxRank: fastify.config.pvp.pvpFilterMaxRank,
 			pvpFilterGreatMinCP: fastify.config.pvp.pvpFilterGreatMinCP,
