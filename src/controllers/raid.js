@@ -25,7 +25,7 @@ class Raid extends Controller {
 		(raid.exclusive = ${data.ex} or raid.exclusive = 0) and
 		(raid.form = ${data.form} or raid.form = 0) and
 		(raid.evolution = 9000 or raid.evolution = ${data.evolution}) and
-		(raid.move = 0 or raid.move = ${data.move_1} or raid.move = ${data.move_2})
+		(raid.move = 9000 or raid.move = ${data.move_1} or raid.move = ${data.move_2})
 		${strictareastring}
 		and
 		(raid.gym_id='${data.gym_id}' or (raid.gym_id is NULL and `
@@ -57,7 +57,7 @@ class Raid extends Controller {
 			`)
 			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping
 		}
-		// this.log.silly(`${data.gym_id}: Raid query ${query}`)
+		this.log.silly(`${data.gym_id}: Raid query ${query}`)
 		let result = await this.db.raw(query)
 
 		if (!['pg', 'mysql'].includes(this.config.database.client)) {

@@ -103,7 +103,7 @@ module.exports = async (fastify, options, next) => {
 				clean: +defaultTo(+row.clean, 0),
 				level: +level,
 				form: 0,
-				move: +defaultTo(row.move, 0),
+				move: +defaultTo(row.move, 9000),
 				evolution: +defaultTo(row.evolution, 9000),
 				gym_id: row.gym_id ? row.gym_id : null,
 			}

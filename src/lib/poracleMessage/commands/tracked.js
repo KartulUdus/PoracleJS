@@ -65,7 +65,7 @@ async function raidRowText(config, translator, GameData, raid, scannerQuery) {
 	let gymNameText = null
 	if (raid.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(raid.gym_id) || raid.gym_id : raid.gym_id
 
-	const moveName = raid.move && GameData.moves[raid.move] ? `${translator.translate(GameData.moves[raid.move].name)}/${translator.translate(GameData.moves[raid.move].type)}` : ''
+	const moveName = raid.move !== 9000 && GameData.moves[raid.move] ? `${translator.translate(GameData.moves[raid.move].name)}/${translator.translate(GameData.moves[raid.move].type)}` : ''
 
 	if (+raid.pokemon_id === 9000) {
 		return `**${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${moveName ? ` | ${translator.translate('with move')} ${moveName}` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}${raid.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
