@@ -26,7 +26,7 @@ class ProfileLogic {
 		await this.query.updateQuery('profiles', { active_hours: JSON.stringify(hours) }, { id: this.id, profile_no: profileNo })
 	}
 
-	async addProfile(profileName, hours) {
+	async addProfile(name, hours) {
 		if (!this.human) await this.init()
 
 		let newProfileNo = 1
@@ -45,7 +45,7 @@ class ProfileLogic {
 		await this.query.insertQuery('profiles', {
 			id: this.id,
 			profile_no: newProfileNo,
-			profileName,
+			name,
 			area: this.human.area,
 			latitude: this.human.latitude,
 			longitude: this.human.longitude,

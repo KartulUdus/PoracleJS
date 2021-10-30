@@ -20,11 +20,11 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
-		const profiles = await fastify.query.selectAllQuery('profiles', { id: req.params.id })
+		const profile = await fastify.query.selectAllQuery('profiles', { id: req.params.id })
 
 		return {
 			status: 'ok',
-			profiles,
+			profile,
 		}
 	})
 
@@ -134,7 +134,7 @@ module.exports = async (fastify, options, next) => {
 
 			return {
 				profile_no: row.profile_no,
-				active_hours: +defaultTo(row.active_hours, '{}'),
+				active_hours: defaultTo(row.active_hours, '{}'),
 			}
 		})
 
