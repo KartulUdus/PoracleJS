@@ -553,8 +553,7 @@ async function processOne(hook) {
 					if (encountered) {
 						try {
 							const ohbemstart = process.hrtime()
-							const ohbemCalc = ohbem.queryPvPRank(+data.pokemon_id, +data.form || 0, +data.costume, +data.gender, +data.individual_attack, +data.individual_defense, +data.individual_stamina, +data.pokemon_level)
-							data.ohbem_pvp = ohbemCalc
+							data.ohbem_pvp = ohbem.queryPvPRank(+data.pokemon_id, +data.form || 0, +data.costume, +data.gender, +data.individual_attack, +data.individual_defense, +data.individual_stamina, +data.pokemon_level)
 							const ohbemend = process.hrtime(ohbemstart)
 							const ohbemms = ohbemend[1] / 1000000
 							fastify.controllerLog.debug(`${hook.message.encounter_id}: PVP time: ${ohbemms}ms`)
@@ -781,12 +780,15 @@ async function currentStatus() {
 schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
 	try {
 		log.verbose('Profile Check: Checking for active profile changes')
-		const humans = await query.selectAllQuery('humans', {})
+		const humans = await query.selectAllQuery('humans', { enabled: 1, admin_disable: 0 })
 		const profilesToCheck = await query.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
 		let lastId
 		for (const profile of profilesToCheck) {
 			const human = humans.find((x) => x.id === profile.id)
+
+			// eslint-disable-next-line no-continue
+			if (!human) continue
 
 			let nowForHuman = moment()
 			if (human.latitude) {
