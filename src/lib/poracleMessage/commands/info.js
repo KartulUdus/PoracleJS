@@ -65,12 +65,31 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 
+			case 'shiny': {
+				if (client.PoracleInfo.lastStatsBroadcast) {
+					let message = `**${translator.translate('Shiny Stats (Last few hours)')}**\n`
+					const { shiny } = client.PoracleInfo.lastStatsBroadcast
+
+					Object.entries(shiny).forEach(([pokemonId, shinyInfo]) => {
+						const mon = client.GameData.monsters[`${pokemonId}_0`]
+						const monName = mon ? translator.translate(mon.name) : `${translator.translate('Unknown monster')} ${pokemonId}`
+
+						message = message.concat(`${monName}: ${translator.translate('Seen')} ${shinyInfo.seen} - ${translator.translate('Ratio')} 1:${shinyInfo.ratio.toFixed(0)}\n`)
+					})
+
+					await msg.reply(message, { style: 'markdown' })
+				} else {
+					await msg.reply(translator.translate('Shiny information not yet calculated - wait a few minutes and try again'))
+				}
+				break
+			}
 			case 'rarity': {
 				if (client.PoracleInfo.lastStatsBroadcast) {
 					let message = ''
+					const { rarity } = client.PoracleInfo.lastStatsBroadcast
 					// Miss out common and unseen
 					for (let group = 2; group < 6; group++) {
-						const monsters = client.PoracleInfo.lastStatsBroadcast[group].map(
+						const monsters = rarity[group].map(
 							(x) => {
 								const mon = Object.values(client.GameData.monsters).find((m) => m.id === x && m.form.id === 0)
 								if (!mon) {
@@ -203,6 +222,12 @@ exports.run = async (client, msg, args, options) => {
 							? translator.translate(emojiLookup.lookup(typeData[type].emoji, platform))
 							: ''} ${translator.translate(type)}`
 
+						if (client.PoracleInfo.lastStatsBroadcast) {
+							const { shiny } = client.PoracleInfo.lastStatsBroadcast
+							if (shiny[mon.id]) {
+								message = message.concat(`\n**${translator.translate('Shiny Rate')}**: ${shiny[mon.id].seen}/${shiny[mon.id].total}  (1:${shiny[mon.id].ratio.toFixed(0)})\n`)
+							}
+						}
 						Object.entries(strengths).forEach(([name, tyepss], i) => {
 							message = message.concat(`\n**${translator.translate(i ? 'Secondary Type' : 'Primary Type')}:**  ${typeEmojiName(name)}`)
 
