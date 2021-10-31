@@ -47,6 +47,10 @@ exports.run = async (client, msg, [args]) => {
 
 			if (webhookName && webhookLink) target = { id: webhookLink, name: webhookName, webhook: true }
 
+			if (!target.webhook && msg.channel.type !== 'text') {
+				return msg.reply('Adding a bot controlled channel cannot be done from DM. To add webhooks, provide both a name using the `name` parameter and an url')
+			}
+
 			const isRegistered = await client.query.countQuery('humans', { id: target.id })
 
 			if (isRegistered) return await msg.react('👌')
@@ -76,9 +80,13 @@ exports.run = async (client, msg, [args]) => {
 				return msg.reply('Webhook with that name does not appeared to be registered')
 			}
 
+			if (msg.channel.type !== 'text') {
+				return msg.reply('Removing a bot controlled channel cannot be done from DM')
+			}
+
 			const isRegistered = await client.query.countQuery('humans', { id: target.id })
 
-			if (!isRegistered && msg.channel.type === 'text') {
+			if (!isRegistered) {
 				return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('channel')} ${client.translator.translate('add')}`)
 			}
 			if (isRegistered) {
