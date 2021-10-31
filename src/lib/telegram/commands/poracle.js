@@ -102,7 +102,7 @@ module.exports = async (ctx) => {
 		}
 
 		if (client.config.telegram.groupWelcomeText) {
-			await ctx.reply(`${controller.config.telegram.groupWelcomeText.replace('{user}', userName.replace(/[_*[`]/g, ((m) => `\\${m}`)))}`, { parse_mode: 'Markdown' })
+			await ctx.reply(`${controller.config.telegram.groupWelcomeText.replace('{user}', userName.replace(/[_*[\]`]/g, ((m) => `\\${m}`)))}`, { parse_mode: 'Markdown' })
 		}
 
 		const dts = controller.dts.find((template) => template.type === 'greeting' && template.platform === 'telegram' && template.default)
