@@ -10,7 +10,7 @@ class PoracleTelegramMessage {
 		this.userId = this.user.id
 		this.userName = this.user.username
 
-		this.fullName = `${this.user.first_name} ${this.user.last_name ? this.user.last_name : ''} [${this.user.username ? this.user.username : ''}]`
+		this.fullName = `${this.user.first_name}${this.user.last_name ? ` ${this.user.last_name}` : ''}${this.user.username ? ` [${this.user.username}]` : ''}`
 		this.prefix = '/'
 		this.command = ctx.state.command.command
 	}
