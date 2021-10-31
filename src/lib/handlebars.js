@@ -13,7 +13,7 @@ const EmojiLookup = require('./emojiLookup')
 const translatorFactory = new TranslatorFactory(config)
 const emojiLookup = new EmojiLookup(emojis)
 
-require('handlebars-helpers')({
+require('@budibase/handlebars-helpers')({
 	handlebars,
 })
 
