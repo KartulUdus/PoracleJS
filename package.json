@@ -1,7 +1,7 @@
 {
   "name": "PoracleJS",
-  "version": "4.2.7",
-  "description": "Webhook processing and personalized discord|telegram alarms",
+  "version": "4.3.0",
+  "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
   "scripts": {
     "test": "node test/test",
@@ -48,7 +48,7 @@
     "fs-extra": "^10.0.0",
     "geo-tz": "^6.0.1",
     "handlebars": "^4.7.7",
-    "handlebars-helpers": "^0.10.0",
+    "@budibase/handlebars-helpers": "^0.11.7",
     "hastebin-gen": "^2.0.5",
     "import-fresh": "^3.3.0",
     "knex": "^0.95.4",

@@ -107,6 +107,34 @@ exports.run = async (client, msg, args, options) => {
 				}
 				break
 			}
+			case 'moves': {
+				let message = `${translator.translate('Recognised moves:')}\n`
+				const moveList = Object.values(client.GameData.moves).sort((a, b) => a.name.localeCompare(b.name))
+				for (const move of moveList) {
+					let displayText = move.name
+					let translatedDisplayText = translator.translate(move.name)
+					if (moveList.filter((x) => x.name === move.name).length > 1) {
+						displayText += `/${move.type}`
+						translatedDisplayText += `/${translator.translate(move.type)}`
+					}
+
+					message += `${displayText.replace(/ /g, '\\_')}${translatedDisplayText !== displayText ? ` or ${translatedDisplayText.replace(/ /g, '\\_')}` : ''}\n`
+				}
+
+				await msg.reply(message, { style: 'markdown' })
+				break
+			}
+			case 'items': {
+				let message = `${translator.translate('Recognised items:')}\n`
+				const itemList = Object.values(client.GameData.items).map((x) => x.name).sort()
+				for (const itemName of itemList) {
+					const translatedName = translator.translate(itemName)
+					message += `${itemName.replace(/ /g, '\\_')}${translatedName !== itemName ? ` or ${translatedName.replace(/ /g, '\\_')}` : ''}\n`
+				}
+
+				await msg.reply(message, { style: 'markdown' })
+				break
+			}
 
 			case 'weather': {
 				if (!client.PoracleInfo.lastWeatherBroadcast) {
@@ -306,7 +334,7 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				if (!found) {
-					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info bulbasaur`', util.prefix),
+					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`', util.prefix),
 						{ style: 'markdown' })
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 				}

@@ -15,13 +15,15 @@ module.exports = async (fastify, options, next) => {
 			status: 'ok',
 			version,
 			locale: fastify.config.general.locale,
+			prefix: fastify.config.discord.prefix,
 			providerURL: fastify.config.geocoding.providerURL,
+			addressFormat: fastify.config.locale.addressFormat,
 			staticKey: fastify.config.geocoding.staticKey,
 			pvpFilterMaxRank: fastify.config.pvp.pvpFilterMaxRank,
 			pvpFilterGreatMinCP: fastify.config.pvp.pvpFilterGreatMinCP,
 			pvpFilterUltraMinCP: fastify.config.pvp.pvpFilterUltraMinCP,
 			pvpFilterLittleMinCP: fastify.config.pvp.pvpFilterLittleMinCP,
-			pvpLittleLeagueAllowed: fastify.config.pvp.dataSource === 'internal',
+			pvpLittleLeagueAllowed: fastify.config.pvp.dataSource === 'internal' || fastify.config.pvp.dataSource === 'chuck',
 			defaultTemplateName: fastify.config.general.defaultTemplateName || '1',
 			channelNotesContainsCategory: fastify.config.discord.checkRole && fastify.config.reconciliation.discord.updateChannelNotes,
 			admins: {
@@ -30,6 +32,7 @@ module.exports = async (fastify, options, next) => {
 			},
 			maxDistance: fastify.config.tracking.maxDistance,
 			everythingFlagPermissions: fastify.config.tracking.everythingFlagPermissions,
+
 		}
 	})
 

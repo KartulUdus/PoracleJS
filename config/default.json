@@ -125,6 +125,14 @@
           "user": "poracleuser",
           "password": "poraclepassword",
           "port": 3306
+      },
+      "scannerType": "none",               // Scanner type: can be none, rdm or mad
+      "scanner": {
+          "host": "127.0.0.1",
+          "database": "scannerdb",
+          "user": "scanneruser",
+          "password": "scannerpassword",
+          "port": 3306
       }
   },
   //
