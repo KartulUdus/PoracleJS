@@ -90,6 +90,7 @@ exports.run = async (client, msg, args, options) => {
 				team: +team,
 				clean: +clean,
 				level: +lvl,
+				gym_id: null,
 			}))
 
 			const tracked = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
@@ -128,15 +129,15 @@ exports.run = async (client, msg, args, options) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
-				alreadyPresent.forEach((egg) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.eggRowText(client.config, translator, client.GameData, egg), '\n')
-				})
-				updates.forEach((egg) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.eggRowText(client.config, translator, client.GameData, egg), '\n')
-				})
-				insert.forEach((egg) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.eggRowText(client.config, translator, client.GameData, egg), '\n')
-				})
+				for (const egg of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.eggRowText(client.config, translator, client.GameData, egg, client.scannerQuery), '\n')
+				}
+				for (const egg of updates) {
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.eggRowText(client.config, translator, client.GameData, egg, client.scannerQuery), '\n')
+				}
+				for (const egg of insert) {
+					message = message.concat(translator.translate('New: '), await trackedCommand.eggRowText(client.config, translator, client.GameData, egg, client.scannerQuery), '\n')
+				}
 			}
 
 			await client.query.deleteWhereInQuery('egg', {

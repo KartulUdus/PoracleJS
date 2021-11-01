@@ -31,11 +31,10 @@ class Gym extends Controller {
 		gym.team = ${data.teamId}
 		${slotChangeQuery}
 		and
-		(gym.gym_id='${data.gymId}' `
+		(gym.gym_id='${data.gymId}' or (gym.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
-			or
 			(
 				(
 					round(
@@ -52,7 +51,7 @@ class Gym extends Controller {
 						gym.distance = 0 and (${areastring})
 					)
 			)
-			)
+			))
 			`)
 			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 		} else {

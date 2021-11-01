@@ -4,6 +4,7 @@ const PoracleDiscordMessage = require('./poracleDiscordMessage')
 class PoracleDiscordState {
 	constructor(client) {
 		this.query = client.query
+		this.scannerQuery = client.scannerQuery
 		this.dts = client.dts
 		this.log = client.logs.command
 		this.GameData = client.GameData

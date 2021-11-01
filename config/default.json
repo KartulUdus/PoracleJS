@@ -125,6 +125,14 @@
           "user": "poracleuser",
           "password": "poraclepassword",
           "port": 3306
+      },
+      "scannerType": "none",               // Scanner type: can be none, rdm or mad
+      "scanner": {
+          "host": "127.0.0.1",
+          "database": "scannerdb",
+          "user": "scanneruser",
+          "password": "scannerpassword",
+          "port": 3306
       }
   },
   //
@@ -321,8 +329,10 @@
     // groupWelcomeText - message text (in channel) when someone registers. Users have to
     //   select the 'start' option on the bot in the telegram client before it can message
     //   them and this can be used to remind them of that
-      "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages",
-    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+      "groupWelcomeText": "Welcome {user}, remember to click on me and 'start bot' to be able to receive messages",
+    // botWelcomeText - message the bot sends to users who register
+      "botWelcomeText": "You are now registered with Poracle",
+  // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
       "unregisteredUserMessage": "",
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": "",
