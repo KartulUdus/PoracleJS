@@ -22,17 +22,17 @@ const geoTz = require('geo-tz')
 const schedule = require('node-schedule')
 const telegramCommandParser = require('./lib/telegram/middleware/commandParser')
 const telegramController = require('./lib/telegram/middleware/controller')
-// const TelegramUtil = require('./lib/telegram/telegramUtil.js')
 const DiscordReconciliation = require('./lib/discord/discordReconciliation')
 const TelegramReconciliation = require('./lib/telegram/telegramReconciliation')
 const PogoEventParser = require('./lib/pogoEventParser')
+const scannerFactory = require('./lib/scanner/scannerFactory')
 const ShinyPossible = require('./lib/shinyLoader')
 
 const { Config } = require('./lib/configFetcher')
 const GameData = require('./lib/GameData')
 
 const {
-	config, knex, dts, geofence, translator, translatorFactory,
+	config, knex, scannerKnex, dts, geofence, translatorFactory,
 } = Config()
 
 const PoracleInfo = {}
@@ -41,6 +41,8 @@ const readDir = util.promisify(fs.readdir)
 
 const telegraf = new Telegraf(config.telegram.token)// , { channelMode: true })
 const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.telegram.channelToken)/* , { channelMode: true }) */ : null
+
+const scannerQuery = scannerFactory.createScanner(scannerKnex, config.database.scannerType)
 
 const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
 
@@ -73,14 +75,15 @@ fastify.decorate('cache', cache)
 fastify.decorate('gymCache', gymCache)
 fastify.decorate('GameData', GameData)
 fastify.decorate('query', query)
+fastify.decorate('scannerQuery', scannerQuery)
 fastify.decorate('dts', dts)
 fastify.decorate('geofence', geofence)
-fastify.decorate('translator', translator)
+fastify.decorate('translatorFactory', translatorFactory)
 fastify.decorate('discordQueue', [])
 fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
-const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
+const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, scannerQuery, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
 logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
@@ -100,10 +103,10 @@ if (config.discord.enabled) {
 }
 
 if (config.telegram.enabled) {
-	telegram = new TelegramWorker('1', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegraf, translatorFactory, telegramCommandParser, re, true)
+	telegram = new TelegramWorker('1', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, scannerQuery, telegraf, translatorFactory, telegramCommandParser, re, true)
 
 	if (telegrafChannel) {
-		telegramChannel = new TelegramWorker('2', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
+		telegramChannel = new TelegramWorker('2', config, logs, GameData, PoracleInfo, dts, geofence, telegramController, query, scannerQuery, telegrafChannel, translatorFactory, telegramCommandParser, re, true)
 	}
 }
 
@@ -550,13 +553,12 @@ async function processOne(hook) {
 					if (encountered) {
 						try {
 							const ohbemstart = process.hrtime()
-							const ohbemCalc = ohbem.queryPvPRank(+data.pokemon_id, +data.form || 0, +data.costume, +data.gender, +data.individual_attack, +data.individual_defense, +data.individual_stamina, +data.pokemon_level)
-							data.ohbem_pvp = ohbemCalc
+							data.ohbem_pvp = ohbem.queryPvPRank(+data.pokemon_id, +data.form || 0, +data.costume, +data.gender, +data.individual_attack, +data.individual_defense, +data.individual_stamina, +data.pokemon_level)
 							const ohbemend = process.hrtime(ohbemstart)
 							const ohbemms = ohbemend[1] / 1000000
 							fastify.controllerLog.debug(`${hook.message.encounter_id}: PVP time: ${ohbemms}ms`)
 						} catch (err) {
-							fastify.controllerLog.error(`${hook.message.encounter_id}: Ohbem exception - params ohbem.queryPvPRank(${+data.pokemon_id}, ${+data.form || 0}, ${+data.costume}, ${+data.gender}, ${+data.individual_attack}, ${+data.individual_defense}, +${data.individual_stamina}, ${+data.pokemon_level}) - continuing`, err)
+							fastify.controllerLog.error(`${hook.message.encounter_id}: Ohbem exception - params ohbem.queryPvPRank(${+data.pokemon_id}, ${+data.form || 0}, ${+data.costume}, ${+data.gender}, ${+data.individual_attack}, ${+data.individual_defense}, ${+data.individual_stamina}, ${+data.pokemon_level}) - continuing`, err)
 						}
 					}
 				}
@@ -778,12 +780,15 @@ async function currentStatus() {
 schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run every 10 minutes - note if this changes then check below also needs to change
 	try {
 		log.verbose('Profile Check: Checking for active profile changes')
-		const humans = await query.selectAllQuery('humans', {})
+		const humans = await query.selectAllQuery('humans', { enabled: 1, admin_disable: 0 })
 		const profilesToCheck = await query.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
 		let lastId
 		for (const profile of profilesToCheck) {
 			const human = humans.find((x) => x.id === profile.id)
+
+			// eslint-disable-next-line no-continue
+			if (!human) continue
 
 			let nowForHuman = moment()
 			if (human.latitude) {

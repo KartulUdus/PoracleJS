@@ -8,7 +8,7 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 const noop = () => {}
 
 class Telegram {
-	constructor(id, config, logs, GameData, PoracleInfo, dts, geofence, controller, query, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
+	constructor(id, config, logs, GameData, PoracleInfo, dts, geofence, controller, query, scannerQuery, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
 		this.config = config
 		this.logs = logs
 		this.GameData = GameData
@@ -31,7 +31,7 @@ class Telegram {
 		this.queueProcessor = new FairPromiseQueue(this.telegramQueue, this.config.tuning.concurrentTelegramDestinationsPerBot, ((entry) => entry.target))
 		this.bot
 			.use(commandParser(this.translatorFactory))
-			.use(controller(query, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip, mustache))
+			.use(controller(query, scannerQuery, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip, mustache))
 
 		this.commands = {}
 
