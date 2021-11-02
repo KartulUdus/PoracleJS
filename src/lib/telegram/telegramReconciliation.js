@@ -253,7 +253,7 @@ class TelegramReconciliation {
 
 				if (telegramUser) {
 					if (!name) {
-						name = emojiStrip(`${telegramUser.user.first_name} ${telegramUser.user.last_name ? telegramUser.user.last_name : ''} [${telegramUser.user.username ? telegramUser.user.username : ''}]`)
+						name = emojiStrip(`${telegramUser.user.first_name}${telegramUser.user.last_name ? ` ${telegramUser.user.last_name}` : ''}${telegramUser.user.username ? ` [${telegramUser.user.username}]` : ''}`)
 					}
 					const { status } = telegramUser
 					if (!['left', 'kicked'].includes(status)) {
