@@ -80,7 +80,7 @@ exports.run = async (client, msg, args, options) => {
 
 		if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 
-		args.forEach((element) => {
+		for (const element of args) {
 			if (element === 'ex') exclusive = 1
 			else if (element.match(client.re.levelRe)) levelSet.add(+element.match(client.re.levelRe)[2])
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
@@ -93,7 +93,7 @@ exports.run = async (client, msg, args, options) => {
 				const moveData = Object.entries(client.GameData.moves).find(([, data]) => data.name.toLowerCase() === englishMoveName && (!englishTypeName || data.type.toLowerCase() === englishTypeName))
 				if (!moveData) {
 					msg.react('🙅')
-					return msg.reply(translator.translateFormat('Unrecognised move name {0}', moveName))
+					return msg.reply(translator.translateFormat('Unrecognised move name {0}', typeName ? `${moveName}/${typeName}` : moveName))
 				}
 				[move] = moveData
 			} else if (element === 'instinct' || element === 'yellow') team = 3
@@ -102,7 +102,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'harmony' || element === 'gray') team = 0
 			else if (element === 'everything') [1, 2, 3, 4, 5, 6].forEach((x) => levelSet.add(x))
 			else if (element === 'clean') clean = true
-		})
+		}
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
