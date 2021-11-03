@@ -130,7 +130,7 @@ class Gym extends Controller {
 			data.oldSlotsAvailable = data.old_slots_available
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.color = data.gymColor
-			data.isInBattle = data.is_in_battle
+			data.inBattle = data.is_in_battle !== undefined ? data.is_in_battle : data.in_battle
 
 			const whoCares = await this.gymWhoCares(data)
 
