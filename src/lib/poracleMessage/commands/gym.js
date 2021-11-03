@@ -27,7 +27,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}gym everything`, `{0}gym mystic slot_changes`', util.prefix),
+			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}gym everything`, `{0}gym mystic slot_changes`, `{0}gym valor battle_changes`', util.prefix),
 				{ style: 'markdown' })
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
@@ -42,6 +42,7 @@ exports.run = async (client, msg, args, options) => {
 		let template = client.config.general.defaultTemplateName
 		let clean = false
 		let slotChanges = false
+		let battleChanges = false
 		const teams = []
 		const pings = msg.getPings()
 
@@ -56,6 +57,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'everything') teams.push(...[0, 1, 2, 3])
 			else if (element === 'clean') clean = true
 			else if (element === 'slot changes') slotChanges = true
+			else if (element === 'battle changes') battleChanges = true
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
@@ -86,6 +88,7 @@ exports.run = async (client, msg, args, options) => {
 				clean: +clean,
 				team: +teamId,
 				slot_changes: +slotChanges,
+				battle_changes: +battleChanges,
 				gym_id: null,
 			}))
 
@@ -106,7 +109,7 @@ exports.run = async (client, msg, args, options) => {
 							insert.splice(i, 1)
 							break
 						case 2:		// One difference (something + uid)
-							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean', 'slot_changes'].includes(x))) {
+							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean', 'slot_changes', 'battle_changes'].includes(x))) {
 								updates.push({
 									...toInsert,
 									uid: existing.uid,

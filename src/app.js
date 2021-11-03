@@ -662,7 +662,7 @@ async function processOne(hook) {
 				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
 
 				const cachedGymDetails = fastify.gymCache.getKey(id)
-				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available) {
+				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available && cachedGymDetails.is_in_battle === hook.message.is_in_battle) {
 					fastify.controllerLog.debug(`${id}: Gym was sent again with same details, ignoring`)
 					break
 				}
@@ -675,6 +675,7 @@ async function processOne(hook) {
 					team_id: team,
 					slots_available: hook.message.slots_available,
 					last_owner_id: team || hook.message.last_owner_id,
+					is_in_battle: hook.message.is_in_battle
 				}, 0)
 				processHook = hook
 				break
