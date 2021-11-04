@@ -8,7 +8,7 @@ exports.run = async (client, msg) => {
 		const limit = 100
 		const messages = await msg.channel.messages.fetch({ limit })
 
-		const startMessage = await msg.reply(`${client.translator.translate('Will start cleaning up to')} ${limit} ${client.translator.translate('messages back - do not re-run until finished')}`)
+		const startMessage = await msg.reply(client.translator.translateFormat('Will start cleaning up to {0} messages back - do not re-run until finished', limit))
 		for (const message of messages.values()) {
 			if (message.author.id === msg.client.user.id) {
 				await message.delete({ timeout: 1 })
