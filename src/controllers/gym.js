@@ -22,10 +22,17 @@ class Gym extends Controller {
 		}
 		let changeQuery = ''
 		if (data.old_team_id === data.teamId) {
-			if (data.old_slots_available === data.slots_available) {
-				changeQuery = 'and gym.battle_changes = true'
-			} else {
-				changeQuery = 'and gym.slot_changes = true'
+			if (data.old_slots_available !== data.slotsAvailable) {
+				changeQuery = 'and (gym.slot_changes = true'
+			}
+			if (data.old_in_battle !== data.inBattle) {
+				if (changeQuery.length > 0) {
+					changeQuery += ' or gym.battle_changes = true)'
+				} else {
+					changeQuery = ' and gym.battle_changes = true'
+				}
+			} else if (changeQuery.length > 0) {
+				changeQuery += ')'
 			}
 		}
 		let query = `

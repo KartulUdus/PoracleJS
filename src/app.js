@@ -670,6 +670,7 @@ async function processOne(hook) {
 
 				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
 				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
+				hook.message.old_in_battle = cachedGymDetails ? cachedGymDetails.in_battle : -1
 				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
 
 				fastify.gymCache.setKey(id, {
