@@ -11,12 +11,14 @@ exports.run = async (client, msg) => {
 		const startMessage = await msg.reply(client.translator.translateFormat('Will start cleaning up to {0} messages back - do not re-run until finished', limit))
 		for (const message of messages.values()) {
 			if (message.author.id === msg.client.user.id) {
-				await message.delete({ timeout: 1 })
+				await message.delete()
 			}
 		}
 
-		startMessage.delete()
-		msg.reply(client.translator.translate('Cleaning finished'))
+		await startMessage.delete()
+		const finishMessage = msg.reply(client.translator.translate('Cleaning finished'))
+		setTimeout(() => { finishMessage.delete() }, 15000)
+
 	} catch (err) {
 		await msg.reply('Failed to run clean, check logs')
 		client.logs.log.error(`Poracle-clean command "${msg.content}" unhappy:`, err)
