@@ -6,7 +6,7 @@ exports.up = async function migrationUp(knex) {
 	})
 
 	try {
-		await knex.raw('ALTER TABLE quest DROP constraint quest_tracking')
+		await knex.raw('ALTER TABLE quest DROP index quest_tracking')
 	} catch {
 		log.info('Database did not have unique constraint')
 	}

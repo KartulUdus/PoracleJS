@@ -8,7 +8,7 @@ exports.run = async (client, msg) => {
 		const limit = 100
 		const messages = await msg.channel.messages.fetch({ limit })
 
-		const startMessage = await msg.reply(`Will start cleaning up to ${limit} messages back - do not re-run until finished`)
+		const startMessage = await msg.reply(client.translator.translateFormat('Will start cleaning up to {0} messages back - do not re-run until finished', limit))
 		for (const message of messages.values()) {
 			if (message.author.id === msg.client.user.id) {
 				await message.delete({ timeout: 1 })
@@ -16,7 +16,7 @@ exports.run = async (client, msg) => {
 		}
 
 		startMessage.delete()
-		msg.reply('Cleaning finished')
+		msg.reply(client.translator.translate('Cleaning finished'))
 	} catch (err) {
 		await msg.reply('Failed to run clean, check logs')
 		client.logs.log.error(`Poracle-clean command "${msg.content}" unhappy:`, err)
