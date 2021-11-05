@@ -6,7 +6,7 @@ exports.up = async function migrationUp(knex) {
 	})
 
 	try {
-		await knex.raw('ALTER TABLE raid DROP constraint raid_tracking')
+		await knex.raw('ALTER TABLE raid DROP index raid_tracking')
 	} catch {
 		log.info('Database did not have unique constraint')
 	}
@@ -20,7 +20,7 @@ exports.up = async function migrationUp(knex) {
 	})
 
 	try {
-		await knex.raw('ALTER TABLE egg DROP constraint egg_tracking')
+		await knex.raw('ALTER TABLE egg DROP index egg_tracking')
 	} catch {
 		log.info('Database did not have unique constraint')
 	}
