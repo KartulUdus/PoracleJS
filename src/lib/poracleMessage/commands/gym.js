@@ -26,8 +26,21 @@ exports.run = async (client, msg, args, options) => {
 			return msg.reply(translator.translate('You do not have permission to execute this command'))
 		}
 
+		const disallowGymBattle = !util.client.config.tracking.enableGymBattle
+
+		if (disallowGymBattle && !!args.find((arg) => arg === 'battle changes')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to use this option: battle changes'))
+		}
+
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}gym everything`, `{0}gym mystic slot_changes`, `{0}gym valor battle_changes`', util.prefix),
+			let tipMsg = 'Valid commands are e.g. `{0}gym everything`, `{0}gym mystic slot_changes`'
+
+			if (!disallowGymBattle) {
+				tipMsg += ', `{0}gym valor battle_changes`'
+			}
+
+			await msg.reply(translator.translateFormat(tipMsg, util.prefix),
 				{ style: 'markdown' })
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
