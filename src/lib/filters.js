@@ -9,7 +9,8 @@ class FilterProcessor {
 		this.trackingChanger = trackingChanger
 	}
 
-	async applyFilter(id, profileNo, filterName, performUserChecks) {
+	// eslint-disable-next-line class-methods-use-this
+	async loadFilter(filterName) {
 		let filter
 
 		try {
@@ -19,7 +20,36 @@ class FilterProcessor {
 			throw new Error(`filters/${filterName}.json - ${err.message}`)
 		}
 
+		return filter
+	}
+
+	async applyFilter(id, profileNo, filterName, performUserChecks) {
+		let filter = await this.loadFilter(filterName)
 		let messages = ''
+
+		if (filter.based_on) {
+			// Load other filters
+			const filterStack = [[filterName, filter]]
+			let currentFilter = filter
+			while (currentFilter.based_on) {
+				// check here for circular reference ==> crash
+				const baseFilter = await this.loadFilter(currentFilter.based_on)
+				filterStack.unshift([currentFilter.based_on, baseFilter])
+				currentFilter = baseFilter
+			}
+
+			// Now combine filters
+
+			filter = {}
+			for (const [, addition] of filterStack) {
+				for (const category of ['pokemon', 'egg']) {
+					if (addition[category]) {
+						if (!(category in filter)) filter[category] = {}
+						Object.assign(filter[category], addition[category])
+					}
+				}
+			}
+		}
 		if (filter.pokemon) {
 			messages += await this.applyPokemonFilter(id, profileNo, filter.pokemon, performUserChecks)
 		}
@@ -29,6 +59,8 @@ class FilterProcessor {
 
 	async applyPokemonFilter(id, profileNo, filter, performUserChecks) {
 		const defaultTo = ((value, x) => ((value === undefined) ? x : value))
+
+		if (filter.pokemon.length === 0) filter.pokemon = [0]
 
 		const insert = filter.pokemon.map((pokemonId) => {
 			let distance

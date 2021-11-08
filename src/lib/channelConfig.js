@@ -12,8 +12,8 @@ async function processChannelConfig(trackManager, filterLogic) {
 		throw new Error(`channels.json - ${err.message}`)
 	}
 
-	if (channels.clone) {
-		for (const [id, destinations] of Object.entries(channels.clone)) {
+	if (channels.clones) {
+		for (const [id, destinations] of Object.entries(channels.clones)) {
 			const targets = []
 			for (const destId of destinations) {
 				targets.push(...await trackManager.resolveId(destId))
@@ -24,12 +24,17 @@ async function processChannelConfig(trackManager, filterLogic) {
 		}
 	}
 
-	if (channels.templates) {
-		for (const [id, filters] of Object.entries(channels.templates)) {
-			const profileNo = trackManager.getProfileNo(id)
-			trackManager.reset(id, profileNo)
-			for (const destId of filters) {
-				await filterLogic.applyFilter(id, profileNo, destId, false)
+	if (channels.filters) {
+		for (const [id, filters] of Object.entries(channels.filters)) {
+			const targets = []
+			targets.push(...await trackManager.resolveId(id))
+
+			for (const destId of targets) {
+				const profileNo = await trackManager.getProfileNo(destId)
+				await trackManager.reset(destId, profileNo)
+				for (const filter of filters) {
+					await filterLogic.applyFilter(id, profileNo, filter, false)
+				}
 			}
 		}
 	}

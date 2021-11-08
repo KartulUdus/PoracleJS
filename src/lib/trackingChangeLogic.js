@@ -58,7 +58,7 @@ class TrackingChange {
 		})
 		if (webhookByName) targets.push(...webhookByName)
 
-		return targets
+		return targets.map((x) => x.id)
 	}
 
 	async genericApply(settings, changes, id, profileNo) {
