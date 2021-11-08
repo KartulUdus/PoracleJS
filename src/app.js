@@ -654,7 +654,7 @@ async function processOne(hook) {
 			case 'gym_details': {
 				const id = hook.message.id || hook.message.gym_id
 				const team = hook.message.team_id !== undefined ? hook.message.team_id : hook.message.team
-				const inBattle = hook.message.is_in_battle !== undefined ? hook.message.is_in_battle : hook.message.in_battle
+				const inBattle = hook.message.is_in_battle !== undefined ? hook.message.is_in_battle : hook.message.in_battle !== undefined ? hook.message.in_battle : 0
 
 				if (config.general.disableGym) {
 					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
