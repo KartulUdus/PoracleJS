@@ -28,7 +28,12 @@ exports.run = async (client, msg, args, options) => {
 
 		if (args[0] === 'to') {
 			for (let x = 1; x < args.length; x++) {
-				await trackingChanger.copy(target.id, currentProfileNo, args[x], 0)
+				const targets = []
+				targets.push(...await trackingChanger.resolveId(args[x]))
+
+				for (const destId of targets) {
+					await trackingChanger.copy(target.id, currentProfileNo, destId, 0)
+				}
 			}
 		} else {
 			// from
