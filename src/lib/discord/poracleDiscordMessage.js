@@ -77,14 +77,14 @@ class PoracleDiscordMessage {
 
 	async replyWithImageUrl(title, message, url) {
 		const messageText = {
-			embed: {
+			embeds: [{
 				color: 0x00ff00,
 				title,
 				description: message,
 				image: {
 					url,
 				},
-			},
+			}],
 		}
 		await this.msg.reply(messageText)
 	}
