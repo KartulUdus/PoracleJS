@@ -28,7 +28,7 @@ class Gym extends Controller {
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, gym.template, gym.distance, gym.clean, gym.ping from gym
 		join humans on (humans.id = gym.id and humans.current_profile_no = gym.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
-		gym.team = ${data.teamId}
+		(gym.team = ${data.teamId} or gym.team = 4)
 		${slotChangeQuery}
 		and
 		(gym.gym_id='${data.gymId}' or (gym.gym_id is NULL and `
