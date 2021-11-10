@@ -664,24 +664,15 @@ async function processOne(hook) {
 
 				const cacheKey = `${id}_battle`
 				const cachedGymDetails = fastify.gymCache.getKey(id)
-				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available) {
-					let tooSoon = !!fastify.cache.get(cacheKey)
-					
-					if (inBattle) {
-						fastify.cache.set(cacheKey, 'x',  5 * 60)
-					}
+				const tooSoon = fastify.cache.get(cacheKey)
 
-					if (tooSoon) {	
-						fastify.controllerLog.debug(`${id}: Gym battle cooldown time hasn't ended, ignoring`)
-						fastify.gymCache.setKey(id, {
-							team_id: team,
-							slots_available: hook.message.slots_available,
-							in_battle: inBattle
-						}, 0)
-						break
-					}
-				} else if (inBattle) {
+				if (inBattle) {
 					fastify.cache.set(cacheKey, 'x',  5 * 60)
+				}
+
+				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available && tooSoon) {
+					fastify.controllerLog.debug(`${id}: Gym battle cooldown time hasn't ended, ignoring`)
+					break
 				}
 
 				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1

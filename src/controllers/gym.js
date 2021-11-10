@@ -26,7 +26,7 @@ class Gym extends Controller {
 			if (data.old_slots_available !== data.slotsAvailable) {
 				changeQuery += ' or gym.slot_changes = true'
 			}
-			if (data.old_in_battle !== data.inBattle) {
+			if (data.inBattle) {
 				changeQuery += ' or gym.battle_changes = true'
 			}
 			changeQuery += ')'
