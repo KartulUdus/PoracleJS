@@ -42,7 +42,7 @@ class TileserverPregen {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. Got invalid response from tileserver - ${result.data}`)
 				return null
 			}
-			const tileResult = result.data.startsWith('http') ? result.data : `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`;
+			const tileResult = result.data.startsWith('http') ? result.data : new URL(`${mapType}/pregenerated/${result.data}`, this.config.geocoding.staticProviderURL).toString();
 			(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`${logReference}: Tile generated ${tileResult} (${hrendms} ms)`)
 
 			return tileResult
@@ -63,7 +63,7 @@ class TileserverPregen {
 			mapType = 'multistaticmap'
 			templateType = 'multi-'
 		}
-		const url = new URL(`${this.config.geocoding.staticProviderURL}/${mapType}/poracle-${templateType}${type}`)
+		const url = new URL(`${mapType}/poracle-${templateType}${type}`, this.config.geocoding.staticProviderURL)
 		Object.keys(data).forEach((item) => {
 			url.searchParams.set(item, data[item])
 		})
