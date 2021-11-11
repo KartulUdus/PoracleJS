@@ -12,18 +12,8 @@ class Monster extends Controller {
 	}
 
 	async monsterWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
 		if (data.pvpEvoLookup) {
 			pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and pvp_ranking_league > 0)` // form checked per league later

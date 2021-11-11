@@ -4,18 +4,8 @@ const Controller = require('./controller')
 
 class Raid extends Controller {
 	async raidWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
 		join humans on (humans.id = raid.id and humans.current_profile_no = raid.profile_no)
@@ -77,18 +67,8 @@ class Raid extends Controller {
 	}
 
 	async eggWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on (humans.id = egg.id and humans.current_profile_no = egg.profile_no)

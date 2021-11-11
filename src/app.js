@@ -654,7 +654,7 @@ async function processOne(hook) {
 			case 'gym_details': {
 				const id = hook.message.id || hook.message.gym_id
 				const team = hook.message.team_id !== undefined ? hook.message.team_id : hook.message.team
-				const inBattle = hook.message.is_in_battle !== undefined ? hook.message.is_in_battle : hook.message.in_battle !== undefined ? hook.message.in_battle : 0
+				const inBattle = (hook.message.is_in_battle !== undefined ? hook.message.is_in_battle : hook.message.in_battle) || 0
 
 				if (config.general.disableGym) {
 					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
@@ -667,7 +667,7 @@ async function processOne(hook) {
 				const tooSoon = fastify.cache.get(cacheKey)
 
 				if (inBattle) {
-					fastify.cache.set(cacheKey, 'x',  5 * 60)
+					fastify.cache.set(cacheKey, 'x', 5 * 60)
 				}
 
 				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available && tooSoon) {
@@ -684,7 +684,7 @@ async function processOne(hook) {
 					team_id: team,
 					slots_available: hook.message.slots_available,
 					last_owner_id: team || hook.message.last_owner_id,
-					in_battle: inBattle
+					in_battle: inBattle,
 				}, 0)
 				processHook = hook
 				break
