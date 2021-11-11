@@ -80,7 +80,7 @@ async function gymRowText(config, translator, GameData, gym, scannerQuery) {
 	let gymNameText = null
 	if (gym.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(gym.gym_id) || gym.gym_id : gym.gym_id
 
-	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''} ${standardText(config, translator, gym)}${gym.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
+	return `**${raidTeam} ${translator.translate('gyms')}**${gym.distance ? ` | ${translator.translate('distance')}: ${gym.distance}m` : ''}${gym.slot_changes ? ` | ${translator.translate('including slot changes')}` : ''}${gym.battle_changes ? ` | ${translator.translate('including battle changes')}` : ''} ${standardText(config, translator, gym)}${gym.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
 }
 
 function nestRowText(config, translator, GameData, nest) {

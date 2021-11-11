@@ -1,7 +1,7 @@
 {
   "name": "poracle",
-  "version": "4.3.0",
-  "description": "Webhook processing and personalized discord|telegram alarms",
+  "version": "4.3.2",
+  "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
   "engines": { "node": ">=16.6.0" },
   "scripts": {
