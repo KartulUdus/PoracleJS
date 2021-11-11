@@ -654,6 +654,7 @@ async function processOne(hook) {
 			case 'gym_details': {
 				const id = hook.message.id || hook.message.gym_id
 				const team = hook.message.team_id !== undefined ? hook.message.team_id : hook.message.team
+				const inBattle = hook.message.is_in_battle !== undefined ? hook.message.is_in_battle : hook.message.in_battle !== undefined ? hook.message.in_battle : 0
 
 				if (config.general.disableGym) {
 					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
@@ -661,20 +662,29 @@ async function processOne(hook) {
 				}
 				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
 
+				const cacheKey = `${id}_battle`
 				const cachedGymDetails = fastify.gymCache.getKey(id)
-				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available) {
-					fastify.controllerLog.debug(`${id}: Gym was sent again with same details, ignoring`)
+				const tooSoon = fastify.cache.get(cacheKey)
+
+				if (inBattle) {
+					fastify.cache.set(cacheKey, 'x',  5 * 60)
+				}
+
+				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available && tooSoon) {
+					fastify.controllerLog.debug(`${id}: Gym battle cooldown time hasn't ended, ignoring`)
 					break
 				}
 
 				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
 				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
+				hook.message.old_in_battle = cachedGymDetails ? cachedGymDetails.in_battle : -1
 				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
 
 				fastify.gymCache.setKey(id, {
 					team_id: team,
 					slots_available: hook.message.slots_available,
 					last_owner_id: team || hook.message.last_owner_id,
+					in_battle: inBattle
 				}, 0)
 				processHook = hook
 				break

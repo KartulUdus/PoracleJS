@@ -20,16 +20,23 @@ class Gym extends Controller {
 			})
 			strictareastring = strictareastring.concat('))')
 		}
-		let slotChangeQuery = ''
+		let changeQuery = ''
 		if (data.old_team_id === data.teamId) {
-			slotChangeQuery = 'and gym.slot_changes = true'
+			changeQuery = 'and (1=0'
+			if (data.old_slots_available !== data.slotsAvailable) {
+				changeQuery += ' or gym.slot_changes = true'
+			}
+			if (data.inBattle) {
+				changeQuery += ' or gym.battle_changes = true'
+			}
+			changeQuery += ')'
 		}
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, gym.template, gym.distance, gym.clean, gym.ping from gym
 		join humans on (humans.id = gym.id and humans.current_profile_no = gym.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
 		gym.team = ${data.teamId}
-		${slotChangeQuery}
+		${changeQuery}
 		and
 		(gym.gym_id='${data.gymId}' or (gym.gym_id is NULL and `
 
@@ -126,6 +133,7 @@ class Gym extends Controller {
 			data.oldSlotsAvailable = data.old_slots_available
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.color = data.gymColor
+			data.inBattle = data.is_in_battle !== undefined ? data.is_in_battle : data.in_battle
 
 			const whoCares = await this.gymWhoCares(data)
 

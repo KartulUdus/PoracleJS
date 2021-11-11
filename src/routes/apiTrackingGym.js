@@ -96,6 +96,7 @@ module.exports = async (fastify, options, next) => {
 				clean: +defaultTo(row.clean, 0),
 				team,
 				slot_changes: +defaultTo(row.slot_changes, 0),
+				battle_changes: +defaultTo(row.battle_changes, 0),
 				gym_id: row.gym_id,
 			}
 		})
@@ -119,7 +120,7 @@ module.exports = async (fastify, options, next) => {
 							insert.splice(i, 1)
 							break
 						case 2:		// One difference (something + uid)
-							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean', 'slot_changes'].includes(x))) {
+							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean', 'slot_changes', 'battle_changes'].includes(x))) {
 								updates.push({
 									...toInsert,
 									uid: existing.uid,
