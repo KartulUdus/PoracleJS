@@ -16,15 +16,14 @@ const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)
 
 class Quest extends Controller {
 	async questWhoCares(data) {
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on (humans.id = quest.id and humans.current_profile_no = quest.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%quest%') and
-		(0 = 1`
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%quest%') 
+		${strictareastring}
+		and (0 = 1`
 
 		if (data.rewardData.monsters.length) {
 			for (const monster of data.rewardData.monsters) {

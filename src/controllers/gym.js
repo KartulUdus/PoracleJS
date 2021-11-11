@@ -8,18 +8,8 @@ const Controller = require('./controller')
  */
 class Gym extends Controller {
 	async gymWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let changeQuery = ''
 		if (data.old_team_id === data.teamId) {
 			changeQuery = 'and (1=0'
@@ -37,6 +27,7 @@ class Gym extends Controller {
 		where humans.enabled = 1 and humans.admin_disable = false and
 		gym.team = ${data.teamId}
 		${changeQuery}
+		${strictareastring}
 		and
 		(gym.gym_id='${data.gymId}' or (gym.gym_id is NULL and `
 
