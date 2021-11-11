@@ -314,7 +314,7 @@ class Raid extends Controller {
 						now: new Date(),
 						nowISO: new Date().toISOString(),
 						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)) },
-						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 					}
 
 					const templateType = 'raid'
@@ -412,7 +412,7 @@ class Raid extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'egg'

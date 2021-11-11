@@ -606,7 +606,7 @@ class Monster extends Controller {
 					now: new Date(),
 					nowISO: new Date().toISOString(),
 					pvpUserRanking: cares.pvp_ranking_worst === 4096 ? 0 : cares.pvp_ranking_worst,
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,

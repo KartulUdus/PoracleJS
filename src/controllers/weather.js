@@ -416,7 +416,7 @@ class Weather extends Controller {
 					...data,
 					...geoResult,
 					id: data.s2_cell_id,
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 					now: new Date(),
 					nowISO: new Date().toISOString(),
 				}

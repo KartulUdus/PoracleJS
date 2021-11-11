@@ -189,7 +189,7 @@ class Gym extends Controller {
 					tths: data.tth.seconds,
 					now: new Date(),
 					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'gym'

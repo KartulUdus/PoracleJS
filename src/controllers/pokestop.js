@@ -266,7 +266,7 @@ class Invasion extends Controller {
 						name: translator.translate(data.genderDataEng.name),
 						emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
 					} : { name: '', emoji: '' },
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'invasion'
