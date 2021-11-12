@@ -257,6 +257,21 @@ class Controller extends EventEmitter {
 				if (tileServerOptions.includeStops && tileServerOptions.pregenerate && this.scannerQuery) {
 					const limits = this.tileserverPregen.limits(data.latitude, data.longitude, tileServerOptions.width, tileServerOptions.height, tileServerOptions.zoom)
 					data.nearbyStops = await this.scannerQuery.getStopData(limits[0][0], limits[0][1], limits[1][0], limits[1][1])
+					if (data.nearbyStops) {
+						for (const stop of data.nearbyStops) {
+							switch (stop.type) {
+								case 'gym': {
+									stop.imgUrl = await this.imgUicons.gymIcon(stop.teamId, stop.slots, false, false)
+									break
+								}
+								case 'pokestop': {
+									stop.imgUrl = await this.imgUicons.pokestopIcon(0)
+									break
+								}
+								default:
+							}
+						}
+					}
 				}
 
 				if (tileServerOptions.type && tileServerOptions.type !== 'none') {
