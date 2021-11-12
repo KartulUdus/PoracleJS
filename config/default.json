@@ -441,25 +441,20 @@
       "staticProviderURL": "",
       "tileserverSettings": {
         "default": {
-          "type": "staticMap",
+          "type": "staticMap",          // can be staticMap or multiStaticMap - default is unlike to be changed
           "width": 500,
           "height": 250,
           "zoom": 15,
           "pregenerate": true,
           "includeStops": false
         }
+        // add further types to 'override' - type can be monster, raid, pokestop, quest, weather, location, nest, gym
+        // override values can be any of the above fields
+//      ,  "monster": {
+//          "type": "staticMap",
+//          "includeStops": true
+//        }
       },
-    // staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook type
-//      "staticMapType": {
-//        "pokemon": "staticMap",
-//        "raid": "staticMap",
-//        "pokestop": "staticMap",
-//        "quest": "staticMap",
-//        "weather": "staticMap",
-//        "location": "staticMap",
-//        "nest": "staticMap",
-//        "gym": "staticMap"
-//      },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],
     // staticKey - google or mapquest keys for provision of tiles - can be array and poracle will cycle, and parameters to use when requesting tiles
