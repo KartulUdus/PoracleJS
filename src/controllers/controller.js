@@ -261,7 +261,7 @@ class Controller extends EventEmitter {
 						for (const stop of data.nearbyStops) {
 							switch (stop.type) {
 								case 'gym': {
-									stop.imgUrl = await this.imgUicons.gymIcon(stop.teamId, stop.slots, false, false)
+									stop.imgUrl = await this.imgUicons.gymIcon(stop.teamId, 6 - stop.slots, false, false)
 									break
 								}
 								case 'pokestop': {

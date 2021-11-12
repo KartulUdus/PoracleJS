@@ -122,6 +122,8 @@ class Gym extends Controller {
 			data.gymColor = this.GameData.utilData.teams[data.teamId].color
 			data.slotsAvailable = data.slots_available
 			data.oldSlotsAvailable = data.old_slots_available
+			data.trainerCount = 6 - data.slotsAvailable
+			data.oldTrainerCount = 6 - data.oldSlotsAvailable
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.color = data.gymColor
 			data.inBattle = data.is_in_battle !== undefined ? data.is_in_battle : data.in_battle
@@ -147,8 +149,8 @@ class Gym extends Controller {
 				return []
 			}
 
-			data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
-			data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, false, data.ex)
+			data.imgUrl = await this.imgUicons.gymIcon(data.teamId, 6 - data.slotsAvailable, data.inBattle, data.ex)
+			data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, 6 - data.slotsAvailable, data.inBattle, data.ex)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
