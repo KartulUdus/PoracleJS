@@ -12,18 +12,8 @@ class Monster extends Controller {
 	}
 
 	async monsterWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
 		if (data.pvpEvoLookup) {
 			pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and pvp_ranking_league > 0)` // form checked per league later
@@ -488,9 +478,9 @@ class Monster extends Controller {
 				data.genderEmoji = data.genderData.emoji
 				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 				data.rarityName = translator.translate(data.rarityNameEng)
-				data.quickMoveName = data.weight && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
+				data.quickMoveName = encountered && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
 				data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji, platform)) : ''
-				data.chargeMoveName = data.weight && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
+				data.chargeMoveName = encountered && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
 				data.chargeMoveEmoji = this.GameData.moves[data.chargeMoveId] && this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type].emoji, platform)) : ''
 				data.boosted = !!data.weather
 				data.generationName = translator.translate(data.generationNameEng)
@@ -616,7 +606,7 @@ class Monster extends Controller {
 					now: new Date(),
 					nowISO: new Date().toISOString(),
 					pvpUserRanking: cares.pvp_ranking_worst === 4096 ? 0 : cares.pvp_ranking_worst,
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 					pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
 					pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
 					pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,

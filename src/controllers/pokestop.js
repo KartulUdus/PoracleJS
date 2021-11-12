@@ -5,17 +5,17 @@ const Controller = require('./controller')
 class Invasion extends Controller {
 	async invasionWhoCares(obj) {
 		const data = obj
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		if (!data.gender) data.gender = -1
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping from invasion
 		join humans on (humans.id = invasion.id and humans.current_profile_no = invasion.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%invasion%') and
 		(invasion.grunt_type='${String(data.gruntType).toLowerCase()}' or invasion.grunt_type = 'everything') and
-		(invasion.gender = ${data.gender} or invasion.gender = 0)`
+		(invasion.gender = ${data.gender} or invasion.gender = 0)
+		${strictareastring}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -266,7 +266,7 @@ class Invasion extends Controller {
 						name: translator.translate(data.genderDataEng.name),
 						emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
 					} : { name: '', emoji: '' },
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'invasion'

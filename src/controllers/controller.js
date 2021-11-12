@@ -93,6 +93,22 @@ class Controller extends EventEmitter {
 		}
 	}
 
+	buildAreaString(matched) {
+		let areastring = '1 = 0 '
+		matched.forEach((area) => {
+			areastring = areastring.concat(`or humans.area like '%"${area.replace(/'/g, '\\\'')}"%' `)
+		})
+		let strictareastring = ''
+		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
+			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
+			matched.forEach((area) => {
+				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area.replace(/'/g, '\\\'')}"%' `)
+			})
+			strictareastring = strictareastring.concat('))')
+		}
+		return { areastring, strictareastring }
+	}
+
 	getShortener() {
 		switch (this.config.general.shortlinkProvider) {
 			case 'shlink': {

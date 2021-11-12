@@ -8,28 +8,26 @@ const Controller = require('./controller')
  */
 class Gym extends Controller {
 	async gymWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
-		let slotChangeQuery = ''
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
+		let changeQuery = ''
 		if (data.old_team_id === data.teamId) {
-			slotChangeQuery = 'and gym.slot_changes = true'
+			changeQuery = 'and (1=0'
+			if (data.old_slots_available !== data.slotsAvailable) {
+				changeQuery += ' or gym.slot_changes = true'
+			}
+			if (data.inBattle) {
+				changeQuery += ' or gym.battle_changes = true'
+			}
+			changeQuery += ')'
 		}
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, gym.template, gym.distance, gym.clean, gym.ping from gym
 		join humans on (humans.id = gym.id and humans.current_profile_no = gym.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and
 		gym.team = ${data.teamId}
-		${slotChangeQuery}
+		${changeQuery}
+		${strictareastring}
 		and
 		(gym.gym_id='${data.gymId}' or (gym.gym_id is NULL and `
 
@@ -121,11 +119,12 @@ class Gym extends Controller {
 			data.teamNameEng = data.teamId >= 0 ? this.GameData.utilData.teams[data.teamId].name : 'Unknown'
 			data.oldTeamNameEng = data.old_team_id >= 0 ? this.GameData.utilData.teams[data.old_team_id].name : ''
 			data.previousControlNameEng = data.last_owner_id >= 0 ? this.GameData.utilData.teams[data.last_owner_id].name : ''
-			data.gymColor = data.team_id >= 0 ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
+			data.gymColor = this.GameData.utilData.teams[data.teamId].color
 			data.slotsAvailable = data.slots_available
 			data.oldSlotsAvailable = data.old_slots_available
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.color = data.gymColor
+			data.inBattle = data.is_in_battle !== undefined ? data.is_in_battle : data.in_battle
 
 			const whoCares = await this.gymWhoCares(data)
 
@@ -190,7 +189,7 @@ class Gym extends Controller {
 					tths: data.tth.seconds,
 					now: new Date(),
 					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'gym'

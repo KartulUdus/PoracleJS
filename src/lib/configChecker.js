@@ -84,9 +84,6 @@ function checkGeofence(geofence) {
 		if (!fence.name) {
 			logs.log.warn('Config Check: geofence.json has entry with blank name')
 		}
-		if (fence.name.includes('_')) {
-			logs.log.warn('Config Check: geofence.json has entry with underscore - should be a space')
-		}
 		if (!fence.path.length) {
 			logs.log.warn('Config Check: geofence.json has empty path')
 		}

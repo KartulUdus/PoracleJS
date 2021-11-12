@@ -8,15 +8,15 @@ const Controller = require('./controller')
 class Lure extends Controller {
 	async lureWhoCares(obj) {
 		const data = obj
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, lures.template, lures.distance, lures.clean, lures.ping from lures
 		join humans on (humans.id = lures.id and humans.current_profile_no = lures.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%lure%') and
-		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0) `
+		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0)
+		${strictareastring}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -163,7 +163,7 @@ class Lure extends Controller {
 					tths: data.tth.seconds,
 					now: new Date(),
 					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'lure'
