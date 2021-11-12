@@ -166,6 +166,29 @@ class TileserverPregen {
 			longitude,
 		}
 	}
+
+	// eslint-disable-next-line class-methods-use-this
+	limits(latCenter, lonCenter, width, height, zoom) {
+		// copied from https://help.openstreetmap.org/questions/75611/transform-xy-pixel-values-into-lat-and-long
+		const C = (256 / (2 * Math.PI)) * 2 ** zoom
+
+		const xcenter = C * (lonCenter * Math.PI / 180.0 + Math.PI)
+		const ycenter = C * (Math.PI - Math.log(Math.tan((Math.PI / 4) + latCenter * Math.PI / 360.0)))
+
+		const points = []
+		for (const point of [[0, 0], [width, height]]) {
+			const xpoint = xcenter - (width / 2 - point[0])
+			const ypoint = ycenter - (height / 2 - point[1])
+
+			const M = (xpoint / C) - Math.PI
+			const N = -(ypoint / C) + Math.PI
+
+			const finLon = M * 180.0 / Math.PI
+			const finLat = (Math.atan(Math.E ** N) - (Math.PI / 4)) * 2 * 180.0 / Math.PI
+			points.push([finLat, finLon])
+		}
+		return points
+	}
 }
 
 module.exports = TileserverPregen

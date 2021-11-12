@@ -439,17 +439,27 @@
     //   uses templates (examples provided in tileservercache_templates folder)
       "staticProvider": "none",
       "staticProviderURL": "",
-    // staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook type
-      "staticMapType": {
-        "pokemon": "staticMap",
-        "raid": "staticMap",
-        "pokestop": "staticMap",
-        "quest": "staticMap",
-        "weather": "staticMap",
-        "location": "staticMap",
-        "nest": "staticMap",
-        "gym": "staticMap"
+      "tileserverSettings": {
+        "default": {
+          "type": "staticMap",
+          "width": 500,
+          "height": 250,
+          "zoom": 15,
+          "pregenerate": true,
+          "includeStops": false
+        }
       },
+    // staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook type
+//      "staticMapType": {
+//        "pokemon": "staticMap",
+//        "raid": "staticMap",
+//        "pokestop": "staticMap",
+//        "quest": "staticMap",
+//        "weather": "staticMap",
+//        "location": "staticMap",
+//        "nest": "staticMap",
+//        "gym": "staticMap"
+//      },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],
     // staticKey - google or mapquest keys for provision of tiles - can be array and poracle will cycle, and parameters to use when requesting tiles

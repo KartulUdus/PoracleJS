@@ -7,6 +7,18 @@
     "height": 250,
     "scale": 1,
     "markers": [
+    #if(nearbyStops != nil):
+        #for(stop in nearbyStops):
+        {
+            "url": #if(stop.teamId != nil):"https://raw.githubusercontent.com/ccev/stopwatcher-icons/master/tileserver-2/#(stop.teamId).png"#else:"https://raw.githubusercontent.com/ccev/stopwatcher-icons/master/tileserver-2/stop.png"#endif,
+            "latitude": #(stop.latitude),
+            "longitude": #(stop.longitude),
+            "width": 20,
+            "height": 20,
+            "y_offset": -10
+        },
+        #endfor
+    #endif
         {
             "url": "#(imgUrl)",
             "latitude": #(latitude),

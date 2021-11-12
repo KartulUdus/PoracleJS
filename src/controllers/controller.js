@@ -1,6 +1,5 @@
 const inside = require('point-in-polygon')
 const NodeGeocoder = require('node-geocoder')
-const cp = require('child_process')
 const EventEmitter = require('events')
 const path = require('path')
 const fs = require('fs')
@@ -19,10 +18,10 @@ const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
+	constructor(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
 		super()
 		this.db = db
-		this.cp = cp
+		this.scannerQuery = scannerQuery
 		this.config = config
 		this.log = log
 		this.dts = dts
@@ -234,15 +233,43 @@ class Controller extends EventEmitter {
 		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
 		switch (this.config.geocoding.staticProvider.toLowerCase()) {
 			case 'tileservercache': {
+				const tileServerOptions = {}
+				Object.assign(tileServerOptions, {
+					type: 'staticMap',
+					includeStops: false,
+					width: 500,
+					height: 250,
+					zoom: 15,
+					pregenerate: true,
+				}, this.config.geocoding.tileserverSettings ? this.config.geocoding.tileserverSettings.default : null)
+
 				if (this.config.geocoding.staticMapType[configTemplate]) {
-					if (this.config.geocoding.staticMapType[configTemplate].startsWith('*')) {
+					Object.assign(tileServerOptions, {
+						type: this.config.geocoding.staticMapType[configTemplate].startsWith('*') ? this.config.geocoding.staticMapType[configTemplate].substring(1) : this.config.geocoding.staticMapType[configTemplate],
+						pregenerate: !this.config.geocoding.staticMapType[configTemplate].startsWith('*'),
+					})
+				}
+
+				if (this.config.geocoding.tileserverSettings && this.config.geocoding.tileserverSettings[tileTemplate]) {
+					Object.assign(tileServerOptions, this.config.geocoding.tileserverSettings[tileTemplate])
+				}
+
+				if (tileServerOptions.includeStops && tileServerOptions.pregenerate && this.scannerQuery) {
+					const limits = this.tileserverPregen.limits(data.latitude, data.longitude, tileServerOptions.width, tileServerOptions.height, tileServerOptions.zoom)
+					data.nearbyStops = await this.scannerQuery.getStopData(limits[0][0], limits[0][1], limits[1][0], limits[1][1])
+				}
+
+				if (tileServerOptions.type && tileServerOptions.type !== 'none') {
+					if (!tileServerOptions.pregenerate) {
 						data.staticMap = await this.tileserverPregen.getTileURL(logReference, tileTemplate,
-							Object.fromEntries(Object.entries(data).filter(([field]) => keys.includes(field))),
-							this.config.geocoding.staticMapType[configTemplate].substring(1))
+							Object.fromEntries(Object.entries(data)
+								.filter(([field]) => keys.includes(field))),
+							tileServerOptions.type)
 					} else {
-						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType[configTemplate])
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, tileServerOptions.type)
 					}
 				}
+
 				break
 			}
 
@@ -491,18 +518,6 @@ class Controller extends EventEmitter {
 		else if (iv < 100) colorIdx = 4 // purple epic
 
 		return this.config.discord.ivColors[colorIdx]
-	}
-
-	execPromise(command) {
-		return new Promise((resolve, reject) => {
-			this.cp.exec(command, (error, stdout) => {
-				if (error) {
-					reject(error)
-					return
-				}
-				resolve(stdout.trim())
-			})
-		})
 	}
 }
 
