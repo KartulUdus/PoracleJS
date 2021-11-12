@@ -12,8 +12,8 @@ const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../
 const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class Weather extends Controller {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
-		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
+	constructor(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
+		super(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
 		this.controllerData = weatherCache.getKey('weatherCacheData') || {}
 		this.caresData = weatherCache.getKey('caredPokemon') || {}
 

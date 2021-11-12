@@ -14,6 +14,18 @@
                         "height": 250,
                         "scale": 2,
                         "markers": [
+                            #if(nearbyStops != nil):
+                                #for(stop in nearbyStops):
+                                {
+                                    "url": "#(stop.imgUrl)",
+                                    "latitude": #(stop.latitude),
+                                    "longitude": #(stop.longitude),
+                                    "width": 20,
+                                    "height": 20,
+                                    "y_offset": -10
+                                },
+                                #endfor
+                            #endif
                             {
                                 "url": "#(imgUrl)",
                                 "latitude": #(latitude),
