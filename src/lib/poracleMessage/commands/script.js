@@ -22,7 +22,7 @@ exports.run = async (client, msg, args, options) => {
 		const translator = client.translatorFactory.Translator(language)
 
 		if (!await util.commandAllowed(commandName)) {
-			await msg.react('🚫')
+			await msg.react('ðŸš«')
 			return msg.reply(translator.translate('You do not have permission to execute this command'))
 		}
 
@@ -241,7 +241,6 @@ exports.run = async (client, msg, args, options) => {
 					message += `${prefix}gym ${teamNames[gym.team]}`
 
 					if (gym.slot_changes) message += ' slot_changes'
-					if (gym.battle_changes) message += ' battle_changes'
 					for (const [param, [dbFieldName, defaultValue]] of Object.entries(gymParameters)) {
 						if (gym[dbFieldName] !== defaultValue) message += ` ${param}:${gym[dbFieldName]}`
 					}
@@ -319,21 +318,21 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!message.length) {
-			return await msg.reply('The script specified is empty')
+			return await msg.reply(client.translator.translate('The script specified is empty'))
 		}
 
 		if (args.includes('link')) {
 			try {
 				const hastelink = await client.hastebin(message)
-				return await msg.reply(`Your backup is at ${hastelink}`)
+				return await msg.reply(`${client.translator.translate('Your backup is at')} ${hastelink}`)
 			} catch (e) {
-				await msg.reply('Hastebin seems down')
+				await msg.reply(client.translator.translate('Hastebin seems down'))
 			}
 		}
 
 		const filepath = path.join(__dirname, `./${target.name}.txt`)
 		fs.writeFileSync(filepath, message)
-		await msg.replyWithAttachment('Your backup', filepath)
+		await msg.replyWithAttachment(client.translator.translate('Your backup'), filepath)
 		fs.unlinkSync(filepath)
 	} catch (err) {
 		client.log.error(`profile command ${msg.content} unhappy:`, err)
