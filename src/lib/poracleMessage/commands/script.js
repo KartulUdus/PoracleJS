@@ -241,6 +241,7 @@ exports.run = async (client, msg, args, options) => {
 					message += `${prefix}gym ${teamNames[gym.team]}`
 
 					if (gym.slot_changes) message += ' slot_changes'
+					if (gym.battle_changes) message += ' battle_changes'
 					for (const [param, [dbFieldName, defaultValue]] of Object.entries(gymParameters)) {
 						if (gym[dbFieldName] !== defaultValue) message += ` ${param}:${gym[dbFieldName]}`
 					}
