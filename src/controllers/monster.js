@@ -77,10 +77,6 @@ class Monster extends Controller {
 	buildQuery(queryName, data, strictareastring, areastring, pokemonTarget, league, leagueData) {
 		const pokemonQueryString = `(pokemon_id=${pokemonTarget.pokemon_id}${pokemonTarget.includeEverything ? ' or pokemon_id=0' : ''}) and (form = 0 or form = ${pokemonTarget.form})`
 
-		// if (data.pvpEvoLookup) {
-		// 	pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and pvp_ranking_league > 0)` // form checked per league later
-		// }
-
 		let pvpQueryString = ''
 		const pvpSecurityEnabled = this.config.discord.commandSecurity && this.config.discord.commandSecurity.pvp
 
@@ -346,22 +342,7 @@ class Monster extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			//			data.pvpEvoLookup = 0
 			const whoCares = await this.monsterWhoCares(data)
-
-			// if (this.config.pvp.pvpEvolutionDirectTracking) {
-			// 	const pvpEvoData = data
-			// 	if (Object.keys(data.pvpEvolutionData).length !== 0) {
-			// 		for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
-			// 			pvpEvoData.pvpPokemonId = key
-			// 			pvpEvoData.pvpEvoLookup = pvpMon
-			// 			const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
-			// 			if (pvpWhoCares[0]) {
-			// 				whoCares.push(...pvpWhoCares)
-			// 			}
-			// 		}
-			// 	}
-			// }
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
@@ -372,12 +353,6 @@ class Monster extends Controller {
 			}
 
 			if (!whoCares.length) return []
-
-			if (whoCares.length > 1 && this.config.pvp.pvpEvolutionDirectTracking) {
-				const whoCaresNoDuplicates = whoCares.filter((v, i, a) => a.findIndex((t) => (t.id === v.id)) === i)
-				whoCares.length = 0
-				whoCares.push(...whoCaresNoDuplicates)
-			}
 
 			hrstart = process.hrtime()
 			let discordCacheBad = true // assume the worst
