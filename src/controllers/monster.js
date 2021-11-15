@@ -11,38 +11,89 @@ class Monster extends Controller {
 		return boostingWeathers
 	}
 
+	async performQuery(query) {
+		let result = await this.db.raw(query)
+		result = this.returnByDatabaseType(result)
+
+		return result
+	}
+
 	async monsterWhoCares(data) {
 		const { areastring, strictareastring } = this.buildAreaString(data.matched)
 
-		let pokemonQueryString = `(pokemon_id=${data.pokemon_id} or pokemon_id=0) and (form = 0 or form = ${data.form})`
-		if (data.pvpEvoLookup) {
-			pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and pvp_ranking_league > 0)` // form checked per league later
+		const pvpQueryLimit = this.config.pvp.pvpQueryMaxRank || this.config.pvp.pvpFilterMaxRank || 100
+
+		let result = []
+
+		// Basic Pokemon
+		result.push(...await this.performQuery(this.buildQuery('Basic', data, strictareastring, areastring, { pokemon_id: data.pokemon_id, form: data.form, includeEverything: true }, 0)))
+
+		// PVP Pokemon
+
+		for (const [league, leagueData] of Object.entries(data.pvpBestRank)) {
+			// if rank is good enough
+			if (leagueData.rank <= pvpQueryLimit) {
+				result.push(...await this.performQuery(this.buildQuery(`PVP ${league}`, data, strictareastring, areastring,
+					{
+						pokemon_id: data.pokemon_id,
+						form: data.form,
+						includeEverything: true,
+					}, league, leagueData)))
+			}
 		}
+
+		// PVP Evolution mon
+
+		if (this.config.pvp.pvpEvolutionDirectTracking) {
+			if (Object.keys(data.pvpEvolutionData).length !== 0) {
+				for (const [pokemonId, pvpMon] of Object.entries(data.pvpEvolutionData)) {
+					for (const [league, leagueData] of Object.entries(pvpMon)) {
+						// if rank is good enough
+						if (leagueData.rank <= pvpQueryLimit) {
+							result.push(...await this.performQuery(this.buildQuery(`PVPEvo ${league}`, data, strictareastring, areastring,
+								{
+									pokemon_id: pokemonId,
+									form: leagueData.form,
+									includeEverything: false,
+								},
+								league, leagueData)))
+						}
+					}
+				}
+			}
+		}
+
+		// remove any duplicates
+		const alertIds = []
+		result = result.filter((alert) => {
+			if (!alertIds.includes(alert.id)) {
+				alertIds.push(alert.id)
+				return alert
+			}
+		})
+		return result
+	}
+
+	buildQuery(queryName, data, strictareastring, areastring, pokemonTarget, league, leagueData) {
+		const pokemonQueryString = `(pokemon_id=${pokemonTarget.pokemon_id}${pokemonTarget.includeEverything ? ' or pokemon_id=0' : ''}) and (form = 0 or form = ${pokemonTarget.form})`
+
+		// if (data.pvpEvoLookup) {
+		// 	pokemonQueryString = `(pokemon_id=${data.pvpPokemonId} and pvp_ranking_league > 0)` // form checked per league later
+		// }
 
 		let pvpQueryString = ''
 		const pvpSecurityEnabled = this.config.discord.commandSecurity && this.config.discord.commandSecurity.pvp
-		if (!data.pvpEvoLookup) {
+
+		if (!league) {
 			pvpQueryString = 'pvp_ranking_league = 0'
-			if (pvpSecurityEnabled) {
-				pvpQueryString = pvpQueryString.concat(' or ((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (1 = 0')
-			}
-			for (const [league, leagueData] of Object.entries(data.pvpBestRank)) {
-				pvpQueryString = pvpQueryString.concat(` or (pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp})`)
-			}
-			if (pvpSecurityEnabled) {
-				pvpQueryString = pvpQueryString.concat('))')
-			}
 		} else {
 			if (pvpSecurityEnabled) {
-				pvpQueryString = '(humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (1 = 0'
-			} else {
-				pvpQueryString = '1 = 0'
+				pvpQueryString = pvpQueryString.concat('((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (')
 			}
-			for (const [league, leagueData] of Object.entries(data.pvpEvoLookup)) {
-				pvpQueryString = pvpQueryString.concat(` or ((form = 0 or form = ${leagueData.form}) and pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp})`)
-			}
+			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp}`)
+
 			if (pvpSecurityEnabled) {
-				pvpQueryString = pvpQueryString.concat(')')
+				pvpQueryString = pvpQueryString.concat('))')
 			}
 		}
 
@@ -100,26 +151,8 @@ class Monster extends Controller {
 					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
 					`)
 		}
-		this.log.silly(`${data.encounter_id}: Query ${query}`)
-
-		let result = await this.db.raw(query)
-
-		if (!['pg', 'mysql'].includes(this.config.database.client)) {
-			result = result.filter((res) => +res.distance === 0 || +res.distance > 0 && +res.distance > this.getDistance({
-				lat: res.latitude,
-				lon: res.longitude,
-			}, { lat: data.latitude, lon: data.longitude }))
-		}
-		result = this.returnByDatabaseType(result)
-		// remove any duplicates
-		const alertIds = []
-		result = result.filter((alert) => {
-			if (!alertIds.includes(alert.id)) {
-				alertIds.push(alert.id)
-				return alert
-			}
-		})
-		return result
+		this.log.silly(`${data.encounter_id}: Query[${queryName}] ${query}`)
+		return query
 	}
 
 	async handle(obj) {
@@ -313,22 +346,22 @@ class Monster extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			data.pvpEvoLookup = 0
+			//			data.pvpEvoLookup = 0
 			const whoCares = await this.monsterWhoCares(data)
 
-			if (this.config.pvp.pvpEvolutionDirectTracking) {
-				const pvpEvoData = data
-				if (Object.keys(data.pvpEvolutionData).length !== 0) {
-					for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
-						pvpEvoData.pvpPokemonId = key
-						pvpEvoData.pvpEvoLookup = pvpMon
-						const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
-						if (pvpWhoCares[0]) {
-							whoCares.push(...pvpWhoCares)
-						}
-					}
-				}
-			}
+			// if (this.config.pvp.pvpEvolutionDirectTracking) {
+			// 	const pvpEvoData = data
+			// 	if (Object.keys(data.pvpEvolutionData).length !== 0) {
+			// 		for (const [key, pvpMon] of Object.entries(data.pvpEvolutionData)) {
+			// 			pvpEvoData.pvpPokemonId = key
+			// 			pvpEvoData.pvpEvoLookup = pvpMon
+			// 			const pvpWhoCares = await this.monsterWhoCares(pvpEvoData)
+			// 			if (pvpWhoCares[0]) {
+			// 				whoCares.push(...pvpWhoCares)
+			// 			}
+			// 		}
+			// 	}
+			// }
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
