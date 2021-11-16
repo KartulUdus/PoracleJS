@@ -27,7 +27,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!args.length) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}script everything`, `{0}script pokemon raids eggs quest lure invasion nests gym`, `{0}script everything allprofiles`, `{0}script everything link`', util.prefix),
+			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}script everything`, `{0}script pokemon raids eggs quest lures invasion nests gym`, `{0}script everything allprofiles`, `{0}script everything link`', util.prefix),
 				{ style: 'markdown' })
 			return
 		}
@@ -252,7 +252,7 @@ exports.run = async (client, msg, args, options) => {
 				}
 			}
 
-			if (everything || args.includes('lure')) {
+			if (everything || args.includes('lures')) {
 				const lureParameters = {
 					template: ['template', client.config.general.defaultTemplateName.toString()],
 					d: ['distance', 0],
