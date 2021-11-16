@@ -297,5 +297,6 @@ if (!isMainThread) {
 	controllerWeatherManager.on('weatherForecastRequested', (data) => notifyWeatherController('weatherForecastRequested', data))
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
+	monsterController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
 	setInterval(currentStatus, 60000)
 }
