@@ -298,5 +298,10 @@ if (!isMainThread) {
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
 	monsterController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	raidController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	pokestopController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	pokestopLureController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	gymController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+
 	setInterval(currentStatus, 60000)
 }
