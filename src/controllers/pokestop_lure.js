@@ -8,15 +8,15 @@ const Controller = require('./controller')
 class Lure extends Controller {
 	async lureWhoCares(obj) {
 		const data = obj
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, lures.template, lures.distance, lures.clean, lures.ping from lures
 		join humans on (humans.id = lures.id and humans.current_profile_no = lures.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%lure%') and
-		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0) `
+		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0)
+		${strictareastring}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -124,69 +124,83 @@ class Lure extends Controller {
 				return []
 			}
 
-			data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
-			data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
+			setImmediate(async () => {
+				try {
+					data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
+					data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
 
-			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-			const jobs = []
+					const geoResult = await this.getAddress({
+						lat: data.latitude,
+						lon: data.longitude,
+					})
+					const jobs = []
 
-			await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'lureTypeId'])
-			data.staticmap = data.staticMap // deprecated
+					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'lureTypeId'])
+					data.staticmap = data.staticMap // deprecated
 
-			for (const cares of whoCares) {
-				this.log.debug(`${logReference}: Creating lure alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+					for (const cares of whoCares) {
+						this.log.debug(`${logReference}: Creating lure alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
-				if (rateLimitTtr) {
-					this.log.verbose(`${logReference}: Not creating lure alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
-					// eslint-disable-next-line no-continue
-					continue
+						const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+						if (rateLimitTtr) {
+							this.log.verbose(`${logReference}: Not creating lure alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+							// eslint-disable-next-line no-continue
+							continue
+						}
+						this.log.verbose(`${logReference}: Creating lure alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+
+						const language = cares.language || this.config.general.locale
+						const translator = this.translatorFactory.Translator(language)
+						let [platform] = cares.type.split(':')
+						if (platform === 'webhook') platform = 'discord'
+
+						// full build
+						data.lureTypeName = translator.translate(data.lureTypeNameEng)
+						data.lureType = data.lureTypeName
+						data.lureTypeEmoji = this.emojiLookup.lookup(this.GameData.utilData.lures[data.lure_id].emoji, platform)
+
+						const view = {
+							...geoResult,
+							...data,
+							time: data.distime,
+							tthh: data.tth.hours,
+							tthm: data.tth.minutes,
+							tths: data.tth.seconds,
+							now: new Date(),
+							nowISO: new Date().toISOString(),
+							areas: data.matchedAreas.filter((area) => area.displayInMatches)
+								.map((area) => area.name)
+								.join(', '),
+						}
+
+						const templateType = 'lure'
+						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
+
+						const work = {
+							lat: data.latitude.toString()
+								.substring(0, 8),
+							lon: data.longitude.toString()
+								.substring(0, 8),
+							message,
+							target: cares.id,
+							type: cares.type,
+							name: cares.name,
+							tth: data.tth,
+							clean: cares.clean,
+							emoji: data.emoji,
+							logReference,
+							language,
+						}
+
+						jobs.push(work)
+					}
+					this.emit('postMessage', jobs)
+				} catch (e) {
+					this.log.error(`${data.pokestop_id}: Can't seem to handle pokestop(lure) (user cares): `, e, data)
 				}
-				this.log.verbose(`${logReference}: Creating lure alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+			})
 
-				const language = cares.language || this.config.general.locale
-				const translator = this.translatorFactory.Translator(language)
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
-				// full build
-				data.lureTypeName = translator.translate(data.lureTypeNameEng)
-				data.lureType = data.lureTypeName
-				data.lureTypeEmoji = this.emojiLookup.lookup(this.GameData.utilData.lures[data.lure_id].emoji, platform)
-
-				const view = {
-					...geoResult,
-					...data,
-					time: data.distime,
-					tthh: data.tth.hours,
-					tthm: data.tth.minutes,
-					tths: data.tth.seconds,
-					now: new Date(),
-					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
-				}
-
-				const templateType = 'lure'
-				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
-
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-					emoji: data.emoji,
-					logReference,
-					language,
-				}
-
-				jobs.push(work)
-			}
-
-			return jobs
+			return []
 		} catch (e) {
 			this.log.error(`${data.pokestop_id}: Can't seem to handle pokestop(lure): `, e, data)
 		}
