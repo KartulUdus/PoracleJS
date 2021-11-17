@@ -220,12 +220,14 @@ class Telegram {
 			}
 			this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
 
-			const msg = await this.retrySender(senderId,
-				async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-					parse_mode: 'Markdown',
-					disable_web_page_preview: !data.message.webpage_preview,
-				}))
-			messageIds.push(msg.message_id)
+			if (!data.message.text_last) {
+				const msg = await this.retrySender(senderId,
+					async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
+						parse_mode: 'Markdown',
+						disable_web_page_preview: !data.message.webpage_preview,
+					}))
+				messageIds.push(msg.message_id)
+			}
 
 			if (data.message.location) {
 				this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
@@ -238,6 +240,15 @@ class Telegram {
 				} catch (err) {
 					this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
 				}
+			}
+
+			if (data.message.text_last) {
+				const msg = await this.retrySender(senderId,
+					async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
+						parse_mode: 'Markdown',
+						disable_web_page_preview: !data.message.webpage_preview,
+					}))
+				messageIds.push(msg.message_id)
 			}
 
 			if (data.clean) {
