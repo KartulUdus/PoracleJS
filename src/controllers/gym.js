@@ -149,72 +149,79 @@ class Gym extends Controller {
 				return []
 			}
 
-			data.imgUrl = await this.imgUicons.gymIcon(data.teamId, 6 - data.slotsAvailable, data.inBattle, data.ex)
-			data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, 6 - data.slotsAvailable, data.inBattle, data.ex)
+			setImmediate(async () => {
+				try {
+					data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
+					data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
 
-			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-			const jobs = []
+					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+					const jobs = []
 
-			await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl'])
-			data.staticmap = data.staticMap // deprecated
+					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl'])
+					data.staticmap = data.staticMap // deprecated
 
-			for (const cares of whoCares) {
-				this.log.debug(`${logReference}: Creating gym alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+					for (const cares of whoCares) {
+						this.log.debug(`${logReference}: Creating gym alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
-				if (rateLimitTtr) {
-					this.log.verbose(`${logReference}: Not creating gym alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
-					// eslint-disable-next-line no-continue
-					continue
+						const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+						if (rateLimitTtr) {
+							this.log.verbose(`${logReference}: Not creating gym alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+							// eslint-disable-next-line no-continue
+							continue
+						}
+						this.log.verbose(`${logReference}: Creating gym alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+
+						const language = cares.language || this.config.general.locale
+						const translator = this.translatorFactory.Translator(language)
+						let [platform] = cares.type.split(':')
+						if (platform === 'webhook') platform = 'discord'
+
+						data.teamName = translator.translate(data.teamNameEng)
+						data.oldTeamName = translator.translate(data.oldTeamNameEng)
+						data.previousControlName = translator.translate(data.previousControlNameEng)
+						data.teamEmojiEng = data.teamId >= 0 ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.teamId].emoji, platform) : ''
+						data.teamEmoji = translator.translate(data.teamEmojiEng)
+
+						// full build
+
+						const view = {
+							...geoResult,
+							...data,
+							time: data.distime,
+							tthh: data.tth.hours,
+							tthm: data.tth.minutes,
+							tths: data.tth.seconds,
+							now: new Date(),
+							nowISO: new Date().toISOString(),
+							areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
+						}
+
+						const templateType = 'gym'
+						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
+
+						const work = {
+							lat: data.latitude.toString().substring(0, 8),
+							lon: data.longitude.toString().substring(0, 8),
+							message,
+							target: cares.id,
+							type: cares.type,
+							name: cares.name,
+							tth: data.tth,
+							clean: cares.clean,
+							emoji: data.emoji,
+							logReference,
+							language,
+						}
+
+						jobs.push(work)
+					}
+					this.emit('postMessage', jobs)
+				} catch (e) {
+					this.log.error(`${data.id || data.gym_id}: Can't seem to handle gym (user cares): `, e, data)
 				}
-				this.log.verbose(`${logReference}: Creating gym alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+			})
 
-				const language = cares.language || this.config.general.locale
-				const translator = this.translatorFactory.Translator(language)
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
-				data.teamName = translator.translate(data.teamNameEng)
-				data.oldTeamName = translator.translate(data.oldTeamNameEng)
-				data.previousControlName = translator.translate(data.previousControlNameEng)
-				data.teamEmojiEng = data.teamId >= 0 ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.teamId].emoji, platform) : ''
-				data.teamEmoji = translator.translate(data.teamEmojiEng)
-
-				// full build
-
-				const view = {
-					...geoResult,
-					...data,
-					time: data.distime,
-					tthh: data.tth.hours,
-					tthm: data.tth.minutes,
-					tths: data.tth.seconds,
-					now: new Date(),
-					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
-				}
-
-				const templateType = 'gym'
-				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
-
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-					emoji: data.emoji,
-					logReference,
-					language,
-				}
-
-				jobs.push(work)
-			}
-
-			return jobs
+			return []
 		} catch (e) {
 			this.log.error(`${data.id || data.gym_id}: Can't seem to handle gym: `, e, data)
 		}
