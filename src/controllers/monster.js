@@ -436,6 +436,11 @@ class Monster extends Controller {
 						data.futureEventTrigger = event.reason
 					}
 
+					// Lookup pokestop name if needed
+					if (this.config.general.populatePokestopName && !data.pokestopName && data.pokestop_id && this.scannerQuery) {
+						data.pokestopName = this.escapeJsonString(await this.scannerQuery.getPokestopName(data.pokestop_id))
+					}
+
 					for (const cares of whoCares) {
 						this.log.debug(`${logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
