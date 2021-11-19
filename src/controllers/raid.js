@@ -4,18 +4,8 @@ const Controller = require('./controller')
 
 class Raid extends Controller {
 	async raidWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
 		join humans on (humans.id = raid.id and humans.current_profile_no = raid.profile_no)
@@ -77,18 +67,8 @@ class Raid extends Controller {
 	}
 
 	async eggWhoCares(data) {
-		let areastring = '1 = 0 '// `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
-		let strictareastring = ''
-		if (this.config.areaSecurity.enabled && this.config.areaSecurity.strictLocations) {
-			strictareastring = 'and (humans.area_restriction IS NULL OR (1 = 0 '
-			data.matched.forEach((area) => {
-				strictareastring = strictareastring.concat(`or humans.area_restriction like '%"${area}"%' `)
-			})
-			strictareastring = strictareastring.concat('))')
-		}
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
 		join humans on (humans.id = egg.id and humans.current_profile_no = egg.profile_no)
@@ -215,7 +195,8 @@ class Raid extends Controller {
 				data.chargeMoveNameEng = this.GameData.moves[data.move_2] ? this.GameData.moves[data.move_2].name : ''
 				data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 				// eslint-disable-next-line prefer-destructuring
-				data.generation = this.GameData.utilData.genException[`${data.pokemon_id}_${data.form}`] || Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
+				data.generation = this.GameData.utilData.genException[`${data.pokemon_id}_${data.form}`] || Object.entries(this.GameData.utilData.genData)
+					.find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
 				data.generationNameEng = this.GameData.utilData.genData[data.generation].name
 				data.generationRoman = this.GameData.utilData.genData[data.generation].roman
 
@@ -248,114 +229,134 @@ class Raid extends Controller {
 					return []
 				}
 
-				data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-				// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
-				// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
+				setImmediate(async () => {
+					try {
+						data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+						data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+						// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
+						// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 
-				const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-				const jobs = []
+						const geoResult = await this.getAddress({
+							lat: data.latitude,
+							lon: data.longitude,
+						})
+						const jobs = []
 
-				await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
-				data.staticmap = data.staticMap // deprecated
+						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
+						data.staticmap = data.staticMap // deprecated
 
-				for (const cares of whoCares) {
-					this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+						for (const cares of whoCares) {
+							this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-					const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
-					if (rateLimitTtr) {
-						this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
-						// eslint-disable-next-line no-continue
-						continue
+							const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+							if (rateLimitTtr) {
+								this.log.verbose(`${logReference}: Not creating raid alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+								// eslint-disable-next-line no-continue
+								continue
+							}
+							this.log.verbose(`${logReference}: Creating raid alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+
+							const language = cares.language || this.config.general.locale
+							const translator = this.translatorFactory.Translator(language)
+							let [platform] = cares.type.split(':')
+							if (platform === 'webhook') platform = 'discord'
+
+							data.name = translator.translate(data.nameEng)
+							data.formName = translator.translate(data.formNameEng)
+							data.evolutionName = translator.translate(data.evolutionNameEng)
+							data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
+							data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+							data.teamName = translator.translate(data.teamNameEng)
+							data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
+							data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
+							data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji, platform)) : ''
+							data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
+							data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji, platform)) : ''
+							data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
+							data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+							data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
+							data.generationName = translator.translate(data.generationNameEng)
+
+							data.quickMove = data.quickMoveName // deprecated
+							data.chargeMove = data.chargeMoveName // deprecated
+							data.move1 = data.quickMoveName // deprecated
+							data.move2 = data.chargeMoveName // deprecated
+							data.move1emoji = data.quickMoveEmoji // deprecated
+							data.move2emoji = data.chargeMoveEmoji // deprecated
+
+							const e = []
+							const t = []
+							const n = []
+							monster.types.forEach((type) => {
+								e.push(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform))
+								t.push(type.id)
+								n.push(type.name)
+							})
+							data.types = t
+							data.typeNameEng = n
+							data.emoji = e
+
+							data.typeName = data.typeNameEng.map((type) => translator.translate(type))
+								.join(', ')
+							data.typeEmoji = data.emoji.map((emoji) => translator.translate(emoji))
+								.join('')
+
+							data.boostingWeathers = data.types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost)
+								.find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
+							data.boosted = !!data.boostingWeathers.includes(data.weather)
+							data.boostWeatherNameEng = data.boosted ? this.GameData.utilData.weather[data.weather].name : ''
+							data.boostWeatherId = data.boosted ? data.weather : ''
+							data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
+							data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+
+							const view = {
+								...geoResult,
+								...data,
+								pokemonName: data.pokemonName,
+								id: data.pokemon_id,
+								baseStats: monster.stats,
+								time: data.disappearTime,
+								tthh: data.tth.hours,
+								tthm: data.tth.minutes,
+								tths: data.tth.seconds,
+								confirmedTime: data.disappear_time_verified,
+								now: new Date(),
+								nowISO: new Date().toISOString(),
+								genderData: {
+									name: translator.translate(data.genderDataEng.name),
+									emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
+								},
+								areas: data.matchedAreas.filter((area) => area.displayInMatches)
+									.map((area) => area.name)
+									.join(', '),
+							}
+
+							const templateType = 'raid'
+							const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
+
+							const work = {
+								lat: data.latitude.toString()
+									.substring(0, 8),
+								lon: data.longitude.toString()
+									.substring(0, 8),
+								message,
+								target: cares.id,
+								type: cares.type,
+								name: cares.name,
+								tth: data.tth,
+								clean: cares.clean,
+								emoji: data.emoji,
+								logReference,
+								language,
+							}
+							jobs.push(work)
+						}
+						this.emit('postMessage', jobs)
+					} catch (e) {
+						this.log.error(`${data.gym_id}: Can't seem to handle raid (user cared): `, e, data)
 					}
-					this.log.verbose(`${logReference}: Creating raid alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
-
-					const language = cares.language || this.config.general.locale
-					const translator = this.translatorFactory.Translator(language)
-					let [platform] = cares.type.split(':')
-					if (platform === 'webhook') platform = 'discord'
-
-					data.name = translator.translate(data.nameEng)
-					data.formName = translator.translate(data.formNameEng)
-					data.evolutionName = translator.translate(data.evolutionNameEng)
-					data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
-					data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
-					data.teamName = translator.translate(data.teamNameEng)
-					data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
-					data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
-					data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji, platform)) : ''
-					data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
-					data.chargeMoveEmoji = this.GameData.moves[data.move_2] && this.GameData.moves[data.move_2].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_2].type].emoji, platform)) : ''
-					data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
-					data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
-					data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
-					data.generationName = translator.translate(data.generationNameEng)
-
-					data.quickMove = data.quickMoveName // deprecated
-					data.chargeMove = data.chargeMoveName // deprecated
-					data.move1 = data.quickMoveName // deprecated
-					data.move2 = data.chargeMoveName // deprecated
-					data.move1emoji = data.quickMoveEmoji // deprecated
-					data.move2emoji = data.chargeMoveEmoji // deprecated
-
-					const e = []
-					const t = []
-					const n = []
-					monster.types.forEach((type) => {
-						e.push(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform))
-						t.push(type.id)
-						n.push(type.name)
-					})
-					data.types = t
-					data.typeNameEng = n
-					data.emoji = e
-
-					data.typeName = data.typeNameEng.map((type) => translator.translate(type)).join(', ')
-					data.typeEmoji = data.emoji.map((emoji) => translator.translate(emoji)).join('')
-
-					data.boostingWeathers = data.types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
-					data.boosted = !!data.boostingWeathers.includes(data.weather)
-					data.boostWeatherNameEng = data.boosted ? this.GameData.utilData.weather[data.weather].name : ''
-					data.boostWeatherId = data.boosted ? data.weather : ''
-					data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
-					data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
-
-					const view = {
-						...geoResult,
-						...data,
-						pokemonName: data.pokemonName,
-						id: data.pokemon_id,
-						baseStats: monster.stats,
-						time: data.disappearTime,
-						tthh: data.tth.hours,
-						tthm: data.tth.minutes,
-						tths: data.tth.seconds,
-						confirmedTime: data.disappear_time_verified,
-						now: new Date(),
-						nowISO: new Date().toISOString(),
-						genderData: { name: translator.translate(data.genderDataEng.name), emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)) },
-						areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
-					}
-
-					const templateType = 'raid'
-					const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
-
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: data.emoji,
-						logReference,
-						language,
-					}
-					jobs.push(work)
-				}
-				return jobs
+				})
+				return []
 			}
 
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
@@ -390,70 +391,78 @@ class Raid extends Controller {
 				return []
 			}
 
-			data.imgUrl = await this.imgUicons.eggIcon(data.level)
-			data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
-			// data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
-			// data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
+			setImmediate(async () => {
+				try {
+					data.imgUrl = await this.imgUicons.eggIcon(data.level)
+					data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
+					// data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
+					// data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
-			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-			const jobs = []
+					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+					const jobs = []
 
-			await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
-			data.staticmap = data.staticMap // deprecated
+					await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
+					data.staticmap = data.staticMap // deprecated
 
-			for (const cares of whoCares) {
-				this.log.debug(`${logReference}: Creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
-				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
-				if (rateLimitTtr) {
-					this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
-					// eslint-disable-next-line no-continue
-					continue
+					for (const cares of whoCares) {
+						this.log.debug(`${logReference}: Creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+						const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+						if (rateLimitTtr) {
+							this.log.verbose(`${logReference}: Not creating egg alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+							// eslint-disable-next-line no-continue
+							continue
+						}
+						this.log.verbose(`${logReference}: Creating egg alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+
+						const language = cares.language || this.config.general.locale
+						// eslint-disable-next-line no-unused-vars
+						const translator = this.translatorFactory.Translator(language)
+						let [platform] = cares.type.split(':')
+						if (platform === 'webhook') platform = 'discord'
+
+						data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+						data.teamName = translator.translate(data.teamNameEng)
+						data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
+
+						const view = {
+							...geoResult,
+							...data,
+							id: data.pokemon_id,
+							time: data.hatchtime,
+							tthh: data.tth.hours,
+							tthm: data.tth.minutes,
+							tths: data.tth.seconds,
+							confirmedTime: data.disappear_time_verified,
+							now: new Date(),
+							nowISO: new Date().toISOString(),
+							areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
+						}
+
+						const templateType = 'egg'
+						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
+
+						const work = {
+							lat: data.latitude.toString().substring(0, 8),
+							lon: data.longitude.toString().substring(0, 8),
+							message,
+							target: cares.id,
+							type: cares.type,
+							name: cares.name,
+							tth: data.tth,
+							clean: cares.clean,
+							emoji: data.emoji,
+							logReference,
+							language,
+						}
+						jobs.push(work)
+					}
+					this.emit('postMessage', jobs)
+				} catch (e) {
+					this.log.error(`${data.gym_id}: Can't seem to handle raid (user cared): `, e, data)
 				}
-				this.log.verbose(`${logReference}: Creating egg alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+			})
 
-				const language = cares.language || this.config.general.locale
-				// eslint-disable-next-line no-unused-vars
-				const translator = this.translatorFactory.Translator(language)
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
-				data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
-				data.teamName = translator.translate(data.teamNameEng)
-				data.teamEmoji = data.team_id ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
-
-				const view = {
-					...geoResult,
-					...data,
-					id: data.pokemon_id,
-					time: data.hatchtime,
-					tthh: data.tth.hours,
-					tthm: data.tth.minutes,
-					tths: data.tth.seconds,
-					confirmedTime: data.disappear_time_verified,
-					now: new Date(),
-					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
-				}
-
-				const templateType = 'egg'
-				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
-
-				const work = {
-					lat: data.latitude.toString().substring(0, 8),
-					lon: data.longitude.toString().substring(0, 8),
-					message,
-					target: cares.id,
-					type: cares.type,
-					name: cares.name,
-					tth: data.tth,
-					clean: cares.clean,
-					emoji: data.emoji,
-					logReference,
-					language,
-				}
-				jobs.push(work)
-			}
-			return jobs
+			return []
 		} catch (e) {
 			this.log.error(`${data.gym_id}: Can't seem to handle raid: `, e, data)
 		}
