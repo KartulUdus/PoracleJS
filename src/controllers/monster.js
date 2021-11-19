@@ -392,7 +392,7 @@ class Monster extends Controller {
 					const jobs = []
 
 					await this.getStaticMapUrl(logReference, data, 'monster', ['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl'],
-						['ohbem_pvp', 'pvpEvolutionData', 'pvp_ranking_ultra_league', 'pvp_ranking_great_league', 'pvp_ranking_little_league', 'pvpGreat', 'pvpUltra', 'pvpLittle'])
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated
 
 					// get Weather Forecast information

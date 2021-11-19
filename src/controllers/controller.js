@@ -228,7 +228,7 @@ class Controller extends EventEmitter {
 		return message
 	}
 
-	async getStaticMapUrl(logReference, data, maptype, keys, excludeKeys) {
+	async getStaticMapUrl(logReference, data, maptype, keys, pregenKeys) {
 		const tileTemplate = maptype
 		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
 		switch (this.config.geocoding.staticProvider.toLowerCase()) {
@@ -282,7 +282,7 @@ class Controller extends EventEmitter {
 							tileServerOptions.type)
 					} else {
 						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate,
-							excludeKeys ? Object.fromEntries(Object.entries(data).filter(([field]) => !excludeKeys.includes(field))) : data, tileServerOptions.type)
+							pregenKeys ? Object.fromEntries(Object.entries(data).filter(([field]) => ['nearbyStops', 'uiconPokestopUrl'].includes(field) || pregenKeys.includes(field))) : data, tileServerOptions.type)
 					}
 				}
 

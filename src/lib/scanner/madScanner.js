@@ -1,13 +1,16 @@
 class MadScanner {
 	constructor(db) {
-		this.db = db
+		this.dbs = db
 	}
 
 	// eslint-disable-next-line camelcase
 	async getGymName(gym_id) {
 		try {
-			const row = await this.db.select('name').from('gymdetails').where({ gym_id }).first()
-			return row ? row.name : null
+			for (const db of this.dbs) {
+				const row = await db.select('name').from('gymdetails').where({ gym_id }).first()
+				if (row) return row.name
+			}
+			return null
 		} catch (err) {
 			throw { source: 'getGymName', error: err }
 		}
@@ -16,8 +19,11 @@ class MadScanner {
 	// eslint-disable-next-line camelcase
 	async getPokestopName(pokestop_id) {
 		try {
-			const row = await this.db.select('name').from('pokestop').where({ pokestop_id }).first()
-			return row ? row.name : null
+			for (const db of this.dbs) {
+				const row = await db.select('name').from('pokestop').where({ pokestop_id }).first()
+				if (row) return row.name
+			}
+			return null
 		} catch (err) {
 			throw { source: 'getPokestopName', error: err }
 		}
@@ -30,15 +36,32 @@ class MadScanner {
 		const maxLon = Math.max(aLon, bLon)
 
 		try {
-			const pokestopRows = await this.db.select('latitude', 'longitude').from('pokestop').whereBetween('latitude', [minLat, maxLat]).whereBetween('longitude', [minLon, maxLon])
-			const gymRows = await this.db.select('latitude', 'longitude', 'team_id', 'slots_available').from('gym').whereBetween('latitude', [minLat, maxLat]).whereBetween('longitude', [minLon, maxLon])
+			const stopDetails = []
+			for (const db of this.dbs) {
+				const pokestopRows = await db.select('latitude', 'longitude')
+					.from('pokestop')
+					.whereBetween('latitude', [minLat, maxLat])
+					.whereBetween('longitude', [minLon, maxLon])
+				const gymRows = await db.select('latitude', 'longitude', 'team_id', 'slots_available')
+					.from('gym')
+					.whereBetween('latitude', [minLat, maxLat])
+					.whereBetween('longitude', [minLon, maxLon])
 
-			return [
-				...pokestopRows.map((x) => ({ latitude: x.latitude, longitude: x.longitude, type: 'pokestop' })),
-				...gymRows.map((x) => ({
-					latitude: x.latitude, longitude: x.longitude, type: 'gym', teamId: x.team_id, slots: x.slots_available,
-				})),
-			]
+				stopDetails.push(...pokestopRows.map((x) => ({
+					latitude: x.latitude,
+					longitude: x.longitude,
+					type: 'pokestop',
+				})))
+
+				stopDetails.push(...gymRows.map((x) => ({
+					latitude: x.latitude,
+					longitude: x.longitude,
+					type: 'gym',
+					teamId: x.team_id,
+					slots: x.slots_available,
+				})))
+			}
+			return stopDetails
 		} catch (err) {
 			throw { source: 'getStopData', error: err }
 		}
