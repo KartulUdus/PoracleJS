@@ -243,7 +243,7 @@ class Controller extends EventEmitter {
 					pregenerate: true,
 				}, this.config.geocoding.tileserverSettings ? this.config.geocoding.tileserverSettings.default : null)
 
-				if (this.config.geocoding.staticMapType[configTemplate]) {
+				if (this.config.geocoding.staticMapType && this.config.geocoding.staticMapType[configTemplate]) {
 					Object.assign(tileServerOptions, {
 						type: this.config.geocoding.staticMapType[configTemplate].startsWith('*') ? this.config.geocoding.staticMapType[configTemplate].substring(1) : this.config.geocoding.staticMapType[configTemplate],
 						pregenerate: !this.config.geocoding.staticMapType[configTemplate].startsWith('*'),
