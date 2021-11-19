@@ -84,7 +84,7 @@ module.exports = async (fastify, options, next) => {
 
 		const insert = insertReq.map((row) => {
 			const team = +row.team
-			if (row.team === undefined || team < 0 || team > 3) {
+			if (row.team === undefined || team < 0 || team > 4) {
 				throw new Error('Invalid team')
 			}
 			return {
