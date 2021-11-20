@@ -56,7 +56,7 @@ class RdmScanner {
 				stopDetails.push(...pokestopRows.map((x) => ({
 					latitude: x.lat,
 					longitude: x.lon,
-					type: 'pokestop',
+					type: 'stop',
 				})))
 
 				stopDetails.push(...gymRows.map((x) => ({

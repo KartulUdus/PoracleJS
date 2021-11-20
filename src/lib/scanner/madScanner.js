@@ -50,7 +50,7 @@ class MadScanner {
 				stopDetails.push(...pokestopRows.map((x) => ({
 					latitude: x.latitude,
 					longitude: x.longitude,
-					type: 'pokestop',
+					type: 'stop',
 				})))
 
 				stopDetails.push(...gymRows.map((x) => ({
