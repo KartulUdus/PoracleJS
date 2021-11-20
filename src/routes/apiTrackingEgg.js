@@ -85,7 +85,7 @@ module.exports = async (fastify, options, next) => {
 
 		const insert = insertReq.map((row) => {
 			const level = +row.level
-			if (row.level === undefined || level < 1 || level > 6) {
+			if (row.level === undefined || level < 1 || (level > 6 && level !== 90)) {
 				throw new Error('Invalid level')
 			}
 			return {
