@@ -229,30 +229,9 @@ class Controller extends EventEmitter {
 	}
 
 	async getStaticMapUrl(logReference, data, maptype, keys, pregenKeys) {
-		const tileTemplate = maptype
-		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
 		switch (this.config.geocoding.staticProvider.toLowerCase()) {
 			case 'tileservercache': {
-				const tileServerOptions = {}
-				Object.assign(tileServerOptions, {
-					type: 'staticMap',
-					includeStops: false,
-					width: 500,
-					height: 250,
-					zoom: 15,
-					pregenerate: true,
-				}, this.config.geocoding.tileserverSettings ? this.config.geocoding.tileserverSettings.default : null)
-
-				if (this.config.geocoding.staticMapType && this.config.geocoding.staticMapType[configTemplate]) {
-					Object.assign(tileServerOptions, {
-						type: this.config.geocoding.staticMapType[configTemplate].startsWith('*') ? this.config.geocoding.staticMapType[configTemplate].substring(1) : this.config.geocoding.staticMapType[configTemplate],
-						pregenerate: !this.config.geocoding.staticMapType[configTemplate].startsWith('*'),
-					})
-				}
-
-				if (this.config.geocoding.tileserverSettings && this.config.geocoding.tileserverSettings[tileTemplate]) {
-					Object.assign(tileServerOptions, this.config.geocoding.tileserverSettings[tileTemplate])
-				}
+				const tileServerOptions = this.tileserverPregen.getConfigForTileType(maptype)
 
 				if (tileServerOptions.includeStops && tileServerOptions.pregenerate && this.scannerQuery) {
 					const limits = this.tileserverPregen.limits(data.latitude, data.longitude, tileServerOptions.width, tileServerOptions.height, tileServerOptions.zoom)
@@ -276,12 +255,12 @@ class Controller extends EventEmitter {
 
 				if (tileServerOptions.type && tileServerOptions.type !== 'none') {
 					if (!tileServerOptions.pregenerate) {
-						data.staticMap = await this.tileserverPregen.getTileURL(logReference, tileTemplate,
+						data.staticMap = await this.tileserverPregen.getTileURL(logReference, maptype,
 							Object.fromEntries(Object.entries(data)
 								.filter(([field]) => keys.includes(field))),
 							tileServerOptions.type)
 					} else {
-						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate,
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, maptype,
 							pregenKeys ? Object.fromEntries(Object.entries(data).filter(([field]) => ['nearbyStops', 'uiconPokestopUrl'].includes(field) || pregenKeys.includes(field))) : data, tileServerOptions.type)
 					}
 				}

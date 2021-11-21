@@ -7,6 +7,34 @@ class TileserverPregen {
 		this.config = config
 	}
 
+	getConfigForTileType(maptype) {
+		const tileTemplate = maptype
+		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
+
+		const tileServerOptions = {}
+		Object.assign(tileServerOptions, {
+			type: 'staticMap',
+			includeStops: false,
+			width: 500,
+			height: 250,
+			zoom: 15,
+			pregenerate: true,
+		}, this.config.geocoding.tileserverSettings ? this.config.geocoding.tileserverSettings.default : null)
+
+		if (this.config.geocoding.staticMapType && this.config.geocoding.staticMapType[configTemplate]) {
+			Object.assign(tileServerOptions, {
+				type: this.config.geocoding.staticMapType[configTemplate].startsWith('*') ? this.config.geocoding.staticMapType[configTemplate].substring(1) : this.config.geocoding.staticMapType[configTemplate],
+				pregenerate: !this.config.geocoding.staticMapType[configTemplate].startsWith('*'),
+			})
+		}
+
+		if (this.config.geocoding.tileserverSettings && this.config.geocoding.tileserverSettings[tileTemplate]) {
+			Object.assign(tileServerOptions, this.config.geocoding.tileserverSettings[tileTemplate])
+		}
+
+		return tileServerOptions
+	}
+
 	async getPregeneratedTileURL(logReference, type, data, staticMapType) {
 		let mapType = 'staticmap'
 		let templateType = ''
