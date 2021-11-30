@@ -86,7 +86,7 @@ class Monster extends Controller {
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (')
 			}
-			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp}`)
+			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp} ${leagueData.capped ? '' : `and (${leagueData.caps ? `pvp_ranking_cap IN (${leagueData.caps})` : `pvp_ranking_cap = ${leagueData.cap}`} or pvp_ranking_cap = 0)`} `)
 
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('))')
@@ -177,8 +177,8 @@ class Monster extends Controller {
 			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-        || !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-        || !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			if (data.pokestop_name) data.pokestop_name = this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.pokestop_name
@@ -274,6 +274,8 @@ class Monster extends Controller {
 			const rankCalculator = (league, leagueData, minCp) => {
 				let bestRank = 4096
 				let bestCP = 0
+				const caps = new Set()
+				let capped = false
 				if (leagueData) {
 					for (const stats of leagueData) {
 						let newBest = false
@@ -285,6 +287,11 @@ class Monster extends Controller {
 							bestCP = stats.cp
 							newBest = true
 						}
+						if (stats.capped) {
+							capped = true
+						} else {
+							caps.add(stats.cap)
+						}
 						if (newBest && !stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
 							const leagueStats = {}
 							leagueStats[league] = {
@@ -295,6 +302,7 @@ class Monster extends Controller {
 								level: stats.level,
 								cp: stats.cp,
 								cap: stats.cap,
+								capped: stats.capped,
 							}
 							data.pvpEvolutionData[stats.pokemon] = {
 								...data.pvpEvolutionData[stats.pokemon],
@@ -305,6 +313,8 @@ class Monster extends Controller {
 					data.pvpBestRank[league] = {
 						cp: bestCP,
 						rank: bestRank,
+						caps: [...caps],
+						capped,
 					}
 				}
 
