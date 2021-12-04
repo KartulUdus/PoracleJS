@@ -1,6 +1,5 @@
 const inside = require('point-in-polygon')
 const NodeGeocoder = require('node-geocoder')
-const cp = require('child_process')
 const EventEmitter = require('events')
 const path = require('path')
 const fs = require('fs')
@@ -19,10 +18,10 @@ const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
+	constructor(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
 		super()
 		this.db = db
-		this.cp = cp
+		this.scannerQuery = scannerQuery
 		this.config = config
 		this.log = log
 		this.dts = dts
@@ -229,20 +228,43 @@ class Controller extends EventEmitter {
 		return message
 	}
 
-	async getStaticMapUrl(logReference, data, maptype, keys) {
-		const tileTemplate = maptype
-		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
+	async getStaticMapUrl(logReference, data, maptype, keys, pregenKeys) {
 		switch (this.config.geocoding.staticProvider.toLowerCase()) {
 			case 'tileservercache': {
-				if (this.config.geocoding.staticMapType[configTemplate]) {
-					if (this.config.geocoding.staticMapType[configTemplate].startsWith('*')) {
-						data.staticMap = await this.tileserverPregen.getTileURL(logReference, tileTemplate,
-							Object.fromEntries(Object.entries(data).filter(([field]) => keys.includes(field))),
-							this.config.geocoding.staticMapType[configTemplate].substring(1))
-					} else {
-						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType[configTemplate])
+				const tileServerOptions = this.tileserverPregen.getConfigForTileType(maptype)
+
+				if (tileServerOptions.includeStops && tileServerOptions.pregenerate && this.scannerQuery) {
+					const limits = this.tileserverPregen.limits(data.latitude, data.longitude, tileServerOptions.width, tileServerOptions.height, tileServerOptions.zoom)
+					data.nearbyStops = await this.scannerQuery.getStopData(limits[0][0], limits[0][1], limits[1][0], limits[1][1])
+					if (data.nearbyStops) {
+						data.uiconPokestopUrl = await this.imgUicons.pokestopIcon(0)
+						for (const stop of data.nearbyStops) {
+							switch (stop.type) {
+								case 'gym': {
+									stop.imgUrl = await this.imgUicons.gymIcon(stop.teamId, 6 - stop.slots, false, false)
+									break
+								}
+								case 'pokestop': {
+									break
+								}
+								default:
+							}
+						}
 					}
 				}
+
+				if (tileServerOptions.type && tileServerOptions.type !== 'none') {
+					if (!tileServerOptions.pregenerate) {
+						data.staticMap = await this.tileserverPregen.getTileURL(logReference, maptype,
+							Object.fromEntries(Object.entries(data)
+								.filter(([field]) => keys.includes(field))),
+							tileServerOptions.type)
+					} else {
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, maptype,
+							pregenKeys ? Object.fromEntries(Object.entries(data).filter(([field]) => ['nearbyStops', 'uiconPokestopUrl'].includes(field) || pregenKeys.includes(field))) : data, tileServerOptions.type)
+					}
+				}
+
 				break
 			}
 
@@ -491,18 +513,6 @@ class Controller extends EventEmitter {
 		else if (iv < 100) colorIdx = 4 // purple epic
 
 		return this.config.discord.ivColors[colorIdx]
-	}
-
-	execPromise(command) {
-		return new Promise((resolve, reject) => {
-			this.cp.exec(command, (error, stdout) => {
-				if (error) {
-					reject(error)
-					return
-				}
-				resolve(stdout.trim())
-			})
-		})
 	}
 }
 

@@ -423,6 +423,8 @@ class Raid extends Controller {
 						data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
 						data.teamName = translator.translate(data.teamNameEng)
 						data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
+						data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
+						data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
 
 						const view = {
 							...geoResult,
