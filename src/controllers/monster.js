@@ -391,7 +391,8 @@ class Monster extends Controller {
 					})
 					const jobs = []
 
-					await this.getStaticMapUrl(logReference, data, 'monster', ['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl'])
+					await this.getStaticMapUrl(logReference, data, 'monster', ['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated
 
 					// get Weather Forecast information
@@ -433,6 +434,11 @@ class Monster extends Controller {
 						data.futureEventTime = event.time
 						data.futureEventName = event.name
 						data.futureEventTrigger = event.reason
+					}
+
+					// Lookup pokestop name if needed
+					if (this.config.general.populatePokestopName && !data.pokestopName && data.pokestop_id && this.scannerQuery) {
+						data.pokestopName = this.escapeJsonString(await this.scannerQuery.getPokestopName(data.pokestop_id))
 					}
 
 					for (const cares of whoCares) {
