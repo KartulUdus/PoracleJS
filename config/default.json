@@ -34,6 +34,7 @@
       "stickers": {
       },
       "requestShinyImages": false,
+      "populatePokestopName": false,            // [RDM] lookup nearby pokestop names in scanner db for nearby mons
       "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
@@ -439,16 +440,21 @@
     //   uses templates (examples provided in tileservercache_templates folder)
       "staticProvider": "none",
       "staticProviderURL": "",
-    // staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook type
-      "staticMapType": {
-        "pokemon": "staticMap",
-        "raid": "staticMap",
-        "pokestop": "staticMap",
-        "quest": "staticMap",
-        "weather": "staticMap",
-        "location": "staticMap",
-        "nest": "staticMap",
-        "gym": "staticMap"
+      "tileserverSettings": {
+        "default": {
+          "type": "staticMap",          // can be staticMap or multiStaticMap - default is unlike to be changed
+          "width": 500,
+          "height": 250,
+          "zoom": 15,
+          "pregenerate": true,
+          "includeStops": false
+        }
+        // add further types to 'override' - type can be monster, raid, pokestop, quest, weather, location, nest, gym
+        // override values can be any of the above fields
+//      ,  "monster": {
+//          "type": "staticMap",
+//          "includeStops": true
+//        }
       },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],
