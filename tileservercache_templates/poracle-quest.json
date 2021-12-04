@@ -7,6 +7,18 @@
     "height": 250,
     "scale": 1,
     "markers": [
+    #if(nearbyStops != nil):
+        #for(stop in nearbyStops):
+        {
+            "url": "#if(stop.imgUrl):#(stop.imgUrl)#else:#(uiconPokestopUrl)#endif",
+            "latitude": #(stop.latitude),
+            "longitude": #(stop.longitude),
+            "width": 20,
+            "height": 20,
+            "y_offset": -10
+        },
+        #endfor
+    #endif
         {
             "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/misc/pokestop.png",
             "latitude": #(latitude),
