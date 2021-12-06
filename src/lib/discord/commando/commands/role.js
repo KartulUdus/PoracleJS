@@ -21,12 +21,43 @@ exports.run = async (client, msg, [args]) => {
 
 		const translator = client.translatorFactory.Translator(human.language || this.client.config.general.locale)
 
-		if (args.length === 0 || (args[0] !== 'add' && args[0] !== 'remove' && args[0] !== 'list')) {
+		if (args.length === 0 || (args[0] !== 'add' && args[0] !== 'remove' && args[0] !== 'list' && args[0] !== 'membership')) {
 			return await msg.reply(translator.translateFormat('Valid commands are `{0}role list`, `{0}role add <areaname>`, `{0}role remove <areaname>`', client.config.discord.prefix))
 		}
 
 		if (args[0] === 'list') {
-			let roleList = ''
+			let roleList = `${translator.translate('Roles available')}:\n`
+
+			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
+				const guild = await msg.client.guilds.fetch(guildId)
+				// Fetch the GuildMember from appropriate guild as this is likely a DM
+				try {
+					await guild.members.fetch(msg.author.id)
+
+					roleList = roleList.concat(`${guild.name}\n`)
+
+					const { roles } = guildDetails
+					for (const roleDesc of Object.keys(roles)) {
+						roleList = roleList.concat(`   ${roleDesc}\n`)
+					}
+				} catch (err) {
+					if (err instanceof DiscordAPIError) {
+						if (err.httpStatus === 404) {
+							// eslint-disable-next-line no-continue
+							// last line in loop, so we don't need this
+							// continue
+						}
+					} else {
+						throw err
+					}
+				}
+			}
+
+			return msg.reply(roleList)
+		}
+
+		if (args[0] === 'membership') {
+			let roleList = `${translator.translate('You have the following roles')}:\n`
 
 			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
 				const guild = await msg.client.guilds.fetch(guildId)
@@ -37,9 +68,10 @@ exports.run = async (client, msg, [args]) => {
 					roleList = roleList.concat(`${guild.name}\n`)
 
 					const { roles } = guildDetails
-					const discordRoles = [...guildMember.roles.cache.values()]
 					for (const [roleDesc, roleId] of Object.entries(roles)) {
-						if (discordRoles.some((x) => x.id === roleId)) {
+						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
+
+						if (discordRole) {
 							roleList = roleList.concat(`   ${roleDesc}\n`)
 						}
 					}
