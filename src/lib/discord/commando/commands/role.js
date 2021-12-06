@@ -7,18 +7,20 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
-		const isRegistered = await client.query.countQuery('humans', { id: target.id })
-
-		if (!isRegistered) {
+		if (!client.config.discord.userRoleSubscription) {
 			return await msg.react(client.translator.translate('🙅'))
 		}
 
-		if (args.length === 0) {
-			return await msg.reply('No args')
+		const human = await client.query.selectOneQuery('humans', { id: target.id })
+
+		if (!human) {
+			return await msg.react(client.translator.translate('🙅'))
 		}
 
-		if (args[0] !== 'add' && args[0] !== 'remove') {
-			return await msg.reply('Need to add args')
+		const translator = client.translatorFactory.Translator(human.language || this.client.config.general.locale)
+
+		if (args.length === 0 || (args[0] !== 'add' && args[0] !== 'remove')) {
+			return await msg.reply(translator.translateFormat('Valid commands are `{0}role add <areaname>`, `{0}role remove <areaname>`', client.config.discord.prefix))
 		}
 
 		for (let param = 1; param < args.length; param++) {
@@ -26,10 +28,11 @@ exports.run = async (client, msg, [args]) => {
 			let found = false
 			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
 				const { roles } = guildDetails
-				if (roleToAdd in roles) {
+				const matchRole = Object.keys(roles).find((r)=> r.toLowerCase() === roleToAdd)
+				if (matchRole) {
 					found = true
 
-					const roleId = roles[roleToAdd]
+					const roleId = roles[matchRole]
 
 					const guild = await msg.client.guilds.fetch(guildId)
 
@@ -40,10 +43,10 @@ exports.run = async (client, msg, [args]) => {
 
 					if (args[0] === 'add') {
 						await member.roles.add(role)
-						await msg.reply(`Added role ${roleToAdd}`)
+						await msg.reply(translator.translateFormat('You have been granted the role {0}', matchRole))
 					} else {
 						await member.roles.remove(role)
-						await msg.reply(`Removed role ${roleToAdd}`)
+						await msg.reply(translator.translateFormat('I have removed the role {0}', matchRole))
 					}
 				}
 			}
