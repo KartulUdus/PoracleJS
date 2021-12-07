@@ -8,7 +8,7 @@ const { performance } = require('perf_hooks')
 const pcache = require('flat-cache')
 
 const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
-const emojiFlags = require('emoji-flags')
+const emojiFlags = require('country-code-emoji')
 const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
@@ -369,12 +369,12 @@ class Controller extends EventEmitter {
 				const endTime = performance.now();
 				(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`Geocode ${locationObject.lat},${locationObject.lon} (${endTime - startTime} ms)`)
 
-				const flag = emojiFlags[result.countryCode]
+				const flag = emojiFlags.countryCodeEmoji(result.countryCode)
 				if (!this.addressDts) {
 					this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
 				}
 				result.addr = this.addressDts(result)
-				result.flag = flag ? flag.emoji : ''
+				result.flag = flag || ''
 
 				return this.escapeAddress(result)
 			} catch (err) {
