@@ -196,59 +196,63 @@ class Telegram {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
 			const senderId = `${logReference}: ${data.name} ${data.target}`
-			try {
-				if (data.message.sticker && data.message.sticker.length > 0) {
-					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
-					const msg = await this.retrySender(senderId,
-						async () => this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true }))
-					messageIds.push(msg.message_id)
-				}
-			} catch (err) {
-				this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`)
-			}
-			try {
-				if (data.message.photo && data.message.photo.length > 0) {
-					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Photo ${data.message.photo}`)
-
-					const msg = await this.retrySender(senderId,
-						async () => this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true }))
-					messageIds.push(msg.message_id)
-				}
-			} catch (err) {
-				this.logs.telegram.error(`${logReference}: Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
-			}
-			this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
-
-			if (!data.message.text_last) {
-				const msg = await this.retrySender(senderId,
-					async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-						parse_mode: 'Markdown',
-						disable_web_page_preview: !data.message.webpage_preview,
-					}))
-				messageIds.push(msg.message_id)
+			const sendOrderDefault = ['sticker', 'photo', 'text', 'location']
+			const sendOrderDefaultSet = new Set(sendOrderDefault)
+			let sendOrder = data.message.send_order || sendOrderDefault
+			// lowercase, filter unique and check for valid entries
+			sendOrder = sendOrder
+				.map((v) => v.toLowerCase())
+				.filter((v, i, a) => a.indexOf(v) === i)
+				.filter((v) => sendOrderDefaultSet.has(v))
+			if (sendOrder.length === 0) {
+				this.logs.telegram.warn('send_order has no valid entries')
 			}
 
-			if (data.message.location) {
-				this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
-
+			for (const type of sendOrder) {
 				try {
-					// eslint-disable-next-line no-shadow
-					const msg = await this.retrySender(senderId,
-						async () => this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true }))
-					messageIds.push(msg.message_id)
-				} catch (err) {
-					this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
-				}
-			}
+					if (type === 'sticker' && data.message.sticker && data.message.sticker.length > 0) {
+						this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
-			if (data.message.text_last) {
-				const msg = await this.retrySender(senderId,
-					async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-						parse_mode: 'Markdown',
-						disable_web_page_preview: !data.message.webpage_preview,
-					}))
-				messageIds.push(msg.message_id)
+						const msg = await this.retrySender(senderId,
+							async () => this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true }))
+						messageIds.push(msg.message_id)
+					}
+				} catch (err) {
+					this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`)
+				}
+				try {
+					if (type === 'photo' && data.message.photo && data.message.photo.length > 0) {
+						this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Photo ${data.message.photo}`)
+
+						const msg = await this.retrySender(senderId,
+							async () => this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true }))
+						messageIds.push(msg.message_id)
+					}
+				} catch (err) {
+					this.logs.telegram.error(`${logReference}: Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
+				}
+				if (type === 'text') {
+					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
+
+					const msg = await this.retrySender(senderId,
+						async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
+							parse_mode: 'Markdown',
+							disable_web_page_preview: !data.message.webpage_preview,
+						}))
+					messageIds.push(msg.message_id)
+				}
+				if (type === 'location' && data.message.location) {
+					try {
+						this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
+						// eslint-disable-next-line no-shadow
+						const msg = await this.retrySender(senderId,
+							async () => this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true }))
+						messageIds.push(msg.message_id)
+					} catch (err) {
+						this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
+					}
+				}
 			}
 
 			if (data.clean) {
