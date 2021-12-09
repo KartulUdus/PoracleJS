@@ -19,7 +19,7 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.react(client.translator.translate('🙅'))
 		}
 
-		const translator = client.translatorFactory.Translator(human.language || this.client.config.general.locale)
+		const translator = client.translatorFactory.Translator(human.language || client.config.general.locale)
 
 		if (args.length === 0 || (args[0] !== 'add' && args[0] !== 'remove' && args[0] !== 'list' && args[0] !== 'membership')) {
 			return await msg.reply(translator.translateFormat('Valid commands are `{0}role list`, `{0}role add <areaname>`, `{0}role remove <areaname>`', client.config.discord.prefix))
