@@ -13,7 +13,7 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.react(client.translator.translate('🙅'))
 		}
 
-		const human = await client.query.selectOneQuery('humans', { id: target.id })
+		const human = await client.query.selectOneQuery('humans', { id: target.id, admin_disable: 0 })
 
 		if (!human) {
 			return await msg.react(client.translator.translate('🙅'))
@@ -38,7 +38,7 @@ exports.run = async (client, msg, [args]) => {
 
 					const { roles } = guildDetails
 					for (const roleDesc of Object.keys(roles)) {
-						roleList = roleList.concat(`   ${roleDesc}\n`)
+						roleList = roleList.concat(`   ${roleDesc.replace(/ /g, '_')}\n`)
 					}
 				} catch (err) {
 					if (err instanceof DiscordAPIError) {
@@ -72,7 +72,7 @@ exports.run = async (client, msg, [args]) => {
 						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
 
 						if (discordRole) {
-							roleList = roleList.concat(`   ${roleDesc}\n`)
+							roleList = roleList.concat(`   ${roleDesc.replace(/ /g, '_')}\n`)
 						}
 					}
 				} catch (err) {
@@ -96,7 +96,7 @@ exports.run = async (client, msg, [args]) => {
 			let found = false
 			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
 				const { roles } = guildDetails
-				const matchRole = Object.keys(roles).find((r) => r.toLowerCase() === roleToAdd)
+				const matchRole = Object.keys(roles).find((r) => r.replace(/_/g, ' ').toLowerCase() === roleToAdd)
 				if (matchRole) {
 					found = true
 
