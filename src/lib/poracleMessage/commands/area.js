@@ -182,7 +182,7 @@ exports.run = async (client, msg, args, options) => {
 					const staticMap = await geofenceTileGenerator.generateGeofenceOverviewTile(
 						client.geofence,
 						client.query.tileserverPregen,
-						args.length > 2 ? args : JSON.parse(human.area),
+						args.length >= 2 ? args : JSON.parse(human.area),
 					)
 					if (staticMap) {
 						await msg.replyWithImageUrl(translator.translateFormat('Overview display'),
@@ -194,7 +194,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 			case 'show': {
 				if (client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
-					const areas = args.length > 2 ? args : JSON.parse(human.area)
+					const areas = args.length >= 2 ? args : JSON.parse(human.area)
 					for (const area of areas) {
 						let staticMap
 
