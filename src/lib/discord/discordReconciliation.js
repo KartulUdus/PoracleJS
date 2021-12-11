@@ -43,7 +43,7 @@ class DiscordReconciliation {
 				try {
 					const guildMember = await guild.members.fetch(userId)
 
-					const { roles } = guildDetails
+					const roles = guildDetails.roles || {}
 					for (const roleId of Object.values(roles)) {
 						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
 
@@ -51,6 +51,21 @@ class DiscordReconciliation {
 							this.log.info(`Reconciliation (Discord) Disable user ${user.id} removed role ${discordRole.name}`)
 
 							await guildMember.roles.remove(discordRole)
+						}
+					}
+
+					let exclusiveRoles = guildDetails.exclusiveRoles || []
+					if (!Array.isArray(exclusiveRoles)) exclusiveRoles = [exclusiveRoles]
+
+					for (const exclusiveRole of exclusiveRoles) {
+						for (const roleId of Object.values(exclusiveRole)) {
+							const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
+
+							if (discordRole) {
+								this.log.info(`Reconciliation (Discord) Disable user ${user.id} removed role ${discordRole.name}`)
+
+								await guildMember.roles.remove(discordRole)
+							}
 						}
 					}
 				} catch (err) {
