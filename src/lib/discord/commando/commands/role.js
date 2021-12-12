@@ -58,6 +58,7 @@ exports.run = async (client, discordMsg, [args]) => {
 
 						roleList = roleList.concat(`   ${roleDesc.replace(/ /g, '_')}  ${discordRole ? '☑️' : ''}\n`)
 					}
+					if (Object.entries(roles).length) roleList = roleList.concat('\n')
 				} catch (err) {
 					if (err instanceof DiscordAPIError) {
 						if (err.httpStatus === 404) {
