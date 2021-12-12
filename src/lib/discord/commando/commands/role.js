@@ -5,12 +5,12 @@ exports.run = async (client, discordMsg, [args]) => {
 	const target = { id: discordMsg.author.id, name: discordMsg.author.tag, webhook: false }
 
 	try {
-		// Check target
-		if (!client.config.discord.admins.includes(discordMsg.author.id) && discordMsg.channel.type === 'text') {
-			return await discordMsg.author.send(client.translator.translate('Please run commands in Direct Messages'))
-		}
-
 		const msg = new PoracleDiscordMessage(client, discordMsg)
+
+		// Check target
+		if (!msg.isFromAdmin && !msg.isDM) {
+			return await msg.replyByDM(client.translator.translate('Please run commands in Direct Messages'))
+		}
 
 		if (!client.config.discord.userRoleSubscription) {
 			return await msg.react(client.translator.translate('🙅'))
@@ -71,7 +71,11 @@ exports.run = async (client, discordMsg, [args]) => {
 				}
 			}
 
-			return msg.reply(roleList)
+			if (roleList.length > 2000) {
+				return await msg.replyAsAttachment(roleList, 'Role List', 'rolelist.txt')
+			}
+
+			return await msg.reply(roleList)
 		}
 
 		if (args[0] === 'membership') {
