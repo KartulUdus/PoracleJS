@@ -49,7 +49,7 @@ exports.run = async (client, msg, [args]) => {
 						roleList = roleList.concat('\n')
 					}
 
-					const { roles } = guildDetails
+					const roles = guildDetails.role || {}
 					for (const [roleDesc, roleId] of Object.entries(roles)) {
 						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
 
@@ -134,7 +134,7 @@ exports.run = async (client, msg, [args]) => {
 					if (err instanceof DiscordAPIError) {
 						if (err.httpStatus === 404) {
 							// eslint-disable-next-line no-continue
-							await msg.reply(translator.translateFormat('You are not a member of the right guild to add {0}', roleToAdd))
+							continue
 						}
 					} else {
 						throw err
@@ -198,8 +198,9 @@ exports.run = async (client, msg, [args]) => {
 					}
 				}
 			}
+
 			if (!found) {
-				await msg.reply(`Could not find role ${roleToAdd}`)
+				await msg.reply(translator.translateFormat('Unknown role -- {0}', roleToAdd))
 			}
 		}
 	} catch (err) {
