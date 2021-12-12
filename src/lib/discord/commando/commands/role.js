@@ -1,13 +1,16 @@
 const { DiscordAPIError } = require('discord.js')
+const PoracleDiscordMessage = require('../../poracleDiscordMessage')
 
-exports.run = async (client, msg, [args]) => {
-	const target = { id: msg.author.id, name: msg.author.tag, webhook: false }
+exports.run = async (client, discordMsg, [args]) => {
+	const target = { id: discordMsg.author.id, name: discordMsg.author.tag, webhook: false }
 
 	try {
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
-			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
+		if (!client.config.discord.admins.includes(discordMsg.author.id) && discordMsg.channel.type === 'text') {
+			return await discordMsg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
+
+		const msg = new PoracleDiscordMessage(client, discordMsg)
 
 		if (!client.config.discord.userRoleSubscription) {
 			return await msg.react(client.translator.translate('🙅'))
@@ -29,10 +32,10 @@ exports.run = async (client, msg, [args]) => {
 			let roleList = `${translator.translate('Roles available')}:\n`
 
 			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
-				const guild = await msg.client.guilds.fetch(guildId)
+				const guild = await discordMsg.client.guilds.fetch(guildId)
 				// Fetch the GuildMember from appropriate guild as this is likely a DM
 				try {
-					const guildMember = await guild.members.fetch(msg.author.id)
+					const guildMember = await guild.members.fetch(msg.userId)
 
 					roleList = roleList.concat(`**${guild.name}**\n`)
 
@@ -75,10 +78,10 @@ exports.run = async (client, msg, [args]) => {
 			let roleList = `${translator.translate('You have the following roles')}:\n`
 
 			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
-				const guild = await msg.client.guilds.fetch(guildId)
+				const guild = await discordMsg.client.guilds.fetch(guildId)
 				// Fetch the GuildMember from appropriate guild as this is likely a DM
 				try {
-					const guildMember = await guild.members.fetch(msg.author.id)
+					const guildMember = await guild.members.fetch(msg.userId)
 
 					roleList = roleList.concat(`${guild.name}\n`)
 
@@ -123,13 +126,13 @@ exports.run = async (client, msg, [args]) => {
 			const roleToAdd = args[param]
 			let found = false
 			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
-				const guild = await msg.client.guilds.fetch(guildId)
+				const guild = await discordMsg.client.guilds.fetch(guildId)
 
 				let guildMember
 
 				// Fetch the GuildMember from appropriate guild as this is likely a DM
 				try {
-					guildMember = await guild.members.fetch(msg.author.id)
+					guildMember = await guild.members.fetch(msg.userId)
 				} catch (err) {
 					if (err instanceof DiscordAPIError) {
 						if (err.httpStatus === 404) {
@@ -204,7 +207,7 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 	} catch (err) {
-		await msg.reply('Something went wrong with your request')
-		client.logs.log.error(`Role command "${msg.content}" unhappy:`, err)
+		await discordMsg.reply('Something went wrong with your request')
+		client.logs.log.error(`Role command "${discordMsg.content}" unhappy:`, err)
 	}
 }
