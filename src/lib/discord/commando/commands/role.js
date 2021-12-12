@@ -52,7 +52,7 @@ exports.run = async (client, discordMsg, [args]) => {
 						roleList = roleList.concat('\n')
 					}
 
-					const roles = guildDetails.role || {}
+					const roles = guildDetails.roles || {}
 					for (const [roleDesc, roleId] of Object.entries(roles)) {
 						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
 
