@@ -11,7 +11,7 @@
         #for(stop in nearbyStops):
         {
             "url": "#if(stop.imgUrl):#(stop.imgUrl)#else:#(uiconPokestopUrl)#endif",
-            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/stop.png",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/#if(stop.type=='gym'):gym#else:stop#endif.png",
             "latitude": #(stop.latitude),
             "longitude": #(stop.longitude),
             "width": 20,
