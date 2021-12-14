@@ -1,3 +1,6 @@
+const path = require('path')
+const fs = require('fs')
+
 const maxLength = 2000
 async function split(message, send) {
 	let remainingMessage = message
@@ -102,6 +105,13 @@ class PoracleDiscordMessage {
 		}
 
 		return this.msg.reply(message, { files: [attachment] })
+	}
+
+	async replyAsAttachment(message, title, filename) {
+		const filepath = path.join(__dirname, filename)
+		fs.writeFileSync(filepath, message)
+		await this.msg.reply(title, { files: [filepath] })
+		fs.unlinkSync(filepath)
 	}
 
 	async react(message) {
