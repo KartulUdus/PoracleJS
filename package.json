@@ -41,7 +41,7 @@
     "chokidar": "^3.5.2",
     "config": "^3.3.6",
     "deep-object-diff": "^1.1.0",
-    "discord.js": "^12.5.3",
+    "discord.js": "^13.3.1",
     "country-code-emoji": "^2.3.0",
     "fastify": "^3.15.1",
     "flat-cache": "^3.0.4",
