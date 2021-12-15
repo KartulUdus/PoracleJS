@@ -319,7 +319,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!message.length) {
-			return await msg.reply(client.translator.translate('The script specified is empty'))
+			return await msg.reply(translator.translate('The script specified is empty'))
 		}
 
 		if (args.includes('link')) {
