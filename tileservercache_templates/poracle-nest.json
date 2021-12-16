@@ -28,6 +28,7 @@
   "markers": [
   {
     "url": "#(imgUrl)",
+    "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
     "latitude": #(latitude),
     "longitude": #(longitude),
     "width": 30,
