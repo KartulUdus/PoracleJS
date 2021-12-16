@@ -319,21 +319,21 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!message.length) {
-			return await msg.reply(client.translator.translate('The script specified is empty'))
+			return await msg.reply(translator.translate('The script specified is empty'))
 		}
 
 		if (args.includes('link')) {
 			try {
 				const hastelink = await client.hastebin(message)
-				return await msg.reply(`${client.translator.translate('Your backup is at')} ${hastelink}`)
+				return await msg.reply(`${translator.translate('Your backup is at')} ${hastelink}`)
 			} catch (e) {
-				await msg.reply(client.translator.translate('Hastebin seems down'))
+				await msg.reply(translator.translate('Hastebin seems down'))
 			}
 		}
 
 		const filepath = path.join(__dirname, `./${target.name}.txt`)
 		fs.writeFileSync(filepath, message)
-		await msg.replyWithAttachment(client.translator.translate('Your backup'), filepath)
+		await msg.replyWithAttachment(translator.translate('Your backup'), filepath)
 		fs.unlinkSync(filepath)
 	} catch (err) {
 		client.log.error(`profile command ${msg.content} unhappy:`, err)
