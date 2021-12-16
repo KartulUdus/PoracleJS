@@ -147,6 +147,7 @@ class Invasion extends Controller {
 			setImmediate(async () => {
 				try {
 					data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId)
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.invasionIcon(data.gruntTypeId)
 					data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
