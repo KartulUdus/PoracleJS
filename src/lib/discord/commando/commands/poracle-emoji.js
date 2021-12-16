@@ -123,7 +123,7 @@ exports.run = async (client, msg, [args]) => {
 
 		const filepath = path.join(__dirname, './emoji.json')
 		fs.writeFileSync(filepath, s)
-		await msg.reply('Here\'s a nice new emoji.json for you!', { files: [filepath] })
+		await msg.reply({ content: 'Here\'s a nice new emoji.json for you!', files: [filepath] })
 		fs.unlinkSync(filepath)
 	} catch (err) {
 		await msg.reply('Failed to run emoji upload, check logs')

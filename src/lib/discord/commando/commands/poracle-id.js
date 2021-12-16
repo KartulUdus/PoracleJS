@@ -42,7 +42,7 @@ exports.run = async (client, msg, [args]) => {
 
 		const filepath = path.join(__dirname, './id.txt')
 		fs.writeFileSync(filepath, details)
-		await msg.reply('Here\'s your guild ids!', { files: [filepath] })
+		await msg.reply({ content: 'Here\'s your guild ids!', files: [filepath] })
 		fs.unlinkSync(filepath)
 	} catch (err) {
 		await msg.reply('Failed to run emoji upload, check logs')
