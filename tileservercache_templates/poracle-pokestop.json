@@ -22,7 +22,7 @@
     #endif
         {
             "url": "#(imgUrl)",
-            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/stop.png",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/pokestop.png",
             "latitude": #(latitude),
             "longitude": #(longitude),
             "width": 50,
