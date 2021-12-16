@@ -110,7 +110,7 @@ class PoracleDiscordMessage {
 	async replyAsAttachment(message, title, filename) {
 		const filepath = path.join(__dirname, filename)
 		fs.writeFileSync(filepath, message)
-		await this.msg.reply(title, { files: [filepath] })
+		await this.msg.reply({ content: title, files: [filepath] })
 		fs.unlinkSync(filepath)
 	}
 
