@@ -24,6 +24,8 @@
       "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
     // imgUrl - base url for poracle creation of {{imgUrl}} reference (uicons repository)
       "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS",
+    // imgUrlAlt - Second base url for poracle creation of {{imgUrlAlt}} reference (uicons repository)
+      "imgUrlAlt": "",
     // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers (uicons repository)
       "stickerUrl": "https://raw.githubusercontent.com/bbdoc/tgUICONS/main/Shuffle",
     // images/stickers - override uicons repository for each alert type
