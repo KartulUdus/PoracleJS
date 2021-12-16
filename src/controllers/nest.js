@@ -140,6 +140,7 @@ class Nest extends Controller {
 			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 
 			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
 			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })

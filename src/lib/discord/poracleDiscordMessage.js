@@ -95,6 +95,12 @@ class PoracleDiscordMessage {
 				},
 			},
 		}
+
+		if (this.client.config.discord.uploadEmbedImages) {
+			messageText.embed.image.url = 'attachment://image.png'
+			messageText.embed.files = [{ attachment: url, name: 'image.png' }]
+		}
+
 		await this.msg.reply(messageText)
 	}
 
