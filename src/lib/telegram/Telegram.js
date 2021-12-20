@@ -1,3 +1,4 @@
+const { EventEmitter } = require('events')
 const fs = require('fs')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
@@ -7,8 +8,9 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 
 const noop = () => {}
 
-class Telegram {
+class Telegram extends EventEmitter {
 	constructor(id, config, logs, GameData, PoracleInfo, dts, geofence, controller, query, scannerQuery, telegraf, translatorFactory, commandParser, re, rehydrateTimeouts = false) {
+		super()
 		this.config = config
 		this.logs = logs
 		this.GameData = GameData
@@ -109,6 +111,7 @@ class Telegram {
 		if (!command) return
 		if (command.bot && command.bot.toLowerCase() !== ctx.botInfo.username.toLowerCase()) return
 		if (Object.keys(this.commands).includes(command.command)) {
+			ctx.poracleAddQueue = (queue) => this.emit('sendMessages', queue)
 			return this.commands[command.command](ctx)
 		}
 		if (ctx.update.message.chat.type === 'private'

@@ -18,6 +18,7 @@ class PoracleDiscordState {
 		this.translator = client.translator
 		this.config = client.config
 		this.hastebin = client.hastebin
+		this.addToQueue = (queueEntries) => client.emit('poracleAddQueue', queueEntries)
 	}
 
 	createMessage(msg) {

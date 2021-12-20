@@ -952,6 +952,10 @@ async function run() {
 		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guilds) {
 			setTimeout(syncDiscordRole, 10000)
 		}
+
+		discordCommando.on('sendMessages', (res) => {
+			processMessages(res)
+		})
 	}
 
 	if (config.telegram.enabled) {
@@ -973,6 +977,10 @@ async function run() {
 		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 			setTimeout(syncTelegramMembership, 30000)
 		}
+
+		telegram.on('sendMessages', (res) => {
+			processMessages(res)
+		})
 	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
