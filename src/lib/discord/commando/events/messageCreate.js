@@ -24,7 +24,9 @@ module.exports = async (client, msg) => {
 					} else {
 						channel.send(message).then((logmsg) => {
 							if (msgDeletionMs > 0) {
-								logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+								setTimeout(() => {
+									logmsg.delete().catch(() => {})
+								}, msgDeletionMs)
 							}
 						}).catch(() => { })
 					}
