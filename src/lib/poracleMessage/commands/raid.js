@@ -47,6 +47,8 @@ exports.run = async (client, msg, args, options) => {
 		let team = 4
 		let template = client.config.general.defaultTemplateName
 		let clean = false
+		const evolution = 9000
+		let move = 9000
 		const levelSet = new Set()
 		const pings = msg.getPings()
 		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase())
@@ -78,18 +80,29 @@ exports.run = async (client, msg, args, options) => {
 
 		if (gen) monsters = monsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
 
-		args.forEach((element) => {
+		for (const element of args) {
 			if (element === 'ex') exclusive = 1
 			else if (element.match(client.re.levelRe)) levelSet.add(+element.match(client.re.levelRe)[2])
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
-			else if (element === 'instinct' || element === 'yellow') team = 3
+			else if (element.match(client.re.moveRe)) {
+				const [,, moveText] = element.match(client.re.moveRe)
+				const [moveName, typeName] = moveText.split('/')
+				const englishMoveName = client.translatorFactory.reverseTranslateCommand(moveName, true).toLowerCase()
+				const englishTypeName = typeName ? client.translatorFactory.reverseTranslateCommand(typeName, true).toLowerCase() : null
+				const moveData = Object.entries(client.GameData.moves).find(([, data]) => data.name.toLowerCase() === englishMoveName && (!englishTypeName || data.type.toLowerCase() === englishTypeName))
+				if (!moveData) {
+					msg.react('🙅')
+					return msg.reply(translator.translateFormat('Unrecognised move name {0}', typeName ? `${moveName}/${typeName}` : moveName))
+				}
+				[move] = moveData
+			} else if (element === 'instinct' || element === 'yellow') team = 3
 			else if (element === 'valor' || element === 'red') team = 2
 			else if (element === 'mystic' || element === 'blue') team = 1
 			else if (element === 'harmony' || element === 'gray') team = 0
 			else if (element === 'everything') [1, 2, 3, 4, 5, 6].forEach((x) => levelSet.add(x))
 			else if (element === 'clean') clean = true
-		})
+		}
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
 		if (distance > 0 && !userHasLocation && !remove) {
@@ -123,6 +136,9 @@ exports.run = async (client, msg, args, options) => {
 				clean: +clean,
 				level: 9000,
 				form: mon.form.id,
+				evolution: +evolution,
+				move: +move,
+				gym_id: null,
 			}))
 
 			levels.forEach((level) => {
@@ -138,6 +154,9 @@ exports.run = async (client, msg, args, options) => {
 					clean: +clean,
 					level: +level,
 					form: 0,
+					evolution: +evolution,
+					move: +move,
+					gym_id: null,
 				})
 			})
 
@@ -177,15 +196,15 @@ exports.run = async (client, msg, args, options) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
-				alreadyPresent.forEach((raid) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
-				})
-				updates.forEach((raid) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
-				})
-				insert.forEach((raid) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.raidRowText(client.config, translator, client.GameData, raid), '\n')
-				})
+				for (const raid of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.raidRowText(client.config, translator, client.GameData, raid, client.scannerQuery), '\n')
+				}
+				for (const raid of updates) {
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.raidRowText(client.config, translator, client.GameData, raid, client.scannerQuery), '\n')
+				}
+				for (const raid of insert) {
+					message = message.concat(translator.translate('New: '), await trackedCommand.raidRowText(client.config, translator, client.GameData, raid, client.scannerQuery), '\n')
+				}
 			}
 
 			await client.query.deleteWhereInQuery('raid', {

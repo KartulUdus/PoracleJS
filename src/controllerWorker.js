@@ -8,6 +8,7 @@ const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
 const GameData = require('./lib/GameData')
+const scannerFactory = require('./lib/scanner/scannerFactory')
 
 const { log } = logs
 
@@ -18,7 +19,7 @@ const { workerId } = workerData
 logs.setWorkerId(workerId)
 
 const {
-	config, knex, dts, geofence, translatorFactory,
+	config, knex, scannerKnex, dts, geofence, translatorFactory,
 } = Config(false)
 
 const PromiseQueue = require('./lib/PromiseQueue')
@@ -43,19 +44,20 @@ const controllerWeatherManager = new ControllerWeatherManager(config, log)
 const statsData = new StatsData(config, log)
 const pogoEventParser = new PogoEventParser(log)
 const shinyPossible = new ShinyPossible(log)
+const scannerQuery = scannerFactory.createScanner(scannerKnex, config.database.scannerType)
 
 const eventParsers = {
 	shinyPossible,
 	pogoEvents: pogoEventParser,
 }
 
-const monsterController = new MonsterController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const raidController = new RaidController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const questController = new QuestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const pokestopController = new PokestopController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const nestController = new NestController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const pokestopLureController = new PokestopLureController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const gymController = new GymController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const monsterController = new MonsterController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const raidController = new RaidController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const questController = new QuestController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopController = new PokestopController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const nestController = new NestController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopLureController = new PokestopLureController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const gymController = new GymController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 
 const hookQueue = []
 let queuePort
@@ -297,5 +299,11 @@ if (!isMainThread) {
 	controllerWeatherManager.on('weatherForecastRequested', (data) => notifyWeatherController('weatherForecastRequested', data))
 
 	monsterController.on('userCares', (data) => notifyWeatherController('userCares', data))
+	monsterController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	raidController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	pokestopController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	pokestopLureController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	gymController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+
 	setInterval(currentStatus, 60000)
 }

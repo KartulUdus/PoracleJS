@@ -8,16 +8,16 @@ const Controller = require('./controller')
 class Nest extends Controller {
 	async nestWhoCares(obj) {
 		const data = obj
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, nests.template, nests.distance, nests.clean, nests.ping from nests
 		join humans on (humans.id = nests.id and humans.current_profile_no = nests.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%nest%')and
 		((nests.pokemon_id = 0 or nests.pokemon_id='${data.pokemon_id}') and nests.min_spawn_avg <= ${data.pokemon_avg}) and
-		(nests.form = ${data.form} or nests.form = 0)`
+		(nests.form = ${data.form} or nests.form = 0)
+		${strictareastring}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -65,7 +65,6 @@ class Nest extends Controller {
 	}
 
 	async handle(obj) {
-		let pregenerateTile = false
 		const data = obj
 		// const minTth = this.config.general.alertMinimumTime || 0
 
@@ -74,27 +73,6 @@ class Nest extends Controller {
 
 			data.longitude = data.lon
 			data.latitude = data.lat
-			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'tileservercache': {
-					pregenerateTile = true
-					break
-				}
-				case 'google': {
-					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'osm': {
-					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'mapbox': {
-					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				default: {
-					data.staticMap = ''
-				}
-			}
 
 			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
@@ -162,24 +140,22 @@ class Nest extends Controller {
 			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 
 			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
 			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
-			// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-			// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.nest) {
-				// Attempt to calculate best position for nest
-				const position = this.tileserverPregen.autoposition({
-					polygons:
-						JSON.parse(data.poly_path).map((x) => ({ path: x })),
-				}, 500, 250)
-				data.zoom = Math.min(position.zoom, 16)
-				data.map_longitude = position.longitude
-				data.map_latitude = position.latitude
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'nest', data, this.config.geocoding.staticMapType.nest)
-			}
+			// Attempt to calculate best position for nest
+			const position = this.tileserverPregen.autoposition({
+				polygons:
+					JSON.parse(data.poly_path).map((x) => ({ path: x })),
+			}, 500, 250)
+			data.zoom = Math.min(position.zoom, 16)
+			data.map_longitude = position.longitude
+			data.map_latitude = position.latitude
+
+			await this.getStaticMapUrl(logReference, data, 'nest', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'poly_path'])
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
@@ -213,7 +189,7 @@ class Nest extends Controller {
 					tths: data.tth.seconds,
 					now: new Date(),
 					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'nest'

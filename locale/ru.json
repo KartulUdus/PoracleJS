@@ -235,7 +235,7 @@
   "404 No team types found":"404 - неверный цвет команды",
   "No forecast available":"Прогноз погоды недоступен",
   "including slot changes":"включая оповещения об изменении слотов в гимах",
-  "Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info bulbasaur`":"Примеры команд: `{0}info rarity`, `{0}info weather`, `{0}info bulbasaur`",
+  "Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`":"Примеры команд: `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`",
   "Boosted by":"*Погодный буст*",
   "Primary Type":"*Первый тип*",
   "Secondary Type":"*Второй тип*",
@@ -267,5 +267,14 @@
   "eggs":"яйца",
   "lures":"люры",
   "invasions":"командыр",
-  "nests":"гнезда"
+  "nests":"гнезда",
+  "Recognised items:":"Список предметов:",
+  "Recognised moves:":"Список атак:",
+  " or ":" или ",
+  "Level":"Уровень",
+  "with move":"с атакой",
+  "Shiny Stats (Last few hours)":"Шайни-статистика за последние пару часов",
+  "Trade Bonus":"Бесплатно после трейда",
+  "items":"предметы",
+  "moves":"атаки"
 }

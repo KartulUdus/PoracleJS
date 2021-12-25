@@ -24,6 +24,8 @@
       "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
     // imgUrl - base url for poracle creation of {{imgUrl}} reference (uicons repository)
       "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS",
+    // imgUrlAlt - Second base url for poracle creation of {{imgUrlAlt}} reference (uicons repository)
+      "imgUrlAlt": "",
     // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers (uicons repository)
       "stickerUrl": "https://raw.githubusercontent.com/bbdoc/tgUICONS/main/Shuffle",
     // images/stickers - override uicons repository for each alert type
@@ -34,6 +36,7 @@
       "stickers": {
       },
       "requestShinyImages": false,
+      "populatePokestopName": false,            // [RDM] lookup nearby pokestop names in scanner db for nearby mons
       "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
@@ -125,6 +128,14 @@
           "user": "poracleuser",
           "password": "poraclepassword",
           "port": 3306
+      },
+      "scannerType": "none",               // Scanner type: can be none, rdm or mad
+      "scanner": {
+          "host": "127.0.0.1",
+          "database": "scannerdb",
+          "user": "scanneruser",
+          "password": "scannerpassword",
+          "port": 3306
       }
   },
   //
@@ -203,7 +214,8 @@
     //    deny: users cannot track for everything and must track against individual pokemon
       "everythingFlagPermissions": "allow-any",
       "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
-      "maxDistance": 0                            // restrict users from having too large a tracking circle (0 = no limit)
+      "maxDistance": 0,                           // restrict users from having too large a tracking circle (0 = no limit)
+      "enableGymBattle": false                    // allow users to use "battle_changes" option into !gym tracking command
   },
   //
   // stats configuration
@@ -321,8 +333,10 @@
     // groupWelcomeText - message text (in channel) when someone registers. Users have to
     //   select the 'start' option on the bot in the telegram client before it can message
     //   them and this can be used to remind them of that
-      "groupWelcomeText": "Remember to click on me and 'start bot' to be able to receive messages",
-    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+      "groupWelcomeText": "Welcome {user}, remember to click on me and 'start bot' to be able to receive messages",
+    // botWelcomeText - message the bot sends to users who register
+      "botWelcomeText": "You are now registered with Poracle",
+  // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
       "unregisteredUserMessage": "",
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": "",
@@ -428,16 +442,21 @@
     //   uses templates (examples provided in tileservercache_templates folder)
       "staticProvider": "none",
       "staticProviderURL": "",
-    // staticMapType - can be either staticMap, multiStaticMap or empty to disable static map creation for this hook type
-      "staticMapType": {
-        "pokemon": "staticMap",
-        "raid": "staticMap",
-        "pokestop": "staticMap",
-        "quest": "staticMap",
-        "weather": "staticMap",
-        "location": "staticMap",
-        "nest": "staticMap",
-        "gym": "staticMap"
+      "tileserverSettings": {
+        "default": {
+          "type": "staticMap",          // can be staticMap or multiStaticMap - default is unlike to be changed
+          "width": 500,
+          "height": 250,
+          "zoom": 15,
+          "pregenerate": true,
+          "includeStops": false
+        }
+        // add further types to 'override' - type can be monster, raid, pokestop, quest, weather, location, nest, gym
+        // override values can be any of the above fields
+//      ,  "monster": {
+//          "type": "staticMap",
+//          "includeStops": true
+//        }
       },
     // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
       "geocodingKey":[""],

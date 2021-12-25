@@ -16,15 +16,14 @@ const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)
 
 class Quest extends Controller {
 	async questWhoCares(data) {
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, quest.distance, quest.clean, quest.ping, quest.template from quest
 		join humans on (humans.id = quest.id and humans.current_profile_no = quest.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%quest%') and
-		(0 = 1`
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%quest%') 
+		${strictareastring}
+		and (0 = 1`
 
 		if (data.rewardData.monsters.length) {
 			for (const monster of data.rewardData.monsters) {
@@ -174,40 +173,29 @@ class Quest extends Controller {
 
 			if (data.rewardData.monsters.length > 0) {
 				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
+				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
 				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
-				// data.imgUrl = data.rewardData.monsters.length > 0
-				// 	? `${this.config.general.imgUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.png`
-				// 	: 'https://s3.amazonaws.com/com.cartodb.users-assets.production/production/jonmrich/assets/20150203194453red_pin.png'
-				// data.stickerUrl = data.rewardData.monsters.length > 0
-				// 	? `${this.config.general.stickerUrl}pokemon_icon_${data.rewardData.monsters[0].pokemonId.toString().padStart(3, '0')}_${data.rewardData.monsters[0].formId.toString().padStart(2, '0')}.webp`
-				// 	: ''
 			}
 
 			if (data.rewardData.items.length > 0) {
 				data.imgUrl = await this.imgUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
+				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
 				data.stickerUrl = await this.stickerUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
-
-				// data.imgUrl = `${this.config.general.imgUrl}rewards/reward_${data.rewardData.items[0].id}_1.png`
-				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_${data.rewardData.items[0].id}_1.webp`
 			}
 			if (data.dustAmount) {
 				data.imgUrl = await this.imgUicons.rewardStardustIcon(data.rewardData.dustAmount)
+				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardStardustIcon(data.rewardData.dustAmount)
 				data.stickerUrl = await this.stickerUicons.rewardStardustIcon(data.rewardData.dustAmount)
-				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_stardust.png`
-				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_stardust.webp`
 			}
 			if (data.rewardData.energyMonsters.length > 0) {
 				data.imgUrl = await this.imgUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
 				data.stickerUrl = await this.stickerUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
-				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.png`
-				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_mega_energy_${data.rewardData.energyMonsters[0].pokemonId}.webp`
 			}
 			if (data.rewardData.candy.length > 0) {
 				data.imgUrl = await this.imgUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
 				data.stickerUrl = await this.stickerUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
-
-				//				data.imgUrl = `${this.config.general.imgUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.png`
-				// data.stickerUrl = `${this.config.general.stickerUrl}rewards/reward_candy_${data.rewardData.candy[0].pokemonId}.webp`
 			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
@@ -352,7 +340,7 @@ class Quest extends Controller {
 					confirmedTime: data.disappear_time_verified,
 					now: new Date(),
 					nowISO: new Date().toISOString(),
-					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name.replace(/'/gi, '')).join(', '),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
 				const templateType = 'quest'

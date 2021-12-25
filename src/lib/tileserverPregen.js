@@ -7,6 +7,34 @@ class TileserverPregen {
 		this.config = config
 	}
 
+	getConfigForTileType(maptype) {
+		const tileTemplate = maptype
+		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
+
+		const tileServerOptions = {}
+		Object.assign(tileServerOptions, {
+			type: 'staticMap',
+			includeStops: false,
+			width: 500,
+			height: 250,
+			zoom: 15,
+			pregenerate: true,
+		}, this.config.geocoding.tileserverSettings ? this.config.geocoding.tileserverSettings.default : null)
+
+		if (this.config.geocoding.staticMapType && this.config.geocoding.staticMapType[configTemplate]) {
+			Object.assign(tileServerOptions, {
+				type: this.config.geocoding.staticMapType[configTemplate].startsWith('*') ? this.config.geocoding.staticMapType[configTemplate].substring(1) : this.config.geocoding.staticMapType[configTemplate],
+				pregenerate: !this.config.geocoding.staticMapType[configTemplate].startsWith('*'),
+			})
+		}
+
+		if (this.config.geocoding.tileserverSettings && this.config.geocoding.tileserverSettings[tileTemplate]) {
+			Object.assign(tileServerOptions, this.config.geocoding.tileserverSettings[tileTemplate])
+		}
+
+		return tileServerOptions
+	}
+
 	async getPregeneratedTileURL(logReference, type, data, staticMapType) {
 		let mapType = 'staticmap'
 		let templateType = ''
@@ -42,7 +70,7 @@ class TileserverPregen {
 				this.log.warn(`${logReference}: Failed to Pregenerate ${templateType}StaticMap. Got invalid response from tileserver - ${result.data}`)
 				return null
 			}
-			const tileResult = result.data.startsWith('http') ? result.data : `${this.config.geocoding.staticProviderURL}/${mapType}/pregenerated/${result.data}`;
+			const tileResult = result.data.startsWith('http') ? result.data : new URL(`${mapType}/pregenerated/${result.data}`, this.config.geocoding.staticProviderURL).toString();
 			(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`${logReference}: Tile generated ${tileResult} (${hrendms} ms)`)
 
 			return tileResult
@@ -63,7 +91,7 @@ class TileserverPregen {
 			mapType = 'multistaticmap'
 			templateType = 'multi-'
 		}
-		const url = new URL(`${this.config.geocoding.staticProviderURL}/${mapType}/poracle-${templateType}${type}`)
+		const url = new URL(`${mapType}/poracle-${templateType}${type}`, this.config.geocoding.staticProviderURL)
 		Object.keys(data).forEach((item) => {
 			url.searchParams.set(item, data[item])
 		})
@@ -165,6 +193,29 @@ class TileserverPregen {
 			latitude,
 			longitude,
 		}
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	limits(latCenter, lonCenter, width, height, zoom) {
+		// copied from https://help.openstreetmap.org/questions/75611/transform-xy-pixel-values-into-lat-and-long
+		const C = (256 / (2 * Math.PI)) * 2 ** zoom
+
+		const xcenter = C * (lonCenter * Math.PI / 180.0 + Math.PI)
+		const ycenter = C * (Math.PI - Math.log(Math.tan((Math.PI / 4) + latCenter * Math.PI / 360.0)))
+
+		const points = []
+		for (const point of [[0, 0], [width, height]]) {
+			const xpoint = xcenter - (width / 2 - point[0])
+			const ypoint = ycenter - (height / 2 - point[1])
+
+			const M = (xpoint / C) - Math.PI
+			const N = -(ypoint / C) + Math.PI
+
+			const finLon = M * 180.0 / Math.PI
+			const finLat = (Math.atan(Math.E ** N) - (Math.PI / 4)) * 2 * 180.0 / Math.PI
+			points.push([finLat, finLon])
+		}
+		return points
 	}
 }
 

@@ -1,5 +1,5 @@
 <p align="center">
-          <img width="256" src="https://raw.githubusercontent.com/KartulUdus/poracleWiki/master/assets/starchy.svg?sanitize=true">
+          <img width="256" src="https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/starchy.svg?sanitize=true">
 </p>
   
 [![Build Status](https://travis-ci.org/KartulUdus/PoracleJS.svg?branch=master)](https://travis-ci.org/KartulUdus/PoracleJS)
@@ -15,7 +15,7 @@ It allows for high end-user configurability using discord `!commands` or telegra
 - [Discord](https://discord.gg/AathPCp) - Place for #help and #announcments  
 
 ### Install
-- [Install NodeJS](https://nodejs.org/en/) version 12 or higher
+- [Install NodeJS](https://nodejs.org/en/) version 16
 - [Create a discord bot and invite it to your server](https://muckelba.github.io/poracleWiki/discordbot.html)
 
 ```bash

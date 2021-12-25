@@ -41,7 +41,12 @@ module.exports = async (client, msg) => {
 			// eslint-disable-next-line no-continue
 			if (commandText.indexOf(client.config.discord.prefix) !== 0) continue
 
-			let args = commandText.slice(client.config.discord.prefix.length).trim().split(/ +/g)
+			// Regex will split by spaces but keeping quotes as a single string, even if in a substring eg: form:"new form"
+			// Remove the quotes
+
+			let args = commandText.slice(client.config.discord.prefix.length).trim().match(/(".*?"|[^"\s]+)+(?=\s*|\s*$)/g).map((x) => x.replace(/"/g, ''))
+
+			// Convert to lower case, translate back to english, and substitute _ for spaces
 
 			args = args.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
 			const command = args.shift()

@@ -13,6 +13,7 @@ let dts
 let geofence
 let translator
 let translatorFactory
+let scannerKnex
 
 function getKnex(conf) {
 	switch (conf.database.client) {
@@ -20,7 +21,7 @@ function getKnex(conf) {
 			return Knex({
 				client: 'mysql2',
 				connection: conf.database.conn,
-				pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
 			})
 		}
 
@@ -47,12 +48,30 @@ function getKnex(conf) {
 	}
 }
 
+function getScannerKnex(conf) {
+	if (conf.database.scannerType === 'mad' || conf.database.scannerType === 'rdm') {
+		return !Array.isArray(conf.database.scanner)
+			? [Knex({
+				client: 'mysql2',
+				connection: conf.database.scanner,
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
+			})] : conf.database.scanner.map((scanner) => Knex({
+				client: 'mysql2',
+				connection: scanner,
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
+			}))
+	}
+
+	return null
+}
+
 module.exports = {
 	Config: (performChecks = true) => {
 		config = importFresh('config')
 		dts = dtsLoader.readDtsFiles()
 		geofence = geofenceLoader.readGeofenceFile(config, path.join(__dirname, `../../${config.geofence.path}`))
 		knex = getKnex(config)
+		scannerKnex = getScannerKnex(config)
 		translatorFactory = new TranslatorFactory(config)
 		translator = translatorFactory.default
 
@@ -64,7 +83,7 @@ module.exports = {
 
 		moment.locale(config.locale.timeformat)
 		return {
-			config, knex, dts, geofence, translator, translatorFactory,
+			config, knex, scannerKnex, dts, geofence, translator, translatorFactory,
 		}
 	},
 	getKnex,
