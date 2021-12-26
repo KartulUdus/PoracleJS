@@ -126,8 +126,14 @@ class DiscordCommando {
 				this.logs.log.info(`Discord commando loaded ${enabledCommands.join(', ')} commands`)
 			})
 
-			this.client.login(this.token)
+			await this.client.login(this.token)
 		} catch (err) {
+			if (err.code === 'DISALLOWED_INTENTS') {
+				this.logs.log.error('Could not initialise discord', err)
+				this.logs.log.error('Ensure that your discord bot Gateway intents for Presence, Server Members and Messages are on - see https://muckelba.github.io/poracleWiki/discordbot.html')
+				process.exit(1)
+			}
+
 			this.logs.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)
 			return this.bounceWorker()
