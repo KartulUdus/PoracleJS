@@ -1,4 +1,8 @@
-const { Client } = require('discord.js')
+const {
+	Client,
+	Intents,
+	Options,
+} = require('discord.js')
 const fs = require('fs')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
@@ -28,26 +32,26 @@ class DiscordCommando {
 
 	async bounceWorker() {
 		delete this.client
-		// This will be required in discord.js 13
-		// -- but causes an exception if intent not given in discord bot configuration
-		// const intents = new Intents([
-		// 	Intents.NON_PRIVILEGED, // include all non-privileged intents, would be better to specify which ones you actually need
-		// 	'GUILD_MEMBERS', // lets you request guild members (i.e. fixes the issue)
-		// ])
+
+		const intents = new Intents()
+		intents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_PRESENCES)
 
 		this.client = new Client({
-			messageCacheMaxSize: 1,
-			messsageCacheLifetime: 60,
-			messageSweepInterval: 120,
-			messageEditHistoryMaxSize: 1,
-			// ws: { intents },
+			intents,
+			partials: ['CHANNEL', 'MESSAGE'], // , 'GUILD_MEMBER'],
+			makeCache: Options.cacheWithLimits({
+				MessageManager: 1,
+				PresenceManager: 0,
+			}),
 		})
+
 		try {
 			this.client.on('error', (err) => {
 				this.busy = true
 				this.logs.log.error(`Discord worker #${this.id} \n bouncing`, err)
 				this.bounceWorker()
 			})
+
 			this.client.on('rateLimit', (info) => {
 				let channelId
 				if (info.route) {
