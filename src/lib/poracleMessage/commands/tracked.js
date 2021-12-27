@@ -39,13 +39,15 @@ function monsterRowText(config, translator, GameData, monster) {
 	if (minRarity === -1) minRarity = 1
 
 	const pvpString = monster.pvp_ranking_league
-		? translator.translate('pvp ranking:').concat(' ',
+		? translator.translate('pvp ranking:').concat(
+			' ',
 			{
 				500: translator.translate('littlepvp'),
 				1500: translator.translate('greatpvp'),
 				2500: translator.translate('ultrapvp'),
 			}[monster.pvp_ranking_league].toString(),
-			` top${monster.pvp_ranking_best > 1 ? `${monster.pvp_ranking_best}-` : ''}${monster.pvp_ranking_worst} (@${monster.pvp_ranking_min_cp}+)`)
+			` top${monster.pvp_ranking_best > 1 ? `${monster.pvp_ranking_best}-` : ''}${monster.pvp_ranking_worst} (@${monster.pvp_ranking_min_cp}+)`,
+		)
 		: ''
 
 	// const greatLeague = monster.great_league_ranking >= 4096 ? translator.translate('any') : `top${monster.great_league_ranking_highest > 1 ? `${monster.great_league_ranking_highest}-` : ''}${monster.great_league_ranking} (@${monster.great_league_ranking_min_cp}+)`
@@ -154,7 +156,7 @@ function questRowText(config, translator, GameData, quest) {
 
 function invasionRowText(config, translator, GameData, invasion) {
 	let genderText = ''
-	let typeText = ''
+	let typeText
 	if (!invasion.gender || invasion.gender === '') {
 		genderText = translator.translate('any')
 	} else if (invasion.gender === 1) {
@@ -174,7 +176,7 @@ function invasionRowText(config, translator, GameData, invasion) {
 }
 
 function lureRowText(config, translator, GameData, lure) {
-	let typeText = ''
+	let typeText
 
 	if (lure.lure_id === 0) {
 		typeText = 'any'

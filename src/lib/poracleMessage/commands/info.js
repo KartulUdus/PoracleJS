@@ -191,15 +191,17 @@ exports.run = async (client, msg, args, options) => {
 					const forecastInfo = weatherInfo[currentTimestamp]
 					if (!forecastInfo) break
 
-					const timeForHuman = moment.unix(currentTimestamp).tz(geoTz(latitude, longitude).toString()).format('HH:mm')
+					const timeForHuman = moment.unix(currentTimestamp).tz(geoTz.find(latitude, longitude).toString()).format('HH:mm')
 
 					forecastString = forecastString.concat(timeForHuman, ' - ', translator.translate(client.GameData.utilData.weather[forecastInfo].name), ' ', translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[forecastInfo].emoji, platform)), '\n')
 					availableForecast = true
 				}
 
-				await msg.replyWithImageUrl(translator.translateFormat('Current Weather: {0} {1}', translator.translate(client.GameData.utilData.weather[weatherId].name), translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weatherId].emoji, platform))),
+				await msg.replyWithImageUrl(
+					translator.translateFormat('Current Weather: {0} {1}', translator.translate(client.GameData.utilData.weather[weatherId].name), translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weatherId].emoji, platform))),
 					availableForecast ? forecastString : translator.translate('No forecast available'),
-					staticMap)
+					staticMap,
+				)
 
 				break
 			}
@@ -334,8 +336,10 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				if (!found) {
-					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`', util.prefix),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`', util.prefix),
+						{ style: 'markdown' },
+					)
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 				}
 			}

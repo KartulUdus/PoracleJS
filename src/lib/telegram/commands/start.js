@@ -15,8 +15,13 @@ module.exports = async (ctx) => {
 			// This is a DM, and we are allowed to attempt to register on start
 			const { id } = ctx.update.message.from
 
-			const telegramReconciliation = new TelegramReconciliation(ctx,
-				controller.logs.log, controller.config, controller.query, controller.dts)
+			const telegramReconciliation = new TelegramReconciliation(
+				ctx,
+				controller.logs.log,
+				controller.config,
+				controller.query,
+				controller.dts,
+			)
 			await telegramReconciliation.syncTelegramUser(id, true, false)
 		}
 

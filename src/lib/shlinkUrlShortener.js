@@ -42,7 +42,7 @@ class ShlinkUrlShortener {
 			if (error.response) {
 				this.log.warn(`Shortener[shlink]: Failed to shorten ${url}. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
 			} else {
-				this.log.warn(`Shortener[shlink]: Failed to shorten ${url}StaticMap. Error: ${error}.`)
+				this.log.warn(`Shortener[shlink]: Failed to shorten ${url}. Error: ${error}.`)
 			}
 			return url
 		}

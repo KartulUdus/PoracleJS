@@ -89,7 +89,7 @@ class DiscordCommando {
 			this.client.translatorFactory = this.translatorFactory
 			this.client.updatedDiff = diff
 			this.client.translator = this.translator
-			this.client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$])', 'igm')
+			this.client.hookRegex = /(?:https?:\/\/|www\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$])/igm
 
 			fs.readdir(`${__dirname}/events/`, (err, files) => {
 				if (err) return this.log.error(err)
@@ -140,7 +140,7 @@ class DiscordCommando {
 		}
 	}
 
-	// eslint-disable-next-line class-methods-use-this
+	// eslint-disable-next-line class-methods-use-this,no-promise-executor-return
 	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 }
 

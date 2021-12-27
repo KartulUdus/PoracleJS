@@ -40,8 +40,10 @@ exports.run = async (client, msg, args, options) => {
 				tipMsg += ', `{0}gym valor battle_changes`'
 			}
 
-			await msg.reply(translator.translateFormat(tipMsg, util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat(tipMsg, util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -152,12 +154,15 @@ exports.run = async (client, msg, args, options) => {
 				}
 			}
 
-			await client.query.deleteWhereInQuery('gym', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'gym',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('gym', [...insert, ...updates])
 

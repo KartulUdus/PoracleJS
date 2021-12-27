@@ -21,14 +21,14 @@ exports.run = async (client, msg, args, options) => {
 			return msg.reply(translator.translate('You do not have permission to execute this command'))
 		}
 
-		let platform = target.type.split(':')[0]
-		if (platform === 'webhook') platform = 'discord'
-
 		await client.query.updateQuery('humans', { enabled: 1 }, { id: target.id })
 		await msg.react('✅')
 
-		await msg.reply(translator.translateFormat('Your tracking is now activated, send {0}{1} for more information about available commands',
-			util.prefix, translator.translate('help')))
+		await msg.reply(translator.translateFormat(
+			'Your tracking is now activated, send {0}{1} for more information about available commands',
+			util.prefix,
+			translator.translate('help'),
+		))
 	} catch (err) {
 		client.log.error(`start command ${msg.content} unhappy:`, err)
 	}

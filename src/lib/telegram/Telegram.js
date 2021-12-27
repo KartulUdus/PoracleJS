@@ -119,6 +119,7 @@ class Telegram {
 
 	// eslint-disable-next-line class-methods-use-this
 	async sleep(n) {
+		// eslint-disable-next-line no-promise-executor-return
 		return new Promise((resolve) => setTimeout(resolve, n))
 	}
 
@@ -133,10 +134,12 @@ class Telegram {
 	work(data) {
 		this.telegramQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+			this.queueProcessor.run(
+				async (work) => (this.sendAlert(work)),
 				async (err) => {
 					this.logs.log.error('Telegram queueProcessor exception', err)
-				})
+				},
+			)
 		}
 	}
 
@@ -200,8 +203,10 @@ class Telegram {
 				if (data.message.sticker && data.message.sticker.length > 0) {
 					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
-					const msg = await this.retrySender(senderId,
-						async () => this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true }))
+					const msg = await this.retrySender(
+						senderId,
+						async () => this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true }),
+					)
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
@@ -211,8 +216,10 @@ class Telegram {
 				if (data.message.photo && data.message.photo.length > 0) {
 					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Photo ${data.message.photo}`)
 
-					const msg = await this.retrySender(senderId,
-						async () => this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true }))
+					const msg = await this.retrySender(
+						senderId,
+						async () => this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true }),
+					)
 					messageIds.push(msg.message_id)
 				}
 			} catch (err) {
@@ -220,11 +227,13 @@ class Telegram {
 			}
 			this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
 
-			const msg = await this.retrySender(senderId,
+			const msg = await this.retrySender(
+				senderId,
 				async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
 					parse_mode: 'Markdown',
 					disable_web_page_preview: !data.message.webpage_preview,
-				}))
+				}),
+			)
 			messageIds.push(msg.message_id)
 
 			if (data.message.location) {
@@ -232,8 +241,10 @@ class Telegram {
 
 				try {
 					// eslint-disable-next-line no-shadow
-					const msg = await this.retrySender(senderId,
-						async () => this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true }))
+					const msg = await this.retrySender(
+						senderId,
+						async () => this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true }),
+					)
 					messageIds.push(msg.message_id)
 				} catch (err) {
 					this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
