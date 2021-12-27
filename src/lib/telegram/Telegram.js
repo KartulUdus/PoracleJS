@@ -119,7 +119,6 @@ class Telegram {
 
 	// eslint-disable-next-line class-methods-use-this
 	async sleep(n) {
-		// eslint-disable-next-line no-promise-executor-return
 		return new Promise((resolve) => setTimeout(resolve, n))
 	}
 
@@ -134,12 +133,10 @@ class Telegram {
 	work(data) {
 		this.telegramQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run(
-				async (work) => (this.sendAlert(work)),
+			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
 				async (err) => {
 					this.logs.log.error('Telegram queueProcessor exception', err)
-				},
-			)
+				})
 		}
 	}
 
@@ -199,60 +196,76 @@ class Telegram {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
 			const senderId = `${logReference}: ${data.name} ${data.target}`
-			try {
-				if (data.message.sticker && data.message.sticker.length > 0) {
-					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
-					const msg = await this.retrySender(
-						senderId,
-						async () => this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true }),
-					)
-					messageIds.push(msg.message_id)
-				}
-			} catch (err) {
-				this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`)
-			}
-			try {
-				if (data.message.photo && data.message.photo.length > 0) {
-					this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Photo ${data.message.photo}`)
+			const sendOrderDefault = ['sticker', 'photo', 'text', 'location']
+			const sendOrderDefaultSet = new Set(sendOrderDefault)
+			let sendOrder = data.message.send_order || sendOrderDefault
+			// lowercase, filter unique and check for valid entries
+			sendOrder = sendOrder
+				.map((v) => v.toLowerCase())
+				.filter((v, i, a) => a.indexOf(v) === i)
+				.filter((v) => sendOrderDefaultSet.has(v))
 
-					const msg = await this.retrySender(
-						senderId,
-						async () => this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true }),
-					)
-					messageIds.push(msg.message_id)
-				}
-			} catch (err) {
-				this.logs.telegram.error(`${logReference}: Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
-			}
-			this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
+			for (const type of sendOrder) {
+				switch (type) {
+					case 'sticker': {
+						try {
+							if (data.message.sticker && data.message.sticker.length > 0) {
+								this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Sticker ${data.message.sticker}`)
 
-			const msg = await this.retrySender(
-				senderId,
-				async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-					parse_mode: 'Markdown',
-					disable_web_page_preview: !data.message.webpage_preview,
-				}),
-			)
-			messageIds.push(msg.message_id)
+								const msg = await this.retrySender(senderId,
+									async () => this.bot.telegram.sendSticker(data.target, data.message.sticker, { disable_notification: true }))
+								messageIds.push(msg.message_id)
+							}
+						} catch (err) {
+							this.logs.telegram.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} Failed to send Telegram sticker ${data.message.sticker}`)
+						}
+						break
+					}
+					case 'photo': {
+						try {
+							if (data.message.photo && data.message.photo.length > 0) {
+								this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Photo ${data.message.photo}`)
 
-			if (data.message.location) {
-				this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
+								const msg = await this.retrySender(senderId,
+									async () => this.bot.telegram.sendPhoto(data.target, data.message.photo, { disable_notification: true }))
+								messageIds.push(msg.message_id)
+							}
+						} catch (err) {
+							this.logs.telegram.error(`${logReference}: Failed to send Telegram photo ${data.message.photo} to ${data.name}/${data.target}`, err)
+						}
+						break
+					}
+					case 'text': {
+						this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
+						const msg = await this.retrySender(senderId,
+							async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
+								parse_mode: 'Markdown',
+								disable_web_page_preview: !data.message.webpage_preview,
+							}))
+						messageIds.push(msg.message_id)
+						break
+					}
+					case 'location': {
+						if (data.message.location) {
+							this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Location ${data.lat} ${data.lat}`)
 
-				try {
-					// eslint-disable-next-line no-shadow
-					const msg = await this.retrySender(
-						senderId,
-						async () => this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true }),
-					)
-					messageIds.push(msg.message_id)
-				} catch (err) {
-					this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
+							try {
+								// eslint-disable-next-line no-shadow
+								const msg = await this.retrySender(senderId,
+									async () => this.bot.telegram.sendLocation(data.target, data.lat, data.lon, { disable_notification: true }))
+								messageIds.push(msg.message_id)
+							} catch (err) {
+								this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram location ${data.lat} ${data.lat}`, err)
+							}
+						}
+						break
+					}
+					default: break
 				}
 			}
 
 			if (data.clean) {
-				//				this.log.warn(`Telegram setting to clean in ${msgDeletionMs}ms`)
 				for (const id of messageIds) {
 					this.telegramMessageTimeouts.set(`${id}:${data.target}`, data.target, Math.floor(msgDeletionMs / 1000) + 1)
 				}
