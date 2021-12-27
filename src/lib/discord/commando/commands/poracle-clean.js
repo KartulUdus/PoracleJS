@@ -18,7 +18,6 @@ exports.run = async (client, msg) => {
 		await startMessage.delete()
 		const finishMessage = msg.reply(client.translator.translate('Cleaning finished'))
 		setTimeout(() => { finishMessage.delete() }, 15000)
-
 	} catch (err) {
 		await msg.reply('Failed to run clean, check logs')
 		client.logs.log.error(`Poracle-clean command "${msg.content}" unhappy:`, err)
