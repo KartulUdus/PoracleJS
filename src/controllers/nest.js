@@ -82,10 +82,10 @@ class Nest extends Controller {
 
 			const nestExpiration = data.reset_time + (7 * 24 * 60 * 60)
 			data.tth = moment.preciseDiff(Date.now(), nestExpiration * 1000, true)
-			data.disappearDate = moment(nestExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.date)
-			data.resetDate = moment(data.reset_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.date)
-			data.disappearTime = moment(nestExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.resetTime = moment(data.reset_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.disappearDate = moment(nestExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.date)
+			data.resetDate = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.date)
+			data.disappearTime = moment(nestExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.resetTime = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated

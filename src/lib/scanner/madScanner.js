@@ -7,6 +7,7 @@ class MadScanner {
 	async getGymName(gym_id) {
 		try {
 			for (const db of this.dbs) {
+				// eslint-disable-next-line camelcase
 				const row = await db.select('name').from('gymdetails').where({ gym_id }).first()
 				if (row) return row.name
 			}
@@ -20,6 +21,7 @@ class MadScanner {
 	async getPokestopName(pokestop_id) {
 		try {
 			for (const db of this.dbs) {
+				// eslint-disable-next-line camelcase
 				const row = await db.select('name').from('pokestop').where({ pokestop_id }).first()
 				if (row) return row.name
 			}

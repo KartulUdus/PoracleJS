@@ -11,7 +11,7 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 const noop = () => { }
 
 class Worker {
-	constructor(token, id, config, logs, rehydrateTimeouts = false, statusActivity) {
+	constructor(token, id, config, logs, rehydrateTimeouts, statusActivity) {
 		this.id = id
 		this.token = token
 		this.config = config
@@ -29,7 +29,7 @@ class Worker {
 		this.bounceWorker()
 	}
 
-	// eslint-disable-next-line class-methods-use-this
+	// eslint-disable-next-line class-methods-use-this,no-promise-executor-return
 	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 	addUser(id) {
@@ -105,10 +105,12 @@ class Worker {
 	work(data) {
 		this.discordQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+			this.queueProcessor.run(
+				async (work) => (this.sendAlert(work)),
 				async (err) => {
 					this.logs.log.error('Discord queueProcessor exception', err)
-				})
+				},
+			)
 		}
 	}
 

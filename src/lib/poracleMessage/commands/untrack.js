@@ -19,8 +19,10 @@ exports.run = async (client, msg, args, options) => {
 		const translator = client.translatorFactory.Translator(language)
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -39,8 +41,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 
-		let monsters = []
-		monsters = Object.values(client.GameData.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+		const monsters = Object.values(client.GameData.monsters).filter((mon) => ((args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
 			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t)) || args.includes('everything'))
 			&& !mon.form.id)
 

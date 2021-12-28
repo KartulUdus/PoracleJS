@@ -102,11 +102,13 @@ exports.run = async (client, msg, args, options) => {
 					profileNo = profile.profile_no
 				}
 
-				await client.query.deleteQuery('profiles',
+				await client.query.deleteQuery(
+					'profiles',
 					{
 						id: target.id,
 						profile_no: profileNo,
-					})
+					},
+				)
 
 				if (profiles.length !== 1 || profileNo !== 1) {
 					await client.query.deleteQuery('egg', { id: target.id, profile_no: profileNo })
@@ -128,18 +130,24 @@ exports.run = async (client, msg, args, options) => {
 						}
 					}
 					if (!lowestProfile) {
-						await client.query.updateQuery('humans',
+						await client.query.updateQuery(
+							'humans',
 							{
 								current_profile_no: 1,
-							}, { id: target.id })
+							},
+							{ id: target.id },
+						)
 					} else {
-						await client.query.updateQuery('humans',
+						await client.query.updateQuery(
+							'humans',
 							{
 								current_profile_no: lowestProfileNo,
 								area: lowestProfile.area,
 								latitude: lowestProfile.latitude,
 								longitude: lowestProfile.longitude,
-							}, { id: target.id })
+							},
+							{ id: target.id },
+						)
 					}
 				}
 
@@ -272,8 +280,10 @@ exports.run = async (client, msg, args, options) => {
 						await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 					}
 
-					await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`, `{0}profile copyto <name>`', util.prefix),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`, `{0}profile copyto <name>`', util.prefix),
+						{ style: 'markdown' },
+					)
 
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 					return
@@ -298,13 +308,16 @@ exports.run = async (client, msg, args, options) => {
 					return await msg.reply(translator.translate('I can\'t find that profile'))
 				}
 
-				await client.query.updateQuery('humans',
+				await client.query.updateQuery(
+					'humans',
 					{
 						current_profile_no: profileNo,
 						area: profile.area,
 						latitude: profile.latitude,
 						longitude: profile.longitude,
-					}, { id: target.id })
+					},
+					{ id: target.id },
+				)
 				await msg.react('✅')
 			}
 		}
