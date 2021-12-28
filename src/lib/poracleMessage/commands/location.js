@@ -25,8 +25,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}location <lat>,<lon>`, `{0}location <your address>`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}location <lat>,<lon>`, `{0}location <your address>`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -84,18 +86,26 @@ exports.run = async (client, msg, args, options) => {
 		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
 		message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
 
-		if (platform === 'discord' && client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
-			staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'location', { latitude: lat, longitude: lon }, client.config.geocoding.staticMapType.location)
-			message = {
-				embed: {
-					color: 0x00ff00,
-					title: translator.translate('New location'),
-					description: `${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}`,
-					image: {
-						url: staticMap,
+		if (platform === 'discord' && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+			const tileServerOptions = client.query.tileserverPregen.getConfigForTileType('location')
+			if (tileServerOptions.type !== 'none') {
+				// Could also use logic to not pregenerate
+				staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'location', {
+					latitude: lat,
+					longitude: lon,
+				}, tileServerOptions.type)
+
+				message = {
+					embed: {
+						color: 0x00ff00,
+						title: translator.translate('New location'),
+						description: `${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}`,
+						image: {
+							url: staticMap,
+						},
+						url: maplink,
 					},
-					url: maplink,
-				},
+				}
 			}
 		}
 

@@ -33,6 +33,56 @@ class DiscordReconciliation {
 		}
 	}
 
+	async removeRoles(user) {
+		if (this.config.discord.userRoleSubscription) {
+			const userId = user.id
+
+			for (const [guildId, guildDetails] of Object.entries(this.config.discord.userRoleSubscription)) {
+				const guild = await this.client.guilds.fetch(guildId)
+				// Fetch the GuildMember from appropriate guild as this is likely a DM
+				try {
+					const guildMember = await guild.members.fetch(userId)
+
+					const roles = guildDetails.roles || {}
+					for (const roleId of Object.values(roles)) {
+						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
+
+						if (discordRole) {
+							this.log.info(`Reconciliation (Discord) Disable user ${user.id} removed role ${discordRole.name}`)
+
+							await guildMember.roles.remove(discordRole)
+						}
+					}
+
+					let exclusiveRoles = guildDetails.exclusiveRoles || []
+					if (!Array.isArray(exclusiveRoles)) exclusiveRoles = [exclusiveRoles]
+
+					for (const exclusiveRole of exclusiveRoles) {
+						for (const roleId of Object.values(exclusiveRole)) {
+							const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
+
+							if (discordRole) {
+								this.log.info(`Reconciliation (Discord) Disable user ${user.id} removed role ${discordRole.name}`)
+
+								await guildMember.roles.remove(discordRole)
+							}
+						}
+					}
+				} catch (err) {
+					if (err instanceof DiscordAPIError) {
+						if (err.httpStatus === 404) {
+							// eslint-disable-next-line no-continue
+							// last line in loop, so we don't need this
+							// continue
+						}
+					} else {
+						throw err
+					}
+				}
+			}
+		}
+	}
+
 	async disableUser(user) {
 		if (this.config.general.roleCheckMode === 'disable-user') {
 			if (!user.admin_disable) {
@@ -41,6 +91,7 @@ class DiscordReconciliation {
 					disabled_date: this.query.dbNow(),
 				}, { id: user.id })
 				this.log.info(`Reconciliation (Discord) Disable user ${user.id} ${user.name}`)
+				await this.removeRoles(user)
 			}
 		} else if (this.config.general.roleCheckMode === 'delete') {
 			await this.query.deleteQuery('egg', { id: user.id })
@@ -51,6 +102,7 @@ class DiscordReconciliation {
 			await this.query.deleteQuery('profiles', { id: user.id })
 			await this.query.deleteQuery('humans', { id: user.id })
 			this.log.info(`Reconciliation (Discord) Delete user ${user.id} ${user.name}`)
+			await this.removeRoles(user)
 		} else {
 			this.log.info(`Reconciliation (Discord) Not removing invalid user ${user.id} [roleCheckMode is ignored]`)
 		}

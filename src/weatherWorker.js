@@ -19,7 +19,7 @@ const {
 const WeatherController = require('./controllers/weather')
 
 const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
-const weatherController = new WeatherController(logs.controller, knex, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
+const weatherController = new WeatherController(logs.controller, knex, null, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
 
 const hookQueue = []
 const workerId = 'WEATHER'

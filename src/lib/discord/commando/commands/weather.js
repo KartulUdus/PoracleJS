@@ -4,14 +4,14 @@ exports.run = async (client, msg, command) => {
 
 	try {
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 		let webhookName
 		const webhookArray = command.find((args) => args.find((arg) => arg.match(client.re.nameRe)))
 		if (webhookArray) webhookName = webhookArray.find((arg) => arg.match(client.re.nameRe))
 		if (webhookName) webhookName = webhookName.replace(client.translator.translate('name'), '')
-		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
+		if (client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') target = { id: msg.channel.id, name: msg.channel.name, webhook: false }
 		if (client.config.discord.admins.includes(msg.author.id) && webhookName) target = { name: webhookName.replace(client.translator.translate('name'), ''), webhook: true }
 		const isRegistered = target.webhook
 			? await client.query.selectOneQuery('humans', { name: target.name, type: 'webhook' })
@@ -20,10 +20,10 @@ exports.run = async (client, msg, command) => {
 		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && target.webhook) {
 			return await msg.reply(`Webhook ${target.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('webhook')} ${client.translator.translate('add')} ${client.translator.translate('<Your-Webhook-url>')}`)
 		}
-		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+		if (!isRegistered && client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
 			return await msg.reply(`${msg.channel.name} ${client.translator.translate('does not seem to be registered. add it with')} ${client.config.discord.prefix}${client.translator.translate('channel')} ${client.translator.translate('add')}`)
 		}
-		if (!isRegistered && msg.channel.type === 'dm') {
+		if (!isRegistered && msg.channel.type === 'DM') {
 			return await msg.react(client.translator.translate('🙅'))
 		}
 		if (target.webhook) target.id = isRegistered.id

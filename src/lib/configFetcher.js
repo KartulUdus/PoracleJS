@@ -50,11 +50,16 @@ function getKnex(conf) {
 
 function getScannerKnex(conf) {
 	if (conf.database.scannerType === 'mad' || conf.database.scannerType === 'rdm') {
-		return Knex({
-			client: 'mysql2',
-			connection: conf.database.scanner,
-			pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
-		})
+		return !Array.isArray(conf.database.scanner)
+			? [Knex({
+				client: 'mysql2',
+				connection: conf.database.scanner,
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
+			})] : conf.database.scanner.map((scanner) => Knex({
+				client: 'mysql2',
+				connection: scanner,
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
+			}))
 	}
 
 	return null

@@ -69,14 +69,6 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 
-		// Check target
-		//		const confAreas = lowercaseAreas.map((area) => area.replace(/ /gi, '_')).sort()
-		//		const confAreas2 = availableAreas.map((area) => area.replace(/ /gi, '_')).sort()
-		//		const confUse = confAreas2.join('\n')
-
-		let platform = target.type.split(':')[0]
-		if (platform === 'webhook') platform = 'discord'
-
 		// Remove arguments that we don't want to keep for area processing
 		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
@@ -99,8 +91,10 @@ exports.run = async (client, msg, args, options) => {
 				const uniqueNewAreas = [...new Set(newAreas)]
 
 				if (!addAreas.length) {
-					await msg.reply(translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
+						{ style: 'markdown' },
+					)
 				}
 
 				await client.query.updateQuery('humans', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id })
@@ -131,8 +125,10 @@ exports.run = async (client, msg, args, options) => {
 				const uniqueNewAreas = [...new Set(newAreas)]
 
 				if (!removeAreas.length) {
-					await msg.reply(translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
+						{ style: 'markdown' },
+					)
 				}
 
 				await client.query.updateQuery('humans', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id })
@@ -178,23 +174,26 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			case 'overview': {
-				if (client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+				if (client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
 					const staticMap = await geofenceTileGenerator.generateGeofenceOverviewTile(
 						client.geofence,
 						client.query.tileserverPregen,
-						args.length > 2 ? args : JSON.parse(human.area),
+						args.length >= 2 ? args : JSON.parse(human.area),
 					)
 					if (staticMap) {
-						await msg.replyWithImageUrl(translator.translateFormat('Overview display'),
+						await msg.replyWithImageUrl(
+							translator.translateFormat('Overview display'),
 							null,
-							staticMap)
+							staticMap,
+						)
 					}
 				}
 				break
 			}
 			case 'show': {
-				if (client.config.geocoding.staticMapType.location && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
-					for (const area of args) {
+				if (client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+					const areas = args.length >= 2 ? args : JSON.parse(human.area)
+					for (const area of areas) {
 						let staticMap
 
 						if (area.match(client.re.dRe)) {
@@ -218,9 +217,11 @@ exports.run = async (client, msg, args, options) => {
 						}
 
 						if (staticMap) {
-							await msg.replyWithImageUrl(translator.translateFormat('Area display: {0}', area),
+							await msg.replyWithImageUrl(
+								translator.translateFormat('Area display: {0}', area),
 								null,
-								staticMap)
+								staticMap,
+							)
 						}
 					}
 				}
@@ -229,8 +230,10 @@ exports.run = async (client, msg, args, options) => {
 			default: {
 				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 
-				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
-					{ style: 'markdown' })
+				await msg.reply(
+					translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
+					{ style: 'markdown' },
+				)
 				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 
 				break

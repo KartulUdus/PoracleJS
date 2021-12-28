@@ -152,16 +152,21 @@ async function syncDiscordRole() {
 		// 	"unregisterMissingChannels": true
 		if (config.reconciliation.discord.updateChannelNames || config.reconciliation.discord.updateChannelNotes
 			|| config.reconciliation.discord.unregisterMissingChannels) {
-			await discordReconciliation.syncDiscordChannels(config.reconciliation.discord.updateChannelNames,
-				config.reconciliation.discord.updateChannelNotes, config.reconciliation.discord.unregisterMissingChannels)
+			await discordReconciliation.syncDiscordChannels(
+				config.reconciliation.discord.updateChannelNames,
+				config.reconciliation.discord.updateChannelNotes,
+				config.reconciliation.discord.unregisterMissingChannels,
+			)
 		}
 		// "updateUserNames": true,
 		// "removeInvalidUsers": true,
 		// "registerNewUsers": true,
 		if (config.reconciliation.discord.updateUserNames || config.reconciliation.discord.removeInvalidUsers || config.reconciliation.discord.registerNewUsers) {
-			await discordReconciliation.syncDiscordRole(config.reconciliation.discord.registerNewUsers,
+			await discordReconciliation.syncDiscordRole(
+				config.reconciliation.discord.registerNewUsers,
 				config.reconciliation.discord.updateUserNames,
-				config.reconciliation.discord.removeInvalidUsers)
+				config.reconciliation.discord.removeInvalidUsers,
+			)
 		}
 	} catch (err) {
 		log.error('Verification of Poracle user\'s roles failed with', err)
@@ -756,6 +761,7 @@ async function handleAlarms() {
 
 async function currentStatus() {
 	let discordQueueLength = 0
+
 	// eslint-disable-next-line no-sequences
 	const queueCount = (queue) => queue.map((x) => x.target).reduce((r, c) => (r[c] = (r[c] || 0) + 1, r), {})
 
@@ -770,10 +776,12 @@ async function currentStatus() {
 		+ (telegramChannel ? telegramChannel.telegramQueue.length : 0)
 
 	const webhookQueueLength = discordWebhookWorker ? discordWebhookWorker.webhookQueue.length : 0
-	Object.assign(queueSummary,
+	Object.assign(
+		queueSummary,
 		telegram ? queueCount(telegram.telegramQueue) : {},
 		telegramChannel ? queueCount(telegramChannel.telegramQueue) : {},
-		discordWebhookWorker ? queueCount(discordWebhookWorker.webhookQueue) : {})
+		discordWebhookWorker ? queueCount(discordWebhookWorker.webhookQueue) : {},
+	)
 
 	const infoMessage = `[Main] Queues: Inbound webhook ${fastify.hookQueue.length} | Discord: ${discordQueueLength} + ${webhookQueueLength} | Telegram: ${telegramQueueLength}`
 	log.info(infoMessage)
@@ -793,7 +801,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 		const humans = await query.selectAllQuery('humans', { enabled: 1, admin_disable: 0 })
 		const profilesToCheck = await query.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
-		let lastId
+		let lastId = null
 		for (const profile of profilesToCheck) {
 			const human = humans.find((x) => x.id === profile.id)
 
@@ -802,7 +810,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 
 			let nowForHuman = moment()
 			if (human.latitude) {
-				nowForHuman = moment().tz(geoTz(human.latitude, human.longitude).toString())
+				nowForHuman = moment().tz(geoTz.find(human.latitude, human.longitude).toString())
 			}
 
 			if (profile.id !== lastId) {
@@ -843,13 +851,16 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 						log.info(`Profile Check: Setting ${profile.id} to profile ${profile.profile_no} - ${profile.name}`)
 
 						lastId = profile.id
-						await query.updateQuery('humans',
+						await query.updateQuery(
+							'humans',
 							{
 								current_profile_no: profile.profile_no,
 								area: profile.area,
 								latitude: profile.latitude,
 								longitude: profile.longitude,
-							}, { id: profile.id })
+							},
+							{ id: profile.id },
+						)
 					}
 				}
 			}

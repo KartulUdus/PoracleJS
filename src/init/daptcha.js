@@ -2,6 +2,7 @@
 
 const { Client } = require('discord.js')
 
+// eslint-disable-next-line no-promise-executor-return
 const sleep = (n) => new Promise((resolve) => setTimeout(resolve, n))
 
 module.exports = async (idArray, config, log) => {

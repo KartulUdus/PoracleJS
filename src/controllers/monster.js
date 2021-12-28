@@ -33,12 +33,19 @@ class Monster extends Controller {
 		for (const [league, leagueData] of Object.entries(data.pvpBestRank)) {
 			// if rank is good enough
 			if (leagueData.rank <= pvpQueryLimit) {
-				result.push(...await this.performQuery(this.buildQuery(`PVP ${league}`, data, strictareastring, areastring,
+				result.push(...await this.performQuery(this.buildQuery(
+					`PVP ${league}`,
+					data,
+					strictareastring,
+					areastring,
 					{
 						pokemon_id: data.pokemon_id,
 						form: data.form,
 						includeEverything: true,
-					}, league, leagueData)))
+					},
+					league,
+					leagueData,
+				)))
 			}
 		}
 
@@ -50,13 +57,19 @@ class Monster extends Controller {
 					for (const [league, leagueData] of Object.entries(pvpMon)) {
 						// if rank is good enough
 						if (leagueData.rank <= pvpQueryLimit) {
-							result.push(...await this.performQuery(this.buildQuery(`PVPEvo ${league}`, data, strictareastring, areastring,
+							result.push(...await this.performQuery(this.buildQuery(
+								`PVPEvo ${league}`,
+								data,
+								strictareastring,
+								areastring,
 								{
 									pokemon_id: pokemonId,
 									form: leagueData.form,
 									includeEverything: false,
 								},
-								league, leagueData)))
+								league,
+								leagueData,
+							)))
 						}
 					}
 				}
@@ -222,7 +235,7 @@ class Monster extends Controller {
 			data.ivColor = this.findIvColor(data.iv)
 			data.tthSeconds = data.disappear_time - Date.now() / 1000
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
-			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.confirmedTime = data.disappear_time_verified
 			data.distime = data.disappearTime // deprecated
 			data.individual_attack = data.atk // deprecated
@@ -381,9 +394,8 @@ class Monster extends Controller {
 					}
 
 					data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 					data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-					// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-					// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 
 					const geoResult = await this.getAddress({
 						lat: data.latitude,
@@ -391,7 +403,13 @@ class Monster extends Controller {
 					})
 					const jobs = []
 
-					await this.getStaticMapUrl(logReference, data, 'monster', ['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl'])
+					await this.getStaticMapUrl(
+						logReference,
+						data,
+						'monster',
+						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt'],
+					)
 					data.staticmap = data.staticMap // deprecated
 
 					// get Weather Forecast information
@@ -407,7 +425,7 @@ class Monster extends Controller {
 						if (weatherForecast.current > 0 && currentBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 						if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather === 0))) {
 							const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000)
-								.tz(geoTz(data.latitude, data.longitude)
+								.tz(geoTz.find(data.latitude, data.longitude)
 									.toString())
 								.format(this.config.locale.time)
 								.slice(0, -3)
@@ -433,6 +451,11 @@ class Monster extends Controller {
 						data.futureEventTime = event.time
 						data.futureEventName = event.name
 						data.futureEventTrigger = event.reason
+					}
+
+					// Lookup pokestop name if needed
+					if (this.config.general.populatePokestopName && !data.pokestopName && data.pokestop_id && this.scannerQuery) {
+						data.pokestopName = this.escapeJsonString(await this.scannerQuery.getPokestopName(data.pokestop_id))
 					}
 
 					for (const cares of whoCares) {
@@ -594,8 +617,10 @@ class Monster extends Controller {
 									displayRank.form = translator.translate(formName)
 									if (displayRank.evolution) {
 										displayRank.fullNameEng = 'Mega '.concat(displayRank.nameEng, displayRank.formEng ? ' ' : '', displayRank.formEng)
-										displayRank.fullName = translator.translateFormat(this.GameData.utilData.megaName[1],
-											displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form))
+										displayRank.fullName = translator.translateFormat(
+											this.GameData.utilData.megaName[1],
+											displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form),
+										)
 									} else {
 										displayRank.fullNameEng = displayRank.nameEng.concat(displayRank.formEng ? ' ' : '', displayRank.formEng)
 										displayRank.fullName = displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form)

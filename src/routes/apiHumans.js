@@ -24,9 +24,12 @@ module.exports = async (fastify, options, next) => {
 		let allowedAreas = fastify.geofence.map((x) => x.name.toLowerCase())
 		if (fastify.config.areaSecurity.enabled && !fastify.config.discord.admins.includes(req.params.id)
 		&& !fastify.config.telegram.admins.includes(req.params.id)) {
-			allowedAreas = communityLogic.filterAreas(fastify.config, human.community_membership
-				? JSON.parse(human.community_membership) : [],
-			allowedAreas)
+			allowedAreas = communityLogic.filterAreas(
+				fastify.config,
+				human.community_membership
+					? JSON.parse(human.community_membership) : [],
+				allowedAreas,
+			)
 		}
 
 		return {
@@ -73,8 +76,12 @@ module.exports = async (fastify, options, next) => {
 
 				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.channelTracking
 						&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
-					const dr = new DiscordUtil(fastify.discordWorker.client,
-						fastify.log, fastify.config, fastify.query)
+					const dr = new DiscordUtil(
+						fastify.discordWorker.client,
+						fastify.log,
+						fastify.config,
+						fastify.query,
+					)
 
 					roles = await dr.getUserRoles(req.params.id)
 
@@ -108,8 +115,12 @@ module.exports = async (fastify, options, next) => {
 				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.webhookTracking
 					&& Object.keys(fastify.config.discord.delegatedAdministration.webhookTracking).length) {
 					if (!roles) {
-						const dr = new DiscordUtil(fastify.discordWorker.client,
-							fastify.log, fastify.config, fastify.query)
+						const dr = new DiscordUtil(
+							fastify.discordWorker.client,
+							fastify.log,
+							fastify.config,
+							fastify.query,
+						)
 
 						roles = await dr.getUserRoles(req.params.id)
 					}
@@ -122,8 +133,12 @@ module.exports = async (fastify, options, next) => {
 
 				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.userTracking) {
 					if (!roles) {
-						const dr = new DiscordUtil(fastify.discordWorker.client,
-							fastify.log, fastify.config, fastify.query)
+						const dr = new DiscordUtil(
+							fastify.discordWorker.client,
+							fastify.log,
+							fastify.config,
+							fastify.query,
+						)
 
 						roles = await dr.getUserRoles(req.params.id)
 					}
@@ -269,13 +284,16 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
-		await fastify.query.updateQuery('humans',
+		await fastify.query.updateQuery(
+			'humans',
 			{
 				current_profile_no: profileNo,
 				area: profile.area,
 				latitude: profile.latitude,
 				longitude: profile.longitude,
-			}, { id: req.params.id })
+			},
+			{ id: req.params.id },
+		)
 
 		return {
 			status: 'ok',
@@ -311,9 +329,12 @@ module.exports = async (fastify, options, next) => {
 		if (!adminTarget) allowedAreas = allowedAreas.filter((area) => (area.userSelectable === undefined || area.userSelectable))
 		allowedAreas = allowedAreas.map((x) => x.name.toLowerCase())
 		if (fastify.config.areaSecurity.enabled && !adminTarget) {
-			allowedAreas = communityLogic.filterAreas(fastify.config, human.community_membership
-				? JSON.parse(human.community_membership) : [],
-			allowedAreas)
+			allowedAreas = communityLogic.filterAreas(
+				fastify.config,
+				human.community_membership
+					? JSON.parse(human.community_membership) : [],
+				allowedAreas,
+			)
 		}
 
 		const newAreas = areas.filter((x) => allowedAreas.some((y) => y.toLowerCase() === x))
@@ -350,10 +371,13 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
-		await fastify.query.updateQuery('humans',
+		await fastify.query.updateQuery(
+			'humans',
 			{
 				enabled: 1,
-			}, { id: req.params.id })
+			},
+			{ id: req.params.id },
+		)
 
 		return {
 			status: 'ok',
@@ -379,10 +403,13 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
-		await fastify.query.updateQuery('humans',
+		await fastify.query.updateQuery(
+			'humans',
 			{
 				enabled: 0,
-			}, { id: req.params.id })
+			},
+			{ id: req.params.id },
+		)
 
 		return {
 			status: 'ok',

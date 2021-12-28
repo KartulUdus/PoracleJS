@@ -38,7 +38,7 @@ module.exports = async (ctx) => {
 
 		let channelName = args.find((arg) => arg.match(controller.re.nameRe))
 		if (channelName) [,, channelName] = channelName.match(controller.re.nameRe)
-		const channelRegex = new RegExp('-\\d{1,20}', 'gi')
+		const channelRegex = /-\d{1,20}/gi
 
 		const channelId = command.args.match(channelRegex) ? command.args.match(channelRegex)[0] : false
 
