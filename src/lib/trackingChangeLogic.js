@@ -52,8 +52,10 @@ class TrackingChange {
 		const humansById = await this.query.selectOneQuery('humans', { id: idString })
 		if (humansById) targets.push(humansById)
 		const webhookByName = await this.query.selectAllQuery('humans', (builder) => {
-			builder.whereIn('type',
-				['webhook', 'discord:channel', 'telegram:channel', 'telegram:group'])
+			builder.whereIn(
+				'type',
+				['webhook', 'discord:channel', 'telegram:channel', 'telegram:group'],
+			)
 				.andWhere('name', 'like', idString)
 		})
 		if (webhookByName) targets.push(...webhookByName)

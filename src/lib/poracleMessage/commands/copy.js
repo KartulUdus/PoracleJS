@@ -20,8 +20,10 @@ exports.run = async (client, msg, args, options) => {
 		const translator = client.translatorFactory.Translator(language)
 
 		if (args.length < 2 || !['from', 'to'].includes(args[0])) {
-			return await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}copy from <id>`, `{0}copy to <id> <id> <id>`', util.prefix),
-				{ style: 'markdown' })
+			return await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}copy from <id>`, `{0}copy to <id> <id> <id>`', util.prefix),
+				{ style: 'markdown' },
+			)
 		}
 
 		const trackingChanger = new TrackingChangeLogic(client.config, client.query, client.scannerQuery, translator, client.GameData)
