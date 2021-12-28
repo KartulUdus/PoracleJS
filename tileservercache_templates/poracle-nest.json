@@ -27,8 +27,8 @@
 
   "markers": [
   {
-    "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_#if(form != nil):#pad(form, 2)#else:00#endif.png",
-    "fallback_url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_00.png",
+    "url": "#(imgUrl)",
+    "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
     "latitude": #(latitude),
     "longitude": #(longitude),
     "width": 30,

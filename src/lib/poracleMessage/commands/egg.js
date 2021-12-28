@@ -21,9 +21,16 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName) && !args.find((arg) => arg === 'remove')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}egg level5`, `{0}egg remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}egg level5`, `{0}egg remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -38,19 +45,19 @@ exports.run = async (client, msg, args, options) => {
 		let team = 4
 		let template = client.config.general.defaultTemplateName
 		let clean = false
-		let levels = []
+		const levelSet = new Set()
 		const pings = msg.getPings()
 
 		args.forEach((element) => {
 			if (element === 'ex') exclusive = 1
-			else if (element.match(client.re.levelRe)) levels.push(element.match(client.re.levelRe)[2])
+			else if (element.match(client.re.levelRe)) levelSet.add(+element.match(client.re.levelRe)[2])
 			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
 			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
 			else if (element === 'instinct' || element === 'yellow') team = 3
 			else if (element === 'valor' || element === 'red') team = 2
 			else if (element === 'mystic' || element === 'blue') team = 1
 			else if (element === 'harmony' || element === 'gray') team = 0
-			else if (element === 'everything') levels = [1, 2, 3, 4, 5, 6]
+			else if (element === 'everything') [1, 2, 3, 4, 5, 6].forEach((x) => levelSet.add(x))
 			else if (element === 'clean') clean = true
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
@@ -68,6 +75,8 @@ exports.run = async (client, msg, args, options) => {
 			distance = client.config.tracking.defaultDistance
 		}
 
+		const levels = [...levelSet]
+
 		if (!levels.length) {
 			return await msg.reply(translator.translate('404 No raid egg levels found'))
 		}
@@ -83,6 +92,7 @@ exports.run = async (client, msg, args, options) => {
 				team: +team,
 				clean: +clean,
 				level: +lvl,
+				gym_id: null,
 			}))
 
 			const tracked = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })
@@ -121,28 +131,31 @@ exports.run = async (client, msg, args, options) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
-				alreadyPresent.forEach((egg) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
-				})
-				updates.forEach((egg) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
-				})
-				insert.forEach((egg) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.eggRowText(translator, client.GameData, egg), '\n')
-				})
+				for (const egg of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.eggRowText(client.config, translator, client.GameData, egg, client.scannerQuery), '\n')
+				}
+				for (const egg of updates) {
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.eggRowText(client.config, translator, client.GameData, egg, client.scannerQuery), '\n')
+				}
+				for (const egg of insert) {
+					message = message.concat(translator.translate('New: '), await trackedCommand.eggRowText(client.config, translator, client.GameData, egg, client.scannerQuery), '\n')
+				}
 			}
 
-			await client.query.deleteWhereInQuery('egg', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'egg',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('egg', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking level ${levels.join(', ')} eggs`)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			let result = 0

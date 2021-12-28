@@ -1,3 +1,5 @@
+const communityLogic = require('../../communityLogic')
+
 module.exports = async (ctx) => {
 	// channel message authors aren't identifiable, ignore all commands sent in channels
 	if (Object.keys(ctx.update).includes('channel_post')) return
@@ -8,20 +10,51 @@ module.exports = async (ctx) => {
 	const [args] = command.splitArgsArray
 
 	try {
-		// Check target
-		if (!controller.config.telegram.admins.includes(user.id.toString())) return
+		// Check user rights
+		let communityList = null
+		let areaRestriction = null
+		let fullAdmin = false
+
+		if (controller.config.areaSecurity.enabled) {
+			const communityAdmin = communityLogic.isTelegramCommunityAdmin(controller.config, user.id.toString())
+			if (communityAdmin) {
+				communityList = communityAdmin
+				areaRestriction = communityLogic.calculateLocationRestrictions(controller.config, communityList)
+			}
+		}
+
+		if (controller.config.telegram.admins.includes(user.id.toString())) {
+			communityList = []
+			areaRestriction = null
+			fullAdmin = true
+		}
+
+		if (!communityList) {
+			// Not set a community list - so not a recognised admin
+			return
+		}
 
 		let target = { id: ctx.update.message.from.id.toString(), name: ctx.update.message.from.username, channel: false }
 
 		let channelName = args.find((arg) => arg.match(controller.re.nameRe))
 		if (channelName) [,, channelName] = channelName.match(controller.re.nameRe)
-		const channelRegex = new RegExp('-\\d{1,20}', 'gi')
+		const channelRegex = /-\d{1,20}/gi
 
 		const channelId = command.args.match(channelRegex) ? command.args.match(channelRegex)[0] : false
 
 		if (channelName && !channelId || !channelName && channelId) return await ctx.reply('To add a channel, provide both a name and an channel id')
-		if (controller.config.telegram.admins.includes(user.id.toString()) && channelName && channelId) target = { id: channelId, name: channelName, channel: true }
-		if (controller.config.telegram.admins.includes(user.id.toString()) && ctx.update.message.chat.type !== 'private' && !target.channel) {
+		if (channelName && channelId) {
+			if (!fullAdmin) {
+				return await ctx.reply('You are not a full poracle administrator')
+			}
+			target = { id: channelId, name: channelName, channel: true }
+		}
+
+		if (ctx.update.message.chat.type === 'private' && !target.channel) {
+			return await ctx.reply('To add a group, please send /channel add in the group')
+		}
+
+		if (ctx.update.message.chat.type !== 'private' && !target.channel) {
 			target = { id: ctx.update.message.chat.id.toString(), name: ctx.update.message.chat ? ctx.update.message.chat.title.toLowerCase() : '', channel: false }
 		}
 
@@ -34,7 +67,8 @@ module.exports = async (ctx) => {
 				type: target.channel ? 'telegram:channel' : 'telegram:group',
 				name: target.name,
 				area: '[]',
-				community_membership: '[]',
+				community_membership: JSON.stringify(communityList),
+				area_restriction: areaRestriction ? JSON.stringify(areaRestriction) : null,
 			})
 			await ctx.reply('✅')
 		} else if (args.find((arg) => arg === 'remove')) {
@@ -47,6 +81,6 @@ module.exports = async (ctx) => {
 			}
 		}
 	} catch (err) {
-		controller.logs.telegram.error('Group command "-" unhappy:', err)
+		controller.logs.telegram.error('Telegram channel command unhappy:', err)
 	}
 }

@@ -1,0 +1,32 @@
+{
+  "style": "klokantech-basic",
+  "latitude": #(latitude),
+  "longitude": #(longitude),
+  "zoom": 15,
+  "width": 500,
+  "height": 250,
+  "scale": 1,
+  "markers": [
+     #if(nearbyStops != nil):
+        #for(stop in nearbyStops):
+        {
+            "url": "#if(stop.imgUrl):#(stop.imgUrl)#else:#(uiconPokestopUrl)#endif",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/#(stop.type).png",
+            "latitude": #(stop.latitude),
+            "longitude": #(stop.longitude),
+            "width": 20,
+            "height": 20,
+            "y_offset": -10
+        },
+        #endfor
+    #endif
+    {
+      "url": "#(imgUrl)",
+      "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/gym.png",
+      "latitude": #(latitude),
+      "longitude": #(longitude),
+      "width": 50,
+      "height": 50
+    }
+  ]
+}

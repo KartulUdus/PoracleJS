@@ -7,9 +7,22 @@
     "height": 250,
     "scale": 1,
     "markers": [
+    #if(nearbyStops != nil):
+        #for(stop in nearbyStops):
         {
-            "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_#if(form != nil):#pad(form, 2)#else:00#endif.png",
-            "fallback_url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_00.png",
+            "url": "#if(stop.imgUrl):#(stop.imgUrl)#else:#(uiconPokestopUrl)#endif",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/#(stop.type).png",
+            "latitude": #(stop.latitude),
+            "longitude": #(stop.longitude),
+            "width": 20,
+            "height": 20,
+            "y_offset": -10
+        },
+        #endfor
+    #endif
+        {
+            "url": "#(imgUrl)",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
             "latitude": #(latitude),
             "longitude": #(longitude),
             "width": 50,

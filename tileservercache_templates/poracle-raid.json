@@ -7,13 +7,22 @@
     "height": 250,
     "scale": 1,
     "markers": [
+    #if(nearbyStops != nil):
+        #for(stop in nearbyStops):
         {
-            #if(pokemon_id != nil && pokemon_id != 0):
-            "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_#if(form != nil):#pad(form, 2)#else:00#endif#if(evolution > 0):_#pad(evolution,1)#endif.png",
-            "fallback_url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/pokemon_icon_#pad(pokemon_id,3)_00.png",
-            #else:
-            "url": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/PMSF_icons_large/egg#(level).png",
-            #endif
+            "url": "#if(stop.imgUrl):#(stop.imgUrl)#else:#(uiconPokestopUrl)#endif",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/#(stop.type).png",
+            "latitude": #(stop.latitude),
+            "longitude": #(stop.longitude),
+            "width": 20,
+            "height": 20,
+            "y_offset": -10
+        },
+        #endfor
+    #endif
+        {
+            "url": "#(imgUrl)",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/gym.png",
             "latitude": #(latitude),
             "longitude": #(longitude),
             "width": 50,

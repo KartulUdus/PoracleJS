@@ -31,8 +31,6 @@ function checkDts(dts, config) {
 				for (const dtsEntry of dts.filter((x) => x.platform === platform && x.type === type && x.language === language)) {
 					if (!dtsEntry.id) {
 						logs.log.warn(`Config Check: DTS - Template name blank in platform:${platform} language:${language} type:${type}`)
-					} else if (dtsEntry.id.toString().includes('_')) {
-						logs.log.warn(`Config Check: DTS - Template name includes underscore in platform:${platform} language:${language} type:${type} id:${dtsEntry.template}`)
 					}
 				}
 			}
@@ -85,9 +83,6 @@ function checkGeofence(geofence) {
 	for (const fence of geofence) {
 		if (!fence.name) {
 			logs.log.warn('Config Check: geofence.json has entry with blank name')
-		}
-		if (fence.name.includes('_')) {
-			logs.log.warn('Config Check: geofence.json has entry with underscore - should be a space')
 		}
 		if (!fence.path.length) {
 			logs.log.warn('Config Check: geofence.json has empty path')

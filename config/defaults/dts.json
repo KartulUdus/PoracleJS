@@ -579,6 +579,40 @@
       "webpage_preview": true
      }
   },
+  {
+    "id": 1,
+    "type": "gym",
+    "language": "en",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Gym change at {{{gymName}}} {{#if previousControlName}}from {{previousControlName}} {{/if}}to {{teamName}}",
+        "description": "Slots available: {{slotsAvailable}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "color": "{{color}}",
+        "thumbnail": {
+          "url": "{{{gymUrl}}}"
+        }
+      }
+    }
+  },
+  {
+    "id": 1,
+    "type": "gym",
+    "language": "en",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "webpage_preview": false,
+      "location": true,
+      "content": [
+        "***⚠️ Gym change ⚠️***",
+        "\nGym change at {{{gymName}}} {{#if previousControlName}}from {{previousControlName}} {{/if}}to {{teamName}}",
+        "\nSlots available: {{slotsAvailable}}",
+        "\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})"
+      ]
+    }
+  },
 {
   "id": 1,
   "language": "en",
@@ -666,15 +700,15 @@
       "fields": [
         {
           "name": "**General commands**",
-          "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n `{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
+          "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n`{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
         },
         {
           "name": "**_Basic Examples_**",
-          "value": "You probably want to start off with something like these commands. One command at a time. Change the distances (d=metres) to suit yourself. \n `{{prefix}}location 123 Common Road, Town, Region` \n `{{prefix}}track unown azelf mesprit uxie d5000 ` \n `{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}track everything iv100 d1000` \n `{{prefix}}quest silver_pinap_berry d500 clean`"
+          "value": "You probably want to start off with something like these commands. One command at a time. Change the distances (d=metres) to suit yourself. \n`{{prefix}}location 123 Common Road, Town, Region` \n`{{prefix}}track unown azelf mesprit uxie d5000 ` \n`{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka d1500` \n`{{prefix}}raid timburr litwick d1500` \n`{{prefix}}track everything iv100 d1000` \n`{{prefix}}quest silver_pinap_berry d500 clean`"
         },
         {
           "name": "**Monster tracking commands**",
-          "value": "The command needs to include at least one monster and any amount of variables. E.g. \n `{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
+          "value": "The command needs to include at least one monster and any amount of variables. E.g. \n`{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
         },
         {
           "name": "**Raid tracking commands**",
@@ -686,15 +720,15 @@
         },
         {
           "name": "**Quest tracking commands**",
-          "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n `{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
+          "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n`{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
         },
         {
           "name": "**Invasion tracking commands**",
-          "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
+          "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n`{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
         },
         {
           "name": "**Areas**",
-          "value": "If your admin has configured areas, these other commands are available: \n `{{prefix}}area list`: Lists the possible areas you can add. \n `{{prefix}}location yourArea`: Sets yourArea as your location \n Admin commands: \n `{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
+          "value": "If your admin has configured areas, these other commands are available: \n`{{prefix}}area list`: Lists the possible areas you can add. \n`{{prefix}}location yourArea`: Sets yourArea as your location \n Admin commands: \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
         },
         {
           "name": "**Further info**",
@@ -721,15 +755,15 @@
       "fields": [
           {
             "name": "***General commands***",
-            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n`{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`{{prefix}}area remove somePlace`: Removes a configured area \n `{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
+            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n`{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`{{prefix}}area remove somePlace`: Removes a configured area \n`{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
           },
           {
             "name": "***Basic Examples***",
-            "value": "You probably want to start off with something like these 5 commands. Change the distances (d=metres) to suit yourself. \n `{{prefix}}location 123 Common Road, Town, Region` \n `{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka unown d1500` \n `{{prefix}}raid timburr litwick d1500` \n `{{prefix}}track everything iv100 d1000` \n `{{prefix}}quest silver_pinap_berry d500 clean`"
+            "value": "You probably want to start off with something like these 5 commands. Change the distances (d=metres) to suit yourself. \n`{{prefix}}location 123 Common Road, Town, Region` \n`{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka unown d1500` \n`{{prefix}}raid timburr litwick d1500` \n`{{prefix}}track everything iv100 d1000` \n`{{prefix}}quest silver_pinap_berry d500 clean`"
           },
           {
             "name": "***Monster tracking commands***",
-            "value": "The command needs to include at least one monster and any amount of filters. E.g. \n `{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
+            "value": "The command needs to include at least one monster and any amount of filters. E.g. \n`{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
           },
           {
             "name": "***Raid tracking commands***",
@@ -737,15 +771,15 @@
           },
           {
             "name": "***Quest tracking commands***",
-            "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n `{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
+            "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n`{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
           },
           {
             "name": "***Invasion tracking commands***",
-            "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n `{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
+            "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n`{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
           },
           {
             "name": "***Areas***",
-            "value": "If your admin has configured areas, these other commands are available: \n `{{prefix}}area list`: lists the possible areas you can add. \n `{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n `{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
+            "value": "If your admin has configured areas, these other commands are available: \n`{{prefix}}area list`: lists the possible areas you can add. \n`{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
           },
           {
             "name": "***Further info***",

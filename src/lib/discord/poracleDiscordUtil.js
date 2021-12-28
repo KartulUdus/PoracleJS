@@ -1,3 +1,5 @@
+const { DiscordAPIError } = require('discord.js')
+
 class PoracleDiscordUtil {
 	constructor(client, msg, options) {
 		this.client = client
@@ -5,6 +7,96 @@ class PoracleDiscordUtil {
 		this.options = options
 
 		this.prefix = this.client.config.discord.prefix
+	}
+
+	async getUserRoles() {
+		if (this.userRoles) return this.userRoles
+
+		const postUserId = this.msg.msg.author.id
+
+		const roleList = []
+
+		const hrstart = process.hrtime()
+
+		if (this.msg.isDM) {
+			// DM messages - calculate role list from all guilds
+
+			for (const guildId of this.client.config.discord.guilds) {
+				let guild
+				try {
+					guild = await this.msg.msg.client.guilds.fetch(guildId)
+				} catch (err) {
+					this.client.log.warn(`Command Processor (Discord) Cannot load guild "${guildId}"`, err)
+				}
+				if (!guild) {
+					this.client.log.warn(`Command Processor (Discord) Cannot load guild "${guildId}"`)
+					// eslint-disable-next-line no-continue
+					continue
+				}
+
+				let guildMember
+				try {
+					guildMember = await guild.members.fetch({ user: postUserId })
+				} catch (err) {
+					if (err instanceof DiscordAPIError) {
+						if (err.httpStatus === 404) {
+							// eslint-disable-next-line no-continue
+							continue
+						}
+					} else {
+						throw err
+					}
+				}
+				if (guildMember) {
+					for (const role of guildMember.roles.cache.values()) {
+						roleList.push(role.id)
+					}
+				}
+			}
+		} else {
+			// channel message - only load roles from this guild
+
+			try {
+				const guildMember = await this.msg.msg.channel.guild.members.fetch(postUserId)
+
+				if (guildMember) {
+					for (const role of guildMember.roles.cache.values()) {
+						roleList.push(role.id)
+					}
+				}
+			} catch (err) {
+				this.client.log.error('Calculating user security', err)
+			}
+		}
+
+		const hrend = process.hrtime(hrstart)
+		const hrendms = hrend[1] / 1000000
+
+		this.client.log.debug(`Command Processor (Discord) execution time ${hrendms}ms`)
+
+		this.userRoles = roleList
+		return this.userRoles
+	}
+
+	async commandAllowed(command) {
+		const roleList = this.client.config.discord.commandSecurity && this.client.config.discord.commandSecurity[command]
+		if (!roleList) return true
+
+		const postUserId = this.msg.msg.author.id
+		if (roleList.includes(postUserId)) {
+			return true
+		}
+
+		const userRoleMembership = await this.getUserRoles()
+		if (userRoleMembership) {
+			for (const role of userRoleMembership) {
+				if (roleList.includes(role)) {
+					return true
+				}
+			}
+		}
+
+		return false
 	}
 
 	async calculatePermissions() {
@@ -17,39 +109,28 @@ class PoracleDiscordUtil {
 			const postChannelCategoryId = this.msg.msg.channel.parentID
 
 			this.client.log.debug(`Channel message - examine permissions for ${postUserId} in channel ${postChannelId} guild ${postGuildId} category ${postChannelCategoryId}`)
-			try {
-				const guildMember = await this.msg.msg.channel.guild.members.fetch(postUserId)
 
-				if (guildMember) {
-					const userRoleMembership = []
+			const roleList = this.client.config.discord.delegatedAdministration
+				? this.client.config.discord.delegatedAdministration.channelTracking : null
 
-					for (const role of guildMember.roles.cache.values()) {
-						userRoleMembership.push(role.id)
-					}
+			if (roleList) {
+				const userRoleMembership = await this.getUserRoles()
 
-					const roleList = this.client.config.discord.delegatedAdministration
-						? this.client.config.discord.delegatedAdministration.channelTracking : null
+				for (const id of Object.keys(roleList)) {
+					if (id === postChannelId || id === postGuildId || id === postChannelCategoryId) {
+						const checkUserAgainst = roleList[id]
 
-					if (roleList) {
-						for (const id of Object.keys(roleList)) {
-							if (id === postChannelId || id === postGuildId || id === postChannelCategoryId) {
-								const checkUserAgainst = roleList[id]
+						if (checkUserAgainst.includes(postUserId)) {
+							channelPermissions = true
+						}
 
-								if (checkUserAgainst.includes(postUserId)) {
-									channelPermissions = true
-								}
-
-								for (const role of userRoleMembership) {
-									if (checkUserAgainst.includes(role)) {
-										channelPermissions = true
-									}
-								}
+						for (const role of userRoleMembership) {
+							if (checkUserAgainst.includes(role)) {
+								channelPermissions = true
 							}
 						}
 					}
 				}
-			} catch (err) {
-				this.client.log.error('Calculating user security', err)
 			}
 		}
 
@@ -126,7 +207,7 @@ class PoracleDiscordUtil {
 			let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
 			if (userIdOverride) [, , userIdOverride] = userIdOverride.match(this.client.re.userRe)
 
-			if (this.msg.msg.channel.type === 'text' && (this.msg.isFromAdmin || this.permissions.channelTracking)) {
+			if (this.msg.msg.channel.type === 'GUILD_TEXT' && (this.msg.isFromAdmin || this.permissions.channelTracking)) {
 				target = {
 					id: this.msg.msg.channel.id,
 					name: this.msg.msg.channel.name,
@@ -154,7 +235,7 @@ class PoracleDiscordUtil {
 				return { canContinue: false }
 			}
 
-			if (!status.isRegistered && (this.msg.isFromAdmin || this.permissions.channelTracking) && this.msg.msg.channel.type === 'text') {
+			if (!status.isRegistered && (this.msg.isFromAdmin || this.permissions.channelTracking) && this.msg.msg.channel.type === 'GUILD_TEXT') {
 				await this.msg.reply(`${this.msg.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
 				return { canContinue: false }
 			}
@@ -164,7 +245,7 @@ class PoracleDiscordUtil {
 				return { canContinue: false }
 			}
 
-			if (!status.isRegistered && this.msg.msg.channel.type === 'dm') {
+			if (!status.isRegistered && this.msg.msg.channel.type === 'DM') {
 				await this.msg.react(this.client.translator.translate('🙅'))
 				if (this.client.config.discord.unregisteredUserMessage) {
 					await this.msg.reply(this.client.config.discord.unregisteredUserMessage)

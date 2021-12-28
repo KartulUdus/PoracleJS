@@ -22,9 +22,16 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName) && !args.find((arg) => arg === 'remove')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}nest bulbasaur`, `{0}nest remove everything`, `{0}nest hoppip minspawn5`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}nest bulbasaur`, `{0}nest remove everything`, `{0}nest hoppip minspawn5`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -146,27 +153,30 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((raid) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.nestRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.nestRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 				updates.forEach((raid) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.nestRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.nestRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 				insert.forEach((raid) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.nestRowText(translator, client.GameData, raid), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.nestRowText(client.config, translator, client.GameData, raid), '\n')
 				})
 			}
 
-			await client.query.deleteWhereInQuery('nests', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'nests',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('nests', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking nests `)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			const monsterIds = monsters.map((mon) => mon.id)

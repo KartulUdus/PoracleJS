@@ -1,22 +1,28 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
-const monsters = require('../util/monsters.json')
 const {
-	cpMultipliers, types, powerUpCost,
-} = require('../util/util.json')
-const moves = require('../util/moves.json')
+	moves, monsters, utilData: {
+		cpMultipliers, types, powerUpCost, emojis,
+	},
+} = require('./GameData')
 
 const TranslatorFactory = require('../util/translatorFactory')
+const EmojiLookup = require('./emojiLookup')
 
 const translatorFactory = new TranslatorFactory(config)
+const emojiLookup = new EmojiLookup(emojis)
 
-require('handlebars-helpers')({
+require('@budibase/handlebars-helpers')({
 	handlebars,
 })
 
 function userTranslator(options) {
 	return options.data.language ? translatorFactory.Translator(options.data.language) : translatorFactory.default
+}
+
+function emoji(options, emojiText) {
+	return emojiLookup.lookup(emojiText, options.data.platform)
 }
 
 function translatorAlt() {
@@ -52,15 +58,15 @@ module.exports = () => {
 	handlebars.registerHelper('moveTypeEng', (value) => (moves[value] ? moves[value].type : ''))
 	handlebars.registerHelper('moveEmoji', (value, options) => {
 		if (!moves[value]) return ''
-		return types[moves[value].type] ? userTranslator(options).translate(types[moves[value].type].emoji) : ''
+		return types[moves[value].type] ? userTranslator(options).translate(emoji(options, types[moves[value].type].emoji)) : ''
 	})
-	handlebars.registerHelper('moveEmojiAlt', (value) => {
+	handlebars.registerHelper('moveEmojiAlt', (value, options) => {
 		if (!moves[value]) return ''
-		return types[moves[value].type] ? translatorAlt.translate(types[moves[value].type].emoji) : ''
+		return types[moves[value].type] ? translatorAlt.translate(emoji(options, types[moves[value].type].emoji)) : ''
 	})
-	handlebars.registerHelper('moveEmojiEng', (value) => {
+	handlebars.registerHelper('moveEmojiEng', (value, options) => {
 		if (!moves[value]) return ''
-		return types[moves[value].type] ? types[moves[value].type].emoji : ''
+		return types[moves[value].type] ? emoji(options, types[moves[value].type].emoji) : ''
 	})
 
 	handlebars.registerHelper('pokemonName', (value, options) => {
@@ -119,10 +125,10 @@ module.exports = () => {
 
 		return Math.max(10, Math.floor(
 			(atk + +ivAttack)
-              * (def + +ivDefense) ** 0.5
-              * (sta + +ivStamina) ** 0.5
-              * cpMulti ** 2
-              / 10,
+			* (def + +ivDefense) ** 0.5
+			* (sta + +ivStamina) ** 0.5
+			* cpMulti ** 2
+			/ 10,
 		))
 	})
 
@@ -137,6 +143,8 @@ module.exports = () => {
 			baseStamina: 0,
 		}
 	})
+
+	handlebars.registerHelper('getEmoji', (emojiName, options) => userTranslator(options).translate(emoji(options, emojiName)))
 
 	handlebars.registerHelper('getPowerUpCost', (levelStart, levelEnd, options) => {
 		const translator = userTranslator(options)
@@ -180,6 +188,21 @@ module.exports = () => {
 		}
 
 		return f.map[value]
+	})
+
+	handlebars.registerHelper('map2', (name, value, value2, options) => {
+		const r = require('./customMap')
+
+		let f = r.find((x) => (x.name === name && x.language === options.data.language))
+		if (!f) {
+			f = r.find((x) => (x.name === name))
+		}
+
+		if (options.fn) {
+			return options.fn(f.map[value] || f.map[value2])
+		}
+
+		return f.map[value] || f.map[value2]
 	})
 
 	return handlebars

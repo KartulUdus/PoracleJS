@@ -1,23 +1,22 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
-
 /**
  * Controller for processing pokestop webhooks
  * Alerts on lures
  */
-class PokestopLure extends Controller {
+class Lure extends Controller {
 	async lureWhoCares(obj) {
 		const data = obj
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, lures.template, lures.distance, lures.clean, lures.ping from lures
 		join humans on (humans.id = lures.id and humans.current_profile_no = lures.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
-		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0) `
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%lure%') and
+		(lures.lure_id='${data.lure_id}' or lures.lure_id = 0)
+		${strictareastring}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -65,48 +64,26 @@ class PokestopLure extends Controller {
 	}
 
 	async handle(obj) {
-		let pregenerateTile = false
 		const data = obj
 		// const minTth = this.config.general.monsterMinimumTimeTillHidden || 0
 		const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
 			const logReference = data.pokestop_id
-			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'tileservercache': {
-					pregenerateTile = true
-					break
-				}
-				case 'google': {
-					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'osm': {
-					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'mapbox': {
-					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				default: {
-					data.staticMap = ''
-				}
-			}
 
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			data.name = this.escapeJsonString(data.name)
+			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
 
 			const lureExpiration = data.lure_expiration
 			data.tth = moment.preciseDiff(Date.now(), lureExpiration * 1000, true)
-			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -115,14 +92,14 @@ class PokestopLure extends Controller {
 				return []
 			}
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.lureTypeId = 0
 			if (data.lure_id) {
 				data.lureTypeId = data.lure_id
 			}
 
-			data.lureTypeEmoji = this.GameData.utilData.lures[data.lure_id].emoji
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
 			data.lureTypeNameEng = this.GameData.utilData.lures[data.lure_id].name
 
@@ -147,96 +124,88 @@ class PokestopLure extends Controller {
 				return []
 			}
 
-			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
-			const jobs = []
+			setImmediate(async () => {
+				try {
+					data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId)
+					data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.pokestop) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'pokestop', data, this.config.geocoding.staticMapType.pokestop)
-			}
-			data.staticmap = data.staticMap // deprecated
+					const geoResult = await this.getAddress({
+						lat: data.latitude,
+						lon: data.longitude,
+					})
+					const jobs = []
 
-			for (const cares of whoCares) {
-				this.log.debug(`${logReference}: Creating lure alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'lureTypeId'])
+					data.staticmap = data.staticMap // deprecated
 
-				const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
-				if (rateLimitTtr) {
-					this.log.verbose(`${logReference}: Not creating lure alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
-					// eslint-disable-next-line no-continue
-					continue
-				}
-				this.log.verbose(`${logReference}: Creating lure alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+					for (const cares of whoCares) {
+						this.log.debug(`${logReference}: Creating lure alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
-				const language = cares.language || this.config.general.locale
-				const translator = this.translatorFactory.Translator(language)
-
-				// full build
-				data.lureTypeName = translator.translate(data.lureTypeNameEng)
-				data.lureType = data.lureTypeName
-
-				const view = {
-					...geoResult,
-					...data,
-					time: data.distime,
-					tthh: data.tth.hours,
-					tthm: data.tth.minutes,
-					tths: data.tth.seconds,
-					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
-				}
-
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
-
-				const mustache = this.getDts(logReference, 'lure', platform, cares.template, language)
-				if (mustache) {
-					let mustacheResult
-					let message
-					try {
-						mustacheResult = mustache(view, { data: { language } })
-					} catch (err) {
-						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
+						const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+						if (rateLimitTtr) {
+							this.log.verbose(`${logReference}: Not creating lure alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+							// eslint-disable-next-line no-continue
+							continue
 						}
-					}
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: data.emoji,
-						logReference,
-						language,
-					}
+						this.log.verbose(`${logReference}: Creating lure alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
-					jobs.push(work)
+						const language = cares.language || this.config.general.locale
+						const translator = this.translatorFactory.Translator(language)
+						let [platform] = cares.type.split(':')
+						if (platform === 'webhook') platform = 'discord'
+
+						// full build
+						data.lureTypeName = translator.translate(data.lureTypeNameEng)
+						data.lureType = data.lureTypeName
+						data.lureTypeEmoji = this.emojiLookup.lookup(this.GameData.utilData.lures[data.lure_id].emoji, platform)
+
+						const view = {
+							...geoResult,
+							...data,
+							time: data.distime,
+							tthh: data.tth.hours,
+							tthm: data.tth.minutes,
+							tths: data.tth.seconds,
+							now: new Date(),
+							nowISO: new Date().toISOString(),
+							areas: data.matchedAreas.filter((area) => area.displayInMatches)
+								.map((area) => area.name)
+								.join(', '),
+						}
+
+						const templateType = 'lure'
+						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
+
+						const work = {
+							lat: data.latitude.toString()
+								.substring(0, 8),
+							lon: data.longitude.toString()
+								.substring(0, 8),
+							message,
+							target: cares.id,
+							type: cares.type,
+							name: cares.name,
+							tth: data.tth,
+							clean: cares.clean,
+							emoji: data.emoji,
+							logReference,
+							language,
+						}
+
+						jobs.push(work)
+					}
+					this.emit('postMessage', jobs)
+				} catch (e) {
+					this.log.error(`${data.pokestop_id}: Can't seem to handle pokestop(lure) (user cares): `, e, data)
 				}
-			}
+			})
 
-			return jobs
+			return []
 		} catch (e) {
 			this.log.error(`${data.pokestop_id}: Can't seem to handle pokestop(lure): `, e, data)
 		}
 	}
 }
 
-module.exports = PokestopLure
+module.exports = Lure

@@ -19,6 +19,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName)) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		const profiles = await client.query.selectAllQuery('profiles', { id: target.id })
 
 		// Remove arguments that we don't want to keep for area processing
@@ -33,7 +38,7 @@ exports.run = async (client, msg, args, options) => {
 				const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 				const name = args[1]
-				if (!name) {
+				if (!name || name === 'all') {
 					await msg.react('🙅')
 					await msg.reply(translator.translate('That is not a valid profile name'))
 					return
@@ -97,11 +102,13 @@ exports.run = async (client, msg, args, options) => {
 					profileNo = profile.profile_no
 				}
 
-				await client.query.deleteQuery('profiles',
+				await client.query.deleteQuery(
+					'profiles',
 					{
 						id: target.id,
 						profile_no: profileNo,
-					})
+					},
+				)
 
 				if (profiles.length !== 1 || profileNo !== 1) {
 					await client.query.deleteQuery('egg', { id: target.id, profile_no: profileNo })
@@ -123,18 +130,24 @@ exports.run = async (client, msg, args, options) => {
 						}
 					}
 					if (!lowestProfile) {
-						await client.query.updateQuery('humans',
+						await client.query.updateQuery(
+							'humans',
 							{
 								current_profile_no: 1,
-							}, { id: target.id })
+							},
+							{ id: target.id },
+						)
 					} else {
-						await client.query.updateQuery('humans',
+						await client.query.updateQuery(
+							'humans',
 							{
 								current_profile_no: lowestProfileNo,
 								area: lowestProfile.area,
 								latitude: lowestProfile.latitude,
 								longitude: lowestProfile.longitude,
-							}, { id: target.id })
+							},
+							{ id: target.id },
+						)
 					}
 				}
 
@@ -221,7 +234,43 @@ exports.run = async (client, msg, args, options) => {
 
 				break
 			}
+			case 'copyto': {
+				const currentName = profiles.find((profile) => profile.profile_no === currentProfileNo).name
+				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests']
+				const valid = []
+				const invalid = []
 
+				for (const arg of args) {
+					if ((arg === 'all' || profiles.some((profile) => profile.name === arg)) && currentName !== arg) {
+						valid.push(arg)
+					} else if (arg !== 'copyto') {
+						invalid.push(arg)
+					}
+				}
+				for (const category of categories) {
+					const tempBackup = await client.query.selectAllQuery(category, { id: target.id, profile_no: currentProfileNo })
+					for (const profile of profiles) {
+						if (profile.profile_no !== currentProfileNo && (valid.includes(profile.name) || valid.includes('all'))) {
+							if (!valid.includes(profile.name)) valid.push(profile.name)
+							await client.query.deleteQuery(category, { id: target.id, profile_no: profile.profile_no })
+							await client.query.insertQuery(category, tempBackup.map((x) => ({ ...x, profile_no: profile.profile_no, uid: undefined })))
+						}
+					}
+				}
+				let message = ''
+				if (valid.length) {
+					await msg.react('✅')
+					message = message.concat(translator.translate('Current profile copied to: '), valid.filter((x) => x !== 'all').join(', '), '.')
+					if (valid.includes('all')) message = message.concat(translator.translate(' (all)'))
+				} else {
+					await msg.react('🙅')
+				}
+				if (invalid.length) {
+					message = message.concat(translator.translate('\nThese profiles were invalid: '), invalid.join(', '), '.')
+					if (invalid.includes(currentName)) message = message.concat(translator.translate('\nCannot copy over the currently active profile.'))
+				}
+				await msg.reply(message, { style: 'markdown' })
+			} break
 			default: {
 				if (args.length === 0) {
 					const profile = profiles.find((x) => x.profile_no === currentProfileNo)
@@ -231,8 +280,10 @@ exports.run = async (client, msg, args, options) => {
 						await msg.reply(`${translator.translate('Your profile is currently set to:')} ${profile.name}`)
 					}
 
-					await msg.reply(translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`', util.prefix),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('Valid commands are `{0}profile <name>`, `{0}profile list`, `{0}profile add <name>`, `{0}profile remove <name>`, `{0}profile settime <timestring>`, `{0}profile copyto <name>`', util.prefix),
+						{ style: 'markdown' },
+					)
 
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 					return
@@ -257,13 +308,16 @@ exports.run = async (client, msg, args, options) => {
 					return await msg.reply(translator.translate('I can\'t find that profile'))
 				}
 
-				await client.query.updateQuery('humans',
+				await client.query.updateQuery(
+					'humans',
 					{
 						current_profile_no: profileNo,
 						area: profile.area,
 						latitude: profile.latitude,
 						longitude: profile.longitude,
-					}, { id: target.id })
+					},
+					{ id: target.id },
+				)
 				await msg.react('✅')
 			}
 		}

@@ -22,9 +22,16 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName) && !args.find((arg) => arg === 'remove')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}quest spinda`, `{0}quest energycharizard`, `{0}quest remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}quest spinda`, `{0}quest energycharizard`, `{0}quest remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -33,9 +40,8 @@ exports.run = async (client, msg, args, options) => {
 		let reaction = '👌'
 
 		const pings = msg.getPings()
-		let monsters = []
-		let fullMonsters = []
-		let items = []
+		let fullMonsters
+		let items
 		let distance = 0
 		const questTracks = []
 		let template = client.config.general.defaultTemplateName
@@ -44,7 +50,9 @@ exports.run = async (client, msg, args, options) => {
 		let minDust = 10000000
 		let stardustTracking = 9999999
 		const energyMonsters = []
+		const candyMonsters = []
 		let energyMonster = 0
+		let candyMonster = 0
 		let commandEverything = 0
 		let clean = false
 
@@ -62,23 +70,36 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 
+		// Check for monsters or forms
+		const formArgs = args.filter((arg) => arg.match(client.re.formRe))
+		const formNames = formArgs ? formArgs.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase()) : []
 		const argTypes = args.filter((arg) => typeArray.includes(arg))
 		const genCommand = args.filter((arg) => arg.match(client.re.genRe))
 		const gen = genCommand.length ? client.GameData.utilData.genData[+(genCommand[0].match(client.re.genRe)[2])] : 0
 
-		fullMonsters = Object.values(client.GameData.monsters).filter((mon) => (
-			(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
-			|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
-			|| args.includes('all pokemon')) && !mon.form.id)
+		if (formNames.length) {
+			fullMonsters = Object.values(client.GameData.monsters).filter((mon) => (
+				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
+				|| (args.includes('all pokemon') || args.includes('everything')) && !disableEverythingTracking
+				|| (args.includes('all pokemon') || args.includes('everything')) && msg.isFromAdmin) && formNames.includes(mon.form.name.toLowerCase()))
+		} else {
+			fullMonsters = Object.values(client.GameData.monsters).filter((mon) => (
+				(args.includes(mon.name.toLowerCase()) || args.includes(mon.id.toString()))
+				|| mon.types.map((t) => t.name.toLowerCase()).find((t) => argTypes.includes(t))
+				|| (args.includes('all pokemon') || args.includes('everything')) && !disableEverythingTracking
+				|| (args.includes('all pokemon') || args.includes('everything')) && msg.isFromAdmin) && !mon.form.id)
+		}
 		if (gen) fullMonsters = fullMonsters.filter((mon) => mon.id >= gen.min && mon.id <= gen.max)
-		monsters = fullMonsters.map((mon) => mon.id)
+		//		monsters = fullMonsters.map((mon) => mon.id)
 		items = Object.keys(client.GameData.items).filter((key) => args.includes(translator.translate(client.GameData.items[key].name.toLowerCase())) || args.includes('all items'))
 		if (args.includes('everything') && (!disableEverythingTracking || args.includes('remove') || msg.isFromAdmin)) {
-			monsters = Object.values(client.GameData.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
+			// monsters = Object.values(client.GameData.monsters).filter((mon) => !mon.form.id).map((m) => m.id)
 			items = Object.keys(client.GameData.items)
 			minDust = 0
 			stardustTracking = -1
 			energyMonsters.push('0')
+			candyMonsters.push('0')
 			commandEverything = 1
 		}
 		args.forEach((element) => {
@@ -98,6 +119,14 @@ exports.run = async (client, msg, args, options) => {
 				if (+energyMonster > 0) energyMonsters.push(energyMonster)
 			} else if (element === 'energy') {
 				energyMonsters.push('0')
+			} else if (element.match(client.re.candyRe)) {
+				[,, candyMonster] = element.match(client.re.candyRe)
+				candyMonster = translator.reverse(candyMonster.toLowerCase(), true).toLowerCase()
+				candyMonster = Object.values(client.GameData.monsters).find((mon) => candyMonster.includes(mon.name.toLowerCase()) && mon.form.id === 0)
+				candyMonster = candyMonster ? candyMonster.id : 0
+				if (+candyMonster > 0) candyMonsters.push(candyMonster)
+			} else if (element === 'candy') {
+				candyMonsters.push('0')
 			} else if (element === 'shiny') mustShiny = 1
 			else if (element === 'remove') remove = true
 			else if (element === 'clean') clean = true
@@ -126,6 +155,8 @@ exports.run = async (client, msg, args, options) => {
 				template: template.toString(),
 				shiny: +mustShiny,
 				reward_type: 3,
+				amount: 0,
+				form: 0,
 				distance: +distance,
 				clean: +clean,
 			})
@@ -140,20 +171,40 @@ exports.run = async (client, msg, args, options) => {
 				template: template.toString(),
 				shiny: mustShiny,
 				reward_type: 12,
+				amount: 0,
+				form: 0,
 				distance: +distance,
 				clean: +clean,
 			})
 		})
 
-		monsters.forEach((pid) => {
+		candyMonsters.forEach((pid) => {
 			questTracks.push({
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
-				reward: pid,
+				reward: +pid,
+				template: template.toString(),
+				shiny: mustShiny,
+				reward_type: 4,
+				amount: 0,
+				form: 0,
+				distance: +distance,
+				clean: +clean,
+			})
+		})
+
+		fullMonsters.forEach((mon) => {
+			questTracks.push({
+				id: target.id,
+				profile_no: currentProfileNo,
+				ping: pings,
+				reward: +mon.id,
 				template: template.toString(),
 				shiny: +mustShiny,
 				reward_type: 7,
+				amount: 0,
+				form: mon.form.id,
 				distance: +distance,
 				clean: +clean,
 			})
@@ -168,6 +219,8 @@ exports.run = async (client, msg, args, options) => {
 				template: template.toString(),
 				shiny: +mustShiny,
 				reward_type: 2,
+				amount: 0,
+				form: 0,
 				distance: +distance,
 				clean: +clean,
 			})
@@ -216,39 +269,50 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((quest) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.questRowText(client.config, translator, client.GameData, quest), '\n')
 				})
 				updates.forEach((quest) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.questRowText(client.config, translator, client.GameData, quest), '\n')
 				})
 				insert.forEach((quest) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.questRowText(translator, client.GameData, quest), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.questRowText(client.config, translator, client.GameData, quest), '\n')
 				})
 			}
 
-			await client.query.deleteWhereInQuery('quest', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'quest',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('quest', [...insert, ...updates])
 
 			client.log.info(`${target.name} added quest trackings`)
 
 			// const result = await client.query.insertOrUpdateQuery('quest', questTracks)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			// in case no items or pokemon are in the command, add a dummy 0 to not break sql
 			items.push(0)
-			monsters.push(0)
+			fullMonsters.push({ id: 0 })
 			energyMonsters.push(10000)
+			candyMonsters.push(10000)
 			const remQuery = `
 				delete from quest WHERE id='${target.id}' and profile_no=${currentProfileNo} and
-				((reward_type = 2 and reward in(${items})) or (reward_type = 7 and reward in(${monsters})) or (reward_type = 3 and reward > ${stardustTracking}) or (reward_type = 12 and reward in(${energyMonsters})) or (reward_type = 12 and ${commandEverything}=1))
-				`
+				(
+				  (reward_type = 2 and reward in (${items})) 
+				  or (reward_type = 7 and reward in (${fullMonsters.map((mon) => mon.id)})) 
+				  or (reward_type = 3 and reward > ${stardustTracking}) 
+				  or (reward_type = 12 and reward in (${energyMonsters})) 
+				  or (reward_type = 12 and ${commandEverything}=1)
+				  or (reward_type = 4 and reward in (${candyMonsters})) 
+				  or (reward_type = 4 and ${commandEverything}=1)
+				)`
 			let result = await client.query.misteryQuery(remQuery)
 
 			result = result ? result.affectedRows : 0

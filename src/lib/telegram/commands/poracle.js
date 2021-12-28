@@ -6,7 +6,7 @@ module.exports = async (ctx) => {
 
 	const { controller } = ctx.state
 
-	const userName = controller.emojiStrip(`${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name ? ctx.update.message.from.last_name : ''} [${ctx.update.message.from.username ? ctx.update.message.from.username : ''}]`)
+	const userName = controller.emojiStrip(`${ctx.update.message.from.first_name}${ctx.update.message.from.last_name ? ` ${ctx.update.message.from.last_name}` : ''}${ctx.update.message.from.username ? ` [${ctx.update.message.from.username}]` : ''}`)
 	if (ctx.update.message.chat.type === 'private') {
 		return controller.logs.log.info(`${userName} tried to register in direct message`)
 	}
@@ -75,8 +75,10 @@ module.exports = async (ctx) => {
 
 			if (communityToAdd) {
 				update.community_membership = JSON.stringify(communityLogic.addCommunity(client.config, user.community_membership ? JSON.parse(user.community_membership) : [], communityToAdd))
-				update.area_restriction = JSON.stringify(communityLogic.calculateLocationRestrictions(client.config,
-					JSON.parse(update.community_membership)))
+				update.area_restriction = JSON.stringify(communityLogic.calculateLocationRestrictions(
+					client.config,
+					JSON.parse(update.community_membership),
+				))
 				updateRequired = true
 			}
 
@@ -102,7 +104,7 @@ module.exports = async (ctx) => {
 		}
 
 		if (client.config.telegram.groupWelcomeText) {
-			await ctx.reply(controller.config.telegram.groupWelcomeText, { parse_mode: 'Markdown' })
+			await ctx.reply(`${controller.config.telegram.groupWelcomeText.replace('{user}', ctx.update.message.from.first_name.replace(/[_*[\]`]/g, ((m) => `\\${m}`)))}`, { parse_mode: 'Markdown' })
 		}
 
 		const dts = controller.dts.find((template) => template.type === 'greeting' && template.platform === 'telegram' && template.default)
@@ -123,9 +125,9 @@ module.exports = async (ctx) => {
 			fields.forEach((field) => {
 				messageText = messageText.concat(`\n\n${field.name}\n\n${field.value}`)
 			})
-			await ctx.telegram.sendMessage(user.id, messageText, { parse_mode: 'Markdown' })
+			await ctx.telegram.sendMessage(telegramUser.id, messageText, { parse_mode: 'Markdown' })
 		}
-		await ctx.telegram.sendMessage(user.id, 'You are now registered with Poracle', { parse_mode: 'Markdown' })
+		await ctx.telegram.sendMessage(telegramUser.id, client.config.telegram.botWelcomeText, { parse_mode: 'Markdown' })
 
 		client.logs.telegram.info(`${userName} Registered!`)
 	} catch (err) {

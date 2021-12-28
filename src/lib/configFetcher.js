@@ -5,6 +5,7 @@ const moment = require('moment-timezone')
 const TranslatorFactory = require('../util/translatorFactory')
 const dtsLoader = require('./dtsloader')
 const configChecker = require('./configChecker')
+const geofenceLoader = require('./geofenceLoader')
 
 let config
 let knex
@@ -12,35 +13,15 @@ let dts
 let geofence
 let translator
 let translatorFactory
+let scannerKnex
 
-function getGeofenceFromGEOjson(file) {
-	const rawdata = importFresh(file)
-	if (rawdata.type !== 'FeatureCollection' || !rawdata.features) return
-	const geofenceGEOjson = rawdata.features
-	const outGeofence = []
-	for (let i = 0; i < geofenceGEOjson.length; i++) {
-		if (geofenceGEOjson[i].type === 'Feature' && geofenceGEOjson[i].geometry.type === 'Polygon') {
-			const name = geofenceGEOjson[i].properties.name || config.defaultGeofenceName + i.toString()
-			const color = geofenceGEOjson[i].properties.color || config.defaultGeofenceColor
-			outGeofence[i] = {
-				name,
-				id: i,
-				color,
-				path: [],
-				group: geofenceGEOjson[i].properties.group || '',
-			}
-			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
-		}
-	}
-	return outGeofence
-}
 function getKnex(conf) {
 	switch (conf.database.client) {
 		case 'mysql': {
 			return Knex({
 				client: 'mysql2',
 				connection: conf.database.conn,
-				pool: { min: 2, max: conf.tuning.maxDatabaseConnections },
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
 			})
 		}
 
@@ -67,21 +48,34 @@ function getKnex(conf) {
 	}
 }
 
+function getScannerKnex(conf) {
+	if (conf.database.scannerType === 'mad' || conf.database.scannerType === 'rdm') {
+		return !Array.isArray(conf.database.scanner)
+			? [Knex({
+				client: 'mysql2',
+				connection: conf.database.scanner,
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
+			})] : conf.database.scanner.map((scanner) => Knex({
+				client: 'mysql2',
+				connection: scanner,
+				pool: { min: 0, max: conf.tuning.maxDatabaseConnections },
+			}))
+	}
+
+	return null
+}
+
 module.exports = {
 	Config: (performChecks = true) => {
 		config = importFresh('config')
 		dts = dtsLoader.readDtsFiles()
-		geofence = importFresh(path.join(__dirname, `../../${config.geofence.path}`))
-		if (geofence.type === 'FeatureCollection') geofence = getGeofenceFromGEOjson(path.join(__dirname, `../../${config.geofence.path}`))
+		geofence = geofenceLoader.readGeofenceFile(config, path.join(__dirname, `../../${config.geofence.path}`))
 		knex = getKnex(config)
+		scannerKnex = getScannerKnex(config)
 		translatorFactory = new TranslatorFactory(config)
 		translator = translatorFactory.default
 
 		if (performChecks) {
-			knex.migrate.latest({
-				directory: path.join(__dirname, './db/migrations'),
-				tableName: 'migrations',
-			})
 			configChecker.checkConfig(config)
 			configChecker.checkDts(dts, config)
 			configChecker.checkGeofence(geofence)
@@ -89,7 +83,7 @@ module.exports = {
 
 		moment.locale(config.locale.timeformat)
 		return {
-			config, knex, dts, geofence, translator, translatorFactory,
+			config, knex, scannerKnex, dts, geofence, translator, translatorFactory,
 		}
 	},
 	getKnex,

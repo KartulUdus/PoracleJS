@@ -4,7 +4,7 @@ const EventEmitter = require('events')
 const path = require('path')
 const pcache = require('flat-cache')
 
-const weatherCache = pcache.load('weatherCache', path.resolve(`${__dirname}../../../.cache/`))
+const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class WeatherData extends EventEmitter {
 	constructor(config, log) {
@@ -134,13 +134,6 @@ class WeatherData extends EventEmitter {
 		}
 	}
 
-	/**
-	 * Gets forecast data (current and next hour) for pokemon at lat, lon
-	 * @param lat
-	 * @param lon
-	 * @param disappearTime
-	 * @returns {null}
-	 */
 	async getWeatherForecast(id) {
 		const nowTimestamp = Math.floor(Date.now() / 1000)
 		const currentHourTimestamp = nowTimestamp - (nowTimestamp % 3600)
@@ -188,6 +181,7 @@ class WeatherData extends EventEmitter {
 
 	// eslint-disable-next-line class-methods-use-this
 	async sleep(n) {
+		// eslint-disable-next-line no-promise-executor-return
 		return new Promise((resolve) => setTimeout(resolve, n))
 	}
 }

@@ -9,6 +9,7 @@
     "markers": [
         {
             "url": "https://raw.githubusercontent.com/PokeMiners/pogo_assets/master/Images/NPCs/f_poses_empty_icon.png",
+            "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/uni.png",
             "latitude": #(latitude),
             "longitude": #(longitude),
             "width": 20,

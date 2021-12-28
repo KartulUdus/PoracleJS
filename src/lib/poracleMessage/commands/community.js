@@ -26,8 +26,10 @@ exports.run = async (client, msg, args, options) => {
 		if (args[0] === 'list' && args.length === 1) invalidCommand = false
 
 		if (invalidCommand) {
-			await msg.reply(translator.translateFormat('Valid commands are `{0}community add <name> <targets>`, `{0}community remove <name> <targets>`, `{0}community clear <targets>`, `{0}community show <targets>`, `{0}community list`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are `{0}community add <name> <targets>`, `{0}community remove <name> <targets>`, `{0}community clear <targets>`, `{0}community show <targets>`, `{0}community list`', util.prefix),
+				{ style: 'markdown' },
+			)
 			// await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -91,8 +93,6 @@ exports.run = async (client, msg, args, options) => {
 							community_membership: JSON.stringify(newCommunities),
 						}, { id })
 					}
-
-					break
 				}
 				break
 			case 'remove':
@@ -109,8 +109,6 @@ exports.run = async (client, msg, args, options) => {
 							community_membership: JSON.stringify(newCommunities),
 						}, { id })
 					}
-
-					break
 				}
 
 				break
@@ -121,8 +119,6 @@ exports.run = async (client, msg, args, options) => {
 					if (human) {
 						msg.reply(`User target ${id} ${human.name} has communities ${human.community_membership} location restrictions ${human.area_restriction ? human.area_restriction : 'none'}`)
 					}
-
-					break
 				}
 				break
 		}

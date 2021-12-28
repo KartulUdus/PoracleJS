@@ -404,7 +404,8 @@
 		"pl": "polish",
 		"ru": "russian",
 		"fi": "finnish",
-		"se": "swedish"
+		"se": "swedish",
+		"nb-no": "norwegian"
 	},
 	"cpMultipliers": {
 		"1": 0.0939999967813492,
@@ -447,6 +448,21 @@
 		"38": 0.778932750225067,
 		"39": 0.784636974334717,
 		"40": 0.790300011634827,
+		"41": 0.795300006866455,
+		"42": 0.800300002098084,
+		"43": 0.805299997329712,
+		"44": 0.810299992561340,
+		"45": 0.815299987792969,
+		"46": 0.820299983024597,
+		"47": 0.825299978256226,
+		"48": 0.830299973487854,
+		"49": 0.835300028324127,
+		"50": 0.840300023555756,
+		"51": 0.845300018787384,
+		"52": 0.850300014019012,
+		"53": 0.855300009250641,
+		"54": 0.860300004482269,
+		"55": 0.865299999713897,
 		"1.5": 0.135137432089339,
 		"2.5": 0.192650913155325,
 		"3.5": 0.236572651424822,
@@ -485,32 +501,47 @@
 		"36.5": 0.770297293677362,
 		"37.5": 0.776064947064992,
 		"38.5": 0.781790050767666,
-		"39.5": 0.787473608513275
+		"39.5": 0.787473608513275,
+		"40.5": 0.792803950958808,
+		"41.5": 0.797803921486970,
+		"42.5": 0.802803892322847,
+		"43.5": 0.807803863460723,
+		"44.5": 0.812803834895027,
+		"45.5": 0.817803806620319,
+		"46.5": 0.822803778631297,
+		"47.5": 0.827803750922783,
+		"48.5": 0.832803753381377,
+		"49.5": 0.837803755931570,
+		"50.5": 0.842803729034748,
+		"51.5": 0.847803702398935,
+		"52.5": 0.852803676019539,
+		"53.5": 0.857803649892077,
+		"54.5": 0.862803624012169
 	},
 	"lures": {
 		"501": {
 			"name": "Normal Lure",
-			"emoji": "",
+			"emoji": "lure-normal",
 			"color": "D000C0"
 		},
 		"502": {
 			"name": "Glacial Lure",
-			"emoji": "\u2744",
+			"emoji": "lure-glacial",
 			"color": "2973DD"
 		},
 		"503": {
 			"name": "Mossy Lure",
-			"emoji": "\uD83C\uDF43",
+			"emoji": "lure-mossy",
 			"color": "86A630"
 		},
 		"504": {
 			"name": "Magnetic Lure",
-			"emoji": "\uD83E\uDDF2",
+			"emoji": "lure-magnetic",
 			"color": "9FA6C1"
 		},
 		"505": {
 			"name": "Rainy Lure",
-			"emoji": "\uD83D\uDCA7",
+			"emoji": "lure-rainy",
 			"color": "03D7FC"
 		}
 	},
@@ -521,15 +552,15 @@
 		},
 		"1": {
 			"name": "male",
-			"emoji": "\u2642"
+			"emoji": "gender-male"
 		},
 		"2": {
 			"name": "female",
-			"emoji": "\u2640"
+			"emoji": "gender-female"
 		},
 		"3": {
 			"name": "genderless",
-			"emoji": "\u26a7"
+			"emoji": "gender-none"
 		}
 	},
 	"rarity": {
@@ -569,22 +600,22 @@
 		"0": {
 			"name": "Uncontested",
 			"color": "BABABA",
-			"emoji": "\u26AA"
+			"emoji": "team-uncontested"
 		},
 		"1": {
 			"name": "Mystic",
 			"color": "3B4CCA",
-			"emoji": "\uD83D\uDD35"
+			"emoji": "team-mystic"
 		},
 		"2": {
 			"name": "Valor",
 			"color": "CC0000",
-			"emoji": "\uD83D\uDD34"
+			"emoji": "team-valor"
 		},
 		"3": {
 			"name": "Instinct",
 			"color": "FFDE00",
-			"emoji": "\uD83D\uDFE1"
+			"emoji": "team-instinct"
 		},
 		"4": {
 			"name": "Any team",
@@ -594,92 +625,92 @@
 	"types": {
 		"Grass": {
 			"id": 12,
-			"emoji": "🌿",
+			"emoji": "type-grass",
 			"color": "78C850"
 		},
 		"Poison": {
 			"id": 4,
-			"emoji": "☠",
+			"emoji": "type-poison",
 			"color": "A040A0"
 		},
 		"Fire": {
 			"id": 10,
-			"emoji": "🔥",
+			"emoji": "type-fire",
 			"color": "F08030"
 		},
 		"Flying": {
 			"id": 3,
-			"emoji": "🐦",
+			"emoji": "type-flying",
 			"color": "A890F0"
 		},
 		"Water": {
 			"id": 11,
-			"emoji": "💧",
+			"emoji": "type-water",
 			"color": "6890F0"
 		},
 		"Bug": {
 			"id": 7,
-			"emoji": "🐛",
+			"emoji": "type-bug",
 			"color": "A8B820"
 		},
 		"Normal": {
 			"id": 1,
-			"emoji": "⭕",
+			"emoji": "type-normal",
 			"color": "A8A878"
 		},
 		"Dark": {
 			"id": 17,
-			"emoji": "🌑",
+			"emoji": "type-dark",
 			"color": "705848"
 		},
 		"Electric": {
 			"id": 13,
-			"emoji": "⚡",
+			"emoji": "type-electric",
 			"color": "F8D030"
 		},
 		"Rock": {
 			"id": 6,
-			"emoji": "🗿",
+			"emoji": "type-rock",
 			"color": "B8A038"
 		},
 		"Ground": {
 			"id": 5,
-			"emoji": "⛰️",
+			"emoji": "type-ground",
 			"color": "E0C068"
 		},
 		"Fairy": {
 			"id": 18,
-			"emoji": "🦋",
+			"emoji": "type-fairy",
 			"color": "EE99AC"
 		},
 		"Fighting": {
 			"id": 2,
-			"emoji": "👊",
+			"emoji": "type-fighting",
 			"color": "C03028"
 		},
 		"Psychic": {
 			"id": 14,
-			"emoji": "🔮",
+			"emoji": "type-psychic",
 			"color": "F85888"
 		},
 		"Steel": {
 			"id": 9,
-			"emoji": "🔩",
+			"emoji": "type-steel",
 			"color": "B8B8D0"
 		},
 		"Ice": {
 			"id": 15,
-			"emoji": "❄",
+			"emoji": "type-ice",
 			"color": "98D8D8"
 		},
 		"Ghost": {
 			"id": 8,
-			"emoji": "👻",
+			"emoji": "type-ghost",
 			"color": "705898"
 		},
 		"Dragon": {
 			"id": 16,
-			"emoji": "🐲",
+			"emoji": "type-dragon",
 			"color": "7038F8"
 		}
 	},
@@ -690,31 +721,31 @@
 		},
 		"1": {
 			"name": "sunny",
-			"emoji": "\u2600"
+			"emoji": "weather-sunny"
 		},
 		"2": {
 			"name": "rain",
-			"emoji": "\uD83C\uDF27"
+			"emoji": "weather-rain"
 		},
 		"3": {
 			"name": "partly cloudy",
-			"emoji": "\uD83C\uDF24"
+			"emoji": "weather-partly-cloudy"
 		},
 		"4": {
 			"name": "cloudy",
-			"emoji": "\u2601"
+			"emoji": "weather-cloudy"
 		},
 		"5": {
 			"name": "windy",
-			"emoji": "\uD83E\uDE81"
+			"emoji": "weather-windy"
 		},
 		"6": {
 			"name": "snow",
-			"emoji": "\u2744"
+			"emoji": "weather-snow"
 		},
 		"7": {
 			"name": "fog",
-			"emoji": "\uD83C\uDF2B"
+			"emoji": "weather-fog"
 		}
 	},
 	"weatherTypeBoost": {
@@ -729,31 +760,129 @@
 	"genData": {
 		"1": {
 			"min": 1,
-			"max": 151
+			"max": 151,
+			"name": "Kanto",
+			"roman": "I"
 		},
 		"2": {
 			"min": 152,
-			"max": 251
+			"max": 251,
+			"name": "Johto",
+			"roman": "II"
 		},
 		"3": {
 			"min": 252,
-			"max": 386
+			"max": 386,
+			"name": "Hoenn",
+			"roman": "III"
 		},
 		"4": {
 			"min": 387,
-			"max": 493
+			"max": 493,
+			"name": "Sinnoh",
+			"roman": "IV"
 		},
 		"5": {
 			"min": 494,
-			"max": 649
+			"max": 649,
+			"name": "Unova",
+			"roman": "V"
 		},
 		"6": {
 			"min": 650,
-			"max": 721
+			"max": 721,
+			"name": "Kalos",
+			"roman": "VII"
 		},
 		"7": {
 			"min": 722,
-			"max": 809
+			"max": 809,
+			"name": "Alola",
+			"roman": "VII"
+		},
+		"8": {
+			"min": 810,
+			"max": 890,
+			"name": "Galar",
+			"roman": "VIII"
 		}
+	},
+	"genException": {
+		"19_46": "7",
+		"20_48": "7",
+		"26_50": "7",
+		"27_52": "7",
+		"28_54": "7",
+		"37_56": "7",
+		"38_58": "7",
+		"50_60": "7",
+		"51_62": "7",
+		"52_64": "7",
+		"52_2335": "8",
+		"53_66": "7",
+		"74_68": "7",
+		"75_70": "7",
+		"76_72": "7",
+		"77_2336": "8",
+		"78_2337": "8",
+		"79_2582": "8",
+		"80_2583": "8",
+		"83_2338": "8",
+		"88_74": "7",
+		"89_76": "7",
+		"103_78": "7",
+		"105_80": "7",
+		"110_944": "8",
+		"122_2339": "8",
+		"199_2584": "8",
+		"222_2340": "8",
+		"263_946": "8",
+		"264_948": "8",
+		"554_2341": "8",
+		"555_2342": "8",
+		"555_2343": "8",
+		"562_2344": "8",
+		"618_2345": "8"
+	},
+	"emojis": {
+		"lure-normal": "\ud83d\udccd",
+		"lure-glacial": "\u2744",
+		"lure-mossy": "\uD83C\uDF43",
+		"lure-magnetic": "\uD83E\uDDF2",
+		"lure-rainy": "\uD83D\uDCA7",
+		"gender-male": "\u2642",
+		"gender-female": "\u2640",
+		"gender-none": "\u26a7",
+		"weather-sunny": "\u2600",
+		"weather-rain": "\uD83C\uDF27",
+		"weather-partly-cloudy": "\uD83C\uDF24",
+		"weather-cloudy": "\u2601",
+		"weather-windy": "\uD83E\uDE81",
+		"weather-snow": "\u2603",
+		"weather-fog": "\uD83C\uDF2B",
+		"type-grass": "🌿",
+		"type-poison": "☠",
+		"type-fire": "🔥",
+		"type-flying": "🐦",
+		"type-water": "💧",
+		"type-bug": "🐛",
+		"type-normal": "⭕",
+		"type-dark": "🌑",
+		"type-electric": "⚡",
+		"type-rock": "🗿",
+		"type-ground": "⛰️",
+		"type-fairy": "🦋",
+		"type-fighting": "👊",
+		"type-psychic": "🔮",
+		"type-steel": "🔩",
+		"type-ice": "❄",
+		"type-ghost": "👻",
+		"type-dragon": "🐲",
+		"grunt-unknown": "❓",
+		"team-uncontested": "\u26AA",
+		"team-mystic": "\uD83D\uDD35",
+		"team-valor": "\uD83D\uDD34",
+		"team-instinct": "\uD83D\uDFE1",
+		"shiny": "✨"
 	}
 }

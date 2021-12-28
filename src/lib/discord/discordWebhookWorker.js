@@ -1,10 +1,12 @@
 const axios = require('axios')
 const NodeCache = require('node-cache')
 const fsp = require('fs').promises
+const FormData = require('form-data')
 
+const { performance } = require('perf_hooks')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
-const hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[A-Z0-9+&@#\\/%=~_|$])', 'igm')
+const hookRegex = /(?:https?:\/\/|www\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[A-Z0-9+&@#/%=~_|$])/igm
 
 const noop = () => {}
 
@@ -25,7 +27,7 @@ class DiscordWebhookWorker {
 		setImmediate(() => this.init())
 	}
 
-	// eslint-disable-next-line class-methods-use-this
+	// eslint-disable-next-line class-methods-use-this,no-promise-executor-return
 	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 	async init() {
@@ -107,19 +109,46 @@ class DiscordWebhookWorker {
 
 			const timeoutMs = this.config.tuning.discordTimeout || 10000
 			const res = await this.retrySender(senderId, async () => {
+				let uploadData = data.message
+				let headers = null
+
+				const startDownloadTime = performance.now()
+
+				if (this.config.discord.uploadEmbedImages && data.message.embeds && data.message.embeds.length && data.message.embeds[0].image && data.message.embeds[0].image.url) {
+					const copyMessage = JSON.parse(JSON.stringify(data.message))
+					const imageUrl = copyMessage.embeds[0].image.url
+					copyMessage.embeds[0].image.url = 'attachment://map.png'
+
+					const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
+					const buffer = Buffer.from(response.data, 'utf-8')
+
+					const formData = new FormData()
+					formData.append('payload_json', JSON.stringify(copyMessage))
+					formData.append('file', buffer, 'map.png')
+
+					headers = formData.getHeaders()
+					uploadData = formData
+				}
+
 				const source = axios.CancelToken.source()
 				const timeout = setTimeout(() => {
 					source.cancel(`Timeout waiting for response - ${timeoutMs}ms`)
 					// Timeout Logic
 				}, timeoutMs)
 
+				const startSendTime = performance.now()
+
 				const result = await axios({
 					method: 'post',
 					url,
-					data: data.message,
+					data: uploadData,
+					headers,
 					validateStatus: ((status) => status < 500),
 					cancelToken: source.token,
 				})
+
+				const endTime = performance.now();
+				(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: http(s)> ${data.name} WEBHOOK (${startSendTime - startDownloadTime} download ms, ${endTime - startSendTime} send ms)`)
 
 				clearTimeout(timeout)
 				return result
@@ -137,8 +166,10 @@ class DiscordWebhookWorker {
 				const msgId = res.data.id
 				this.webhookTimeouts.set(msgId, data.target, Math.floor(msgDeletionMs / 1000) + 1)
 
-				setTimeout(async () => this.deleteMessage(logReference, data.name, data.target, msgId),
-					msgDeletionMs)
+				setTimeout(
+					async () => this.deleteMessage(logReference, data.name, data.target, msgId),
+					msgDeletionMs,
+				)
 			}
 		} catch (err) {
 			this.logs.discord.error(`${data.logReference}: ${data.name} WEBHOOK failed`, err)
@@ -148,10 +179,12 @@ class DiscordWebhookWorker {
 
 	work(data) {
 		this.webhookQueue.push(data)
-		this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+		this.queueProcessor.run(
+			async (work) => (this.sendAlert(work)),
 			async (err) => {
 				this.logs.log.error('Discord Webhook queueProcessor exception', err)
-			})
+			},
+		)
 	}
 
 	async saveTimeouts() {
@@ -203,7 +236,14 @@ class DiscordWebhookWorker {
 
 		const now = Date.now()
 
-		const data = JSON.parse(loaddatatxt)
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn('Clean cache for discord webhookWorker contains invalid data - ignoring')
+			return
+		}
+
 		for (const key of Object.keys(data)) {
 			const msgData = data[key]
 

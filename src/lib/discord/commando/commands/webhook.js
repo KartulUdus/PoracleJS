@@ -1,13 +1,19 @@
+const { Permissions } = require('discord.js')
+
 exports.run = async (client, msg, [args]) => {
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
 
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
-		if (!msg.guild.me.hasPermission('MANAGE_WEBHOOKS')) {
+		if (msg.channel.type !== 'GUILD_TEXT') {
+			return await msg.reply('This needs to be run from within a channel on the appropriate guild')
+		}
+
+		if (!msg.guild.me.hasPermission(Permissions.FLAGS.MANAGE_WEBHOOKS)) {
 			return await msg.reply('I have not been allowed to make webhooks!')
 		}
 

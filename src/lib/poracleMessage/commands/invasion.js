@@ -22,9 +22,16 @@ exports.run = async (client, msg, args, options) => {
 
 		const translator = client.translatorFactory.Translator(language)
 
+		if (!await util.commandAllowed(commandName) && !args.find((arg) => arg === 'remove')) {
+			await msg.react('🚫')
+			return msg.reply(translator.translate('You do not have permission to execute this command'))
+		}
+
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}invasion giovanni`, `{0}invasion dragon`, `{0}invasion remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}invasion giovanni`, `{0}invasion dragon`, `{0}invasion remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -116,30 +123,33 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				alreadyPresent.forEach((invasion) => {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.invasionRowText(client.config, translator, client.GameData, invasion), '\n')
 				})
 				updates.forEach((invasion) => {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+					message = message.concat(translator.translate('Updated: '), trackedCommand.invasionRowText(client.config, translator, client.GameData, invasion), '\n')
 				})
 				insert.forEach((invasion) => {
-					message = message.concat(translator.translate('New: '), trackedCommand.invasionRowText(translator, client.GameData, invasion), '\n')
+					message = message.concat(translator.translate('New: '), trackedCommand.invasionRowText(client.config, translator, client.GameData, invasion), '\n')
 				})
 			}
 
-			await client.query.deleteWhereInQuery('invasion', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'invasion',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('invasion', [...insert, ...updates])
 
 			client.log.info(`${logReference}: ${target.name} started tracking ${types.join(', ')} invasions`)
-			await msg.reply(message)
+			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
-			let result = 0
+			let result
 			if (commandEverything) {
 				result = await client.query.deleteQuery('invasion', { id: target.id, profile_no: currentProfileNo })
 				client.log.info(`${logReference}: ${target.name} stopped tracking all invasions`)

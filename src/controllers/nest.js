@@ -8,16 +8,16 @@ const Controller = require('./controller')
 class Nest extends Controller {
 	async nestWhoCares(obj) {
 		const data = obj
-		let areastring = `humans.area like '%"${data.matched[0] || 'doesntexist'}"%' `
-		data.matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area}"%' `)
-		})
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
+
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, nests.template, nests.distance, nests.clean, nests.ping from nests
 		join humans on (humans.id = nests.id and humans.current_profile_no = nests.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%nest%')and
 		((nests.pokemon_id = 0 or nests.pokemon_id='${data.pokemon_id}') and nests.min_spawn_avg <= ${data.pokemon_avg}) and
-		(nests.form = ${data.form} or nests.form = 0)`
+		(nests.form = ${data.form} or nests.form = 0)
+		${strictareastring}
+		`
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -65,7 +65,6 @@ class Nest extends Controller {
 	}
 
 	async handle(obj) {
-		let pregenerateTile = false
 		const data = obj
 		// const minTth = this.config.general.alertMinimumTime || 0
 
@@ -74,28 +73,8 @@ class Nest extends Controller {
 
 			data.longitude = data.lon
 			data.latitude = data.lat
-			switch (this.config.geocoding.staticProvider.toLowerCase()) {
-				case 'tileservercache': {
-					pregenerateTile = true
-					break
-				}
-				case 'google': {
-					data.staticMap = `https://maps.googleapis.com/maps/api/staticmap?center=${data.latitude},${data.longitude}&markers=color:red|${data.latitude},${data.longitude}&maptype=${this.config.geocoding.type}&zoom=${this.config.geocoding.zoom}&size=${this.config.geocoding.width}x${this.config.geocoding.height}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'osm': {
-					data.staticMap = `https://www.mapquestapi.com/staticmap/v5/map?locations=${data.latitude},${data.longitude}&size=${this.config.geocoding.width},${this.config.geocoding.height}&defaultMarker=marker-md-3B5998-22407F&zoom=${this.config.geocoding.zoom}&key=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				case 'mapbox': {
-					data.staticMap = `https://api.mapbox.com/styles/v1/mapbox/streets-v10/static/url-https%3A%2F%2Fi.imgur.com%2FMK4NUzI.png(${data.longitude},${data.latitude})/${data.longitude},${data.latitude},${this.config.geocoding.zoom},0,0/${this.config.geocoding.width}x${this.config.geocoding.height}?access_token=${this.config.geocoding.staticKey[~~(this.config.geocoding.staticKey.length * Math.random())]}`
-					break
-				}
-				default: {
-					data.staticMap = ''
-				}
-			}
 
+			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
@@ -103,14 +82,13 @@ class Nest extends Controller {
 
 			const nestExpiration = data.reset_time + (7 * 24 * 60 * 60)
 			data.tth = moment.preciseDiff(Date.now(), nestExpiration * 1000, true)
-			data.disappearDate = moment(nestExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.date)
-			data.resetDate = moment(data.reset_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.date)
-			data.disappearTime = moment(nestExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
-			data.resetTime = moment(data.reset_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.disappearDate = moment(nestExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.date)
+			data.resetDate = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.date)
+			data.disappearTime = moment(nestExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.resetTime = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
-			data.imgUrl = data.pokestopUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
 			// Stop handling if it already disappeared or is about to go away
@@ -119,10 +97,11 @@ class Nest extends Controller {
 			// 	return []
 			// }
 
-			data.matched = this.pointInArea([data.latitude, data.longitude])
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			if (data.form === undefined || data.form === null) data.form = 0
-			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] ? this.GameData.monsters[`${data.pokemon_id}_${data.form}`] : this.GameData.monsters[`${data.pokemon_id}_0`]
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 			if (!monster) {
 				this.log.warn(`${logReference}: Couldn't find monster in:`, data)
 				return
@@ -133,8 +112,6 @@ class Nest extends Controller {
 			data.nameEng = monster.name
 			data.formId = monster.form.id
 			data.formNameEng = monster.form.name
-			data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.png`
-			data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}.webp`
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.pokemonCount = data.pokemon_count
 			data.pokemonSpawnAvg = data.pokemon_avg
@@ -160,20 +137,25 @@ class Nest extends Controller {
 				return []
 			}
 
+			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
+
+			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.nest) {
-				// Attempt to calculate best position for nest
-				const position = this.tileserverPregen.autoposition({
-					polygons:
-						JSON.parse(data.poly_path).map((x) => ({ path: x })),
-				}, 500, 250)
-				data.zoom = Math.min(position.zoom, 16)
-				data.map_longitude = position.longitude
-				data.map_latitude = position.latitude
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'nest', data, this.config.geocoding.staticMapType.nest)
-			}
+			// Attempt to calculate best position for nest
+			const position = this.tileserverPregen.autoposition({
+				polygons:
+					JSON.parse(data.poly_path).map((x) => ({ path: x })),
+			}, 500, 250)
+			data.zoom = Math.min(position.zoom, 16)
+			data.map_longitude = position.longitude
+			data.map_latitude = position.latitude
+
+			await this.getStaticMapUrl(logReference, data, 'nest', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'poly_path'])
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
@@ -189,10 +171,13 @@ class Nest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				let [platform] = cares.type.split(':')
+				if (platform === 'webhook') platform = 'discord'
 
 				// full build
 				data.name = translator.translate(data.nameEng)
 				data.formName = translator.translate(data.formNameEng)
+				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 
 				const view = {
 					...geoResult,
@@ -203,55 +188,28 @@ class Nest extends Controller {
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
 					now: new Date(),
-					areas: data.matched.map((area) => area.replace(/'/gi, '').replace(/ /gi, '-')).join(', '),
+					nowISO: new Date().toISOString(),
+					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
-				let [platform] = cares.type.split(':')
-				if (platform === 'webhook') platform = 'discord'
+				const templateType = 'nest'
+				const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
-				const mustache = this.getDts(logReference, 'nest', platform, cares.template, language)
-				if (mustache) {
-					let mustacheResult
-					let message
-					try {
-						mustacheResult = mustache(view, { data: { language } })
-					} catch (err) {
-						this.log.error(`${logReference}: Error generating mustache results for ${platform}/${cares.template}/${language}`, err, view)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-					mustacheResult = await this.urlShorten(mustacheResult)
-					try {
-						message = JSON.parse(mustacheResult)
-					} catch (err) {
-						this.log.error(`${logReference}: Error JSON parsing mustache results ${mustacheResult}`, err)
-						// eslint-disable-next-line no-continue
-						continue
-					}
-
-					if (cares.ping) {
-						if (!message.content) {
-							message.content = cares.ping
-						} else {
-							message.content += cares.ping
-						}
-					}
-					const work = {
-						lat: data.latitude.toString().substring(0, 8),
-						lon: data.longitude.toString().substring(0, 8),
-						message,
-						target: cares.id,
-						type: cares.type,
-						name: cares.name,
-						tth: data.tth,
-						clean: cares.clean,
-						emoji: data.emoji,
-						logReference,
-						language,
-					}
-
-					jobs.push(work)
+				const work = {
+					lat: data.latitude.toString().substring(0, 8),
+					lon: data.longitude.toString().substring(0, 8),
+					message,
+					target: cares.id,
+					type: cares.type,
+					name: cares.name,
+					tth: data.tth,
+					clean: cares.clean,
+					emoji: data.emoji,
+					logReference,
+					language,
 				}
+
+				jobs.push(work)
 			}
 
 			return jobs
