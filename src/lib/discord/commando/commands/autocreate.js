@@ -134,9 +134,7 @@ exports.run = async (client, msg, [args]) => {
 			} else {
 				const webhookName = channel.name
 				const res = await channel.createWebhook('Poracle')
-				const webhookLink = res.url
-
-				id = webhookLink
+				id = res.url
 				type = 'webhook'
 				name = channelDefinition.webhookName ? format(channelDefinition.webhookName, args) : webhookName
 			}
@@ -169,10 +167,14 @@ exports.run = async (client, msg, [args]) => {
 
 				const cmd = require(`../../../poracleMessage/commands/${cmdName}`)
 
-				await cmd.run(pds, pdm, commandArgs,
+				await cmd.run(
+					pds,
+					pdm,
+					commandArgs,
 					{
 						targetOverride: target,
-					})
+					},
+				)
 			}
 		}
 	} catch (err) {

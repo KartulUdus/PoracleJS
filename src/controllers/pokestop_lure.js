@@ -81,7 +81,7 @@ class Lure extends Controller {
 
 			const lureExpiration = data.lure_expiration
 			data.tth = moment.preciseDiff(Date.now(), lureExpiration * 1000, true)
-			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated

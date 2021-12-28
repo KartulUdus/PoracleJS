@@ -6,13 +6,18 @@ module.exports = async (client, member) => {
 
 		if (client.config.discord.admins.includes(member.id)) return
 
-		const dr = new DiscordReconciliation(member.client,
+		const dr = new DiscordReconciliation(
+			member.client,
 			client.logs.log,
 			client.config,
-			client.query, client.dts)
+			client.query,
+			client.dts,
+		)
 
-		await dr.reconcileSingleUser(member.id,
-			client.config.reconciliation.discord.removeInvalidUsers)
+		await dr.reconcileSingleUser(
+			member.id,
+			client.config.reconciliation.discord.removeInvalidUsers,
+		)
 	} catch (e) {
 		client.logs.discord.error('Discord event: guildMemberRemove - was unable to remove/disable human', e)
 	}

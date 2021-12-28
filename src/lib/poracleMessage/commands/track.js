@@ -28,8 +28,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -169,8 +171,10 @@ exports.run = async (client, msg, args, options) => {
 
 				if (permissionName.length && !await util.commandAllowed(permissionName[0])) {
 					await msg.react('🚫')
-					return msg.reply(translator.translateFormat('You do not have permission to use the `{0}` parameter',
-						translator.translate(paramName)))
+					return msg.reply(translator.translateFormat(
+						'You do not have permission to use the `{0}` parameter',
+						translator.translate(paramName),
+					))
 				}
 
 				switch (paramName) {
@@ -392,12 +396,15 @@ exports.run = async (client, msg, args, options) => {
 			})
 		}
 
-		await client.query.deleteWhereInQuery('monsters', {
-			id: target.id,
-			profile_no: currentProfileNo,
-		},
-		updates.map((x) => x.uid),
-		'uid')
+		await client.query.deleteWhereInQuery(
+			'monsters',
+			{
+				id: target.id,
+				profile_no: currentProfileNo,
+			},
+			updates.map((x) => x.uid),
+			'uid',
+		)
 
 		await client.query.insertQuery('monsters', [...insert, ...updates])
 

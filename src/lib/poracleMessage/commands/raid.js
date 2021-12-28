@@ -28,8 +28,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}raid level5`, `{0}raid articuno`, `{0}raid remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}raid level5`, `{0}raid articuno`, `{0}raid remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -41,7 +43,7 @@ exports.run = async (client, msg, args, options) => {
 		const remove = !!args.find((arg) => arg === 'remove')
 		const commandEverything = !!args.find((arg) => arg === 'everything')
 
-		let monsters = []
+		let monsters
 		let exclusive = 0
 		let distance = 0
 		let team = 4
@@ -207,12 +209,15 @@ exports.run = async (client, msg, args, options) => {
 				}
 			}
 
-			await client.query.deleteWhereInQuery('raid', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'raid',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('raid', [...updates, ...insert])
 

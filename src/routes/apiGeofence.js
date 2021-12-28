@@ -63,8 +63,12 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		try {
-			const url = await geofenceTileGenerator.generateDistanceTile(fastify.query.tileserverPregen,
-				lat, lon, distance)
+			const url = await geofenceTileGenerator.generateDistanceTile(
+				fastify.query.tileserverPregen,
+				lat,
+				lon,
+				distance,
+			)
 			return {
 				status: 'ok',
 				url,
@@ -97,8 +101,11 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		try {
-			const url = await geofenceTileGenerator.generateLocationTile(fastify.query.tileserverPregen,
-				req.params.lat, req.params.lon)
+			const url = await geofenceTileGenerator.generateLocationTile(
+				fastify.query.tileserverPregen,
+				req.params.lat,
+				req.params.lon,
+			)
 			return {
 				status: 'ok',
 				url,
