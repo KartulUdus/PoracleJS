@@ -19,7 +19,7 @@ exports.run = async (client, msg, [args]) => {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
 
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'text') {
+		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
@@ -134,9 +134,7 @@ exports.run = async (client, msg, [args]) => {
 			} else {
 				const webhookName = channel.name
 				const res = await channel.createWebhook('Poracle')
-				const webhookLink = res.url
-
-				id = webhookLink
+				id = res.url
 				type = 'webhook'
 				name = channelDefinition.webhookName ? format(channelDefinition.webhookName, args) : webhookName
 			}
@@ -169,10 +167,14 @@ exports.run = async (client, msg, [args]) => {
 
 				const cmd = require(`../../../poracleMessage/commands/${cmdName}`)
 
-				await cmd.run(pds, pdm, commandArgs,
+				await cmd.run(
+					pds,
+					pdm,
+					commandArgs,
 					{
 						targetOverride: target,
-					})
+					},
+				)
 			}
 		}
 	} catch (err) {

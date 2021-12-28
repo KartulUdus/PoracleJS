@@ -28,8 +28,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}invasion giovanni`, `{0}invasion dragon`, `{0}invasion remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}invasion giovanni`, `{0}invasion dragon`, `{0}invasion remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -131,12 +133,15 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.deleteWhereInQuery('invasion', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'invasion',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('invasion', [...insert, ...updates])
 
@@ -144,7 +149,7 @@ exports.run = async (client, msg, args, options) => {
 			await msg.reply(message, { style: 'markdown' })
 			reaction = insert.length ? '✅' : reaction
 		} else {
-			let result = 0
+			let result
 			if (commandEverything) {
 				result = await client.query.deleteQuery('invasion', { id: target.id, profile_no: currentProfileNo })
 				client.log.info(`${logReference}: ${target.name} stopped tracking all invasions`)

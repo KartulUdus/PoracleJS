@@ -7,7 +7,7 @@ module.exports = async (client, msg) => {
 		client.logs.discord.debug(`Received message ${msg.author.username} ${msg.content}`)
 
 		// Log all DM messages to dmLogChannelID
-		if (msg.channel.type === 'dm' && client.config.discord.dmLogChannelID !== '') {
+		if (msg.channel.type === 'DM' && client.config.discord.dmLogChannelID !== '') {
 			let message = `${msg.author} > ${msg.cleanContent}`
 			if (client.config.discord.guilds && client.config.discord.guilds.length > 1) {
 				message = `${msg.author.username} ${msg.author} > ${msg.cleanContent}`
@@ -24,7 +24,9 @@ module.exports = async (client, msg) => {
 					} else {
 						channel.send(message).then((logmsg) => {
 							if (msgDeletionMs > 0) {
-								logmsg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => {})
+								setTimeout(() => {
+									logmsg.delete().catch(() => {})
+								}, msgDeletionMs)
 							}
 						}).catch(() => { })
 					}
@@ -77,7 +79,7 @@ module.exports = async (client, msg) => {
 				cmd.run(client, msg, initialArgs)
 			}
 		}
-		if (msg.channel.type === 'dm' && !recognisedCommand && client.config.discord.unrecognisedCommandMessage) {
+		if (msg.channel.type === 'DM' && !recognisedCommand && client.config.discord.unrecognisedCommandMessage) {
 			msg.reply(client.config.discord.unrecognisedCommandMessage)
 		}
 	} catch (err) {

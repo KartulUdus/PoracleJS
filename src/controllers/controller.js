@@ -131,6 +131,8 @@ class Controller extends EventEmitter {
 
 	getDts(logReference, templateType, platform, templateName, language) {
 		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
+		templateName = templateName.toLowerCase()
+
 		const key = `${templateType} ${platform} ${templateName} ${language}`
 		if (this.dtsCache[key]) {
 			return this.dtsCache[key]
@@ -256,13 +258,20 @@ class Controller extends EventEmitter {
 
 				if (tileServerOptions.type && tileServerOptions.type !== 'none') {
 					if (!tileServerOptions.pregenerate) {
-						data.staticMap = await this.tileserverPregen.getTileURL(logReference, maptype,
+						data.staticMap = await this.tileserverPregen.getTileURL(
+							logReference,
+							maptype,
 							Object.fromEntries(Object.entries(data)
 								.filter(([field]) => keys.includes(field))),
-							tileServerOptions.type)
+							tileServerOptions.type,
+						)
 					} else {
-						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, maptype,
-							pregenKeys ? Object.fromEntries(Object.entries(data).filter(([field]) => ['nearbyStops', 'uiconPokestopUrl'].includes(field) || pregenKeys.includes(field))) : data, tileServerOptions.type)
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(
+							logReference,
+							maptype,
+							pregenKeys ? Object.fromEntries(Object.entries(data).filter(([field]) => ['nearbyStops', 'uiconPokestopUrl'].includes(field) || pregenKeys.includes(field))) : data,
+							tileServerOptions.type,
+						)
 					}
 				}
 
@@ -348,12 +357,14 @@ class Controller extends EventEmitter {
 
 	/**
 	 * Replace URLs with shortened versions if surrounded by <S< >S>
-	 * @param
 	 */
 	// eslint-disable-next-line class-methods-use-this
 	async urlShorten(s) {
-		return replaceAsync(s, /<S<(.*?)>S>/g,
-			async (match, name) => this.shortener.getShortlink(name))
+		return replaceAsync(
+			s,
+			/<S<(.*?)>S>/g,
+			async (match, name) => this.shortener.getShortlink(name),
+		)
 	}
 
 	async getAddress(locationObject) {

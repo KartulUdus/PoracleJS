@@ -25,8 +25,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}location <lat>,<lon>`, `{0}location <your address>`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}location <lat>,<lon>`, `{0}location <your address>`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}

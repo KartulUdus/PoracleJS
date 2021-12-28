@@ -27,8 +27,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}lure mossy`, `{0}lure remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}lure mossy`, `{0}lure remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -132,12 +134,15 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.deleteWhereInQuery('lures', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'lures',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('lures', [...insert, ...updates])
 

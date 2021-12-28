@@ -9,6 +9,7 @@ class RdmScanner {
 			for (const db of this.dbs) {
 				const row = await db.select('name')
 					.from('gym')
+					// eslint-disable-next-line camelcase
 					.where({ id: gym_id })
 					.first()
 				if (row) return row.name
@@ -25,6 +26,7 @@ class RdmScanner {
 			for (const db of this.dbs) {
 				const row = await db.select('name')
 					.from('pokestop')
+					// eslint-disable-next-line camelcase
 					.where({ id: pokestop_id })
 					.first()
 				if (row) return row.name
