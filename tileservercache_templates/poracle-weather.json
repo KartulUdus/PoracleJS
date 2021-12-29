@@ -11,6 +11,7 @@
      #for(pok in activePokemons):
      {
          "url": "#(pok.imgUrl)",
+         "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
          "latitude": #(pok.latitude),
          "longitude": #(pok.longitude),
          "width": 20,
@@ -20,6 +21,7 @@
      #endif
     {
       "url": "#(imgUrl)",
+      "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/weather.png",
       "height": 40,
       "width": 40,
       "x_offset": 0,

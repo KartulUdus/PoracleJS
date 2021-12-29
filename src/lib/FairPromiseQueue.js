@@ -1,5 +1,5 @@
 class FairPromiseQueue {
-	constructor(tasks = [], concurrentCount = 1, selector) {
+	constructor(tasks, concurrentCount, selector) {
 		this.todo = tasks
 		this.running = []
 		this.count = concurrentCount

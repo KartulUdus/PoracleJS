@@ -71,8 +71,10 @@ const dts = require('../../config/dts.json')
 // }
 
 function updateDtsString(test, fixes) {
-	return test.replace(/{{([a-zA-Z0-9 #]*)}}/g,
-		((x) => `{{${x.substring(2, x.length - 2).replace(/(\S+)/g, ((word) => checkreplace(checkreplace(word, fixes), all)))}}}`))
+	return test.replace(
+		/{{([a-zA-Z0-9 #]*)}}/g,
+		((x) => `{{${x.substring(2, x.length - 2).replace(/(\S+)/g, ((word) => checkreplace(checkreplace(word, fixes), all)))}}}`),
+	)
 }
 
 function fix(o, t) {

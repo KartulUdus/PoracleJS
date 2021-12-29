@@ -154,7 +154,7 @@ class Raid extends Controller {
 			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
 			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url || data.url || ''
-			data.disappearTime = moment(data.end * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.color = data.gymColor // deprecated
@@ -232,9 +232,8 @@ class Raid extends Controller {
 				setImmediate(async () => {
 					try {
 						data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 						data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-						// data.imgUrl = `${this.config.general.imgUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.png`
-						// data.stickerUrl = `${this.config.general.stickerUrl}pokemon_icon_${data.pokemon_id.toString().padStart(3, '0')}_${data.form ? data.form.toString() : '00'}${data.evolution > 0 ? `_${data.evolution.toString()}` : ''}.webp`
 
 						const geoResult = await this.getAddress({
 							lat: data.latitude,
@@ -360,7 +359,7 @@ class Raid extends Controller {
 			}
 
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-			data.hatchTime = moment(data.start * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			data.hatchTime = moment(data.start * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.hatchtime = data.hatchTime // deprecated
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -394,9 +393,8 @@ class Raid extends Controller {
 			setImmediate(async () => {
 				try {
 					data.imgUrl = await this.imgUicons.eggIcon(data.level)
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.eggIcon(data.level)
 					data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
-					// data.imgUrl = `${this.config.general.imgUrl}egg${data.level}.png`
-					// data.stickerUrl = `${this.config.general.stickerUrl}egg${data.level}.webp`
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []

@@ -27,8 +27,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}egg level5`, `{0}egg remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}egg level5`, `{0}egg remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -140,12 +142,15 @@ exports.run = async (client, msg, args, options) => {
 				}
 			}
 
-			await client.query.deleteWhereInQuery('egg', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'egg',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('egg', [...insert, ...updates])
 

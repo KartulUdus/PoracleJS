@@ -57,7 +57,7 @@ class PogoEventParser {
 		if (!this.events) return
 
 		try {
-			const tz = geoTz(lat, lon).toString()
+			const tz = geoTz.find(lat, lon).toString()
 
 			for (const event of this.events.filter((x) => (x.spawns && x.spawns.length) || x.type === 'community-day' || x.type === 'spotlight-hour')) {
 				const eventStart = moment.tz(event.start, tz).unix()
@@ -94,7 +94,7 @@ class PogoEventParser {
 		if (!this.events) return
 
 		try {
-			const tz = geoTz(lat, lon).toString()
+			const tz = geoTz.find(lat, lon).toString()
 
 			for (const event of this.events.filter((x) => x.has_quests)) {
 				const eventStart = moment.tz(event.start, tz).unix()

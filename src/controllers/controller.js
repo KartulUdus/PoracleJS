@@ -1,6 +1,5 @@
 const inside = require('point-in-polygon')
 const NodeGeocoder = require('node-geocoder')
-const cp = require('child_process')
 const EventEmitter = require('events')
 const path = require('path')
 const fs = require('fs')
@@ -9,7 +8,7 @@ const { performance } = require('perf_hooks')
 const pcache = require('flat-cache')
 
 const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
-const emojiFlags = require('emoji-flags')
+const emojiFlags = require('country-code-emoji')
 const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
@@ -19,10 +18,10 @@ const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
+	constructor(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
 		super()
 		this.db = db
-		this.cp = cp
+		this.scannerQuery = scannerQuery
 		this.config = config
 		this.log = log
 		this.dts = dts
@@ -41,6 +40,7 @@ class Controller extends EventEmitter {
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
 		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
+		this.imgUiconsAlt = this.config.general.imgUrlAlt ? new Uicons((this.config.general.imagesAlt && this.config.general.imagesAlt[this.constructor.name.toLowerCase()]) || this.config.general.imgUrlAlt, 'png', this.log) : null
 		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
 		this.dtsCache = {}
 		this.shortener = this.getShortener()
@@ -131,6 +131,8 @@ class Controller extends EventEmitter {
 
 	getDts(logReference, templateType, platform, templateName, language) {
 		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
+		templateName = templateName.toLowerCase()
+
 		const key = `${templateType} ${platform} ${templateName} ${language}`
 		if (this.dtsCache[key]) {
 			return this.dtsCache[key]
@@ -229,20 +231,50 @@ class Controller extends EventEmitter {
 		return message
 	}
 
-	async getStaticMapUrl(logReference, data, maptype, keys) {
-		const tileTemplate = maptype
-		const configTemplate = maptype === 'monster' ? 'pokemon' : maptype
+	async getStaticMapUrl(logReference, data, maptype, keys, pregenKeys) {
 		switch (this.config.geocoding.staticProvider.toLowerCase()) {
 			case 'tileservercache': {
-				if (this.config.geocoding.staticMapType[configTemplate]) {
-					if (this.config.geocoding.staticMapType[configTemplate].startsWith('*')) {
-						data.staticMap = await this.tileserverPregen.getTileURL(logReference, tileTemplate,
-							Object.fromEntries(Object.entries(data).filter(([field]) => keys.includes(field))),
-							this.config.geocoding.staticMapType[configTemplate].substring(1))
-					} else {
-						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, tileTemplate, data, this.config.geocoding.staticMapType[configTemplate])
+				const tileServerOptions = this.tileserverPregen.getConfigForTileType(maptype)
+
+				if (tileServerOptions.includeStops && tileServerOptions.pregenerate && this.scannerQuery) {
+					const limits = this.tileserverPregen.limits(data.latitude, data.longitude, tileServerOptions.width, tileServerOptions.height, tileServerOptions.zoom)
+					data.nearbyStops = await this.scannerQuery.getStopData(limits[0][0], limits[0][1], limits[1][0], limits[1][1])
+					if (data.nearbyStops) {
+						data.uiconPokestopUrl = await this.imgUicons.pokestopIcon(0)
+						for (const stop of data.nearbyStops) {
+							switch (stop.type) {
+								case 'gym': {
+									stop.imgUrl = await this.imgUicons.gymIcon(stop.teamId, 6 - stop.slots, false, false)
+									break
+								}
+								case 'pokestop': {
+									break
+								}
+								default:
+							}
+						}
 					}
 				}
+
+				if (tileServerOptions.type && tileServerOptions.type !== 'none') {
+					if (!tileServerOptions.pregenerate) {
+						data.staticMap = await this.tileserverPregen.getTileURL(
+							logReference,
+							maptype,
+							Object.fromEntries(Object.entries(data)
+								.filter(([field]) => keys.includes(field))),
+							tileServerOptions.type,
+						)
+					} else {
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(
+							logReference,
+							maptype,
+							pregenKeys ? Object.fromEntries(Object.entries(data).filter(([field]) => ['nearbyStops', 'uiconPokestopUrl'].includes(field) || pregenKeys.includes(field))) : data,
+							tileServerOptions.type,
+						)
+					}
+				}
+
 				break
 			}
 
@@ -325,12 +357,14 @@ class Controller extends EventEmitter {
 
 	/**
 	 * Replace URLs with shortened versions if surrounded by <S< >S>
-	 * @param
 	 */
 	// eslint-disable-next-line class-methods-use-this
 	async urlShorten(s) {
-		return replaceAsync(s, /<S<(.*?)>S>/g,
-			async (match, name) => this.shortener.getShortlink(name))
+		return replaceAsync(
+			s,
+			/<S<(.*?)>S>/g,
+			async (match, name) => this.shortener.getShortlink(name),
+		)
 	}
 
 	async getAddress(locationObject) {
@@ -346,12 +380,12 @@ class Controller extends EventEmitter {
 				const endTime = performance.now();
 				(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`Geocode ${locationObject.lat},${locationObject.lon} (${endTime - startTime} ms)`)
 
-				const flag = emojiFlags[result.countryCode]
+				const flag = emojiFlags.countryCodeEmoji(result.countryCode)
 				if (!this.addressDts) {
 					this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
 				}
 				result.addr = this.addressDts(result)
-				result.flag = flag ? flag.emoji : ''
+				result.flag = flag || ''
 
 				return this.escapeAddress(result)
 			} catch (err) {
@@ -491,18 +525,6 @@ class Controller extends EventEmitter {
 		else if (iv < 100) colorIdx = 4 // purple epic
 
 		return this.config.discord.ivColors[colorIdx]
-	}
-
-	execPromise(command) {
-		return new Promise((resolve, reject) => {
-			this.cp.exec(command, (error, stdout) => {
-				if (error) {
-					reject(error)
-					return
-				}
-				resolve(stdout.trim())
-			})
-		})
 	}
 }
 

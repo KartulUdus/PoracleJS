@@ -12,8 +12,8 @@ const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../
 const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class Weather extends Controller {
-	constructor(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
-		super(log, db, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
+	constructor(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
+		super(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
 		this.controllerData = weatherCache.getKey('weatherCacheData') || {}
 		this.caresData = weatherCache.getKey('caredPokemon') || {}
 
@@ -323,8 +323,12 @@ class Weather extends Controller {
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
-			if (pregenerateTile && this.config.geocoding.staticMapType.weather && !this.config.weather.showAlteredPokemonStaticMap) {
-				data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
+			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
+				const tileServerOptions = this.tileserverPregen.getConfigForTileType('weather')
+
+				if (tileServerOptions.type !== 'none') {
+					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, tileServerOptions.type)
+				}
 			}
 
 			data.oldWeatherId = (previousWeather > -1) ? previousWeather : ''
@@ -335,6 +339,7 @@ class Weather extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 			data.imgUrl = await this.imgUicons.weatherIcon(data.condition)
+			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.weatherIcon(data.condition)
 			data.stickerUrl = await this.stickerUicons.weatherIcon(data.condition)
 
 			const jobs = []
@@ -382,8 +387,12 @@ class Weather extends Controller {
 						}
 					}
 				}
-				if (pregenerateTile && this.config.geocoding.staticMapType.weather && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
-					data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, this.config.geocoding.staticMapType.weather)
+				if (pregenerateTile && this.config.weather.showAlteredPokemon && this.config.weather.showAlteredPokemonStaticMap) {
+					const tileServerOptions = this.tileserverPregen.getConfigForTileType('weather')
+
+					if (tileServerOptions.type !== 'none') {
+						data.staticMap = await this.tileserverPregen.getPregeneratedTileURL(logReference, 'weather', data, tileServerOptions.type)
+					}
 				}
 				data.staticmap = data.staticMap // deprecated
 				if (cares.caresUntil) weatherTth = moment.preciseDiff(now, cares.caresUntil * 1000, true)

@@ -26,8 +26,10 @@ exports.run = async (client, msg, args, options) => {
 		if (args[0] === 'list' && args.length === 1) invalidCommand = false
 
 		if (invalidCommand) {
-			await msg.reply(translator.translateFormat('Valid commands are `{0}community add <name> <targets>`, `{0}community remove <name> <targets>`, `{0}community clear <targets>`, `{0}community show <targets>`, `{0}community list`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are `{0}community add <name> <targets>`, `{0}community remove <name> <targets>`, `{0}community clear <targets>`, `{0}community show <targets>`, `{0}community list`', util.prefix),
+				{ style: 'markdown' },
+			)
 			// await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
