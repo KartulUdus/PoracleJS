@@ -100,7 +100,12 @@ exports.run = async (client, msg) => {
 		if (greetingDts) {
 			const view = { prefix: client.config.discord.prefix }
 			const greeting = client.mustache.compile(JSON.stringify(greetingDts.template))
-			await msg.author.send(JSON.parse(greeting(view)))
+			const discordMsgToSend = JSON.parse(greeting(view))
+			if (discordMsgToSend.embed) {
+				discordMsgToSend.embeds = [discordMsgToSend.embed]
+				delete discordMsgToSend.embed
+			}
+			await msg.author.send(discordMsgToSend)
 		}
 	} catch (err) {
 		client.logs.log.error('!poracle command errored with:', err)
