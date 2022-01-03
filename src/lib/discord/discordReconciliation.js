@@ -29,7 +29,12 @@ class DiscordReconciliation {
 			const view = { prefix: this.config.discord.prefix }
 			const greeting = this.mustache.compile(JSON.stringify(greetingDts.template)) /* grrr */
 			await discordUser.createDM()
-			await discordUser.send(JSON.parse(greeting(view)))
+			const discordMsgToSend = JSON.parse(greeting(view))
+			if (discordMsgToSend.embed) {
+				discordMsgToSend.embeds = [discordMsgToSend.embed]
+				delete discordMsgToSend.embed
+			}
+			await discordUser.send(discordMsgToSend)
 		}
 	}
 
