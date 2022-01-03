@@ -50,6 +50,28 @@ exports.run = async (client, msg, [args]) => {
 			}
 		}
 
+		if (args[0] === 'remove') {
+			const isChannelBotRegistered = await client.query.countQuery('humans', { id: msg.channel.id })
+			if (isChannelBotRegistered) {
+				await msg.author.send('This channel is already registered under bot control - `channel remove` first')
+
+				return await msg.react('👌')
+			}
+
+			const isRegistered = await client.query.countQuery('humans', { name: webhookName })
+			if (isRegistered) {
+				await client.query.deleteQuery('humans', {
+					name: webhookName,
+					type: 'webhook',
+				})
+				await msg.react('✅')
+				return
+			}
+
+			await msg.author.send(`A webhook or channel with the name ${webhookName} cannot be found`)
+			return await msg.react('👌')
+		}
+
 		if (args[0] === 'create' || args[0] === 'add') {
 			const hooks = await msg.channel.fetchWebhooks()
 			hooks.forEach((hook) => {
