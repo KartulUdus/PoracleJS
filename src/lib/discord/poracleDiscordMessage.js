@@ -92,7 +92,7 @@ class PoracleDiscordMessage {
 
 		if (this.client.config.discord.uploadEmbedImages) {
 			messageText.embeds[0].image.url = 'attachment://image.png'
-			messageText.embeds[0].files = [{ attachment: url, name: 'image.png' }]
+			messageText.files = [{ attachment: url, name: 'image.png' }]
 		}
 
 		await this.msg.reply(messageText)
