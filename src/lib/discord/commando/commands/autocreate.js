@@ -40,10 +40,10 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.reply('No guild has been set, either execute inside a channel or specify guild<id>')
 		}
 
-		if (!guild.me.hasPermission(Permissions.FLAGS.MANAGE_WEBHOOKS)) {
+		if (!guild.me.permissions.has(Permissions.FLAGS.MANAGE_WEBHOOKS)) {
 			return await msg.reply('I have not been allowed to manage webhooks!')
 		}
-		if (!guild.me.hasPermission(Permissions.FLAGS.MANAGE_CHANNELS)) {
+		if (!guild.me.permissions.has(Permissions.FLAGS.MANAGE_CHANNELS)) {
 			return await msg.reply('I have not been allowed to manage channels!')
 		}
 
