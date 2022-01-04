@@ -7,7 +7,6 @@ const fs = require('fs')
 const util = require('util')
 const { S2 } = require('s2-geometry')
 const { Worker, MessageChannel } = require('worker_threads')
-const NodeCache = require('node-cache')
 const pcache = require('flat-cache')
 const fastify = require('fastify')({
 	bodyLimit: 5242880,
@@ -44,8 +43,6 @@ const telegrafChannel = config.telegram.channelToken ? new Telegraf(config.teleg
 
 const scannerQuery = scannerFactory.createScanner(scannerKnex, config.database.scannerType)
 
-const cache = new NodeCache({ stdTTL: 5400, useClones: false }) // 90 minutes
-
 const DiscordWorker = require('./lib/discord/discordWorker')
 const DiscordWebhookWorker = require('./lib/discord/discordWebhookWorker')
 const DiscordCommando = require('./lib/discord/commando')
@@ -71,7 +68,6 @@ fastify.decorate('controllerLog', logs.controller)
 fastify.decorate('webhooks', logs.webhooks)
 fastify.decorate('config', config)
 fastify.decorate('knex', knex)
-fastify.decorate('cache', cache)
 fastify.decorate('gymCache', gymCache)
 fastify.decorate('GameData', GameData)
 fastify.decorate('query', query)
@@ -537,8 +533,8 @@ async function processOne(hook) {
 				}
 				fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
 				const verifiedSpawnTime = (hook.message.verified || hook.message.disappear_time_verified)
-				const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp}`
-				if (fastify.cache.get(cacheKey)) {
+				const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp || 'x'}`
+				if (await fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
 					break
 				}
@@ -547,7 +543,7 @@ async function processOne(hook) {
 
 				const secondsRemaining = !verifiedSpawnTime ? 3600 : (Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300)
 
-				fastify.cache.set(cacheKey, 'x', secondsRemaining)
+				await fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 				if (ohbem) {
 					const data = hook.message
@@ -583,12 +579,12 @@ async function processOne(hook) {
 				fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
 				const cacheKey = `${hook.message.gym_id}${hook.message.end}${hook.message.pokemon_id}`
 
-				if (fastify.cache.get(cacheKey)) {
+				if (await fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 					break
 				}
 
-				fastify.cache.set(cacheKey, 'x')
+				await fastify.cache.set(cacheKey, 'x')
 
 				processHook = hook
 
@@ -610,7 +606,7 @@ async function processOne(hook) {
 				if (lureExpiration && !config.general.disableLure) {
 					const cacheKey = `${hook.message.pokestop_id}L${lureExpiration}`
 
-					if (fastify.cache.get(cacheKey)) {
+					if (await fastify.cache.get(cacheKey)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
 						break
 					}
@@ -618,13 +614,13 @@ async function processOne(hook) {
 					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
 					const secondsRemaining = Math.max((lureExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-					fastify.cache.set(cacheKey, 'x', secondsRemaining)
+					await fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 					processHook = hook
 				} else if (!config.general.disableInvasion) {
-					const cacheKey = `${hook.message.pokestop_id}I${lureExpiration}`
+					const cacheKey = `${hook.message.pokestop_id}I`
 
-					if (fastify.cache.get(cacheKey)) {
+					if (await fastify.cache.get(cacheKey)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
 						break
 					}
@@ -632,7 +628,7 @@ async function processOne(hook) {
 					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
 					const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
 
-					fastify.cache.set(cacheKey, 'x', secondsRemaining)
+					await fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 					processHook = hook
 				}
@@ -646,11 +642,11 @@ async function processOne(hook) {
 				fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
 				const cacheKey = `${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`
 
-				if (fastify.cache.get(cacheKey)) {
+				if (await fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
 					break
 				}
-				fastify.cache.set(cacheKey, 'x')
+				await fastify.cache.set(cacheKey, 'x')
 				processHook = hook
 
 				break
@@ -702,7 +698,7 @@ async function processOne(hook) {
 				}
 				fastify.webhooks.info(`nest ${JSON.stringify(hook.message)}`)
 				const cacheKey = `${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`
-				if (fastify.cache.get(cacheKey)) {
+				if (await fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was sent again too soon, ignoring`)
 					break
 				}
@@ -710,7 +706,7 @@ async function processOne(hook) {
 				// expiry time -- 14 days (!) after reset time
 				const secondsRemaining = Math.max(((hook.message.reset_time + 14 * 24 * 60 * 60) * 1000 - Date.now()) / 1000, 0)
 
-				fastify.cache.set(cacheKey, 'x', secondsRemaining)
+				await fastify.cache.set(cacheKey, 'x', secondsRemaining)
 				processHook = hook
 
 				break
@@ -726,11 +722,11 @@ async function processOne(hook) {
 				const updateTimestamp = hook.message.time_changed || hook.message.updated
 				const hookHourTimestamp = updateTimestamp - (updateTimestamp % 3600)
 				const cacheKey = `${hook.message.s2_cell_id}_${hookHourTimestamp}`
-				if (fastify.cache.get(cacheKey)) {
+				if (await fastify.cache.get(cacheKey)) {
 					fastify.controllerLog.debug(`${hook.message.s2_cell_id}: Weather for this cell was sent again too soon, ignoring`)
 					break
 				}
-				fastify.cache.set(cacheKey, 'x')
+				await fastify.cache.set(cacheKey, 'x')
 
 				// post directly to weather controller
 				weatherWorker.queuePort.postMessage(hook)
@@ -870,7 +866,12 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 	}
 })
 
+const cacheFactory = require('./lib/cache/cacheFactory')
+
 async function run() {
+	const cache = cacheFactory.createCache(config, 5400)
+	fastify.decorate('cache', cache)
+
 	process.on('SIGINT', handleShutdown)
 	process.on('SIGTERM', handleShutdown)
 
