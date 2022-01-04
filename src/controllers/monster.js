@@ -1,7 +1,9 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-const Controller = require('./controller')
 require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
+
+const Controller = require('./controller')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
@@ -237,7 +239,6 @@ class Monster extends Controller {
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
 			const disappearTime = moment(data.disappear_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
 			data.disappearTime = disappearTime.format(this.config.locale.time)
-			data.nightTime = disappearTime.hour() < 8 || disappearTime.hour() >= 20
 			data.confirmedTime = data.disappear_time_verified
 			data.distime = data.disappearTime // deprecated
 			data.individual_attack = data.atk // deprecated
@@ -404,6 +405,11 @@ class Monster extends Controller {
 						lon: data.longitude,
 					})
 					const jobs = []
+
+					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
+					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+
+					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
 
 					await this.getStaticMapUrl(
 						logReference,
