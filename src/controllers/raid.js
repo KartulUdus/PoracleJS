@@ -18,7 +18,7 @@ class Raid extends Controller {
 		(raid.move = 9000 or raid.move = ${data.move_1} or raid.move = ${data.move_2})
 		${strictareastring}
 		and
-		(raid.gym_id='${data.gym_id}' or (raid.gym_id is NULL and `
+		(((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%specificgym%') and raid.gym_id='${data.gym_id}') or (raid.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -78,7 +78,7 @@ class Raid extends Controller {
 		(egg.exclusive = ${data.ex} or egg.exclusive = 0)
 		${strictareastring}
 		and
-		(egg.gym_id='${data.gym_id}' or (egg.gym_id is NULL and `
+		(((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%specificgym%') and egg.gym_id='${data.gym_id}') or (egg.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
