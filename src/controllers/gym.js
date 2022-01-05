@@ -24,7 +24,7 @@ class Gym extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, gym.template, gym.distance, gym.clean, gym.ping from gym
 		join humans on (humans.id = gym.id and humans.current_profile_no = gym.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%gym%') and
 		(gym.team = ${data.teamId} or gym.team = 4)
 		${changeQuery}
 		${strictareastring}
