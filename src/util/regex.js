@@ -44,6 +44,7 @@ module.exports = (translatorFactory) => ({
 	staRe: createCommandRegex(translatorFactory, 'sta', '\\d{1,2}'),
 	weightRe: createCommandRegex(translatorFactory, 'weight', '\\d{1,8}'),
 	rarityRe: createCommandRegex(translatorFactory, 'rarity', '.+'),
+
 	greatLeagueRe: createCommandRegex(translatorFactory, 'great', '\\d{1,4}'),
 	greatLeagueHighestRe: createCommandRegex(translatorFactory, 'greathigh', '\\d{1,4}'),
 	greatLeagueCPRe: createCommandRegex(translatorFactory, 'greatcp', '\\d{1,5}'),
@@ -51,10 +52,12 @@ module.exports = (translatorFactory) => ({
 	ultraLeagueRe: createCommandRegex(translatorFactory, 'ultra', '\\d{1,4}'),
 	ultraLeagueHighestRe: createCommandRegex(translatorFactory, 'ultrahigh', '\\d{1,4}'),
 	ultraLeagueCPRe: createCommandRegex(translatorFactory, 'ultracp', '\\d{1,5}'),
+
 	littleLeagueRe: createCommandRegex(translatorFactory, 'little', '\\d{1,4}'),
 	littleLeagueHighestRe: createCommandRegex(translatorFactory, 'littlehigh', '\\d{1,4}'),
 	littleLeagueCPRe: createCommandRegex(translatorFactory, 'littlecp', '\\d{1,5}'),
 
+	capRe: createCommandRegex(translatorFactory, 'cap', '\\d{1,4}'),
 	dRe: createCommandRegex(translatorFactory, 'd', '[\\d.]{1,}'),
 	tRe: createCommandRegex(translatorFactory, 't', '\\d{1,4}'),
 	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),

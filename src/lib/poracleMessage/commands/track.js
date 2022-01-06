@@ -62,26 +62,26 @@ exports.run = async (client, msg, args, options) => {
 			case 'allow-any': {
 				disableEverythingTracking = false
 				forceEverythingSeparately = false
-				individuallyAllowed	= true
+				individuallyAllowed = true
 				break
 			}
 			case 'allow-and-always-individually': {
 				disableEverythingTracking = false
 				forceEverythingSeparately = true
-				individuallyAllowed	= true
+				individuallyAllowed = true
 				break
 			}
 			case 'allow-and-ignore-individually': {
 				disableEverythingTracking = false
 				forceEverythingSeparately = false
-				individuallyAllowed	= false
+				individuallyAllowed = false
 				break
 			}
 			case 'deny':
 			default: {
 				disableEverythingTracking = true
 				forceEverythingSeparately = false
-				individuallyAllowed	= true
+				individuallyAllowed = true
 			}
 		}
 		const littleLeagueAllowed = client.config.pvp.dataSource === 'internal' || client.config.pvp.dataSource === 'chuck'
@@ -126,11 +126,12 @@ exports.run = async (client, msg, args, options) => {
 			atk: client.re.atkRe,
 			def: client.re.defRe,
 			sta: client.re.staRe,
+			cap: client.re.capRe,
 			male: '^male$',
 			female: '^female$',
 			genderless: '^genderless$',
 			clean: '^clean$',
-			ping: '^<@.*',				// will not be used but stops it being listed as invalid parameter
+			ping: '^<@.*',			// will not be used but stops it being listed as invalid parameter
 		}
 
 		if (!disableEverythingTracking || msg.isFromAdmin) parameterDefinition.everything = '^everything$'
@@ -206,6 +207,17 @@ exports.run = async (client, msg, args, options) => {
 					await msg.react('🙅')
 					return msg.reply(translator.translateFormat('I do not understand this option: {0}', element))
 				}
+			}
+		}
+
+		if (parameterValues.cap) {
+			if (client.config.pvp.dataSource === 'webhook') {
+				await msg.react('🙅')
+				return msg.reply(translator.translate('Caps are not supported with this map\'s data source'))
+			}
+			if (!client.config.pvp.levelCaps.includes(+parameterValues.cap)) {
+				await msg.react('🙅')
+				return msg.reply(`${translator.translate('This level cap is not supported')}, valid choices are: ${client.config.pvp.levelCaps.join(', ')}`)
 			}
 		}
 
@@ -341,6 +353,7 @@ exports.run = async (client, msg, args, options) => {
 			pvp_ranking_best: pvpLeague ? +pvp[pvpLeague].best : 1,
 			pvp_ranking_worst: pvpLeague ? +pvp[pvpLeague].worst : 4096,
 			pvp_ranking_min_cp: pvpLeague ? +pvp[pvpLeague].minCp : 0,
+			pvp_ranking_cap: +defaultTo(parameterValues.cap, 0),
 			rarity: +rarity,
 			max_rarity: +maxRarity,
 			min_time: +defaultTo(parameterValues.t, 0),
