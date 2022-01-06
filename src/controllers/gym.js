@@ -1,10 +1,13 @@
-// const geoTz = require('geo-tz')
-// const moment = require('moment-timezone')
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
+
 const Controller = require('./controller')
 
 /**
  * Controller for processing gym webhooks
- * Alerts on lures
+ * Alerts on Team change
  */
 class Gym extends Controller {
 	async gymWhoCares(data) {
@@ -103,6 +106,9 @@ class Gym extends Controller {
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
+			const conqueredTime = moment().tz(geoTz.find(data.latitude, data.longitude).toString())
+			data.conqueredTime = conqueredTime.format(this.config.locale.time)
+
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				this.log.debug(`${data.id} Gym already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -156,6 +162,11 @@ class Gym extends Controller {
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
+
+					const sunsetTime = moment(getSunset(data.latitude, data.longitude, conqueredTime.toDate()))
+					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, conqueredTime.toDate()))
+
+					data.nightTime = !conqueredTime.isBetween(sunriseTime, sunsetTime)
 
 					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated
