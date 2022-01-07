@@ -77,7 +77,7 @@ class Invasion extends Controller {
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
 
-			const incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp
+			const incidentExpiration = data.incident_expiration ?? data.incident_expire_timestamp
 			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
 			data.disappearTime = moment(incidentExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
