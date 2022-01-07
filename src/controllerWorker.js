@@ -89,22 +89,21 @@ async function processOne(hook) {
 				}
 				break
 			}
-			case 'invasion':
-			case 'pokestop': {
-				if (hook.message.lure_expiration) {
-					const result = await pokestopLureController.handle(hook.message)
-					if (result) {
-						queueAddition = result
-					} else {
-						log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
-					}
+			case 'invasion': {
+				const result = await pokestopController.handle(hook.message)
+				if (result) {
+					queueAddition = result
 				} else {
-					const result = await pokestopController.handle(hook.message)
-					if (result) {
-						queueAddition = result
-					} else {
-						log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
-					}
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+				}
+				break
+			}
+			case 'lure': {
+				const result = await pokestopLureController.handle(hook.message)
+				if (result) {
+					queueAddition = result
+				} else {
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
 				}
 				break
 			}
