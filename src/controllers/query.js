@@ -136,11 +136,11 @@ class Query {
 		}
 	}
 
-	async misteryQuery(sql) {
+	async mysteryQuery(sql) {
 		try {
 			return this.returnByDatabaseType(await this.db.raw(sql))
 		} catch (err) {
-			throw { source: 'misteryQuery', error: err }
+			throw { source: 'mysteryQuery', error: err }
 		}
 	}
 

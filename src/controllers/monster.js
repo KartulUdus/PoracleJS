@@ -172,7 +172,7 @@ class Monster extends Controller {
 
 			const minTth = this.config.general.alertMinimumTime || 0
 
-			if (data.form === undefined || data.form === null) data.form = 0
+			data.form ??= 0
 			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
@@ -384,7 +384,7 @@ class Monster extends Controller {
 					}
 
 					if (data.display_pokemon_id && data.display_pokemon_id !== data.pokemon_id) {
-						if (data.display_form === undefined || data.display_form === null) data.display_form = 0
+						data.display_form ??= 0
 						const displayMonster = this.GameData.monsters[`${data.display_pokemon_id}_${data.display_form}`] || this.GameData.monsters[`${data.display_pokemon_id}_0`]
 
 						if (displayMonster) {

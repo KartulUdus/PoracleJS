@@ -196,7 +196,7 @@ class DiscordReconciliation {
 			}
 
 			if (!this.config.areaSecurity.enabled) {
-				if (this.config.discord.userRole && this.config.discord.userRole.length) {
+				if (this.config.discord.userRole?.length) {
 					const before = !!user && !user.admin_disable
 					const after = roleList.some((role) => this.config.discord.userRole.includes(role))
 
@@ -256,7 +256,7 @@ class DiscordReconciliation {
 				// If a community does not have any user roles, perhaps we should be taking those communities into account
 				// later -- but the @everyone group could be added by users in config
 				for (const community of Object.keys(this.config.areaSecurity.communities)) {
-					if (roleList.some((role) => this.config.areaSecurity.communities[community].discord.userRole.includes(role))) {
+					if (roleList.some((role) => this.config.areaSecurity.communities[community].discord?.userRole?.includes(role))) {
 						communityList.push(community.toLowerCase())
 					}
 				}
