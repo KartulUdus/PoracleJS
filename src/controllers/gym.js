@@ -29,7 +29,7 @@ class Gym extends Controller {
 		${changeQuery}
 		${strictareastring}
 		and
-		(((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%specificgym%') and gym.gym_id='${data.gymId}') or (gym.gym_id is NULL and `
+		((gym.gym_id='${data.gymId}' and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%specificgym%') ) or (gym.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
