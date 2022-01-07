@@ -130,7 +130,7 @@ class Controller extends EventEmitter {
 	}
 
 	getDts(logReference, templateType, platform, templateName, language) {
-		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
+		if (!templateName) templateName = this.config.general.defaultTemplateName.toString() || '1'
 		templateName = templateName.toLowerCase()
 
 		const key = `${templateType} ${platform} ${templateName} ${language}`
