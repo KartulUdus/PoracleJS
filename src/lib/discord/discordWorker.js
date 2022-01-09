@@ -305,7 +305,9 @@ class Worker {
 					} else {
 						const newTtlms = Math.max(msgData.t - now, 2000)
 						const newTtl = Math.floor(newTtlms / 1000)
-						msg.delete({ timeout: newTtlms, reason: 'Historic message delete after restart' }).catch(noop)
+						setTimeout(() => {
+							msg.delete().catch(noop)
+						}, newTtlms)
 						this.discordMessageTimeouts.set(key, msgData.v, newTtl)
 					}
 				}
