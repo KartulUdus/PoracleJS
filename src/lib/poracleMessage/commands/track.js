@@ -210,14 +210,17 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 
+		let pvpCap = this.config.tracking.defaultUserTrackingLevelCap
+
 		if (parameterValues.cap) {
 			if (client.config.pvp.dataSource === 'webhook') {
 				await msg.react('🙅')
 				return msg.reply(translator.translate('Caps are not supported with this map\'s data source'))
 			}
-			if (!client.config.pvp.levelCaps.includes(+parameterValues.cap)) {
+			pvpCap = +parameterValues.cap
+			if (pvpCap !== 0 && !client.config.pvp.levelCaps.includes(pvpCap)) {
 				await msg.react('🙅')
-				return msg.reply(`${translator.translate('This level cap is not supported')}, valid choices are: ${client.config.pvp.levelCaps.join(', ')}`)
+				return msg.reply(translator.translateFormat('This level cap is not supported, valid choices are: {0}', [0, ...client.config.pvp.levelCaps].join(', ')))
 			}
 		}
 
@@ -353,7 +356,7 @@ exports.run = async (client, msg, args, options) => {
 			pvp_ranking_best: pvpLeague ? +pvp[pvpLeague].best : 1,
 			pvp_ranking_worst: pvpLeague ? +pvp[pvpLeague].worst : 4096,
 			pvp_ranking_min_cp: pvpLeague ? +pvp[pvpLeague].minCp : 0,
-			pvp_ranking_cap: +defaultTo(parameterValues.cap, 0),
+			pvp_ranking_cap: pvpLeague ? pvpCap : 0,
 			rarity: +rarity,
 			max_rarity: +maxRarity,
 			min_time: +defaultTo(parameterValues.t, 0),

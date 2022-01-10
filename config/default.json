@@ -216,6 +216,7 @@
       "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
       "maxDistance": 0,                           // restrict users from having too large a tracking circle (0 = no limit)
       "enableGymBattle": false                    // allow users to use "battle_changes" option into !gym tracking command
+      "defaultUserTrackingLevelCap": 0,           // user default for pvp tracking level cap - 0 all levels
   },
   //
   // stats configuration
