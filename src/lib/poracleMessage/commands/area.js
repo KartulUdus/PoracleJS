@@ -29,7 +29,7 @@ exports.run = async (client, msg, args, options) => {
 		let selectableGeofence = client.geofence
 		// Note for Poracle admins we don't remove the userSelectable items
 		// But we do apply the filtering later based on the user/channel that is the target (targetIsAdmin used instead)
-		if (!msg.isFromAdmin) selectableGeofence = selectableGeofence.filter((area) => (area.userSelectable === undefined || area.userSelectable))
+		if (!msg.isFromAdmin) selectableGeofence = selectableGeofence.filter((area) => area.userSelectable ?? true)
 
 		let availableAreas = selectableGeofence.map((area) => ({
 			name: area.name,

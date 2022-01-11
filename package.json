@@ -64,6 +64,7 @@
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",
     "strip-json-comments": "^3.1.1",
+    "sunrise-sunset-js": "^2.2.1",
     "telegraf": "^4.5.2",
     "winston": "^3.3.3",
     "winston-daily-rotate-file": "^4.5.5"
