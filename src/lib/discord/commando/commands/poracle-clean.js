@@ -16,7 +16,7 @@ exports.run = async (client, msg) => {
 		}
 
 		await startMessage.delete()
-		const finishMessage = msg.reply(client.translator.translate('Cleaning finished'))
+		const finishMessage = await msg.reply(client.translator.translate('Cleaning finished'))
 		setTimeout(() => { finishMessage.delete() }, 15000)
 	} catch (err) {
 		await msg.reply('Failed to run clean, check logs')
