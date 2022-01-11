@@ -231,9 +231,9 @@ class Raid extends Controller {
 
 				setImmediate(async () => {
 					try {
-						data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-						data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 
 						const geoResult = await this.getAddress({
 							lat: data.latitude,
@@ -392,9 +392,9 @@ class Raid extends Controller {
 
 			setImmediate(async () => {
 				try {
-					data.imgUrl = await this.imgUicons.eggIcon(data.level)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.eggIcon(data.level)
 					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.eggIcon(data.level)
-					data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []

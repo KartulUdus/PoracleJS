@@ -172,30 +172,30 @@ class Quest extends Controller {
 			data.stickerUrl = ''
 
 			if (data.rewardData.monsters.length > 0) {
-				data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
+				if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
 				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
-				data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
+				if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId, 0, 0, 0, data.isShiny || (data.shinyPossible && this.config.general.requestShinyImages))
 			}
 
 			if (data.rewardData.items.length > 0) {
-				data.imgUrl = await this.imgUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
+				if (this.imgUicons) data.imgUrl = await this.imgUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
 				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
-				data.stickerUrl = await this.stickerUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
+				if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.rewardItemIcon(data.rewardData.items[0].id, data.rewardData.items[0].amount)
 			}
 			if (data.dustAmount) {
-				data.imgUrl = await this.imgUicons.rewardStardustIcon(data.rewardData.dustAmount)
+				if (this.imgUicons) data.imgUrl = await this.imgUicons.rewardStardustIcon(data.rewardData.dustAmount)
 				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardStardustIcon(data.rewardData.dustAmount)
-				data.stickerUrl = await this.stickerUicons.rewardStardustIcon(data.rewardData.dustAmount)
+				if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.rewardStardustIcon(data.rewardData.dustAmount)
 			}
 			if (data.rewardData.energyMonsters.length > 0) {
-				data.imgUrl = await this.imgUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				if (this.imgUicons) data.imgUrl = await this.imgUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
 				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
-				data.stickerUrl = await this.stickerUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
+				if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.rewardMegaEnergyIcon(data.rewardData.energyMonsters[0].pokemonId, data.rewardData.energyMonsters[0].amount)
 			}
 			if (data.rewardData.candy.length > 0) {
-				data.imgUrl = await this.imgUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+				if (this.imgUicons) data.imgUrl = await this.imgUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
 				if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
-				data.stickerUrl = await this.stickerUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
+				if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
 			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
