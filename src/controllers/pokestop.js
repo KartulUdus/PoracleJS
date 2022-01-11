@@ -77,7 +77,7 @@ class Invasion extends Controller {
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
 
-			const incidentExpiration = data.incident_expiration ? data.incident_expiration : data.incident_expire_timestamp
+			const incidentExpiration = data.incident_expiration ?? data.incident_expire_timestamp
 			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
 			data.disappearTime = moment(incidentExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
@@ -146,9 +146,9 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId)
 					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.invasionIcon(data.gruntTypeId)
-					data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []

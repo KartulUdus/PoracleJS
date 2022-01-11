@@ -18,8 +18,8 @@ function getGeofenceFromGEOjson(config, rawdata) {
 				path: [],
 				group: properties.group || '',
 				description: properties.description || '',
-				userSelectable: properties.userSelectable === undefined || properties.userSelectable,
-				displayInMatches: properties.displayInMatches === undefined || properties.displayInMatches,
+				userSelectable: !!(properties.userSelectable ?? true),
+				displayInMatches: !!(properties.displayInMatches ?? true),
 			}
 			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
 		}

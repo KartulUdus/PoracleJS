@@ -214,8 +214,8 @@ module.exports = async (fastify, options, next) => {
 					id: inGeofence.id || 0,
 					group: inGeofence.group || '',
 					description: inGeofence.description || '',
-					userSelectable: inGeofence.userSelectable === undefined || inGeofence.userSelectable,
-					displayInMatches: inGeofence.displayInMatches === undefined || inGeofence.displayInMatches,
+					userSelectable: inGeofence.userSelectable ?? true,
+					displayInMatches: inGeofence.displayInMatches ?? true,
 				},
 				geometry: {
 					type: 'Polygon',

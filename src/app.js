@@ -94,8 +94,8 @@ if (config.discord.enabled) {
 	for (let key = 0; key < config.discord.token.length; key++) {
 		if (config.discord.token[key]) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, (key
-				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity === undefined ? 'PoracleHelper' : config.discord.workerActivity }
-				: { status: 'available', activity: config.discord.activity === undefined ? 'PoracleJS' : config.discord.activity })))
+				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity ?? 'PoracleHelper' }
+				: { status: 'available', activity: config.discord.activity ?? 'PoracleJS' })))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
@@ -658,9 +658,9 @@ async function processOne(hook) {
 			}
 			case 'gym':
 			case 'gym_details': {
-				const id = hook.message.id || hook.message.gym_id
-				const team = hook.message.team_id !== undefined ? hook.message.team_id : hook.message.team
-				const inBattle = (hook.message.is_in_battle !== undefined ? hook.message.is_in_battle : hook.message.in_battle) || 0
+				const id = hook.message.id ?? hook.message.gym_id
+				const team = hook.message.team_id ?? hook.message.team
+				const inBattle = hook.message.is_in_battle ?? hook.message.in_battle ?? 0
 
 				if (config.general.disableGym) {
 					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
@@ -794,7 +794,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 	try {
 		log.verbose('Profile Check: Checking for active profile changes')
 		const humans = await query.selectAllQuery('humans', { enabled: 1, admin_disable: 0 })
-		const profilesToCheck = await query.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
+		const profilesToCheck = await query.mysteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
 		let lastId = null
 		for (const profile of profilesToCheck) {

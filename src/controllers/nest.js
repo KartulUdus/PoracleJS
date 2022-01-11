@@ -100,7 +100,7 @@ class Nest extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			if (data.form === undefined || data.form === null) data.form = 0
+			data.form ??= 0
 			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 			if (!monster) {
 				this.log.warn(`${logReference}: Couldn't find monster in:`, data)
@@ -139,9 +139,9 @@ class Nest extends Controller {
 
 			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 
-			data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
 			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
-			data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
+			if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, 0, 0, data.shinyPossible && this.config.general.requestShinyImages)
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
