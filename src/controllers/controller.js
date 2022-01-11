@@ -130,7 +130,7 @@ class Controller extends EventEmitter {
 	}
 
 	getDts(logReference, templateType, platform, templateName, language) {
-		if (!templateName) templateName = this.config.general.defaultTemplateName.toString() || '1'
+		if (!templateName) templateName = this.config.general.defaultTemplateName?.toString() || '1'
 		templateName = templateName.toLowerCase()
 
 		const key = `${templateType} ${platform} ${templateName} ${language}`
@@ -414,7 +414,7 @@ class Controller extends EventEmitter {
 				matchAreas.push({
 					name: areaObj.name,
 					description: areaObj.description,
-					displayInMatches: areaObj.displayInMatches === undefined || !!areaObj.displayInMatches,
+					displayInMatches: areaObj.displayInMatches ?? true,
 					group: areaObj.group,
 				})
 			}
@@ -428,7 +428,7 @@ class Controller extends EventEmitter {
 		try {
 			return await this.db.select('*').from(table).where(conditions).first()
 		} catch (err) {
-			throw { source: 'slectOneQuery', error: err }
+			throw { source: 'selectOneQuery', error: err }
 		}
 	}
 
@@ -475,11 +475,11 @@ class Controller extends EventEmitter {
 		}
 	}
 
-	async misteryQuery(sql) {
+	async mysteryQuery(sql) {
 		try {
 			return this.returnByDatabaseType(await this.db.raw(sql))
 		} catch (err) {
-			throw { source: 'misteryQuery', error: err }
+			throw { source: 'mysteryQuery', error: err }
 		}
 	}
 

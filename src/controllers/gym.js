@@ -113,10 +113,10 @@ class Gym extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gymId = data.id || data.gym_id
-			data.teamId = data.team_id !== undefined ? data.team_id : data.team
-			data.oldTeamId = data.old_team_id >= 0 ? data.old_team_id : 0
-			data.previousControlId = data.last_owner_id >= 0 ? data.last_owner_id : 0
-			data.teamNameEng = data.teamId >= 0 ? this.GameData.utilData.teams[data.teamId].name : 'Unknown'
+			data.teamId = data.team_id ?? data.team ?? 0
+			data.oldTeamId = data.old_team_id ?? 0
+			data.previousControlId = data.last_owner_id ?? 0
+			data.teamNameEng = this.GameData.utilData.teams[data.teamId].name
 			data.oldTeamNameEng = data.old_team_id >= 0 ? this.GameData.utilData.teams[data.old_team_id].name : ''
 			data.previousControlNameEng = data.last_owner_id >= 0 ? this.GameData.utilData.teams[data.last_owner_id].name : ''
 			data.gymColor = this.GameData.utilData.teams[data.teamId].color
@@ -124,9 +124,9 @@ class Gym extends Controller {
 			data.oldSlotsAvailable = data.old_slots_available
 			data.trainerCount = 6 - data.slotsAvailable
 			data.oldTrainerCount = 6 - data.oldSlotsAvailable
-			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
+			data.ex = !!(data.ex_raid_eligible ?? data.is_ex_raid_eligible)
 			data.color = data.gymColor
-			data.inBattle = data.is_in_battle !== undefined ? data.is_in_battle : data.in_battle
+			data.inBattle = data.is_in_battle ?? data.in_battle
 
 			const whoCares = await this.gymWhoCares(data)
 
