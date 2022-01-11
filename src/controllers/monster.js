@@ -393,9 +393,9 @@ class Monster extends Controller {
 						}
 					}
 
-					data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-					data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 
 					const geoResult = await this.getAddress({
 						lat: data.latitude,
