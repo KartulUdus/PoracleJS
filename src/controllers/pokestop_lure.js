@@ -1,5 +1,8 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
+
 const Controller = require('./controller')
 /**
  * Controller for processing pokestop webhooks
@@ -81,7 +84,8 @@ class Lure extends Controller {
 
 			const lureExpiration = data.lure_expiration
 			data.tth = moment.preciseDiff(Date.now(), lureExpiration * 1000, true)
-			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			const disappearTime = moment(lureExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
@@ -135,6 +139,11 @@ class Lure extends Controller {
 						lon: data.longitude,
 					})
 					const jobs = []
+
+					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
+					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+
+					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
 
 					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'lureTypeId'])
 					data.staticmap = data.staticMap // deprecated

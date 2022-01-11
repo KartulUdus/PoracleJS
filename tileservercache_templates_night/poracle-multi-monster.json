@@ -1,0 +1,86 @@
+{
+    "grid": [
+        {
+            "direction": "first",
+            "maps": [
+                {
+                    "direction": "first",
+                    "map": {
+                        "style": #if(nightTime == true): "dark-night" #else: "klokantech-basic" #endif,
+                        "latitude": #(latitude),
+                        "longitude": #(longitude),
+                        "zoom": 15,
+                        "width": 350,
+                        "height": 250,
+                        "scale": 2,
+                        "markers": [
+                            #if(nearbyStops != nil):
+                                #for(stop in nearbyStops):
+                                {
+                                    "url": "#if(stop.imgUrl):#(stop.imgUrl)#else:#(uiconPokestopUrl)#endif",
+                                    "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/#(stop.type).png",
+                                    "latitude": #(stop.latitude),
+                                    "longitude": #(stop.longitude),
+                                    "width": 20,
+                                    "height": 20,
+                                    "y_offset": -10
+                                },
+                                #endfor
+                            #endif
+                            {
+                                "url": "#(imgUrl)",
+                                "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "width": 20,
+                                "height": 20
+                            }
+                        ],
+                        "circles": [
+                            {
+                                "fill_color": "rgba(255,255,255,0.6)",
+                                "stroke_color": "\#C7C7C7",
+                                "stroke_width": 1,
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "radius": 40
+                            }
+                        ]
+                    }
+                },
+                {
+                    "direction": "right",
+                    "map": {
+                        "style": "mapbox-sattelite",
+                        "latitude": #(latitude),
+                        "longitude": #(longitude),
+                        "zoom": 18,
+                        "width": 400,
+                        "height": 500,
+                        "scale": 1,
+                        "markers": [
+                            {
+                                "url": "#(imgUrl)",
+                                "fallback_url": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "width": 60,
+                                "height": 60
+                            }
+                        ],
+                        "circles": [
+                            {
+                                "fill_color": "rgba(255,255,255,0.4)",
+                                "stroke_color": "rgba(255,255,255,0.25)",
+                                "stroke_width": 1,
+                                "latitude": #(latitude),
+                                "longitude": #(longitude),
+                                "radius": 40
+                            }
+                        ]
+                    }
+                }
+            ]
+        }
+    ]
+}
