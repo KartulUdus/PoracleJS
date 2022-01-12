@@ -210,7 +210,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 
-		let pvpCap = this.config.tracking.defaultUserTrackingLevelCap
+		let pvpCap = client.config.tracking.defaultUserTrackingLevelCap
 
 		if (parameterValues.cap) {
 			if (client.config.pvp.dataSource === 'webhook') {
