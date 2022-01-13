@@ -643,6 +643,7 @@
     "You have not set a location yet":"Es wurde noch kein Standort gesetzt.",
     "You have not set your location, use `!{0}{1}`":"Es wurde noch kein Standort festgelegt, verwende `!{0}{1}`",
     "You have reached the limit of {0} messages over {1} seconds":"Das Limit von {0} Benachrichtigungen innerhalb von {1} Sekunden wurde erreicht.",
+    "You have the following roles:":"Folgende Rollen sind hinzugefügt:",
     "Your alerts are currently":"Benachrichtigungen sind aktuell",
     "Your backup":"Deine Sicherung",
     "Your backup is at":"Deine Sicherung ist unter",
