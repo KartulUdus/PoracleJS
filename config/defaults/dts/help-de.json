@@ -143,5 +143,23 @@
         ]
       }
     }
+  },
+  {
+    "id": "role",
+    "type": "help",
+    "default": true,
+    "language": "de",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Discord Rollen Befehle",
+            "value": "`{{prefix}}rolle auflisten`: zeigt alle verfügbaren Discord-Rollen an.\n`{{prefix}}rolle hinzufügen <Rollenname>`: Fügt eine Discord-Rolle deiner Konfiguration hinzu.\n`{{prefix}}rolle mitglied`: Übersicht aller Rollen aus deiner Konfiguration.\n`{{prefix}}rolle entfernen <Rollenname>`: Entfernt die Discord-Rolle aus deiner Konfiguration."
+          }
+        ]
+      }
+    }
   }
 ]
