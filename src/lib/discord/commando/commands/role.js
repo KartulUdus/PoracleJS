@@ -212,7 +212,7 @@ exports.run = async (client, discordMsg, [args]) => {
 			}
 		}
 	} catch (err) {
-		await discordMsg.reply('Something went wrong with your request')
+		await discordMsg.reply(translator.translate('Something went wrong with your request'))
 		client.logs.log.error(`Role command "${discordMsg.content}" unhappy:`, err)
 	}
 }
