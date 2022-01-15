@@ -313,7 +313,7 @@ exports.run = async (client, msg, args, options) => {
 				  or (reward_type = 4 and reward in (${candyMonsters})) 
 				  or (reward_type = 4 and ${commandEverything}=1)
 				)`
-			let result = await client.query.misteryQuery(remQuery)
+			let result = await client.query.mysteryQuery(remQuery)
 
 			result = result ? result.affectedRows : 0
 

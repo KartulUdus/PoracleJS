@@ -39,9 +39,9 @@ class Controller extends EventEmitter {
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
-		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
+		this.imgUicons = this.config.general.imgUrl ? new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log) : null
 		this.imgUiconsAlt = this.config.general.imgUrlAlt ? new Uicons((this.config.general.imagesAlt && this.config.general.imagesAlt[this.constructor.name.toLowerCase()]) || this.config.general.imgUrlAlt, 'png', this.log) : null
-		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
+		this.stickerUicons = this.config.general.stickerUrl ? new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log) : null
 		this.dtsCache = {}
 		this.shortener = this.getShortener()
 	}
@@ -130,7 +130,7 @@ class Controller extends EventEmitter {
 	}
 
 	getDts(logReference, templateType, platform, templateName, language) {
-		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
+		if (!templateName) templateName = this.config.general.defaultTemplateName?.toString() || '1'
 		templateName = templateName.toLowerCase()
 
 		const key = `${templateType} ${platform} ${templateName} ${language}`
@@ -239,7 +239,7 @@ class Controller extends EventEmitter {
 				if (tileServerOptions.includeStops && tileServerOptions.pregenerate && this.scannerQuery) {
 					const limits = this.tileserverPregen.limits(data.latitude, data.longitude, tileServerOptions.width, tileServerOptions.height, tileServerOptions.zoom)
 					data.nearbyStops = await this.scannerQuery.getStopData(limits[0][0], limits[0][1], limits[1][0], limits[1][1])
-					if (data.nearbyStops) {
+					if (data.nearbyStops && this.imgUicons) {
 						data.uiconPokestopUrl = await this.imgUicons.pokestopIcon(0)
 						for (const stop of data.nearbyStops) {
 							switch (stop.type) {
@@ -414,7 +414,7 @@ class Controller extends EventEmitter {
 				matchAreas.push({
 					name: areaObj.name,
 					description: areaObj.description,
-					displayInMatches: areaObj.displayInMatches === undefined || !!areaObj.displayInMatches,
+					displayInMatches: areaObj.displayInMatches ?? true,
 					group: areaObj.group,
 				})
 			}
@@ -428,7 +428,7 @@ class Controller extends EventEmitter {
 		try {
 			return await this.db.select('*').from(table).where(conditions).first()
 		} catch (err) {
-			throw { source: 'slectOneQuery', error: err }
+			throw { source: 'selectOneQuery', error: err }
 		}
 	}
 
@@ -475,11 +475,11 @@ class Controller extends EventEmitter {
 		}
 	}
 
-	async misteryQuery(sql) {
+	async mysteryQuery(sql) {
 		try {
 			return this.returnByDatabaseType(await this.db.raw(sql))
 		} catch (err) {
-			throw { source: 'misteryQuery', error: err }
+			throw { source: 'mysteryQuery', error: err }
 		}
 	}
 

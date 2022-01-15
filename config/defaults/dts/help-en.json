@@ -161,5 +161,23 @@
         ]
       }
     }
+  },
+  {
+    "id": "role",
+    "type": "help",
+    "default": true,
+    "language": "en",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Discord Role commands",
+            "value": "`{{prefix}}role list`: Lists all available Discord Roles.\n`{{prefix}}role add <areaname>`: Adds a Discord role to your configuration.\n`{{prefix}}role membership`: Overview of all roles from your configuration.\n`{{prefix}}role remove <areaname>`: Removes the Discord role from your configuration."
+          }
+        ]
+      }
+    }
   }
 ]

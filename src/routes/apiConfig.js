@@ -32,7 +32,8 @@ module.exports = async (fastify, options, next) => {
 			},
 			maxDistance: fastify.config.tracking.maxDistance,
 			everythingFlagPermissions: fastify.config.tracking.everythingFlagPermissions,
-
+			disabledHooks: ['Pokemon', 'Raid', 'Pokestop', 'Invasion', 'Lure', 'Quest', 'Weather', 'Nest', 'Gym']
+				.filter((hookType) => fastify.config.general[`disable${hookType}`]).map((hookType) => hookType.toLowerCase()),
 		}
 	})
 
