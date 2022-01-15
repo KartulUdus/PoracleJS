@@ -334,7 +334,7 @@ exports.run = async (client, msg, args, options) => {
 			def: +(parameterValues.def?.min ?? 0),
 			max_def: +(parameterValues.def?.max ?? parameterValues.maxdef ?? 15),
 			sta: +(parameterValues.sta?.min ?? 0),
-			max_sta: +(parameterValues.sta?.min ?? parameterValues.maxsta ?? 15),
+			max_sta: +(parameterValues.sta?.max ?? parameterValues.maxsta ?? 15),
 			template: (parameterValues.template ?? client.config.general.defaultTemplateName ?? '1').toString(),
 			min_weight: +(parameterValues.weight?.min ?? 0),
 			max_weight: +(parameterValues.weight?.max ?? parameterValues.maxweight ?? 9000000),
