@@ -19,7 +19,16 @@ module.exports = (translatorFactory) => (ctx, next) => {
 		get splitArgsArray() {
 			if (!parts[3].length) return [[]]
 
-			let args = parts[3].split(/ +/g)
+			// Fix curly quotes
+			const paramText = parts[3]
+				.replace(/[\u2018\u2019]/g, "'")
+				.replace(/[\u201C\u201D]/g, '"')
+
+			// Split around quotes
+			let args = paramText
+				.match(/(".*?"|[^"\s]+)+(?=\s*|\s*$)/g)
+				.map((x) => x.replace(/"/g, ''))
+
 			args = args.map((arg) => translatorFactory.reverseTranslateCommand(arg.toLowerCase().replace(/_/g, ' '), true).toLowerCase())
 			let initialArgs
 			if (args.includes('|')) {
