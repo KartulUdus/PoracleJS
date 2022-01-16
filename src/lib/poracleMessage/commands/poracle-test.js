@@ -10,7 +10,7 @@ exports.run = async (client, msg, args, options) => {
 		const util = client.createUtil(msg, options)
 
 		const {
-			canContinue, language, target,
+			canContinue, target,
 		} = await util.buildTarget(args)
 
 		if (!canContinue) return
