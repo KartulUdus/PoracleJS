@@ -1,0 +1,18 @@
+[
+  {
+    "type": "pokemon",
+    "test": "1",
+    "location": "current",
+    "webhook": {"encounter_id":"2860050238438880188","pokemon_id":339,"display_pokemon_id":null,"spawnpoint_id":4938889143561,"latitude":51.28667669763628,"longitude":1.068291695520621,"disappear_time":1641971693,"verified":true,"seen_type":"encounter","cp_multiplier":0.667934,"pokemon_level":25,"costume":0,"cp":512,"individual_attack":5,"individual_defense":12,"individual_stamina":9,"move_1":216,"move_2":39,"height":0.420763,"weight":2.03655,"gender":2,"rarity":1,"base_catch":0.37428844,"great_catch":0.50505006,"ultra_catch":0.60848504,"weather":1}
+  },
+  {
+    "type": "raid",
+    "test": "egg",
+    "webhook": {"latitude":51.214498,"longitude":1.136982,"level":1,"pokemon_id":0,"team_id":2,"cp":0,"start":1641972583,"end":1641975283,"name":"The Labyrinth at The Quiet View","evolution":0,"spawn":1641968983,"move_1":1,"move_2":2,"gym_id":"21aa4dc581714d80b85d4cea7f9049de.16","url":"http://lh3.googleusercontent.com/x8Zuut6uKvyJCD1ZlmX3XeO2QoqefpNUq_iHtJEgU9NQZT3i1ZjqoUiwPiVYnZ8NzNEyddEWZKHofPl7FB8jk1CJQzcqULYYvwGbrJFo","is_ex_raid_eligible":false,"is_exclusive":false}
+  },
+  {
+    "type": "raid",
+    "test": "raid5",
+    "webhook":{"latitude":51.278005,"longitude":1.093851,"level":5,"pokemon_id":485,"team_id":3,"cp":49192,"start":1641969560,"end":1641972260,"name":"St Martin's Church","evolution":0,"spawn":1641965960,"move_1":269,"move_2":32,"gym_id":"3ccf1513aff04c7e91e6831e237fe39a.11","url":"http://lh3.googleusercontent.com/ZpnODSKPiiHxRYVOI9mCJcKiw2LH3HMfk8gGWXVqJB3NAPgyqIr76NF0zsdrszrchECNqGgZ2E5W0KURNyTmP-lfkqE","form":0,"is_ex_raid_eligible":false,"is_exclusive":false,"gender":2,"costume":0}
+  }
+]

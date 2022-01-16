@@ -1,3 +1,7 @@
+const stripJsonComments = require('strip-json-comments')
+const fs = require('fs')
+const path = require('path')
+
 exports.run = async (client, msg, args, options) => {
 	try {
 		if (!msg.isFromAdmin) {
@@ -19,6 +23,8 @@ exports.run = async (client, msg, args, options) => {
 		let latitude
 		let longitude
 
+		let test = false
+
 		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.areaRe)) {
 				const [,, areaName] = args[i].match(client.re.areaRe)
@@ -38,13 +44,18 @@ exports.run = async (client, msg, args, options) => {
 			args.splice(0, 1)
 		}
 
-		if (!args.length) {
-			await msg.reply('Blank message!')
-			return
+		if (!latitude && !matched.length) {
+			if (args[0] === 'test') {
+				test = true
+				args.splice(0, 1)
+			} else {
+				await msg.reply('No location or areas specified')
+				return
+			}
 		}
 
-		if (!latitude && !matched) {
-			await msg.reply('No location or areas specified')
+		if (!args.length) {
+			await msg.reply('Blank message!')
 			return
 		}
 
@@ -55,20 +66,38 @@ exports.run = async (client, msg, args, options) => {
 
 		const message = args.join(' ')
 
-		let areastring = '1 = 0 '
-		matched.forEach((area) => {
-			areastring = areastring.concat(`or humans.area like '%"${area.replace(/'/g, '\\\'')}"%' `)
-		})
+		let broadcastMessages
+		try {
+			const rawText = stripJsonComments(fs.readFileSync(path.join(__dirname, '../../../../config/broadcast.json'), 'utf8'))
+			broadcastMessages = JSON.parse(rawText)
+		} catch (err) {
+			await msg.reply('Cannot read broadcast.json - see log file for details')
+			throw new Error(`broadcast.json - ${err.message}`)
+		}
 
-		let query = `
+		const telegramMessage = broadcastMessages.find((x) => x.id?.toString() === message && (x.platform === 'telegram' || !x.platform))?.template
+		const discordMesssage = broadcastMessages.find((x) => x.id?.toString() === message && (x.platform === 'discord' || !x.platform))?.template
+
+		if (!telegramMessage && !discordMesssage) {
+			await msg.reply('Cannot find this broadcast message')
+			return
+		}
+
+		if (!test) {
+			let areastring = '1 = 0 '
+			matched.forEach((area) => {
+				areastring = areastring.concat(`or humans.area like '%"${area.replace(/'/g, '\\\'')}"%' `)
+			})
+
+			let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude 
 		from humans
 		where humans.enabled = 1 and humans.admin_disable = false and humans.type like '%:user'
 		and
 		(`
 
-		if (latitude) {
-			query = query.concat(`
+			if (latitude) {
+				query = query.concat(`
 
 					(
 						round(
@@ -84,28 +113,52 @@ exports.run = async (client, msg, args, options) => {
 					)
 					or
 					`)
-		}
-		query = query.concat(`(${areastring}) 
+			}
+			query = query.concat(`(${areastring}) 
 			
 			)`)
 
-		const result = await client.query.misteryQuery(query)
+			const result = await client.query.mysteryQuery(query)
+			const job = result.map((row) => ({
+				type: row.type,
+				target: row.id,
+				name: row.name,
+				ping: '',
+				clean: false,
+				message: row.type.startsWith('telegram') ? telegramMessage : discordMesssage,
+				logReference: '',
+				tth: { hours: 1, minutes: 0, seconds: 0 },
+				alwaysSend: true,
+			}))
 
-		const job = result.map((row) => ({
-			type: row.type,
-			target: row.id,
-			name: row.name,
-			ping: '',
-			clean: false,
-			message: { content: message },
-			logReference: '',
-			tth: { hours: 1, minutes: 0, seconds: 0 },
-		}))
+			if (job.some((x) => !x.message)) {
+				await msg.reply(`Not sending any messages - You do not have a message defined for all platforms in your distribution list`)
+				return
+			}
 
-		client.addToQueue(job)
+			client.addToMessageQueue(job)
+			const users = result.map((row) => row.name).join(', ')
+			await msg.reply(`I sent your message to ${users}`)
+		} else {
+			const job =	[{
+				type: target.type,
+				target: target.id,
+				name: target.name,
+				ping: '',
+				clean: false,
+				message: target.type.startsWith('telegram') ? telegramMessage : discordMesssage,
+				logReference: '',
+				tth: { hours: 1, minutes: 0, seconds: 0 },
+				alwaysSend: true,
+			}]
 
-		const users = result.map((row) => row.name).join(', ')
-		await msg.reply(`I sent your message to ${users}`)
+			if (job.some((x) => !x.message)) {
+				await msg.reply(`You do not have a message defined for this platform`)
+				return
+			}
+
+			client.addToMessageQueue(job)
+		}
 		await msg.react('✅')
 	} catch (err) {
 		client.log.error(`broadcast command ${msg.content} unhappy:`, err)

@@ -93,7 +93,8 @@ class DiscordCommando extends EventEmitter {
 			this.client.updatedDiff = diff
 			this.client.translator = this.translator
 			this.client.hookRegex = /(?:https?:\/\/|www\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$])/igm
-			this.client.on('poracleAddQueue', (queue) => this.emit('sendMessages', queue))
+			this.client.on('poracleAddMessageQueue', (queue) => this.emit('sendMessages', queue))
+			this.client.on('poracleAddWebhookQueue', (queue) => this.emit('addWebhook', queue))
 
 			fs.readdir(`${__dirname}/events/`, (err, files) => {
 				if (err) return this.log.error(err)

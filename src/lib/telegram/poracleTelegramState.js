@@ -21,7 +21,8 @@ class PoracleTelegramState {
 		this.mustache = mustache
 		this.hastebin = hastebin
 		this.updatedDiff = diff
-		this.addToQueue = ctx.poracleAddQueue
+		this.addToMessageQueue = ctx.poracleAddMessageQueue
+		this.addToWebhookQueue = ctx.poracleAddWebhookQueue
 	}
 
 	createMessage(msg) {
