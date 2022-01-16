@@ -30,8 +30,11 @@ exports.run = async (client, msg, args, options) => {
 
 		const testId = args[1] ?? '1'
 
-		for (const element of args) {
-			if (element.match(client.re.templateRe)) [, , template] = element.match(client.re.templateRe)
+		for (let i = args.length - 1; i >= 0; i--) {
+			if (args[i].match(client.re.templateRe)) {
+				[, , template] = args[i].match(client.re.templateRe)
+				args.splice(i, 1)
+			}
 		}
 
 		let testdata
