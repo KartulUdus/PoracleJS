@@ -16,8 +16,6 @@ exports.run = async (client, msg, args, options) => {
 		if (!canContinue) return
 		client.log.info(`${target.name}/${target.type}-${target.id}: ${__filename.slice(__dirname.length + 1, -3)} ${args}`)
 
-		const translator = client.translatorFactory.Translator(language)
-
 		const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 		let template = client.config.general.defaultTemplateName?.toString() ?? '1'
@@ -80,7 +78,7 @@ exports.run = async (client, msg, args, options) => {
 				hook.end = hook.start + 30 * 60
 				break
 			}
-			default: { }
+			default:
 		}
 
 		await msg.reply(`Queueing hook ${hookType} test id ${testId}`)

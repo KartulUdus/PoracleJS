@@ -132,7 +132,7 @@ exports.run = async (client, msg, args, options) => {
 			}))
 
 			if (job.some((x) => !x.message)) {
-				await msg.reply(`Not sending any messages - You do not have a message defined for all platforms in your distribution list`)
+				await msg.reply('Not sending any messages - You do not have a message defined for all platforms in your distribution list')
 				return
 			}
 
@@ -153,7 +153,7 @@ exports.run = async (client, msg, args, options) => {
 			}]
 
 			if (job.some((x) => !x.message)) {
-				await msg.reply(`You do not have a message defined for this platform`)
+				await msg.reply('You do not have a message defined for this platform')
 				return
 			}
 
