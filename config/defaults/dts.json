@@ -727,7 +727,7 @@
           "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n`{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
         },
         {
-          "name": "\**Gym tracking commands**",
+          "name": "**Gym tracking commands**",
           "value": "`{{prefix}}gym instinct slot_changes`: Any arguments are optional, this command would alert you about gyms inside an added area. The set filters require the Gym to be controlled by team Instinct and slot changes occur\n`{{prefix}}gym remove instinct`: Removes tracking for all gyms controlled by team Instinct."
         },
         {
