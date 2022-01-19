@@ -30,7 +30,7 @@
         "fields": [
           {
             "name": "Monster beobachten Befehle",
-            "value": "`{{prefix}}beobachte relaxo lapras d500 iv50 maxiv90 cp1000 level15`: Alle Argumente sind optional, dieser Befehl informiert euch über Snorlax und Lapras im Umkreis von 500 Metern um euren Standort oder in einem hinzugefügten Gebiet. Die eingestellten Filter erfordern, dass sie eine IV zwischen 50% und 90% haben, mindestens Level 15 und mindestens 1000 WP\n`{{prefix}}unbeobachte lapras vileplume`: entfernt das Tracking für Lapras und Vileplume"
+            "value": "`{{prefix}}beobachte relaxo lapras d500 iv50-90 cp1000 level15`: Alle Argumente sind optional, dieser Befehl informiert euch über Snorlax und Lapras im Umkreis von 500 Metern um euren Standort oder in einem hinzugefügten Gebiet. Die eingestellten Filter erfordern, dass sie eine IV zwischen 50% und 90% haben, mindestens Level 15 und mindestens 1000 WP\n`{{prefix}}beobachte alle super1-3 superwp1450 aufräumen`: meldet alle Monster und Entwicklungen die in der Superliga Rang 1-3, minimum 1450 CP erreichen können und entfernt die Meldung nach dem Despawn.\n`{{prefix}}unbeobachte lapras vileplume`: entfernt das Tracking für Lapras und Vileplume"
           }
         ]
       }
