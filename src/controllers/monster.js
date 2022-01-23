@@ -652,6 +652,17 @@ class Monster extends Controller {
 							lon: data.longitude,
 						}) : ''
 
+						const bearing = cares.longitude ? this.getBearing({
+							lat: cares.latitude,
+							lon: cares.longitude,
+						}, {
+							lat: data.latitude,
+							lon: data.longitude,
+						}) : null
+
+						data.bearing = bearing?.toFixed(0) ?? ''
+						data.bearingEmoji = bearing ? this.emojiLookup.lookup(this.getBearingEmoji(data.bearing), platform) : ''
+
 						const view = {
 							...geoResult,
 							...data,
