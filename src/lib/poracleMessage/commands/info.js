@@ -53,6 +53,11 @@ exports.run = async (client, msg, args, options) => {
 				}
 				break
 			}
+			case 'translate': {
+				await msg.reply(`Reverse translation: ${args.map((x) => `"${x}" `)}`)
+				await msg.reply(`Forward translation: ${args.map((x) => `"${translator.translate(x)}" `)}`)
+				break
+			}
 			case 'dts': {
 				if (msg.isFromAdmin) {
 					let s = 'Your loaded DTS looks like this:\n'
