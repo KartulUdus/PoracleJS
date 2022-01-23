@@ -883,6 +883,14 @@
 		"team-mystic": "\uD83D\uDD35",
 		"team-valor": "\uD83D\uDD34",
 		"team-instinct": "\uD83D\uDFE1",
-		"shiny": "✨"
+		"shiny": "✨",
+		"north": "\u2b06\ufe0f",
+		"northwest": "\u2197\ufe0f",
+		"west": "\u27a1\ufe0f",
+		"southwest": "\u2198\ufe0f",
+		"south":"\u2b07\ufe0f",
+		"southeast": "\u2199\ufe0f",
+		"east": "\u2b05\ufe0f",
+		"northeast": "\u2196\ufe0f"
 	}
 }
