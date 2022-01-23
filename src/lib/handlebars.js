@@ -1,6 +1,7 @@
 const handlebars = require('handlebars')
 const config = require('config')
 const moreHandlebars = require('./more-handlebars')
+const partials = require('./partials')
 const {
 	moves, monsters, utilData: {
 		cpMultipliers, types, powerUpCost, emojis,
@@ -31,6 +32,7 @@ function translatorAlt() {
 
 module.exports = () => {
 	moreHandlebars.registerHelpers(handlebars)
+	partials.registerPartials(handlebars)
 
 	handlebars.registerHelper('numberFormat', (value, decimals) => {
 		if (!['string', 'number'].includes(typeof decimals)) decimals = 2 // We may have the handlebars options in the parameter
