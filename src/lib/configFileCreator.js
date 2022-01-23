@@ -18,4 +18,8 @@ module.exports = () => {
 		const defaultGeofConfig = fs.readFileSync(path.join(__dirname, '../../config/defaults/pokemonAlias.json'), 'utf8')
 		fs.writeFileSync(path.join(__dirname, '../../config/pokemonAlias.json'), defaultGeofConfig)
 	}
+	if (!fs.existsSync(path.join(__dirname, '../../config/partials.json'))) {
+		const defaultDtsConfig = fs.readFileSync(path.join(__dirname, '../../config/defaults/partials.json'), 'utf8')
+		fs.writeFileSync(path.join(__dirname, '../../config/partials.json'), defaultDtsConfig)
+	}
 }
