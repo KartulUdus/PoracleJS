@@ -652,7 +652,7 @@ class Monster extends Controller {
 							lon: data.longitude,
 						}) : ''
 
-						const bearing = cares.longitude ? this.getDistance({
+						const bearing = cares.longitude ? this.getBearing({
 							lat: cares.latitude,
 							lon: cares.longitude,
 						}, {
