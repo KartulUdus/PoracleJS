@@ -30,7 +30,7 @@
         "fields": [
           {
             "name": "Monster beobachten Befehle",
-            "value": "`{{prefix}}beobachte relaxo lapras d500 iv50 maxiv90 cp1000 level15`: Alle Argumente sind optional, dieser Befehl informiert euch über Snorlax und Lapras im Umkreis von 500 Metern um euren Standort oder in einem hinzugefügten Gebiet. Die eingestellten Filter erfordern, dass sie eine IV zwischen 50% und 90% haben, mindestens Level 15 und mindestens 1000 WP\n`{{prefix}}unbeobachte lapras vileplume`: entfernt das Tracking für Lapras und Vileplume"
+            "value": "`{{prefix}}beobachte relaxo lapras d500 iv50-90 cp1000 level15`: Alle Argumente sind optional, dieser Befehl informiert euch über Snorlax und Lapras im Umkreis von 500 Metern um euren Standort oder in einem hinzugefügten Gebiet. Die eingestellten Filter erfordern, dass sie eine IV zwischen 50% und 90% haben, mindestens Level 15 und mindestens 1000 WP\n`{{prefix}}beobachte alle super1-3 superwp1450 aufräumen`: meldet alle Monster und Entwicklungen die in der Superliga Rang 1-3, minimum 1450 CP erreichen können und entfernt die Meldung nach dem Despawn.\n`{{prefix}}unbeobachte lapras vileplume`: entfernt das Tracking für Lapras und Vileplume"
           }
         ]
       }
@@ -139,6 +139,24 @@
           {
             "name": "Arena beobachten Befehle",
             "value": "`{{prefix}}arena intuition platzänderung`: Alle Argumente sind optional, dieser Befehl informiert euch über Arenen in einem zusätzlichen Gebiet. Die eingestellten Filter erfordern, dass die Arena von Team Intuition kontrolliert wird und Platzänderungen stattfinden\n`{{prefix}}arena entfernen intuition`: entfernt das Beobachten für Arenen, die vom Team Intution kontrolliert werden"
+          }
+        ]
+      }
+    }
+  },
+  {
+    "id": "role",
+    "type": "help",
+    "default": true,
+    "language": "de",
+    "platform": "",
+    "template": {
+      "embed": {
+        "title": "Poracle Help",
+        "fields": [
+          {
+            "name": "Discord Rollen Befehle",
+            "value": "`{{prefix}}rolle auflisten`: zeigt alle verfügbaren Discord-Rollen an.\n`{{prefix}}rolle hinzufügen <Rollenname>`: Fügt eine Discord-Rolle deiner Konfiguration hinzu.\n`{{prefix}}rolle mitglied`: Übersicht aller Rollen aus deiner Konfiguration.\n`{{prefix}}rolle entfernen <Rollenname>`: Entfernt die Discord-Rolle aus deiner Konfiguration."
           }
         ]
       }

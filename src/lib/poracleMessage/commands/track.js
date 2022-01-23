@@ -195,8 +195,13 @@ exports.run = async (client, msg, args, options) => {
 					}
 					default: {
 						const matchResult = element.match(parameterDefinition[paramName])
-						if (matchResult.length === 1) parameterValues[paramName] = true
-						else [, , parameterValues[paramName]] = matchResult
+						if (matchResult.length === 1) {
+							parameterValues[paramName] = true
+						} else if (matchResult.groups) {
+							parameterValues[paramName] = matchResult.groups
+						} else {
+							[, , parameterValues[paramName]] = matchResult
+						}
 					}
 				}
 			} else {
@@ -260,20 +265,19 @@ exports.run = async (client, msg, args, options) => {
 			monsters = monsterArray.map((id) => ({ id, form: { id: 0 } }))
 		}
 
-		const defaultTo = ((value, x) => ((value === undefined) ? x : value))
 		// Set defaults
 
-		let distance = +defaultTo(parameterValues.d, 0)
-		let rarity = defaultTo(parameterValues.rarity, -1)
-		let maxRarity = defaultTo(parameterValues.maxrarity, 6)
+		let distance = +(parameterValues.d ?? 0)
+		let rarity = (parameterValues.rarity ?? -1)
+		let maxRarity = (parameterValues.maxrarity ?? 6)
 		const pings = msg.getPings()
 
 		const pvp = {}
 
 		Object.entries(leagues).forEach(([league, rank]) => {
-			const leagueLowest = +defaultTo(parameterValues[league], 4096)
-			const leagueHighest = +defaultTo(parameterValues[`${league}high`], 1)
-			const leagueCP = +defaultTo(parameterValues[`${league}cp`], 0)
+			const leagueLowest = +(parameterValues[league]?.second ?? parameterValues[league]?.first ?? 4096)
+			const leagueHighest = +(parameterValues[league]?.second ? parameterValues[league].first : (parameterValues[`${league}high`] ?? 1))
+			const leagueCP = +(parameterValues[`${league}cp`] ?? 0)
 
 			if (leagueLowest < 4096 || leagueCP > 0) {
 				pvp[rank] = {
@@ -334,24 +338,24 @@ exports.run = async (client, msg, args, options) => {
 			pokemon_id: mon.id,
 			ping: pings,
 			distance: +distance,
-			min_iv: +defaultTo(parameterValues.iv, -1),
-			max_iv: +defaultTo(parameterValues.maxiv, 100),
-			min_cp: +defaultTo(parameterValues.cp, 0),
-			max_cp: +defaultTo(parameterValues.maxcp, 9000),
-			min_level: +defaultTo(parameterValues.level, 0),
-			max_level: +defaultTo(parameterValues.maxlevel, 40),
-			atk: +defaultTo(parameterValues.atk, 0),
-			def: +defaultTo(parameterValues.def, 0),
-			sta: +defaultTo(parameterValues.sta, 0),
-			template: defaultTo(parameterValues.template, client.config.general.defaultTemplateName).toString(),
-			min_weight: +defaultTo(parameterValues.weight, 0),
-			max_weight: +defaultTo(parameterValues.maxweight, 9000000),
+			min_iv: +(parameterValues.iv?.min ?? -1),
+			max_iv: +(parameterValues.iv?.max ?? parameterValues.maxiv ?? 100),
+			min_cp: +(parameterValues.cp?.min ?? 0),
+			max_cp: +(parameterValues.cp?.max ?? parameterValues.maxcp ?? 9000),
+			min_level: +(parameterValues.level?.min ?? 0),
+			max_level: +(parameterValues.level?.max ?? parameterValues.maxlevel ?? 40),
+			atk: +(parameterValues.atk?.min ?? 0),
+			max_atk: +(parameterValues.atk?.max ?? parameterValues.maxatk ?? 15),
+			def: +(parameterValues.def?.min ?? 0),
+			max_def: +(parameterValues.def?.max ?? parameterValues.maxdef ?? 15),
+			sta: +(parameterValues.sta?.min ?? 0),
+			max_sta: +(parameterValues.sta?.max ?? parameterValues.maxsta ?? 15),
+			template: (parameterValues.template ?? client.config.general.defaultTemplateName ?? '1').toString(),
+			min_weight: +(parameterValues.weight?.min ?? 0),
+			max_weight: +(parameterValues.weight?.max ?? parameterValues.maxweight ?? 9000000),
 			form: mon.form.id,
-			max_atk: +defaultTo(parameterValues.maxatk, 15),
-			max_def: +defaultTo(parameterValues.maxdef, 15),
-			max_sta: +defaultTo(parameterValues.maxsta, 15),
-			gender: +defaultTo(parameterValues.gender, 0),
-			clean: +defaultTo(parameterValues.clean, 0),
+			gender: +(parameterValues.gender ?? 0),
+			clean: +(parameterValues.clean ?? 0),
 			pvp_ranking_league: +pvpLeague,
 			pvp_ranking_best: pvpLeague ? +pvp[pvpLeague].best : 1,
 			pvp_ranking_worst: pvpLeague ? +pvp[pvpLeague].worst : 4096,
@@ -359,7 +363,7 @@ exports.run = async (client, msg, args, options) => {
 			pvp_ranking_cap: pvpLeague ? pvpCap : 0,
 			rarity: +rarity,
 			max_rarity: +maxRarity,
-			min_time: +defaultTo(parameterValues.t, 0),
+			min_time: +(parameterValues.t ?? 0),
 		}))
 		if (!insert.length) {
 			return await msg.reply(translator.translate('404 No monsters found'))
