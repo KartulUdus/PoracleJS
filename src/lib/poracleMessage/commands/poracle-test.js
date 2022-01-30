@@ -28,15 +28,6 @@ exports.run = async (client, msg, args, options) => {
 			return
 		}
 
-		const testId = args[1] ?? '1'
-
-		for (let i = args.length - 1; i >= 0; i--) {
-			if (args[i].match(client.re.templateRe)) {
-				[, , template] = args[i].match(client.re.templateRe)
-				args.splice(i, 1)
-			}
-		}
-
 		let testdata
 
 		try {
@@ -45,6 +36,25 @@ exports.run = async (client, msg, args, options) => {
 		} catch (err) {
 			await msg.reply('Cannot read testdata.json - see log file for details')
 			throw new Error(`testdata.json - ${err.message}`)
+		}
+
+		const testId = args[1]
+
+		if (!testId) {
+			let message = `Tests found for hook type ${hookType}:\n\n`
+
+			for (const test of testdata.filter((x) => x.type === hookType)) {
+				message = message.concat(`  ${test.test}\n`)
+			}
+
+			return await msg.reply(message)
+		}
+
+		for (let i = args.length - 1; i >= 0; i--) {
+			if (args[i].match(client.re.templateRe)) {
+				[, , template] = args[i].match(client.re.templateRe)
+				args.splice(i, 1)
+			}
 		}
 
 		const dataItem = testdata.find((x) => x.type === hookType && x.test === testId)
@@ -84,7 +94,7 @@ exports.run = async (client, msg, args, options) => {
 			default:
 		}
 
-		await msg.reply(`Queueing hook ${hookType} test id ${testId}`)
+		await msg.reply(`Queueing test hook ${hookType} test [${testId}] template [${template}]`)
 
 		client.addToWebhookQueue({
 			type: dataItem.type,
