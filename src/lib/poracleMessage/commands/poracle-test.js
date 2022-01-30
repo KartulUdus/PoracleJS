@@ -20,7 +20,7 @@ exports.run = async (client, msg, args, options) => {
 
 		let template = client.config.general.defaultTemplateName?.toString() ?? '1'
 
-		const validHooks = ['pokemon', 'raid', 'egg', 'invasion', 'pokestop', 'gym', 'nest', 'weather']
+		const validHooks = ['pokemon', 'raid', 'pokestop', 'gym', 'nest', 'quest']
 
 		const hookType = args[0]
 		if (!validHooks.includes(hookType)) {
@@ -89,6 +89,18 @@ exports.run = async (client, msg, args, options) => {
 			case 'raid': {
 				hook.start = Date.now() / 1000 + 10 * 60
 				hook.end = hook.start + 30 * 60
+				break
+			}
+			case 'pokestop': {
+				if (hook.incident_expiration) hook.incident_expiration = Date.now() / 1000 + 10 * 60
+				if (hook.incident_expire_timestamp) hook.incident_expire_timestamp = Date.now() / 1000 + 10 * 60
+				if (hook.lure_expiration) hook.lure_expiration = Date.now() / 1000 + 5 * 60
+				break
+			}
+			case 'quest': {
+				break
+			}
+			case 'gym': {
 				break
 			}
 			default:

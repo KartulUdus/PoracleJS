@@ -116,7 +116,11 @@ class Nest extends Controller {
 			data.pokemonCount = data.pokemon_count
 			data.pokemonSpawnAvg = data.pokemon_avg
 
-			const whoCares = await this.nestWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.nestWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Nest ${data.name} found in areas (${data.matched}) and ${whoCares.length} humans cared.`)
