@@ -1003,6 +1003,10 @@ async function run() {
 		telegram.on('sendMessages', (res) => {
 			processMessages(res)
 		})
+
+		telegram.on('addWebhook', (res) => {
+			processOne(res)
+		})
 	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
