@@ -94,7 +94,7 @@ exports.run = async (client, msg, args, options) => {
 			default:
 		}
 
-		await msg.reply(`Queueing test hook ${hookType} test [${testId}] template [${template}]`)
+		await msg.reply(`Queueing ${hookType} test hook [${testId}] template [${template}]`)
 
 		client.addToWebhookQueue({
 			type: dataItem.type,
