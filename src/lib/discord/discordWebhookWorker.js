@@ -95,7 +95,10 @@ class DiscordWebhookWorker {
 			data.message.embed.color = parseInt(data.message.embed.color.replace(/^#/, ''), 16)
 		}
 
-		if (data.message.embed) data.message.embeds = [data.message.embed]
+		if (data.message.embed) {
+			data.message.embeds = [data.message.embed]
+			delete data.message.embed
+		}
 		try {
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 

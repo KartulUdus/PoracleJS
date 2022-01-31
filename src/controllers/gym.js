@@ -134,7 +134,11 @@ class Gym extends Controller {
 			data.color = data.gymColor
 			data.inBattle = data.is_in_battle ?? data.in_battle
 
-			const whoCares = await this.gymWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.gymWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Gym ${data.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)

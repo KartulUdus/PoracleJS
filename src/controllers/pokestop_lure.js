@@ -107,7 +107,11 @@ class Lure extends Controller {
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
 			data.lureTypeNameEng = this.GameData.utilData.lures[data.lure_id].name
 
-			const whoCares = await this.lureWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.lureWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Lure of type ${data.lureTypeNameEng} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)

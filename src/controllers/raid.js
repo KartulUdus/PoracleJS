@@ -210,7 +210,11 @@ class Raid extends Controller {
 					return []
 				}
 
-				const whoCares = await this.raidWhoCares(data)
+				const whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+				}] : await this.raidWhoCares(data)
 
 				if (whoCares.length) {
 					this.log.info(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
@@ -377,7 +381,11 @@ class Raid extends Controller {
 				return []
 			}
 
-			const whoCares = await this.eggWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.eggWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)

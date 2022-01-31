@@ -399,7 +399,12 @@ class Monster extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			const whoCares = await this.monsterWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+				pvp_ranking_worst: 100,
+			}] : await this.monsterWhoCares(data)
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
