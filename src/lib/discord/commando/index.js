@@ -3,6 +3,7 @@ const {
 	Intents,
 	Options,
 } = require('discord.js')
+const { EventEmitter } = require('events')
 const fs = require('fs')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
@@ -11,8 +12,10 @@ const { diff } = require('deep-object-diff')
 
 const emojiStrip = require('../../../util/emojiStrip')
 
-class DiscordCommando {
+class DiscordCommando extends EventEmitter {
 	constructor(token, query, scannerQuery, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) {
+		super()
+
 		this.token = token
 		this.config = config
 		this.query = query
@@ -90,6 +93,8 @@ class DiscordCommando {
 			this.client.updatedDiff = diff
 			this.client.translator = this.translator
 			this.client.hookRegex = /(?:https?:\/\/|www\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$])/igm
+			this.client.on('poracleAddMessageQueue', (queue) => this.emit('sendMessages', queue))
+			this.client.on('poracleAddWebhookQueue', (queue) => this.emit('addWebhook', queue))
 
 			fs.readdir(`${__dirname}/events/`, (err, files) => {
 				if (err) return this.log.error(err)

@@ -127,7 +127,11 @@ class Invasion extends Controller {
 				}
 			}
 
-			const whoCares = await this.invasionWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.invasionWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Invasion of type ${data.gruntType} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
