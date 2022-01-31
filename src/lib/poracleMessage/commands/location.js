@@ -52,7 +52,7 @@ exports.run = async (client, msg, args, options) => {
 		let message
 		let remove = false
 
-		if (args.length === 1 && args[0] === 'remove' ) {
+		if (args.length === 1 && args[0] === 'remove') {
 			remove = true
 			lat = 0
 			lon = 0

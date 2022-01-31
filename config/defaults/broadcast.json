@@ -1,0 +1,27 @@
+[
+  // An example template with different telegram and discord messages
+  {
+    "id": "donate",
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "Donations needed",
+        "description": "More donations are needed for this area"
+      }
+    }
+  },
+  {
+    "id": "donate",
+    "platform": "telegram",
+    "template": {
+      "content": "More donations are needed for this area"
+    }
+  },
+  // An example message that will work for both telegram and discord
+  {
+    "id": "2",
+    "template": {
+      "content": "This service takes a substantial amount of effort to maintain, please consider donating"
+    }
+  }
+]

@@ -7,7 +7,7 @@ module.exports = () => {
 		fs.writeFileSync(path.join(__dirname, '../../config/local.json'), defaultConfig)
 	}
 
-	const defaultFiles = ['dts.json', 'geofence.json', 'pokemonAlias.json', 'partials.json']
+	const defaultFiles = ['dts.json', 'geofence.json', 'pokemonAlias.json', 'partials.json', 'testdata.json']
 
 	for (const configFile of defaultFiles) {
 		const localFile = path.join(__dirname, '../../config', configFile)

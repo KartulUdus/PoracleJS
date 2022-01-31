@@ -1,0 +1,78 @@
+[
+  {
+    "type": "pokemon",
+    "test": "boring",
+    "location": "current",
+    "webhook": {"encounter_id":"2860050238438880188","pokemon_id":339,"display_pokemon_id":null,"spawnpoint_id":4938889143561,"latitude":51.28667669763628,"longitude":1.068291695520621,"disappear_time":1641971693,"verified":true,"seen_type":"encounter","cp_multiplier":0.667934,"pokemon_level":25,"costume":0,"cp":512,"individual_attack":5,"individual_defense":12,"individual_stamina":9,"move_1":216,"move_2":39,"height":0.420763,"weight":2.03655,"gender":2,"rarity":1,"base_catch":0.37428844,"great_catch":0.50505006,"ultra_catch":0.60848504,"weather":1}
+  },
+  {
+    "type": "pokemon",
+    "test": "hundo",
+    "location": "current",
+    "webhook": {"encounter_id":"18138400381185779793","pokemon_id":100,"display_pokemon_id":null,"spawnpoint_id":4938887656651,"latitude":51.28431913673707,"longitude":1.0932030626067226,"disappear_time":1643559245,"verified":true,"seen_type":"encounter","cp_multiplier":0.25572,"pokemon_level":4,"form":1047,"costume":0,"cp":100,"individual_attack":14,"individual_defense":9,"individual_stamina":10,"move_1":206,"move_2":35,"height":0.580141,"weight":14.996,"gender":3,"rarity":1,"base_catch":0.97763157,"great_catch":0.99665457,"ultra_catch":0.9994997}
+  },
+  {
+    "type": "pokemon",
+    "test": "great1",
+    "location": "current",
+    "webhook": {"encounter_id":"5228303021291180843","pokemon_id":653,"display_pokemon_id":null,"spawnpoint_id":4938889137835,"latitude":51.28064116626805,"longitude":1.0659243041521245,"disappear_time":1643554344,"verified":true,"seen_type":"encounter","cp_multiplier":0.443108,"pokemon_level":11,"costume":0,"cp":285,"individual_attack":0,"individual_defense":15,"individual_stamina":14,"move_1":220,"move_2":60,"height":0.386655,"weight":8.56926,"gender":1,"rarity":3,"base_catch":0.22567886,"great_catch":0.31863207,"ultra_catch":0.40042675}
+  },
+  {
+    "type": "pokemon",
+    "test": "hisuian",
+    "location": "current",
+    "webhook": {"encounter_id":"9338459503482903326","pokemon_id":100,"display_pokemon_id":null,"spawnpoint_id":4938896667841,"latitude":51.321657891935466,"longitude":0.8998418403740487,"disappear_time":1643562415,"verified":true,"seen_type":"encounter","cp_multiplier":0.719399,"pokemon_level":29,"form":2728,"costume":0,"cp":715,"individual_attack":2,"individual_defense":11,"individual_stamina":7,"move_1":221,"move_2":125,"height":0.558708,"weight":16.899,"gender":3,"rarity":1,"base_catch":0.34751225,"great_catch":0.47294182,"ultra_catch":0.57425976}
+  },
+  {
+    "type": "pokemon",
+    "test": "eevee",
+    "location": "current",
+    "webhook": {"encounter_id":"2857982865584927291","pokemon_id":133,"display_pokemon_id":null,"spawnpoint_id":4938887527525,"latitude":51.26747517194389,"longitude":1.09152267924935,"disappear_time":1643525390,"verified":true,"seen_type":"encounter","cp_multiplier":0.566755,"pokemon_level":18,"costume":0,"cp":479,"individual_attack":0,"individual_defense":15,"individual_stamina":14,"move_1":221,"move_2":125,"height":0.230075,"weight":2.88183,"gender":1,"rarity":2,"base_catch":0.35288644,"great_catch":0.47944003,"ultra_catch":0.58124405}
+  },
+  {
+    "type": "pokemon",
+    "test": "ultra1",
+    "location": "current",
+    "webhook": {"encounter_id":"7281211089751226809","pokemon_id":125,"display_pokemon_id":null,"spawnpoint_id":4938887549503,"latitude":51.276881361348075,"longitude":1.083247353320102,"disappear_time":1643557211,"verified":true,"seen_type":"encounter","cp_multiplier":0.550793,"pokemon_level":17,"form":640,"costume":0,"cp":1059,"individual_attack":1,"individual_defense":15,"individual_stamina":15,"move_1":205,"move_2":79,"height":0.845533,"weight":19.9572,"gender":1,"rarity":3,"base_catch":0.18155652,"great_catch":0.25957167,"ultra_catch":0.33015025}
+  },
+  {
+    "type": "raid",
+    "test": "egg",
+    "webhook": {"latitude":51.214498,"longitude":1.136982,"level":1,"pokemon_id":0,"team_id":2,"cp":0,"start":1641972583,"end":1641975283,"name":"The Labyrinth at The Quiet View","evolution":0,"spawn":1641968983,"move_1":1,"move_2":2,"gym_id":"21aa4dc581714d80b85d4cea7f9049de.16","url":"http://lh3.googleusercontent.com/x8Zuut6uKvyJCD1ZlmX3XeO2QoqefpNUq_iHtJEgU9NQZT3i1ZjqoUiwPiVYnZ8NzNEyddEWZKHofPl7FB8jk1CJQzcqULYYvwGbrJFo","is_ex_raid_eligible":false,"is_exclusive":false}
+  },
+  {
+    "type": "raid",
+    "test": "level5",
+    "webhook":{"latitude":51.278005,"longitude":1.093851,"level":5,"pokemon_id":485,"team_id":3,"cp":49192,"start":1641969560,"end":1641972260,"name":"St Martin's Church","evolution":0,"spawn":1641965960,"move_1":269,"move_2":32,"gym_id":"3ccf1513aff04c7e91e6831e237fe39a.11","url":"http://lh3.googleusercontent.com/ZpnODSKPiiHxRYVOI9mCJcKiw2LH3HMfk8gGWXVqJB3NAPgyqIr76NF0zsdrszrchECNqGgZ2E5W0KURNyTmP-lfkqE","form":0,"is_ex_raid_eligible":false,"is_exclusive":false,"gender":2,"costume":0}
+  },
+  {
+    "type": "quest",
+    "test": "stardust",
+    "webhook": {"pokestop_id":"7d2bd3f5e4564b74a4426fb5521cf758.11","template":"CHALLENGE_BASE_SPIN_S_ITEM","pokestop_name":"Canterbury Bus Station","pokestop_url":"http://lh3.googleusercontent.com/hCU2iQ2B2UrFAeUxNlg0IMA5X0cy1ntn-ly_IKwCjDeDP-MZeS2TWZU695UM7f0vG7MhqREQ8QitO1csxfgy17RpGU4","conditions":[],"type":5,"latitude":51.276593,"longitude":1.082505,"rewards":[{"info":{"amount":500},"type":3}],"target":3,"updated":1643522373,"quest_task":"Spin 3 PokéStops or Gyms","with_ar":true}
+  },
+  {
+    "type": "quest",
+    "test": "pokemon",
+    "webhook": {"pokestop_id":"45ad8b858e31453fa5a8da2fa124c11a.16","template":"JAN_2022_BUDDY_HEARTS","pokestop_name":"Whitefriars Water Clock","pokestop_url":"http://lh3.googleusercontent.com/YiixrmDfSjYoH_OAfdN3UCmPfDpYLPWowz_zTk-eDELJBCWhGwrscjLHpfV_yt53z7zo_7NtKqkGSHnTWrkK3tjCEdA","conditions":[],"type":34,"latitude":51.277028,"longitude":1.081485,"rewards":[{"info":{"pokemon_id":133,"form_id":0,"costume_id":0,"shiny":0},"type":7}],"target":5,"updated":1643522366,"quest_task":"Earn 5 hearts with your Buddy","with_ar":true}
+  },
+  {
+    "type": "quest",
+    "test": "item",
+    "webhook": {"pokestop_id":"696a5d061f824c01b01b853af6a1ad95.16","template":"QUEST_TGR_JAN22_CATCH","pokestop_name":"Eye On The Wall","pokestop_url":"http://lh3.googleusercontent.com/WWDrs4ADaghmU-OFAKAY8lbgJIq5LiDDtPMRSh6_QTIbIWIg69UD1LoLEnH7LYcTyaNEBP38yTVJnE73C6bGS2_8gzhN","conditions":[],"type":4,"latitude":51.276413,"longitude":1.082237,"rewards":[{"info":{"item_id":103,"amount":2},"type":2}],"target":5,"updated":1643522344,"quest_task":"Catch 5 Pokémon","with_ar":true}
+  },
+  {
+    "type": "pokestop",
+    "test": "invasion",
+    "webhook": {"name":"Site Of Doges Chantry","pokestop_id":"e3c2628308cf468fb802ff72b326232c.16","latitude":51.276225,"longitude":1.087866,"updated":1643529456,"last_modified":1643529455,"url":"http://lh3.googleusercontent.com/esDyMLRH7TGp6lgw2VLNk8tBRzx5nJ3_9JRiPgZA1spY_FKMpDI-1lBwfrN4enCy8JF4QTlVRwIlpQMqxIq9Z63n_Q","incident_start":1643529452,"incident_expiration":1643531252,"incident_grunt_type":49}
+  },
+  {
+    "type": "pokestop",
+    "test": "giovanni",
+    "webhook": {"name":"Patisserie Valerie","pokestop_id":"4a5d8d346e584faaa41bc1a8abe8055a.16","latitude":51.279894,"longitude":1.078755,"updated":1643529456,"last_modified":1643508636,"url":"http://lh3.googleusercontent.com/SEhpe0J4i_odlJxtpph2REtdoMTKYxWPhhZryDJdFBCuPUdBY0uw0yeYKK9Obbk79ziVdJkYzBA1hjqbQ7kqeO4W3eFt","incident_start":1643522400,"incident_expiration":1643580000,"incident_grunt_type":44}
+  },
+  {
+    "type": "pokestop",
+    "test": "lure",
+    "webhook": {"name":"Memorial Sculpture & Verse","pokestop_id":"0d4b26adbf24446ba893f0aa3f8de337.16","latitude":51.284727,"longitude":1.060694,"updated":1643554276,"last_modified":1643553312,"lure_expiration":1643555112,"lure_id":502,"url":"http://lh3.googleusercontent.com/Ce-yPhm1FwGNbFzaM0ToMESZ57EWx1g8dKXXgEE4o-mmdP0XdsHk2nSEXOBk88H5PIXBHud-b7m6PUUJ3N8Pe_XB98NY"}
+  }
+]

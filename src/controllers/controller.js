@@ -178,12 +178,36 @@ class Controller extends EventEmitter {
 				return null
 			}
 		} else {
-			if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
-				findDts.template.embed.description = findDts.template.embed.description.join('')
+			const loadInclude = (includeString) => {
+				const includePath = includeString.split(' ')[1]
+				const filepath = path.join(__dirname, '../../config/dts', includePath)
+				try {
+					template = fs.readFileSync(filepath, 'utf8')
+				} catch (err) {
+					this.log.error(`${logReference}: Unable to load @include ${includePath} filepath ${filepath} from DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
+					return `Cannot load @include - ${includeString}`
+				}
+				return template
+			}
+
+			if (findDts.template.embed) {
+				for (const field of ['description', 'title']) {
+					if (findDts.template.embed[field]) {
+						if (Array.isArray(findDts.template.embed[field])) {
+							findDts.template.embed[field] = findDts.template.embed[field].join('')
+						}
+						if (findDts.template.embed[field].startsWith('@include')) {
+							findDts.template.embed[field] = loadInclude(findDts.template.embed[field])
+						}
+					}
+				}
 			}
 
 			if (Array.isArray(findDts.template.content)) {
 				findDts.template.content = findDts.template.content.join('')
+			}
+			if (findDts.template.content?.startsWith('@include')) {
+				findDts.template.content = loadInclude(findDts.template.content)
 			}
 
 			template = JSON.stringify(findDts.template)
