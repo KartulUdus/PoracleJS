@@ -10,7 +10,7 @@ const { Worker, MessageChannel } = require('worker_threads')
 const NodeCache = require('node-cache')
 const pcache = require('flat-cache')
 const fastify = require('fastify')({
-	bodyLimit: 5242880,
+	bodyLimit: 52428800,
 	maxParamLength: 256,
 })
 const { Telegraf } = require('telegraf')
