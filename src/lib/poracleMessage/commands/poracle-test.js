@@ -19,6 +19,7 @@ exports.run = async (client, msg, args, options) => {
 		const human = await client.query.selectOneQuery('humans', { id: target.id })
 
 		let template = client.config.general.defaultTemplateName?.toString() ?? '1'
+		let language = client.config.general.locale
 
 		const validHooks = ['pokemon', 'raid', 'pokestop', 'gym', 'nest', 'quest']
 
@@ -55,6 +56,10 @@ exports.run = async (client, msg, args, options) => {
 				[, , template] = args[i].match(client.re.templateRe)
 				args.splice(i, 1)
 			}
+			if (args[i].match(client.re.languageRe)) {
+				[, , language] = args[i].match(client.re.languageRe)
+				args.splice(i, 1)
+			}
 		}
 
 		const dataItem = testdata.find((x) => x.type === hookType && x.test === testId)
@@ -71,7 +76,7 @@ exports.run = async (client, msg, args, options) => {
 			name: target.name,
 			latitude: human.latitude,
 			longitude: human.longitude,
-			language: 'en',
+			language,
 			template,
 		}
 
