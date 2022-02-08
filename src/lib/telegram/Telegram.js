@@ -268,7 +268,7 @@ class Telegram extends EventEmitter {
 								// eslint-disable-next-line no-shadow
 								const msg = await this.retrySender(
 									senderId,
-									async () => this.bot.telegram.sendVenue(data.target, data.lat, data.lon, data.message.venue.title ?? '', data.message.venue.address ?? '', { disable_notification: true }),
+									async () => this.bot.telegram.sendVenue(data.target, data.lat, data.lon, data.message.venue.title ?? '', data.message.venue.address ?? '', { disable_notification: !sendOrder.includes('text') }),
 								)
 								messageIds.push(msg.message_id)
 							} catch (err) {
