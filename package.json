@@ -49,7 +49,7 @@
     "hastebin-gen": "^2.0.5",
     "import-fresh": "^3.3.0",
     "knex": "^1.0.1",
-    "lru-cache": "^6.0.0",
+    "lru-cache": "^7.3.0",
     "moment-precise-range-plugin": "^1.3.0",
     "moment-timezone": "^0.5.34",
     "mysql2": "^2.3.3",
