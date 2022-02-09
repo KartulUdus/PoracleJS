@@ -223,9 +223,10 @@ exports.run = async (client, msg, args, options) => {
 				return msg.reply(translator.translate('Caps are not supported with this map\'s data source'))
 			}
 			pvpCap = +parameterValues.cap
-			if (pvpCap !== 0 && !client.config.pvp.levelCaps.includes(pvpCap)) {
+			const capsConsidered = client.config.pvp.levelCaps ?? [50]
+			if (pvpCap !== 0 && !capsConsidered.includes(pvpCap)) {
 				await msg.react('🙅')
-				return msg.reply(translator.translateFormat('This level cap is not supported, valid choices are: {0}', [0, ...client.config.pvp.levelCaps].join(', ')))
+				return msg.reply(translator.translateFormat('This level cap is not supported, valid choices are: {0}', [0, ...capsConsidered].join(', ')))
 			}
 		}
 

@@ -292,7 +292,7 @@ class Monster extends Controller {
 			data.pvpBestRank = {}
 
 			const capsConsidered = this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'chuck'
-				? this.config.pvp.levelCaps : [50]
+				? (this.config.pvp.levelCaps ?? [50]) : [50]
 
 			const rankCalculator = (league, leagueData, minCp) => {
 				const best = Object.fromEntries(capsConsidered.map((x) => [x, { rank: 4096, cp: 0 }]))
@@ -303,7 +303,7 @@ class Monster extends Controller {
 						if (!stats.cap && !stats.capped) { // not ohbem
 							caps.push(50)
 						} else if (stats.capped) {
-							caps.push(...this.config.pvp.levelCaps.filter((x) => x >= stats.cap))
+							caps.push(...capsConsidered.filter((x) => x >= stats.cap))
 						} else {
 							caps.push(stats.cap)
 						}
@@ -317,7 +317,6 @@ class Monster extends Controller {
 							}
 						}
 
-						// This needs fixing as does not do 'capped' for evolution tracking
 						if (!stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
 							const newEvo = {
 								rank: stats.rank,
@@ -328,7 +327,7 @@ class Monster extends Controller {
 								cp: stats.cp,
 								// eslint-disable-next-line no-nested-ternary
 								caps: stats.capped
-									? this.config.pvp.levelCaps.filter((x) => x >= stats.cap)
+									? capsConsidered.filter((x) => x >= stats.cap)
 									: (stats.cap ? [stats.cap] : null),
 							}
 
