@@ -11,7 +11,7 @@ module.exports = () => {
 
 	for (const configFile of defaultFiles) {
 		const localFile = path.join(__dirname, '../../config', configFile)
-		const defaultFile = path.join(__dirname, '../../defaults/config', configFile)
+		const defaultFile = path.join(__dirname, '../../config/defaults', configFile)
 
 		if (!fs.existsSync(localFile) && fs.existsSync(defaultFile)) {
 			const fileContents = fs.readFileSync(defaultFile, 'utf8')
