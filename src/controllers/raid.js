@@ -1,5 +1,8 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
+
 const Controller = require('./controller')
 
 class Raid extends Controller {
@@ -18,7 +21,7 @@ class Raid extends Controller {
 		(raid.move = 9000 or raid.move = ${data.move_1} or raid.move = ${data.move_2})
 		${strictareastring}
 		and
-		(raid.gym_id='${data.gym_id}' or (raid.gym_id is NULL and `
+		((raid.gym_id='${data.gym_id}' and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%specificgym%') ) or (raid.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -78,7 +81,7 @@ class Raid extends Controller {
 		(egg.exclusive = ${data.ex} or egg.exclusive = 0)
 		${strictareastring}
 		and
-		(egg.gym_id='${data.gym_id}' or (egg.gym_id is NULL and `
+		((egg.gym_id='${data.gym_id}' and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%specificgym%') ) or (egg.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -140,7 +143,7 @@ class Raid extends Controller {
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 
-			if (!data.team_id) data.team_id = 0
+			data.team_id ??= 0
 			if (data.name) {
 				data.name = this.escapeJsonString(data.name)
 				data.gymName = data.name
@@ -150,11 +153,12 @@ class Raid extends Controller {
 				data.gymName = data.gym_name
 			}
 			data.gymId = data.gym_id
-			data.teamId = data.team_id ? data.team_id : 0
-			data.gymColor = data.team_id ? this.GameData.utilData.teams[data.team_id].color : 'BABABA'
-			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
+			data.teamId = data.team_id
+			data.gymColor = this.GameData.utilData.teams[data.team_id].color
+			data.ex = !!(data.ex_raid_eligible ?? data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url || data.url || ''
-			data.disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			const disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.color = data.gymColor // deprecated
@@ -174,7 +178,7 @@ class Raid extends Controller {
 			}
 
 			if (data.pokemon_id) {
-				if (data.form === undefined || data.form === null) data.form = 0
+				data.form ??= 0
 				const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 				if (!monster) {
 					this.log.warn(`${logReference}: Couldn't find monster in:`, data)
@@ -189,8 +193,8 @@ class Raid extends Controller {
 				data.tth = moment.preciseDiff(Date.now(), data.end * 1000, true)
 				data.formname = data.formNameEng // deprecated
 				data.evolutionname = data.evolutionNameEng // deprecated
-				data.quickMoveId = data.move_1 ? data.move_1 : ''
-				data.chargeMoveId = data.move_2 ? data.move_2 : ''
+				data.quickMoveId = data.move_1 ?? ''
+				data.chargeMoveId = data.move_2 ?? ''
 				data.quickMoveNameEng = this.GameData.moves[data.move_1] ? this.GameData.moves[data.move_1].name : ''
 				data.chargeMoveNameEng = this.GameData.moves[data.move_2] ? this.GameData.moves[data.move_2].name : ''
 				data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
@@ -206,7 +210,11 @@ class Raid extends Controller {
 					return []
 				}
 
-				const whoCares = await this.raidWhoCares(data)
+				const whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+				}] : await this.raidWhoCares(data)
 
 				if (whoCares.length) {
 					this.log.info(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
@@ -231,15 +239,20 @@ class Raid extends Controller {
 
 				setImmediate(async () => {
 					try {
-						data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-						data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, data.evolution, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 
 						const geoResult = await this.getAddress({
 							lat: data.latitude,
 							lon: data.longitude,
 						})
 						const jobs = []
+
+						const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
+						const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+
+						data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
 
 						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
 						data.staticmap = data.staticMap // deprecated
@@ -264,9 +277,9 @@ class Raid extends Controller {
 							data.formName = translator.translate(data.formNameEng)
 							data.evolutionName = translator.translate(data.evolutionNameEng)
 							data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
-							data.teamNameEng = data.team_id ? this.GameData.utilData.teams[data.team_id].name : 'Harmony'
+							data.teamNameEng = this.GameData.utilData.teams[data.team_id].name
 							data.teamName = translator.translate(data.teamNameEng)
-							data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
+							data.teamEmoji = this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform)
 							data.quickMoveName = this.GameData.moves[data.move_1] ? translator.translate(this.GameData.moves[data.move_1].name) : ''
 							data.quickMoveEmoji = this.GameData.moves[data.move_1] && this.GameData.moves[data.move_1].type ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.move_1].type].emoji, platform)) : ''
 							data.chargeMoveName = this.GameData.moves[data.move_2] ? translator.translate(this.GameData.moves[data.move_2].name) : ''
@@ -359,7 +372,8 @@ class Raid extends Controller {
 			}
 
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-			data.hatchTime = moment(data.start * 1000).tz(geoTz.find(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			const hatchTime = moment(data.start * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			data.hatchTime = hatchTime.format(this.config.locale.time)
 			data.hatchtime = data.hatchTime // deprecated
 
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -367,7 +381,11 @@ class Raid extends Controller {
 				return []
 			}
 
-			const whoCares = await this.eggWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.eggWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
@@ -392,12 +410,17 @@ class Raid extends Controller {
 
 			setImmediate(async () => {
 				try {
-					data.imgUrl = await this.imgUicons.eggIcon(data.level)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.eggIcon(data.level)
 					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.eggIcon(data.level)
-					data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.eggIcon(data.level)
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
+
+					const sunsetTime = moment(getSunset(data.latitude, data.longitude, hatchTime.toDate()))
+					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, hatchTime.toDate()))
+
+					data.nightTime = !hatchTime.isBetween(sunriseTime, sunsetTime)
 
 					await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated

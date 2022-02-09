@@ -1,0 +1,23 @@
+{
+  "circle-11": {
+    "height": 17,
+    "pixelRatio": 1,
+    "width": 17,
+    "x": 64,
+    "y": 0
+  },
+  "star-11": {
+    "height": 17,
+    "pixelRatio": 1,
+    "width": 17,
+    "x": 81,
+    "y": 0
+  },
+  "wood-pattern": {
+    "height": 64,
+    "pixelRatio": 1,
+    "width": 64,
+    "x": 0,
+    "y": 0
+  }
+}

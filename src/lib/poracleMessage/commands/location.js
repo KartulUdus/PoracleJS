@@ -50,61 +50,72 @@ exports.run = async (client, msg, args, options) => {
 		let placeConfirmation = ''
 		let staticMap
 		let message
+		let remove = false
 
-		const matches = search.match(client.re.latlonRe)
-		if (matches !== null && matches.length >= 2) {
-			lat = parseFloat(matches[1])
-			lon = parseFloat(matches[2])
+		if (args.length === 1 && args[0] === 'remove') {
+			remove = true
+			lat = 0
+			lon = 0
 		} else {
-			if (args.length === 1 && search.match(/^\d{1,5}$/) === null) {
-				await msg.react(translator.translate('🙅'))
-				return await msg.reply(`${translator.translate('Oops, you need to specify more than just a city name to locate accurately your position')}`)
+			const matches = search.match(client.re.latlonRe)
+			if (matches !== null && matches.length >= 2) {
+				lat = parseFloat(matches[1])
+				lon = parseFloat(matches[2])
+			} else {
+				if (args.length === 1 && search.match(/^\d{1,5}$/) === null) {
+					await msg.react(translator.translate('🙅'))
+					return await msg.reply(`${translator.translate('Oops, you need to specify more than just a city name to locate accurately your position')}`)
+				}
+				const locations = await client.query.geolocate(search)
+				if (locations === undefined || locations.length === 0) {
+					return await msg.react(translator.translate('🙅'))
+				}
+				lat = locations[0].latitude
+				lon = locations[0].longitude
+				placeConfirmation = locations[0].city ? ` **${locations[0].city} - ${locations[0].country}** ` : ` **${locations[0].country}** `
 			}
-			const locations = await client.query.geolocate(search)
-			if (locations === undefined || locations.length === 0) {
-				return await msg.react(translator.translate('🙅'))
-			}
-			lat = locations[0].latitude
-			lon = locations[0].longitude
-			placeConfirmation = locations[0].city ? ` **${locations[0].city} - ${locations[0].country}** ` : ` **${locations[0].country}** `
-		}
 
-		if (client.config.areaSecurity.enabled && !msg.isFromAdmin) {
-			const human = await client.query.selectOneQuery('humans', { id: target.id })
-			if (human.area_restriction) {
-				const allowedFences = JSON.parse(human.area_restriction)
-				const areas = client.query.pointInArea([lat, lon])
+			if (client.config.areaSecurity.enabled && !msg.isFromAdmin) {
+				const human = await client.query.selectOneQuery('humans', { id: target.id })
+				if (human.area_restriction) {
+					const allowedFences = JSON.parse(human.area_restriction)
+					const areas = client.query.pointInArea([lat, lon])
 
-				if (!allowedFences.some((x) => areas.includes(x))) {
-					await msg.reply(translator.translate('This location is not your permitted area'))
-					await msg.react('🙅')
-					return
+					if (!allowedFences.some((x) => areas.includes(x))) {
+						await msg.reply(translator.translate('This location is not your permitted area'))
+						await msg.react('🙅')
+						return
+					}
 				}
 			}
 		}
 
-		const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
-		message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
+		if (remove) {
+			message = translator.translateFormat('I have removed {0}\'s  location', target.name)
+		} else {
+			const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
+			message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
 
-		if (platform === 'discord' && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
-			const tileServerOptions = client.query.tileserverPregen.getConfigForTileType('location')
-			if (tileServerOptions.type !== 'none') {
-				// Could also use logic to not pregenerate
-				staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'location', {
-					latitude: lat,
-					longitude: lon,
-				}, tileServerOptions.type)
+			if (platform === 'discord' && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
+				const tileServerOptions = client.query.tileserverPregen.getConfigForTileType('location')
+				if (tileServerOptions.type !== 'none') {
+					// Could also use logic to not pregenerate
+					staticMap = await client.query.tileserverPregen.getPregeneratedTileURL('location', 'location', {
+						latitude: lat,
+						longitude: lon,
+					}, tileServerOptions.type)
 
-				message = {
-					embed: {
-						color: 0x00ff00,
-						title: translator.translate('New location'),
-						description: `${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}`,
-						image: {
-							url: staticMap,
+					message = {
+						embed: {
+							color: 0x00ff00,
+							title: translator.translate('New location'),
+							description: `${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}`,
+							image: {
+								url: staticMap,
+							},
+							url: maplink,
 						},
-						url: maplink,
-					},
+					}
 				}
 			}
 		}

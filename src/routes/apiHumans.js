@@ -38,7 +38,7 @@ module.exports = async (fastify, options, next) => {
 				name: x.name,
 				group: x.group || '',
 				description: x.description || '',
-				userSelectable: (x.userSelectable === undefined || x.userSelectable),
+				userSelectable: !!(x.userSelectable ?? true),
 			})),
 		}
 	})

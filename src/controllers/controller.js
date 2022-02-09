@@ -31,7 +31,6 @@ class Controller extends EventEmitter {
 		this.translatorFactory = translatorFactory
 		this.translator = translatorFactory ? this.translatorFactory.default : null
 		this.mustache = mustache
-		this.earthRadius = 6371 * 1000 // m
 		this.weatherData = weatherData
 		this.statsData = statsData
 		this.eventParser = eventProviders && eventProviders.pogoEvents
@@ -39,9 +38,9 @@ class Controller extends EventEmitter {
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
-		this.imgUicons = new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log)
+		this.imgUicons = this.config.general.imgUrl ? new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log) : null
 		this.imgUiconsAlt = this.config.general.imgUrlAlt ? new Uicons((this.config.general.imagesAlt && this.config.general.imagesAlt[this.constructor.name.toLowerCase()]) || this.config.general.imgUrlAlt, 'png', this.log) : null
-		this.stickerUicons = new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log)
+		this.stickerUicons = this.config.general.stickerUrl ? new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log) : null
 		this.dtsCache = {}
 		this.shortener = this.getShortener()
 	}
@@ -130,7 +129,7 @@ class Controller extends EventEmitter {
 	}
 
 	getDts(logReference, templateType, platform, templateName, language) {
-		if (!templateName) templateName = this.config.general.defaultTemplateName || '1'
+		if (!templateName) templateName = this.config.general.defaultTemplateName?.toString() || '1'
 		templateName = templateName.toLowerCase()
 
 		const key = `${templateType} ${platform} ${templateName} ${language}`
@@ -179,12 +178,36 @@ class Controller extends EventEmitter {
 				return null
 			}
 		} else {
-			if (findDts.template.embed && Array.isArray(findDts.template.embed.description)) {
-				findDts.template.embed.description = findDts.template.embed.description.join('')
+			const loadInclude = (includeString) => {
+				const includePath = includeString.split(' ')[1]
+				const filepath = path.join(__dirname, '../../config/dts', includePath)
+				try {
+					template = fs.readFileSync(filepath, 'utf8')
+				} catch (err) {
+					this.log.error(`${logReference}: Unable to load @include ${includePath} filepath ${filepath} from DTS type: ${findDts.type} platform: ${findDts.platform} language: ${findDts.language} template: ${findDts.template}`)
+					return `Cannot load @include - ${includeString}`
+				}
+				return template
+			}
+
+			if (findDts.template.embed) {
+				for (const field of ['description', 'title']) {
+					if (findDts.template.embed[field]) {
+						if (Array.isArray(findDts.template.embed[field])) {
+							findDts.template.embed[field] = findDts.template.embed[field].join('')
+						}
+						if (findDts.template.embed[field].startsWith('@include')) {
+							findDts.template.embed[field] = loadInclude(findDts.template.embed[field])
+						}
+					}
+				}
 			}
 
 			if (Array.isArray(findDts.template.content)) {
 				findDts.template.content = findDts.template.content.join('')
+			}
+			if (findDts.template.content?.startsWith('@include')) {
+				findDts.template.content = loadInclude(findDts.template.content)
 			}
 
 			template = JSON.stringify(findDts.template)
@@ -239,7 +262,7 @@ class Controller extends EventEmitter {
 				if (tileServerOptions.includeStops && tileServerOptions.pregenerate && this.scannerQuery) {
 					const limits = this.tileserverPregen.limits(data.latitude, data.longitude, tileServerOptions.width, tileServerOptions.height, tileServerOptions.zoom)
 					data.nearbyStops = await this.scannerQuery.getStopData(limits[0][0], limits[0][1], limits[1][0], limits[1][1])
-					if (data.nearbyStops) {
+					if (data.nearbyStops && this.imgUicons) {
 						data.uiconPokestopUrl = await this.imgUicons.pokestopIcon(0)
 						for (const stop of data.nearbyStops) {
 							switch (stop.type) {
@@ -296,28 +319,66 @@ class Controller extends EventEmitter {
 		}
 	}
 
+	// eslint-disable-next-line class-methods-use-this
 	getDistance(start, end) {
-		if (typeof (Number.prototype.toRad) === 'undefined') {
-			// eslint-disable-next-line no-extend-native
-			Number.prototype.toRad = function toRad() {
-				return this * Math.PI / 180
-			}
-		}
-		let lat1 = parseFloat(start.lat)
-		let lat2 = parseFloat(end.lat)
+		const lat1 = parseFloat(start.lat)
+		const lat2 = parseFloat(end.lat)
 		const lon1 = parseFloat(start.lon)
 		const lon2 = parseFloat(end.lon)
 
-		const dLat = (lat2 - lat1).toRad()
-		const dLon = (lon2 - lon1).toRad()
-		lat1 = lat1.toRad()
-		lat2 = lat2.toRad()
+		// https://www.movable-type.co.uk/scripts/latlong.html
 
-		const a = Math.sin(dLat / 2) * Math.sin(dLat / 2)
-				+ Math.sin(dLon / 2) * Math.sin(dLon / 2) * Math.cos(lat1) * Math.cos(lat2)
+		const R = 6371e3 // metres
+		const φ1 = lat1 * Math.PI / 180 // φ, λ in radians
+		const φ2 = lat2 * Math.PI / 180
+		const Δφ = (lat2 - lat1) * Math.PI / 180
+		const Δλ = (lon2 - lon1) * Math.PI / 180
+
+		const a = Math.sin(Δφ / 2) * Math.sin(Δφ / 2)
+			+ Math.cos(φ1) * Math.cos(φ2)
+			* Math.sin(Δλ / 2) * Math.sin(Δλ / 2)
 		const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a))
-		const d = this.earthRadius * c
+
+		const d = R * c // in metres
+
 		return Math.ceil(d)
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	getBearing(start, end) {
+		const lat1 = parseFloat(start.lat)
+		const lat2 = parseFloat(end.lat)
+		const lon1 = parseFloat(start.lon)
+		const lon2 = parseFloat(end.lon)
+
+		// https://www.movable-type.co.uk/scripts/latlong.html
+
+		const φ1 = lat1 * Math.PI / 180 // φ, λ in radians
+		const φ2 = lat2 * Math.PI / 180
+		const λ1 = lon1 * Math.PI / 180 // φ, λ in radians
+		const λ2 = lon2 * Math.PI / 180
+
+		const y = Math.sin(λ2 - λ1) * Math.cos(φ2)
+		const x = Math.cos(φ1) * Math.sin(φ2)
+			- Math.sin(φ1) * Math.cos(φ2) * Math.cos(λ2 - λ1)
+		const θ = Math.atan2(y, x)
+		const brng = (θ * 180 / Math.PI + 360) % 360 // in degrees
+
+		return brng
+	}
+
+	// eslint-disable-next-line class-methods-use-this
+	getBearingEmoji(brng) {
+		if (brng < 22.5) return 'north'
+		if (brng < 45 + 22.5) return 'northwest'
+		if (brng < 90 + 22.5) return 'west'
+		if (brng < 135 + 22.5) return 'southwest'
+		if (brng < 180 + 22.5) return 'south'
+		if (brng < 225 + 22.5) return 'southeast'
+		if (brng < 270 + 22.5) return 'east'
+		if (brng < 315 + 22.5) return 'northeast'
+
+		return 'north'
 	}
 
 	isRateLimited(id) {
@@ -414,7 +475,7 @@ class Controller extends EventEmitter {
 				matchAreas.push({
 					name: areaObj.name,
 					description: areaObj.description,
-					displayInMatches: areaObj.displayInMatches === undefined || !!areaObj.displayInMatches,
+					displayInMatches: areaObj.displayInMatches ?? true,
 					group: areaObj.group,
 				})
 			}
@@ -428,7 +489,7 @@ class Controller extends EventEmitter {
 		try {
 			return await this.db.select('*').from(table).where(conditions).first()
 		} catch (err) {
-			throw { source: 'slectOneQuery', error: err }
+			throw { source: 'selectOneQuery', error: err }
 		}
 	}
 
@@ -475,11 +536,11 @@ class Controller extends EventEmitter {
 		}
 	}
 
-	async misteryQuery(sql) {
+	async mysteryQuery(sql) {
 		try {
 			return this.returnByDatabaseType(await this.db.raw(sql))
 		} catch (err) {
-			throw { source: 'misteryQuery', error: err }
+			throw { source: 'mysteryQuery', error: err }
 		}
 	}
 

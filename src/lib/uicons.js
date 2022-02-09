@@ -173,7 +173,7 @@ class Uicons {
 	constructor(url, imageType, log, fallback) {
 		this.url = url.endsWith('/') ? url.slice(0, -1) : url
 		this.imageType = imageType || 'png'
-		this.fallback = fallback === undefined ? true : fallback
+		this.fallback = fallback ?? true
 		this.log = log || console
 	}
 

@@ -506,5 +506,8 @@
 	"Valid commands are e.g. `{0}quest spinda`, `{0}quest energycharizard`, `{0}quest remove everything`":"I comandi validi sono ad es. `{0}quest spinda`, `{0}quest energiacharizard`, `{0}quest rimuovi tutto`",
 	"Valid commands are e.g. `{0}raid level5`, `{0}raid articuno`, `{0}raid remove everything`":"I comandi validi sono ad es. `{0}raid livello5`, `{0}raid articuno`, `{0}raid rimuovi tutto`",
 	"Valid commands are e.g. `{0}track charmander`, `{0}track everything iv100`, `{0}track gible d500`":"I comandi validi sono ad es. `{0}trova charmander`, `{0}trova tutto iv100`, `{0}trova gible d500`",
-	"Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`":"I comandi validi sono ad es. `{0}basta charmander`, `{0}basta tutto`"
+	"Valid commands are e.g. `{0}untrack charmander`, `{0}untrack everything`":"I comandi validi sono ad es. `{0}basta charmander`, `{0}basta tutto`",
+	"Leader Cliff": "Leader Cliff",
+	"Leader Arlo": "Leader Arlo",
+	"Leader Sierra": "Leader Sierra"
 }

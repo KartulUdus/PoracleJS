@@ -53,6 +53,11 @@ exports.run = async (client, msg, args, options) => {
 				}
 				break
 			}
+			case 'translate': {
+				await msg.reply(`Reverse translation: ${args.map((x) => `"${x}" `)}`)
+				await msg.reply(`Forward translation: ${args.map((x) => `"${translator.translate(x)}" `)}`)
+				break
+			}
 			case 'dts': {
 				if (msg.isFromAdmin) {
 					let s = 'Your loaded DTS looks like this:\n'
@@ -173,7 +178,7 @@ exports.run = async (client, msg, args, options) => {
 
 				const weatherId = weatherInfo[currentHourTimestamp]
 				let staticMap = null
-				if (client.config.geocoding.staticProvider === 'tileservercache') {
+				if (client.config.geocoding.staticProvider === 'tileservercache' && client.config.general.imgUrl) {
 					const imgUicons = new Uicons(client.config.general.imgUrl, 'png', client.log)
 
 					staticMap = await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId, imgUicons)

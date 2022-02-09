@@ -10,7 +10,7 @@ const { Worker, MessageChannel } = require('worker_threads')
 const NodeCache = require('node-cache')
 const pcache = require('flat-cache')
 const fastify = require('fastify')({
-	bodyLimit: 5242880,
+	bodyLimit: 52428800,
 	maxParamLength: 256,
 })
 const { Telegraf } = require('telegraf')
@@ -94,8 +94,8 @@ if (config.discord.enabled) {
 	for (let key = 0; key < config.discord.token.length; key++) {
 		if (config.discord.token[key]) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, (key
-				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity === undefined ? 'PoracleHelper' : config.discord.workerActivity }
-				: { status: 'available', activity: config.discord.activity === undefined ? 'PoracleJS' : config.discord.activity })))
+				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity ?? 'PoracleHelper' }
+				: { status: 'available', activity: config.discord.activity ?? 'PoracleJS' })))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
@@ -291,7 +291,7 @@ async function processMessages(msgs) {
 		let logMessage = null
 		let shameMessage = null
 
-		if (!rate.passMessage) {
+		if (!msg.alwaysSend && !rate.passMessage) {
 			if (rate.justBreached) {
 				const userTranslator = translatorFactory.Translator(msg.language || config.general.locale)
 				queueMessage = {
@@ -527,7 +527,9 @@ async function processOne(hook) {
 	currentWorkerNo = (currentWorkerNo + 1) % maxWorkers
 
 	try {
-		let processHook
+		const processHook = async (hookToProcess) => { await workers[currentWorkerNo].queuePort.postMessage(hookToProcess) }
+		const processWeather = async (hookToProcess) => { await weatherWorker.queuePort.postMessage(hookToProcess) }
+		const processStats = async (hookToProcess) => { await statsWorker.queuePort.postMessage(hookToProcess) }
 
 		switch (hook.type) {
 			case 'pokemon': {
@@ -535,19 +537,21 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
-				const verifiedSpawnTime = (hook.message.verified || hook.message.disappear_time_verified)
-				const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp}`
-				if (fastify.cache.get(cacheKey)) {
-					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
-					break
+				if (!hook.message.poracleTest) {
+					fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
+					const verifiedSpawnTime = (hook.message.verified || hook.message.disappear_time_verified)
+					const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp}`
+					if (fastify.cache.get(cacheKey)) {
+						fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was sent again too soon, ignoring`)
+						break
+					}
+
+					// Set cache expiry to calculated pokemon expiry + 5 minutes to cope with near misses; or 60 minutes (3600s) in the case of an unverified spawn
+
+					const secondsRemaining = !verifiedSpawnTime ? 3600 : (Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300)
+
+					fastify.cache.set(cacheKey, 'x', secondsRemaining)
 				}
-
-				// Set cache expiry to calculated pokemon expiry + 5 minutes to cope with near misses; or 60 minutes (3600s) in the case of an unverified spawn
-
-				const secondsRemaining = !verifiedSpawnTime ? 3600 : (Math.max((hook.message.disappear_time * 1000 - Date.now()) / 1000, 0) + 300)
-
-				fastify.cache.set(cacheKey, 'x', secondsRemaining)
 
 				if (ohbem) {
 					const data = hook.message
@@ -567,11 +571,11 @@ async function processOne(hook) {
 						}
 					}
 				}
-				processHook = hook
+
+				await processHook(hook)
 
 				// also post directly to stats controller
-				statsWorker.queuePort.postMessage(hook)
-
+				if (!hook.message.poracleTest) await processStats(hook)
 				break
 			}
 			case 'raid': {
@@ -580,18 +584,19 @@ async function processOne(hook) {
 
 					break
 				}
-				fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
-				const cacheKey = `${hook.message.gym_id}${hook.message.end}${hook.message.pokemon_id}`
+				if (!hook.message.poracleTest) {
+					fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
+					const cacheKey = `${hook.message.gym_id}${hook.message.end}${hook.message.pokemon_id}`
 
-				if (fastify.cache.get(cacheKey)) {
-					fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
-					break
+					if (fastify.cache.get(cacheKey)) {
+						fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
+						break
+					}
+
+					fastify.cache.set(cacheKey, 'x')
 				}
 
-				fastify.cache.set(cacheKey, 'x')
-
-				processHook = hook
-
+				await processHook(hook)
 				break
 			}
 			case 'invasion':
@@ -601,40 +606,42 @@ async function processOne(hook) {
 					break
 				}
 				fastify.webhooks.info(`pokestop(${hook.type}) ${JSON.stringify(hook.message)}`)
-				const incidentExpiration = hook.message.incident_expiration ? hook.message.incident_expiration : hook.message.incident_expire_timestamp
+				const incidentExpiration = hook.message.incident_expiration ?? hook.message.incident_expire_timestamp
 				const lureExpiration = hook.message.lure_expiration
 				if (!lureExpiration && !incidentExpiration) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
 				}
+
 				if (lureExpiration && !config.general.disableLure) {
 					const cacheKey = `${hook.message.pokestop_id}L${lureExpiration}`
 
-					if (fastify.cache.get(cacheKey)) {
+					if (fastify.cache.get(cacheKey) && !hook.message.poracleTest) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Lure was sent again too soon, ignoring`)
-						break
+					} else {
+						// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+						const secondsRemaining = Math.max((lureExpiration * 1000 - Date.now()) / 1000, 0) + 300
+
+						fastify.cache.set(cacheKey, 'x', secondsRemaining)
+						hook.type = 'lure'
+						await processHook(hook)
 					}
+				}
 
-					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
-					const secondsRemaining = Math.max((lureExpiration * 1000 - Date.now()) / 1000, 0) + 300
+				if (incidentExpiration && !config.general.disableInvasion) {
+					const cacheKey = `${hook.message.pokestop_id}I${incidentExpiration}`
 
-					fastify.cache.set(cacheKey, 'x', secondsRemaining)
-
-					processHook = hook
-				} else if (!config.general.disableInvasion) {
-					const cacheKey = `${hook.message.pokestop_id}I${lureExpiration}`
-
-					if (fastify.cache.get(cacheKey)) {
+					if (fastify.cache.get(cacheKey) && !hook.message.poracleTest) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
-						break
+					} else {
+						// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+						const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
+
+						fastify.cache.set(cacheKey, 'x', secondsRemaining)
+
+						hook.type = 'invasion'
+						await processHook(hook)
 					}
-
-					// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
-					const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
-
-					fastify.cache.set(cacheKey, 'x', secondsRemaining)
-
-					processHook = hook
 				}
 				break
 			}
@@ -643,55 +650,59 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
-				const cacheKey = `${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`
+				if (!hook.message.poracleTest) {
+					fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
+					const cacheKey = `${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`
 
-				if (fastify.cache.get(cacheKey)) {
-					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
-					break
+					if (fastify.cache.get(cacheKey)) {
+						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
+						break
+					}
+					fastify.cache.set(cacheKey, 'x')
 				}
-				fastify.cache.set(cacheKey, 'x')
-				processHook = hook
-
+				await processHook(hook)
 				break
 			}
 			case 'gym':
 			case 'gym_details': {
-				const id = hook.message.id || hook.message.gym_id
-				const team = hook.message.team_id !== undefined ? hook.message.team_id : hook.message.team
-				const inBattle = (hook.message.is_in_battle !== undefined ? hook.message.is_in_battle : hook.message.in_battle) || 0
+				if (!hook.message.poracleTest) {
+					const id = hook.message.id ?? hook.message.gym_id
+					const team = hook.message.team_id ?? hook.message.team
+					const inBattle = hook.message.is_in_battle ?? hook.message.in_battle ?? 0
 
-				if (config.general.disableGym) {
-					fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
-					break
+					if (config.general.disableGym) {
+						fastify.controllerLog.debug(`${id}: Gym was received but set to be ignored in config`)
+						break
+					}
+					fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
+
+					const cacheKey = `${id}_battle`
+					const cachedGymDetails = fastify.gymCache.getKey(id)
+					const tooSoon = fastify.cache.get(cacheKey)
+
+					if (inBattle) {
+						fastify.cache.set(cacheKey, 'x', 5 * 60)
+					}
+
+					if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available && tooSoon) {
+						fastify.controllerLog.debug(`${id}: Gym battle cooldown time hasn't ended, ignoring`)
+						break
+					}
+
+					hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
+					hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
+					hook.message.old_in_battle = cachedGymDetails ? cachedGymDetails.in_battle : -1
+					hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
+
+					fastify.gymCache.setKey(id, {
+						team_id: team,
+						slots_available: hook.message.slots_available,
+						last_owner_id: team || hook.message.last_owner_id,
+						in_battle: inBattle,
+					}, 0)
 				}
-				fastify.webhooks.info(`gym(${hook.type})  ${JSON.stringify(hook.message)}`)
 
-				const cacheKey = `${id}_battle`
-				const cachedGymDetails = fastify.gymCache.getKey(id)
-				const tooSoon = fastify.cache.get(cacheKey)
-
-				if (inBattle) {
-					fastify.cache.set(cacheKey, 'x', 5 * 60)
-				}
-
-				if (cachedGymDetails && cachedGymDetails.team_id === team && cachedGymDetails.slots_available === hook.message.slots_available && tooSoon) {
-					fastify.controllerLog.debug(`${id}: Gym battle cooldown time hasn't ended, ignoring`)
-					break
-				}
-
-				hook.message.old_team_id = cachedGymDetails ? cachedGymDetails.team_id : -1
-				hook.message.old_slots_available = cachedGymDetails ? cachedGymDetails.slots_available : -1
-				hook.message.old_in_battle = cachedGymDetails ? cachedGymDetails.in_battle : -1
-				hook.message.last_owner_id = cachedGymDetails ? cachedGymDetails.last_owner_id : -1
-
-				fastify.gymCache.setKey(id, {
-					team_id: team,
-					slots_available: hook.message.slots_available,
-					last_owner_id: team || hook.message.last_owner_id,
-					in_battle: inBattle,
-				}, 0)
-				processHook = hook
+				await processHook(hook)
 				break
 			}
 
@@ -700,19 +711,20 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was received but set to be ignored in config`)
 					break
 				}
-				fastify.webhooks.info(`nest ${JSON.stringify(hook.message)}`)
-				const cacheKey = `${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`
-				if (fastify.cache.get(cacheKey)) {
-					fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was sent again too soon, ignoring`)
-					break
+				if (!hook.message.poracleTest) {
+					fastify.webhooks.info(`nest ${JSON.stringify(hook.message)}`)
+					const cacheKey = `${hook.message.nest_id}_${hook.message.pokemon_id}_${hook.message.reset_time}`
+					if (fastify.cache.get(cacheKey)) {
+						fastify.controllerLog.debug(`${hook.message.nest_id}: Nest was sent again too soon, ignoring`)
+						break
+					}
+
+					// expiry time -- 14 days (!) after reset time
+					const secondsRemaining = Math.max(((hook.message.reset_time + 14 * 24 * 60 * 60) * 1000 - Date.now()) / 1000, 0)
+
+					fastify.cache.set(cacheKey, 'x', secondsRemaining)
 				}
-
-				// expiry time -- 14 days (!) after reset time
-				const secondsRemaining = Math.max(((hook.message.reset_time + 14 * 24 * 60 * 60) * 1000 - Date.now()) / 1000, 0)
-
-				fastify.cache.set(cacheKey, 'x', secondsRemaining)
-				processHook = hook
-
+				await processHook(hook)
 				break
 			}
 
@@ -733,17 +745,12 @@ async function processOne(hook) {
 				fastify.cache.set(cacheKey, 'x')
 
 				// post directly to weather controller
-				weatherWorker.queuePort.postMessage(hook)
-				//	processHook = hook
-
+				await processWeather(hook)
 				break
 			}
 			default:
 				fastify.webhooks.info(`${hook.type} [unrecognised] ${JSON.stringify(hook.message)}`)
 				break
-		}
-		if (processHook) {
-			await workers[currentWorkerNo].queuePort.postMessage(processHook)
 		}
 	} catch (err) {
 		fastify.controllerLog.error('Hook processor error (something wasn\'t caught higher)', err)
@@ -799,7 +806,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 	try {
 		log.verbose('Profile Check: Checking for active profile changes')
 		const humans = await query.selectAllQuery('humans', { enabled: 1, admin_disable: 0 })
-		const profilesToCheck = await query.misteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
+		const profilesToCheck = await query.mysteryQuery('SELECT * FROM profiles WHERE LENGTH(active_hours)>5 ORDER BY id, profile_no')
 
 		let lastId = null
 		for (const profile of profilesToCheck) {
@@ -963,6 +970,14 @@ async function run() {
 		if (config.discord.checkRole && config.discord.checkRoleInterval && config.discord.guilds) {
 			setTimeout(syncDiscordRole, 10000)
 		}
+
+		discordCommando.on('sendMessages', (res) => {
+			processMessages(res)
+		})
+
+		discordCommando.on('addWebhook', (res) => {
+			processOne(res)
+		})
 	}
 
 	if (config.telegram.enabled) {
@@ -984,6 +999,14 @@ async function run() {
 		if (config.telegram.checkRole && config.telegram.checkRoleInterval) {
 			setTimeout(syncTelegramMembership, 30000)
 		}
+
+		telegram.on('sendMessages', (res) => {
+			processMessages(res)
+		})
+
+		telegram.on('addWebhook', (res) => {
+			processOne(res)
+		})
 	}
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
