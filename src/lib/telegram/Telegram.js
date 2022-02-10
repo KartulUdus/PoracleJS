@@ -205,7 +205,7 @@ class Telegram extends EventEmitter {
 
 			const senderId = `${logReference}: ${data.name} ${data.target}`
 
-			const sendOrderDefault = ['sticker', 'photo', 'text', 'location']
+			const sendOrderDefault = ['sticker', 'photo', 'text', 'location', 'venue']
 			const sendOrderDefaultSet = new Set(sendOrderDefault)
 			let sendOrder = data.message.send_order || sendOrderDefault
 			// lowercase, filter unique and check for valid entries
@@ -258,6 +258,24 @@ class Telegram extends EventEmitter {
 							}),
 						)
 						messageIds.push(msg.message_id)
+						break
+					}
+					case 'venue': {
+						if (data.message.venue) {
+							this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Venue ${data.lat} ${data.lat} Title ${data.message.venue.title ?? ''} Address: ${data.message.venue.address ?? ''}`)
+
+							try {
+								// eslint-disable-next-line no-shadow
+								const msg = await this.retrySender(
+									senderId,
+									async () => this.bot.telegram.sendVenue(data.target, data.lat, data.lon, data.message.venue.title ?? '', data.message.venue.address ?? '', { disable_notification: !sendOrder.includes('text') }),
+								)
+								messageIds.push(msg.message_id)
+							} catch (err) {
+								this.logs.telegram.error(`${logReference}: #${this.id} -> ${data.name} ${data.target}  Failed to send Telegram venue ${data.lat} ${data.lat} Title ${data.message.venue.title ?? ''} Address: ${data.message.venue.address ?? ''}`, err)
+							}
+						}
+
 						break
 					}
 					case 'location': {
