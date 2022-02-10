@@ -29,6 +29,16 @@ exports.run = async (client, msg, args, options) => {
 		let platform = target.type.split(':')[0]
 		if (platform === 'webhook') platform = 'discord'
 
+		// Substitute aliases
+		const pokemonAlias = require('../../../../config/pokemonAlias.json')
+		for (let i = args.length - 1; i >= 0; i--) {
+			let alias = pokemonAlias[args[i]]
+			if (alias) {
+				if (!Array.isArray(alias)) alias = [alias]
+				args.splice(i, 1, ...alias.map((x) => x.toString()))
+			}
+		}
+
 		switch (args[0]) {
 			case 'poracle': {
 				if (msg.isFromAdmin) {
