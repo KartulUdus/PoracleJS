@@ -162,8 +162,12 @@ class Worker {
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)
 
 			if (data.clean) {
-				setTimeout(() => {
-					msg.delete().catch(noop)
+				setTimeout(async () => {
+					try {
+						await msg.delete()
+					} catch (err) {
+						this.logs.discord.error(`${data.logReference}: #${this.id} Failed to send clean Discord alert to ${data.name} ${data.target}`, err)
+					}
 				}, msgDeletionMs)
 				this.discordMessageTimeouts.set(msg.id, { type: 'user', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
@@ -201,8 +205,12 @@ class Worker {
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL (${endTime - startTime} ms)`)
 
 			if (data.clean) {
-				setTimeout(() => {
-					msg.delete().catch(noop)
+				setTimeout(async () => {
+					try {
+						await msg.delete()
+					} catch (err) {
+						this.logs.discord.error(`${data.logReference}: #${this.id} Failed to send clean Discord alert to ${data.name} ${data.target}`, err)
+					}
 				}, msgDeletionMs)
 				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
