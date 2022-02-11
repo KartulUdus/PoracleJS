@@ -236,7 +236,7 @@ module.exports = async (fastify, options, next) => {
 		const currentProfileNo = human.current_profile_no
 		const { lat, lon } = req.params
 
-		if (fastify.config.areaSecurity.enabled) {
+		if (fastify.config.areaSecurity.enabled && human.area_restriction) {
 			const allowedFences = JSON.parse(human.area_restriction)
 			const areas = fastify.query.pointInArea([lat, lon])
 			if (!allowedFences.some((x) => areas.includes(x))) {
