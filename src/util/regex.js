@@ -55,6 +55,7 @@ module.exports = (translatorFactory) => ({
 	littleLeagueHighestRe: createCommandRegex(translatorFactory, 'littlehigh', '\\d{1,4}'),
 	littleLeagueCPRe: createCommandRegex(translatorFactory, 'littlecp', '\\d{1,5}'),
 
+	capRe: createCommandRegex(translatorFactory, 'cap', '\\d{1,4}'),
 	dRe: createCommandRegex(translatorFactory, 'd', '[\\d.]{1,}'),
 	tRe: createCommandRegex(translatorFactory, 't', '\\d{1,4}'),
 	stardustRe: createCommandRegex(translatorFactory, 'stardust', '\\d{1,8}'),
