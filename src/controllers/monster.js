@@ -32,22 +32,24 @@ class Monster extends Controller {
 
 		// PVP Pokemon
 
-		for (const [league, leagueData] of Object.entries(data.pvpBestRank)) {
-			// if rank is good enough
-			if (leagueData.rank <= pvpQueryLimit) {
-				result.push(...await this.performQuery(this.buildQuery(
-					`PVP ${league}`,
-					data,
-					strictareastring,
-					areastring,
-					{
-						pokemon_id: data.pokemon_id,
-						form: data.form,
-						includeEverything: true,
-					},
-					league,
-					leagueData,
-				)))
+		for (const [league, leagueDataArr] of Object.entries(data.pvpBestRank)) {
+			for (const leagueData of leagueDataArr) {
+				// if rank is good enough
+				if (leagueData.rank <= pvpQueryLimit) {
+					result.push(...await this.performQuery(this.buildQuery(
+						`PVP ${league}`,
+						data,
+						strictareastring,
+						areastring,
+						{
+							pokemon_id: data.pokemon_id,
+							form: data.form,
+							includeEverything: true,
+						},
+						league,
+						leagueData,
+					)))
+				}
 			}
 		}
 
@@ -56,22 +58,24 @@ class Monster extends Controller {
 		if (this.config.pvp.pvpEvolutionDirectTracking) {
 			if (Object.keys(data.pvpEvolutionData).length !== 0) {
 				for (const [pokemonId, pvpMon] of Object.entries(data.pvpEvolutionData)) {
-					for (const [league, leagueData] of Object.entries(pvpMon)) {
-						// if rank is good enough
-						if (leagueData.rank <= pvpQueryLimit) {
-							result.push(...await this.performQuery(this.buildQuery(
-								`PVPEvo ${league}`,
-								data,
-								strictareastring,
-								areastring,
-								{
-									pokemon_id: pokemonId,
-									form: leagueData.form,
-									includeEverything: false,
-								},
-								league,
-								leagueData,
-							)))
+					for (const [league, leagueDataArr] of Object.entries(pvpMon)) {
+						for (const leagueData of leagueDataArr) {
+							// if rank is good enough
+							if (leagueData.rank <= pvpQueryLimit) {
+								result.push(...await this.performQuery(this.buildQuery(
+									`PVPEvo ${league}`,
+									data,
+									strictareastring,
+									areastring,
+									{
+										pokemon_id: pokemonId,
+										form: leagueData.form,
+										includeEverything: false,
+									},
+									league,
+									leagueData,
+								)))
+							}
 						}
 					}
 				}
@@ -101,7 +105,7 @@ class Monster extends Controller {
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (')
 			}
-			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp}`)
+			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp} and (pvp_ranking_cap = 0 ${leagueData.caps ? `or pvp_ranking_cap IN (${leagueData.caps})` : ''})`)
 
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('))')
@@ -139,7 +143,7 @@ class Monster extends Controller {
 			query = query.concat(`
 				and
 				(
-					(	
+					(
 						monsters.distance != 0 and
 						round(
 							6371000	* acos(
@@ -192,8 +196,8 @@ class Monster extends Controller {
 			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-        || !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-        || !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			if (data.pokestop_name) data.pokestop_name = this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.pokestop_name
@@ -287,46 +291,82 @@ class Monster extends Controller {
 
 			data.pvpBestRank = {}
 
+			const capsConsidered = this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'chuck'
+				? (this.config.pvp.levelCaps ?? [50]) : [50]
+
 			const rankCalculator = (league, leagueData, minCp) => {
-				let bestRank = 4096
-				let bestCP = 0
+				const best = Object.fromEntries(capsConsidered.map((x) => [x, { rank: 4096, cp: 0 }]))
+
 				if (leagueData) {
 					for (const stats of leagueData) {
-						let newBest = false
-						if (stats.rank && stats.rank < bestRank) {
-							bestRank = stats.rank
-							bestCP = stats.cp || 0
-							newBest = true
-						} else if (stats.rank && stats.cp && stats.rank === bestRank && stats.cp > bestCP) {
-							bestCP = stats.cp
-							newBest = true
+						const caps = []
+						if (!stats.cap && !stats.capped) { // not ohbem
+							caps.push(50)
+						} else if (stats.capped) {
+							caps.push(...capsConsidered.filter((x) => x >= stats.cap))
+						} else {
+							caps.push(stats.cap)
 						}
-						if (newBest && !stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
-							const leagueStats = {}
-							leagueStats[league] = {
+
+						for (const cap of caps) {
+							if (stats.rank && stats.rank < best[cap].rank) {
+								best[cap].rank = stats.rank
+								best[cap].cp = stats.cp || 0
+							} else if (stats.rank && stats.cp && stats.rank === best[cap].rank && stats.cp > best[cap].cp) {
+								best[cap].cp = stats.cp
+							}
+						}
+
+						if (!stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
+							const newEvo = {
 								rank: stats.rank,
 								percentage: stats.percentage,
 								pokemon: stats.pokemon,
 								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
-								cap: stats.cap,
+								// eslint-disable-next-line no-nested-ternary
+								caps: stats.capped
+									? capsConsidered.filter((x) => x >= stats.cap)
+									: (stats.cap ? [stats.cap] : null),
 							}
-							data.pvpEvolutionData[stats.pokemon] = {
-								...data.pvpEvolutionData[stats.pokemon],
-								...leagueStats,
+
+							if (data.pvpEvolutionData[stats.pokemon] && data.pvpEvolutionData[stats.pokemon][league]) {
+								data.pvpEvolutionData[stats.pokemon][league].push(newEvo)
+							} else {
+								const leagueStats = {}
+								leagueStats[league] = [newEvo]
+								data.pvpEvolutionData[stats.pokemon] = {
+									...data.pvpEvolutionData[stats.pokemon],
+									...leagueStats,
+								}
 							}
 						}
 					}
-					data.pvpBestRank[league] = {
-						cp: bestCP,
-						rank: bestRank,
+
+					const bestRanks = []
+					for (const [cap, details] of Object.entries(best)) {
+						let found = false
+						for (const bestRank of bestRanks) {
+							if (bestRank.cp === details.cp && bestRank.rank === details.rank) {
+								bestRank.caps.push(cap)
+								found = true
+								break
+							}
+						}
+						if (!found) {
+							bestRanks.push({
+								...details,
+								caps: [cap],
+							})
+						}
 					}
+					data.pvpBestRank[league] = bestRanks
 				}
 
 				return {
-					rank: bestRank,
-					cp: bestCP,
+					rank: Math.min(...Object.values(best).map((x) => x.rank)),
+					cp: Math.min(...Object.values(best).map((x) => x.cp)),
 				}
 			}
 
@@ -629,9 +669,12 @@ class Monster extends Controller {
 									displayRank.name = translator.translate(monsterName)
 									displayRank.form = translator.translate(formName)
 									if (displayRank.evolution) {
-										displayRank.fullNameEng = 'Mega '.concat(displayRank.nameEng, displayRank.formEng ? ' ' : '', displayRank.formEng)
+										displayRank.fullNameEng = translator.format(
+											this.GameData.utilData.megaName[displayRank.evolution],
+											displayRank.nameEng.concat(displayRank.formEng ? ' ' : '', displayRank.formEng),
+										)
 										displayRank.fullName = translator.translateFormat(
-											this.GameData.utilData.megaName[1],
+											this.GameData.utilData.megaName[displayRank.evolution],
 											displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form),
 										)
 									} else {
