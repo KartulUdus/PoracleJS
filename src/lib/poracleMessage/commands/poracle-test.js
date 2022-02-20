@@ -55,8 +55,7 @@ exports.run = async (client, msg, args, options) => {
 			if (args[i].match(client.re.templateRe)) {
 				[, , template] = args[i].match(client.re.templateRe)
 				args.splice(i, 1)
-			}
-			if (args[i].match(client.re.languageRe)) {
+			} else if (args[i].match(client.re.languageRe)) {
 				[, , language] = args[i].match(client.re.languageRe)
 				args.splice(i, 1)
 			}
