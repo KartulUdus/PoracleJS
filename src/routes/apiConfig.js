@@ -25,6 +25,7 @@ module.exports = async (fastify, options, next) => {
 			pvpFilterLittleMinCP: fastify.config.pvp.pvpFilterLittleMinCP,
 			pvpLittleLeagueAllowed: fastify.config.pvp.dataSource === 'internal' || fastify.config.pvp.dataSource === 'chuck',
 			pvpCaps: fastify.config.pvp.dataSource === 'internal' || fastify.config.pvp.dataSource === 'chuck' ? fastify.config.pvp.levelCaps ?? [50] : [50],
+			pvpRequiresMinCp: fastify.config.pvp.forceMinCp && fastify.config.pvp.dataSource === 'webhook',
 			defaultPvpCap: fastify.config.tracking.defaultUserTrackingLevelCap || 0,
 			defaultTemplateName: fastify.config.general.defaultTemplateName || '1',
 			channelNotesContainsCategory: fastify.config.discord.checkRole && fastify.config.reconciliation.discord.updateChannelNotes,
