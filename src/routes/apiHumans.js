@@ -63,6 +63,8 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
+		fastify.logger.info(`GhostWalker: A`)
+
 		try {
 			const result = {}
 
@@ -73,6 +75,7 @@ module.exports = async (fastify, options, next) => {
 				result.discord.channels = []
 				result.discord.webhooks = []
 				result.discord.users = false
+				fastify.logger.info(`GhostWalker: B`)
 
 				if (fastify.config.discord.delegatedAdministration && fastify.config.discord.delegatedAdministration.channelTracking
 						&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
@@ -85,25 +88,41 @@ module.exports = async (fastify, options, next) => {
 
 					roles = await dr.getUserRoles(req.params.id)
 
+					fastify.logger.info(`GhostWalker Roles: ${roles}`)
+
 					const rolesAndId = [...roles, req.params.id]
 
 					let channels
 					for (const id of Object.keys(fastify.config.discord.delegatedAdministration.channelTracking)) {
+						fastify.logger.info(`GhostWalker Checking: ${id}`)
+
 						if (fastify.config.discord.delegatedAdministration.channelTracking[id].some((x) => rolesAndId.includes(x))) {
+							fastify.logger.info(`GhostWalker C`)
+
 							if (!channels) {
 								channels = await dr.getAllChannels()
 							}
+							fastify.logger.info(`GhostWalker D - all channels ${JSON.stringify(channels)}`)
+
 							if (fastify.config.discord.guilds.includes(id)) {
 								// push whole guild
 								result.discord.channels.push(...channels[id].map((x) => x.id))
+								fastify.logger.info(`GhostWalker E`)
 							}
 							for (const guild of fastify.config.discord.guilds) {
+								fastify.logger.info(`GhostWalker F - guild ${guild}`)
+
 								if (channels[guild]) {
+									fastify.logger.info(`GhostWalker G`)
+
 									if (channels[guild].some((x) => x.categoryId === id)) {
+										fastify.logger.info(`GhostWalker H`)
 										// push whole category
 										result.discord.channels.push(...channels[guild].filter((x) => x.categoryId === id).map((x) => x.id))
 									}
 									if (channels[guild].some((x) => x.id === id)) {
+										fastify.logger.info(`GhostWalker I`)
+
 										result.discord.channels.push(id)
 									}
 								}

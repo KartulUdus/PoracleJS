@@ -106,7 +106,7 @@ class PoracleDiscordUtil {
 			const postUserId = this.msg.msg.author.id
 			const postChannelId = this.msg.msg.channel.id
 			const postGuildId = this.msg.msg.channel.guild ? this.msg.msg.channel.guild.id : 'x'
-			const postChannelCategoryId = this.msg.msg.channel.parentID
+			const postChannelCategoryId = this.msg.msg.channel.parentId
 
 			this.client.log.debug(`Channel message - examine permissions for ${postUserId} in channel ${postChannelId} guild ${postGuildId} category ${postChannelCategoryId}`)
 
