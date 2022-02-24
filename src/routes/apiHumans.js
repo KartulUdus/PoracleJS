@@ -78,7 +78,7 @@ module.exports = async (fastify, options, next) => {
 						&& Object.keys(fastify.config.discord.delegatedAdministration.channelTracking).length) {
 					const dr = new DiscordUtil(
 						fastify.discordWorker.client,
-						fastify.log,
+						fastify.logger,
 						fastify.config,
 						fastify.query,
 					)
@@ -93,6 +93,8 @@ module.exports = async (fastify, options, next) => {
 							if (!channels) {
 								channels = await dr.getAllChannels()
 							}
+							fastify.logger.debug(`getAdministrationRoles - all channels: ${JSON.stringify(channels)}`)
+
 							if (fastify.config.discord.guilds.includes(id)) {
 								// push whole guild
 								result.discord.channels.push(...channels[id].map((x) => x.id))
@@ -117,7 +119,7 @@ module.exports = async (fastify, options, next) => {
 					if (!roles) {
 						const dr = new DiscordUtil(
 							fastify.discordWorker.client,
-							fastify.log,
+							fastify.logger,
 							fastify.config,
 							fastify.query,
 						)
@@ -135,7 +137,7 @@ module.exports = async (fastify, options, next) => {
 					if (!roles) {
 						const dr = new DiscordUtil(
 							fastify.discordWorker.client,
-							fastify.log,
+							fastify.logger,
 							fastify.config,
 							fastify.query,
 						)

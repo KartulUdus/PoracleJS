@@ -28,7 +28,7 @@ class DiscordUtil {
 			if (x.type === 'GUILD_TEXT') {
 				channelList.push({
 					id: x.id,
-					categoryId: x.parentID,
+					categoryId: x.parentId,
 				})
 			}
 		})
