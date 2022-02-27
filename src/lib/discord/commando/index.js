@@ -1,4 +1,9 @@
-const { Client } = require('discord.js')
+const {
+	Client,
+	Intents,
+	Options,
+} = require('discord.js')
+const { EventEmitter } = require('events')
 const fs = require('fs')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
@@ -7,8 +12,10 @@ const { diff } = require('deep-object-diff')
 
 const emojiStrip = require('../../../util/emojiStrip')
 
-class DiscordCommando {
+class DiscordCommando extends EventEmitter {
 	constructor(token, query, scannerQuery, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) {
+		super()
+
 		this.token = token
 		this.config = config
 		this.query = query
@@ -28,26 +35,26 @@ class DiscordCommando {
 
 	async bounceWorker() {
 		delete this.client
-		// This will be required in discord.js 13
-		// -- but causes an exception if intent not given in discord bot configuration
-		// const intents = new Intents([
-		// 	Intents.NON_PRIVILEGED, // include all non-privileged intents, would be better to specify which ones you actually need
-		// 	'GUILD_MEMBERS', // lets you request guild members (i.e. fixes the issue)
-		// ])
+
+		const intents = new Intents()
+		intents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_PRESENCES)
 
 		this.client = new Client({
-			messageCacheMaxSize: 1,
-			messsageCacheLifetime: 60,
-			messageSweepInterval: 120,
-			messageEditHistoryMaxSize: 1,
-			// ws: { intents },
+			intents,
+			partials: ['CHANNEL', 'MESSAGE'], // , 'GUILD_MEMBER'],
+			makeCache: Options.cacheWithLimits({
+				MessageManager: 1,
+				PresenceManager: 0,
+			}),
 		})
+
 		try {
 			this.client.on('error', (err) => {
 				this.busy = true
 				this.logs.log.error(`Discord worker #${this.id} \n bouncing`, err)
 				this.bounceWorker()
 			})
+
 			this.client.on('rateLimit', (info) => {
 				let channelId
 				if (info.route) {
@@ -85,7 +92,9 @@ class DiscordCommando {
 			this.client.translatorFactory = this.translatorFactory
 			this.client.updatedDiff = diff
 			this.client.translator = this.translator
-			this.client.hookRegex = new RegExp('(?:(?:https?):\\/\\/|www\\.)(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$?!:,.])*(?:\\([-A-Z0-9+&@#\\/%=~_|$?!:,.]*\\)|[-A-Z0-9+&@#\\/%=~_|$])', 'igm')
+			this.client.hookRegex = /(?:https?:\/\/|www\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$?!:,.])*(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0-9+&@#/%=~_|$])/igm
+			this.client.on('poracleAddMessageQueue', (queue) => this.emit('sendMessages', queue))
+			this.client.on('poracleAddWebhookQueue', (queue) => this.emit('addWebhook', queue))
 
 			fs.readdir(`${__dirname}/events/`, (err, files) => {
 				if (err) return this.log.error(err)
@@ -122,15 +131,21 @@ class DiscordCommando {
 				this.logs.log.info(`Discord commando loaded ${enabledCommands.join(', ')} commands`)
 			})
 
-			this.client.login(this.token)
+			await this.client.login(this.token)
 		} catch (err) {
+			if (err.code === 'DISALLOWED_INTENTS') {
+				this.logs.log.error('Could not initialise discord', err)
+				this.logs.log.error('Ensure that your discord bot Gateway intents for Presence, Server Members and Messages are on - see https://muckelba.github.io/poracleWiki/discordbot.html')
+				process.exit(1)
+			}
+
 			this.logs.log.error(`Discord commando didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)
 			return this.bounceWorker()
 		}
 	}
 
-	// eslint-disable-next-line class-methods-use-this
+	// eslint-disable-next-line class-methods-use-this,no-promise-executor-return
 	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 }
 

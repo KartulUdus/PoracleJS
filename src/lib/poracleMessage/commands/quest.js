@@ -28,8 +28,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}quest spinda`, `{0}quest energycharizard`, `{0}quest remove everything`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}quest spinda`, `{0}quest energycharizard`, `{0}quest remove everything`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -38,9 +40,8 @@ exports.run = async (client, msg, args, options) => {
 		let reaction = '👌'
 
 		const pings = msg.getPings()
-		// let monsters = []
-		let fullMonsters = []
-		let items = []
+		let fullMonsters
+		let items
 		let distance = 0
 		const questTracks = []
 		let template = client.config.general.defaultTemplateName
@@ -278,12 +279,15 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.deleteWhereInQuery('quest', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'quest',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('quest', [...insert, ...updates])
 
@@ -309,7 +313,7 @@ exports.run = async (client, msg, args, options) => {
 				  or (reward_type = 4 and reward in (${candyMonsters})) 
 				  or (reward_type = 4 and ${commandEverything}=1)
 				)`
-			let result = await client.query.misteryQuery(remQuery)
+			let result = await client.query.mysteryQuery(remQuery)
 
 			result = result ? result.affectedRows : 0
 

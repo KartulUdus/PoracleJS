@@ -34,8 +34,10 @@ exports.run = async (client, msg, args, options) => {
 
 		if (args.length === 0) {
 			await msg.reply(`${translator.translate('Current language is set to')}: ${currentLanguageName || language}`)
-			await msg.reply(translator.translateFormat('Use `{0}language` to set to one of {1}', util.prefix, Object.keys(client.config.general.availableLanguages)),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Use `{0}language` to set to one of {1}', util.prefix, Object.keys(client.config.general.availableLanguages)),
+				{ style: 'markdown' },
+			)
 			return
 		}
 

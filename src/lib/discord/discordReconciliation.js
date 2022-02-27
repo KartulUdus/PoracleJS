@@ -29,7 +29,12 @@ class DiscordReconciliation {
 			const view = { prefix: this.config.discord.prefix }
 			const greeting = this.mustache.compile(JSON.stringify(greetingDts.template)) /* grrr */
 			await discordUser.createDM()
-			await discordUser.send(JSON.parse(greeting(view)))
+			const discordMsgToSend = JSON.parse(greeting(view))
+			if (discordMsgToSend.embed) {
+				discordMsgToSend.embeds = [discordMsgToSend.embed]
+				delete discordMsgToSend.embed
+			}
+			await discordUser.send(discordMsgToSend)
 		}
 	}
 
@@ -181,7 +186,7 @@ class DiscordReconciliation {
 			let blocked = null
 			if (this.config.discord.commandSecurity && Object.keys(this.config.discord.commandSecurity).length) {
 				const blockedList = []
-				for (const command of ['raid', 'monster', 'gym', 'lure', 'nest', 'gym', 'egg', 'invasion', 'pvp']) {
+				for (const command of ['raid', 'monster', 'gym', 'specificgym', 'lure', 'nest', 'egg', 'invasion', 'pvp']) {
 					const permissions = this.config.discord.commandSecurity[command]
 					if (permissions && !permissions.includes(id) && !permissions.some((x) => roleList.includes(x))) {
 						blockedList.push(command)
@@ -191,7 +196,7 @@ class DiscordReconciliation {
 			}
 
 			if (!this.config.areaSecurity.enabled) {
-				if (this.config.discord.userRole && this.config.discord.userRole.length) {
+				if (this.config.discord.userRole?.length) {
 					const before = !!user && !user.admin_disable
 					const after = roleList.some((role) => this.config.discord.userRole.includes(role))
 
@@ -251,7 +256,7 @@ class DiscordReconciliation {
 				// If a community does not have any user roles, perhaps we should be taking those communities into account
 				// later -- but the @everyone group could be added by users in config
 				for (const community of Object.keys(this.config.areaSecurity.communities)) {
-					if (roleList.some((role) => this.config.areaSecurity.communities[community].discord.userRole.includes(role))) {
+					if (roleList.some((role) => this.config.areaSecurity.communities[community].discord?.userRole?.includes(role))) {
 						communityList.push(community.toLowerCase())
 					}
 				}

@@ -1,7 +1,9 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
-const Controller = require('./controller')
 require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
+
+const Controller = require('./controller')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
@@ -30,15 +32,24 @@ class Monster extends Controller {
 
 		// PVP Pokemon
 
-		for (const [league, leagueData] of Object.entries(data.pvpBestRank)) {
-			// if rank is good enough
-			if (leagueData.rank <= pvpQueryLimit) {
-				result.push(...await this.performQuery(this.buildQuery(`PVP ${league}`, data, strictareastring, areastring,
-					{
-						pokemon_id: data.pokemon_id,
-						form: data.form,
-						includeEverything: true,
-					}, league, leagueData)))
+		for (const [league, leagueDataArr] of Object.entries(data.pvpBestRank)) {
+			for (const leagueData of leagueDataArr) {
+				// if rank is good enough
+				if (leagueData.rank <= pvpQueryLimit) {
+					result.push(...await this.performQuery(this.buildQuery(
+						`PVP ${league}`,
+						data,
+						strictareastring,
+						areastring,
+						{
+							pokemon_id: data.pokemon_id,
+							form: data.form,
+							includeEverything: true,
+						},
+						league,
+						leagueData,
+					)))
+				}
 			}
 		}
 
@@ -47,16 +58,24 @@ class Monster extends Controller {
 		if (this.config.pvp.pvpEvolutionDirectTracking) {
 			if (Object.keys(data.pvpEvolutionData).length !== 0) {
 				for (const [pokemonId, pvpMon] of Object.entries(data.pvpEvolutionData)) {
-					for (const [league, leagueData] of Object.entries(pvpMon)) {
-						// if rank is good enough
-						if (leagueData.rank <= pvpQueryLimit) {
-							result.push(...await this.performQuery(this.buildQuery(`PVPEvo ${league}`, data, strictareastring, areastring,
-								{
-									pokemon_id: pokemonId,
-									form: leagueData.form,
-									includeEverything: false,
-								},
-								league, leagueData)))
+					for (const [league, leagueDataArr] of Object.entries(pvpMon)) {
+						for (const leagueData of leagueDataArr) {
+							// if rank is good enough
+							if (leagueData.rank <= pvpQueryLimit) {
+								result.push(...await this.performQuery(this.buildQuery(
+									`PVPEvo ${league}`,
+									data,
+									strictareastring,
+									areastring,
+									{
+										pokemon_id: pokemonId,
+										form: leagueData.form,
+										includeEverything: false,
+									},
+									league,
+									leagueData,
+								)))
+							}
 						}
 					}
 				}
@@ -86,7 +105,7 @@ class Monster extends Controller {
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (')
 			}
-			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp}`)
+			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp} and (pvp_ranking_cap = 0 ${leagueData.caps ? `or pvp_ranking_cap IN (${leagueData.caps})` : ''})`)
 
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('))')
@@ -124,7 +143,7 @@ class Monster extends Controller {
 			query = query.concat(`
 				and
 				(
-					(	
+					(
 						monsters.distance != 0 and
 						round(
 							6371000	* acos(
@@ -159,7 +178,7 @@ class Monster extends Controller {
 
 			const minTth = this.config.general.alertMinimumTime || 0
 
-			if (data.form === undefined || data.form === null) data.form = 0
+			data.form ??= 0
 			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
 
 			if (!monster) {
@@ -177,8 +196,8 @@ class Monster extends Controller {
 			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
 			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
-        || !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
-        || !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
 
 			if (data.pokestop_name) data.pokestop_name = this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.pokestop_name
@@ -222,7 +241,8 @@ class Monster extends Controller {
 			data.ivColor = this.findIvColor(data.iv)
 			data.tthSeconds = data.disappear_time - Date.now() / 1000
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
-			data.disappearTime = moment(data.disappear_time * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			const disappearTime = moment(data.disappear_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.confirmedTime = data.disappear_time_verified
 			data.distime = data.disappearTime // deprecated
 			data.individual_attack = data.atk // deprecated
@@ -271,46 +291,82 @@ class Monster extends Controller {
 
 			data.pvpBestRank = {}
 
+			const capsConsidered = this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'chuck'
+				? (this.config.pvp.levelCaps ?? [50]) : [50]
+
 			const rankCalculator = (league, leagueData, minCp) => {
-				let bestRank = 4096
-				let bestCP = 0
+				const best = Object.fromEntries(capsConsidered.map((x) => [x, { rank: 4096, cp: 0 }]))
+
 				if (leagueData) {
 					for (const stats of leagueData) {
-						let newBest = false
-						if (stats.rank && stats.rank < bestRank) {
-							bestRank = stats.rank
-							bestCP = stats.cp || 0
-							newBest = true
-						} else if (stats.rank && stats.cp && stats.rank === bestRank && stats.cp > bestCP) {
-							bestCP = stats.cp
-							newBest = true
+						const caps = []
+						if (!stats.cap && !stats.capped) { // not ohbem
+							caps.push(50)
+						} else if (stats.capped) {
+							caps.push(...capsConsidered.filter((x) => x >= stats.cap))
+						} else {
+							caps.push(stats.cap)
 						}
-						if (newBest && !stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
-							const leagueStats = {}
-							leagueStats[league] = {
+
+						for (const cap of caps) {
+							if (stats.rank && stats.rank < best[cap].rank) {
+								best[cap].rank = stats.rank
+								best[cap].cp = stats.cp || 0
+							} else if (stats.rank && stats.cp && stats.rank === best[cap].rank && stats.cp > best[cap].cp) {
+								best[cap].cp = stats.cp
+							}
+						}
+
+						if (!stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
+							const newEvo = {
 								rank: stats.rank,
 								percentage: stats.percentage,
 								pokemon: stats.pokemon,
 								form: stats.form || 0,
 								level: stats.level,
 								cp: stats.cp,
-								cap: stats.cap,
+								// eslint-disable-next-line no-nested-ternary
+								caps: stats.capped
+									? capsConsidered.filter((x) => x >= stats.cap)
+									: (stats.cap ? [stats.cap] : null),
 							}
-							data.pvpEvolutionData[stats.pokemon] = {
-								...data.pvpEvolutionData[stats.pokemon],
-								...leagueStats,
+
+							if (data.pvpEvolutionData[stats.pokemon] && data.pvpEvolutionData[stats.pokemon][league]) {
+								data.pvpEvolutionData[stats.pokemon][league].push(newEvo)
+							} else {
+								const leagueStats = {}
+								leagueStats[league] = [newEvo]
+								data.pvpEvolutionData[stats.pokemon] = {
+									...data.pvpEvolutionData[stats.pokemon],
+									...leagueStats,
+								}
 							}
 						}
 					}
-					data.pvpBestRank[league] = {
-						cp: bestCP,
-						rank: bestRank,
+
+					const bestRanks = []
+					for (const [cap, details] of Object.entries(best)) {
+						let found = false
+						for (const bestRank of bestRanks) {
+							if (bestRank.cp === details.cp && bestRank.rank === details.rank) {
+								bestRank.caps.push(cap)
+								found = true
+								break
+							}
+						}
+						if (!found) {
+							bestRanks.push({
+								...details,
+								caps: [cap],
+							})
+						}
 					}
+					data.pvpBestRank[league] = bestRanks
 				}
 
 				return {
-					rank: bestRank,
-					cp: bestCP,
+					rank: Math.min(...Object.values(best).map((x) => x.rank)),
+					cp: Math.min(...Object.values(best).map((x) => x.cp)),
 				}
 			}
 
@@ -342,7 +398,12 @@ class Monster extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			const whoCares = await this.monsterWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+				pvp_ranking_worst: 100,
+			}] : await this.monsterWhoCares(data)
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
@@ -371,7 +432,7 @@ class Monster extends Controller {
 					}
 
 					if (data.display_pokemon_id && data.display_pokemon_id !== data.pokemon_id) {
-						if (data.display_form === undefined || data.display_form === null) data.display_form = 0
+						data.display_form ??= 0
 						const displayMonster = this.GameData.monsters[`${data.display_pokemon_id}_${data.display_form}`] || this.GameData.monsters[`${data.display_pokemon_id}_0`]
 
 						if (displayMonster) {
@@ -380,9 +441,9 @@ class Monster extends Controller {
 						}
 					}
 
-					data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
-					data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
 
 					const geoResult = await this.getAddress({
 						lat: data.latitude,
@@ -390,8 +451,18 @@ class Monster extends Controller {
 					})
 					const jobs = []
 
-					await this.getStaticMapUrl(logReference, data, 'monster', ['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
-						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt'])
+					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
+					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+
+					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
+
+					await this.getStaticMapUrl(
+						logReference,
+						data,
+						'monster',
+						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime'],
+					)
 					data.staticmap = data.staticMap // deprecated
 
 					// get Weather Forecast information
@@ -407,7 +478,7 @@ class Monster extends Controller {
 						if (weatherForecast.current > 0 && currentBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 						if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather === 0))) {
 							const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000)
-								.tz(geoTz(data.latitude, data.longitude)
+								.tz(geoTz.find(data.latitude, data.longitude)
 									.toString())
 								.format(this.config.locale.time)
 								.slice(0, -3)
@@ -598,9 +669,14 @@ class Monster extends Controller {
 									displayRank.name = translator.translate(monsterName)
 									displayRank.form = translator.translate(formName)
 									if (displayRank.evolution) {
-										displayRank.fullNameEng = 'Mega '.concat(displayRank.nameEng, displayRank.formEng ? ' ' : '', displayRank.formEng)
-										displayRank.fullName = translator.translateFormat(this.GameData.utilData.megaName[1],
-											displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form))
+										displayRank.fullNameEng = translator.format(
+											this.GameData.utilData.megaName[displayRank.evolution],
+											displayRank.nameEng.concat(displayRank.formEng ? ' ' : '', displayRank.formEng),
+										)
+										displayRank.fullName = translator.translateFormat(
+											this.GameData.utilData.megaName[displayRank.evolution],
+											displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form),
+										)
 									} else {
 										displayRank.fullNameEng = displayRank.nameEng.concat(displayRank.formEng ? ' ' : '', displayRank.formEng)
 										displayRank.fullName = displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form)
@@ -623,6 +699,17 @@ class Monster extends Controller {
 							lat: data.latitude,
 							lon: data.longitude,
 						}) : ''
+
+						const bearing = cares.longitude ? this.getBearing({
+							lat: cares.latitude,
+							lon: cares.longitude,
+						}, {
+							lat: data.latitude,
+							lon: data.longitude,
+						}) : null
+
+						data.bearing = bearing?.toFixed(0) ?? ''
+						data.bearingEmoji = bearing ? this.emojiLookup.lookup(this.getBearingEmoji(data.bearing), platform) : ''
 
 						const view = {
 							...geoResult,

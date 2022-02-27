@@ -5,8 +5,7 @@ const mutex = new Mutex()
 const uiconsIndex = {}
 const lastRetrieved = {}
 
-function resolvePokemonIcon(availPokemon, imageType, pokemonId, form = 0, evolution = 0, gender = 0, costume = 0,
-	shiny = false) {
+function resolvePokemonIcon(availPokemon, imageType, pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, shiny = false) {
 	const evolutionSuffixes = evolution ? [`_e${evolution}`, ''] : ['']
 	const formSuffixes = form ? [`_f${form}`, ''] : ['']
 	const costumeSuffixes = costume ? [`_c${costume}`, ''] : ['']
@@ -174,7 +173,7 @@ class Uicons {
 	constructor(url, imageType, log, fallback) {
 		this.url = url.endsWith('/') ? url.slice(0, -1) : url
 		this.imageType = imageType || 'png'
-		this.fallback = fallback === undefined ? true : fallback
+		this.fallback = fallback ?? true
 		this.log = log || console
 	}
 

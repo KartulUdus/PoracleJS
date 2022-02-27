@@ -146,12 +146,15 @@ module.exports = async (fastify, options, next) => {
 				}
 			}
 
-			await fastify.query.deleteWhereInQuery('quest', {
-				id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await fastify.query.deleteWhereInQuery(
+				'quest',
+				{
+					id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await fastify.query.insertQuery('quest', [...insert, ...updates])
 

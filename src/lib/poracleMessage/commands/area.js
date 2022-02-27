@@ -29,7 +29,7 @@ exports.run = async (client, msg, args, options) => {
 		let selectableGeofence = client.geofence
 		// Note for Poracle admins we don't remove the userSelectable items
 		// But we do apply the filtering later based on the user/channel that is the target (targetIsAdmin used instead)
-		if (!msg.isFromAdmin) selectableGeofence = selectableGeofence.filter((area) => (area.userSelectable === undefined || area.userSelectable))
+		if (!msg.isFromAdmin) selectableGeofence = selectableGeofence.filter((area) => area.userSelectable ?? true)
 
 		let availableAreas = selectableGeofence.map((area) => ({
 			name: area.name,
@@ -69,14 +69,6 @@ exports.run = async (client, msg, args, options) => {
 			}
 		}
 
-		// Check target
-		//		const confAreas = lowercaseAreas.map((area) => area.replace(/ /gi, '_')).sort()
-		//		const confAreas2 = availableAreas.map((area) => area.replace(/ /gi, '_')).sort()
-		//		const confUse = confAreas2.join('\n')
-
-		let platform = target.type.split(':')[0]
-		if (platform === 'webhook') platform = 'discord'
-
 		// Remove arguments that we don't want to keep for area processing
 		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.nameRe)) args.splice(i, 1)
@@ -99,8 +91,10 @@ exports.run = async (client, msg, args, options) => {
 				const uniqueNewAreas = [...new Set(newAreas)]
 
 				if (!addAreas.length) {
-					await msg.reply(translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
+						{ style: 'markdown' },
+					)
 				}
 
 				await client.query.updateQuery('humans', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id })
@@ -131,8 +125,10 @@ exports.run = async (client, msg, args, options) => {
 				const uniqueNewAreas = [...new Set(newAreas)]
 
 				if (!removeAreas.length) {
-					await msg.reply(translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('No valid areas. Use `{0}{1} list`', util.prefix, translator.translate('area')),
+						{ style: 'markdown' },
+					)
 				}
 
 				await client.query.updateQuery('humans', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id })
@@ -185,9 +181,11 @@ exports.run = async (client, msg, args, options) => {
 						args.length >= 2 ? args : JSON.parse(human.area),
 					)
 					if (staticMap) {
-						await msg.replyWithImageUrl(translator.translateFormat('Overview display'),
+						await msg.replyWithImageUrl(
+							translator.translateFormat('Overview display'),
 							null,
-							staticMap)
+							staticMap,
+						)
 					}
 				}
 				break
@@ -219,9 +217,11 @@ exports.run = async (client, msg, args, options) => {
 						}
 
 						if (staticMap) {
-							await msg.replyWithImageUrl(translator.translateFormat('Area display: {0}', area),
+							await msg.replyWithImageUrl(
+								translator.translateFormat('Area display: {0}', area),
 								null,
-								staticMap)
+								staticMap,
+							)
 						}
 					}
 				}
@@ -230,8 +230,10 @@ exports.run = async (client, msg, args, options) => {
 			default: {
 				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 
-				await msg.reply(translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
-					{ style: 'markdown' })
+				await msg.reply(
+					translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
+					{ style: 'markdown' },
+				)
 				await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 
 				break

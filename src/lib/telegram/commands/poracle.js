@@ -75,8 +75,10 @@ module.exports = async (ctx) => {
 
 			if (communityToAdd) {
 				update.community_membership = JSON.stringify(communityLogic.addCommunity(client.config, user.community_membership ? JSON.parse(user.community_membership) : [], communityToAdd))
-				update.area_restriction = JSON.stringify(communityLogic.calculateLocationRestrictions(client.config,
-					JSON.parse(update.community_membership)))
+				update.area_restriction = JSON.stringify(communityLogic.calculateLocationRestrictions(
+					client.config,
+					JSON.parse(update.community_membership),
+				))
 				updateRequired = true
 			}
 

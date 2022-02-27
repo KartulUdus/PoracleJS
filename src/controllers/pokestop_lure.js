@@ -1,5 +1,8 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
+
 const Controller = require('./controller')
 /**
  * Controller for processing pokestop webhooks
@@ -81,7 +84,8 @@ class Lure extends Controller {
 
 			const lureExpiration = data.lure_expiration
 			data.tth = moment.preciseDiff(Date.now(), lureExpiration * 1000, true)
-			data.disappearTime = moment(lureExpiration * 1000).tz(geoTz(data.latitude, data.longitude).toString()).format(this.config.locale.time)
+			const disappearTime = moment(lureExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
@@ -103,7 +107,11 @@ class Lure extends Controller {
 			data.lureTypeColor = this.GameData.utilData.lures[data.lure_id].color
 			data.lureTypeNameEng = this.GameData.utilData.lures[data.lure_id].name
 
-			const whoCares = await this.lureWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.lureWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Lure of type ${data.lureTypeNameEng} at ${data.pokestopName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
@@ -126,15 +134,20 @@ class Lure extends Controller {
 
 			setImmediate(async () => {
 				try {
-					data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
 					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId)
-					data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
 
 					const geoResult = await this.getAddress({
 						lat: data.latitude,
 						lon: data.longitude,
 					})
 					const jobs = []
+
+					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
+					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+
+					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
 
 					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'lureTypeId'])
 					data.staticmap = data.staticMap // deprecated

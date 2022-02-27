@@ -28,8 +28,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (args.length === 0) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}nest bulbasaur`, `{0}nest remove everything`, `{0}nest hoppip minspawn5`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}nest bulbasaur`, `{0}nest remove everything`, `{0}nest hoppip minspawn5`', util.prefix),
+				{ style: 'markdown' },
+			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 			return
 		}
@@ -161,12 +163,15 @@ exports.run = async (client, msg, args, options) => {
 				})
 			}
 
-			await client.query.deleteWhereInQuery('nests', {
-				id: target.id,
-				profile_no: currentProfileNo,
-			},
-			updates.map((x) => x.uid),
-			'uid')
+			await client.query.deleteWhereInQuery(
+				'nests',
+				{
+					id: target.id,
+					profile_no: currentProfileNo,
+				},
+				updates.map((x) => x.uid),
+				'uid',
+			)
 
 			await client.query.insertQuery('nests', [...insert, ...updates])
 

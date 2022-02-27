@@ -338,9 +338,9 @@ class Weather extends Controller {
 
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
-			data.imgUrl = await this.imgUicons.weatherIcon(data.condition)
+			if (this.imgUicons) data.imgUrl = await this.imgUicons.weatherIcon(data.condition)
 			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.weatherIcon(data.condition)
-			data.stickerUrl = await this.stickerUicons.weatherIcon(data.condition)
+			if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.weatherIcon(data.condition)
 
 			const jobs = []
 			const now = moment.now()
@@ -381,7 +381,7 @@ class Weather extends Controller {
 					const activePokemons = cares.caredPokemons.filter((pokemon) => pokemon.alteringWeathers.includes(data.condition))
 
 					data.activePokemons = activePokemons.slice(0, this.config.weather.showAlteredPokemonMaxCount) || null
-					if (data.activePokemons) {
+					if (data.activePokemons && this.imgUicons) {
 						for (const mon of data.activePokemons) {
 							mon.imgUrl = await this.imgUicons.pokemonIcon(mon.pokemon_id, mon.form)
 						}

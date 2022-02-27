@@ -1,10 +1,13 @@
-// const geoTz = require('geo-tz')
-// const moment = require('moment-timezone')
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
+
 const Controller = require('./controller')
 
 /**
  * Controller for processing gym webhooks
- * Alerts on lures
+ * Alerts on Team change
  */
 class Gym extends Controller {
 	async gymWhoCares(data) {
@@ -24,12 +27,12 @@ class Gym extends Controller {
 		let query = `
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, gym.template, gym.distance, gym.clean, gym.ping from gym
 		join humans on (humans.id = gym.id and humans.current_profile_no = gym.profile_no)
-		where humans.enabled = 1 and humans.admin_disable = false and
+		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%"gym"%') and
 		(gym.team = ${data.teamId} or gym.team = 4)
 		${changeQuery}
 		${strictareastring}
 		and
-		(gym.gym_id='${data.gymId}' or (gym.gym_id is NULL and `
+		((gym.gym_id='${data.gymId}' and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%specificgym%') ) or (gym.gym_id is NULL and `
 
 		if (['pg', 'mysql'].includes(this.config.database.client)) {
 			query = query.concat(`
@@ -103,6 +106,9 @@ class Gym extends Controller {
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
+			const conqueredTime = moment().tz(geoTz.find(data.latitude, data.longitude).toString())
+			data.conqueredTime = conqueredTime.format(this.config.locale.time)
+
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				this.log.debug(`${data.id} Gym already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
@@ -113,10 +119,10 @@ class Gym extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gymId = data.id || data.gym_id
-			data.teamId = data.team_id !== undefined ? data.team_id : data.team
-			data.oldTeamId = data.old_team_id >= 0 ? data.old_team_id : 0
-			data.previousControlId = data.last_owner_id >= 0 ? data.last_owner_id : 0
-			data.teamNameEng = data.teamId >= 0 ? this.GameData.utilData.teams[data.teamId].name : 'Unknown'
+			data.teamId = data.team_id ?? data.team ?? 0
+			data.oldTeamId = data.old_team_id ?? 0
+			data.previousControlId = data.last_owner_id ?? 0
+			data.teamNameEng = this.GameData.utilData.teams[data.teamId].name
 			data.oldTeamNameEng = data.old_team_id >= 0 ? this.GameData.utilData.teams[data.old_team_id].name : ''
 			data.previousControlNameEng = data.last_owner_id >= 0 ? this.GameData.utilData.teams[data.last_owner_id].name : ''
 			data.gymColor = this.GameData.utilData.teams[data.teamId].color
@@ -124,11 +130,15 @@ class Gym extends Controller {
 			data.oldSlotsAvailable = data.old_slots_available
 			data.trainerCount = 6 - data.slotsAvailable
 			data.oldTrainerCount = 6 - data.oldSlotsAvailable
-			data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
+			data.ex = !!(data.ex_raid_eligible ?? data.is_ex_raid_eligible)
 			data.color = data.gymColor
-			data.inBattle = data.is_in_battle !== undefined ? data.is_in_battle : data.in_battle
+			data.inBattle = data.is_in_battle ?? data.in_battle
 
-			const whoCares = await this.gymWhoCares(data)
+			const whoCares = data.poracleTest ? [{
+				...data.poracleTest,
+				clean: false,
+				ping: '',
+			}] : await this.gymWhoCares(data)
 
 			if (whoCares.length) {
 				this.log.info(`${logReference}: Gym ${data.name} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
@@ -151,11 +161,16 @@ class Gym extends Controller {
 
 			setImmediate(async () => {
 				try {
-					data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
-					data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
+
+					const sunsetTime = moment(getSunset(data.latitude, data.longitude, conqueredTime.toDate()))
+					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, conqueredTime.toDate()))
+
+					data.nightTime = !conqueredTime.isBetween(sunriseTime, sunsetTime)
 
 					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated

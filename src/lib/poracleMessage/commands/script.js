@@ -27,8 +27,10 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (!args.length) {
-			await msg.reply(translator.translateFormat('Valid commands are e.g. `{0}script everything`, `{0}script pokemon raids eggs quest lures invasion nests gym`, `{0}script everything allprofiles`, `{0}script everything link`', util.prefix),
-				{ style: 'markdown' })
+			await msg.reply(
+				translator.translateFormat('Valid commands are e.g. `{0}script everything`, `{0}script pokemon raids eggs quest lures invasion nests gym`, `{0}script everything allprofiles`, `{0}script everything link`', util.prefix),
+				{ style: 'markdown' },
+			)
 			return
 		}
 

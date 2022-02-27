@@ -42,13 +42,13 @@ class PoracleDiscordMessage {
 	}
 
 	getPings() {
-		return [this.msg.mentions.users.array().map((u) => `<@!${u.id}>`), this.msg.mentions.roles.array().map((r) => `<@&${r.id}>`)].join('')
+		return [this.msg.mentions.users.map((u) => `<@!${u.id}>`), this.msg.mentions.roles.map((r) => `<@&${r.id}>`)].join('')
 	}
 
 	getMentions() {
 		const targets = []
-		this.msg.mentions.users.array().forEach((user) => targets.push({ id: user.id, name: user.tag, type: 'user' }))
-		this.msg.mentions.channels.array().forEach((channel) => targets.push({ id: channel.id, name: channel.name, type: 'channel' }))
+		this.msg.mentions.users.forEach((user) => targets.push({ id: user.id, name: user.tag, type: 'user' }))
+		this.msg.mentions.channels.forEach((channel) => targets.push({ id: channel.id, name: channel.name, type: 'channel' }))
 
 		return targets
 	}
@@ -63,60 +63,54 @@ class PoracleDiscordMessage {
 	}
 
 	get isDM() {
-		return !(this.msg.channel.type === 'text')
+		return !(this.msg.channel.type === 'GUILD_TEXT')
 	}
 
 	async reply(message) {
-		if (this.msg.channel.type === 'text') {
-			if (message.embed) {
-				this.msg.channel.send(message)
-			} else {
-				// This is a channel, do not reply but rather send to avoid @ reply
-				await split(message, async (msg) => this.msg.channel.send(msg))
-			}
-			return
-		}
-
+		// Don't actually reply, but send to channel to avoid Discord reply text
 		if (message.embed) {
-			this.msg.reply(message)
+			message.embeds = [message.embed]
+			delete message.embed
+			this.msg.channel.send(message)
 		} else {
-			await split(message, async (msg) => this.msg.reply(msg))
+			// This is a channel, do not reply but rather send to avoid @ reply
+			await split(message, async (msg) => this.msg.channel.send(msg))
 		}
 	}
 
 	async replyWithImageUrl(title, message, url) {
 		const messageText = {
-			embed: {
+			embeds: [{
 				color: 0x00ff00,
 				title,
 				description: message,
 				image: {
 					url,
 				},
-			},
+			}],
 		}
 
 		if (this.client.config.discord.uploadEmbedImages) {
-			messageText.embed.image.url = 'attachment://image.png'
-			messageText.embed.files = [{ attachment: url, name: 'image.png' }]
+			messageText.embeds[0].image.url = 'attachment://image.png'
+			messageText.files = [{ attachment: url, name: 'image.png' }]
 		}
 
 		await this.msg.reply(messageText)
 	}
 
 	async replyWithAttachment(message, attachment) {
-		if (this.msg.channel.type === 'text') {
+		if (this.msg.channel.type === 'GUILD_TEXT') {
 			// This is a channel, do not reply but rather send to avoid @ reply
-			return this.msg.channel.send(message, { files: [attachment] })
+			return this.msg.channel.send({ content: message, files: [attachment] })
 		}
 
-		return this.msg.reply(message, { files: [attachment] })
+		return this.msg.reply({ content: message, files: [attachment] })
 	}
 
 	async replyAsAttachment(message, title, filename) {
 		const filepath = path.join(__dirname, filename)
 		fs.writeFileSync(filepath, message)
-		await this.msg.reply(title, { files: [filepath] })
+		await this.msg.reply({ content: title, files: [filepath] })
 		fs.unlinkSync(filepath)
 	}
 

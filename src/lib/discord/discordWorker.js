@@ -1,4 +1,8 @@
-const { Client, DiscordAPIError } = require('discord.js')
+const {
+	Client, DiscordAPIError,
+	Intents,
+	Options,
+} = require('discord.js')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
 const { performance } = require('perf_hooks')
@@ -7,7 +11,7 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 const noop = () => { }
 
 class Worker {
-	constructor(token, id, config, logs, rehydrateTimeouts = false, statusActivity) {
+	constructor(token, id, config, logs, rehydrateTimeouts, statusActivity) {
 		this.id = id
 		this.token = token
 		this.config = config
@@ -25,7 +29,7 @@ class Worker {
 		this.bounceWorker()
 	}
 
-	// eslint-disable-next-line class-methods-use-this
+	// eslint-disable-next-line class-methods-use-this,no-promise-executor-return
 	async sleep(n) { return new Promise((resolve) => setTimeout(resolve, n)) }
 
 	addUser(id) {
@@ -68,18 +72,30 @@ class Worker {
 
 	async bounceWorker() {
 		delete this.client
+
+		const intents = new Intents()
+		intents.add(Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES, Intents.FLAGS.GUILD_MEMBERS, Intents.FLAGS.DIRECT_MESSAGES, Intents.FLAGS.GUILD_PRESENCES)
+
 		this.client = new Client({
-			messageCacheMaxSize: 1,
-			messsageCacheLifetime: 60,
-			messageSweepInterval: 120,
-			messageEditHistoryMaxSize: 1,
+			intents,
+			partials: ['CHANNEL', 'MESSAGE'], // , 'GUILD_MEMBER'],
+			makeCache: Options.cacheWithLimits({
+				MessageManager: 1,
+				PresenceManager: 0,
+			}),
 		})
+
 		try {
 			await this.setListeners()
 			await this.client.login(this.token)
 			await this.client.user.setStatus(this.status)
 			if (this.activity) await this.client.user.setActivity(this.activity)
 		} catch (err) {
+			if (err.code === 'DISALLOWED_INTENTS') {
+				this.logs.log.error('Could not initialise discord', err)
+				this.logs.log.error('Ensure that your discord bot Gateway intents for Presence, Server Members and Messages are on - see https://muckelba.github.io/poracleWiki/discordbot.html')
+				process.exit(1)
+			}
 			this.logs.log.error(`Discord worker didn't bounce, \n ${err.message} \n trying again`)
 			await this.sleep(2000)
 			return this.bounceWorker()
@@ -89,10 +105,12 @@ class Worker {
 	work(data) {
 		this.discordQueue.push(data)
 		if (!this.busy) {
-			this.queueProcessor.run(async (work) => (this.sendAlert(work)),
+			this.queueProcessor.run(
+				async (work) => (this.sendAlert(work)),
 				async (err) => {
 					this.logs.log.error('Discord queueProcessor exception', err)
-				})
+				},
+			)
 		}
 	}
 
@@ -131,16 +149,26 @@ class Worker {
 			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
 				const { url } = data.message.embed.image
 				data.message.embed.image.url = 'attachment://map.png'
-				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+				data.message.files = [{ attachment: url, name: 'map.png' }]
 			}
 
 			const startTime = performance.now()
-			const msg = await user.send(data.message.content || '', data.message)
+			if (data.message.embed) {
+				data.message.embeds = [data.message.embed]
+				delete data.message.embed
+			}
+			const msg = await user.send(/* data.message.content || '', */ data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)
 
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(noop)
+				setTimeout(async () => {
+					try {
+						await msg.delete()
+					} catch (err) {
+						this.logs.discord.error(`${data.logReference}: #${this.id} Failed to send clean Discord alert to ${data.name} ${data.target}`, err)
+					}
+				}, msgDeletionMs)
 				this.discordMessageTimeouts.set(msg.id, { type: 'user', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true
@@ -164,16 +192,26 @@ class Worker {
 			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
 				const { url } = data.message.embed.image
 				data.message.embed.image.url = 'attachment://map.png'
-				data.message.embed.files = [{ attachment: url, name: 'map.png' }]
+				data.message.files = [{ attachment: url, name: 'map.png' }]
 			}
 
 			const startTime = performance.now()
-			const msg = await channel.send(data.message.content || '', data.message)
+			if (data.message.embed) {
+				data.message.embeds = [data.message.embed]
+				delete data.message.embed
+			}
+			const msg = await channel.send(data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL (${endTime - startTime} ms)`)
 
 			if (data.clean) {
-				msg.delete({ timeout: msgDeletionMs, reason: 'Removing old stuff.' }).catch(() => { })
+				setTimeout(async () => {
+					try {
+						await msg.delete()
+					} catch (err) {
+						this.logs.discord.error(`${data.logReference}: #${this.id} Failed to send clean Discord alert to ${data.name} ${data.target}`, err)
+					}
+				}, msgDeletionMs)
 				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
 			return true
@@ -275,7 +313,9 @@ class Worker {
 					} else {
 						const newTtlms = Math.max(msgData.t - now, 2000)
 						const newTtl = Math.floor(newTtlms / 1000)
-						msg.delete({ timeout: newTtlms, reason: 'Historic message delete after restart' }).catch(noop)
+						setTimeout(() => {
+							msg.delete().catch(noop)
+						}, newTtlms)
 						this.discordMessageTimeouts.set(key, msgData.v, newTtl)
 					}
 				}

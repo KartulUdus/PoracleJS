@@ -1,8 +1,9 @@
 {
   "name": "poracle",
-  "version": "4.3.3",
+  "version": "4.5.1",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
+  "engines": { "node": ">=16.6.0" },
   "scripts": {
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
@@ -11,7 +12,8 @@
     "dev": "node .",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",
-    "generate": "node src/util/generateData.js"
+    "generate": "node src/util/generateData.js",
+    "prepare": "husky install"
   },
   "repository": {
     "type": "git",
@@ -28,56 +30,51 @@
   "bugs": {
     "url": "https://github.com/KartulUdus/reference/issues"
   },
-  "husky": {
-    "hooks": {
-      "pre-push": "npm run lint"
-    }
-  },
   "homepage": "https://github.com/KartulUdus/reference#readme",
   "dependencies": {
     "form-data": "^4.0.0",
     "async-mutex": "^0.3.1",
-    "axios": "^0.21.1",
+    "axios": "^0.26.0",
     "chokidar": "^3.5.2",
-    "config": "^3.3.6",
-    "deep-object-diff": "^1.1.0",
-    "discord.js": "^12.5.3",
+    "config": "^3.3.7",
+    "deep-object-diff": "^1.1.7",
     "country-code-emoji": "^2.3.0",
-    "fastify": "^3.15.1",
+    "discord.js": "^13.6.0",
+    "fastify": "^3.27.1",
     "flat-cache": "^3.0.4",
     "fs-extra": "^10.0.0",
-    "geo-tz": "^6.0.1",
+    "geo-tz": "^7.0.1",
     "handlebars": "^4.7.7",
-    "@budibase/handlebars-helpers": "^0.11.7",
+    "@budibase/handlebars-helpers": "^0.11.8",
     "hastebin-gen": "^2.0.5",
     "import-fresh": "^3.3.0",
-    "knex": "^0.95.4",
-    "lru-cache": "^6.0.0",
+    "knex": "^1.0.3",
     "moment-precise-range-plugin": "^1.3.0",
-    "moment-timezone": "^0.5.33",
-    "mysql2": "^2.2.5",
+    "moment-timezone": "^0.5.34",
+    "mysql2": "^2.3.3",
     "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.1",
-    "node-geocoder": "^3.28.0",
-    "node-schedule": "^2.0.0",
+    "node-fetch": "^2.6.7",
+    "node-geocoder": "^4.0.0",
+    "node-schedule": "^2.1.0",
     "nodes2ts": "^2.0.0",
-    "ohbem": "^1.3.0",
-    "pogo-data-generator": "^1.2.5",
+    "ohbem": "^1.4.0",
+    "pogo-data-generator": "^1.3.9",
     "point-in-polygon": "^1.1.0",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",
     "strip-json-comments": "^3.1.1",
-    "telegraf": "^4.3.0",
-    "winston": "^3.3.3",
-    "winston-daily-rotate-file": "^4.5.5"
+    "sunrise-sunset-js": "^2.2.1",
+    "telegraf": "^4.7.0",
+    "winston": "^3.6.0",
+    "winston-daily-rotate-file": "^4.6.1"
   },
   "devDependencies": {
-    "ajv": "^6.12.0",
-    "chai": "^4.2.0",
-    "eslint": "^7.26.0",
-    "eslint-config-airbnb-base": "^14.2.1",
-    "eslint-plugin-import": "^2.22.1",
-    "husky": "^4.2.3",
-    "mocha": "^6.2.2"
+    "ajv": "^8.6.3",
+    "chai": "^4.3.4",
+    "eslint": "^8.5.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.25.3",
+    "husky": "^7.0.0",
+    "mocha": "^9.2.0"
   }
 }

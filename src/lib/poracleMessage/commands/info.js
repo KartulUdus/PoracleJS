@@ -29,6 +29,16 @@ exports.run = async (client, msg, args, options) => {
 		let platform = target.type.split(':')[0]
 		if (platform === 'webhook') platform = 'discord'
 
+		// Substitute aliases
+		const pokemonAlias = require('../../../../config/pokemonAlias.json')
+		for (let i = args.length - 1; i >= 0; i--) {
+			let alias = pokemonAlias[args[i]]
+			if (alias) {
+				if (!Array.isArray(alias)) alias = [alias]
+				args.splice(i, 1, ...alias.map((x) => x.toString()))
+			}
+		}
+
 		switch (args[0]) {
 			case 'poracle': {
 				if (msg.isFromAdmin) {
@@ -51,6 +61,11 @@ exports.run = async (client, msg, args, options) => {
 
 					await msg.reply(`Poracle has been up for ${format(process.uptime())}`)
 				}
+				break
+			}
+			case 'translate': {
+				await msg.reply(`Reverse translation: ${args.map((x) => `"${x}" `)}`)
+				await msg.reply(`Forward translation: ${args.map((x) => `"${translator.translate(x)}" `)}`)
 				break
 			}
 			case 'dts': {
@@ -173,7 +188,7 @@ exports.run = async (client, msg, args, options) => {
 
 				const weatherId = weatherInfo[currentHourTimestamp]
 				let staticMap = null
-				if (client.config.geocoding.staticProvider === 'tileservercache') {
+				if (client.config.geocoding.staticProvider === 'tileservercache' && client.config.general.imgUrl) {
 					const imgUicons = new Uicons(client.config.general.imgUrl, 'png', client.log)
 
 					staticMap = await weatherTileGenerator.generateWeatherTile(client.query.tileserverPregen, weatherCellId, weatherId, imgUicons)
@@ -191,15 +206,17 @@ exports.run = async (client, msg, args, options) => {
 					const forecastInfo = weatherInfo[currentTimestamp]
 					if (!forecastInfo) break
 
-					const timeForHuman = moment.unix(currentTimestamp).tz(geoTz(latitude, longitude).toString()).format('HH:mm')
+					const timeForHuman = moment.unix(currentTimestamp).tz(geoTz.find(latitude, longitude).toString()).format('HH:mm')
 
 					forecastString = forecastString.concat(timeForHuman, ' - ', translator.translate(client.GameData.utilData.weather[forecastInfo].name), ' ', translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[forecastInfo].emoji, platform)), '\n')
 					availableForecast = true
 				}
 
-				await msg.replyWithImageUrl(translator.translateFormat('Current Weather: {0} {1}', translator.translate(client.GameData.utilData.weather[weatherId].name), translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weatherId].emoji, platform))),
+				await msg.replyWithImageUrl(
+					translator.translateFormat('Current Weather: {0} {1}', translator.translate(client.GameData.utilData.weather[weatherId].name), translator.translate(emojiLookup.lookup(client.GameData.utilData.weather[weatherId].emoji, platform))),
 					availableForecast ? forecastString : translator.translate('No forecast available'),
-					staticMap)
+					staticMap,
+				)
 
 				break
 			}
@@ -334,8 +351,10 @@ exports.run = async (client, msg, args, options) => {
 				}
 
 				if (!found) {
-					await msg.reply(translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`', util.prefix),
-						{ style: 'markdown' })
+					await msg.reply(
+						translator.translateFormat('Valid commands are `{0}info rarity`, `{0}info weather`, `{0}info moves`, `{0}info items`, `{0}info bulbasaur`', util.prefix),
+						{ style: 'markdown' },
+					)
 					await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
 				}
 			}
