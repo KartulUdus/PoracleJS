@@ -26,7 +26,10 @@ class Worker {
 		this.queueProcessor = new FairPromiseQueue(this.discordQueue, this.config.tuning.concurrentDiscordDestinationsPerBot, ((entry) => entry.target))
 		this.status = statusActivity.status
 		this.activity = statusActivity.activity
-		this.bounceWorker()
+	}
+
+	async start() {
+		await this.bounceWorker()
 	}
 
 	// eslint-disable-next-line class-methods-use-this,no-promise-executor-return
