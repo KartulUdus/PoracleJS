@@ -131,8 +131,8 @@ class Monster extends Controller {
 		max_atk>=${data.atk} and
 		max_def>=${data.def} and
 		max_sta>=${data.sta} and
-		min_weight<=${data.weight * 1000} and
-		max_weight>=${data.weight * 1000} and
+		min_weight<=${data.weight} and
+		max_weight>=${data.weight} and
 		rarity<=${data.rarityGroup} and
 		max_rarity>=${data.rarityGroup} and
 		(${pvpQueryString})
