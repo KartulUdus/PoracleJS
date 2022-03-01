@@ -620,6 +620,35 @@ class Monster extends Controller {
 						data.emojiString = e.join('')
 						data.typeEmoji = data.emojiString
 
+						data.hasEvolutions = monster.evolutions.length
+
+						let totalCount = 0
+						const evolutions = []
+
+						// eslint-disable-next-line no-shadow
+						const calcEvolutions = (monster) => {
+							if (++totalCount >= 10) {
+								this.log.error(`${data.encounter_id}: Too many possible evolutions ${data.pokemonId}_${data.form}`)
+								return
+							}
+
+							for (const evo of monster.evolutions) {
+								const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
+
+								evolutions.push({
+									id: evo.evoId,
+									form: evo.id,
+									nameEng: newMonster?.name ?? '',
+									formNameEng: newMonster?.form.name ?? '',
+								})
+
+								if (newMonster && monster.evolutions.length) calcEvolutions(newMonster)
+							}
+						}
+
+						if (data.hasEvolutions) calcEvolutions(monster)
+						data.evolutions = evolutions
+
 						const createPvpDisplay = (leagueData, maxRank, minCp) => {
 							const displayList = []
 							for (const rank of leagueData) {
