@@ -23,7 +23,9 @@ class DiscordWebhookWorker {
 		this.webhookTimeouts = new NodeCache()
 
 		this.queueProcessor = new FairPromiseQueue(this.webhookQueue, this.config.tuning.concurrentDiscordWebhookConnections, ((t) => t.target))
+	}
 
+	async start() {
 		setImmediate(() => this.init())
 	}
 

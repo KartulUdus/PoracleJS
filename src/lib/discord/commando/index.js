@@ -30,7 +30,10 @@ class DiscordCommando extends EventEmitter {
 		this.translator = translatorFactory.default
 		this.re = require('../../../util/regex')(this.translatorFactory)
 		this.id = '0'
-		this.bounceWorker()
+	}
+
+	async start() {
+		await this.bounceWorker()
 	}
 
 	async bounceWorker() {
