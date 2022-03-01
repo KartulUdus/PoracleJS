@@ -620,7 +620,7 @@ class Monster extends Controller {
 						data.emojiString = e.join('')
 						data.typeEmoji = data.emojiString
 
-						data.hasEvolutions = monster.evolutions.length
+						data.hasEvolutions = monster.evolutions && monster.evolutions.length
 
 						let totalCount = 0
 						const evolutions = []
@@ -642,7 +642,7 @@ class Monster extends Controller {
 									formNameEng: newMonster?.form.name ?? '',
 								})
 
-								if (newMonster && monster.evolutions.length) calcEvolutions(newMonster)
+								if (newMonster && newMonster.evolutions && newMonster.evolutions.length) calcEvolutions(newMonster)
 							}
 						}
 

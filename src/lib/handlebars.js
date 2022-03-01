@@ -93,7 +93,7 @@ module.exports = () => {
 			typeNameEng: n,
 			typeName: n.map((type) => userTranslator(options).translate(type)).join(', '),
 			typeEmoji: e.join(''),
-			hasEvolution: !!monster.evolutions.length,
+			hasEvolutions: !!(monster.evolutions && monster.evolutions.length),
 		})
 	})
 
