@@ -640,6 +640,12 @@ class Monster extends Controller {
 									form: evo.id,
 									nameEng: newMonster?.name ?? '',
 									formNameEng: newMonster?.form.name ?? '',
+									baseStats: newMonster ? newMonster.stats
+										: {
+											baseAttack: 0,
+											baseDefense: 0,
+											baseStamina: 0,
+										},
 								})
 
 								if (newMonster && newMonster.evolutions && newMonster.evolutions.length) calcEvolutions(newMonster)
