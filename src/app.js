@@ -934,6 +934,20 @@ async function run() {
 	})
 
 	if (config.discord.enabled) {
+		try {
+			log.info('Starting discord workers')
+
+			await discordCommando.start()
+			for (const discordWorker of discordWorkers) {
+				await discordWorker.start()
+			}
+			await discordWebhookWorker.start()
+		}
+		catch (err) {
+			log.error('Error starting discord workers', err)
+
+		}
+
 		setInterval(() => {
 			if (!fastify.discordQueue.length) {
 				return
@@ -981,6 +995,16 @@ async function run() {
 	}
 
 	if (config.telegram.enabled) {
+		try {
+			log.info('Starting telegram workers')
+
+			await telegram.start()
+			if (telegramChannel) await telegramChannel.start()
+		}
+		catch (err) {
+			log.error('Error starting discord workers', err)
+
+		}
 		setInterval(() => {
 			if (!fastify.telegramQueue.length) {
 				return

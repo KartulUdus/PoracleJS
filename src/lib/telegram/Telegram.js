@@ -36,7 +36,9 @@ class Telegram extends EventEmitter {
 			.use(controller(query, scannerQuery, dts, logs, GameData, PoracleInfo, geofence, config, re, translatorFactory, emojiStrip, mustache))
 
 		this.commands = {}
+	}
 
+	start() {
 		// Handle identify special case on channels & in conversations
 
 		this.bot.on('channel_post', (ctx, next) => {
