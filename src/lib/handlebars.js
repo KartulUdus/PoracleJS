@@ -65,7 +65,7 @@ module.exports = () => {
 		return types[moves[value].type] ? emoji(options, types[moves[value].type].emoji) : ''
 	})
 
-	handlebars.registerHelper('pokemon', (value, id, form, options) => {
+	handlebars.registerHelper('pokemon', (id, form, options) => {
 		if (form.fn) {
 			// clean up parameters if no form specified
 			options = form
@@ -80,7 +80,7 @@ module.exports = () => {
 		const e = []
 		const n = []
 		monster.types.forEach((type) => {
-			e.push(userTranslator(options).translate(emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, options.data.platform)))
+			e.push(userTranslator(options).translate(emojiLookup.lookup(types[type.name].emoji, options.data.platform)))
 			n.push(type.name)
 		})
 
