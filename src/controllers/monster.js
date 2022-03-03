@@ -456,6 +456,35 @@ class Monster extends Controller {
 
 					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
 
+					if (data.seen_type) {
+						switch (data.seen_type) {
+							case 'nearby_stop': {
+								data.seenType = 'pokestop'
+								break
+							}
+							case 'nearby_cell': {
+								data.seenType = 'cell'
+								break
+							}
+							case 'lure':
+							case 'lure_wild': {
+								data.seenType = 'lure'
+								break
+							}
+							case 'encounter':
+							case 'wild': {
+								data.seenType = data.seen_type
+								break
+							}
+							default:
+								break
+						}
+					} else {
+						if (data.pokestop_id === 'None' && data.spawnpoint_id === 'None') data.seenType = 'cell'
+						else if (data.pokemon_id === 'None') data.seenType = encountered ? 'encounter' : 'wild'
+						else data.seenType = 'pokestop'
+					}
+
 					await this.getStaticMapUrl(
 						logReference,
 						data,
