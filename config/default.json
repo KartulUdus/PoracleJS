@@ -302,7 +302,9 @@
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": "",
     // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
-      "unregisteredUserMessage": ""
+      "unregisteredUserMessage": "",
+    // lostRoleMessage - message to send to user when they have lost their role base access
+      "lostRoleMessage": ""
   },
 
   //
@@ -337,7 +339,9 @@
       "groupWelcomeText": "Welcome {user}, remember to click on me and 'start bot' to be able to receive messages",
     // botWelcomeText - message the bot sends to users who register
       "botWelcomeText": "You are now registered with Poracle",
-  // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+    // botGoodbyeMessage - message to send to user when they have lost their access (through reconciliation)
+      "botGoodbyeMessage": "",
+    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
       "unregisteredUserMessage": "",
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": "",
