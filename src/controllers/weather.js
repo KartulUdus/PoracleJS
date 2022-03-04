@@ -7,6 +7,7 @@ const pcache = require('flat-cache')
 const { Mutex } = require('async-mutex')
 const Controller = require('./controller')
 require('moment-precise-range-plugin')
+const { getSunrise, getSunset } = require('sunrise-sunset-js')
 
 const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../../.cache'))
 const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
@@ -322,6 +323,11 @@ class Weather extends Controller {
 			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+
+			const sunsetTime = moment(getSunset(data.latitude, data.longitude, moment().toDate()))
+			const sunriseTime = moment(getSunrise(data.latitude, data.longitude, moment().toDate()))
+
+			data.nightTime = !moment().isBetween(sunriseTime, sunsetTime)
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				const tileServerOptions = this.tileserverPregen.getConfigForTileType('weather')
