@@ -453,8 +453,12 @@ class Monster extends Controller {
 
 					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
 					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+					const dawnEndTime = sunriseTime.add({ hours: 1 })
+					const duskStartTime = sunsetTime.subtract({ hours: 1 })
 
 					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
+					data.dawnTime = disappearTime.isBetween(sunsetTime, dawnEndTime)
+					data.duskTime = disappearTime.isBetween(duskStartTime, sunsetTime)
 
 					if (data.seen_type) {
 						switch (data.seen_type) {
@@ -488,7 +492,7 @@ class Monster extends Controller {
 						data,
 						'monster',
 						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
-						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime'],
 					)
 					data.staticmap = data.staticMap // deprecated
 
