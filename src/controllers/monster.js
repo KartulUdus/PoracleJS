@@ -595,6 +595,12 @@ class Monster extends Controller {
 						if (data.disguisePokemonNameEng) data.disguisePokemonName = translator.translate(data.disguisePokemonNameEng)
 						if (data.disguiseFormNameEng) data.disguiseFormName = translator.translate(data.disguiseFormNameEng)
 
+						data.formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
+						data.formNormalised = translator.translate(data.formNormalisedEng)
+
+						data.fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
+						data.fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
+
 						data.genderData = {
 							name: translator.translate(data.genderDataEng.name),
 							emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),

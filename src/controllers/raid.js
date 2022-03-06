@@ -276,6 +276,24 @@ class Raid extends Controller {
 							data.name = translator.translate(data.nameEng)
 							data.formName = translator.translate(data.formNameEng)
 							data.evolutionName = translator.translate(data.evolutionNameEng)
+
+							data.formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
+							data.formNormalised = translator.translate(data.formNormalisedEng)
+
+							if (data.evolution) {
+								data.fullNameEng = translator.format(
+									this.GameData.utilData.megaName[data.evolution],
+									data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng),
+								)
+								data.fullName = translator.translateFormat(
+									this.GameData.utilData.megaName[data.evolution],
+									data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised),
+								)
+							} else {
+								data.fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
+								data.fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
+							}
+
 							data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
 							data.teamNameEng = this.GameData.utilData.teams[data.team_id].name
 							data.teamName = translator.translate(data.teamNameEng)
