@@ -10,6 +10,8 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 
 const noop = () => { }
 
+const messageCache = new NodeCache()
+
 class Worker {
 	constructor(token, id, config, logs, rehydrateTimeouts, statusActivity) {
 		this.id = id
@@ -160,9 +162,25 @@ class Worker {
 				data.message.embeds = [data.message.embed]
 				delete data.message.embed
 			}
+
+			let previousMsg
+			if (data.logReference) {
+				previousMsg = messageCache.get(`${data.logReference}-${data.target}`)
+				if (previousMsg) {
+					data.message.reply = {
+						messageReference: previousMsg,
+						failIfNotExists: false
+					}
+				}
+			}
+
 			const msg = await user.send(/* data.message.content || '', */ data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)
+
+			if (data.logReference) {
+				messageCache.set(`${data.logReference}-${data.target}`, msg.id, Math.floor(msgDeletionMs / 1000) + 1)
+			}
 
 			if (data.clean) {
 				setTimeout(async () => {
@@ -203,9 +221,25 @@ class Worker {
 				data.message.embeds = [data.message.embed]
 				delete data.message.embed
 			}
+
+			let previousMsg
+			if (data.logReference) {
+				previousMsg = messageCache.get(`${data.logReference}-${data.target}`)
+				if (previousMsg) {
+					data.message.reply = {
+						messageReference: previousMsg,
+						failIfNotExists: false
+					}
+				}
+			}
+
 			const msg = await channel.send(data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL (${endTime - startTime} ms)`)
+
+			if (data.logReference) {
+				messageCache.set(`${data.logReference}-${data.target}`, msg.id, Math.floor(msgDeletionMs / 1000) + 1)
+			}
 
 			if (data.clean) {
 				setTimeout(async () => {
@@ -217,6 +251,7 @@ class Worker {
 				}, msgDeletionMs)
 				this.discordMessageTimeouts.set(msg.id, { type: 'channel', id: data.target }, Math.floor(msgDeletionMs / 1000) + 1)
 			}
+
 			return true
 		} catch (err) {
 			this.logs.discord.error(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
