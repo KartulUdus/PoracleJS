@@ -1,14 +1,7 @@
 const inside = require('point-in-polygon')
-const NodeGeocoder = require('node-geocoder')
 const EventEmitter = require('events')
 const path = require('path')
 const fs = require('fs')
-const { performance } = require('perf_hooks')
-
-const pcache = require('flat-cache')
-
-const geoCache = pcache.load('geoCache', path.join(__dirname, '../../.cache'))
-const emojiFlags = require('country-code-emoji')
 const Uicons = require('../lib/uicons')
 const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')

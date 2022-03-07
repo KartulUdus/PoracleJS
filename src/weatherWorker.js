@@ -18,7 +18,8 @@ const {
 } = Config(false)
 
 const WeatherController = require('./controllers/weather')
-const cachingGeocoder = new CachingGeocoder(config, log, mustache, `geoCache-WEATHER`)
+
+const cachingGeocoder = new CachingGeocoder(config, log, mustache, 'geoCache-WEATHER')
 
 const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
 const weatherController = new WeatherController(logs.controller, knex, cachingGeocoder, null, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)

@@ -61,8 +61,7 @@ class CachingGeocoder {
 			try {
 				this.dirty = false
 				this.cache.save(true)
-			}
-			catch (err) {
+			} catch (err) {
 				this.log.error('Writing geoCache failed', err)
 			}
 		}

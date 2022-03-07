@@ -46,7 +46,7 @@ const statsData = new StatsData(config, log)
 const pogoEventParser = new PogoEventParser(log)
 const shinyPossible = new ShinyPossible(log)
 const scannerQuery = scannerFactory.createScanner(scannerKnex, config.database.scannerType)
-const cachingGeocoder = new CachingGeocoder(config, log, mustache,`geoCache-${workerId}`)
+const cachingGeocoder = new CachingGeocoder(config, log, mustache, `geoCache-${workerId}`)
 
 const eventParsers = {
 	shinyPossible,
