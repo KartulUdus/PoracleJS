@@ -18,7 +18,7 @@ const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
 const EmojiLookup = require('../lib/emojiLookup')
 
 class Controller extends EventEmitter {
-	constructor(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
+	constructor(log, db, geocoder, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, weatherData, statsData, eventProviders) {
 		super()
 		this.db = db
 		this.scannerQuery = scannerQuery
@@ -42,54 +42,8 @@ class Controller extends EventEmitter {
 		this.imgUiconsAlt = this.config.general.imgUrlAlt ? new Uicons((this.config.general.imagesAlt && this.config.general.imagesAlt[this.constructor.name.toLowerCase()]) || this.config.general.imgUrlAlt, 'png', this.log) : null
 		this.stickerUicons = this.config.general.stickerUrl ? new Uicons((this.config.general.stickers && this.config.general.stickers[this.constructor.name.toLowerCase()]) || this.config.general.stickerUrl, 'webp', this.log) : null
 		this.dtsCache = {}
+		this.geocoder = geocoder
 		this.shortener = this.getShortener()
-	}
-
-	getGeocoder() {
-		switch (this.config.geocoding.provider.toLowerCase()) {
-			case 'poracle': {
-				return NodeGeocoder({
-					provider: 'openstreetmap',
-					osmServer: this.config.geocoding.providerURL,
-					formatterPattern: this.config.locale.addressFormat,
-					timeout: this.config.tuning.geocodingTimeout || 5000,
-				})
-			}
-			case 'nominatim': {
-				const geocoder = NodeGeocoder({
-					provider: 'openstreetmap',
-					osmServer: this.config.geocoding.providerURL,
-					formatterPattern: this.config.locale.addressFormat,
-					timeout: this.config.tuning.geocodingTimeout || 5000,
-				})
-				// Hack in suburb support
-				// eslint-disable-next-line no-underscore-dangle
-				geocoder._geocoder._formatResult = ((original) => (result) => ({
-					...original(result),
-					suburb: result.address.suburb || '',
-					town: result.address.town || '',
-					village: result.address.village || '',
-					// eslint-disable-next-line no-underscore-dangle
-				}))(geocoder._geocoder._formatResult)
-				return geocoder
-			}
-			case 'google': {
-				return NodeGeocoder({
-					provider: 'google',
-					httpAdapter: 'https',
-					apiKey: this.config.geocoding.geocodingKey[Math.floor(Math.random() * this.config.geocoding.geocodingKey.length)],
-					timeout: this.config.tuning.geocodingTimeout || 5000,
-				})
-			}
-			default:
-			{
-				return NodeGeocoder({
-					provider: 'openstreetmap',
-					formatterPattern: this.config.locale.addressFormat,
-					timeout: this.config.tuning.geocodingTimeout || 5000,
-				})
-			}
-		}
 	}
 
 	buildAreaString(matched) {
@@ -410,12 +364,6 @@ class Controller extends EventEmitter {
 		return s.replace(/"/g, '\'\'').replace(/\n/g, ' ').replace(/\\/g, '?')
 	}
 
-	escapeAddress(a) {
-		a.streetName = this.escapeJsonString(a.streetName)
-		a.addr = this.escapeJsonString(a.addr)
-		return a
-	}
-
 	/**
 	 * Replace URLs with shortened versions if surrounded by <S< >S>
 	 */
@@ -429,41 +377,7 @@ class Controller extends EventEmitter {
 	}
 
 	async getAddress(locationObject) {
-		if (this.config.geocoding.provider.toLowerCase() === 'none') {
-			return { addr: 'Unknown', flag: '' }
-		}
-
-		const doGeolocate = async () => {
-			try {
-				const startTime = performance.now()
-				const geocoder = this.getGeocoder()
-				const [result] = await geocoder.reverse(locationObject)
-				const endTime = performance.now();
-				(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`Geocode ${locationObject.lat},${locationObject.lon} (${endTime - startTime} ms)`)
-
-				const flag = emojiFlags.countryCodeEmoji(result.countryCode)
-				if (!this.addressDts) {
-					this.addressDts = this.mustache.compile(this.config.locale.addressFormat)
-				}
-				result.addr = this.addressDts(result)
-				result.flag = flag || ''
-
-				return this.escapeAddress(result)
-			} catch (err) {
-				this.log.error('getAddress: failed to fetch data', err)
-				return { addr: 'Unknown', flag: '' }
-			}
-		}
-
-		if (this.config.geocoding.cacheDetail === 0) {
-			return doGeolocate()
-		}
-
-		const cacheKey = `${String(+locationObject.lat.toFixed(this.config.geocoding.cacheDetail))}-${String(+locationObject.lon.toFixed(this.config.geocoding.cacheDetail))}`
-		const cachedResult = geoCache.getKey(cacheKey)
-		if (cachedResult) return this.escapeAddress(cachedResult)
-
-		return doGeolocate()
+		return this.geocoder.getAddress(locationObject)
 	}
 
 	pointInArea(point) {

@@ -11,15 +11,17 @@ const { log } = logs
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 const GameData = require('./lib/GameData')
+const CachingGeocoder = require('./lib/cachingGeocoder')
 
 const {
 	config, knex, dts, geofence, translatorFactory,
 } = Config(false)
 
 const WeatherController = require('./controllers/weather')
+const cachingGeocoder = new CachingGeocoder(config, log, mustache, `geoCache-WEATHER`)
 
 const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
-const weatherController = new WeatherController(logs.controller, knex, null, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
+const weatherController = new WeatherController(logs.controller, knex, cachingGeocoder, null, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
 
 const hookQueue = []
 const workerId = 'WEATHER'
