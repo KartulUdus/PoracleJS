@@ -63,7 +63,7 @@ class PoracleDiscordMessage {
 	}
 
 	get isDM() {
-		return !(this.msg.channel.type === 'GUILD_TEXT')
+		return (this.msg.channel.type === 'DM')
 	}
 
 	async reply(message) {
@@ -99,7 +99,7 @@ class PoracleDiscordMessage {
 	}
 
 	async replyWithAttachment(message, attachment) {
-		if (this.msg.channel.type === 'GUILD_TEXT') {
+		if (this.msg.channel.type === 'GUILD_TEXT' || this.msg.channel.type === 'GUILD_NEWS') {
 			// This is a channel, do not reply but rather send to avoid @ reply
 			return this.msg.channel.send({ content: message, files: [attachment] })
 		}
