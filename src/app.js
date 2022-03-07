@@ -942,10 +942,10 @@ async function run() {
 				await discordWorker.start()
 			}
 			await discordWebhookWorker.start()
-		}
-		catch (err) {
-			log.error('Error starting discord workers', err)
 
+			fastify.decorate('discordClient', discordWorkers[0].client)
+		} catch (err) {
+			log.error('Error starting discord workers', err)
 		}
 
 		setInterval(() => {
@@ -1000,10 +1000,8 @@ async function run() {
 
 			await telegram.start()
 			if (telegramChannel) await telegramChannel.start()
-		}
-		catch (err) {
+		} catch (err) {
 			log.error('Error starting discord workers', err)
-
 		}
 		setInterval(() => {
 			if (!fastify.telegramQueue.length) {
