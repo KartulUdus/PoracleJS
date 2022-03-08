@@ -1,5 +1,4 @@
 const importFresh = require('import-fresh')
-const path = require('path')
 const Knex = require('knex')
 const moment = require('moment-timezone')
 const TranslatorFactory = require('../util/translatorFactory')
@@ -69,7 +68,7 @@ module.exports = {
 	Config: (performChecks = true) => {
 		config = importFresh('config')
 		dts = dtsLoader.readDtsFiles()
-		geofence = geofenceLoader.readGeofenceFile(config, path.join(__dirname, `../../${config.geofence.path}`))
+		geofence = geofenceLoader.readAllGeofenceFiles(config)
 		knex = getKnex(config)
 		scannerKnex = getScannerKnex(config)
 		translatorFactory = new TranslatorFactory(config)
