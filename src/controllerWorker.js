@@ -3,7 +3,6 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const path = require('path')
 const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
@@ -191,7 +190,7 @@ function reloadDts() {
 
 function reloadGeofence() {
 	try {
-		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		const newGeofence = require('./lib/geofenceLoader').readAllGeofenceFiles(config)
 		monsterController.setGeofence(newGeofence)
 		raidController.setGeofence(newGeofence)
 		questController.setGeofence(newGeofence)

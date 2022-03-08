@@ -3,7 +3,6 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const path = require('path')
 const logs = require('./lib/logger')
 
 const { log } = logs
@@ -92,7 +91,7 @@ function reloadDts() {
 
 function reloadGeofence() {
 	try {
-		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		const newGeofence = require('./lib/geofenceLoader').readAllGeofenceFiles(config)
 		weatherController.setGeofence(newGeofence)
 		log.info('Geofence reloaded')
 	} catch (err) {

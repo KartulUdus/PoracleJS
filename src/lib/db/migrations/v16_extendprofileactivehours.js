@@ -11,7 +11,3 @@ exports.up = async function migrationUp(knex) {
 exports.down = async function migrationDown(knex) {
 	log.info(knex)
 }
-
-
-
-

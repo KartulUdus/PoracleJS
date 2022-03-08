@@ -84,7 +84,6 @@ fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
 const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, scannerQuery, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
-logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
 let telegram
@@ -888,9 +887,10 @@ async function run() {
 	setTimeout(processPogoEvents, 30000)
 	setTimeout(processPossibleShiny, 30000)
 
-	chokidar.watch([
-		path.join(__dirname, `../${config.geofence.path}`),
-	], {
+	let watchGeofence = Array.isArray(config.geofence.path) ? config.geofence.path : [config.geofence.path]
+	watchGeofence = watchGeofence.map((x) => path.join(__dirname, `../${x}`))
+
+	chokidar.watch(watchGeofence, {
 		awaitWriteFinish: true,
 	}).on('change', () => {
 		log.info('Change in geofence detected, triggering reload')
@@ -903,7 +903,7 @@ async function run() {
 			})
 
 			// This splice mechanism replaces array in place (relies on no caching)
-			const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+			const newGeofence = require('./lib/geofenceLoader').readAllGeofenceFiles(config)
 			geofence.splice(0, geofence.length, ...newGeofence)
 		} catch (err) {
 			log.error('Error reloading dts', err)
