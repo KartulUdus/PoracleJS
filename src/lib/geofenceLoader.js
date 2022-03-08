@@ -1,5 +1,6 @@
 const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
+const path = require('path')
 
 function getGeofenceFromGEOjson(config, rawdata) {
 	if (rawdata.type !== 'FeatureCollection' || !rawdata.features) return
@@ -42,4 +43,21 @@ function readGeofenceFile(config, filename) {
 	return geofence
 }
 
-module.exports = { readGeofenceFile }
+function readAllGeofenceFiles(config) {
+	let geofence
+
+	if (Array.isArray(config.geofence.path)) {
+		const fence = []
+		for (const fencePath of config.geofence.path) {
+			const localFence = readGeofenceFile(config, path.join(__dirname, `../../${fencePath}`))
+			fence.push(...localFence)
+		}
+		geofence = fence
+	} else {
+		geofence = readGeofenceFile(config, path.join(__dirname, `../../${config.geofence.path}`))
+	}
+
+	return geofence
+}
+
+module.exports = { readAllGeofenceFiles }

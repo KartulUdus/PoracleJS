@@ -3,7 +3,6 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const path = require('path')
 const logs = require('./lib/logger')
 
 const { log } = logs
@@ -11,6 +10,7 @@ const { log } = logs
 const { Config } = require('./lib/configFetcher')
 const mustache = require('./lib/handlebars')()
 const GameData = require('./lib/GameData')
+const CachingGeocoder = require('./lib/cachingGeocoder')
 
 const {
 	config, knex, dts, geofence, translatorFactory,
@@ -18,8 +18,10 @@ const {
 
 const WeatherController = require('./controllers/weather')
 
+const cachingGeocoder = new CachingGeocoder(config, log, mustache, 'geoCache-WEATHER')
+
 const rateLimitedUserCache = new NodeCache({ stdTTL: config.discord.limitSec })
-const weatherController = new WeatherController(logs.controller, knex, null, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
+const weatherController = new WeatherController(logs.controller, knex, cachingGeocoder, null, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache)
 
 const hookQueue = []
 const workerId = 'WEATHER'
@@ -89,7 +91,7 @@ function reloadDts() {
 
 function reloadGeofence() {
 	try {
-		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		const newGeofence = require('./lib/geofenceLoader').readAllGeofenceFiles(config)
 		weatherController.setGeofence(newGeofence)
 		log.info('Geofence reloaded')
 	} catch (err) {
