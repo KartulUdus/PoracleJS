@@ -169,7 +169,7 @@ class Worker {
 				if (previousMsg) {
 					data.message.reply = {
 						messageReference: previousMsg,
-						failIfNotExists: false
+						failIfNotExists: false,
 					}
 				}
 			}
@@ -228,7 +228,7 @@ class Worker {
 				if (previousMsg) {
 					data.message.reply = {
 						messageReference: previousMsg,
-						failIfNotExists: false
+						failIfNotExists: false,
 					}
 				}
 			}
