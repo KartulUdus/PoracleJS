@@ -5,11 +5,11 @@ exports.run = async (client, msg, [args]) => {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
 
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
+		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type !== 'DM') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
-		if (msg.channel.type !== 'GUILD_TEXT') {
+		if (msg.channel.type !== 'GUILD_TEXT' && msg.channel.type !== 'GUILD_NEWS') {
 			return await msg.reply('This needs to be run from within a channel on the appropriate guild')
 		}
 
