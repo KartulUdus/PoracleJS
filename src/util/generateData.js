@@ -24,11 +24,10 @@ const update = async function update() {
 
 		log.info('Creating new Game Master...')
 		Object.keys(gameMaster).forEach((category) => {
-			fs.writeFile(
+			fs.writeFileSync(
 				`./src/util/${category}.json`,
 				JSON.stringify(gameMaster[category], null, 2),
 				'utf8',
-				() => { },
 			)
 		})
 	} catch (e) {
@@ -39,11 +38,10 @@ const update = async function update() {
 	if (process.argv[2] === 'latest') {
 		try {
 			log.info('Fetching latest invasions...')
-			fs.writeFile(
+			fs.writeFileSync(
 				'./src/util/grunts.json',
 				JSON.stringify(await invasions(), null, 2),
 				'utf8',
-				() => { },
 			)
 			log.info('Latest grunts saved...')
 		} catch (e) {
@@ -55,20 +53,22 @@ const update = async function update() {
 	try {
 		log.info('Creating new locales...')
 
-		fs.mkdir('./src/util/locale', (error) => (error
-			? log.info('Locale folder already exists, skipping.')
-			: log.info('Locale folder created.')))
+		try {
+			fs.mkdirSync('./src/util/locale')
+			log.info('Locale folder created.')
+		} catch (error) {
+			log.info('Locale folder already exists, skipping.')
+		}
 
 		const availableLocales = await fetch('https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/index.json')
 
 		await Promise.all(availableLocales.map(async (locale) => {
 			try {
 				const remoteFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/enRefMerged/${locale}`)
-				fs.writeFile(
+				fs.writeFileSync(
 					`./src/util/locale/${locale}`,
 					JSON.stringify(remoteFiles, null, 2),
 					'utf8',
-					() => { },
 				)
 				log.info(`${locale}`, 'file saved.')
 			} catch (e) {
