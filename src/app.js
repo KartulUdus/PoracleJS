@@ -942,10 +942,8 @@ async function run() {
 				await discordWorker.start()
 			}
 			await discordWebhookWorker.start()
-		}
-		catch (err) {
+		} catch (err) {
 			log.error('Error starting discord workers', err)
-
 		}
 
 		setInterval(() => {
@@ -1000,10 +998,8 @@ async function run() {
 
 			await telegram.start()
 			if (telegramChannel) await telegramChannel.start()
-		}
-		catch (err) {
+		} catch (err) {
 			log.error('Error starting discord workers', err)
-
 		}
 		setInterval(() => {
 			if (!fastify.telegramQueue.length) {
@@ -1043,8 +1039,9 @@ async function run() {
 
 function startPoracle() {
 	const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-	if (NODE_MAJOR_VERSION !== '16') {
-		log.warn('Near future versions of Poracle will require Node 16 - please upgrade')
+	if (NODE_MAJOR_VERSION < 16) {
+		log.warn('PoracleJS requires Node 16 - please upgrade')
+		process.exit(1)
 	}
 
 	run()

@@ -25,7 +25,7 @@ class DiscordUtil {
 
 		const channelList = []
 		guild.channels.cache.forEach((x) => {
-			if (x.type === 'GUILD_TEXT') {
+			if (x.type === 'GUILD_TEXT' || x.type === 'GUILD_NEWS') {
 				channelList.push({
 					id: x.id,
 					categoryId: x.parentId,
