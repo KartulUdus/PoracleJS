@@ -69,16 +69,7 @@ module.exports = {
 	Config: (performChecks = true) => {
 		config = importFresh('config')
 		dts = dtsLoader.readDtsFiles()
-		if (Array.isArray(config.geofence.path)) {
-			const fence = []
-			for (const fencePath of config.geofence.path) {
-				const localFence = geofenceLoader.readGeofenceFile(config, path.join(__dirname, `../../${fencePath}`))
-				fence.push(...localFence)
-			}
-			geofence = fence
-		} else {
-			geofence = geofenceLoader.readGeofenceFile(config, path.join(__dirname, `../../${config.geofence.path}`))
-		}
+		geofence = geofenceLoader.readAllGeofenceFiles(config)
 		knex = getKnex(config)
 		scannerKnex = getScannerKnex(config)
 		translatorFactory = new TranslatorFactory(config)

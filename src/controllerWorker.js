@@ -191,7 +191,7 @@ function reloadDts() {
 
 function reloadGeofence() {
 	try {
-		const newGeofence = require('./lib/geofenceLoader').readGeofenceFile(config, path.join(__dirname, `../${config.geofence.path}`))
+		const newGeofence = require('./lib/geofenceLoader').readAllGeofenceFiles(config)
 		monsterController.setGeofence(newGeofence)
 		raidController.setGeofence(newGeofence)
 		questController.setGeofence(newGeofence)
