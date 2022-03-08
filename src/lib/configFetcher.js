@@ -1,5 +1,4 @@
 const importFresh = require('import-fresh')
-const path = require('path')
 const Knex = require('knex')
 const moment = require('moment-timezone')
 const TranslatorFactory = require('../util/translatorFactory')

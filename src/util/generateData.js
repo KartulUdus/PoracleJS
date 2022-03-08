@@ -56,8 +56,7 @@ const update = async function update() {
 		try {
 			fs.mkdirSync('./src/util/locale')
 			log.info('Locale folder created.')
-		}
-		catch (error) {
+		} catch (error) {
 			log.info('Locale folder already exists, skipping.')
 		}
 

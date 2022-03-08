@@ -84,7 +84,6 @@ fastify.decorate('telegramQueue', [])
 fastify.decorate('hookQueue', [])
 
 const discordCommando = config.discord.enabled ? new DiscordCommando(config.discord.token[0], query, scannerQuery, config, logs, GameData, PoracleInfo, dts, geofence, translatorFactory) : null
-logs.log.info(`Discord commando ${discordCommando ? '' : ''}starting`)
 const discordWorkers = []
 let discordWebhookWorker
 let telegram

@@ -3,7 +3,6 @@ const { writeHeapSnapshot } = require('v8')
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
 const NodeCache = require('node-cache')
-const path = require('path')
 const PogoEventParser = require('./lib/pogoEventParser')
 const ShinyPossible = require('./lib/shinyLoader')
 const logs = require('./lib/logger')
