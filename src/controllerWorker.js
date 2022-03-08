@@ -33,6 +33,7 @@ const PokestopLureController = require('./controllers/pokestop_lure')
 const NestController = require('./controllers/nest')
 const ControllerWeatherManager = require('./controllers/weatherData')
 const StatsData = require('./controllers/statsData')
+const CachingGeocoder = require('./lib/cachingGeocoder')
 
 /**
  * Contains currently rate limited users
@@ -45,19 +46,20 @@ const statsData = new StatsData(config, log)
 const pogoEventParser = new PogoEventParser(log)
 const shinyPossible = new ShinyPossible(log)
 const scannerQuery = scannerFactory.createScanner(scannerKnex, config.database.scannerType)
+const cachingGeocoder = new CachingGeocoder(config, log, mustache, `geoCache-${workerId}`)
 
 const eventParsers = {
 	shinyPossible,
 	pogoEvents: pogoEventParser,
 }
 
-const monsterController = new MonsterController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const raidController = new RaidController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const questController = new QuestController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const pokestopController = new PokestopController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const nestController = new NestController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const pokestopLureController = new PokestopLureController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
-const gymController = new GymController(logs.controller, knex, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const monsterController = new MonsterController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const raidController = new RaidController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const questController = new QuestController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopController = new PokestopController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const nestController = new NestController(logs.controller, knex, scannerQuery, cachingGeocoder, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const pokestopLureController = new PokestopLureController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const gymController = new GymController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 
 const hookQueue = []
 let queuePort

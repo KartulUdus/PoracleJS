@@ -117,11 +117,23 @@ async function getAvailableIcons(log, baseUrl) {
 				currentSet = uiconsIndex[baseUrl]
 				lastRetrievedDate = lastRetrieved[baseUrl]
 				if (currentSet === undefined || lastRetrievedDate === undefined || Date.now() - lastRetrievedDate > maxAge) {
+					log.debug(`Fetching UICONS index from ${baseUrl}`)
+
+					const timeoutMs = 10000
+					const source = axios.CancelToken.source()
+					const timeout = setTimeout(() => {
+						source.cancel(`Timeout waiting for response - ${timeoutMs}ms`)
+						// Timeout Logic
+					}, timeoutMs)
+
 					const response = await axios({
 						method: 'get',
 						url: `${baseUrl}/index.json`,
 						validateStatus: ((status) => status < 500),
+						cancelToken: source.token,
 					})
+					clearTimeout(timeout)
+
 					switch (response.status) {
 						case 404: {
 							log.verbose(`Got 404 for UICONS data file from ${baseUrl}`)
