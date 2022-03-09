@@ -661,6 +661,7 @@ class Monster extends Controller {
 
 						let totalCount = 0
 						const evolutions = []
+						const megaEvolutions = []
 
 						// eslint-disable-next-line no-shadow
 						const calcEvolutions = (monster) => {
@@ -675,6 +676,7 @@ class Monster extends Controller {
 								evolutions.push({
 									id: evo.evoId,
 									form: evo.id,
+									name: newMonster ? translator.translate(newMonster.name) : '',
 									nameEng: newMonster?.name ?? '',
 									formNameEng: newMonster?.form.name ?? '',
 									baseStats: newMonster ? newMonster.stats
@@ -687,10 +689,49 @@ class Monster extends Controller {
 
 								if (newMonster && newMonster.evolutions && newMonster.evolutions.length) calcEvolutions(newMonster)
 							}
+							if (monster.tempEvolutions) {
+								for (const evo of monster.tempEvolutions) {
+									const fullNameEng = translator.format(
+										this.GameData.utilData.megaName[evo.evoId],
+										monster.name)
+									const fullName = translator.translateFormat(
+										this.GameData.utilData.megaName[evo.evoId],
+										translator.translate(monster.name)
+									)
+
+									const types = evo.types ?? monster.types
+									// eslint-disable-next-line no-shadow
+									const e = []
+									// eslint-disable-next-line no-shadow
+									const n = []
+
+									types.forEach((type) => {
+										e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
+										n.push(type.name)
+									})
+
+									const typeName = n.map((type) => translator.translate(type))
+										.join(', ')
+									const emojiString = e.join('')
+
+									megaEvolutions.push({
+										fullName,
+										fullNameEng,
+										evolution: evo.evoId,
+										baseStats: evo.stats,
+										types,
+										typeName,
+										typeEmoji: emojiString,
+									})
+								}
+							}
 						}
 
 						if (data.hasEvolutions) calcEvolutions(monster)
 						data.evolutions = evolutions
+
+						data.hasEvolutions = !!megaEvolutions.length
+						data.megaEvolutions = megaEvolutions
 
 						const createPvpDisplay = (leagueData, maxRank, minCp) => {
 							const displayList = []
