@@ -1,5 +1,5 @@
-const { DiscordAPIError } = require('discord.js')
 const PoracleDiscordMessage = require('../../poracleDiscordMessage')
+const DiscordRoleSetter = require('../../discordRoleSetter')
 
 exports.run = async (client, discordMsg, [args]) => {
 	const target = { id: discordMsg.author.id, name: discordMsg.author.tag, webhook: false }
@@ -16,6 +16,14 @@ exports.run = async (client, discordMsg, [args]) => {
 			return await msg.react(client.translator.translate('🙅'))
 		}
 
+		if (msg.isFromAdmin) {
+			let userIdOverride = args.find((arg) => arg.match(client.re.userRe))
+			if (userIdOverride) {
+				[, , userIdOverride] = userIdOverride.match(client.re.userRe)
+				target.id = userIdOverride
+			}
+		}
+
 		const human = await client.query.selectOneQuery('humans', { id: target.id, admin_disable: 0 })
 
 		if (!human) {
@@ -28,47 +36,29 @@ exports.run = async (client, discordMsg, [args]) => {
 			return await msg.reply(translator.translateFormat('Valid commands are `{0}role list`, `{0}role add <areaname>`, `{0}role remove <areaname>`', client.config.discord.prefix))
 		}
 
+		const roleSetter = new DiscordRoleSetter(discordMsg.client, client.config, client.logs.log)
+
 		if (args[0] === 'list') {
 			let roleList = `${translator.translate('Roles available')}:\n`
 
-			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
-				const guild = await discordMsg.client.guilds.fetch(guildId)
-				// Fetch the GuildMember from appropriate guild as this is likely a DM
-				try {
-					const guildMember = await guild.members.fetch(msg.userId)
+			const allRoles = await roleSetter.list(target.id)
 
-					roleList = roleList.concat(`**${guild.name}**\n`)
+			for (const guild of allRoles) {
+				roleList = roleList.concat(`**${guild.name}**\n`)
 
-					let exclusiveRoles = guildDetails.exclusiveRoles || []
-					if (!Array.isArray(exclusiveRoles)) exclusiveRoles = [exclusiveRoles]
-
-					for (const exclusiveRole of exclusiveRoles) {
-						for (const [roleDesc, roleId] of Object.entries(exclusiveRole)) {
-							const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
-
-							roleList = roleList.concat(`   ${roleDesc.replace(/ /g, '_')}  ${discordRole ? '☑️' : ''}\n`)
-						}
-
-						roleList = roleList.concat('\n')
+				for (const exclusiveRoleSet of guild.roles.exclusive) {
+					for (const exclusiveRole of exclusiveRoleSet) {
+						roleList = roleList.concat(`   ${exclusiveRole.description.replace(/ /g, '_')}  ${exclusiveRole.set ? '☑️' : ''}\n`)
 					}
+					roleList = roleList.concat('\n')
+				}
 
-					const roles = guildDetails.roles || {}
-					for (const [roleDesc, roleId] of Object.entries(roles)) {
-						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
+				for (const role of guild.roles.general) {
+					roleList = roleList.concat(`   ${role.description.replace(/ /g, '_')}  ${role.set ? '☑️' : ''}\n`)
+				}
 
-						roleList = roleList.concat(`   ${roleDesc.replace(/ /g, '_')}  ${discordRole ? '☑️' : ''}\n`)
-					}
-					if (Object.entries(roles).length) roleList = roleList.concat('\n')
-				} catch (err) {
-					if (err instanceof DiscordAPIError) {
-						if (err.httpStatus === 404) {
-							// eslint-disable-next-line no-continue
-							// last line in loop, so we don't need this
-							// continue
-						}
-					} else {
-						throw err
-					}
+				if (guild.roles.general.length) {
+					roleList = roleList.concat('\n')
 				}
 			}
 
@@ -82,133 +72,82 @@ exports.run = async (client, discordMsg, [args]) => {
 		if (args[0] === 'membership') {
 			let roleList = `${translator.translate('You have the following roles')}:\n`
 
-			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
-				const guild = await discordMsg.client.guilds.fetch(guildId)
-				// Fetch the GuildMember from appropriate guild as this is likely a DM
-				try {
-					const guildMember = await guild.members.fetch(msg.userId)
+			const allRoles = await roleSetter.list(target.id)
 
-					roleList = roleList.concat(`${guild.name}\n`)
+			for (const guild of allRoles) {
+				roleList = roleList.concat(`**${guild.name}**\n`)
 
-					let exclusiveRoles = guildDetails.exclusiveRoles || []
-					if (!Array.isArray(exclusiveRoles)) exclusiveRoles = [exclusiveRoles]
-
-					for (const exclusiveRole of exclusiveRoles) {
-						for (const [roleDesc, roleId] of Object.entries(exclusiveRole)) {
-							const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
-
-							if (discordRole) {
-								roleList = roleList.concat(`   ${roleDesc.replace(/ /g, '_')}\n`)
-							}
+				for (const exclusiveRoleSet of guild.roles.exclusive) {
+					for (const exclusiveRole of exclusiveRoleSet) {
+						if (exclusiveRole.set) {
+							roleList = roleList.concat(`   ${exclusiveRole.description.replace(/ /g, '_')}\n`)
 						}
 					}
+				}
 
-					const roles = guildDetails.roles || {}
-					for (const [roleDesc, roleId] of Object.entries(roles)) {
-						const discordRole = guildMember.roles.cache.find((r) => r.id === roleId)
-
-						if (discordRole) {
-							roleList = roleList.concat(`   ${roleDesc.replace(/ /g, '_')}\n`)
-						}
-					}
-				} catch (err) {
-					if (err instanceof DiscordAPIError) {
-						if (err.httpStatus === 404) {
-							// eslint-disable-next-line no-continue
-							// last line in loop, so we don't need this
-							// continue
-						}
-					} else {
-						throw err
+				for (const role of guild.roles.general) {
+					if (role.set) {
+						roleList = roleList.concat(`   ${role.description.replace(/ /g, '_')}\n`)
 					}
 				}
 			}
 
-			return msg.reply(roleList)
+			if (roleList.length > 2000) {
+				return await msg.replyAsAttachment(roleList, 'Role List', 'rolelist.txt')
+			}
+
+			return await msg.reply(roleList)
 		}
 
+		const set = args[0] === 'add'
+
 		for (let param = 1; param < args.length; param++) {
+			// eslint-disable-next-line no-continue
+			if (args[param].match(client.re.userRe)) continue	// skip
+
+			const results = []
+
 			const roleToAdd = args[param]
+
 			let found = false
-			for (const [guildId, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
-				const guild = await discordMsg.client.guilds.fetch(guildId)
+			for (const [, guildDetails] of Object.entries(client.config.discord.userRoleSubscription)) {
+				const roles = guildDetails.roles || {}
 
-				let guildMember
+				const matchRole = Object.keys(roles).find((r) => r.replace(/_/g, ' ').toLowerCase() === roleToAdd)
+				if (matchRole) {
+					found = true
 
-				// Fetch the GuildMember from appropriate guild as this is likely a DM
-				try {
-					guildMember = await guild.members.fetch(msg.userId)
-				} catch (err) {
-					if (err instanceof DiscordAPIError) {
-						if (err.httpStatus === 404) {
-							// eslint-disable-next-line no-continue
-							continue
-						}
-					} else {
-						throw err
-					}
+					const roleId = roles[matchRole]
+					results.push(...await roleSetter.setRole(target.id, roleId, set))
 				}
 
-				if (guildMember) {
-					const roles = guildDetails.roles || {}
+				let exclusiveRoles = guildDetails.exclusiveRoles || []
+				if (!Array.isArray(exclusiveRoles)) exclusiveRoles = [exclusiveRoles]
 
-					const matchRole = Object.keys(roles).find((r) => r.replace(/_/g, ' ').toLowerCase() === roleToAdd)
-					if (matchRole) {
+				for (const exclusiveRole of exclusiveRoles) {
+					const matchExclusiveRole = Object.keys(exclusiveRole)
+						.find((r) => r.replace(/_/g, ' ')
+							.toLowerCase() === roleToAdd)
+
+					if (matchExclusiveRole) {
 						found = true
 
-						const roleId = roles[matchRole]
-						const role = guild.roles.cache.find((r) => r.id === roleId)
-
-						if (args[0] === 'add') {
-							await guildMember.roles.add(role)
-							await msg.reply(translator.translateFormat('You have been granted the role {0}', matchRole))
-						} else {
-							await guildMember.roles.remove(role)
-							await msg.reply(translator.translateFormat('I have removed the role {0}', matchRole))
-						}
-					}
-
-					let exclusiveRoles = guildDetails.exclusiveRoles || []
-					if (!Array.isArray(exclusiveRoles)) exclusiveRoles = [exclusiveRoles]
-
-					for (const exclusiveRole of exclusiveRoles) {
-						const matchExclusiveRole = Object.keys(exclusiveRole)
-							.find((r) => r.replace(/_/g, ' ')
-								.toLowerCase() === roleToAdd)
-
-						if (matchExclusiveRole) {
-							found = true
-
-							const roleId = exclusiveRole[matchExclusiveRole]
-
-							if (args[0] === 'add') {
-								for (const [exclusiveRoleName, exclusiveRoleId] of Object.entries(exclusiveRole)) {
-									if (exclusiveRoleId === roleId) {
-										const role = guild.roles.cache.find((r) => r.id === exclusiveRoleId)
-										await guildMember.roles.add(role)
-										await msg.reply(translator.translateFormat('You have been granted the role {0}', exclusiveRoleName))
-									} else {
-										const discordRole = guildMember.roles.cache.find((r) => r.id === exclusiveRoleId)
-
-										if (discordRole) {
-											await guildMember.roles.remove(discordRole)
-											await msg.reply(translator.translateFormat('I have removed the role {0}', exclusiveRoleName))
-										}
-									}
-								}
-							} else {
-								const role = guild.roles.cache.find((r) => r.id === roleId)
-								await guildMember.roles.remove(role)
-
-								await msg.reply(translator.translateFormat('I have removed the role {0}', matchExclusiveRole))
-							}
-						}
+						const roleId = exclusiveRole[matchExclusiveRole]
+						results.push(...await roleSetter.setRole(target.id, roleId, set))
 					}
 				}
 			}
 
 			if (!found) {
 				await msg.reply(translator.translateFormat('Unknown role -- {0}', roleToAdd))
+			}
+
+			for (const result of results) {
+				if (result.set) {
+					await msg.reply(translator.translateFormat('You have been granted the role {0}', result.description))
+				} else {
+					await msg.reply(translator.translateFormat('I have removed the role {0}', result.description))
+				}
 			}
 		}
 	} catch (err) {
