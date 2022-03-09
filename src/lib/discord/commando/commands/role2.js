@@ -61,6 +61,36 @@ exports.run = async (client, discordMsg, [args]) => {
 			return await msg.reply(roleList)
 		}
 
+		if (args[0] === 'membership') {
+			let roleList = `${translator.translate('You have the following roles')}:\n`
+
+			const allRoles = await roleSetter.list(target.id)
+
+			for (const guild of allRoles) {
+				roleList = roleList.concat(`**${guild.name}**\n`)
+
+				for (const exclusiveRoleSet of guild.roles.exclusive) {
+					for (const exclusiveRole of exclusiveRoleSet) {
+						if (exclusiveRole.set) {
+							roleList = roleList.concat(`   ${exclusiveRole.description.replace(/ /g, '_')}\n`)
+						}
+					}
+				}
+
+				for (const role of guild.roles.general) {
+					if (role.set) {
+						roleList = roleList.concat(`   ${role.description.replace(/ /g, '_')}\n`)
+					}
+				}
+			}
+
+			if (roleList.length > 2000) {
+				return await msg.replyAsAttachment(roleList, 'Role List', 'rolelist.txt')
+			}
+
+			return await msg.reply(roleList)
+		}
+
 		const set = args[0] === 'add'
 
 		for (let param = 1; param < args.length; param++) {
