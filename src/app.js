@@ -942,6 +942,8 @@ async function run() {
 				await discordWorker.start()
 			}
 			await discordWebhookWorker.start()
+
+			fastify.decorate('discordClient', discordWorkers[0].client)
 		} catch (err) {
 			log.error('Error starting discord workers', err)
 		}
