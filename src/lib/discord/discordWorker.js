@@ -147,8 +147,6 @@ class Worker {
 				await user.createDM()
 			}
 
-			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message`, data.message)
-
 			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
 				const { url } = data.message.embed.image
 				data.message.embed.image.url = 'attachment://map.png'
@@ -160,6 +158,9 @@ class Worker {
 				data.message.embeds = [data.message.embed]
 				delete data.message.embed
 			}
+
+			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message`, data.message)
+
 			const msg = await user.send(/* data.message.content || '', */ data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)

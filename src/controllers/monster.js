@@ -670,33 +670,35 @@ class Monster extends Controller {
 								return
 							}
 
-							for (const evo of monster.evolutions) {
-								const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
+							if (monster.evolutions && monster.evolutions.length) {
+								for (const evo of monster.evolutions) {
+									const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
 
-								if (newMonster) {
-									const formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
-									const formNormalised = translator.translate(data.formNormalisedEng)
+									if (newMonster) {
+										const formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
+										const formNormalised = translator.translate(data.formNormalisedEng)
 
-									const fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
-									const fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
+										const fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
+										const fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
 
-									evolutions.push({
-										id: evo.evoId,
-										form: evo.id,
-										fullName,
-										fullNameEng,
-										formNormalised,
-										formNormalisedEng,
-										name: translator.translate(newMonster.name),
-										nameEng: newMonster.name,
-										formNameEng: newMonster.form.name,
-										baseStats: newMonster.stats,
-									})
+										evolutions.push({
+											id: evo.evoId,
+											form: evo.id,
+											fullName,
+											fullNameEng,
+											formNormalised,
+											formNormalisedEng,
+											name: translator.translate(newMonster.name),
+											nameEng: newMonster.name,
+											formNameEng: newMonster.form.name,
+											baseStats: newMonster.stats,
+										})
 
-									calcEvolutions(newMonster)
+										calcEvolutions(newMonster)
+									}
 								}
 							}
-							if (monster.tempEvolutions) {
+							if (monster.tempEvolutions && monster.tempEvolutions.length) {
 								for (const evo of monster.tempEvolutions) {
 									const fullNameEng = translator.format(
 										this.GameData.utilData.megaName[evo.evoId],
