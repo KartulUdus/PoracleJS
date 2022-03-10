@@ -675,7 +675,7 @@ class Monster extends Controller {
 									const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
 
 									if (newMonster) {
-										const {types} = newMonster
+										const { types } = newMonster
 										// eslint-disable-next-line no-shadow
 										const e = []
 										// eslint-disable-next-line no-shadow
