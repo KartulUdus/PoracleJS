@@ -311,14 +311,13 @@ class Worker {
 					channel = await this.client.channels.fetch(msgData.v.id)
 				}
 				if (channel) {
-					const msg = await channel.messages.fetch(key)
 					if (msgData.t <= now) {
-						msg.delete().catch(noop)
+						channel.messages.fetch(key).then((msg) => msg.delete()).catch(noop)
 					} else {
 						const newTtlms = Math.max(msgData.t - now, 2000)
 						const newTtl = Math.floor(newTtlms / 1000)
 						setTimeout(() => {
-							msg.delete().catch(noop)
+							channel.messages.fetch(key).then((msg) => msg.delete()).catch(noop)
 						}, newTtlms)
 						this.discordMessageTimeouts.set(key, msgData.v, newTtl)
 					}
