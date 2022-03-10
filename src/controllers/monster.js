@@ -675,6 +675,21 @@ class Monster extends Controller {
 									const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
 
 									if (newMonster) {
+										const {types} = newMonster
+										// eslint-disable-next-line no-shadow
+										const e = []
+										// eslint-disable-next-line no-shadow
+										const n = []
+
+										types.forEach((type) => {
+											e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
+											n.push(type.name)
+										})
+
+										const typeName = n.map((type) => translator.translate(type))
+											.join(', ')
+										const emojiString = e.join('')
+
 										const nameEng = newMonster.name
 										const name = translator.translate(nameEng)
 										const formNameEng = newMonster.form.name
@@ -694,6 +709,8 @@ class Monster extends Controller {
 											name,
 											nameEng,
 											formNameEng,
+											typeName,
+											typeEmoji: emojiString,
 											baseStats: newMonster.stats,
 										})
 
@@ -730,7 +747,7 @@ class Monster extends Controller {
 									megaEvolutions.push({
 										fullName,
 										fullNameEng,
-										evolution: evo.evoId,
+										evolution: evo.tempEvoId,
 										baseStats: evo.stats,
 										types,
 										typeName,
