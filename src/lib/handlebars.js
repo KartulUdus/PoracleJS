@@ -77,7 +77,6 @@ module.exports = () => {
 		const monster = Object.values(monsters).find((m) => m.id === +id && m.form.id === +form)
 		if (!monster) return
 
-
 		const e = []
 		const n = []
 		monster.types.forEach((type) => {
@@ -85,14 +84,13 @@ module.exports = () => {
 			n.push(type.name)
 		})
 
-
 		const formNormalisedEng = monster.form.name === 'Normal' ? '' : monster.form.name
-		const formNormalised = translator.translate(formNormalisedEng)
+		const formNormalised = userTranslator(options).translate(formNormalisedEng)
 
 		const nameEng = monster.name
 		const name = userTranslator(options).translate(monster.name)
-		const fullNameEng = data.nameEng.concat(formNormalisedEng ? ' ' : '', formNormalisedEng)
-		const fullName = data.name.concat(formNormalised ? ' ' : '', formNormalised)
+		const fullNameEng = nameEng.concat(formNormalisedEng ? ' ' : '', formNormalisedEng)
+		const fullName = name.concat(formNormalised ? ' ' : '', formNormalised)
 
 		return options.fn({
 			name,
