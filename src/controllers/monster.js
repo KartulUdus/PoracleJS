@@ -673,30 +673,28 @@ class Monster extends Controller {
 							for (const evo of monster.evolutions) {
 								const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
 
-								evolutions.push({
-									id: evo.evoId,
-									form: evo.id,
-									name: newMonster ? translator.translate(newMonster.name) : '',
-									nameEng: newMonster?.name ?? '',
-									formNameEng: newMonster?.form.name ?? '',
-									baseStats: newMonster ? newMonster.stats
-										: {
-											baseAttack: 0,
-											baseDefense: 0,
-											baseStamina: 0,
-										},
-								})
+								if (newMonster) {
+									evolutions.push({
+										id: evo.evoId,
+										form: evo.id,
+										name: translator.translate(newMonster.name),
+										nameEng: newMonster.name,
+										formNameEng: newMonster.form.name,
+										baseStats: newMonster.stats,
+									})
 
-								if (newMonster && newMonster.evolutions && newMonster.evolutions.length) calcEvolutions(newMonster)
+									calcEvolutions(newMonster)
+								}
 							}
 							if (monster.tempEvolutions) {
 								for (const evo of monster.tempEvolutions) {
 									const fullNameEng = translator.format(
 										this.GameData.utilData.megaName[evo.evoId],
-										monster.name)
+										monster.name,
+									)
 									const fullName = translator.translateFormat(
 										this.GameData.utilData.megaName[evo.evoId],
-										translator.translate(monster.name)
+										translator.translate(monster.name),
 									)
 
 									const types = evo.types ?? monster.types
@@ -727,7 +725,7 @@ class Monster extends Controller {
 							}
 						}
 
-						if (data.hasEvolutions) calcEvolutions(monster)
+						if (data.hasEvolutions || monster.tempEvolutions) calcEvolutions(monster)
 						data.evolutions = evolutions
 
 						data.hasEvolutions = !!megaEvolutions.length
