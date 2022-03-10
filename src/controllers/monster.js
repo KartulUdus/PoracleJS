@@ -743,7 +743,7 @@ class Monster extends Controller {
 						if (data.hasEvolutions || monster.tempEvolutions) calcEvolutions(monster)
 						data.evolutions = evolutions
 
-						data.hasEvolutions = !!megaEvolutions.length
+						data.hasMegaEvolutions = !!megaEvolutions.length
 						data.megaEvolutions = megaEvolutions
 
 						const createPvpDisplay = (leagueData, maxRank, minCp) => {
