@@ -675,11 +675,14 @@ class Monster extends Controller {
 									const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
 
 									if (newMonster) {
-										const formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
-										const formNormalised = translator.translate(data.formNormalisedEng)
+										const nameEng = newMonster.name
+										const name = translator.translate(nameEng)
+										const formNameEng = newMonster.form.name
+										const formNormalisedEng = formNameEng === 'Normal' ? '' : formNameEng
+										const formNormalised = translator.translate(formNormalisedEng)
 
-										const fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
-										const fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
+										const fullNameEng = nameEng.concat(formNormalisedEng ? ' ' : '', formNormalisedEng)
+										const fullName = name.concat(formNormalised ? ' ' : '', formNormalised)
 
 										evolutions.push({
 											id: evo.evoId,
@@ -688,9 +691,9 @@ class Monster extends Controller {
 											fullNameEng,
 											formNormalised,
 											formNormalisedEng,
-											name: translator.translate(newMonster.name),
-											nameEng: newMonster.name,
-											formNameEng: newMonster.form.name,
+											name,
+											nameEng,
+											formNameEng,
 											baseStats: newMonster.stats,
 										})
 
