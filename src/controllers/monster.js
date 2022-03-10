@@ -704,11 +704,11 @@ class Monster extends Controller {
 							if (monster.tempEvolutions && monster.tempEvolutions.length) {
 								for (const evo of monster.tempEvolutions) {
 									const fullNameEng = translator.format(
-										this.GameData.utilData.megaName[evo.evoId],
+										this.GameData.utilData.megaName[evo.tempEvoId],
 										monster.name,
 									)
 									const fullName = translator.translateFormat(
-										this.GameData.utilData.megaName[evo.evoId],
+										this.GameData.utilData.megaName[evo.tempEvoId],
 										translator.translate(monster.name),
 									)
 
