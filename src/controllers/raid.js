@@ -474,7 +474,7 @@ class Raid extends Controller {
 								})
 							}
 
-							const typeObj = {
+							let typeObj = {
 								extraWeak: { value: 4, types: [], text: 'Very vulnerable to' },
 								weak: { value: 2, types: [], text: 'Vulnerable to' },
 								resist: { value: 0.5, types: [], text: 'Resistant to' },
@@ -498,12 +498,17 @@ class Raid extends Controller {
 								}
 							}
 
-							data.weaknessList = Object.values(typeObj)
 
 							let weaknessEmoji = ''
 							for (const info of Object.values(typeObj)) {
-								if (info.types.length) weaknessEmoji = weaknessEmoji.concat(`${info.value}x${info.types.map((x) => x.emoji).join('')} `)
+								if (info.types.length) {
+									const typeEmoji = info.types.map((x) => x.emoji).join('')
+									info.typeEmoji = typeEmoji
+									weaknessEmoji = weaknessEmoji.concat(`${info.value}x${typeEmoji} `)
+								}
 							}
+
+							data.weaknessList = Object.values(typeObj).filter((x) => x.types.length)
 
 							data.weaknessEmoji = weaknessEmoji
 
