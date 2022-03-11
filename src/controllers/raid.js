@@ -339,6 +339,174 @@ class Raid extends Controller {
 							data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
 							data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
 
+							/* Evolutions copied from monster.js -- should be a function? */
+
+							data.hasEvolutions = monster.evolutions && monster.evolutions.length
+
+							let totalCount = 0
+							const evolutions = []
+							const megaEvolutions = []
+
+							// eslint-disable-next-line no-shadow
+							const calcEvolutions = (monster) => {
+								if (++totalCount >= 10) {
+									this.log.error(`${data.encounter_id}: Too many possible evolutions ${data.pokemonId}_${data.form}`)
+									return
+								}
+
+								if (monster.evolutions && monster.evolutions.length) {
+									for (const evo of monster.evolutions) {
+										const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
+
+										if (newMonster) {
+											const { types } = newMonster
+											// eslint-disable-next-line no-shadow
+											const e = []
+											// eslint-disable-next-line no-shadow
+											const n = []
+
+											types.forEach((type) => {
+												e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
+												n.push(type.name)
+											})
+
+											const typeName = n.map((type) => translator.translate(type))
+												.join(', ')
+											const emojiString = e.join('')
+
+											const nameEng = newMonster.name
+											const name = translator.translate(nameEng)
+											const formNameEng = newMonster.form.name
+											const formNormalisedEng = formNameEng === 'Normal' ? '' : formNameEng
+											const formNormalised = translator.translate(formNormalisedEng)
+
+											const fullNameEng = nameEng.concat(formNormalisedEng ? ' ' : '', formNormalisedEng)
+											const fullName = name.concat(formNormalised ? ' ' : '', formNormalised)
+
+											evolutions.push({
+												id: evo.evoId,
+												form: evo.id,
+												fullName,
+												fullNameEng,
+												formNormalised,
+												formNormalisedEng,
+												name,
+												nameEng,
+												formNameEng,
+												typeName,
+												typeEmoji: emojiString,
+												baseStats: newMonster.stats,
+											})
+
+											calcEvolutions(newMonster)
+										}
+									}
+								}
+								if (monster.tempEvolutions && monster.tempEvolutions.length) {
+									for (const evo of monster.tempEvolutions) {
+										const fullNameEng = translator.format(
+											this.GameData.utilData.megaName[evo.tempEvoId],
+											monster.name,
+										)
+										const fullName = translator.translateFormat(
+											this.GameData.utilData.megaName[evo.tempEvoId],
+											translator.translate(monster.name),
+										)
+
+										const types = evo.types ?? monster.types
+										// eslint-disable-next-line no-shadow
+										const e = []
+										// eslint-disable-next-line no-shadow
+										const n = []
+
+										types.forEach((type) => {
+											e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
+											n.push(type.name)
+										})
+
+										const typeName = n.map((type) => translator.translate(type))
+											.join(', ')
+										const emojiString = e.join('')
+
+										megaEvolutions.push({
+											fullName,
+											fullNameEng,
+											evolution: evo.tempEvoId,
+											baseStats: evo.stats,
+											types,
+											typeName,
+											typeEmoji: emojiString,
+										})
+									}
+								}
+							}
+
+							if (data.hasEvolutions || monster.tempEvolutions) calcEvolutions(monster)
+							data.evolutions = evolutions
+
+							data.hasMegaEvolutions = !!megaEvolutions.length
+							data.megaEvolutions = megaEvolutions
+
+							/* Weakness calculations */
+
+							const typeInfo = this.GameData.types
+							const typeData = this.GameData.utilData.types
+
+							const strengths = {}
+							const weaknesses = {}
+
+							for (const type of data.typeNameEng) {
+								strengths[type] = []
+								typeInfo[type].strengths.forEach((x) => {
+									strengths[type].push(x.typeName)
+								})
+								typeInfo[type].weaknesses.forEach((x) => {
+									if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+									weaknesses[x.typeName] *= 2
+								})
+								typeInfo[type].resistances.forEach((x) => {
+									if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+									weaknesses[x.typeName] *= 0.5
+								})
+								typeInfo[type].immunes.forEach((x) => {
+									if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+									weaknesses[x.typeName] *= 0.25
+								})
+							}
+
+							const typeObj = {
+								extraWeak: { value: 4, types: [], text: 'Very vulnerable to' },
+								weak: { value: 2, types: [], text: 'Vulnerable to' },
+								resist: { value: 0.5, types: [], text: 'Resistant to' },
+								immune: { value: 0.25, types: [], text: 'Very resistant to' },
+								extraImmune: { value: 0.125, types: [], text: 'Extremely resistant to' },
+							}
+
+							for (const [name, value] of Object.entries(weaknesses)) {
+								const translated = {
+									nameEng: name,
+									name: translator.translate(name),
+									emoji: translator.translate(this.emojiLookup.lookup(typeData[name].emoji, platform)),
+								}
+								switch (value) {
+									case 0.125: typeObj.extraImmune.types.push(translated); break
+									case 0.25: typeObj.immune.types.push(translated); break
+									case 0.5: typeObj.resist.types.push(translated); break
+									case 2: typeObj.weak.types.push(translated); break
+									case 4: typeObj.extraWeak.types.push(translated); break
+									default: break
+								}
+							}
+
+							data.weaknessList = typeObj
+
+							let weaknessEmoji = ''
+							for (const info of Object.values(typeObj)) {
+								if (info.types.length) weaknessEmoji = weaknessEmoji.concat(`${info.value}x${info.types.map((x) => x.emoji).join('')} `)
+							}
+
+							data.weaknessEmoji = weaknessEmoji
+
 							const view = {
 								...geoResult,
 								...data,
