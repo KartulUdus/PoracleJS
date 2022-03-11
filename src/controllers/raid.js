@@ -498,7 +498,7 @@ class Raid extends Controller {
 								}
 							}
 
-							data.weaknessList = typeObj
+							data.weaknessList = Object.values(typeObj)
 
 							let weaknessEmoji = ''
 							for (const info of Object.values(typeObj)) {
