@@ -474,7 +474,7 @@ class Raid extends Controller {
 								})
 							}
 
-							let typeObj = {
+							const typeObj = {
 								extraWeak: { value: 4, types: [], text: 'Very vulnerable to' },
 								weak: { value: 2, types: [], text: 'Vulnerable to' },
 								resist: { value: 0.5, types: [], text: 'Resistant to' },
@@ -497,7 +497,6 @@ class Raid extends Controller {
 									default: break
 								}
 							}
-
 
 							let weaknessEmoji = ''
 							for (const info of Object.values(typeObj)) {
