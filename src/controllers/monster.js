@@ -856,10 +856,10 @@ class Monster extends Controller {
 						data.pvpGreatBest = calculateBestInfo(data.pvpGreat)
 
 						data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
-						data.pvpUltraBest = calculateBestInfo(data.pvpGreat)
+						data.pvpUltraBest = calculateBestInfo(data.pvpUltra)
 
 						data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
-						data.pvpLittleBest = calculateBestInfo(data.pvpGreat)
+						data.pvpLittleBest = calculateBestInfo(data.pvpLittle)
 
 						data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
 
