@@ -830,9 +830,37 @@ class Monster extends Controller {
 							return displayList.length ? displayList : null
 						}
 
+						const calculateBestInfo = (ranks) => {
+							if (!ranks) return null
+
+							const best = {
+								rank: 4096,
+								list: [],
+							}
+
+							for (const result of ranks) {
+								if (result.rank === best.rank) {
+									best.list.push(result)
+								} else if (result.rank < best.rank) {
+									best.rank = result.rank
+									best.list = [result]
+								}
+							}
+
+							best.name = Array.from(new Set(best.list.map((x) => x.fullName))).join(', ')
+							best.nameEng = Array.from(new Set(best.list.map((x) => x.fullNameEng))).join(', ')
+							return best
+						}
+
 						data.pvpGreat = data.pvp_rankings_great_league ? createPvpDisplay(data.pvp_rankings_great_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayGreatMinCP) : null
+						data.pvpGreatBest = calculateBestInfo(data.pvpGreat)
+
 						data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
+						data.pvpUltraBest = calculateBestInfo(data.pvpGreat)
+
 						data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
+						data.pvpLittleBest = calculateBestInfo(data.pvpGreat)
+
 						data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
 
 						data.distance = cares.longitude ? this.getDistance({
