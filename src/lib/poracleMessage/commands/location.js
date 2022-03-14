@@ -106,7 +106,7 @@ exports.run = async (client, msg, args, options) => {
 					}, tileServerOptions.type)
 
 					message = {
-						embed: {
+						embeds: [{
 							color: 0x00ff00,
 							title: translator.translate('New location'),
 							description: `${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}`,
@@ -114,7 +114,12 @@ exports.run = async (client, msg, args, options) => {
 								url: staticMap,
 							},
 							url: maplink,
-						},
+						}],
+					}
+
+					if (client.config.discord.uploadEmbedImages) {
+						message.embeds[0].image.url = 'attachment://image.png'
+						message.files = [{ attachment: maplink, name: 'image.png' }]
 					}
 				}
 			}
