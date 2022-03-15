@@ -453,8 +453,8 @@ class Monster extends Controller {
 
 					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
 					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
-					const dawnEndTime = sunriseTime.add({ hours: 1 })
-					const duskStartTime = sunsetTime.subtract({ hours: 1 })
+					const dawnEndTime = moment(sunriseTime).add({ hours: 1 })
+					const duskStartTime = moment(sunsetTime).subtract({ hours: 1 })
 
 					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
 					data.dawnTime = disappearTime.isBetween(sunriseTime, dawnEndTime)
