@@ -457,7 +457,7 @@ class Monster extends Controller {
 					const duskStartTime = sunsetTime.subtract({ hours: 1 })
 
 					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
-					data.dawnTime = disappearTime.isBetween(sunsetTime, dawnEndTime)
+					data.dawnTime = disappearTime.isBetween(sunriseTime, dawnEndTime)
 					data.duskTime = disappearTime.isBetween(duskStartTime, sunsetTime)
 
 					if (data.seen_type) {
