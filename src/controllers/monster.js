@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
-const { getSunrise, getSunset } = require('sunrise-sunset-js')
 
 const Controller = require('./controller')
 
@@ -451,14 +450,15 @@ class Monster extends Controller {
 					})
 					const jobs = []
 
-					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
-					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
-					const dawnEndTime = moment(sunriseTime).add({ hours: 1 })
-					const duskStartTime = moment(sunsetTime).subtract({ hours: 1 })
-
-					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
-					data.dawnTime = disappearTime.isBetween(sunriseTime, dawnEndTime)
-					data.duskTime = disappearTime.isBetween(duskStartTime, sunsetTime)
+					require('./common/nightTime').setNightTime(data, disappearTime)
+					// const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
+					// const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+					// const dawnEndTime = moment(sunriseTime).add({ hours: 1 })
+					// const duskStartTime = moment(sunsetTime).subtract({ hours: 1 })
+					//
+					// data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
+					// data.dawnTime = disappearTime.isBetween(sunriseTime, dawnEndTime)
+					// data.duskTime = disappearTime.isBetween(duskStartTime, sunsetTime)
 
 					if (data.seen_type) {
 						switch (data.seen_type) {
@@ -528,6 +528,7 @@ class Monster extends Controller {
 						this.log.debug(`${logReference}: Pokemon ${data.pokemon_id} cell: ${weatherCellId} types ${JSON.stringify(data.types)} weather ${data.weather} Forecast ${weatherForecast.current} [boosted ${pokemonShouldBeBoosted} ${JSON.stringify(currentBoostedTypes)}] next ${weatherForecast.next} [boosted ${pokemonWillBeBoosted} ${JSON.stringify(forecastBoostedTypes)}]`)
 					}
 
+					/* Future event processing */
 					const event = this.eventParser.eventChangesSpawn(moment()
 						.unix(), data.disappear_time, data.latitude, data.longitude)
 					if (event) {
@@ -657,111 +658,7 @@ class Monster extends Controller {
 						data.emojiString = e.join('')
 						data.typeEmoji = data.emojiString
 
-						data.hasEvolutions = monster.evolutions && monster.evolutions.length
-
-						let totalCount = 0
-						const evolutions = []
-						const megaEvolutions = []
-
-						// eslint-disable-next-line no-shadow
-						const calcEvolutions = (monster) => {
-							if (++totalCount >= 10) {
-								this.log.error(`${data.encounter_id}: Too many possible evolutions ${data.pokemonId}_${data.form}`)
-								return
-							}
-
-							if (monster.evolutions && monster.evolutions.length) {
-								for (const evo of monster.evolutions) {
-									const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
-
-									if (newMonster) {
-										const { types } = newMonster
-										// eslint-disable-next-line no-shadow
-										const e = []
-										// eslint-disable-next-line no-shadow
-										const n = []
-
-										types.forEach((type) => {
-											e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
-											n.push(type.name)
-										})
-
-										const typeName = n.map((type) => translator.translate(type))
-											.join(', ')
-										const emojiString = e.join('')
-
-										const nameEng = newMonster.name
-										const name = translator.translate(nameEng)
-										const formNameEng = newMonster.form.name
-										const formNormalisedEng = formNameEng === 'Normal' ? '' : formNameEng
-										const formNormalised = translator.translate(formNormalisedEng)
-
-										const fullNameEng = nameEng.concat(formNormalisedEng ? ' ' : '', formNormalisedEng)
-										const fullName = name.concat(formNormalised ? ' ' : '', formNormalised)
-
-										evolutions.push({
-											id: evo.evoId,
-											form: evo.id,
-											fullName,
-											fullNameEng,
-											formNormalised,
-											formNormalisedEng,
-											name,
-											nameEng,
-											formNameEng,
-											typeName,
-											typeEmoji: emojiString,
-											baseStats: newMonster.stats,
-										})
-
-										calcEvolutions(newMonster)
-									}
-								}
-							}
-							if (monster.tempEvolutions && monster.tempEvolutions.length) {
-								for (const evo of monster.tempEvolutions) {
-									const fullNameEng = translator.format(
-										this.GameData.utilData.megaName[evo.tempEvoId],
-										monster.name,
-									)
-									const fullName = translator.translateFormat(
-										this.GameData.utilData.megaName[evo.tempEvoId],
-										translator.translate(monster.name),
-									)
-
-									const types = evo.types ?? monster.types
-									// eslint-disable-next-line no-shadow
-									const e = []
-									// eslint-disable-next-line no-shadow
-									const n = []
-
-									types.forEach((type) => {
-										e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
-										n.push(type.name)
-									})
-
-									const typeName = n.map((type) => translator.translate(type))
-										.join(', ')
-									const emojiString = e.join('')
-
-									megaEvolutions.push({
-										fullName,
-										fullNameEng,
-										evolution: evo.tempEvoId,
-										baseStats: evo.stats,
-										types,
-										typeName,
-										typeEmoji: emojiString,
-									})
-								}
-							}
-						}
-
-						if (data.hasEvolutions || monster.tempEvolutions) calcEvolutions(monster)
-						data.evolutions = evolutions
-
-						data.hasMegaEvolutions = !!megaEvolutions.length
-						data.megaEvolutions = megaEvolutions
+						require('./common/evolutionCalculator').setEvolutions(data, this.GameData, this.log, logReference, translator, this.emojiLookup, platform, monster)
 
 						const createPvpDisplay = (leagueData, maxRank, minCp) => {
 							const displayList = []

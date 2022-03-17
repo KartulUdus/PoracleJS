@@ -167,7 +167,8 @@ class Raid extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
+			const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
+			data.weather = this.weatherData.getCurrentWeatherInCell(weatherCellId) || 0		// complete weather data from weather cache
 			data.gameWeatherId = data.weather
 			data.gameWeatherNameEng = data.weather ? this.GameData.utilData.weather[data.gameWeatherId].name : ''
 
@@ -256,6 +257,9 @@ class Raid extends Controller {
 
 						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
 						data.staticmap = data.staticMap // deprecated
+						data.types = monster.types.map((type) => type.id)
+
+						await require('./common/weather').calculateForecastImpact(data, this.GameData, weatherCellId, this.weatherData, data.end, this.config)
 
 						for (const cares of whoCares) {
 							this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
@@ -315,14 +319,11 @@ class Raid extends Controller {
 							data.move2emoji = data.chargeMoveEmoji // deprecated
 
 							const e = []
-							const t = []
 							const n = []
 							monster.types.forEach((type) => {
 								e.push(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform))
-								t.push(type.id)
 								n.push(type.name)
 							})
-							data.types = t
 							data.typeNameEng = n
 							data.emoji = e
 
@@ -339,113 +340,8 @@ class Raid extends Controller {
 							data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
 							data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
 
-							/* Evolutions copied from monster.js -- should be a function? */
-
-							data.hasEvolutions = monster.evolutions && monster.evolutions.length
-
-							let totalCount = 0
-							const evolutions = []
-							const megaEvolutions = []
-
-							// eslint-disable-next-line no-shadow
-							const calcEvolutions = (monster) => {
-								if (++totalCount >= 10) {
-									this.log.error(`${data.encounter_id}: Too many possible evolutions ${data.pokemonId}_${data.form}`)
-									return
-								}
-
-								if (monster.evolutions && monster.evolutions.length) {
-									for (const evo of monster.evolutions) {
-										const newMonster = this.GameData.monsters[`${evo.evoId}_${evo.id}`]
-
-										if (newMonster) {
-											const { types } = newMonster
-											// eslint-disable-next-line no-shadow
-											const e = []
-											// eslint-disable-next-line no-shadow
-											const n = []
-
-											types.forEach((type) => {
-												e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
-												n.push(type.name)
-											})
-
-											const typeName = n.map((type) => translator.translate(type))
-												.join(', ')
-											const emojiString = e.join('')
-
-											const nameEng = newMonster.name
-											const name = translator.translate(nameEng)
-											const formNameEng = newMonster.form.name
-											const formNormalisedEng = formNameEng === 'Normal' ? '' : formNameEng
-											const formNormalised = translator.translate(formNormalisedEng)
-
-											const fullNameEng = nameEng.concat(formNormalisedEng ? ' ' : '', formNormalisedEng)
-											const fullName = name.concat(formNormalised ? ' ' : '', formNormalised)
-
-											evolutions.push({
-												id: evo.evoId,
-												form: evo.id,
-												fullName,
-												fullNameEng,
-												formNormalised,
-												formNormalisedEng,
-												name,
-												nameEng,
-												formNameEng,
-												typeName,
-												typeEmoji: emojiString,
-												baseStats: newMonster.stats,
-											})
-
-											calcEvolutions(newMonster)
-										}
-									}
-								}
-								if (monster.tempEvolutions && monster.tempEvolutions.length) {
-									for (const evo of monster.tempEvolutions) {
-										const fullNameEng = translator.format(
-											this.GameData.utilData.megaName[evo.tempEvoId],
-											monster.name,
-										)
-										const fullName = translator.translateFormat(
-											this.GameData.utilData.megaName[evo.tempEvoId],
-											translator.translate(monster.name),
-										)
-
-										const types = evo.types ?? monster.types
-										// eslint-disable-next-line no-shadow
-										const e = []
-										// eslint-disable-next-line no-shadow
-										const n = []
-
-										types.forEach((type) => {
-											e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
-											n.push(type.name)
-										})
-
-										const typeName = n.map((type) => translator.translate(type))
-											.join(', ')
-										const emojiString = e.join('')
-
-										megaEvolutions.push({
-											fullName,
-											fullNameEng,
-											evolution: evo.tempEvoId,
-											baseStats: evo.stats,
-											types,
-											typeName,
-											typeEmoji: emojiString,
-										})
-									}
-								}
-							}
-
-							if (data.hasEvolutions || monster.tempEvolutions) calcEvolutions(monster)
-							data.evolutions = evolutions
-
-							data.hasMegaEvolutions = !!megaEvolutions.length
-							data.megaEvolutions = megaEvolutions
+							require('./common/evolutionCalculator').setEvolutions(data, this.GameData, this.log, logReference, translator, this.emojiLookup, platform, monster)
+							require('./common/weather').setNextWeatherText(data, translator, this.GameData, this.emojiLookup, platform)
 
 							/* Weakness calculations */
 
