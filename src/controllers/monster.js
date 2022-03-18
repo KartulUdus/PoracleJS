@@ -25,7 +25,7 @@ class Monster extends Controller {
 
 		const pvpQueryLimit = this.config.pvp.pvpQueryMaxRank || this.config.pvp.pvpFilterMaxRank || 100
 
-		let result = []
+		const result = []
 
 		// Basic Pokemon
 		result.push(...await this.performQuery(this.buildQuery('Basic', data, strictareastring, areastring, { pokemon_id: data.pokemon_id, form: data.form, includeEverything: true }, 0)))
@@ -83,13 +83,13 @@ class Monster extends Controller {
 		}
 
 		// remove any duplicates
-		const alertIds = []
-		result = result.filter((alert) => {
-			if (!alertIds.includes(alert.id)) {
-				alertIds.push(alert.id)
-				return alert
-			}
-		})
+		// const alertIds = []
+		// result = result.filter((alert) => {
+		// 	if (!alertIds.includes(alert.id)) {
+		// 		alertIds.push(alert.id)
+		// 		return alert
+		// 	}
+		// })
 		return result
 	}
 
@@ -113,7 +113,7 @@ class Monster extends Controller {
 		}
 
 		let query = `
-		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.pvp_ranking_worst from monsters
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.pokemon_id, monsters.pvp_ranking_cap, monsters.pvp_ranking_league, monsters.pvp_ranking_worst from monsters
 		join humans on (humans.id = monsters.id and humans.current_profile_no = monsters.profile_no)
 		where humans.enabled = true and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%monster%') and
 		(${pokemonQueryString}) and
@@ -431,6 +431,26 @@ class Monster extends Controller {
 						return []
 					}
 
+					const consolidatedAlerts = []
+					for (const alert of whoCares) {
+						let existingAlert = consolidatedAlerts.find((x) => x.id === alert.id)
+						if (!existingAlert) {
+							existingAlert = {
+								...alert,
+								filters: [],
+							}
+							consolidatedAlerts.push(existingAlert)
+						}
+
+						if (alert.pvp_ranking_worst < 4096) {
+							existingAlert.filters.push({
+								pvp_ranking_league: alert.pvp_ranking_league,
+								pvp_ranking_worst: alert.pvp_ranking_worst,
+								pvp_ranking_cap: alert.pvp_ranking_cap,
+							})
+						}
+					}
+
 					if (data.display_pokemon_id && data.display_pokemon_id !== data.pokemon_id) {
 						data.display_form ??= 0
 						const displayMonster = this.GameData.monsters[`${data.display_pokemon_id}_${data.display_form}`] || this.GameData.monsters[`${data.display_pokemon_id}_0`]
@@ -511,7 +531,7 @@ class Monster extends Controller {
 						data.pokestopName = this.escapeJsonString(await this.scannerQuery.getPokestopName(data.pokestop_id))
 					}
 
-					for (const cares of whoCares) {
+					for (const cares of consolidatedAlerts) {
 						this.log.debug(`${logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
 						const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
@@ -620,7 +640,7 @@ class Monster extends Controller {
 						data.emojiString = e.join('')
 						data.typeEmoji = data.emojiString
 
-						const createPvpDisplay = (leagueData, maxRank, minCp) => {
+						const createPvpDisplay = (leagueCap, leagueData, maxRank, minCp) => {
 							const displayList = []
 							for (const rank of leagueData) {
 								if (rank.rank <= maxRank
@@ -681,15 +701,31 @@ class Monster extends Controller {
 										displayRank.fullNameEng = displayRank.nameEng.concat(displayRank.formEng ? ' ' : '', displayRank.formEng)
 										displayRank.fullName = displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form)
 									}
-									displayList.push(displayRank)
+
+									if (cares.filters.length) {
+										displayRank.passesFilter = false
+										for (const filter of cares.filters) {
+											if ((filter.pvp_ranking_league === leagueCap || filter.pvp_ranking_league === 0)
+											&& (filter.pvp_ranking_cap === 0 || filter.pvp_ranking_cap === displayRank.cap || displayRank.capped)
+											&& (filter.pvp_ranking_worst >= displayRank.rank)) {
+												displayRank.passesFilter = true
+												break
+											}
+										}
+									} else {
+										displayRank.passesFilter = true
+									}
+									if (!this.config.pvp.filterByTrack || displayRank.passesFilter) {
+										displayList.push(displayRank)
+									}
 								}
 							}
 							return displayList.length ? displayList : null
 						}
 
-						data.pvpGreat = data.pvp_rankings_great_league ? createPvpDisplay(data.pvp_rankings_great_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayGreatMinCP) : null
-						data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
-						data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
+						data.pvpGreat = data.pvp_rankings_great_league ? createPvpDisplay(1500, data.pvp_rankings_great_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayGreatMinCP) : null
+						data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(2500, data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
+						data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(500, data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
 						data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
 
 						data.distance = cares.longitude ? this.getDistance({
@@ -754,7 +790,7 @@ class Monster extends Controller {
 					}
 					hrend = process.hrtime(hrstart)
 					const hrendprocessing = hrend[1] / 1000000
-					this.log.verbose(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length} humans cared [end]. (${hrendms} ms sql + ${hrendprocessing} ms processing dts)`)
+					this.log.verbose(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length}/${consolidatedAlerts.length} humans cared [end]. (${hrendms} ms sql + ${hrendprocessing} ms processing dts)`)
 
 					this.emit('postMessage', jobs)
 				} catch (e) {
