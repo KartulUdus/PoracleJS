@@ -2,9 +2,9 @@ const moment = require('moment-timezone')
 const geoTz = require('geo-tz')
 
 function setGameWeather(data, translator, GameData, emojiLookup, platform, currentCellWeather) {
-	data.gameWeatherId = this.GameData.utilData.weather[currentCellWeather] ? currentCellWeather : ''
-	data.gameWeatherName = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(GameData.utilData.weather[currentCellWeather].name) : ''
-	data.gameWeatherEmoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(emojiLookup.lookup(GameData.utilData.weather[currentCellWeather].emoji, platform)) : ''
+	data.gameWeatherId = GameData.utilData.weather[currentCellWeather] ? currentCellWeather : ''
+	data.gameWeatherName = GameData.utilData.weather[currentCellWeather] ? translator.translate(GameData.utilData.weather[currentCellWeather].name) : ''
+	data.gameWeatherEmoji = GameData.utilData.weather[currentCellWeather] ? translator.translate(emojiLookup.lookup(GameData.utilData.weather[currentCellWeather].emoji, platform)) : ''
 
 	data.gameweather = data.gameWeatherName // deprecated
 	data.gameweatheremoji = data.gameWeatherEmoji // deprecated
@@ -13,11 +13,11 @@ function setGameWeather(data, translator, GameData, emojiLookup, platform, curre
 function setNextWeatherText(data, translator, GameData, emojiLookup, platform) {
 	if (data.weatherNext) {
 		if (!data.weatherCurrent) {
-			data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherNext].emoji, platform))}`
+			data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(emojiLookup.lookup(GameData.utilData.weather[data.weatherNext].emoji, platform))}`
 			data.weatherCurrentName = translator.translate('unknown')
 			data.weatherCurrentEmoji = '❓'
 		} else {
-			data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(this.GameData.utilData.weather[data.weatherCurrent].name)} ${translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherCurrent].emoji, platform))} ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherNext].emoji, platform))}`
+			data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(GameData.utilData.weather[data.weatherCurrent].name)} ${translator.translate(emojiLookup.lookup(GameData.utilData.weather[data.weatherCurrent].emoji, platform))} ➡️ ${translator.translate(GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(emojiLookup.lookup(GameData.utilData.weather[data.weatherNext].emoji, platform))}`
 			data.weatherCurrentName = translator.translate(GameData.utilData.weather[data.weatherCurrent].name)
 			data.weatherCurrentEmoji = translator.translate(emojiLookup.lookup(GameData.utilData.weather[data.weatherCurrent].emoji, platform))
 		}
