@@ -702,6 +702,7 @@ class Monster extends Controller {
 										displayRank.fullName = displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form)
 									}
 
+									displayRank.matchesUserTrack = false
 									if (cares.filters.length) {
 										displayRank.passesFilter = false
 										for (const filter of cares.filters) {
@@ -709,7 +710,7 @@ class Monster extends Controller {
 											&& (filter.pvp_ranking_cap === 0 || filter.pvp_ranking_cap === displayRank.cap || displayRank.capped)
 											&& (filter.pvp_ranking_worst >= displayRank.rank)) {
 												displayRank.passesFilter = true
-												break
+												displayRank.matchesUserTrack = true
 											}
 										}
 									} else {
