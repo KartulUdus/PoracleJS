@@ -75,13 +75,13 @@ exports.run = async (client, msg, [args]) => {
 
 		let categoryId
 		if (template.definition.category) {
-			const category = await guild.channels.create(format(template.definition.category, args), { type: 'category' })
+			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
 			categoryId = category.id
 		}
 
 		for (const channelDefinition of template.definition.channels) {
 			const channelOptions = {
-				type: 'text',
+				type: 'GUILD_TEXT',
 			}
 			if (categoryId) {
 				channelOptions.parent = categoryId

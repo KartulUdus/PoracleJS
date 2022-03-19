@@ -38,6 +38,15 @@ class DiscordReconciliation {
 		}
 	}
 
+	async sendGoodbye(id) {
+		if (this.config.discord.lostRoleMessage) {
+			const discordUser = await this.client.users.fetch(id)
+			await discordUser.createDM()
+
+			await discordUser.send({ content: this.config.discord.lostRoleMessage })
+		}
+	}
+
 	async removeRoles(user) {
 		if (this.config.discord.userRoleSubscription) {
 			const userId = user.id
@@ -97,6 +106,7 @@ class DiscordReconciliation {
 				}, { id: user.id })
 				this.log.info(`Reconciliation (Discord) Disable user ${user.id} ${user.name}`)
 				await this.removeRoles(user)
+				await this.sendGoodbye(user.id)
 			}
 		} else if (this.config.general.roleCheckMode === 'delete') {
 			await this.query.deleteQuery('egg', { id: user.id })
@@ -108,6 +118,7 @@ class DiscordReconciliation {
 			await this.query.deleteQuery('humans', { id: user.id })
 			this.log.info(`Reconciliation (Discord) Delete user ${user.id} ${user.name}`)
 			await this.removeRoles(user)
+			await this.sendGoodbye(user.id)
 		} else {
 			this.log.info(`Reconciliation (Discord) Not removing invalid user ${user.id} [roleCheckMode is ignored]`)
 		}

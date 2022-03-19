@@ -11,6 +11,7 @@ class NominatimGeocoderConverter extends NominatimGeocoder {
 		const result = await super.reverse(obj.lat, obj.lon)
 
 		if (!result) return null
+		if (result.error) return result
 
 		let countryCode = result.address.country_code
 		if (countryCode) {
@@ -100,7 +101,13 @@ class CachingGeocoder {
 			try {
 				const startTime = performance.now()
 				const geocoder = this.getGeocoder()
-				const [result] = await geocoder.reverse(locationObject)
+				const r = await geocoder.reverse(locationObject)
+				if (!r || r.error) {
+					this.log.error(`getAddress: failed to fetch data - ${!r ? 'no result' : `${r.error}`}`)
+					return { addr: 'Unknown', flag: '' }
+				}
+
+				const result = r[0]
 				const endTime = performance.now();
 				(this.config.logger.timingStats ? this.log.verbose : this.log.debug)(`Geocode ${locationObject.lat},${locationObject.lon} (${endTime - startTime} ms)`)
 

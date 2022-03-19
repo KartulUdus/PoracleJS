@@ -1,5 +1,6 @@
 const communityLogic = require('../lib/communityLogic')
 const DiscordUtil = require('../lib/discord/discordUtil')
+const DiscordRoleSetter = require('../lib/discord/discordRoleSetter')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/humans/:id', options, async (req) => {
@@ -40,6 +41,99 @@ module.exports = async (fastify, options, next) => {
 				description: x.description || '',
 				userSelectable: !!(x.userSelectable ?? true),
 			})),
+		}
+	})
+
+	fastify.get('/api/humans/:id/roles', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+
+		if (!human) {
+			return {
+				status: 'error',
+				message: 'User not found',
+			}
+		}
+
+		if (human.type !== 'discord:user') {
+			return []
+		}
+
+		const roleSetter = new DiscordRoleSetter(fastify.discordClient, fastify.config, fastify.logger)
+
+		return {
+			status: 'ok',
+			guilds: await roleSetter.list(human.id),
+		}
+	})
+
+	fastify.post('/api/humans/:id/roles/add/:roleId', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+
+		if (!human) {
+			return {
+				status: 'error',
+				message: 'User not found',
+			}
+		}
+
+		if (human.type !== 'discord:user') {
+			return []
+		}
+
+		const roleSetter = new DiscordRoleSetter(fastify.discordClient, fastify.config, fastify.logger)
+
+		return {
+			status: 'ok',
+			result: await roleSetter.setRole(human.id, req.params.roleId, true),
+		}
+	})
+
+	fastify.post('/api/humans/:id/roles/remove/:roleId', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+
+		if (!human) {
+			return {
+				status: 'error',
+				message: 'User not found',
+			}
+		}
+
+		if (human.type !== 'discord:user') {
+			return []
+		}
+
+		const roleSetter = new DiscordRoleSetter(fastify.discordClient, fastify.config, fastify.logger)
+
+		return {
+			status: 'ok',
+			result: await roleSetter.setRole(human.id, req.params.roleId, false),
 		}
 	})
 

@@ -149,8 +149,6 @@ class Worker {
 				await user.createDM()
 			}
 
-			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message`, data.message)
-
 			if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
 				const { url } = data.message.embed.image
 				data.message.embed.image.url = 'attachment://map.png'
@@ -173,6 +171,8 @@ class Worker {
 					}
 				}
 			}
+
+			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message`, data.message)
 
 			const msg = await user.send(/* data.message.content || '', */ data.message)
 			const endTime = performance.now();
@@ -345,14 +345,13 @@ class Worker {
 					channel = await this.client.channels.fetch(msgData.v.id)
 				}
 				if (channel) {
-					const msg = await channel.messages.fetch(key)
 					if (msgData.t <= now) {
-						msg.delete().catch(noop)
+						channel.messages.fetch(key).then((msg) => msg.delete()).catch(noop)
 					} else {
 						const newTtlms = Math.max(msgData.t - now, 2000)
 						const newTtl = Math.floor(newTtlms / 1000)
 						setTimeout(() => {
-							msg.delete().catch(noop)
+							channel.messages.fetch(key).then((msg) => msg.delete()).catch(noop)
 						}, newTtlms)
 						this.discordMessageTimeouts.set(key, msgData.v, newTtl)
 					}
