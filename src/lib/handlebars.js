@@ -65,6 +65,51 @@ module.exports = () => {
 		return types[moves[value].type] ? emoji(options, types[moves[value].type].emoji) : ''
 	})
 
+	handlebars.registerHelper('pokemon', (id, form, options) => {
+		if (form.fn) {
+			// clean up parameters if no form specified
+			options = form
+			form = 0
+		}
+
+		if (!options.fn) return
+
+		const monster = Object.values(monsters).find((m) => m.id === +id && m.form.id === +form)
+		if (!monster) return
+
+		const e = []
+		const n = []
+		monster.types.forEach((type) => {
+			e.push(userTranslator(options).translate(emojiLookup.lookup(types[type.name].emoji, options.data.platform)))
+			n.push(type.name)
+		})
+
+		const formNormalisedEng = monster.form.name === 'Normal' ? '' : monster.form.name
+		const formNormalised = userTranslator(options).translate(formNormalisedEng)
+
+		const nameEng = monster.name
+		const name = userTranslator(options).translate(monster.name)
+		const fullNameEng = nameEng.concat(formNormalisedEng ? ' ' : '', formNormalisedEng)
+		const fullName = name.concat(formNormalised ? ' ' : '', formNormalised)
+
+		return options.fn({
+			name,
+			nameEng,
+			formName: userTranslator(options).translate(monster.form.name),
+			formNameEng: monster.form.name,
+			fullName,
+			fullNameEng,
+			formNormalised,
+			formNormalisedEng,
+			emoji: e,
+			typeNameEng: n,
+			typeName: n.map((type) => userTranslator(options).translate(type)).join(', '),
+			typeEmoji: e.join(''),
+			hasEvolutions: !!(monster.evolutions && monster.evolutions.length),
+			baseStats: monster.stats,
+		})
+	})
+
 	handlebars.registerHelper('pokemonName', (value, options) => {
 		if (!+value) return ''
 		const monster = Object.values(monsters).find((m) => m.id === +value)

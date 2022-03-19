@@ -43,6 +43,12 @@ class TelegramReconciliation {
 		}
 	}
 
+	async sendGoodbye(id) {
+		if (this.config.telegram.botGoodbyeMessage) {
+			await this.telegraf.telegram.sendMessage(id, this.config.telegram.botGoodbyeMessage)
+		}
+	}
+
 	async disableUser(user) {
 		if (this.config.general.roleCheckMode === 'disable-user') {
 			if (!user.admin_disable) {
@@ -51,6 +57,7 @@ class TelegramReconciliation {
 					disabled_date: this.query.dbNow(),
 				}, { id: user.id })
 				this.log.info(`Reconciliation (Telegram) Disable user ${user.id} ${user.name}`)
+				await this.sendGoodbye(user.id)
 			}
 		} else if (this.config.general.roleCheckMode === 'delete') {
 			await this.query.deleteQuery('egg', { id: user.id })
@@ -61,6 +68,7 @@ class TelegramReconciliation {
 			await this.query.deleteQuery('profiles', { id: user.id })
 			await this.query.deleteQuery('humans', { id: user.id })
 			this.log.info(`Reconciliation (Telegram) Delete user ${user.id} ${user.name}`)
+			await this.sendGoodbye(user.id)
 		} else {
 			this.log.info(`Reconciliation (Telegram) Not removing invalid user ${user.id} [roleCheckMode is ignored]`)
 		}

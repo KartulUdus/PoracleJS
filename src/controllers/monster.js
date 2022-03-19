@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
-const { getSunrise, getSunset } = require('sunrise-sunset-js')
 
 const Controller = require('./controller')
 
@@ -471,17 +470,49 @@ class Monster extends Controller {
 					})
 					const jobs = []
 
-					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
-					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+					require('./common/nightTime').setNightTime(data, disappearTime)
+					// const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
+					// const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+					// const dawnEndTime = moment(sunriseTime).add({ hours: 1 })
+					// const duskStartTime = moment(sunsetTime).subtract({ hours: 1 })
+					//
+					// data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
+					// data.dawnTime = disappearTime.isBetween(sunriseTime, dawnEndTime)
+					// data.duskTime = disappearTime.isBetween(duskStartTime, sunsetTime)
 
-					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
+					if (data.seen_type) {
+						switch (data.seen_type) {
+							case 'nearby_stop': {
+								data.seenType = 'pokestop'
+								break
+							}
+							case 'nearby_cell': {
+								data.seenType = 'cell'
+								break
+							}
+							case 'lure':
+							case 'lure_wild': {
+								data.seenType = 'lure'
+								break
+							}
+							case 'encounter':
+							case 'wild': {
+								data.seenType = data.seen_type
+								break
+							}
+							default:
+								break
+						}
+					} else if (data.pokestop_id === 'None' && data.spawnpoint_id === 'None') data.seenType = 'cell'
+					else if (data.pokemon_id === 'None') data.seenType = encountered ? 'encounter' : 'wild'
+					else data.seenType = 'pokestop'
 
 					await this.getStaticMapUrl(
 						logReference,
 						data,
 						'monster',
 						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
-						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime'],
 					)
 					data.staticmap = data.staticMap // deprecated
 
@@ -517,6 +548,7 @@ class Monster extends Controller {
 						this.log.debug(`${logReference}: Pokemon ${data.pokemon_id} cell: ${weatherCellId} types ${JSON.stringify(data.types)} weather ${data.weather} Forecast ${weatherForecast.current} [boosted ${pokemonShouldBeBoosted} ${JSON.stringify(currentBoostedTypes)}] next ${weatherForecast.next} [boosted ${pokemonWillBeBoosted} ${JSON.stringify(forecastBoostedTypes)}]`)
 					}
 
+					/* Future event processing */
 					const event = this.eventParser.eventChangesSpawn(moment()
 						.unix(), data.disappear_time, data.latitude, data.longitude)
 					if (event) {
@@ -584,6 +616,12 @@ class Monster extends Controller {
 						if (data.disguisePokemonNameEng) data.disguisePokemonName = translator.translate(data.disguisePokemonNameEng)
 						if (data.disguiseFormNameEng) data.disguiseFormName = translator.translate(data.disguiseFormNameEng)
 
+						data.formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
+						data.formNormalised = translator.translate(data.formNormalisedEng)
+
+						data.fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
+						data.fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
+
 						data.genderData = {
 							name: translator.translate(data.genderDataEng.name),
 							emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
@@ -639,6 +677,8 @@ class Monster extends Controller {
 							.join(', ')
 						data.emojiString = e.join('')
 						data.typeEmoji = data.emojiString
+
+						require('./common/evolutionCalculator').setEvolutions(data, this.GameData, this.log, logReference, translator, this.emojiLookup, platform, monster)
 
 						const createPvpDisplay = (leagueCap, leagueData, maxRank, minCp) => {
 							const displayList = []
@@ -724,9 +764,37 @@ class Monster extends Controller {
 							return displayList.length ? displayList : null
 						}
 
+						const calculateBestInfo = (ranks) => {
+							if (!ranks) return null
+
+							const best = {
+								rank: 4096,
+								list: [],
+							}
+
+							for (const result of ranks) {
+								if (result.rank === best.rank) {
+									best.list.push(result)
+								} else if (result.rank < best.rank) {
+									best.rank = result.rank
+									best.list = [result]
+								}
+							}
+
+							best.name = Array.from(new Set(best.list.map((x) => x.fullName))).join(', ')
+							best.nameEng = Array.from(new Set(best.list.map((x) => x.fullNameEng))).join(', ')
+							return best
+						}
+
 						data.pvpGreat = data.pvp_rankings_great_league ? createPvpDisplay(1500, data.pvp_rankings_great_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayGreatMinCP) : null
+						data.pvpGreatBest = calculateBestInfo(data.pvpGreat)
+
 						data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(2500, data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
+						data.pvpUltraBest = calculateBestInfo(data.pvpUltra)
+
 						data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(500, data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
+						data.pvpLittleBest = calculateBestInfo(data.pvpLittle)
+
 						data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
 
 						data.distance = cares.longitude ? this.getDistance({
