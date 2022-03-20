@@ -1042,14 +1042,15 @@ async function run() {
 }
 
 function startPoracle() {
-	const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
-	if (NODE_MAJOR_VERSION !== '16') {
-		log.warn('Near future versions of Poracle will require Node 16 - please upgrade')
-	}
-
 	run()
 	setInterval(handleAlarms, 100)
 	setInterval(currentStatus, 60000)
+}
+
+const NODE_MAJOR_VERSION = process.versions.node.split('.')[0]
+if (NODE_MAJOR_VERSION < 16) {
+        log.warn('PoracleJS requires Node 16 - please upgrade')
+        process.exit(1)
 }
 
 knex.migrate.latest({
