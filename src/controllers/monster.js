@@ -451,14 +451,6 @@ class Monster extends Controller {
 					const jobs = []
 
 					require('./common/nightTime').setNightTime(data, disappearTime)
-					// const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
-					// const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
-					// const dawnEndTime = moment(sunriseTime).add({ hours: 1 })
-					// const duskStartTime = moment(sunsetTime).subtract({ hours: 1 })
-					//
-					// data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
-					// data.dawnTime = disappearTime.isBetween(sunriseTime, dawnEndTime)
-					// data.duskTime = disappearTime.isBetween(duskStartTime, sunsetTime)
 
 					if (data.seen_type) {
 						switch (data.seen_type) {

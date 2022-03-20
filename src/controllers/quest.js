@@ -2,8 +2,7 @@
 // Quest controller getReward and getQuest function inspired from PMSF
 //
 // ....because it is smartly done there!!
-//
-// const pokemonGif = require('pokemon-gif')
+
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
