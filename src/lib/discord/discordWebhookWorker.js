@@ -82,9 +82,9 @@ class DiscordWebhookWorker {
 					throw err
 				}
 			}
-		} while (retry === true && retryCount < 10)
+		} while (retry === true && retryCount < 5)
 
-		if (retryCount === 10 && retry) {
+		if (retryCount === 5 && retry) {
 			this.logs.discord.warn(`${senderId} WEBHOOK given up sending after retries`)
 		}
 		return res
