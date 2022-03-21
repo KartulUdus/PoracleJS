@@ -120,7 +120,7 @@ class Invasion extends Controller {
 				data.gruntRewards = ''
 				if (data.gruntTypeId in this.GameData.grunts) {
 					const gruntType = this.GameData.grunts[data.gruntTypeId]
-					data.gruntName = `${gruntType.type} ${gruntType.grunt}`
+					data.gruntName = (gruntType.type !== gruntType.name) ? `${gruntType.type} ${gruntType.grunt}` : gruntType.name
 					data.gender = gruntType.gender
 					data.gruntType = gruntType.type
 				}
