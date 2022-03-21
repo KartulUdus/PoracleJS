@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
-const { getSunrise, getSunset } = require('sunrise-sunset-js')
 
 const Controller = require('./controller')
 
@@ -167,10 +166,7 @@ class Gym extends Controller {
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
 
-					const sunsetTime = moment(getSunset(data.latitude, data.longitude, conqueredTime.toDate()))
-					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, conqueredTime.toDate()))
-
-					data.nightTime = !conqueredTime.isBetween(sunriseTime, sunsetTime)
+					require('./common/nightTime').setNightTime(data, conqueredTime)
 
 					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated
