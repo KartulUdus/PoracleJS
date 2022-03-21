@@ -788,6 +788,7 @@ class Monster extends Controller {
 						data.pvpLittleBest = calculateBestInfo(data.pvpLittle)
 
 						data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
+						data.userHasPvpTracks = !!cares.filters.length
 
 						data.distance = cares.longitude ? this.getDistance({
 							lat: cares.latitude,
