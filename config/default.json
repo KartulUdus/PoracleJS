@@ -190,6 +190,7 @@
       "includeMegaEvolution": false,                // internal: whether to include mega evolutions in rank calculations
       "littleLeagueCanEvolve": false,               // internal: whether little league mons that are evolved are included
       "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
+      "filterByTrack": false,                       // whether new style PVP listings are auto-filtered by user's track requirements
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation
       "pvpDisplayMaxRank": 10,
