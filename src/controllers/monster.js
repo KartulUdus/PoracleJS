@@ -295,8 +295,7 @@ class Monster extends Controller {
 
 			data.pvpBestRank = {}
 
-			const capsConsidered = this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'chuck'
-				? (this.config.pvp.levelCaps ?? [50]) : [50]
+			const capsConsidered = this.config.pvp.levelCaps ?? [50]
 
 			const rankCalculator = (league, leagueData, minCp) => {
 				const best = Object.fromEntries(capsConsidered.map((x) => [x, { rank: 4096, cp: 0 }]))
