@@ -84,7 +84,7 @@ exports.run = async (client, msg, args, options) => {
 				individuallyAllowed = true
 			}
 		}
-		const littleLeagueAllowed = client.config.pvp.dataSource === 'internal' || client.config.pvp.dataSource === 'chuck'
+		const littleLeagueAllowed = true
 
 		// Remove arguments that we don't want to keep for processing
 		for (let i = args.length - 1; i >= 0; i--) {

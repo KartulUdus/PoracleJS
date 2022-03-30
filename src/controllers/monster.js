@@ -284,14 +284,18 @@ class Monster extends Controller {
 					} else delete data.pvp_rankings_ultra_league
 					if (pvpData.little) {
 						data.pvp_rankings_little_league = pvpData.little.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
-					}
+					} else delete data.pvp_rankings_little_league
+				}
+			} else if (data.pvp) {
+				// For Chuck & new RDM parser
+				for (const league of Object.keys(data.pvp)) {
+					data[`pvp_rankings_${league}_league`] = data.pvp[league]
 				}
 			}
 
 			data.pvpBestRank = {}
 
-			const capsConsidered = this.config.pvp.dataSource === 'internal' || this.config.pvp.dataSource === 'chuck'
-				? (this.config.pvp.levelCaps ?? [50]) : [50]
+			const capsConsidered = this.config.pvp.levelCaps ?? [50]
 
 			const rankCalculator = (league, leagueData, minCp) => {
 				const best = Object.fromEntries(capsConsidered.map((x) => [x, { rank: 4096, cp: 0 }]))
@@ -366,13 +370,6 @@ class Monster extends Controller {
 				return {
 					rank: Math.min(...Object.values(best).map((x) => x.rank)),
 					cp: Math.min(...Object.values(best).map((x) => x.cp)),
-				}
-			}
-
-			if (data.pvp) {
-				// For Chuck parsers
-				for (const league of Object.keys(data.pvp)) {
-					data[`pvp_rankings_${league}_league`] = data.pvp[league]
 				}
 			}
 

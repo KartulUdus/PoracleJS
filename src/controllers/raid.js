@@ -330,6 +330,7 @@ class Raid extends Controller {
 
 							data.boostingWeathers = data.types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost)
 								.find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
+							data.boostingWeathersEmoji = data.boostingWeathers.map((weather) => translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[weather].emoji, platform))).join('')
 							data.boosted = !!data.boostingWeathers.includes(data.weather)
 							data.boostWeatherNameEng = data.boosted ? this.GameData.utilData.weather[data.weather].name : ''
 							data.boostWeatherId = data.boosted ? data.weather : ''
