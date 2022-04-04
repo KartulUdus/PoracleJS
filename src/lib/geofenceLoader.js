@@ -26,6 +26,29 @@ function getGeofenceFromGEOjson(config, rawdata) {
 
 			outGeofence.push(newFence)
 		}
+		if (geofenceGEOjson[i].type === 'Feature' && geofenceGEOjson[i].geometry.type === 'MultiPolygon') {
+			const { properties } = geofenceGEOjson[i]
+			const name = properties.name || config.defaultGeofenceName + i.toString()
+			const color = properties.color || config.defaultGeofenceColor
+
+			let count = 1
+			for (const coordList of geofenceGEOjson[i].geometry.coordinates) {
+				const newFence = {
+					name: name + count,
+					id: i,
+					color,
+					path: [],
+					group: properties.group || name || '',
+					description: properties.description || '',
+					userSelectable: !!(properties.userSelectable ?? true),
+					displayInMatches: !!(properties.displayInMatches ?? true),
+				}
+				coordList.forEach((coordinates) => newFence.path.push([coordinates[1], coordinates[0]]))
+
+				outGeofence.push(newFence)
+				count++
+			}
+		}
 	}
 	return outGeofence
 }
