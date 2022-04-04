@@ -44,7 +44,7 @@ function getGeofenceFromGEOjson(config, rawdata) {
 
 			for (const coordList of geofenceGEOjson[i].geometry.coordinates) {
 				const p = []
-				coordList.forEach((coordinates) => p.push([coordinates[1], coordinates[0]]))
+				coordList[0].forEach((coordinates) => p.push([coordinates[1], coordinates[0]]))
 
 				newFence.multipath.push(p)
 			}
