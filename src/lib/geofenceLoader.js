@@ -12,7 +12,7 @@ function getGeofenceFromGEOjson(config, rawdata) {
 			const name = properties.name || config.defaultGeofenceName + i.toString()
 			const color = properties.color || config.defaultGeofenceColor
 
-			outGeofence[i] = {
+			const newFence = {
 				name,
 				id: i,
 				color,
@@ -22,7 +22,9 @@ function getGeofenceFromGEOjson(config, rawdata) {
 				userSelectable: !!(properties.userSelectable ?? true),
 				displayInMatches: !!(properties.displayInMatches ?? true),
 			}
-			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
+			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => newFence.path.push([coordinates[1], coordinates[0]]))
+
+			outGeofence.push(newFence)
 		}
 	}
 	return outGeofence
