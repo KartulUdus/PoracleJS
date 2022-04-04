@@ -35,7 +35,6 @@ function getGeofenceFromGEOjson(config, rawdata) {
 				name,
 				id: i,
 				color,
-				path: [],
 				multipath: [],
 				group: properties.group || name || '',
 				description: properties.description || '',
