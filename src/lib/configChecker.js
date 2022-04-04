@@ -84,7 +84,7 @@ function checkGeofence(geofence) {
 		if (!fence.name) {
 			logs.log.warn('Config Check: geofence.json has entry with blank name')
 		}
-		if (!fence.path.length) {
+		if (fence.path && !fence.path.length) {
 			logs.log.warn('Config Check: geofence.json has empty path')
 		}
 	}
