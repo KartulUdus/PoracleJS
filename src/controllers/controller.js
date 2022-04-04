@@ -386,8 +386,7 @@ class Controller extends EventEmitter {
 						group: areaObj.group,
 					})
 				}
-			}
-			if (areaObj.multipath) {
+			} else if (areaObj.multipath) {
 				for (const p of areaObj.multipath) {
 					if (inside(point, p)) {
 						matchAreas.push({
@@ -396,6 +395,7 @@ class Controller extends EventEmitter {
 							displayInMatches: areaObj.displayInMatches ?? true,
 							group: areaObj.group,
 						})
+						break
 					}
 				}
 			}
