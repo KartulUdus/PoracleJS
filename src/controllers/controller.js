@@ -376,15 +376,28 @@ class Controller extends EventEmitter {
 	pointInArea(point) {
 		if (!this.geofence.length) return []
 		const matchAreas = []
-
 		for (const areaObj of this.geofence) {
-			if (inside(point, areaObj.path)) {
-				matchAreas.push({
-					name: areaObj.name,
-					description: areaObj.description,
-					displayInMatches: areaObj.displayInMatches ?? true,
-					group: areaObj.group,
-				})
+			if (areaObj.path) {
+				if (inside(point, areaObj.path)) {
+					matchAreas.push({
+						name: areaObj.name,
+						description: areaObj.description,
+						displayInMatches: areaObj.displayInMatches ?? true,
+						group: areaObj.group,
+					})
+				}
+			} else if (areaObj.multipath) {
+				for (const p of areaObj.multipath) {
+					if (inside(point, p)) {
+						matchAreas.push({
+							name: areaObj.name,
+							description: areaObj.description,
+							displayInMatches: areaObj.displayInMatches ?? true,
+							group: areaObj.group,
+						})
+						break
+					}
+				}
 			}
 		}
 		return matchAreas

@@ -64,7 +64,12 @@ class Query {
 		const matchAreas = []
 
 		for (const areaObj of this.geofence) {
-			if (inside(point, areaObj.path)) matchAreas.push(areaObj.name.toLowerCase())
+			if (areaObj.path && inside(point, areaObj.path)) matchAreas.push(areaObj.name.toLowerCase())
+			if (areaObj.multipath) {
+				for (const p of areaObj.multipath) {
+					if (inside(point, p)) matchAreas.push(areaObj.name.toLowerCase())
+				}
+			}
 		}
 		return matchAreas
 	}

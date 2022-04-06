@@ -12,7 +12,7 @@ function getGeofenceFromGEOjson(config, rawdata) {
 			const name = properties.name || config.defaultGeofenceName + i.toString()
 			const color = properties.color || config.defaultGeofenceColor
 
-			outGeofence[i] = {
+			const newFence = {
 				name,
 				id: i,
 				color,
@@ -22,7 +22,33 @@ function getGeofenceFromGEOjson(config, rawdata) {
 				userSelectable: !!(properties.userSelectable ?? true),
 				displayInMatches: !!(properties.displayInMatches ?? true),
 			}
-			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => outGeofence[i].path.push([coordinates[1], coordinates[0]]))
+			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => newFence.path.push([coordinates[1], coordinates[0]]))
+
+			outGeofence.push(newFence)
+		}
+		if (geofenceGEOjson[i].type === 'Feature' && geofenceGEOjson[i].geometry.type === 'MultiPolygon') {
+			const { properties } = geofenceGEOjson[i]
+			const name = properties.name || config.defaultGeofenceName + i.toString()
+			const color = properties.color || config.defaultGeofenceColor
+
+			const newFence = {
+				name,
+				id: i,
+				color,
+				multipath: [],
+				group: properties.group || '',
+				description: properties.description || '',
+				userSelectable: !!(properties.userSelectable ?? true),
+				displayInMatches: !!(properties.displayInMatches ?? true),
+			}
+
+			for (const coordList of geofenceGEOjson[i].geometry.coordinates) {
+				const p = []
+				coordList[0].forEach((coordinates) => p.push([coordinates[1], coordinates[0]]))
+
+				newFence.multipath.push(p)
+			}
+			outGeofence.push(newFence)
 		}
 	}
 	return outGeofence
