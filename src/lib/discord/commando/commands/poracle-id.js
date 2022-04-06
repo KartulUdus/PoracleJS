@@ -30,7 +30,7 @@ exports.run = async (client, msg, [args]) => {
 		let details = ''
 		// Load emojis from discord
 		for (const emoji of guild.emojis.cache.values()) {
-			details += `  "${emoji.name}":"<:${emoji.name}:${emoji.id}>"\n`
+			details += `  "${emoji.name}":"<${emoji.animated ? 'a' : ''}:${emoji.name}:${emoji.id}>"\n`
 		}
 
 		details += '\n\n'
