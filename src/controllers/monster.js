@@ -104,7 +104,7 @@ class Monster extends Controller {
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (')
 			}
-			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp} and (pvp_ranking_cap = 0 ${leagueData.caps ? `or pvp_ranking_cap IN (${leagueData.caps})` : ''})`)
+			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp} and (pvp_ranking_cap = 0 ${leagueData.caps && leagueData.caps.length ? `or pvp_ranking_cap IN (${leagueData.caps})` : ''})`)
 
 			if (pvpSecurityEnabled) {
 				pvpQueryString = pvpQueryString.concat('))')
@@ -312,6 +312,11 @@ class Monster extends Controller {
 						}
 
 						for (const cap of caps) {
+							if (!capsConsidered.includes(cap)) {
+								this.log.warn(`${data.encounter_id}: PVP configuration mismatch - unexpected cap ${cap} found in league ${league}`)
+								// eslint-disable-next-line no-continue
+								continue
+							}
 							if (stats.rank && stats.rank < best[cap].rank) {
 								best[cap].rank = stats.rank
 								best[cap].cp = stats.cp || 0
@@ -331,7 +336,7 @@ class Monster extends Controller {
 								// eslint-disable-next-line no-nested-ternary
 								caps: stats.capped
 									? capsConsidered.filter((x) => x >= stats.cap)
-									: (stats.cap ? [stats.cap] : null),
+									: (stats.cap && capsConsidered.includes(stats.cap) ? [stats.cap] : null),
 							}
 
 							if (data.pvpEvolutionData[stats.pokemon] && data.pvpEvolutionData[stats.pokemon][league]) {
