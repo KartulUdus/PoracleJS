@@ -265,7 +265,7 @@ class Monster extends Controller {
 			data.shinyStats = this.statsData.shinyData[data.pokemonId] ? this.statsData.shinyData[data.pokemonId].ratio.toFixed(0) : null
 
 			if (this.config.logger.enableLogs.pvp && data.iv >= 0) {
-				this.log.verbose(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)}`)
+				this.log.verbose(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)} "pvp":${JSON.stringify(data.pvp)}`)
 			}
 
 			if (data.ohbem_pvp) {
