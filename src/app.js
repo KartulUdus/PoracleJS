@@ -1,4 +1,4 @@
-process.title = 'PoraJS'
+process.title = 'PoracleJS'
 require('./lib/configFileCreator')()
 // eslint-disable-next-line no-underscore-dangle
 require('events').EventEmitter.prototype._maxListeners = 100
