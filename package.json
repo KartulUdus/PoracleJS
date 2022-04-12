@@ -7,9 +7,9 @@
   "scripts": {
     "test": "node test/test",
     "lint": "./node_modules/.bin/eslint ./src --fix",
-    "start": "npm run generate && node .",
-    "latest": "npm run generate latest && node .",
-    "dev": "node .",
+    "start": "npm run generate && node poracle.js",
+    "latest": "npm run generate latest && node poracle.js",
+    "dev": "node poracle.js",
     "migrateV3": "node src/init/migrateV3.js",
     "init": "node src/init/initConfig.js",
     "generate": "node src/util/generateData.js",
