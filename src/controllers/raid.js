@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
-const { getSunrise, getSunset } = require('sunrise-sunset-js')
 
 const Controller = require('./controller')
 
@@ -167,7 +166,8 @@ class Raid extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			data.weather = this.weatherData.getCurrentWeatherInCell(this.weatherData.getWeatherCellId(data.latitude, data.longitude)) || 0		// complete weather data from weather cache
+			const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
+			data.weather = this.weatherData.getCurrentWeatherInCell(weatherCellId) || 0		// complete weather data from weather cache
 			data.gameWeatherId = data.weather
 			data.gameWeatherNameEng = data.weather ? this.GameData.utilData.weather[data.gameWeatherId].name : ''
 
@@ -249,13 +249,13 @@ class Raid extends Controller {
 						})
 						const jobs = []
 
-						const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
-						const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
-
-						data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
+						require('./common/nightTime').setNightTime(data, disappearTime)
 
 						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
 						data.staticmap = data.staticMap // deprecated
+						data.types = monster.types.map((type) => type.id)
+
+						await require('./common/weather').calculateForecastImpact(data, this.GameData, weatherCellId, this.weatherData, data.end, this.config)
 
 						for (const cares of whoCares) {
 							this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
@@ -276,6 +276,24 @@ class Raid extends Controller {
 							data.name = translator.translate(data.nameEng)
 							data.formName = translator.translate(data.formNameEng)
 							data.evolutionName = translator.translate(data.evolutionNameEng)
+
+							data.formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
+							data.formNormalised = translator.translate(data.formNormalisedEng)
+
+							if (data.evolution) {
+								data.fullNameEng = translator.format(
+									this.GameData.utilData.megaName[data.evolution],
+									data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng),
+								)
+								data.fullName = translator.translateFormat(
+									this.GameData.utilData.megaName[data.evolution],
+									data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised),
+								)
+							} else {
+								data.fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
+								data.fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
+							}
+
 							data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
 							data.teamNameEng = this.GameData.utilData.teams[data.team_id].name
 							data.teamName = translator.translate(data.teamNameEng)
@@ -297,14 +315,11 @@ class Raid extends Controller {
 							data.move2emoji = data.chargeMoveEmoji // deprecated
 
 							const e = []
-							const t = []
 							const n = []
 							monster.types.forEach((type) => {
 								e.push(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform))
-								t.push(type.id)
 								n.push(type.name)
 							})
-							data.types = t
 							data.typeNameEng = n
 							data.emoji = e
 
@@ -315,11 +330,79 @@ class Raid extends Controller {
 
 							data.boostingWeathers = data.types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost)
 								.find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
+							data.boostingWeathersEmoji = data.boostingWeathers.map((weather) => translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[weather].emoji, platform))).join('')
 							data.boosted = !!data.boostingWeathers.includes(data.weather)
 							data.boostWeatherNameEng = data.boosted ? this.GameData.utilData.weather[data.weather].name : ''
 							data.boostWeatherId = data.boosted ? data.weather : ''
 							data.boostWeatherName = data.boosted ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
 							data.boostWeatherEmoji = data.boosted ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+
+							require('./common/evolutionCalculator').setEvolutions(data, this.GameData, this.log, logReference, translator, this.emojiLookup, platform, monster)
+							require('./common/weather').setNextWeatherText(data, translator, this.GameData, this.emojiLookup, platform)
+
+							/* Weakness calculations */
+
+							const typeInfo = this.GameData.types
+							const typeData = this.GameData.utilData.types
+
+							const strengths = {}
+							const weaknesses = {}
+
+							for (const type of data.typeNameEng) {
+								strengths[type] = []
+								typeInfo[type].strengths.forEach((x) => {
+									strengths[type].push(x.typeName)
+								})
+								typeInfo[type].weaknesses.forEach((x) => {
+									if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+									weaknesses[x.typeName] *= 2
+								})
+								typeInfo[type].resistances.forEach((x) => {
+									if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+									weaknesses[x.typeName] *= 0.5
+								})
+								typeInfo[type].immunes.forEach((x) => {
+									if (!weaknesses[x.typeName]) weaknesses[x.typeName] = 1
+									weaknesses[x.typeName] *= 0.25
+								})
+							}
+
+							const typeObj = {
+								extraWeak: { value: 4, types: [], text: 'Very vulnerable to' },
+								weak: { value: 2, types: [], text: 'Vulnerable to' },
+								resist: { value: 0.5, types: [], text: 'Resistant to' },
+								immune: { value: 0.25, types: [], text: 'Very resistant to' },
+								extraImmune: { value: 0.125, types: [], text: 'Extremely resistant to' },
+							}
+
+							for (const [name, value] of Object.entries(weaknesses)) {
+								const translated = {
+									nameEng: name,
+									name: translator.translate(name),
+									emoji: translator.translate(this.emojiLookup.lookup(typeData[name].emoji, platform)),
+								}
+								switch (value) {
+									case 0.125: typeObj.extraImmune.types.push(translated); break
+									case 0.25: typeObj.immune.types.push(translated); break
+									case 0.5: typeObj.resist.types.push(translated); break
+									case 2: typeObj.weak.types.push(translated); break
+									case 4: typeObj.extraWeak.types.push(translated); break
+									default: break
+								}
+							}
+
+							let weaknessEmoji = ''
+							for (const info of Object.values(typeObj)) {
+								if (info.types.length) {
+									const typeEmoji = info.types.map((x) => x.emoji).join('')
+									info.typeEmoji = typeEmoji
+									weaknessEmoji = weaknessEmoji.concat(`${info.value}x${typeEmoji} `)
+								}
+							}
+
+							data.weaknessList = Object.values(typeObj).filter((x) => x.types.length)
+
+							data.weaknessEmoji = weaknessEmoji
 
 							const view = {
 								...geoResult,
@@ -417,10 +500,7 @@ class Raid extends Controller {
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
 
-					const sunsetTime = moment(getSunset(data.latitude, data.longitude, hatchTime.toDate()))
-					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, hatchTime.toDate()))
-
-					data.nightTime = !hatchTime.isBetween(sunriseTime, sunsetTime)
+					require('./common/nightTime').setNightTime(data, hatchTime)
 
 					await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated

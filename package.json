@@ -1,6 +1,6 @@
 {
   "name": "poracle",
-  "version": "4.5.1",
+  "version": "4.5.4",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "main": "src/app.js",
   "engines": { "node": ">=16.6.0" },
@@ -57,7 +57,7 @@
     "node-geocoder": "^4.0.0",
     "node-schedule": "^2.1.0",
     "nodes2ts": "^2.0.0",
-    "ohbem": "^1.4.0",
+    "ohbem": "^1.4.1",
     "pogo-data-generator": "^1.3.9",
     "point-in-polygon": "^1.1.0",
     "readline-sync": "^1.4.10",

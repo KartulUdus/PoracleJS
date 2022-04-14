@@ -19,7 +19,7 @@ exports.run = async (client, msg, [args]) => {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
 
 		// Check target
-		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type === 'GUILD_TEXT') {
+		if (!client.config.discord.admins.includes(msg.author.id) && msg.channel.type !== 'DM') {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
@@ -75,13 +75,13 @@ exports.run = async (client, msg, [args]) => {
 
 		let categoryId
 		if (template.definition.category) {
-			const category = await guild.channels.create(format(template.definition.category, args), { type: 'category' })
+			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
 			categoryId = category.id
 		}
 
 		for (const channelDefinition of template.definition.channels) {
 			const channelOptions = {
-				type: 'text',
+				type: 'GUILD_TEXT',
 			}
 			if (categoryId) {
 				channelOptions.parent = categoryId

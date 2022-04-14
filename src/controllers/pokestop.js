@@ -1,7 +1,6 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
-const { getSunrise, getSunset } = require('sunrise-sunset-js')
 
 const Controller = require('./controller')
 
@@ -121,7 +120,7 @@ class Invasion extends Controller {
 				data.gruntRewards = ''
 				if (data.gruntTypeId in this.GameData.grunts) {
 					const gruntType = this.GameData.grunts[data.gruntTypeId]
-					data.gruntName = `${gruntType.type} ${gruntType.grunt}`
+					data.gruntName = (gruntType.type !== gruntType.name) ? `${gruntType.type} ${gruntType.grunt}` : gruntType.name
 					data.gender = gruntType.gender
 					data.gruntType = gruntType.type
 				}
@@ -161,10 +160,11 @@ class Invasion extends Controller {
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
 
-					const sunsetTime = moment(getSunset(data.latitude, data.longitude, disappearTime.toDate()))
-					const sunriseTime = moment(getSunrise(data.latitude, data.longitude, disappearTime.toDate()))
+					require('./common/nightTime').setNightTime(data, disappearTime)
 
-					data.nightTime = !disappearTime.isBetween(sunriseTime, sunsetTime)
+					// Get current cell weather from cache
+					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
+					const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
 					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId'])
 					data.staticmap = data.staticMap // deprecated
@@ -186,6 +186,7 @@ class Invasion extends Controller {
 						if (platform === 'webhook') platform = 'discord'
 
 						data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup('grunt-unknown', platform))
+						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
 
 						// full build
 						if (data.gruntTypeId) {

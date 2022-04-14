@@ -9,13 +9,13 @@
     "type": "pokemon",
     "test": "hundo",
     "location": "current",
-    "webhook": {"encounter_id":"18138400381185779793","pokemon_id":100,"display_pokemon_id":null,"spawnpoint_id":4938887656651,"latitude":51.28431913673707,"longitude":1.0932030626067226,"disappear_time":1643559245,"verified":true,"seen_type":"encounter","cp_multiplier":0.25572,"pokemon_level":4,"form":1047,"costume":0,"cp":100,"individual_attack":14,"individual_defense":9,"individual_stamina":10,"move_1":206,"move_2":35,"height":0.580141,"weight":14.996,"gender":3,"rarity":1,"base_catch":0.97763157,"great_catch":0.99665457,"ultra_catch":0.9994997}
+    "webhook": {"encounter_id":"4741200842694954430","pokemon_id":129,"display_pokemon_id":null,"spawnpoint_id":4938887221731,"latitude":51.24585725757358,"longitude":1.1194668505277585,"disappear_time":1646410991,"verified":true,"seen_type":"encounter","cp_multiplier":0.694144,"pokemon_level":27,"form":253,"costume":0,"cp":212,"individual_attack":15,"individual_defense":15,"individual_stamina":15,"move_1":231,"move_2":133,"height":0.870209,"weight":7.80769,"gender":1,"rarity":1,"base_catch":0.5042184,"great_catch":0.65091145,"ultra_catch":0.7542006}
   },
   {
     "type": "pokemon",
     "test": "great1",
     "location": "current",
-    "webhook": {"encounter_id":"5228303021291180843","pokemon_id":653,"display_pokemon_id":null,"spawnpoint_id":4938889137835,"latitude":51.28064116626805,"longitude":1.0659243041521245,"disappear_time":1643554344,"verified":true,"seen_type":"encounter","cp_multiplier":0.443108,"pokemon_level":11,"costume":0,"cp":285,"individual_attack":0,"individual_defense":15,"individual_stamina":14,"move_1":220,"move_2":60,"height":0.386655,"weight":8.56926,"gender":1,"rarity":3,"base_catch":0.22567886,"great_catch":0.31863207,"ultra_catch":0.40042675}
+    "webhook": {"pokestop_id":"None","longitude":0.8820540265317288,"pokemon_id":2,"disappear_time":1642362331,"last_modified_time":1642361138,"pvp_rankings_ultra_league":[{"level":50,"percentage":0.8981240757366443,"rank":836,"pokemon":2,"form":166,"cp":1731},{"pokemon":3,"cp":2492,"level":39.5,"rank":26,"form":169,"percentage":0.9923566519009468}],"first_seen":1642361134,"gender":1,"move_1":214,"individual_defense":13,"cp":114,"weather":0,"latitude":51.31614219989664,"spawnpoint_id":"ED31A733","costume":0,"capture_2":0.32665425539016724,"pokemon_level":3,"height":1.080157995223999,"move_2":116,"individual_stamina":14,"weight":15.371509552001953,"is_event":false,"username":"PogoDroid","individual_attack":0,"display_pokemon_id":null,"capture_1":0.23176854848861694,"pvp_rankings_great_league":[{"level":38.5,"percentage":1,"pokemon":2,"form":166,"rank":1,"cp":1498},{"pokemon":3,"form":169,"level":20.5,"rank":267,"percentage":0.971374455778384,"cp":1470}],"encounter_id":"2744965908571838891","form":166,"disappear_time_verified":true,"capture_3":0.40982043743133545,"shiny":false}
   },
   {
     "type": "pokemon",
@@ -33,7 +33,7 @@
     "type": "pokemon",
     "test": "ultra1",
     "location": "current",
-    "webhook": {"encounter_id":"7281211089751226809","pokemon_id":125,"display_pokemon_id":null,"spawnpoint_id":4938887549503,"latitude":51.276881361348075,"longitude":1.083247353320102,"disappear_time":1643557211,"verified":true,"seen_type":"encounter","cp_multiplier":0.550793,"pokemon_level":17,"form":640,"costume":0,"cp":1059,"individual_attack":1,"individual_defense":15,"individual_stamina":15,"move_1":205,"move_2":79,"height":0.845533,"weight":19.9572,"gender":1,"rarity":3,"base_catch":0.18155652,"great_catch":0.25957167,"ultra_catch":0.33015025}
+    "webhook": {"disappear_time_verified":true,"latitude":51.318447131147686,"capture_1":0.5401920080184937,"is_event":false,"individual_attack":15,"move_2":79,"pvp_rankings_great_league":[{"pokemon":100,"cp":1137,"rank":4,"form":0,"level":50,"percentage":0.9911505773542376},{"rank":1094,"form":0,"pokemon":101,"cp":1495,"percentage":0.9495395431562693,"level":25}],"gender":3,"shiny":false,"weight":13.658241271972656,"individual_stamina":14,"longitude":0.8804586148837922,"costume":0,"height":0.584269642829895,"individual_defense":15,"move_1":206,"capture_3":0.788576602935791,"spawnpoint_id":"ED31746B","cp":345,"disappear_time":1642365619,"form":0,"encounter_id":"5597246571950245234","pvp_rankings_ultra_league":[{"form":0,"rank":4,"cp":1137,"percentage":0.9911505773542376,"level":50,"pokemon":100},{"rank":1,"pokemon":101,"level":50,"form":0,"cp":2366,"percentage":1}],"username":"PogoDroid","pokemon_id":100,"last_modified_time":1642363854,"capture_2":0.6882081031799316,"first_seen":1642363850,"pokemon_level":12,"display_pokemon_id":null,"weather":0,"pokestop_id":"None"}
   },
   {
     "type": "raid",

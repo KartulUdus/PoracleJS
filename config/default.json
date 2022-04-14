@@ -190,6 +190,7 @@
       "includeMegaEvolution": false,                // internal: whether to include mega evolutions in rank calculations
       "littleLeagueCanEvolve": false,               // internal: whether little league mons that are evolved are included
       "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
+      "filterByTrack": false,                       // whether new style PVP listings are auto-filtered by user's track requirements
     // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
     //   a filtering calculation
       "pvpDisplayMaxRank": 10,
@@ -302,7 +303,9 @@
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": "",
     // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
-      "unregisteredUserMessage": ""
+      "unregisteredUserMessage": "",
+    // lostRoleMessage - message to send to user when they have lost their role base access
+      "lostRoleMessage": ""
   },
 
   //
@@ -337,7 +340,9 @@
       "groupWelcomeText": "Welcome {user}, remember to click on me and 'start bot' to be able to receive messages",
     // botWelcomeText - message the bot sends to users who register
       "botWelcomeText": "You are now registered with Poracle",
-  // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
+    // botGoodbyeMessage - message to send to user when they have lost their access (through reconciliation)
+      "botGoodbyeMessage": "",
+    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
       "unregisteredUserMessage": "",
     // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
       "unrecognisedCommandMessage": "",

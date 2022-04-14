@@ -5,15 +5,15 @@ const S2ts = require('nodes2ts')
 const path = require('path')
 const pcache = require('flat-cache')
 const { Mutex } = require('async-mutex')
-const Controller = require('./controller')
 require('moment-precise-range-plugin')
+const Controller = require('./controller')
 
 const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../../.cache'))
 const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
 class Weather extends Controller {
-	constructor(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
-		super(log, db, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
+	constructor(log, db, geocoder, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
+		super(log, db, geocoder, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
 		this.controllerData = weatherCache.getKey('weatherCacheData') || {}
 		this.caresData = weatherCache.getKey('caredPokemon') || {}
 
@@ -322,6 +322,8 @@ class Weather extends Controller {
 			}
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
+
+			require('./common/nightTime').setNightTime(data, moment())
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				const tileServerOptions = this.tileserverPregen.getConfigForTileType('weather')

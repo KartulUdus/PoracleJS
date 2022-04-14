@@ -207,7 +207,7 @@ class PoracleDiscordUtil {
 			let userIdOverride = args.find((arg) => arg.match(this.client.re.userRe))
 			if (userIdOverride) [, , userIdOverride] = userIdOverride.match(this.client.re.userRe)
 
-			if (this.msg.msg.channel.type === 'GUILD_TEXT' && (this.msg.isFromAdmin || this.permissions.channelTracking)) {
+			if ((this.msg.msg.channel.type === 'GUILD_TEXT' || this.msg.msg.channel.type === 'GUILD_NEWS') && (this.msg.isFromAdmin || this.permissions.channelTracking)) {
 				target = {
 					id: this.msg.msg.channel.id,
 					name: this.msg.msg.channel.name,
@@ -235,7 +235,7 @@ class PoracleDiscordUtil {
 				return { canContinue: false }
 			}
 
-			if (!status.isRegistered && (this.msg.isFromAdmin || this.permissions.channelTracking) && this.msg.msg.channel.type === 'GUILD_TEXT') {
+			if (!status.isRegistered && (this.msg.isFromAdmin || this.permissions.channelTracking) && (this.msg.msg.channel.type === 'GUILD_TEXT' || this.msg.msg.channel.type === 'GUILD_NEWS')) {
 				await this.msg.reply(`${this.msg.msg.channel.name} ${this.client.translator.translate('does not seem to be registered. add it with')} ${this.client.config.discord.prefix}${this.client.translator.translate('channel')} ${this.client.translator.translate('add')}`)
 				return { canContinue: false }
 			}
