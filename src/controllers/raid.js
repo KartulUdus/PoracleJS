@@ -171,6 +171,8 @@ class Raid extends Controller {
 			data.gameWeatherId = data.weather
 			data.gameWeatherNameEng = data.weather ? this.GameData.utilData.weather[data.gameWeatherId].name : ''
 
+			data.levelNameEng = this.GameData.utilData.raidLevels[data.level]
+
 			if (this.config.general.ignoreLongRaids
 				&& (data.end - data.start) > 47 * 60) {
 				this.log.verbose(`${this.logReference}: Raid/Egg on ${data.gymName} will be longer than 47 minutes - ignored`)
@@ -294,6 +296,7 @@ class Raid extends Controller {
 								data.fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
 							}
 
+							data.levelName = translator.translateFormat(data.levelNameEng)
 							data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
 							data.teamNameEng = this.GameData.utilData.teams[data.team_id].name
 							data.teamName = translator.translate(data.teamNameEng)
@@ -526,6 +529,7 @@ class Raid extends Controller {
 						data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
 						data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
 						data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+						data.levelName = translator.translateFormat(data.levelNameEng)
 
 						const view = {
 							...geoResult,
