@@ -498,7 +498,7 @@ class Monster extends Controller {
 								break
 						}
 					} else if (data.pokestop_id === 'None' && data.spawnpoint_id === 'None') data.seenType = 'cell'
-					else if (data.pokemon_id === 'None') data.seenType = encountered ? 'encounter' : 'wild'
+					else if (data.pokestop_id === 'None') data.seenType = encountered ? 'encounter' : 'wild'
 					else data.seenType = 'pokestop'
 
 					await this.getStaticMapUrl(
