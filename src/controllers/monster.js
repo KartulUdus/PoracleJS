@@ -240,7 +240,7 @@ class Monster extends Controller {
 			data.ivColor = this.findIvColor(data.iv)
 			data.tthSeconds = data.disappear_time - Date.now() / 1000
 			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
-			const disappearTime = moment(data.disappear_time * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			const disappearTime = moment(data.disappear_time * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.confirmedTime = data.disappear_time_verified
 			data.distime = data.disappearTime // deprecated
@@ -523,7 +523,7 @@ class Monster extends Controller {
 						if (weatherForecast.current > 0 && currentBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 						if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather === 0))) {
 							const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000)
-								.tz(geoTz.find(data.latitude, data.longitude)
+								.tz(geoTz.find(data.latitude, data.longitude)[0]
 									.toString())
 								.format(this.config.locale.time)
 								.slice(0, -3)
