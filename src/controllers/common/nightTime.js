@@ -1,15 +1,15 @@
 /* Night Time caclulations */
 const moment = require('moment-timezone')
-const {
-	getSunset,
-	getSunrise,
-} = require('sunrise-sunset-js')
+
+const SunCalc = require('suncalc')
 
 /* Night time clculations */
 
 function setNightTime(data, checkTime) {
-	const sunsetTime = moment(getSunset(data.latitude, data.longitude, checkTime.toDate()))
-	const sunriseTime = moment(getSunrise(data.latitude, data.longitude, checkTime.toDate()))
+	const times = SunCalc.getTimes(checkTime.toDate(), data.latitude, data.longitude)
+	const sunsetTime = moment(times.sunset)
+	const sunriseTime = moment(times.sunrise)
+
 	const dawnEndTime = moment(sunriseTime).add({ hours: 1 })
 	const duskStartTime = moment(sunsetTime).subtract({ hours: 1 })
 
