@@ -156,7 +156,7 @@ class Raid extends Controller {
 			data.gymColor = this.GameData.utilData.teams[data.team_id].color
 			data.ex = !!(data.ex_raid_eligible ?? data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url || data.url || ''
-			const disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			const disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
@@ -455,7 +455,7 @@ class Raid extends Controller {
 			}
 
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-			const hatchTime = moment(data.start * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			const hatchTime = moment(data.start * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.hatchTime = hatchTime.format(this.config.locale.time)
 			data.hatchtime = data.hatchTime // deprecated
 

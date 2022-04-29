@@ -105,7 +105,7 @@ class Gym extends Controller {
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
 
-			const conqueredTime = moment().tz(geoTz.find(data.latitude, data.longitude).toString())
+			const conqueredTime = moment().tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.conqueredTime = conqueredTime.format(this.config.locale.time)
 
 			// Stop handling if it already disappeared or is about to go away

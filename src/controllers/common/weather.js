@@ -44,7 +44,7 @@ async function calculateForecastImpact(data, GameData, weatherCellId, weatherDat
 		if (weatherForecast.current > 0 && currentBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
 		if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather === 0))) {
 			const weatherChangeTime = moment((disappearTimeUnix - (disappearTimeUnix % 3600)) * 1000)
-				.tz(geoTz.find(data.latitude, data.longitude)
+				.tz(geoTz.find(data.latitude, data.longitude)[0]
 					.toString())
 				.format(config.locale.time)
 				.slice(0, -3)

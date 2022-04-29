@@ -817,7 +817,7 @@ schedule.scheduleJob({ minute: [0, 10, 20, 30, 40, 50] }, async () => {			// Run
 
 			let nowForHuman = moment()
 			if (human.latitude) {
-				nowForHuman = moment().tz(geoTz.find(human.latitude, human.longitude).toString())
+				nowForHuman = moment().tz(geoTz.find(human.latitude, human.longitude)[0].toString())
 			}
 
 			if (profile.id !== lastId) {
