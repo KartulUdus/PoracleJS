@@ -844,6 +844,15 @@
 		"562_2344": "8",
 		"618_2345": "8"
 	},
+	"raidLevels": {
+		"1": "Level 1",
+		"2": "Level 2",
+		"3": "Level 3",
+		"4": "Level 4",
+		"5": "Level 5",
+		"6": "Mega",
+		"7": "Mega Legendary"
+	},
 	"emojis": {
 		"lure-normal": "\ud83d\udccd",
 		"lure-glacial": "\u2744",
