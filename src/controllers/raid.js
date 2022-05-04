@@ -219,9 +219,9 @@ class Raid extends Controller {
 				}] : await this.raidWhoCares(data)
 
 				if (whoCares.length) {
-					this.log.info(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+					this.log.info(`${logReference}: Raid level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 				} else {
-					this.log.verbose(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+					this.log.verbose(`${logReference}: Raid level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 				}
 
 				if (!whoCares[0]) return []
@@ -474,9 +474,9 @@ class Raid extends Controller {
 			}] : await this.eggWhoCares(data)
 
 			if (whoCares.length) {
-				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			if (!whoCares[0]) return []
