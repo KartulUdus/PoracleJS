@@ -33,6 +33,8 @@ function setNextWeatherText(data, translator, GameData, emojiLookup, platform) {
 async function calculateForecastImpact(data, GameData, weatherCellId, weatherData, disappearTimeUnix, config) {
 	// get Weather Forecast information
 
+	if (!config.weather.enableWeatherForecast) return
+
 	const { nextHourTimestamp } = weatherData.getWeatherTimes()
 	if (disappearTimeUnix > nextHourTimestamp) {
 		const weatherForecast = await weatherData.getWeatherForecast(weatherCellId)
