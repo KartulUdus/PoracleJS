@@ -86,7 +86,11 @@ module.exports = async (fastify, options, next) => {
 			let level = 9000
 			if (row.pokemon_id === 9000) {
 				level = +row.level
+<<<<<<< HEAD
 				if (row.level === undefined || level < 1 || (level > 10 && level !== 90)) {
+=======
+				if (row.level === undefined || level < 1 || (level > 7 && level !== 90)) {
+>>>>>>> 39fb653 (Sync to master - raid level 7 support (#715))
 					throw new Error('Invalid level (must be specified if no pokemon_id')
 				}
 			}
