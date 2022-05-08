@@ -156,7 +156,7 @@ class Raid extends Controller {
 			data.gymColor = this.GameData.utilData.teams[data.team_id].color
 			data.ex = !!(data.ex_raid_eligible ?? data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url || data.url || ''
-			const disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			const disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
@@ -170,6 +170,8 @@ class Raid extends Controller {
 			data.weather = this.weatherData.getCurrentWeatherInCell(weatherCellId) || 0		// complete weather data from weather cache
 			data.gameWeatherId = data.weather
 			data.gameWeatherNameEng = data.weather ? this.GameData.utilData.weather[data.gameWeatherId].name : ''
+
+			data.levelNameEng = this.GameData.utilData.raidLevels[data.level]
 
 			if (this.config.general.ignoreLongRaids
 				&& (data.end - data.start) > 47 * 60) {
@@ -217,9 +219,9 @@ class Raid extends Controller {
 				}] : await this.raidWhoCares(data)
 
 				if (whoCares.length) {
-					this.log.info(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+					this.log.info(`${logReference}: Raid level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 				} else {
-					this.log.verbose(`${logReference}: Raid on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+					this.log.verbose(`${logReference}: Raid level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 				}
 
 				if (!whoCares[0]) return []
@@ -294,6 +296,7 @@ class Raid extends Controller {
 								data.fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
 							}
 
+							data.levelName = translator.translateFormat(data.levelNameEng)
 							data.megaName = data.evolution ? translator.translateFormat(this.GameData.utilData.megaName[data.evolution], data.name) : data.name
 							data.teamNameEng = this.GameData.utilData.teams[data.team_id].name
 							data.teamName = translator.translate(data.teamNameEng)
@@ -455,7 +458,7 @@ class Raid extends Controller {
 			}
 
 			data.tth = moment.preciseDiff(Date.now(), data.start * 1000, true)
-			const hatchTime = moment(data.start * 1000).tz(geoTz.find(data.latitude, data.longitude).toString())
+			const hatchTime = moment(data.start * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.hatchTime = hatchTime.format(this.config.locale.time)
 			data.hatchtime = data.hatchTime // deprecated
 
@@ -471,9 +474,9 @@ class Raid extends Controller {
 			}] : await this.eggWhoCares(data)
 
 			if (whoCares.length) {
-				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Egg level ${data.level} on ${data.gymName} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			if (!whoCares[0]) return []
@@ -526,6 +529,7 @@ class Raid extends Controller {
 						data.teamEmoji = data.team_id !== undefined ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.team_id].emoji, platform) : ''
 						data.gameWeatherName = data.weather ? translator.translate(data.gameWeatherNameEng) : ''
 						data.gameWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+						data.levelName = translator.translateFormat(data.levelNameEng)
 
 						const view = {
 							...geoResult,
