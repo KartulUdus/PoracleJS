@@ -52,6 +52,11 @@
     "webhook":{"latitude":51.278005,"longitude":1.093851,"level":5,"pokemon_id":485,"team_id":3,"cp":49192,"start":1641969560,"end":1641972260,"name":"St Martin's Church","evolution":0,"spawn":1641965960,"move_1":269,"move_2":32,"gym_id":"3ccf1513aff04c7e91e6831e237fe39a.11","url":"http://lh3.googleusercontent.com/ZpnODSKPiiHxRYVOI9mCJcKiw2LH3HMfk8gGWXVqJB3NAPgyqIr76NF0zsdrszrchECNqGgZ2E5W0KURNyTmP-lfkqE","form":0,"is_ex_raid_eligible":false,"is_exclusive":false,"gender":2,"costume":0}
   },
   {
+    "type": "raid",
+    "test": "level7",
+    "webhook": {"costume":0,"gym_name":"Statue of holy Nepomuks","team_id":2,"evolution":0,"spawn":1652098036,"latitude":51.137727,"form":0,"longitude":1.241341,"move_2":0,"gym_url":"http://lh3.googleusercontent.com/GvIvNQamR84wF3soNRaoAYSPdV0OU4yuj8WcIACcq9We1bfDx2gms9T2tTB6yHn7ZVLF_h5TICgKbwN8uVF07D1R0A","gym_id":"2c43cb1aa8f14bb18610e235d4c81b30.16","gender":0,"pokemon_id":0,"power_up_level":0,"sponsor_id":0,"is_exclusive":false,"ar_scan_eligible":true,"cp":0,"ex_raid_eligible":false,"power_up_points":20,"power_up_end_timestamp":0,"partner_id":0,"end":1652104336,"start":1652101636,"move_1":0,"level":7}
+  },
+  {
     "type": "quest",
     "test": "stardust",
     "webhook": {"pokestop_id":"7d2bd3f5e4564b74a4426fb5521cf758.11","template":"CHALLENGE_BASE_SPIN_S_ITEM","pokestop_name":"Canterbury Bus Station","pokestop_url":"http://lh3.googleusercontent.com/hCU2iQ2B2UrFAeUxNlg0IMA5X0cy1ntn-ly_IKwCjDeDP-MZeS2TWZU695UM7f0vG7MhqREQ8QitO1csxfgy17RpGU4","conditions":[],"type":5,"latitude":51.276593,"longitude":1.082505,"rewards":[{"info":{"amount":500},"type":3}],"target":3,"updated":1643522373,"quest_task":"Spin 3 PokéStops or Gyms","with_ar":true}
