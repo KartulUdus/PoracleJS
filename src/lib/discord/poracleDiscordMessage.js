@@ -68,9 +68,12 @@ class PoracleDiscordMessage {
 
 	async reply(message) {
 		// Don't actually reply, but send to channel to avoid Discord reply text
-		if (message.embed) {
-			message.embeds = [message.embed]
-			delete message.embed
+		if (message.embed || message.embeds) {
+			if (message.embed) {
+				message.embeds = [message.embed]
+				delete message.embed
+			}
+
 			this.msg.channel.send(message)
 		} else {
 			// This is a channel, do not reply but rather send to avoid @ reply
