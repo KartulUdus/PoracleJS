@@ -119,7 +119,7 @@ exports.run = async (client, msg, args, options) => {
 
 					if (client.config.discord.uploadEmbedImages) {
 						message.embeds[0].image.url = 'attachment://image.png'
-						message.files = [{ attachment: maplink, name: 'image.png' }]
+						message.files = [{ attachment: staticMap, name: 'image.png' }]
 					}
 				}
 			}
