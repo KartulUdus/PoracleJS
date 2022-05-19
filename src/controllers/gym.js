@@ -192,6 +192,8 @@ class Gym extends Controller {
 						data.previousControlName = translator.translate(data.previousControlNameEng)
 						data.teamEmojiEng = data.teamId >= 0 ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.teamId].emoji, platform) : ''
 						data.teamEmoji = translator.translate(data.teamEmojiEng)
+						data.previousControlTeamEmojiEng = data.previousControlId >= 0 ? this.emojiLookup.lookup(this.GameData.utilData.teams[data.previousControlId].emoji, platform) : ''
+						data.previousControlTeamEmoji = translator.translate(data.previousControlTeamEmojiEng)
 
 						// full build
 
