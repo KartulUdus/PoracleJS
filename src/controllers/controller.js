@@ -370,7 +370,11 @@ class Controller extends EventEmitter {
 	}
 
 	async getAddress(locationObject) {
-		return this.geocoder.getAddress(locationObject)
+		const addr = await this.geocoder.getAddress(locationObject)
+		for (const key of Object.keys(addr)) {
+			if (typeof addr[key] === 'string') addr[key] = this.escapeJsonString(addr[key])
+		}
+		return addr
 	}
 
 	pointInArea(point) {
