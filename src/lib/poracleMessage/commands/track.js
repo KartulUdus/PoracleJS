@@ -221,7 +221,7 @@ exports.run = async (client, msg, args, options) => {
 							count++
 							if (count > 20) return
 							if (mon.evolutions) {
-								for(const evolution of mon.evolutions) {
+								for (const evolution of mon.evolutions) {
 									monsterList.add(evolution.evoId)
 									const evoMonster = client.GameData.monsters[`${evolution.evoId}_${evolution.id}`]
 									evoAdd(evoMonster)
@@ -230,8 +230,7 @@ exports.run = async (client, msg, args, options) => {
 						}
 						evoAdd(monster)
 					}
-				}
-				else if (typeArray.includes(element)) typeList.push(element)
+				} else if (typeArray.includes(element)) typeList.push(element)
 				else {
 					await msg.react('🙅')
 					return msg.reply(translator.translateFormat('I do not understand this option: {0}', element))
