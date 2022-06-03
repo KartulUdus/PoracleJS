@@ -1,0 +1,20 @@
+{
+  "pokemon":
+  [
+    {
+      "pokemon": [0],
+      "pvp": "little",
+      "pvp_rank": 1
+    },
+    {
+      "pokemon": [0],
+      "pvp": "little",
+      "pvp_rank": 1
+    },
+    {
+      "pokemon": [0],
+      "pvp": "great",
+      "pvp_rank": 1
+    }
+  ]
+}
