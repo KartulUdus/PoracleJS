@@ -29,4 +29,19 @@
             "height": 50
         }
     ]
+#if(seenType == "cell"): ,
+    "polygons": [
+    {
+        "fill_color": "rgba(255,255,255,0.6)",
+        "stroke_color": "\#C7C7C7",
+        "stroke_width": 1,
+        "path":
+        [
+            #for(coord in cell_coords):
+                #if(index != 0):,#endif[#index(coord, 0), #index(coord, 1)]
+            #endfor
+        ]
+    }
+    ]
+#endif
 }

@@ -1,7 +1,8 @@
 const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
-
+const { S2 } = require('s2-geometry')
+const S2ts = require('nodes2ts')
 const Controller = require('./controller')
 
 class Monster extends Controller {
@@ -501,12 +502,22 @@ class Monster extends Controller {
 					else if (data.pokestop_id === 'None') data.seenType = encountered ? 'encounter' : 'wild'
 					else data.seenType = 'pokestop'
 
+					if (data.seenType === 'cell' && !data.cell_coords) {
+						const areaCellKey = S2.latLngToKey(data.latitude, data.longitude, 15)
+						const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(areaCellKey))
+						data.cell_coords = []
+						for (let i = 0; i <= 3; i++) {
+							const vertex = S2ts.S2LatLng.fromPoint(s2cell.getVertex(i))
+							data.cell_coords.push([parseFloat(vertex.latDegrees), parseFloat(vertex.lngDegrees)])
+						}
+					}
+
 					await this.getStaticMapUrl(
 						logReference,
 						data,
 						'monster',
 						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
-						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seenType', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime'],
 					)
 					data.staticmap = data.staticMap // deprecated
 

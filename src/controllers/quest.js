@@ -567,8 +567,8 @@ class Quest extends Controller {
 			} else if (reward.type === 7) {
 				monsters.push({
 					pokemonId: reward.info.pokemon_id,
-					formId: reward.info.form_id,
-					shiny: reward.info.shiny,
+					formId: reward.info.form_id ?? 0,
+					shiny: reward.info.shiny ?? false,
 				})
 			} else if (reward.type === 12) {
 				energyMonsters.push({

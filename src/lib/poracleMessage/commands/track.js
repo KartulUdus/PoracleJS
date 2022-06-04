@@ -205,9 +205,32 @@ exports.run = async (client, msg, args, options) => {
 					}
 				}
 			} else {
-				const monster = Object.values(client.GameData.monsters).find((mon) => (element === mon.name.toLowerCase()) || element === mon.id.toString())
-				if (monster) monsterList.add(monster.id)
-				else if (typeArray.includes(element)) typeList.push(element)
+				let monsterMatch = element
+				let addEvolutions = false
+				if (monsterMatch.endsWith('+')) {
+					monsterMatch = monsterMatch.slice(0, -1)
+					addEvolutions = true
+				}
+				const monster = Object.values(client.GameData.monsters).find((mon) => (monsterMatch === mon.name.toLowerCase()) || element === mon.id.toString())
+				if (monster) {
+					monsterList.add(monster.id)
+					if (addEvolutions) {
+						let count = 0
+						// eslint-disable-next-line no-loop-func
+						const evoAdd = (mon) => {
+							count++
+							if (count > 20) return
+							if (mon.evolutions) {
+								for (const evolution of mon.evolutions) {
+									monsterList.add(evolution.evoId)
+									const evoMonster = client.GameData.monsters[`${evolution.evoId}_${evolution.id}`]
+									evoAdd(evoMonster)
+								}
+							}
+						}
+						evoAdd(monster)
+					}
+				} else if (typeArray.includes(element)) typeList.push(element)
 				else {
 					await msg.react('🙅')
 					return msg.reply(translator.translateFormat('I do not understand this option: {0}', element))
