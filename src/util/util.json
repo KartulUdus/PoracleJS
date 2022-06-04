@@ -849,9 +849,14 @@
 		"2": "Level 2",
 		"3": "Level 3",
 		"4": "Level 4",
-		"5": "Level 5",
+		"5": "Legendary",
 		"6": "Mega",
-		"7": "Mega Legendary"
+		"7": "Mega Legendary",
+		"8": "Ultra Beast",
+		"9": "Unknown",
+		"10": "Unknown",
+		"11": "Unknown",
+		"12": "Unknown"
 	},
 	"emojis": {
 		"lure-normal": "\ud83d\udccd",
