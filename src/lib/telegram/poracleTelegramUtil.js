@@ -72,8 +72,11 @@ class PoracleTelegramUtil {
 
 	async buildTarget(args) {
 		if (!this.msg.isFromAdmin && !this.msg.isDM && !await this.canAdminChannel(this.msg.ctx.update.message.chat.id)) {
-			await this.msg.replyByDM(this.client.translator.translate('Please run commands in Direct Messages'))
-
+			try {
+				await this.msg.replyByDM(this.client.translator.translate('Please run commands in Direct Messages'))
+			} catch {
+				// Would like to log here but have no reference to log
+			}
 			return { canContinue: false }
 		}
 
