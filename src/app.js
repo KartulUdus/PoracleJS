@@ -1036,7 +1036,10 @@ async function run() {
 	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
 
 	routes.forEach((route) => fastify.register(require(route)))
-	await fastify.listen(config.server.port, config.server.host)
+	await fastify.listen({
+		port: config.server.port,
+		host: config.server.host
+	})
 	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 }
 
