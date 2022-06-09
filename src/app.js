@@ -1038,7 +1038,7 @@ async function run() {
 	routes.forEach((route) => fastify.register(require(route)))
 	await fastify.listen({
 		port: config.server.port,
-		host: config.server.host
+		host: config.server.host,
 	})
 	log.info(`Service started on ${fastify.server.address().address}:${fastify.server.address().port}`)
 }
