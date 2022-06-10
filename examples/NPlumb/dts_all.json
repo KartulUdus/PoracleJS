@@ -7,7 +7,7 @@
 		"template": {
 			"embed": {
 				"color": "{{color}}",
-				"title": "{{fullName}} {{genderData.emoji}} {{#eq iv '100.00'}} 💯{{/eq}} |{{#if userHasPvpTracks}}{{#or pvpGreat pvpUltra pvpLittle}}{{#if pvpLittle}} 👶#{{pvpLittleBest.rank}} ({{pvpLittleBest.name}}){{/if}}{{#if pvpGreat}} 🔵#{{pvpGreatBest.rank}} ({{pvpGreatBest.name}}){{/if}}{{#if pvpUltra}} 🟡#{{pvpUltraBest.rank}} ({{pvpUltraBest.name}}){{/if}}{{/or}}{{else}} {{round iv}}% ({{atk}}/{{def}}/{{sta}}){{/if}} | {{areas}} {{boostWeatherEmoji}}{{#if weatherChange}}⚠{{/if}}",
+				"title": "{{fullName}} {{#eq pokemonId 132}}({{disguisePokemonName}}){{/eq}} {{genderData.emoji}} {{#eq iv '100.00'}} 💯{{/eq}} |{{#if userHasPvpTracks}}{{#or pvpGreat pvpUltra pvpLittle}}{{#if pvpLittle}} 👶#{{pvpLittleBest.rank}} ({{pvpLittleBest.name}}){{/if}}{{#if pvpGreat}} 🔵#{{pvpGreatBest.rank}} ({{pvpGreatBest.name}}){{/if}}{{#if pvpUltra}} 🟡#{{pvpUltraBest.rank}} ({{pvpUltraBest.name}}){{/if}}{{/or}}{{else}} {{round iv}}% ({{atk}}/{{def}}/{{sta}}){{/if}} | {{areas}} {{boostWeatherEmoji}}{{#if weatherChange}}⚠{{/if}}",
 				"url": "https://YourReactMap.url/id/Pokemon/{{encounterId}}/18",
 				"description": "@include mon.txt",
 				"thumbnail": {
@@ -60,7 +60,7 @@
 						"value": "{{{weaknessEmoji}}}"
 					},
 					{
-						"name": "<:premierball:958744027971321947> **Catch CP**",
+						"name": "📊 **Catch CP**",
 						"value": "☑️ {{calculateCp baseStats 20 10 10 10}}-**{{calculateCp baseStats 20 15 15 15}}**\n⤴️ {{calculateCp baseStats 25 10 10 10}}-**{{calculateCp baseStats 25 15 15 15}}**  {{boostingWeathersEmoji}}"
 					},
 					{
@@ -171,8 +171,8 @@
 		"platform": "discord",
 		"template": {
 			"embed": {
-				"title": "🏞️ {{name}} nest at {{nestName}} | {{areas}}",
-				"description": "Nest first found on {{resetDate}}\nAverage spawn: {{pokemonSpawnAvg}}/hour",
+				"title": "🏞️ {{name}} nest @ {{nestName}} | {{areas}}",
+				"description": "📈 Aprox. {{pokemonSpawnAvg}}/hr \n\nNest first found on {{resetDate}}",
 				"color": "{{color}}",
 				"thumbnail": {
 					"url": "{{{imgUrl}}}"
