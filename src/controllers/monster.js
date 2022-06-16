@@ -4,6 +4,7 @@ require('moment-precise-range-plugin')
 const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
 const Controller = require('./controller')
+const MonsterAlarmMatch = require('./monsterAlarmMatch')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
@@ -82,15 +83,11 @@ class Monster extends Controller {
 			}
 		}
 
-		// remove any duplicates
-		// const alertIds = []
-		// result = result.filter((alert) => {
-		// 	if (!alertIds.includes(alert.id)) {
-		// 		alertIds.push(alert.id)
-		// 		return alert
-		// 	}
-		// })
 		return result
+	}
+
+	async monsterWhoCares2(data) {
+		return this.monsterMatch.monsterWhoCares(data)
 	}
 
 	buildQuery(queryName, data, strictareastring, areastring, pokemonTarget, league, leagueData) {
@@ -406,6 +403,12 @@ class Monster extends Controller {
 				ping: '',
 				pvp_ranking_worst: 100,
 			}] : await this.monsterWhoCares(data)
+
+			const whoCares2 = await this.monsterWhoCares2(data)
+			// compare whocares and whocares2 somehow?
+			if (whoCares2.length !== whoCares.length) {
+				this.log.warn(`${data.encounter_id}: New and old results differ ${whoCares2.length}/${whoCares.length}`)
+			}
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000
