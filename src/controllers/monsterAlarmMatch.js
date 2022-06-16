@@ -34,9 +34,8 @@ class MonsterAlarmMatch {
 					monsters[monster.pokemon_id].push(monster)
 				}
 			}
-		}
-		catch (e) {
-			this.log.error(`Error loading monster alarm cache `, e)
+		} catch (e) {
+			this.log.error('Error loading monster alarm cache ', e)
 			return
 		}
 
@@ -44,7 +43,7 @@ class MonsterAlarmMatch {
 		this.pvpEverything = pvpEverything
 		this.monsters = monsters
 
-		this.log.info(`Refreshed monster alarm cache`)
+		this.log.info('Refreshed monster alarm cache')
 	}
 
 	async monsterWhoCares(data) {
@@ -126,6 +125,7 @@ class MonsterAlarmMatch {
 	}
 
 	/* eslint-disable no-continue */
+	// eslint-disable-next-line class-methods-use-this
 	matchMonsters(data, monsters, pokemonTarget, league, leagueData) {
 		const results = []
 		if (monsters) {
@@ -167,7 +167,6 @@ class MonsterAlarmMatch {
 
 		return results
 	}
-	/* eslint-enable no-continue */
 
 	async validateHumans(monsterList, monsterLocation, areas, strictAreasEnabled) {
 		const humanIds = []
@@ -217,9 +216,7 @@ class MonsterAlarmMatch {
 				)
 
 				if (distance > monster.distance) continue
-			} else {
-				if (!human.parsedArea.some((x) => areas.includes(x))) continue
-			}
+			} else if (!human.parsedArea.some((x) => areas.includes(x))) continue
 			if (strictAreasEnabled && human.parsedAreaRestriction) {
 				if (!human.parsedAreaRestriction.some((x) => areas.includes(x))) continue
 			}
@@ -237,11 +234,12 @@ class MonsterAlarmMatch {
 				pokemon_id: monster.pokemon_id,
 				pvp_ranking_cap: monster.pvp_ranking_cap,
 				pvp_ranking_league: monster.pvp_ranking_league,
-				pvp_ranking_worst: monster.pvp_ranking_worst
+				pvp_ranking_worst: monster.pvp_ranking_worst,
 			})
 		}
 		return filteredMonsters
 	}
+	/* eslint-enable no-continue */
 
 	// eslint-disable-next-line class-methods-use-this
 	getDistance(start, end) {

@@ -4,7 +4,6 @@ require('moment-precise-range-plugin')
 const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
 const Controller = require('./controller')
-const MonsterAlarmMatch = require('./monsterAlarmMatch')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
