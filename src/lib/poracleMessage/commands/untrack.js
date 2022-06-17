@@ -65,6 +65,8 @@ exports.run = async (client, msg, args, options) => {
 			{ style: 'markdown' },
 		)
 
+		client.triggerReloadAlerts()
+
 		if (result || client.config.database.client === 'sqlite') {
 			msg.react('✅')
 		} else {

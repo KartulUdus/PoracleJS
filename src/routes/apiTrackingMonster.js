@@ -69,6 +69,8 @@ module.exports = async (fastify, options, next) => {
 			id: req.params.id,
 		}, deleteUids, 'uid')
 
+		if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
+
 		return {
 			status: 'ok',
 		}
@@ -237,6 +239,8 @@ module.exports = async (fastify, options, next) => {
 				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
 				if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
 			})
+
+			if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
 
 			return {
 				status: 'ok',

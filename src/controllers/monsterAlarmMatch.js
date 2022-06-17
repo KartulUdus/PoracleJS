@@ -133,6 +133,7 @@ class MonsterAlarmMatch {
 				if (!(monster.pokemon_id === pokemonTarget.pokemon_id || (pokemonTarget.includeEverything && monster.pokemon_id === 0))) {
 					continue
 				}
+				if (monster.form && monster.form !== data.form) continue
 				if (league) {
 					if (leagueData.rank > monster.pvp_ranking_worst) continue
 					if (leagueData.rank < monster.pvp_ranking_best) continue

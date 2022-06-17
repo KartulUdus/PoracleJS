@@ -407,6 +407,7 @@ class Monster extends Controller {
 			// compare whocares and whocares2 somehow?
 			if (whoCares2.length !== whoCares.length) {
 				this.log.warn(`${data.encounter_id}: New and old results differ ${whoCares2.length}/${whoCares.length}`)
+
 			}
 
 			let hrend = process.hrtime(hrstart)

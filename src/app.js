@@ -993,6 +993,12 @@ async function run() {
 		discordCommando.on('addWebhook', (res) => {
 			processOne(res)
 		})
+
+		discordCommando.on('refreshAlertCache', () => {
+			sendCommandToWorkers({
+				type: 'refreshAlertCache',
+			})
+		})
 	}
 
 	if (config.telegram.enabled) {
@@ -1030,7 +1036,19 @@ async function run() {
 		telegram.on('addWebhook', (res) => {
 			processOne(res)
 		})
+
+		telegram.on('refreshAlertCache', () => {
+			sendCommandToWorkers({
+				type: 'refreshAlertCache',
+			})
+		})
 	}
+
+	fastify.decorate('triggerReloadAlerts', () => {
+		sendCommandToWorkers({
+			type: 'refreshAlertCache',
+		})
+	})
 
 	const routeFiles = await readDir(`${__dirname}/routes/`)
 	const routes = routeFiles.map((fileName) => `${__dirname}/routes/${fileName}`)
