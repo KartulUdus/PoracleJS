@@ -258,7 +258,7 @@ function receiveCommand(cmd) {
 		}
 		if (cmd.type === 'refreshAlertCache') {
 			log.debug(`Worker ${workerId}: Received reload alert broadcast`)
-			monsterAlarmMatch.loadData().catch(()=>{})
+			monsterAlarmMatch.loadData().catch(() => {})
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)
