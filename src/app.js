@@ -14,6 +14,7 @@ const fastify = require('fastify')({
 	bodyLimit: 52428800,
 	maxParamLength: 256,
 })
+const stringify = require('fast-json-stable-stringify');
 const { Telegraf } = require('telegraf')
 const Ohbem = require('ohbem')
 const path = require('path')
@@ -652,7 +653,7 @@ async function processOne(hook) {
 				}
 				if (!hook.message.poracleTest) {
 					fastify.webhooks.info(`quest ${JSON.stringify(hook.message)}`)
-					const cacheKey = `${hook.message.pokestop_id}_${JSON.stringify(hook.message.rewards)}`
+					const cacheKey = `${hook.message.pokestop_id}_${stringify(hook.message.rewards)}`
 
 					if (fastify.cache.get(cacheKey)) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was sent again too soon, ignoring`)
