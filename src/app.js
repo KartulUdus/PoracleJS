@@ -14,7 +14,7 @@ const fastify = require('fastify')({
 	bodyLimit: 52428800,
 	maxParamLength: 256,
 })
-const stringify = require('fast-json-stable-stringify');
+const stringify = require('fast-json-stable-stringify')
 const { Telegraf } = require('telegraf')
 const Ohbem = require('ohbem')
 const path = require('path')
