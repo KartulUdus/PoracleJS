@@ -504,7 +504,8 @@ class Monster extends Controller {
 
 					if (data.seenType === 'cell' && !data.cell_coords) {
 						const areaCellKey = S2.latLngToKey(data.latitude, data.longitude, 15)
-						const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(areaCellKey))
+						const areaCellId = S2.keyToId(areaCellKey)
+						const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(areaCellId))
 						data.cell_coords = []
 						for (let i = 0; i <= 3; i++) {
 							const vertex = S2ts.S2LatLng.fromPoint(s2cell.getVertex(i))
