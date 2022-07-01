@@ -1,6 +1,6 @@
 logs/*
 config/*.json
-config/customMaps/*
+examples/customMaps/*
 config/dts/*.json
 docker-compose.yml
 .cache/*
