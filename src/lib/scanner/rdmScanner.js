@@ -66,7 +66,7 @@ class RdmScanner {
 					longitude: x.lon,
 					type: 'gym',
 					teamId: x.team_id,
-					slots: x.availble_slots,
+					slots: x.available_slots,
 				})))
 			}
 			return stopDetails

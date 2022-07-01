@@ -160,8 +160,8 @@ class Gym extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if (this.imgUicons) data.imgUrl = await this.imgUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
-					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, data.slotsAvailable, data.inBattle, data.ex)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.gymIcon(data.teamId, 6 - data.slotsAvailable, data.inBattle, data.ex)
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.gymIcon(data.teamId, 6 - data.slotsAvailable, data.inBattle, data.ex)
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
