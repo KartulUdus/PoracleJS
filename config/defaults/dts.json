@@ -7,10 +7,13 @@
   "template": {
     "embed": {
       "color": "{{ivColor}}",
-      "title": "{{round iv}}% {{fullName}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}",
-      "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{#if futureEvent}}There is an event ({{futureEventName}}) {{#eq futureEventTrigger 'start'}}starting{{else}}ending{{/eq}} at {{futureEventTime}}.\n{{/if}}{{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{#if pvpLittle}}**Little league:**\n{{#each pvpLittle}} - {{this.fullName}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.levelWithCap}})\n{{/each}}{{#if pvpGreat}}**Great league:**\n{{#each pvpGreat}} - {{this.fullName}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.levelWithCap}})\n{{/each}}{{#if pvpUltra}}**Ultra league:**\n{{#each pvpUltra}} - {{this.fullName}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.levelWithCap}})\n{{/each}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "title": "{{round iv}}% {{fullName}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{{boostWeatherEmoji}}}",
+      "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{{weatherChange}}}\n{{/if}}{{#if futureEvent}}There is an event ({{futureEventName}}) {{#eq futureEventTrigger 'start'}}starting{{else}}ending{{/eq}} at {{futureEventTime}}.\n{{/if}}{{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{#if pvpLittle}}**Little league:**\n{{#each pvpLittle}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpGreat}}**Great league:**\n{{#each pvpGreat}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpUltra}}**Ultra league:**\n{{#each pvpUltra}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -22,7 +25,7 @@
   "default": true,
   "platform": "telegram",
   "template": {
-    "content": "{{round iv}}% {{fullName}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\nEnd: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}} {{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "content": "{{round iv}}% {{fullName}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\nEnd: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}} {{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{#if pvpLittle}}**Little league:**\n{{#each pvpLittle}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpGreat}}**Great league:**\n{{#each pvpGreat}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpUltra}}**Ultra league:**\n{{#each pvpUltra}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
     "location": true,
     "webpage_preview": true
@@ -37,10 +40,13 @@
   "template": {
     "embed": {
       "color": "{{color}}",
-      "title": "?% {{fullName}} {{boostWeatherEmoji}}",
+      "title": "?% {{fullName}} {{{boostWeatherEmoji}}}",
       "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{{addr}}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -66,15 +72,18 @@
   "platform": "discord",
   "template": {
     "embed": {
-      "title": "{{levelName}} raid against {{fullName}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}",
+      "title": "Raid against {{fullName}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}",
       "description": "CP: {{cp}}, quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "color": "{{gymColor}}",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
       },
       "author": {
-        "name": "{{fullName}} {{levelName}}. End: {{time}} in {{tthm}}m {{tths}}s",
-        "icon_url": "{{{detailsurl}}}"
+        "name": "{{fullName}} {{levelName}} raid. End: {{time}} in {{tthm}}m {{tths}}s",
+        "icon_url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -104,11 +113,14 @@
       "description": "Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "color": "{{gymColor}}",
       "thumbnail": {
-        "url": "{{{detailsurl}}}"
+        "url": "{{{imgUrl}}}"
       },
       "author": {
         "name": "Hatch at: {{time}} in {{tthm}}m {{tths}}s",
         "icon_url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -139,6 +151,9 @@
       "description": "Quest: {{{questString}}}\nReward: {{{rewardString}}}\n{{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -170,6 +185,9 @@
       "description": "Type: {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -270,6 +288,9 @@
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{gymUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticMap}}}"
         }
       }
     }
