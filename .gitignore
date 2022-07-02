@@ -1,6 +1,6 @@
 logs/*
 config/*.json
-examples/customMaps/*
+config/customMaps/*
 config/dts/*.json
 docker-compose.yml
 .cache/*
@@ -26,7 +26,6 @@ package-lock.json
 potato/*
 src/lib/db/poracle.sqlite
 .geoCache
-/.cache/cache/
 backups/*.json
 .weather*
 
