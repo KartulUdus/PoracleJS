@@ -185,7 +185,7 @@
   //   would match an eevee)
   //
   "pvp": {
-      "dataSource": "webhook",                      // webhook - from hooks, internal - internal calculator
+      "dataSource": "internal",                      // webhook - from hooks, internal - internal calculator
       "levelCaps": [50],                            // internal: level caps to be included in internal rank calculations - alternative could be [50, 51]
       "includeMegaEvolution": false,                // internal: whether to include mega evolutions in rank calculations
       "littleLeagueCanEvolve": false,               // internal: whether little league mons that are evolved are included

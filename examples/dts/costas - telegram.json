@@ -1,0 +1,13 @@
+
+{
+  "id": 1,
+  "language": "en",
+  "type": "monster",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "{{round iv}}% {{genderData.emoji}} *{{name}}*{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} \n\ncp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\n\nEnd: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{#if pvpLittle}}\n**Little league:**\n{{#each pvpLittle}} - {{this.fullName}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}} @ max {{this.cap}})\n{{/each}}{{/if}}{{#if pvpGreat}}\n**Great league:**\n{{#each pvpGreat}} - {{this.fullName}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}} @ max {{this.cap}})\n{{/each}}{{/if}}{{#if pvpUltra}}\n**Ultra league:**\n{{#each pvpUltra}} - {{this.fullName}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}} @ max {{this.cap}})\n{{/each}}{{/if}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "location": true,
+    "webpage_preview": false
+  }
+},
