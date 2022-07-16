@@ -2,7 +2,7 @@ const axios = require('axios')
 const NodeCache = require('node-cache')
 const fsp = require('fs').promises
 const FormData = require('form-data')
-
+const util = require('util')
 const { performance } = require('perf_hooks')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
@@ -177,7 +177,7 @@ class DiscordWebhookWorker {
 				)
 			}
 		} catch (err) {
-			this.logs.discord.error(`${data.logReference}: ${data.name} WEBHOOK failed`, err)
+			this.logs.discord.error(`${data.logReference}: ${data.name} WEBHOOK failed`, util.inspect(err))
 		}
 		return true
 	}
@@ -187,7 +187,7 @@ class DiscordWebhookWorker {
 		this.queueProcessor.run(
 			async (work) => (this.sendAlert(work)),
 			async (err) => {
-				this.logs.log.error('Discord Webhook queueProcessor exception', err)
+				this.logs.log.error('Discord Webhook queueProcessor exception', util.inspect(err))
 			},
 		)
 	}
@@ -226,7 +226,7 @@ class DiscordWebhookWorker {
 				this.logs.discord.warn(`${logReference}: ${hookName} WEBHOOK Clean got ${cleanRes.status} ${cleanRes.statusText}`)
 			}
 		} catch (err) {
-			this.logs.discord.error(`${logReference}: ${hookName} WEBHOOK Clean failed`, err)
+			this.logs.discord.error(`${logReference}: ${hookName} WEBHOOK Clean failed`, util.inspect(err))
 		}
 	}
 
