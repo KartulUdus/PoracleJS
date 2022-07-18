@@ -2,6 +2,7 @@ const winston = require('winston')
 require('winston-daily-rotate-file')
 const config = require('config')
 const path = require('path')
+const util = require('util')
 
 // Emerg – the application is in an emergency state.
 // Alert – the application owners need to be alerted.
@@ -51,7 +52,7 @@ function poracleFormatter(debug) {
 	const {
 		timestamp, level, message, ...args
 	} = debug
-	return `${timestamp} ${logInfo.workerId ? `$${logInfo.workerId} ` : ''}${level}: ${message} ${Object.keys(args).length ? JSON.stringify(args) : ''}`
+	return `${timestamp} ${logInfo.workerId ? `$${logInfo.workerId} ` : ''}${level}: ${message} ${Object.keys(args).length ? util.inspect(args) : ''}`
 }
 
 const poracleFormat = winston.format.combine(
