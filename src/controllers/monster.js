@@ -237,6 +237,8 @@ class Monster extends Controller {
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			data.reactMapUrl = `${this.config.general.reactMapURL}/id/pokemon/${data.encounterId}`
+			data.rocketMadUrl = `${this.config.general.rocketMadURL}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivColor = this.findIvColor(data.iv)
 			data.tthSeconds = data.disappear_time - Date.now() / 1000
