@@ -77,9 +77,9 @@
       "shortlinkProviderURL": "",
       "shortlinkProviderKey": "",
       "shortlinkProviderDomain": "",           // if supported, select domain to be used
-    // additional Shortlinks to Pgo Maps in DTS
-      "reactmapDtsURL": "",           // Link to your ReactMap intallation
-      "rocketmadURL": ""              // Link to your RocketMAD intallation
+    // additional Shortlinks to Pogo Maps in DTS - supported Reactmap, RocketMAD
+      "reactMapURL": "",           // https://myReactMap.com/
+      "rocketmadURL": ""           // https://myRocketMAD.com/
   },
   //
   // Configuration for the user reconciliation/role check function
