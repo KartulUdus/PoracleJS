@@ -76,7 +76,10 @@
       "shortlinkProvider": "hideuri",
       "shortlinkProviderURL": "",
       "shortlinkProviderKey": "",
-      "shortlinkProviderDomain": ""           // if supported, select domain to be used
+      "shortlinkProviderDomain": "",           // if supported, select domain to be used
+    // additional Shortlinks to Pgo Maps in DTS
+      "reactmapDtsURL": "",           // Link to your ReactMap intallation
+      "rocketmadURL": ""              // Link to your RocketMAD intallation
   },
   //
   // Configuration for the user reconciliation/role check function
