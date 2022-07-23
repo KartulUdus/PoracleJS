@@ -78,7 +78,7 @@ class Nest extends Controller {
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			data.reactMapUrl = `${this.config.general.reactMapURL}/id/nests/${data.nest_id}`
+			data.reactMapUrl = `${this.config.general.reactMapURL}id/nests/${data.nest_id}`
 			data.rocketMadUrl = `${this.config.general.rocketMadURL}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
 			data.name = this.escapeJsonString(data.name)
 
