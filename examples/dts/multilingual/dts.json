@@ -654,7 +654,7 @@
   "template": {
     "embed": {
       "title": "⚠️ Wetterwechsel ⚠️",
-      "description": "Das Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies hat geänderten Eigenschalften inkl. IV Werten zur Folge...{{/if}}",
+      "description": "Das Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies hat geänderte Eigenschaften inkl. IV Werten zur Folge...{{/if}}",
       "image": {
         "url": "{{{staticMap}}}"
       }
