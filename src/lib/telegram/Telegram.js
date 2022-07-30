@@ -255,7 +255,7 @@ class Telegram extends EventEmitter {
 						const msg = await this.retrySender(
 							senderId,
 							async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-								parse_mode: 'Markdown',
+								parse_mode: (data.message.parse_mode !== null) ? data.message.parse_mode : 'Markdown',
 								disable_web_page_preview: !data.message.webpage_preview,
 							}),
 						)
