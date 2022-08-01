@@ -356,13 +356,20 @@ exports.run = async (client, msg, args, options) => {
 
 		const pvpLeague = Object.keys(pvp)[0] || 0
 
+		const minimumIvZero = (parameterValues.cp || parameterValues.maxcp
+			|| parameterValues.level || parameterValues.maxlevel
+			|| parameterValues.atk || parameterValues.maxatk
+			|| parameterValues.def || parameterValues.maxdef
+			|| parameterValues.sta || parameterValues.maxsta
+			|| parameterValues.weight || parameterValues.maxweight)
+
 		const insert = monsters.map((mon) => ({
 			id: target.id,
 			profile_no: currentProfileNo,
 			pokemon_id: mon.id,
 			ping: pings,
 			distance: +distance,
-			min_iv: +(parameterValues.iv?.min ?? -1),
+			min_iv: +(parameterValues.iv?.min ?? (minimumIvZero ? 0 : -1)),
 			max_iv: +(parameterValues.iv?.max ?? parameterValues.maxiv ?? 100),
 			min_cp: +(parameterValues.cp?.min ?? 0),
 			max_cp: +(parameterValues.cp?.max ?? parameterValues.maxcp ?? 9000),
