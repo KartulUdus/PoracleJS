@@ -321,7 +321,7 @@
   "template": {
     "embed": {
       "title": "⚠️ Weather change ⚠️",
-      "description": "The weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{oldWeatherEmoji}} to {{else}}It is now {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
+      "description": "The weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{{oldWeatherEmoji}}} to {{else}}It is now {{/if}}{{weatherName}} {{{weatherEmoji}}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
       "image": {
         "url": "{{{staticMap}}}"
       }
