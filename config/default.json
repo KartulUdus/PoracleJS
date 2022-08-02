@@ -76,7 +76,10 @@
       "shortlinkProvider": "hideuri",
       "shortlinkProviderURL": "",
       "shortlinkProviderKey": "",
-      "shortlinkProviderDomain": ""           // if supported, select domain to be used
+      "shortlinkProviderDomain": "",           // if supported, select domain to be used
+    // additional Shortlinks to Pogo Maps in DTS - supported Reactmap, RocketMAD
+      "reactMapURL": "",           // https://myReactMap.com/
+      "rocketMadURL": ""           // https://myRocketMAD.com/
   },
   //
   // Configuration for the user reconciliation/role check function
