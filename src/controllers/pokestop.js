@@ -255,7 +255,7 @@ class Invasion extends Controller {
 										})
 									} else if (gruntType.thirdReward) {
 										// Giovanni or other third reward rockets
-										gruntRewardsList.first = { chance: 0, monsters: [] }
+										delete gruntRewardsList.first
 										gruntRewardsList.third = { chance: 100, monsters: [] }
 										let first = true
 										gruntType.encounters.third.forEach((fr) => {
