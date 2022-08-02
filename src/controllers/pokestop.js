@@ -75,12 +75,12 @@ class Invasion extends Controller {
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
-			if (this.config.general.reactMapURL) {
-				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/pokestops/${data.pokestop_id}`
-			}
-			if (this.config.general.rocketMadURL) {
-				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
-			}
+                        if (this.config.general.reactMapURL) {
+			    data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/pokestops/${data.pokestop_id}`
+                        }
+                        if (this.config.general.rocketMadURL) {
+			    data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
+                        }
 			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
@@ -253,38 +253,37 @@ class Invasion extends Controller {
 												name: translator.translate(secondRewardMonster.name),
 											})
 										})
-									} else if (gruntType.thirdReward) {
-										// Giovanni or other third reward rockets
-										delete gruntRewardsList.first
-										gruntRewardsList.third = { chance: 100, monsters: [] }
-										let first = true
-										gruntType.encounters.third.forEach((fr) => {
-											if (!first) gruntRewards += ', '
-											else first = false
-
-											const thirdReward = +fr
-											const thirdRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === thirdReward && !mon.form.id)
-											gruntRewards += thirdRewardMonster ? translator.translate(thirdRewardMonster.name) : ''
-											gruntRewardsList.third.monsters.push({
-												id: thirdReward,
-												name: translator.translate(thirdRewardMonster.name),
-											})
-										})
 									} else {
 										// Single Reward 100% of encounter (might vary based on actual fight).
 										let first = true
-										gruntType.encounters.first.forEach((fr) => {
-											if (!first) gruntRewards += ', '
-											else first = false
+										// Giovanni or other third reward rockets
+										if (gruntType.thirdReward) {
+											gruntType.encounters.third.forEach((tr) => {
+												if (!first) gruntRewards += ', '
+												else first = false
 
-											const firstReward = +fr
-											const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
-											gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
-											gruntRewardsList.first.monsters.push({
-												id: firstReward,
-												name: translator.translate(firstRewardMonster.name),
+												const thirdReward = +tr
+												const thirdRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === thirdReward && !mon.form.id)
+												gruntRewards += thirdRewardMonster ? translator.translate(thirdRewardMonster.name) : ''
+												gruntRewardsList.first.monsters.push({
+													id: thirdReward,
+													name: translator.translate(thirdRewardMonster.name),
+												})
 											})
-										})
+										} else {
+											gruntType.encounters.first.forEach((fr) => {
+												if (!first) gruntRewards += ', '
+												else first = false
+
+												const firstReward = +fr
+												const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
+												gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
+												gruntRewardsList.first.monsters.push({
+													id: firstReward,
+													name: translator.translate(firstRewardMonster.name),
+												})
+											})
+										}
 									}
 									data.gruntRewards = gruntRewards
 									data.gruntRewardsList = gruntRewardsList
