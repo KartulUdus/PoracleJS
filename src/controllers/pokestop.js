@@ -258,7 +258,7 @@ class Invasion extends Controller {
 										gruntRewardsList.first = { chance: 0, monsters: [] }
 										gruntRewardsList.third = { chance: 100, monsters: [] }
 										let first = true
-										gruntType.encounters.first.forEach((fr) => {
+										gruntType.encounters.third.forEach((fr) => {
 											if (!first) gruntRewards += ', '
 											else first = false
 
