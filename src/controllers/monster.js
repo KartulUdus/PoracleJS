@@ -296,7 +296,7 @@ class Monster extends Controller {
 			} else if (data.pvp) {
 				// For Chuck & new RDM parser
 				for (const league of Object.keys(data.pvp)) {
-					data[`pvp_rankings_${league}_league`] = data.pvp[league]
+					data[`pvp_rankings_${league}_league`] = data.pvp[league].filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 				}
 			}
 
