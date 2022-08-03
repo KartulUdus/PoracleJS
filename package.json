@@ -61,7 +61,7 @@
     "node-schedule": "^2.1.0",
     "nodes2ts": "^3.0.0",
     "ohbem": "^1.4.1",
-    "pogo-data-generator": "^1.6.4",
+    "pogo-data-generator": "^1.7.0",
     "point-in-polygon": "^1.1.0",
     "readline-sync": "^1.4.10",
     "s2-geometry": "^1.2.10",

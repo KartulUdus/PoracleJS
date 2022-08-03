@@ -255,17 +255,18 @@ class Invasion extends Controller {
 										})
 									} else {
 										// Single Reward 100% of encounter (might vary based on actual fight).
+										// && Giovanni or other third reward rockets
 										let first = true
-										gruntType.encounters.first.forEach((fr) => {
+										gruntType.encounters[gruntType.thirdReward ? 'third' : 'first'].forEach((tr) => {
 											if (!first) gruntRewards += ', '
 											else first = false
 
-											const firstReward = +fr
-											const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
-											gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
+											const reward = +tr
+											const rewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === reward && !mon.form.id)
+											gruntRewards += rewardMonster ? translator.translate(rewardMonster.name) : ''
 											gruntRewardsList.first.monsters.push({
-												id: firstReward,
-												name: translator.translate(firstRewardMonster.name),
+												id: reward,
+												name: translator.translate(rewardMonster.name),
 											})
 										})
 									}
