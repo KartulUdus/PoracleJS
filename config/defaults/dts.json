@@ -27,6 +27,7 @@
   "template": {
     "content": "{{round iv}}% {{fullName}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\nEnd: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}} {{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{#if pvpLittle}}**Little league:**\n{{#each pvpLittle}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpGreat}}**Great league:**\n{{#each pvpGreat}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpUltra}}**Ultra league:**\n{{#each pvpUltra}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -60,6 +61,7 @@
   "template": {
     "content": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}\nEnds: {{time}}, Time left: {{tthm}}m {{tths}}s\n {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -96,6 +98,7 @@
   "platform": "telegram",
   "template": {
     "content": "{{levelName}} raid against {{fullName}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}\nCP: {{cp}}, quick: {{quickMoveName}}, charge: {{chargeMoveName}} \nEnd: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "parse_mode": "Markdown",
     "sticker": "{{{stickerUrl}}}",
     "location": true,
     "webpage_preview": true
@@ -134,6 +137,7 @@
   "template": {
     "content": "{{levelName}} raid Egg at {{{gymName}}} {{#ex}}(Ex){{/ex}}\nHatch at: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -167,6 +171,7 @@
   "template": {
     "content": "Pokestop: {{{pokestopName}}}\nQuest: {{{questString}}}\nReward: {{{rewardString}}} \n {{{addr}}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -201,6 +206,7 @@
   "template": {
     "content": "Team Rocket at {{{pokestopName}}}\nType: {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -236,10 +242,11 @@
     "default":true,
     "platform":"telegram",
     "template":{
-      "content":"**Lure type:** {{lureTypeName}}\n **Ends:** {{time}} \n**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
-      "location":true,
-      "sticker":"{{stickerUrl}}",
-      "webpage_preview":false
+      "content": "**Lure type:** {{lureTypeName}}\n **Ends:** {{time}} \n**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
+      "sticker": "{{stickerUrl}}",
+      "parse_mode": "Markdown",
+      "location": true,
+      "webpage_preview": false
     }
   },
  {
@@ -271,6 +278,7 @@
     "template": {
       "content": "[\u200A]({{{staticMap}}})***New Nest : {{name}}***\n{{nestName}}\nFound on {{resetDate}}\nSpawns/hour: {{pokemonSpawnAvg}}",
       "sticker": "{{{stickerUrl}}}",
+      "parse_mode": "Markdown",
       "location": false,
       "webpage_preview": true
      }
@@ -303,6 +311,7 @@
     "platform": "telegram",
     "template": {
       "webpage_preview": false,
+      "parse_mode": "Markdown",
       "location": true,
       "content": [
         "***⚠️ Gym change ⚠️***",
@@ -338,6 +347,7 @@
     "content": "[\u200A]({{{staticMap}}})⚠️ Weather change ⚠️\nThe weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{oldWeatherEmoji}} to {{else}}It is now {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
     "webpage_preview": true,
     "sticker": "",
+    "parse_mode": "Markdown",
     "location": false
   }
 },
