@@ -77,7 +77,8 @@
       "shortlinkProviderURL": "",
       "shortlinkProviderKey": "",
       "shortlinkProviderDomain": "",           // if supported, select domain to be used
-    // additional Shortlinks to Pogo Maps in DTS - supported Reactmap, RocketMAD
+    // additional Shortlinks to Pogo Maps in DTS - supported RDM, Reactmap, RocketMAD
+      "rdmURL": "",                // https://myRDM.com/
       "reactMapURL": "",           // https://myReactMap.com/
       "rocketMadURL": ""           // https://myRocketMAD.com/
   },
