@@ -252,10 +252,23 @@ class Telegram extends EventEmitter {
 					}
 					case 'text': {
 						this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
+						let parseMode = 'Markdown'
+						switch ((data.message.parse_mode ?? 'markdown').toLowerCase()) {
+							case 'markdownv2': {
+								parseMode = 'MarkdownV2'
+								break
+							}
+							case 'html': {
+								parseMode = 'HTML'
+								break
+							}
+							default:
+								break
+						}
 						const msg = await this.retrySender(
 							senderId,
 							async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-								parse_mode: 'Markdown',
+								parse_mode: parseMode,
 								disable_web_page_preview: !data.message.webpage_preview,
 							}),
 						)
