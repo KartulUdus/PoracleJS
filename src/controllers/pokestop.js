@@ -86,6 +86,7 @@ class Invasion extends Controller {
 			data.pokestopUrl = data.url
 
 			const incidentExpiration = data.incident_expiration ?? data.incident_expire_timestamp
+			data.incidentExpiration = incidentExpiration
 			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
 			const disappearTime = moment(incidentExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.disappearTime = disappearTime.format(this.config.locale.time)
