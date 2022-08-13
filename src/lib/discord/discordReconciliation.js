@@ -23,6 +23,19 @@ class DiscordReconciliation {
 
 	async sendGreetings(id) {
 		if (!this.config.discord.disableAutoGreetings) {
+			const currentMinute = Math.floor(Date.now() / (1000 * 60))
+
+			if (this.lastGreetingMessageMinute === currentMinute) {
+				this.greetingCount++
+				if (this.greetingCount > 10) {
+					this.log.warn(`Reconciliation (Discord) Did not send greeting to ${id} - attempting to avoid ban ${this.greetingCount} messages in this minute`)
+					return
+				}
+			} else {
+				this.greetingCount = 0
+				this.lastGreetingMessageMinute = currentMinute
+			}
+
 			const discordUser = await this.client.users.fetch(id)
 
 			const greetingDts = this.dts.find((template) => template.type === 'greeting' && template.platform === 'discord' && template.default)
