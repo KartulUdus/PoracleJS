@@ -241,10 +241,6 @@ exports.run = async (client, msg, args, options) => {
 		let pvpCap = +(client.config.tracking.defaultUserTrackingLevelCap || 0)
 
 		if (parameterValues.cap) {
-			if (client.config.pvp.dataSource === 'webhook') {
-				await msg.react('🙅')
-				return msg.reply(translator.translate('Caps are not supported with this map\'s data source'))
-			}
 			pvpCap = +parameterValues.cap
 			const capsConsidered = client.config.pvp.levelCaps ?? [50]
 			if (pvpCap !== 0 && !capsConsidered.includes(pvpCap)) {
