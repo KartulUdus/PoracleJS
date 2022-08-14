@@ -97,6 +97,10 @@ class CachingGeocoder {
 			return { addr: 'Unknown', flag: '' }
 		}
 
+		if (this.config.geocoding.forwardOnly) {
+			return { addr: 'Unknown', flag: '' }
+		}
+
 		const doGeolocate = async () => {
 			try {
 				const startTime = performance.now()
