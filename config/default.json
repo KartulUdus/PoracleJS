@@ -444,6 +444,7 @@
     //   or google (geocoding key provides an array of google API keys)
       "provider": "none",
       "providerURL": "",
+      "forwardOnly": false, // When true, disable reverse geocoding lookup
       "cacheDetail": 3,     // number of decimal places of lon/lat to use while caching geocoding (default 3 - or use 4 for 100x more detail)
     // staticProvider - this is your provider of map tiles; can be tileservercache
     //   (swift tile server - https://github.com/123FLO321/SwiftTileserverCache)
