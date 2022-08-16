@@ -681,7 +681,7 @@
   "default": false,
   "platform": "telegram",
   "template": {
-    "content": "[\u200A]({{{staticMap}}})⚠️ Wetterwechsel ⚠️\nDas Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies hat geänderten Eigenschalften inkl. IV Werten zur Folge...{{/if}}",
+    "content": "[\u200A]({{{staticMap}}})⚠️ Wetterwechsel ⚠️\nDas Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies hat geänderten Eigenschaften inkl. IV Werten zur Folge...{{/if}}",
     "webpage_preview": true,
     "sticker": "",
     "location": false
