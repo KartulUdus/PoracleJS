@@ -99,6 +99,7 @@ class Gym extends Controller {
 			if (this.config.general.rocketMadURL) {
 				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
 			}
+			if (data.gym_name) data.name = data.gym_name
 			data.name = this.escapeJsonString(data.name)
 			data.gymName = data.name
 			data.gymUrl = data.url
