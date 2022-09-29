@@ -87,14 +87,15 @@ class Gym extends Controller {
 			const logReference = data.id || data.gym_id
 
 			Object.assign(data, this.config.general.dtsDictionary)
+			data.gymId = data.id || data.gym_id
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			if (this.config.general.rdmURL) {
-				data.rdmUrl = `${this.config.general.rdmURL}${!this.config.general.rdmURL.endsWith('/') ? '/' : ''}@gym/${data.gym_id}`
+				data.rdmUrl = `${this.config.general.rdmURL}${!this.config.general.rdmURL.endsWith('/') ? '/' : ''}@gym/${data.gymId}`
 			}
 			if (this.config.general.reactMapURL) {
-				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/gyms/${data.gym_id}`
+				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/gyms/${data.gymId}`
 			}
 			if (this.config.general.rocketMadURL) {
 				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
@@ -127,7 +128,6 @@ class Gym extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			data.gymId = data.id || data.gym_id
 			data.teamId = data.team_id ?? data.team ?? 0
 			data.oldTeamId = data.old_team_id ?? 0
 			data.previousControlId = data.last_owner_id ?? 0
