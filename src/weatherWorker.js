@@ -130,7 +130,7 @@ async function receiveCommand(cmd) {
 				weatherController.handleUserCares(cmd.data)
 			}
 			if (cmd.weatherCommand === 'weatherChanged') {
-				const jobs = weatherController.handleMonsterWeatherChange(cmd.data)
+				const jobs = await weatherController.handleMonsterWeatherChange(cmd.data)
 				if (jobs && jobs.length) {
 					queuePort.postMessage({
 						queue: jobs,
