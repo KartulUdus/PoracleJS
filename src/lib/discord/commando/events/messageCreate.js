@@ -1,7 +1,7 @@
 module.exports = async (client, msg) => {
 	try {
 		// Ignore all bots
-		if (msg.author.bot) return
+		if (msg.author.bot && !client.config.discord.admins.includes(msg.author.id)) return
 		if (msg.webhookID) return
 
 		client.logs.discord.debug(`Received message ${msg.author.username} ${msg.content}`)
