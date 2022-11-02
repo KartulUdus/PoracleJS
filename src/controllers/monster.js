@@ -408,14 +408,14 @@ class Monster extends Controller {
 			let whoCares
 
 			if (this.config.tuning.fastMonsters) {
-				 whoCares = data.poracleTest ? [{
+				whoCares = data.poracleTest ? [{
 					...data.poracleTest,
 					clean: false,
 					ping: '',
 					pvp_ranking_worst: 100,
 				}] : await this.monsterWhoCares(data)
 			} else {
-				 whoCares = data.poracleTest ? [{
+				whoCares = data.poracleTest ? [{
 					...data.poracleTest,
 					clean: false,
 					ping: '',
