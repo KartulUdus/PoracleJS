@@ -405,18 +405,22 @@ class Monster extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			const whoCares = data.poracleTest ? [{
-				...data.poracleTest,
-				clean: false,
-				ping: '',
-				pvp_ranking_worst: 100,
-			}] : await this.monsterWhoCares(data)
+			let whoCares
 
-			const whoCares2 = await this.monsterWhoCares2(data)
-			// compare whocares and whocares2 somehow?
-			if (whoCares2.length !== whoCares.length) {
-				this.log.warn(`${data.encounter_id}: New and old results differ ${whoCares2.length}/${whoCares.length}`)
-				this.log.warn(`${data.encounter_id}: New and old results differ ${JSON.stringify(whoCares2)}/${JSON.stringify(whoCares)}`)
+			if (this.config.tuning.fastMonsters) {
+				 whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+					pvp_ranking_worst: 100,
+				}] : await this.monsterWhoCares(data)
+			} else {
+				 whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+					pvp_ranking_worst: 100,
+				}] : await this.monsterWhoCares2(data)
 			}
 
 			let hrend = process.hrtime(hrstart)
