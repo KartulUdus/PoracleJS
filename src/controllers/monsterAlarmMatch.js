@@ -35,7 +35,12 @@ class MonsterAlarmMatch {
 				}
 			}
 		} catch (e) {
-			this.log.error('Error loading monster alarm cache ', e)
+			this.log.error('Error loading monster alarm cache: alarms will not fire on this thread until fixed', e)
+
+			this.pvpSpecific = null
+			this.pvpEverything = null
+			this.monsters = null
+
 			return
 		}
 
@@ -50,6 +55,11 @@ class MonsterAlarmMatch {
 		const pvpQueryLimit = this.config.pvp.pvpQueryMaxRank || this.config.pvp.pvpFilterMaxRank || 100
 
 		const result = []
+
+		if (!this.monsters) { // monsters are not loaded, try again
+			await this.loadData()
+			if (!this.monsters)	return []
+		}
 
 		// Basic Pokemon - everything
 		result.push(...this.matchMonsters(data, this.monsters[0], { pokemon_id: data.pokemon_id, form: data.form, includeEverything: true }, 0))
