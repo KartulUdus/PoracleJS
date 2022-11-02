@@ -50,7 +50,7 @@ class RdmScanner {
 					.from('pokestop')
 					.whereBetween('lat', [minLat, maxLat])
 					.whereBetween('lon', [minLon, maxLon])
-				const gymRows = await db.select('lat', 'lon', 'team_id', 'availble_slots')
+				const gymRows = await db.select('lat', 'lon', 'team_id', 'available_slots')
 					.from('gym')
 					.whereBetween('lat', [minLat, maxLat])
 					.whereBetween('lon', [minLon, maxLon])
@@ -66,7 +66,7 @@ class RdmScanner {
 					longitude: x.lon,
 					type: 'gym',
 					teamId: x.team_id,
-					slots: x.availble_slots,
+					slots: x.available_slots,
 				})))
 			}
 			return stopDetails

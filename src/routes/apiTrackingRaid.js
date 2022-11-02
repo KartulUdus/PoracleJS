@@ -4,7 +4,7 @@ const trackedCommand = require('../lib/poracleMessage/commands/tracked')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/tracking/raid/:id', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -35,7 +35,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.delete('/api/tracking/raid/:id/byUid/:uid', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -53,7 +53,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/tracking/raid/:id', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -86,7 +86,7 @@ module.exports = async (fastify, options, next) => {
 			let level = 9000
 			if (row.pokemon_id === 9000) {
 				level = +row.level
-				if (row.level === undefined || level < 1 || (level > 8 && level !== 90)) {
+				if (row.level === undefined || level < 1 || (level > 9 && level !== 90)) {
 					throw new Error('Invalid level (must be specified if no pokemon_id')
 				}
 			}
@@ -196,7 +196,7 @@ module.exports = async (fastify, options, next) => {
 				message,
 			}
 		} catch (err) {
-			fastify.logger.error(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`, err)
+			fastify.logger.error(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`, err)
 			return {
 				status: 'error',
 				message: 'Exception raised during execution',
@@ -205,7 +205,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/tracking/raid/:id/delete', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }

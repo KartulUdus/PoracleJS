@@ -233,6 +233,15 @@ class Monster extends Controller {
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			if (this.config.general.rdmURL) {
+				data.rdmUrl = `${this.config.general.rdmURL}${!this.config.general.rdmURL.endsWith('/') ? '/' : ''}@pokemon/${data.encounter_id}`
+			}
+			if (this.config.general.reactMapURL) {
+				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/pokemon/${data.encounter_id}`
+			}
+			if (this.config.general.rocketMadURL) {
+				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
+			}
 			data.color = this.GameData.utilData.types[monster.types[0].name].color
 			data.ivColor = this.findIvColor(data.iv)
 			data.tthSeconds = data.disappear_time - Date.now() / 1000
@@ -286,7 +295,7 @@ class Monster extends Controller {
 			} else if (data.pvp) {
 				// For Chuck & new RDM parser
 				for (const league of Object.keys(data.pvp)) {
-					data[`pvp_rankings_${league}_league`] = data.pvp[league]
+					data[`pvp_rankings_${league}_league`] = data.pvp[league].filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
 				}
 			}
 
@@ -507,7 +516,8 @@ class Monster extends Controller {
 
 					if (data.seenType === 'cell' && !data.cell_coords) {
 						const areaCellKey = S2.latLngToKey(data.latitude, data.longitude, 15)
-						const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(areaCellKey))
+						const areaCellId = S2.keyToId(areaCellKey)
+						const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(areaCellId))
 						data.cell_coords = []
 						for (let i = 0; i <= 3; i++) {
 							const vertex = S2ts.S2LatLng.fromPoint(s2cell.getVertex(i))

@@ -7,44 +7,13 @@
   "template": {
     "embed": {
       "color": "{{ivColor}}",
-      "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}",
-      "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "title": "{{round iv}}% {{fullName}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{{boostWeatherEmoji}}}",
+      "description": "End: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{{weatherChange}}}\n{{/if}}{{#if futureEvent}}There is an event ({{futureEventName}}) {{#eq futureEventTrigger 'start'}}starting{{else}}ending{{/eq}} at {{futureEventTime}}.\n{{/if}}{{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{#if pvpLittle}}**Little league:**\n{{#each pvpLittle}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpGreat}}**Great league:**\n{{#each pvpGreat}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpUltra}}**Ultra league:**\n{{#each pvpUltra}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "fr",
-  "type": "monster",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "color": "{{ivColor}}",
-      "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} PC:{{cp}} Niv:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}",
-      "description": "Fin: {{time}}, Temps restant: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}}{{{addr}}} \n rapide: {{quickMoveName}}, chargée: {{chargeMoveName}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**League Super:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}PC (Niv. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**League Hyper:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}PC (Niv. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "monster",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "color": "{{ivColor}}",
-      "title": "{{round iv}}% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} WP:{{cp}} Lvl:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}",
-      "description": "Ende: {{time}}, Restzeit: {{tthm}}m {{tths}}s \n{{#if weatherChange}}{{weatherChange}}\n{{/if}}Adresse: {{{addr}}}\nSofort: {{quickMoveName}}, Lade: {{chargeMoveName}}\n{{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Superliga:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}WP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Hyperliga:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}WP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -56,21 +25,9 @@
   "default": true,
   "platform": "telegram",
   "template": {
-    "content": "{{round iv}}% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\nEnd: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}} {{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n {{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Great league:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Ultra League:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}CP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "content": "{{round iv}}% {{fullName}} cp:{{cp}} L:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\nEnd: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{#if weatherChange}}{{weatherChange}}\n{{/if}} {{{addr}}} \n quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{#if pvpLittle}}**Little league:**\n{{#each pvpLittle}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpGreat}}**Great league:**\n{{#each pvpGreat}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}}{{#if pvpUltra}}**Ultra league:**\n{{#each pvpUltra}} - {{fullName}} #{{rank}} @{{cp}}CP (Lvl. {{levelWithCap}})\n{{/each}}{{/if}} Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
-    "location": true,
-    "webpage_preview": true
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "monster",
-  "default": false,
-  "platform": "telegram",
-  "template": {
-    "content": "{{round iv}}% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} WP:{{cp}} Lvl:{{level}} {{atk}}/{{def}}/{{sta}} {{boostWeatherEmoji}}\nEnde: {{time}}, Restzeit: {{tthm}}m {{tths}}s \n{{#if weatherChange}}{{weatherChange}} \n {{/if}}Adresse: {{{addr}}} \nSofort: {{quickMoveName}}, Lade: {{chargeMoveName}} \n{{#if pvp_rankings_great_league}}{{#compare bestGreatLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestGreatLeagueRankCP '>=' pvpDisplayGreatMinCP}}**Superliga:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_great_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayGreatMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}WP (Lvl. {{this.level}})\n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}{{#if pvp_rankings_ultra_league}}{{#compare bestUltraLeagueRank '<=' pvpDisplayMaxRank}}{{#compare bestUltraLeagueRankCP '>=' pvpDisplayUltraMinCP}}**Hyperliga:**\n{{/compare}}{{/compare}}{{#each pvp_rankings_ultra_league}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpDisplayMaxRank}}{{#compare this.cp '>=' ../pvpDisplayUltraMinCP}} - {{pokemonName this.pokemon}} #{{this.rank}} @{{this.cp}}WP (Lvl. {{this.level}}) \n{{/compare}}{{/compare}}{{/if}}{{/each}}{{/if}}Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-    "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -84,44 +41,13 @@
   "template": {
     "embed": {
       "color": "{{color}}",
-      "title": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}",
+      "title": "?% {{fullName}} {{{boostWeatherEmoji}}}",
       "description": "Ends: {{time}}, Time left: {{tthm}}m {{tths}}s \n {{{addr}}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "fr",
-  "type": "monsterNoIv",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "color": "{{color}}",
-      "title": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}",
-      "description": "Fin: {{time}}, Temps restant: {{tthm}}m {{tths}}s \n {{{addr}}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "monsterNoIv",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "color": "{{color}}",
-      "title": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}",
-      "description": "Ende: {{time}}, Restzeit: {{tthm}}m {{tths}}s \nAdresse: {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -135,19 +61,7 @@
   "template": {
     "content": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}\nEnds: {{time}}, Time left: {{tthm}}m {{tths}}s\n {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
-    "location": true,
-    "webpage_preview": true
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "monsterNoIv",
-  "default": false,
-  "platform": "telegram",
-  "template": {
-    "content": "?% {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} {{boostWeatherEmoji}}\nEnde {{time}}, Restzeit {{tthm}}m {{tths}}s\nAdresse: {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-    "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -160,57 +74,18 @@
   "platform": "discord",
   "template": {
     "embed": {
-      "title": "Raid against {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}",
+      "title": "Raid against {{fullName}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}",
       "description": "CP: {{cp}}, quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "color": "{{gymColor}}",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
       },
       "author": {
-        "name": "{{name}} lvl{{level}}. End: {{time}} in {{tthm}}m {{tths}}s",
-        "icon_url": "{{{detailsurl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "fr",
-  "type": "raid",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Un Raid contre {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} a commencé sur {{{gymName}}}! {{#ex}}(Ex){{/ex}}",
-      "description": "PC: {{cp}}, rapide: {{quickMoveName}}, chargée: {{chargeMoveName}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "color": "{{gymColor}}",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
+        "name": "{{fullName}} {{levelName}} raid. End: {{time}} in {{tthm}}m {{tths}}s",
+        "icon_url": "{{{imgUrl}}}"
       },
-      "author": {
-        "name": "{{name}} niv {{level}}. Fin: {{time}} dans {{tthm}}m {{tths}}s",
-        "icon_url": "{{{detailsurl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "raid",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Raid gegen {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} hat begonnen bei {{{gymName}}}! {{#ex}}(Ex){{/ex}}",
-      "description": "WP: {{cp}}, Sofort: {{quickMoveName}}, Lade: {{chargeMoveName}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "color": "{{gymColor}}",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
-      },
-      "author": {
-        "name": "{{name}} Lvl{{level}}. Ende: {{time}} in {{tthm}}m {{tths}}s",
-        "icon_url": "{{{detailsurl}}}"
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -222,20 +97,8 @@
   "default": true,
   "platform": "telegram",
   "template": {
-    "content": "Raid against {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}\nCP: {{cp}}, quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{name}} lvl{{level}}. End: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-    "sticker": "{{{stickerUrl}}}",
-    "location": true,
-    "webpage_preview": true
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "raid",
-  "default": false,
-  "platform": "telegram",
-  "template": {
-    "content": "Raid gegen {{name}}{{#if form}}{{#isnt formName 'Normal'}} {{formName}}{{/isnt}}{{/if}} hat begonnen bei {{{gymName}}}! {{#ex}}(Ex){{/ex}}\nWP: {{cp}}, Sofort: {{quickMoveName}}, Lade: {{chargeMoveName}}\n{{name}} Lvl{{level}}. Ende: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "content": "{{levelName}} raid against {{fullName}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}\nCP: {{cp}}, quick: {{quickMoveName}}, charge: {{chargeMoveName}} \nEnd: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "parse_mode": "Markdown",
     "sticker": "{{{stickerUrl}}}",
     "location": true,
     "webpage_preview": true
@@ -249,57 +112,18 @@
   "platform": "discord",
   "template": {
     "embed": {
-      "title": "Raid egg level{{level}} at {{{gymName}}} {{#ex}}(Ex){{/ex}}",
+      "title": "{{levelName}} raid Egg at {{{gymName}}} {{#ex}}(Ex){{/ex}}",
       "description": "Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "color": "{{gymColor}}",
       "thumbnail": {
-        "url": "{{{detailsurl}}}"
+        "url": "{{{imgUrl}}}"
       },
       "author": {
         "name": "Hatch at: {{time}} in {{tthm}}m {{tths}}s",
         "icon_url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "fr",
-  "type": "egg",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Oeuf de raid niveau {{level}} sur {{{gymName}}} {{#ex}}(Ex){{/ex}}",
-      "description": "Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "color": "{{color}}",
-      "thumbnail": {
-        "url": "{{{detailsurl}}}"
       },
-      "author": {
-        "name": "Eclot à: {{time}} dans {{tthm}}m {{tths}}s",
-        "icon_url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "egg",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Raid Ei Level{{level}} bei {{{gymName}}} {{#ex}}(Ex){{/ex}}",
-      "description": "Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "color": "{{gymColor}}",
-      "thumbnail": {
-        "url": "{{{detailsurl}}}"
-      },
-      "author": {
-        "name": "Schlüpft um: {{time}} in {{tthm}}m {{tths}}s",
-        "icon_url": "{{{imgUrl}}}"
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -311,21 +135,9 @@
   "default": true,
   "platform": "telegram",
   "template": {
-    "content": "Raid egg level{{level}} at {{{gymName}}} {{#ex}}(Ex){{/ex}}\nHatch at: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "content": "{{levelName}} raid Egg at {{{gymName}}} {{#ex}}(Ex){{/ex}}\nHatch at: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
-    "location": true,
-    "webpage_preview": true
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "egg",
-  "default": false,
-  "platform": "telegram",
-  "template": {
-    "content": "Raid Ei Level{{level}} bei {{{gymName}}} {{#ex}}(Ex){{/ex}}\nSchlüpft um: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-    "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -343,40 +155,9 @@
       "description": "Quest: {{{questString}}}\nReward: {{{rewardString}}}\n{{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "fr",
-  "type": "quest",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Nom du Pokéstop: {{{pokestopName}}}",
-      "url": "{{{googleMapUrl}}}",
-      "description": "Quête : {{{questString}}}\nRécompense : {{{rewardString}}}\n{{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "quest",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Pokestop Name: {{{pokestopName}}}",
-      "url": "{{{googleMapUrl}}}",
-      "description": "Aufgabe: {{{questString}}}\nBelohnung: {{{rewardString}}}\nAdresse: {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -390,19 +171,7 @@
   "template": {
     "content": "Pokestop: {{{pokestopName}}}\nQuest: {{{questString}}}\nReward: {{{rewardString}}} \n {{{addr}}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
-    "location": true,
-    "webpage_preview": true
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "quest",
-  "default": false,
-  "platform": "telegram",
-  "template": {
-    "content": "Pokestop: {{{pokestopName}}}\nAufgabe: {{{questString}}}\nBelohnung: {{{rewardString}}}\nAdresse: {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-    "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
@@ -421,42 +190,9 @@
       "description": "Type: {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
       "thumbnail": {
         "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "fr",
-  "type": "invasion",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Team Rocket sur {{{pokestopName}}}",
-      "url": "{{{googleMapUrl}}}",
-      "color": "{{gruntTypeColor}}",
-      "description": "Type: {{gruntType}} {{gruntTypeEmoji}}\nGenre: {{genderData.name}}{{genderData.emoji}}\nRécompenses possibles: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Fin: {{time}}, dans ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAdresse: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "invasion",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "Team Rocket bei {{{pokestopName}}}",
-      "url": "{{{googleMapUrl}}}",
-      "color": "{{gruntTypeColor}}",
-      "description": "Typ: {{gruntType}} {{gruntTypeEmoji}}\nGeschlecht: {{genderData.name}}{{genderData.emoji}}\nMögliche Belohnungen: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\nEnde: {{time}}, in ({{#if tthh}}{{tthh}}Std {{/if}}{{tthm}}m {{tths}}s)\nAdresse: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-      "thumbnail": {
-        "url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
       }
     }
   }
@@ -470,23 +206,12 @@
   "template": {
     "content": "Team Rocket at {{{pokestopName}}}\nType: {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
     "sticker": "{{{stickerUrl}}}",
+    "parse_mode": "Markdown",
     "location": true,
     "webpage_preview": true
   }
 },
-{
-  "id": 1,
-  "language": "de",
-  "type": "invasion",
-  "default": false,
-  "platform": "telegram",
-  "template": {
-    "content": "Team Rocket bei {{{pokestopName}}}\nTyp: {{gruntType}} {{gruntTypeEmoji}}\nGeschlecht: {{genderData.name}}{{genderData.emoji}}\nMögliche Belohnungen: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\nEnde: {{time}}, in ({{#if tthh}}{{tthh}}Std {{/if}}{{tthm}}m {{tths}}s)\nAdresse: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
-    "sticker": "{{{stickerUrl}}}",
-    "location": true,
-    "webpage_preview": true
-  }
-},
+
   {
     "id": 1,
     "language": "en",
@@ -511,39 +236,17 @@
     }
   },
   {
-    "id": 1,
-    "language": "fr",
-    "type": "lure",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "username": "{{lureTypeName}}",
-      "avatar_url": "https://raw.githubusercontent.com/nileplumb/PkmnHomeIcons/master/RDM_OS_128/pokestop/{{minus lureTypeId 500}}.png",
-      "embed": {
-        "title": "Leurre détecté sur {{{pokestopName}}}",
-        "url": "{{{googleMapUrl}}}",
-        "color": "{{lureTypeColor}}",
-        "description": "**Type :** {{lureTypeName}}\n **Fin à :** {{time}} \n(**Temps restant :** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n**Adresse :** {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}}) | [Waze]({{{wazeMapUrl}}})",
-        "thumbnail": {
-          "url": "{{{imgUrl}}}"
-        },
-        "image": {
-          "url": "{{{staticMap}}}"
-        }
-      }
-    }
-  },
-  {
     "id":1,
     "language":"en",
     "type":"lure",
     "default":true,
     "platform":"telegram",
     "template":{
-      "content":"**Lure type:** {{lureTypeName}}\n **Ends:** {{time}} \n**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
-      "location":true,
-      "sticker":"{{stickerUrl}}",
-      "webpage_preview":false
+      "content": "**Lure type:** {{lureTypeName}}\n **Ends:** {{time}} \n**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
+      "sticker": "{{stickerUrl}}",
+      "parse_mode": "Markdown",
+      "location": true,
+      "webpage_preview": false
     }
   },
  {
@@ -575,6 +278,7 @@
     "template": {
       "content": "[\u200A]({{{staticMap}}})***New Nest : {{name}}***\n{{nestName}}\nFound on {{resetDate}}\nSpawns/hour: {{pokemonSpawnAvg}}",
       "sticker": "{{{stickerUrl}}}",
+      "parse_mode": "Markdown",
       "location": false,
       "webpage_preview": true
      }
@@ -592,6 +296,9 @@
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{gymUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticMap}}}"
         }
       }
     }
@@ -604,6 +311,7 @@
     "platform": "telegram",
     "template": {
       "webpage_preview": false,
+      "parse_mode": "Markdown",
       "location": true,
       "content": [
         "***⚠️ Gym change ⚠️***",
@@ -622,39 +330,7 @@
   "template": {
     "embed": {
       "title": "⚠️ Weather change ⚠️",
-      "description": "The weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{oldWeatherEmoji}} to {{else}}It is now {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
-      "image": {
-        "url": "{{{staticMap}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "fr",
-  "type": "weatherchange",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "⚠️ Changement Météo ⚠️",
-      "description": "La météo a changé pour certains Pokémon que vous suivez!\n{{#if oldWeatherName}}Elle est passée de {{oldWeatherName}} {{oldWeatherEmoji}} à {{else}}C'est maintenant {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Les Pokémon suivants ont maintenant changé et auront des stats et IV différents:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}PC\n{{/each}}{{else}}Cela peut avoir altéré les stats et IV annoncés...{{/if}}",
-      "image": {
-        "url": "{{{staticMap}}}"
-      }
-    }
-  }
-},
-{
-  "id": 1,
-  "language": "de",
-  "type": "weatherchange",
-  "default": false,
-  "platform": "discord",
-  "template": {
-    "embed": {
-      "title": "⚠️ Wetterwechsel ⚠️",
-      "description": "Das Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies hat geänderten Eigenschalften inkl. IV Werten zur Folge...{{/if}}",
+      "description": "The weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{{oldWeatherEmoji}}} to {{else}}It is now {{/if}}{{weatherName}} {{{weatherEmoji}}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
       "image": {
         "url": "{{{staticMap}}}"
       }
@@ -671,22 +347,11 @@
     "content": "[\u200A]({{{staticMap}}})⚠️ Weather change ⚠️\nThe weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{oldWeatherEmoji}} to {{else}}It is now {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
     "webpage_preview": true,
     "sticker": "",
+    "parse_mode": "Markdown",
     "location": false
   }
 },
-{
-  "id": 1,
-  "language": "de",
-  "type": "weatherchange",
-  "default": false,
-  "platform": "telegram",
-  "template": {
-    "content": "[\u200A]({{{staticMap}}})⚠️ Wetterwechsel ⚠️\nDas Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies hat geänderten Eigenschalften inkl. IV Werten zur Folge...{{/if}}",
-    "webpage_preview": true,
-    "sticker": "",
-    "location": false
-  }
-},
+
 {
   "id": 1,
   "language": "en",
