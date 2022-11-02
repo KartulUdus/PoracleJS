@@ -235,7 +235,7 @@ exports.run = async (client, msg, args, options) => {
 
 		const blocked = human.blocked_alerts ? JSON.parse(human.blocked_alerts) : []
 
-		const maplink = `https://www.google.com/maps/search/?api=1&query=${human.latitude},${human.longitude}`
+		const maplink = `https://maps.google.com/maps?q=${human.latitude},${human.longitude}`
 		if (args.includes('area')) {
 			return msg.reply(currentAreaText(translator, client.geofence, JSON.parse(human.area)))
 		}

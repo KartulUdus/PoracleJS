@@ -74,7 +74,7 @@ class Lure extends Controller {
 			const logReference = data.pokestop_id
 
 			Object.assign(data, this.config.general.dtsDictionary)
-			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
 			if (this.config.general.rdmURL) {
