@@ -75,8 +75,13 @@ exports.run = async (client, msg, [args]) => {
 
 		let categoryId
 		if (template.definition.category) {
-			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
-			categoryId = category.id
+			const exists = await guild.channels.cache.find(type => type.type === 'GUILD_CATEGORY' && type.name === template.definition.category)
+			if (exists) {
+				categoryId = exists.id
+			} else {
+				const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
+				categoryId = category.id
+			}
 		}
 
 		for (const channelDefinition of template.definition.channels) {
@@ -103,22 +108,22 @@ exports.run = async (client, msg, [args]) => {
 					roleId = await guild.roles.cache.get(format(role.id, args))
 					if (role.view) { 
 						allowed.push('VIEW_CHANNEL')
-					} else { 
+					} else if (role.view === false) { 
 						deny.push('VIEW_CHANNEL')
 					}
 					if (role.viewHistory) {
 						allowed.push('READ_MESSAGE_HISTORY')
-					} else { 
+					} else if (role.viewHistory === false) { 
 						deny.push('READ_MESSAGE_HISTORY')
 					}
 					if (role.send) {
 						allowed.push('SEND_MESSAGES')
-					} else {
+					} else if (role.send === false) {
 						deny.push('SEND_MESSAGES')
 					}
 					if (role.react) {
 						allowed.push('ADD_REACTIONS')
-					} else {
+					} else if (role.react === false) {
 						deny.push('ADD_REACTIONS') 
 					}
 					roleOverwrites.push({ id: roleId, allow: allowed, deny: deny })
