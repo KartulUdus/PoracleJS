@@ -119,7 +119,7 @@ exports.run = async (client, msg, [args]) => {
 					if (role.react) {
 						allowed.push('ADD_REACTIONS')
 					} else {
-						deny.push('ADD_REACTIONS')
+						deny.push('ADD_REACTIONS') 
 					}
 					roleOverwrites.push({ id: roleId, allow: allowed, deny: deny })
 				}
