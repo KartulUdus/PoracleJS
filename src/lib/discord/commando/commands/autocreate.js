@@ -75,7 +75,7 @@ exports.run = async (client, msg, [args]) => {
 
 		let categoryId
 		if (template.definition.category) {
-			const exists = await guild.channels.cache.find(type => type.type === 'GUILD_CATEGORY' && type.name === template.definition.category)
+			const exists = await guild.channels.cache.find(channel => channel.type === 'GUILD_CATEGORY' && channel.name === template.definition.category)
 			if (exists) {
 				categoryId = exists.id
 			} else {
