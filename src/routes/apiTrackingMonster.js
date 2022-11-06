@@ -46,6 +46,8 @@ module.exports = async (fastify, options, next) => {
 
 		await fastify.query.deleteQuery('monsters', { id: req.params.id, uid: req.params.uid })
 
+		if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
+
 		return {
 			status: 'ok',
 		}
