@@ -413,14 +413,14 @@ class Monster extends Controller {
 					clean: false,
 					ping: '',
 					pvp_ranking_worst: 100,
-				}] : await this.monsterWhoCares(data)
+				}] : await this.monsterWhoCares2(data)
 			} else {
 				whoCares = data.poracleTest ? [{
 					...data.poracleTest,
 					clean: false,
 					ping: '',
 					pvp_ranking_worst: 100,
-				}] : await this.monsterWhoCares2(data)
+				}] : await this.monsterWhoCares(data)
 			}
 
 			let hrend = process.hrtime(hrstart)
