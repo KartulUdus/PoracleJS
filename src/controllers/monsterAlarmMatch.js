@@ -1,3 +1,4 @@
+const { Mutex } = require('async-mutex')
 const Query = require('./query')
 
 class MonsterAlarmMatch {
@@ -5,50 +6,53 @@ class MonsterAlarmMatch {
 		this.log = log
 		this.db = new Query(log, db, config)
 		this.config = config
+		this.loadMutex = new Mutex()
 	}
 
 	async loadData() {
-		const pvpSpecific = {}
-		const pvpEverything = {}
-		for (const league of [500, 1500, 2500]) {
-			pvpEverything[league] = []
-			pvpSpecific[league] = []
-		}
-
-		const monsters = {}
-
-		try {
-			const monsterTable = await this.db.selectAllQuery('monsters', {})
-
-			for (const monster of monsterTable) {
-				if (monster.pvp_ranking_league) {
-					if (monster.pokemon_id) {
-						pvpSpecific[monster.pvp_ranking_league].push(monster)
-					} else {
-						pvpEverything[monster.pvp_ranking_league].push(monster)
-					}
-				} else {
-					if (!(monster.pokemon_id in monsters)) {
-						monsters[monster.pokemon_id] = []
-					}
-					monsters[monster.pokemon_id].push(monster)
-				}
+		return this.loadMutex.runExclusive(async () => {
+			const pvpSpecific = {}
+			const pvpEverything = {}
+			for (const league of [500, 1500, 2500]) {
+				pvpEverything[league] = []
+				pvpSpecific[league] = []
 			}
-		} catch (e) {
-			this.log.error('Error loading monster alarm cache: alarms will not fire on this thread until fixed', e)
 
-			this.pvpSpecific = null
-			this.pvpEverything = null
-			this.monsters = null
+			const monsters = {}
 
-			return
-		}
+			try {
+				const monsterTable = await this.db.selectAllQuery('monsters', {})
 
-		this.pvpSpecific = pvpSpecific
-		this.pvpEverything = pvpEverything
-		this.monsters = monsters
+				for (const monster of monsterTable) {
+					if (monster.pvp_ranking_league) {
+						if (monster.pokemon_id) {
+							pvpSpecific[monster.pvp_ranking_league].push(monster)
+						} else {
+							pvpEverything[monster.pvp_ranking_league].push(monster)
+						}
+					} else {
+						if (!(monster.pokemon_id in monsters)) {
+							monsters[monster.pokemon_id] = []
+						}
+						monsters[monster.pokemon_id].push(monster)
+					}
+				}
+			} catch (e) {
+				this.log.error('Error loading monster alarm cache: alarms will not fire on this thread until fixed', e)
 
-		this.log.info('Refreshed monster alarm cache')
+				this.pvpSpecific = null
+				this.pvpEverything = null
+				this.monsters = null
+
+				return
+			}
+
+			this.pvpSpecific = pvpSpecific
+			this.pvpEverything = pvpEverything
+			this.monsters = monsters
+
+			this.log.info('Refreshed monster alarm cache')
+		})
 	}
 
 	async monsterWhoCares(data) {
