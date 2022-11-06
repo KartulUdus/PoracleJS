@@ -85,7 +85,7 @@ class Monster extends Controller {
 		return result
 	}
 
-	async monsterWhoCares2(data) {
+	async monsterWhoCaresInMemory(data) {
 		return this.monsterMatch.monsterWhoCares(data)
 	}
 
@@ -413,7 +413,7 @@ class Monster extends Controller {
 					clean: false,
 					ping: '',
 					pvp_ranking_worst: 100,
-				}] : await this.monsterWhoCares2(data)
+				}] : await this.monsterWhoCaresInMemory(data)
 			} else {
 				whoCares = data.poracleTest ? [{
 					...data.poracleTest,
