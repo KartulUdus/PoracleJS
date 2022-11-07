@@ -75,13 +75,8 @@ exports.run = async (client, msg, [args]) => {
 
 		let categoryId
 		if (template.definition.category) {
-			const exists = await guild.channels.cache.find(channel => channel.type === 'GUILD_CATEGORY' && channel.name === template.definition.category)
-			if (exists) {
-				categoryId = exists.id
-			} else {
-				const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
-				categoryId = category.id
-			}
+			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
+			categoryId = category.id
 		}
 
 		for (const channelDefinition of template.definition.channels) {
@@ -124,7 +119,7 @@ exports.run = async (client, msg, [args]) => {
 					if (role.react) {
 						allowed.push('ADD_REACTIONS')
 					} else if (role.react === false) {
-						deny.push('ADD_REACTIONS') 
+						deny.push('ADD_REACTIONS')
 					}
 					roleOverwrites.push({ id: roleId, allow: allowed, deny: deny })
 				}
