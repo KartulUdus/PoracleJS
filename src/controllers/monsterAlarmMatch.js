@@ -66,10 +66,10 @@ class MonsterAlarmMatch {
 		}
 
 		// Basic Pokemon - everything
-		result.push(...this.matchMonsters(data, this.monsters[0], { pokemon_id: data.pokemon_id, form: data.form, includeEverything: true }, 0))
+		result.push(...this.matchMonsters(data, this.monsters[0], { pokemon_id: +data.pokemon_id, form: +data.form, includeEverything: true }, 0))
 
 		// Basic Pokemon - by pokemon Id
-		result.push(...this.matchMonsters(data, this.monsters[data.pokemon_id], { pokemon_id: data.pokemon_id, form: data.form, includeEverything: true }, 0))
+		result.push(...this.matchMonsters(data, this.monsters[data.pokemon_id], { pokemon_id: +data.pokemon_id, form: +data.form, includeEverything: true }, 0))
 
 		// PVP Pokemon
 
@@ -81,8 +81,8 @@ class MonsterAlarmMatch {
 						data,
 						this.pvpEverything[league],
 						{
-							pokemon_id: data.pokemon_id,
-							form: data.form,
+							pokemon_id: +data.pokemon_id,
+							form: +data.form,
 							includeEverything: true,
 						},
 						league,
@@ -92,8 +92,8 @@ class MonsterAlarmMatch {
 						data,
 						this.pvpSpecific[league],
 						{
-							pokemon_id: data.pokemon_id,
-							form: data.form,
+							pokemon_id: +data.pokemon_id,
+							form: +data.form,
 							includeEverything: true,
 						},
 						league,
@@ -116,8 +116,8 @@ class MonsterAlarmMatch {
 									data,
 									this.pvpSpecific[league],
 									{
-										pokemon_id: pokemonId,
-										form: leagueData.form,
+										pokemon_id: +pokemonId,
+										form: +leagueData.form,
 										includeEverything: false,
 									},
 									league,
@@ -155,20 +155,20 @@ class MonsterAlarmMatch {
 					if (monster.pvp_ranking_cap && leagueData.caps && leagueData.caps.length && !leagueData.caps.includes(monster.pvp_ranking_cap.toString())) continue
 				}
 
-				if (data.iv < monster.min_iv) continue
-				if (data.iv > monster.max_iv) continue
-				if (data.tthSeconds < monster.min_time) continue
-				if (data.cp < monster.min_cp) continue
-				if (data.cp > monster.max_cp) continue
-				if (monster.gender && monster.gender !== data.gender) continue
-				if (data.level < monster.min_level) continue
-				if (data.level > monster.max_level) continue
-				if (data.atk < monster.atk) continue
-				if (data.def < monster.def) continue
-				if (data.sta < monster.sta) continue
-				if (data.atk > monster.max_atk) continue
-				if (data.def > monster.max_def) continue
-				if (data.sta > monster.max_sta) continue
+				if (+data.iv < monster.min_iv) continue
+				if (+data.iv > monster.max_iv) continue
+				if (+data.tthSeconds < monster.min_time) continue
+				if (+data.cp < monster.min_cp) continue
+				if (+data.cp > monster.max_cp) continue
+				if (monster.gender && monster.gender !== +data.gender) continue
+				if (+data.level < monster.min_level) continue
+				if (+data.level > monster.max_level) continue
+				if (+data.atk < monster.atk) continue
+				if (+data.def < monster.def) continue
+				if (+data.sta < monster.sta) continue
+				if (+data.atk > monster.max_atk) continue
+				if (+data.def > monster.max_def) continue
+				if (+data.sta > monster.max_sta) continue
 
 				const weight = 1000 * data.weight
 				if (weight < monster.min_weight) continue
