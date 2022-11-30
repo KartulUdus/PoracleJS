@@ -388,6 +388,8 @@ class Controller extends EventEmitter {
 						description: areaObj.description,
 						displayInMatches: areaObj.displayInMatches ?? true,
 						group: areaObj.group,
+						donateUrl: areaObj.donateUrl,
+						someCustom: areaObj.someCustom,
 					})
 				}
 			} else if (areaObj.multipath) {
@@ -398,6 +400,8 @@ class Controller extends EventEmitter {
 							description: areaObj.description,
 							displayInMatches: areaObj.displayInMatches ?? true,
 							group: areaObj.group,
+							donateUrl: areaObj.donateUrl,
+							someCustom: areaObj.someCustom,
 						})
 						break
 					}
