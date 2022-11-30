@@ -21,6 +21,8 @@ function getGeofenceFromGEOjson(config, rawdata) {
 				description: properties.description || '',
 				userSelectable: !!(properties.userSelectable ?? true),
 				displayInMatches: !!(properties.displayInMatches ?? true),
+				donateUrl: properties.donateUrl || '',
+				someCustom: properties.someCustom || '',
 			}
 			geofenceGEOjson[i].geometry.coordinates[0].forEach((coordinates) => newFence.path.push([coordinates[1], coordinates[0]]))
 
@@ -40,6 +42,8 @@ function getGeofenceFromGEOjson(config, rawdata) {
 				description: properties.description || '',
 				userSelectable: !!(properties.userSelectable ?? true),
 				displayInMatches: !!(properties.displayInMatches ?? true),
+				donateUrl: properties.donateUrl || '',
+				someCustom: properties.someCustom || '',
 			}
 
 			for (const coordList of geofenceGEOjson[i].geometry.coordinates) {
