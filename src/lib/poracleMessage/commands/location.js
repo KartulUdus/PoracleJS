@@ -93,7 +93,7 @@ exports.run = async (client, msg, args, options) => {
 		if (remove) {
 			message = translator.translateFormat('I have removed {0}\'s  location', target.name)
 		} else {
-			const maplink = `https://www.google.com/maps/search/?api=1&query=${lat},${lon}`
+			const maplink = `https://maps.google.com/maps?q=${lat},${lon}`
 			message = `👋, ${translator.translate('I set ')}${target.name}${translator.translate('\'s location to the following coordinates in')}${placeConfirmation}:\n${maplink}`
 
 			if (platform === 'discord' && client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
