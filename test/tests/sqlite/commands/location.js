@@ -40,7 +40,7 @@ describe('!location command tests', () => {
 		assert.equal(result.latitude, 59.4372155)
 		assert.equal(result.longitude, 24.7453688)
 		assert.equal(client.lastReact, '✅')
-		assert.equal(client.lastMessage, ':wave:, I set registeredUserInTallinns location to : \nhttps://www.google.com/maps/search/?api=1&query=59.4372155,24.7453688')
+		assert.equal(client.lastMessage, ':wave:, I set registeredUserInTallinns location to : \nhttps://maps.google.com/maps?q=59.4372155,24.7453688')
 		assert.equal(discordMessaveValidator(client.lastMessage, 'bot'), true)
 	})
 
@@ -59,7 +59,7 @@ describe('!location command tests', () => {
 		assert.equal(result.latitude, 59.4372155)
 		assert.equal(result.longitude, 24.7453688)
 		assert.equal(client.lastReact, '✅')
-		assert.equal(client.lastMessage, ':wave:, I set adminSetLocationInThisChannels location to : \nhttps://www.google.com/maps/search/?api=1&query=59.4372155,24.7453688')
+		assert.equal(client.lastMessage, ':wave:, I set adminSetLocationInThisChannels location to : \nhttps://maps.google.com/maps?q=59.4372155,24.7453688')
 		assert.equal(discordMessaveValidator(client.lastMessage, 'bot'), true)
 	})
 
@@ -69,7 +69,7 @@ describe('!location command tests', () => {
 		assert.equal(result.latitude, 59.4372155)
 		assert.equal(result.longitude, 24.7453688)
 		assert.equal(client.lastReact, '✅')
-		assert.equal(client.lastMessage, ':wave:, I set registeredwebhooks location to : \nhttps://www.google.com/maps/search/?api=1&query=59.4372155,24.7453688')
+		assert.equal(client.lastMessage, ':wave:, I set registeredwebhooks location to : \nhttps://maps.google.com/maps?q=59.4372155,24.7453688')
 		assert.equal(discordMessaveValidator(client.lastMessage, 'bot'), true)
 	})
 
