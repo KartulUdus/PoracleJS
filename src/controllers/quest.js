@@ -105,9 +105,18 @@ class Quest extends Controller {
 			const logReference = data.pokestop_id
 
 			Object.assign(data, this.config.general.dtsDictionary)
-			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			if (this.config.general.rdmURL) {
+				data.rdmUrl = `${this.config.general.rdmURL}${!this.config.general.rdmURL.endsWith('/') ? '/' : ''}@pokestop/${data.pokestop_id}`
+			}
+			if (this.config.general.reactMapURL) {
+				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/pokestops/${data.pokestop_id}`
+			}
+			if (this.config.general.rocketMadURL) {
+				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
+			}
 			data.disappearTime = moment.tz(new Date(), this.config.locale.time, geoTz.find(data.latitude, data.longitude)[0].toString()).endOf('day')
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated

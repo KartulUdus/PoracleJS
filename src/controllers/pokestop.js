@@ -72,14 +72,24 @@ class Invasion extends Controller {
 			const logReference = data.pokestop_id
 
 			Object.assign(data, this.config.general.dtsDictionary)
-			data.googleMapUrl = `https://www.google.com/maps/search/?api=1&query=${data.latitude},${data.longitude}`
+			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
 			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			if (this.config.general.rdmURL) {
+				data.rdmUrl = `${this.config.general.rdmURL}${!this.config.general.rdmURL.endsWith('/') ? '/' : ''}@pokestop/${data.pokestop_id}`
+			}
+			if (this.config.general.reactMapURL) {
+				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/pokestops/${data.pokestop_id}`
+			}
+			if (this.config.general.rocketMadURL) {
+				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
+			}
 			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
 			data.pokestopUrl = data.url
 
 			const incidentExpiration = data.incident_expiration ?? data.incident_expire_timestamp
+			data.incidentExpiration = incidentExpiration
 			data.tth = moment.preciseDiff(Date.now(), incidentExpiration * 1000, true)
 			const disappearTime = moment(incidentExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
 			data.disappearTime = disappearTime.format(this.config.locale.time)
@@ -249,17 +259,18 @@ class Invasion extends Controller {
 										})
 									} else {
 										// Single Reward 100% of encounter (might vary based on actual fight).
+										// && Giovanni or other third reward rockets
 										let first = true
-										gruntType.encounters.first.forEach((fr) => {
+										gruntType.encounters[gruntType.thirdReward ? 'third' : 'first'].forEach((tr) => {
 											if (!first) gruntRewards += ', '
 											else first = false
 
-											const firstReward = +fr
-											const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
-											gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
+											const reward = +tr
+											const rewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === reward && !mon.form.id)
+											gruntRewards += rewardMonster ? translator.translate(rewardMonster.name) : ''
 											gruntRewardsList.first.monsters.push({
-												id: firstReward,
-												name: translator.translate(firstRewardMonster.name),
+												id: reward,
+												name: translator.translate(rewardMonster.name),
 											})
 										})
 									}

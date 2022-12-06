@@ -3,6 +3,7 @@ const fs = require('fs')
 const fsp = require('fs').promises
 const NodeCache = require('node-cache')
 const mustache = require('handlebars')
+const { performance } = require('perf_hooks')
 const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 
@@ -199,7 +200,7 @@ class Telegram extends EventEmitter {
 		return res
 	}
 
-	async sendFormattedMessage(data) {
+	async sendFormattedMessage(data, dataType) {
 		try {
 			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 			const messageIds = []
@@ -215,6 +216,8 @@ class Telegram extends EventEmitter {
 				.map((v) => v.toLowerCase())
 				.filter((v, i, a) => a.indexOf(v) === i)
 				.filter((v) => sendOrderDefaultSet.has(v))
+
+			const startTime = performance.now()
 
 			for (const type of sendOrder) {
 				switch (type) {
@@ -252,10 +255,23 @@ class Telegram extends EventEmitter {
 					}
 					case 'text': {
 						this.logs.telegram.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} Content`, data.message)
+						let parseMode = 'Markdown'
+						switch ((data.message.parse_mode ?? 'markdown').toLowerCase()) {
+							case 'markdownv2': {
+								parseMode = 'MarkdownV2'
+								break
+							}
+							case 'html': {
+								parseMode = 'HTML'
+								break
+							}
+							default:
+								break
+						}
 						const msg = await this.retrySender(
 							senderId,
 							async () => this.bot.telegram.sendMessage(data.target, data.message.content || data.message || '', {
-								parse_mode: 'Markdown',
+								parse_mode: parseMode,
 								disable_web_page_preview: !data.message.webpage_preview,
 							}),
 						)
@@ -301,6 +317,9 @@ class Telegram extends EventEmitter {
 				}
 			}
 
+			const endTime = performance.now();
+			(this.config.logger.timingStats ? this.logs.telegram.verbose : this.logs.telegram.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} ${dataType} (${endTime - startTime} ms)`)
+
 			if (data.clean) {
 				for (const id of messageIds) {
 					this.telegramMessageTimeouts.set(`${id}:${data.target}`, data.target, Math.floor(msgDeletionMs / 1000) + 1)
@@ -321,19 +340,19 @@ class Telegram extends EventEmitter {
 	async userAlert(data) {
 		this.logs.telegram.info(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
-		return this.sendFormattedMessage(data)
+		return this.sendFormattedMessage(data, 'USER')
 	}
 
 	async groupAlert(data) {
 		this.logs.telegram.info(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} GROUP Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
-		return this.sendFormattedMessage(data)
+		return this.sendFormattedMessage(data, 'GROUP')
 	}
 
 	async channelAlert(data) {
 		this.logs.telegram.info(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending telegram message${data.clean ? ' (clean)' : ''}`)
 
-		return this.sendFormattedMessage(data)
+		return this.sendFormattedMessage(data, 'CHANNEL')
 	}
 
 	async saveTimeouts() {

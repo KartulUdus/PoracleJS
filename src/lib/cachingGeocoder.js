@@ -36,13 +36,14 @@ class NominatimGeocoderConverter extends NominatimGeocoder {
 			city: result.address.city || result.address.town || result.address.village || result.address.hamlet,
 			state: result.address.state,
 			zipcode: result.address.postcode,
-			streetName: result.address.road || result.address.cycleway,
+			streetName: result.address.road || result.address.quarter || result.address.cycleway,
 			streetNumber: result.address.house_number,
 			countryCode,
 			neighbourhood: result.address.neighbourhood || '',
 			suburb: result.address.suburb || '',
 			town: result.address.town || '',
 			village: result.address.village || '',
+			shop: result.address.shop || '',
 		}]
 	}
 }
@@ -94,6 +95,10 @@ class CachingGeocoder {
 
 	async getAddress(locationObject) {
 		if (this.config.geocoding.provider.toLowerCase() === 'none') {
+			return { addr: 'Unknown', flag: '' }
+		}
+
+		if (this.config.geocoding.forwardOnly) {
 			return { addr: 'Unknown', flag: '' }
 		}
 
