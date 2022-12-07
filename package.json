@@ -33,7 +33,7 @@
   "dependencies": {
     "@budibase/handlebars-helpers": "^0.11.8",
     "async-mutex": "^0.4.0",
-    "axios": "1.1.3",
+    "axios": "1.2.1",
     "chokidar": "^3.5.3",
     "config": "^3.3.8",
     "country-code-emoji": "^2.3.0",
