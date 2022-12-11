@@ -82,15 +82,11 @@ class Monster extends Controller {
 			}
 		}
 
-		// remove any duplicates
-		// const alertIds = []
-		// result = result.filter((alert) => {
-		// 	if (!alertIds.includes(alert.id)) {
-		// 		alertIds.push(alert.id)
-		// 		return alert
-		// 	}
-		// })
 		return result
+	}
+
+	async monsterWhoCaresInMemory(data) {
+		return this.monsterMatch.monsterWhoCares(data)
 	}
 
 	buildQuery(queryName, data, strictareastring, areastring, pokemonTarget, league, leagueData) {
@@ -409,12 +405,23 @@ class Monster extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			const whoCares = data.poracleTest ? [{
-				...data.poracleTest,
-				clean: false,
-				ping: '',
-				pvp_ranking_worst: 100,
-			}] : await this.monsterWhoCares(data)
+			let whoCares
+
+			if (this.config.tuning.fastMonsters) {
+				whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+					pvp_ranking_worst: 100,
+				}] : await this.monsterWhoCaresInMemory(data)
+			} else {
+				whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+					pvp_ranking_worst: 100,
+				}] : await this.monsterWhoCares(data)
+			}
 
 			let hrend = process.hrtime(hrstart)
 			const hrendms = hrend[1] / 1000000

@@ -114,6 +114,14 @@ class Query {
 		}
 	}
 
+	async selectWhereInQuery(table, values, valuesColumn) {
+		try {
+			return this.db.select('*').whereIn(valuesColumn, values).from(table)
+		} catch (err) {
+			throw { source: 'selectWhereInQuery unhappy', error: err }
+		}
+	}
+
 	async updateQuery(table, values, conditions) {
 		try {
 			return this.db(table).update(values).where(conditions)

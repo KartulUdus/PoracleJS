@@ -46,6 +46,8 @@ module.exports = async (fastify, options, next) => {
 
 		await fastify.query.deleteQuery('monsters', { id: req.params.id, uid: req.params.uid })
 
+		if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
+
 		return {
 			status: 'ok',
 		}
@@ -68,6 +70,8 @@ module.exports = async (fastify, options, next) => {
 		await fastify.query.deleteWhereInQuery('monsters', {
 			id: req.params.id,
 		}, deleteUids, 'uid')
+
+		if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
 
 		return {
 			status: 'ok',
@@ -238,6 +242,8 @@ module.exports = async (fastify, options, next) => {
 				if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
 			})
 
+			if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
+
 			return {
 				status: 'ok',
 				message,
@@ -248,6 +254,24 @@ module.exports = async (fastify, options, next) => {
 				status: 'error',
 				message: 'Exception raised during execution',
 			}
+		}
+	})
+
+	fastify.get('/api/tracking/pokemon/refresh', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.context.config.method} ${req.context.config.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
+
+		return {
+			status: 'ok',
 		}
 	})
 

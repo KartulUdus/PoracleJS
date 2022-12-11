@@ -116,6 +116,7 @@ class Telegram extends EventEmitter {
 		if (Object.keys(this.commands).includes(command.command)) {
 			ctx.poracleAddMessageQueue = (queue) => this.emit('sendMessages', queue)
 			ctx.poracleAddWebhookQueue = (queue) => this.emit('addWebhook', queue)
+			ctx.poracleReloadAlerts = () => this.emit('refreshAlertCache')
 
 			return this.commands[command.command](ctx)
 		}

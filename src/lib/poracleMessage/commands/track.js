@@ -459,6 +459,7 @@ exports.run = async (client, msg, args, options) => {
 		await msg.reply(message, { style: 'markdown' })
 		await msg.react(reaction)
 
+		client.triggerReloadAlerts()
 		client.log.info(`${logReference} ${target.name} started tracking monsters: ${monsters.map((m) => m.name).join(', ')}`)
 	} catch (err) {
 		client.log.error(`${logReference} Track command unhappy:`, err)
