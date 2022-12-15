@@ -38,6 +38,9 @@ function monsterRowText(config, translator, GameData, monster) {
 	let minRarity = monster.rarity
 	if (minRarity === -1) minRarity = 1
 
+	let minSize = monster.size
+	if (minSize < 1) minSize = 1
+
 	const pvpString = monster.pvp_ranking_league
 		? translator.translate('pvp ranking:').concat(
 			' ',
@@ -50,7 +53,7 @@ function monsterRowText(config, translator, GameData, monster) {
 		)
 		: ''
 
-	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}${pvpString ? ` | ${pvpString}` : ''}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''} ${standardText(config, translator, monster)}`
+	return `**${translator.translate(`${monsterName}`)}** ${translator.translate(`${formName}`)} ${monster.distance ? ` | ${translator.translate('distance')}: ${monster.distance}m` : ''} | ${translator.translate('iv')}: ${miniv}%-${monster.max_iv}% | ${translator.translate('cp')}: ${monster.min_cp}-${monster.max_cp} | ${translator.translate('level')}: ${monster.min_level}-${monster.max_level} | ${translator.translate('stats')}: ${monster.atk}/${monster.def}/${monster.sta} - ${monster.max_atk}/${monster.max_def}/${monster.max_sta}${pvpString ? ` | ${pvpString}` : ''}${(monster.size > 0 || monster.max_size < 6) ? ` | ${translator.translate('size')}: ${translator.translate(GameData.utilData.size[minSize])}-${translator.translate(GameData.utilData.size[monster.max_size])}` : ''}${(monster.rarity > 0 || monster.max_rarity < 6) ? ` | ${translator.translate('rarity')}: ${translator.translate(GameData.utilData.rarity[minRarity])}-${translator.translate(GameData.utilData.rarity[monster.max_rarity])}` : ''}${monster.gender ? ` | ${translator.translate('gender')}: ${GameData.utilData.genders[monster.gender].emoji}` : ''}${monster.min_time ? ` | ${translator.translate('minimum time:')} ${monster.min_time}s` : ''} ${standardText(config, translator, monster)}`
 }
 
 async function raidRowText(config, translator, GameData, raid, scannerQuery) {

@@ -101,14 +101,14 @@ exports.run = async (client, msg, [args]) => {
 					const allowed = []
 					const deny = []
 					roleId = await guild.roles.cache.get(format(role.id, args))
-					if (role.view) { 
+					if (role.view) {
 						allowed.push('VIEW_CHANNEL')
-					} else if (role.view === false) { 
+					} else if (role.view === false) {
 						deny.push('VIEW_CHANNEL')
 					}
 					if (role.viewHistory) {
 						allowed.push('READ_MESSAGE_HISTORY')
-					} else if (role.viewHistory === false) { 
+					} else if (role.viewHistory === false) {
 						deny.push('READ_MESSAGE_HISTORY')
 					}
 					if (role.send) {
@@ -121,7 +121,7 @@ exports.run = async (client, msg, [args]) => {
 					} else if (role.react === false) {
 						deny.push('ADD_REACTIONS')
 					}
-					roleOverwrites.push({ id: roleId, allow: allowed, deny: deny })
+					roleOverwrites.push({ id: roleId, allow: allowed, deny })
 				}
 				channelOptions.permissionOverwrites = roleOverwrites
 			}
