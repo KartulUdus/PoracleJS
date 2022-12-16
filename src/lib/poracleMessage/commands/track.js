@@ -294,7 +294,7 @@ exports.run = async (client, msg, args, options) => {
 		let maxRarity = (parameterValues.maxrarity ?? 6)
 
 		let size = (parameterValues.size?.min ?? -1)
-		let maxSize = parameterValues.size?.max ?? parameterValues.maxsize ?? 5
+		let maxSize = parameterValues.size?.max ?? parameterValues.maxsize ?? parameterValues.size?.min ?? 5
 
 		const pings = msg.getPings()
 
