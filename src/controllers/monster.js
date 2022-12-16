@@ -132,7 +132,7 @@ class Monster extends Controller {
 		rarity<=${data.rarityGroup} and
 		max_rarity>=${data.rarityGroup} and
 		size<=${data.size} and
-		max_size>=${data.size}
+		max_size>=${data.size} and
 		(${pvpQueryString})
 		${strictareastring}
 		`
