@@ -131,6 +131,8 @@ class Monster extends Controller {
 		max_weight>=${data.weight * 1000} and
 		rarity<=${data.rarityGroup} and
 		max_rarity>=${data.rarityGroup} and
+		size<=${data.size} and
+		max_size>=${data.size} and
 		(${pvpQueryString})
 		${strictareastring}
 		`
@@ -221,6 +223,7 @@ class Monster extends Controller {
 			data.level = encountered ? data.pokemon_level : 0
 			data.quickMoveId = encountered ? data.move_1 : 0
 			data.chargeMoveId = encountered ? data.move_2 : 0
+			data.size = data.size ?? 0
 			data.quickMoveNameEng = encountered && this.GameData.moves[data.quickMoveId] ? this.GameData.moves[data.quickMoveId].name : ''
 			data.chargeMoveNameEng = encountered && this.GameData.moves[data.chargeMoveId] ? this.GameData.moves[data.chargeMoveId].name : ''
 			data.height = encountered && data.height ? data.height.toFixed(2) : 0
@@ -264,6 +267,7 @@ class Monster extends Controller {
 			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
 			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1
 			data.rarityNameEng = this.GameData.utilData.rarity[data.rarityGroup] ? this.GameData.utilData.rarity[data.rarityGroup] : ''
+			data.sizeNameEng = data.size && this.GameData.utilData.size[data.size] ? this.GameData.utilData.size[data.size] : ''
 			data.pvpPokemonId = data.pokemon_id
 			data.pvpFormId = data.form
 			data.pvpEvolutionData = {}
@@ -652,6 +656,7 @@ class Monster extends Controller {
 						data.genderEmoji = data.genderData.emoji
 						data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 						data.rarityName = translator.translate(data.rarityNameEng)
+						data.sizeName = translator.translate(data.sizeNameEng)
 						data.quickMoveName = encountered && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
 						data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji, platform)) : ''
 						data.chargeMoveName = encountered && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''

@@ -175,6 +175,8 @@ class MonsterAlarmMatch {
 				if (weight > monster.max_weight) continue
 				if (data.rarityGroup < monster.rarity) continue
 				if (data.rarityGroup > monster.max_rarity) continue
+				if (data.size < monster.size) continue
+				if (data.size > monster.max_size) continue
 
 				results.push(monster)
 			}

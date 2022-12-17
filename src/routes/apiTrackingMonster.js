@@ -145,8 +145,10 @@ module.exports = async (fastify, options, next) => {
 				pvp_ranking_worst: +defaultTo(row.pvp_ranking_worst, 4096),
 				pvp_ranking_min_cp: +defaultTo(row.pvp_ranking_min_cp, 0),
 				pvp_ranking_cap: +defaultTo(row.pvp_ranking_cap, 0),
-				rarity: +defaultTo(row.rarity, 0),
-				max_rarity: +defaultTo(row.max_rarity, 0),
+				size: +defaultTo(row.rarity, -1),
+				max_size: +defaultTo(row.max_rarity, 5),
+				rarity: +defaultTo(row.rarity, -1),
+				max_rarity: +defaultTo(row.max_rarity, 6),
 				min_time: +defaultTo(row.min_time, 0),
 			}
 			if (row.uid) {

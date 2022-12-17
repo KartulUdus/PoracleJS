@@ -127,6 +127,8 @@ exports.run = async (client, msg, args, options) => {
 			def: client.re.defRe,
 			sta: client.re.staRe,
 			cap: client.re.capRe,
+			size: client.re.sizeRe,
+			maxsize: client.re.maxSizeRe,
 			male: '^male$',
 			female: '^female$',
 			genderless: '^genderless$',
@@ -290,6 +292,10 @@ exports.run = async (client, msg, args, options) => {
 		let distance = +(parameterValues.d ?? 0)
 		let rarity = (parameterValues.rarity ?? -1)
 		let maxRarity = (parameterValues.maxrarity ?? 6)
+
+		let size = (parameterValues.size?.min ?? -1)
+		let maxSize = parameterValues.size?.max ?? parameterValues.maxsize ?? parameterValues.size?.min ?? 5
+
 		const pings = msg.getPings()
 
 		const pvp = {}
@@ -334,6 +340,25 @@ exports.run = async (client, msg, args, options) => {
 				maxRarity = maxRarityLevel
 			} else {
 				maxRarity = 6
+			}
+		}
+
+		if (size !== -1 && !['1', '2', '3', '4', '5'].includes(size)) {
+			size = client.translatorFactory.reverseTranslateCommand(size, true)
+			const sizeLevel = Object.keys(client.GameData.utilData.size).find((x) => client.GameData.utilData.size[x].toLowerCase() === size.toLowerCase())
+			if (sizeLevel) {
+				size = sizeLevel
+			} else {
+				size = -1
+			}
+		}
+		if (maxSize !== 5 && !['1', '2', '3', '4', '5'].includes(maxSize)) {
+			maxSize = client.translatorFactory.reverseTranslateCommand(maxSize, true)
+			const maxSizeLevel = Object.keys(client.GameData.utilData.size).find((x) => client.GameData.utilData.size[x].toLowerCase() === maxSize.toLowerCase())
+			if (maxSizeLevel) {
+				maxSize = maxSizeLevel
+			} else {
+				maxSize = 5
 			}
 		}
 
@@ -390,6 +415,8 @@ exports.run = async (client, msg, args, options) => {
 			pvp_ranking_cap: pvpLeague ? pvpCap : 0,
 			rarity: +rarity,
 			max_rarity: +maxRarity,
+			size: +size,
+			max_size: +maxSize,
 			min_time: +(parameterValues.t ?? 0),
 		}))
 		if (!insert.length) {
