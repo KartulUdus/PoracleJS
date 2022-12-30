@@ -18,27 +18,25 @@ const getKojiFences = async () => {
 
 		await Promise.allSettled(
 			fences.map((fencePath) => {
-				try {
-					if (fencePath.startsWith('http')) {
-						log.info(`[KŌJI] Fetching ${fencePath}...`)
-						return fetch(fencePath, {
-							headers: {
-								Authorization: `Bearer ${config.geofence.kojiOptions.bearerToken}`,
-								'Content-Type': 'application/json',
-							},
+				if (fencePath.startsWith('http')) {
+					log.info(`[KŌJI] Fetching ${fencePath}...`)
+					return fetch(fencePath, {
+						headers: {
+							Authorization: `Bearer ${config.geofence.kojiOptions.bearerToken}`,
+							'Content-Type': 'application/json',
+						},
+					})
+						.then((res) => res.json())
+						.then((json) => {
+							fs.writeFileSync(
+								resolve(__dirname, `../../.cache/${fencePath.replace(/\//g, '__')}.json`),
+								JSON.stringify(json.data, null, 2),
+								'utf8',
+							)
 						})
-							.then((res) => res.json())
-							.then((json) => {
-								fs.writeFileSync(
-									resolve(__dirname, `../../.cache/${fencePath.replace(/\//g, '__')}.json`),
-									JSON.stringify(json.data, null, 2),
-									'utf8',
-								)
-							})
-					}
-				} catch (e) {
-					log.warn(`[KŌJI] Could not process ${fencePath}`, e.message)
+						.catch((e) => log.warn(`[KŌJI] Could not process ${fencePath}`, e.message))
 				}
+				return null
 			}),
 		)
 	} else {

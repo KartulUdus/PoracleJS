@@ -1,6 +1,7 @@
 const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
+const { log } = require('./logger')
 
 function getGeofenceFromGEOjson(config, rawdata) {
 	if (rawdata.type !== 'FeatureCollection' || !rawdata.features) return
@@ -55,13 +56,17 @@ function getGeofenceFromGEOjson(config, rawdata) {
 }
 
 function readGeofenceFile(config, filename) {
-	let geofence
+	let geofence = []
 
 	try {
 		const geofenceText = stripJsonComments(fs.readFileSync(filename, 'utf8'))
 		geofence = JSON.parse(geofenceText)
 	} catch (err) {
-		throw new Error(`Geofence ${filename} - ${err.message}`)
+		if (filename.includes('http')) {
+			log.warn(`[KŌJI] Cache not found - ${err.message}]`)
+		} else {
+			throw new Error(`Geofence ${filename} - ${err.message}`)
+		}
 	}
 
 	if (geofence.type === 'FeatureCollection') geofence = getGeofenceFromGEOjson(config, geofence)
