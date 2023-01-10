@@ -11,7 +11,7 @@ async function generateWeatherTile(tileserverPregen, cellId, weatherId, imgUicon
 
 	data.condition = weatherId
 	if (imgUicons) {
-		data.imgUrl = await imgUicons.weatherIcon(data.condition)
+		data.imgUrl = await imgUicons.weatherIcon(data.condition) || this.config.fallbacks?.imgUrlWeather
 	}
 
 	const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(cellId))

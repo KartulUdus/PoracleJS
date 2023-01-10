@@ -142,8 +142,8 @@ class Lure extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
-					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId) || this.config.fallbacks?.imgUrlPokestop
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId) || this.config.fallbacks?.imgUrlPokestop
 					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
 
 					const geoResult = await this.getAddress({

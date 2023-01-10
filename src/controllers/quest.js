@@ -210,6 +210,9 @@ class Quest extends Controller {
 				if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.rewardCandyIcon(data.rewardData.candy[0].pokemonId, data.rewardData.candy[0].amount)
 			}
 
+			data.imgUrl = data.imgUrl || this.config.fallbacks?.imgUrlPokestop
+			data.imgUrlAlt = data.imgUrlAlt || this.config.fallbacks?.imgUrlPokestop
+
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
 
