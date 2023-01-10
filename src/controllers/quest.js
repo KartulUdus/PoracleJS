@@ -129,7 +129,9 @@ class Quest extends Controller {
 				data.pokestop_name = this.escapeJsonString(data.pokestop_name)
 				data.pokestopName = data.pokestop_name
 			}
-			if (data.pokestop_url) data.pokestopUrl = data.pokestop_url
+			data.pokestop_url = data.pokestop_url || this.config.fallbacks?.pokestopUrl
+			data.pokestopUrl = data.pokestop_url
+
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
 				log.debug(`${data.pokestop_id}: quest already disappeared or is about to expire in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
 				return []
