@@ -88,6 +88,7 @@ class Lure extends Controller {
 			}
 			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
+			data.url = data.url || this.config.fallbacks?.pokestopUrl
 			data.pokestopUrl = data.url
 
 			const lureExpiration = data.lure_expiration
