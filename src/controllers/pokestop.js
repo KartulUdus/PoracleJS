@@ -86,6 +86,7 @@ class Invasion extends Controller {
 			}
 			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
+			data.url = data.url || this.config.fallbacks?.pokestopUrl
 			data.pokestopUrl = data.url
 
 			const incidentExpiration = data.incident_expiration ?? data.incident_expire_timestamp
