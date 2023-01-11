@@ -340,8 +340,8 @@ class Weather extends Controller {
 
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
-			if (this.imgUicons) data.imgUrl = await this.imgUicons.weatherIcon(data.condition)
-			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.weatherIcon(data.condition)
+			if (this.imgUicons) data.imgUrl = await this.imgUicons.weatherIcon(data.condition) || this.config.fallbacks?.imgUrlWeather
+			if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.weatherIcon(data.condition) || this.config.fallbacks?.imgUrlWeather
 			if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.weatherIcon(data.condition)
 
 			const jobs = []
