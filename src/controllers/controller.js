@@ -214,7 +214,7 @@ class Controller extends EventEmitter {
 						for (const stop of data.nearbyStops) {
 							switch (stop.type) {
 								case 'gym': {
-									stop.imgUrl = await this.imgUicons.gymIcon(stop.teamId, 6 - stop.slots, false, false)
+									stop.imgUrl = await this.imgUicons.gymIcon(stop.teamId, 6 - stop.slots, false, false) || this.config.fallbacks?.imgUrlGym
 									break
 								}
 								case 'pokestop': {
@@ -264,6 +264,7 @@ class Controller extends EventEmitter {
 				data.staticMap = ''
 			}
 		}
+		data.staticMap = data.staticMap || this.config.fallbacks?.staticMap
 	}
 
 	// eslint-disable-next-line class-methods-use-this

@@ -86,6 +86,7 @@ class Invasion extends Controller {
 			}
 			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
+			data.url = data.url || this.config.fallbacks?.pokestopUrl
 			data.pokestopUrl = data.url
 
 			const incidentExpiration = data.incident_expiration ?? data.incident_expire_timestamp
@@ -163,8 +164,8 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if (this.imgUicons) data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId)
-					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.invasionIcon(data.gruntTypeId)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
 					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
