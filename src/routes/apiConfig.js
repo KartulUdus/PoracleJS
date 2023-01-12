@@ -34,6 +34,7 @@ module.exports = async (fastify, options, next) => {
 				telegram: fastify.config.telegram.admins,
 			},
 			maxDistance: fastify.config.tracking.maxDistance,
+			defaultDistance: fastify.config.tracking.defaultDistance,
 			everythingFlagPermissions: fastify.config.tracking.everythingFlagPermissions,
 			disabledHooks: ['Pokemon', 'Raid', 'Pokestop', 'Invasion', 'Lure', 'Quest', 'Weather', 'Nest', 'Gym']
 				.filter((hookType) => fastify.config.general[`disable${hookType}`]).map((hookType) => hookType.toLowerCase()),

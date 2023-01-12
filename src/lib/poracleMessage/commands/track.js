@@ -211,9 +211,10 @@ exports.run = async (client, msg, args, options) => {
 				let addEvolutions = false
 				if (monsterMatch.endsWith('+')) {
 					monsterMatch = monsterMatch.slice(0, -1)
+					monsterMatch = client.translatorFactory.reverseTranslateCommand(monsterMatch, true)
 					addEvolutions = true
 				}
-				const monster = Object.values(client.GameData.monsters).find((mon) => (monsterMatch === mon.name.toLowerCase()) || element === mon.id.toString())
+				const monster = Object.values(client.GameData.monsters).find((mon) => (monsterMatch === mon.name.toLowerCase()) || monsterMatch === mon.id.toString())
 				if (monster) {
 					monsterList.add(monster.id)
 					if (addEvolutions) {
