@@ -50,10 +50,14 @@ class RdmScanner {
 					.from('pokestop')
 					.whereBetween('lat', [minLat, maxLat])
 					.whereBetween('lon', [minLon, maxLon])
+					.where({ deleted: 0 })
+					.where({ enabled: 1 })
 				const gymRows = await db.select('lat', 'lon', 'team_id', 'available_slots')
 					.from('gym')
 					.whereBetween('lat', [minLat, maxLat])
 					.whereBetween('lon', [minLon, maxLon])
+					.where({ deleted: 0 })
+					.where({ enabled: 1 })
 
 				stopDetails.push(...pokestopRows.map((x) => ({
 					latitude: x.lat,

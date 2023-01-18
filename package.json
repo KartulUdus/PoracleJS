@@ -1,6 +1,6 @@
 {
   "name": "poracle",
-  "version": "4.6.0",
+  "version": "4.6.1",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "keywords": [
     "poracle",
@@ -34,7 +34,7 @@
   "dependencies": {
     "@budibase/handlebars-helpers": "^0.11.8",
     "async-mutex": "^0.4.0",
-    "axios": "1.1.3",
+    "axios": "^1.2.2",
     "chokidar": "^3.5.3",
     "config": "^3.3.8",
     "country-code-emoji": "^2.3.0",
