@@ -33,6 +33,7 @@ const NestController = require('./controllers/nest')
 const ControllerWeatherManager = require('./controllers/weatherData')
 const StatsData = require('./controllers/statsData')
 const CachingGeocoder = require('./lib/cachingGeocoder')
+const MonsterAlarmMatch = require('./controllers/monsterAlarmMatch')
 
 /**
  * Contains currently rate limited users
@@ -59,6 +60,10 @@ const pokestopController = new PokestopController(logs.controller, knex, caching
 const nestController = new NestController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const pokestopLureController = new PokestopLureController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const gymController = new GymController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+
+const monsterAlarmMatch = new MonsterAlarmMatch(logs.controller, knex, config)
+
+monsterController.monsterMatch = monsterAlarmMatch
 
 const hookQueue = []
 let queuePort
@@ -251,6 +256,10 @@ function receiveCommand(cmd) {
 
 			reloadGeofence()
 		}
+		if (cmd.type === 'refreshAlertCache') {
+			log.debug(`Worker ${workerId}: Received reload alert broadcast`)
+			monsterAlarmMatch.loadData().catch(() => {})
+		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to processs command`, err)
 	}
@@ -305,5 +314,6 @@ if (!isMainThread) {
 	pokestopLureController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
 	gymController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
 
+	monsterAlarmMatch.loadData().catch(() => {})
 	setInterval(currentStatus, 60000)
 }

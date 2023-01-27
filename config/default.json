@@ -480,7 +480,19 @@
       "spriteWidth": 20,
       "scale": 2,
       "type": "klokantech-basic"
-    },
+  },
+  // fallback urls if something goes wrong
+  "fallbacks": {
+    "staticMap": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/staticMap.png",
+    // Various imgUrl fallbacks
+    "imgUrl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
+    "imgUrlWeather": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/weather.png",
+    "imgUrlEgg": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/uni.png",
+    "imgUrlGym": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/gym.png",
+    "imgUrlPokestop": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/pokestop.png",
+    // Used for pokestop urls in quests
+    "pokestopUrl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/pokestop.png"
+  },
   //
   // Fine tuning.  We do not recommend that you change these settings without talking to us in discord.
   // But for reference here are some internal settings that can be tunes.
@@ -500,6 +512,7 @@
   // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
   //
   "tuning": {
+    "fastMonsters": false,
     "maxDatabaseConnections": 15,
     "webhookProcessingWorkers": 5,
     "concurrentWebhookProcessorsPerWorker": 4,

@@ -88,6 +88,7 @@ class Lure extends Controller {
 			}
 			data.name = data.name ? this.escapeJsonString(data.name) : this.escapeJsonString(data.pokestop_name)
 			data.pokestopName = data.name
+			data.url = data.url || this.config.fallbacks?.pokestopUrl
 			data.pokestopUrl = data.url
 
 			const lureExpiration = data.lure_expiration
@@ -142,8 +143,8 @@ class Lure extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId)
-					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId) || this.config.fallbacks?.imgUrlPokestop
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId) || this.config.fallbacks?.imgUrlPokestop
 					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId)
 
 					const geoResult = await this.getAddress({

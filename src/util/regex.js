@@ -44,6 +44,8 @@ module.exports = (translatorFactory) => ({
 	staRe: createCommandRegex(translatorFactory, 'sta', '(?<min>[0-9]{1,2})(\\-(?<max>[0-9]{1,2}))?'),
 	weightRe: createCommandRegex(translatorFactory, 'weight', '(?<min>[0-9]{1,8})(\\-(?<max>[0-9]{1,8}))?'),
 	rarityRe: createCommandRegex(translatorFactory, 'rarity', '.+'),
+	sizeRe: createCommandRegex(translatorFactory, 'size', '(?<min>[0-9a-zA-Z]{1,3})(\\-(?<max>[0-9a-zA-Z]{1,3}))?'),
+	maxSizeRe: createCommandRegex(translatorFactory, 'size', '[0-9a-zA-Z]{1,3}'),
 
 	greatLeagueRe: createCommandRegex(translatorFactory, 'great', '(?<first>[0-9]{1,4})(\\-(?<second>[0-9]{1,4}))?'),
 	greatLeagueHighestRe: createCommandRegex(translatorFactory, 'greathigh', '\\d{1,4}'),
