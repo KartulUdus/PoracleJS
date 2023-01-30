@@ -1,5 +1,4 @@
 const fs = require('fs')
-const { invasions } = require('pogo-data-generator')
 const Fetch = require('node-fetch')
 
 const { log } = require('../lib/logger')
@@ -40,7 +39,7 @@ const update = async function update() {
 			log.info('Fetching latest invasions...')
 			fs.writeFileSync(
 				'./src/util/grunts.json',
-				JSON.stringify(await invasions(), null, 2),
+				await fetch('https://raw.githubusercontent.com/WatWowMap/event-info/main/grunts/formatted.json'),
 				'utf8',
 			)
 			log.info('Latest grunts saved...')
