@@ -174,7 +174,7 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if data.gruntTypeId == 352 {
+					if (data.gruntTypeId == 352) {
 						data.shinyPossible = this.shinyPossible.isShinyPossible(data.gruntTypeId, 0)
 						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.gruntTypeId, 0, 0, data.gender, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.gruntTypeId, 0, 0, data.gender, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
