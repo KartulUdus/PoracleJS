@@ -55,6 +55,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'male') gender = 1
 			else if (element === 'clean') clean = true
 			else if (typeArray.includes(element) || element === 'everything') types.push(element)
+			else if (element === 'kecleon' || element === '352') types.push('kecleon')
 		}
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
