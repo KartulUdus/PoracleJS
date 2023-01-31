@@ -143,7 +143,7 @@ class Invasion extends Controller {
 			if (data.gruntTypeId && (data.gruntTypeId == 352)) {
 				data.gender = 0
 				data.gruntName = 'Kecleon'
-				data.gruntType = 'Kecleon'
+				data.gruntType = 'kecleon'
 				data.gruntRewards = ''
 			}
 
