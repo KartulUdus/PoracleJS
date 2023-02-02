@@ -127,7 +127,7 @@ class Invasion extends Controller {
 
 			// Only enough to match for query
 
-			if (data.gruntTypeId && (data.gruntTypeId !== 'event')) {
+			if (data.gruntTypeId && (data.grunt_type !== 0)) {
 				data.gender = 0
 				data.gruntName = 'Grunt'
 				data.gruntType = 'Mixed'
@@ -141,7 +141,7 @@ class Invasion extends Controller {
 			}
 
 			// Kecleon invasion
-			if ((data.grunt_type = 0) && (data.display_type == 8)) {
+			if ((data.grunt_type == 0) && (data.display_type == 8)) {
 				data.gender = 0
 				data.gruntName = 'Kecleon'
 				data.gruntType = 'kecleon'
