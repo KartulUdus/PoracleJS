@@ -141,7 +141,7 @@ class Invasion extends Controller {
 			}
 
 			// Kecleon invasion
-			if (data.gruntTypeId && (data.gruntTypeId == 'event') && (data.displaytype == 8)) {
+			if (data.gruntTypeId && (data.gruntTypeId == 'event') && (data.displayType == 8)) {
 				data.gender = 0
 				data.gruntName = 'Kecleon'
 				data.gruntType = 'kecleon'
