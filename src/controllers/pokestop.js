@@ -112,9 +112,9 @@ class Invasion extends Controller {
 				data.gruntTypeId = data.incident_grunt_type
 			} else if (data.grunt_type && (data.display_type == 1)) {
 				data.gruntTypeId = data.grunt_type
-			} else if (((data.grunt_type == 0) && (data.display_type !== 1)) || (data.incident_grunt_type == 352)) {
-				data.gruntTypeId = 'event'
-				data.displayType = 8
+			} else if (data.incident_grunt_type == 352) {
+				data.grunt_type = 0
+				data.display_type = 8
 			}
 
 			data.gruntTypeColor = 'BABABA'
@@ -141,7 +141,7 @@ class Invasion extends Controller {
 			}
 
 			// Kecleon invasion
-			if (data.gruntTypeId && (data.gruntTypeId == 'event') && (data.displayType == 8)) {
+			if ((data.grunt_type = 0) && (data.display_type == 8)) {
 				data.gender = 0
 				data.gruntName = 'Kecleon'
 				data.gruntType = 'kecleon'
@@ -175,7 +175,7 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if ((data.gruntTypeId == 'event') && (data.displayType == 8)) {
+					if ((data.grunt_type == 0) && (data.display_type == 8)) {
 						data.shinyPossible = this.shinyPossible.isShinyPossible(352, 0)
 						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(352, 0, 0, data.gender, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(352, 0, 0, data.gender, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
@@ -218,7 +218,7 @@ class Invasion extends Controller {
 						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
 
 						// full build
-						if (data.gruntTypeId && (data.gruntTypeId !== 'event')) {
+						if (data.gruntTypeId && (data.grunt_type == 0)) {
 							data.gender = 0
 							data.gruntName = translator.translate('Grunt')
 							data.gruntType = translator.translate('Mixed')
