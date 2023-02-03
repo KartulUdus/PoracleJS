@@ -913,5 +913,9 @@
 		"southeast": "\u2199\ufe0f",
 		"east": "\u2b05\ufe0f",
 		"northeast": "\u2196\ufe0f"
+	},
+	"event": {
+		"8": "Kecleon",
+		"7": "Golden-Stop"
 	}
 }
