@@ -147,6 +147,7 @@ class Invasion extends Controller {
 				data.gruntType = data.display_type && this.GameData.utilData.event[data.display_type] ? this.GameData.utilData.event[data.display_type].toLowerCase() : ''
 				data.gruntRewards = ''
 			}
+			data.displaytypeId = data.display_type
 
 			const whoCares = data.poracleTest ? [{
 				...data.poracleTest,
@@ -194,7 +195,7 @@ class Invasion extends Controller {
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
 					const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
-					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'display_type'])
+					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'displaytypeId'])
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
