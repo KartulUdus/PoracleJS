@@ -140,8 +140,8 @@ class Invasion extends Controller {
 				}
 			}
 
-			// Kecleon invasion
-			if ((data.grunt_type == 0) && (data.display_type == 8)) {
+			// Event invasions
+			if ((data.grunt_type == 0) && (data.display_type !== 1)) {
 				data.gender = 0
 				data.gruntName = this.GameData.utilData.event[data.display_type].name
 				data.gruntType = data.gruntName.toLowerCase()
@@ -175,7 +175,7 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if ((data.grunt_type == 0) && (data.display_type == 8)) {
+					if ((data.grunt_type == 0) && (data.display_type !== 1)) {
 						data.shinyPossible = this.shinyPossible.isShinyPossible(352, 0)
 						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(352, 0, 0, data.gender, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(352, 0, 0, data.gender, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
