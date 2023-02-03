@@ -194,7 +194,7 @@ class Invasion extends Controller {
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
 					const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
-					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId'])
+					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'display_type'])
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
