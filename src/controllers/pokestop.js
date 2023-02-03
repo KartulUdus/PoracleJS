@@ -127,7 +127,7 @@ class Invasion extends Controller {
 
 			// Only enough to match for query
 
-			if (data.gruntTypeId && (data.grunt_type !== 0)) {
+			if (data.gruntTypeId) {
 				data.gender = 0
 				data.gruntName = 'Grunt'
 				data.gruntType = 'Mixed'
@@ -218,7 +218,7 @@ class Invasion extends Controller {
 						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
 
 						// full build
-						if (data.gruntTypeId && (data.grunt_type == 0)) {
+						if (data.gruntTypeId) {
 							data.gender = 0
 							data.gruntName = translator.translate('Grunt')
 							data.gruntType = translator.translate('Mixed')
