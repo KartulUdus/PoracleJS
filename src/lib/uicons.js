@@ -41,7 +41,7 @@ function resolveGymIcon(availGym, imageType, teamId, trainerCount = 0, inBattle 
 	return `0.${imageType}` // substitute
 }
 
-function resolvePokestopIcon(availPokestop, imageType, lureId, invasionActive = false, incidentDisplayType = false, questActive = false) {
+function resolvePokestopIcon(availPokestop, imageType, lureId, invasionActive = false, incidentDisplayType = 0, questActive = false) {
 	const invasionSuffixes = invasionActive ? ['_i', ''] : ['']
 	const incidentDisplayTypeSuffixes = incidentDisplayType ? [`${incidentDisplayType}`, ''] : ['']
 	const questSuffixes = questActive ? ['_q', ''] : ['']
@@ -270,7 +270,7 @@ class Uicons {
 		return currentSet ? `${this.url}/weather/${resolveWeatherIcon(currentSet.weather, this.imageType, weatherId)}` : null
 	}
 
-	async pokestopIcon(lureId = 0, invasionActive = false, incidentDisplayType = false, questActive = false) {
+	async pokestopIcon(lureId = 0, invasionActive = false, incidentDisplayType = 0, questActive = false) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
 		return currentSet ? `${this.url}/pokestop/${resolvePokestopIcon(currentSet.pokestop, this.imageType, lureId, invasionActive, incidentDisplayType, questActive)}` : null
 	}
