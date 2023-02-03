@@ -143,8 +143,8 @@ class Invasion extends Controller {
 			// Event invasions
 			if ((data.grunt_type == 0) && (data.display_type !== 1)) {
 				data.gender = 0
-				data.gruntName = 'Kecleon'
-				data.gruntType = data.gruntName.toLowerCase()
+				data.gruntName = data.display_type && this.GameData.utilData.event[data.display_type] ? this.GameData.utilData.event[data.display_type] : ''
+				data.gruntType = data.display_type && this.GameData.utilData.event[data.display_type] ? this.GameData.utilData.event[data.display_type].toLowerCase() : ''
 				data.gruntRewards = ''
 			}
 
