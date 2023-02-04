@@ -110,11 +110,16 @@ class Invasion extends Controller {
 			data.gruntTypeId = 0
 			if (data.incident_grunt_type && (data.incident_grunt_type !== 352)) {
 				data.gruntTypeId = data.incident_grunt_type
+			} else if (data.character_display && (data.incident_display_type == 1)) {
+				data.gruntTypeId = data.character_display
 			} else if (data.grunt_type && (data.display_type == 1)) {
 				data.gruntTypeId = data.grunt_type
 			} else if (data.incident_grunt_type == 352) {
 				data.grunt_type = 0
 				data.display_type = 8
+			} else if (data.character_display  && (data.incident_display_type != 1)) {
+				data.grunt_type = 0
+				data.display_type = data.incident_display_type
 			}
 
 			data.gruntTypeColor = 'BABABA'
