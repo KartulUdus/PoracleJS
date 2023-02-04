@@ -434,7 +434,7 @@ class Monster extends Controller {
 				}] : await this.monsterWhoCaresInMemory(data)
 
 				if (whoCares.length !== whoCares2.length) {
-					this.log.warn(`${data.encounter_id}: DB Len=${whoCares.length} Mem=${whoCares2.length} Missing = ${JSON.stringify(whoCares.filter((x) => !whoCares2.some((m) => m.id == x.id)))}`)
+					this.log.warn(`${data.encounter_id}: DB Len=${whoCares.length} Mem=${whoCares2.length} Missing = ${JSON.stringify(whoCares.filter((x) => !whoCares2.some((m) => m.id === x.id)))}`)
 				}
 			}
 
