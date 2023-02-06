@@ -108,18 +108,13 @@ class Invasion extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gruntTypeId = 0
-			if (data.incidents.character_display && (data.incidents.incident_display_type == 1)) {
-				data.gruntTypeId = data.incidents.character_display // MAD Async Grunt
-			} else if (data.incident_grunt_type && (data.incident_grunt_type !== 352)) {
-				data.gruntTypeId = data.incident_grunt_type // MAD Master Grunt
+			if (data.incident_grunt_type && (data.incident_grunt_type !== 352)) {
+				data.gruntTypeId = data.incident_grunt_type
 			} else if (data.grunt_type && (data.display_type == 1)) {
-				data.gruntTypeId = data.grunt_type // RDM Grunt
+				data.gruntTypeId = data.grunt_type
 			} else if (data.incident_grunt_type == 352) {
-				data.grunt_type = 0 // MAD Master EventStop
+				data.grunt_type = 0
 				data.display_type = 8
-			} else if (data.incidents.incident_display_type != 1) {
-				data.grunt_type = 0 // MAD Async EventStop
-				data.display_type = data.incidents.incident_display_type
 			}
 
 			data.gruntTypeColor = 'BABABA'
