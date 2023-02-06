@@ -152,7 +152,7 @@ class MonsterAlarmMatch {
 					if (leagueData.rank > monster.pvp_ranking_worst) continue
 					if (leagueData.rank < monster.pvp_ranking_best) continue
 					if (leagueData.cp < monster.pvp_ranking_min_cp) continue
-					if (monster.pvp_ranking_cap && leagueData.caps && leagueData.caps.length && !leagueData.caps.includes(monster.pvp_ranking_cap.toString())) continue
+					if (monster.pvp_ranking_cap && leagueData.caps && leagueData.caps.length && !leagueData.caps.map((x) => x.toString()).includes(monster.pvp_ranking_cap.toString())) continue
 				}
 
 				if (+data.iv < monster.min_iv) continue
@@ -175,8 +175,8 @@ class MonsterAlarmMatch {
 				if (weight > monster.max_weight) continue
 				if (data.rarityGroup < monster.rarity) continue
 				if (data.rarityGroup > monster.max_rarity) continue
-				if (data.size < monster.size) continue
-				if (data.size > monster.max_size) continue
+				if (+data.size < monster.size) continue
+				if (+data.size > monster.max_size) continue
 
 				results.push(monster)
 			}
