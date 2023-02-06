@@ -77,7 +77,7 @@ class MonsterAlarmMatch {
 			for (const leagueData of leagueDataArr) {
 				// if rank is good enough
 				if (leagueData.rank <= pvpQueryLimit) {
-					result.push(...this.matchghMonsters(
+					result.push(...this.matchMonsters(
 						data,
 						this.pvpEverything[league],
 						{
