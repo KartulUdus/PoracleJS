@@ -152,6 +152,8 @@ class MonsterAlarmMatch {
 					if (leagueData.rank > monster.pvp_ranking_worst) continue
 					if (leagueData.rank < monster.pvp_ranking_best) continue
 					if (leagueData.cp < monster.pvp_ranking_min_cp) continue
+					// The string conversion is because caps is sometimes populated with strings, and sometimes ints (see monster.js for possible fix)
+					// But this is the least impact fix
 					if (monster.pvp_ranking_cap && leagueData.caps && leagueData.caps.length && !leagueData.caps.map((x) => x.toString()).includes(monster.pvp_ranking_cap.toString())) continue
 				}
 

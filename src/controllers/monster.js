@@ -367,6 +367,7 @@ class Monster extends Controller {
 						let found = false
 						for (const bestRank of bestRanks) {
 							if (bestRank.cp === details.cp && bestRank.rank === details.rank) {
+								// Probably forcing this to an int would simplify in-memory monster matching
 								bestRank.caps.push(cap)
 								found = true
 								break
