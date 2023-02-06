@@ -152,7 +152,9 @@ class MonsterAlarmMatch {
 					if (leagueData.rank > monster.pvp_ranking_worst) continue
 					if (leagueData.rank < monster.pvp_ranking_best) continue
 					if (leagueData.cp < monster.pvp_ranking_min_cp) continue
-					if (monster.pvp_ranking_cap && leagueData.caps && leagueData.caps.length && !leagueData.caps.includes(monster.pvp_ranking_cap.toString())) continue
+					// The string conversion is because caps is sometimes populated with strings, and sometimes ints (see monster.js for possible fix)
+					// But this is the least impact fix
+					if (monster.pvp_ranking_cap && leagueData.caps && leagueData.caps.length && !leagueData.caps.map((x) => x.toString()).includes(monster.pvp_ranking_cap.toString())) continue
 				}
 
 				if (+data.iv < monster.min_iv) continue
@@ -175,8 +177,8 @@ class MonsterAlarmMatch {
 				if (weight > monster.max_weight) continue
 				if (data.rarityGroup < monster.rarity) continue
 				if (data.rarityGroup > monster.max_rarity) continue
-				if (data.size < monster.size) continue
-				if (data.size > monster.max_size) continue
+				if (+data.size < monster.size) continue
+				if (+data.size > monster.max_size) continue
 
 				results.push(monster)
 			}
@@ -185,7 +187,7 @@ class MonsterAlarmMatch {
 		return results
 	}
 
-	async validateHumans(monsterList, monsterLocation, areas, strictAreasEnabled) {
+	async validateHumans(monsterList, monsterLocation, matchedAreas, strictAreasEnabled) {
 		const humanIds = []
 
 		if (!monsterList.length) return []
@@ -209,11 +211,15 @@ class MonsterAlarmMatch {
 			}
 		}
 
+		// Map all _ to space.  This shouldn't strictly be necessary but sql matching uses like, and a _ would be
+		// treated as any character so underscores would match spaces.
+
+		const areas = matchedAreas.map((areaName) => areaName.replace(/_/g, ' '))
 		const humans = Object.assign({}, ...dbHumans.map((x) => ({
 			[x.id]: {
 				...x,
-				parsedArea: safeJsonParse(x.area),
-				parsedAreaRestriction: x.area_restriction ? safeJsonParse(x.area_restriction) : null,
+				parsedArea: safeJsonParse(x.area).map((areaName) => areaName.replace(/_/g, ' ')),
+				parsedAreaRestriction: x.area_restriction ? safeJsonParse(x.area_restriction).map((areaName) => areaName.replace(/_/g, ' ')) : null,
 			},
 		})))
 		const filteredMonsters = []
