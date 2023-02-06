@@ -108,7 +108,7 @@ class Invasion extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gruntTypeId = 0
-			if (data.incident_grunt_type && (data.incident_grunt_type !== 352) && !data.character_display) {
+			if (data.incident_grunt_type && (data.incident_grunt_type !== 352) && !data.incident_display_type) {
 				data.gruntTypeId = data.incident_grunt_type // MAD Master Grunt
 			} else if (data.character_display && (data.incident_display_type == 1)) {
 				data.gruntTypeId = data.character_display // MAD Async Grunt
