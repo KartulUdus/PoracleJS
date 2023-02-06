@@ -77,7 +77,7 @@ class MonsterAlarmMatch {
 			for (const leagueData of leagueDataArr) {
 				// if rank is good enough
 				if (leagueData.rank <= pvpQueryLimit) {
-					result.push(...this.matchMonsters(
+					result.push(...this.matchghMonsters(
 						data,
 						this.pvpEverything[league],
 						{
@@ -185,7 +185,7 @@ class MonsterAlarmMatch {
 		return results
 	}
 
-	async validateHumans(monsterList, monsterLocation, areas, strictAreasEnabled) {
+	async validateHumans(monsterList, monsterLocation, matchedAreas, strictAreasEnabled) {
 		const humanIds = []
 
 		if (!monsterList.length) return []
@@ -209,11 +209,15 @@ class MonsterAlarmMatch {
 			}
 		}
 
+		// Map all _ to space.  This shouldn't strictly be necessary but sql matching uses like, and a _ would be
+		// treated as any character so underscores would match spaces.
+
+		const areas = matchedAreas.map((areaName) => areaName.replace(/_/g, ' '))
 		const humans = Object.assign({}, ...dbHumans.map((x) => ({
 			[x.id]: {
 				...x,
-				parsedArea: safeJsonParse(x.area),
-				parsedAreaRestriction: x.area_restriction ? safeJsonParse(x.area_restriction) : null,
+				parsedArea: safeJsonParse(x.area).map((areaName) => areaName.replace(/_/g, ' ')),
+				parsedAreaRestriction: x.area_restriction ? safeJsonParse(x.area_restriction).map((areaName) => areaName.replace(/_/g, ' ')) : null,
 			},
 		})))
 		const filteredMonsters = []
