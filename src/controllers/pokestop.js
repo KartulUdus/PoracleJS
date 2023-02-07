@@ -110,7 +110,7 @@ class Invasion extends Controller {
 			data.gruntTypeId = 0
 			if (data.incident_grunt_type && (data.incident_grunt_type !== 352)) {
 				data.gruntTypeId = data.incident_grunt_type
-			} else if (data.grunt_type && (data.display_type == 1)) {
+			} else if (data.grunt_type && (data.display_type <= 6)) {
 				data.gruntTypeId = data.grunt_type
 			} else if (data.incident_grunt_type == 352) {
 				data.grunt_type = 0
@@ -141,7 +141,7 @@ class Invasion extends Controller {
 			}
 
 			// Event invasions
-			if ((data.grunt_type == 0) && (data.display_type !== 1)) {
+			if ((data.grunt_type == 0) && (data.display_type >= 7)) {
 				data.gender = 0
 				data.gruntName = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : ''
 				data.gruntType = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type].toLowerCase() : ''
@@ -176,7 +176,7 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if ((data.grunt_type == 0) && (data.display_type !== 1)) {
+					if ((data.grunt_type == 0) && (data.display_type >= 7)) {
 						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
 						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId, true, data.display_type)
