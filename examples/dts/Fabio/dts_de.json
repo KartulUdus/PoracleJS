@@ -1,0 +1,296 @@
+[
+    {
+        "id": "Normal",
+        "type": "monster",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "embed": {
+            "color": "{{ivcolor}}",
+            "title": "{{#eq bestGreatLeagueRank 1}}🥇 {{else eq bestUltraLeagueRank 1}}🥇 {{else eq bestGreatLeagueRank 2}}🥈 {{else eq bestUltraLeagueRank 2}}🥈 {{else eq bestGreatLeagueRank 3}}🥉 {{else eq bestUltraLeagueRank 3}}🥉 {{/eq}}{{round iv}}% {{fullName}}{{#if disguisePokemonName}} (verkleidet als {{disguisePokemonName}}){{/if}}{{#eq id 29}}{{else eq id 32}}{{else}} {{genderData.emoji}}{{/eq}} L{{level}}{{#gte iv 100}}{{else}} ({{atk}}|{{def}}|{{sta}}){{/gte}}{{#if boostemoji}} {{boostemoji}}{{/if}} ⏱ {{time}}",
+            "description": "{{zipcode}} {{city}}, {{addr}}{{> futureEvent_de}}",
+            "thumbnail": {
+              "url": "{{{imgUrlAlt}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "fields": [
+              {
+                "name": "Verschwindet",
+                "value": "{{time}} (<t:{{disappear_time}}:R>) {{#if weatherChange}}{{weatherChange}}{{/if}}{{#unless confirmedTime}}🅾️{{/unless}}",
+                "inline": false
+              },
+              {
+                "name": "Werte",
+                "value": "{{round iv}}% IV ({{atk}}/{{def}}/{{sta}}) | {{cp}} WP (Lvl. {{level}})\nGewicht {{weight}}kg | Größe: {{height}}m{{#if form}}{{#isnt formname 'Normal'}}\nForm: {{formname}}{{/isnt}}{{/if}}",
+                "inline": false
+              },
+              {
+                "name": "Moveset",
+                "value": "{{quickMove}} {{{quickMoveEmoji}}} | {{chargeMove}} {{{chargeMoveEmoji}}}",
+                "inline": false
+              },
+              {
+                "name": "PVP",
+                "value": "{{#lt (sum (sum pvpLittle.length pvpGreat.length) pvpUltra.length) 3}}{{> pvplcup_de}}{{> pvpgbl_de}}{{> pvpubl_de}}{{else}}{{> pvplcup_pu_de}}{{> pvpgbl_pu_de}}{{> pvpubl_pu_de}}{{/lt}}{{#isFalsey pvpAvailable}}n.V.{{/isFalsey}}",
+                "inline": false
+              },
+              {
+                "name": "Links",
+                "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+                "inline": false
+              }
+            ],
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "type": "monsterNoIv",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "embed": {
+            "color": "{{color}}",
+            "title": "{{name}} {{boostemoji}}",
+            "description": "{{city}}, {{addr}}",
+            "thumbnail": {
+              "url": "{{{imgUrlAlt}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "fields": [
+              {
+                "name": "Verschwindet",
+                "value": "{{time}} ({{tthm}}m{{tths}}s) {{#if weatherChange}}{{weatherChange}}{{/if}}",
+                "inline": false
+              },
+              {
+                "name": "Links",
+                "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+                "inline": false
+              }
+            ],
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "type": "raid",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "embed": {
+            "title": "{{fullName}} - {{levelName}}{{#eq level 5}}er{{/eq}}{{#eq level 7}}er{{/eq}}{{#eq level 8}}n{{/eq}} Raid{{#if boosted}} {{{boostWeatherEmoji}}}{{/if}}",
+            "description": "{{city}}, {{{gym_name}}} ({{time}})",
+            "color": "{{color}}",
+            "thumbnail": {
+              "url": "{{{imgUrlAlt}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "fields": [
+              {
+                "name": "Ende",
+                "value": "{{time}} ({{tthm}}m{{tths}}s)",
+                "inline": false
+              },
+              {
+                "name": "WP",
+                "value": "{{cp}}",
+                "inline": true
+              },
+              {
+                "name": "Moveset",
+                "value": "{{quickMove}} {{quickMoveEmoji}} | {{chargeMove}} {{chargeMoveEmoji}}",
+                "inline": true
+              },
+              {
+                "name": "Links",
+                "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+                "inline": false
+              }
+            ],
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "type": "egg",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "embed": {
+            "title": "Ein{{#eq level 8}}e Ultrapforte öffnet sich{{else}} {{levelName}}{{#eq level 5}}es{{/eq}}{{#eq level 7}}es{{/eq}} Ei schlüpft{{/eq}} bald!",
+            "description": "{{city}}, {{{gymName}}} ({{time}})",
+            "color": "{{color}}",
+            "thumbnail": {
+              "url": "{{{imgUrl}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "fields": [
+              {
+                "name": "Start",
+                "value": "{{time}} ({{tthm}}m{{tths}}s)",
+                "inline": false
+              },
+              {
+                "name": "Links",
+                "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+                "inline": false
+              }
+            ],
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "type": "gym",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "content": "{{#if (eq teamId oldTeamId)}}{{#if (eq trainerCount '6')}}Die Arena {{{gymName}}} ist voll besetzt.{{else}}Die freien Plätze in der Arena {{{gymName}}} haben sich auf {{slotsAvailable}} geändert.{{/if}}{{else}}Die Kontrolle der Arena {{{gymName}}} hat sich geändert.{{/if}}",
+          "embed": {
+            "title": "{{#if inBattle}}Diese Arena wird angegriffen. {{/if}}{{#if (eq teamId oldTeamId)}}{{#if (eq slotsAvailable 0)}}Die Arena {{{gymName}}} ist von Team {{teamName}} voll besetzt.{{else}}Die freien Plätze in der Arena {{{gymName}}} haben sich von {{oldSlotsAvailable}} auf {{slotsAvailable}} geändert.{{/if}}{{else}}Die Kontrolle der Arena {{{gymName}}} ist {{#if previousControlName}}von Team {{previousControlName}} {{/if}}zu Team {{teamName}} {{{teamEmoji}}} gewechselt.{{/if}}",
+            "url": "{{{reactMapUrl}}}",
+            "description": "Arena: **{{{gymName}}}** {{{teamEmoji}}}\nFreie Plätze: **{{#eq trainerCount '6'}}voll besetzt{{else}}{{slotsAvailable}}{{/eq}}**\n\nMaps: [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "color": "{{color}}",
+            "thumbnail": {
+              "url": "{{{gymUrl}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "type": "quest",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "embed": {
+            "title": "Pokestop: {{pokestop_name}}",
+            "url": "{{{reactMapUrl}}}",
+            "description": "Quest: {{questString}}\nBelohnung: {{rewardString}}\n{{addr}}\n\n{{#if with_ar}}Du brauchst eine AR-Kartierungsaufgabe um die richtige Quest zu erhalten{{else}}Lösche vorher deine AR-Kartierungsaufgabe um die richtige Quest zu erhalten\n\n{{/if}}{{#if futureEvent}}📅 das Event ({{futureEventName}}) {{#eq futureEventTrigger 'start'}}startet{{else}}endet{{/eq}} um {{futureEventTime}}. ⚠️\n\n{{/if}}Maps: [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "thumbnail": {
+              "url": "{{{imgUrlAlt}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "type": "invasion",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "embed": {
+            "title": "Team Rocket bei {{name}}",
+            "url": "{{{reactMapUrl}}}",
+            "color": "{{gruntTypeColor}}",
+            "description": "Typ:  {{gruntType}} {{gruntTypeEmoji}}\nGeschlecht: {{genderData.name}}{{genderData.emoji}}\nMögliche Belohnungen: {{gruntRewards}}\nEnde: {{time}} in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAdresse: {{addr}}\n[Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "thumbnail": {
+              "url": "{{{imgUrl}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "language": "de",
+        "type": "lure",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "username": "{{lureTypeName}}",
+          "avatar_url": "https://raw.githubusercontent.com/jms412/PkmnHomeIcons/master/UICONS/pokestop/{{lureTypeId}}{{#if (gt gruntTypeId '0')}}_i{{/if}}.png",
+          "embed": {
+            "title": "{{lureTypeName}} bei {{{pokestopName}}}",
+            "url": "{{{reactMapUrl}}}",
+            "color": "{{lureTypeColor}}",
+            "description": "Pokestop: **{{{pokestopName}}}**\nTyp: **{{lureTypeName}}**\n⏱️ Modul endet: **<t:{{lure_expiration}}:R>** ({{disappearTime}}h)\n\n[Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "thumbnail": {
+              "url": "{{{imgUrl}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      },
+      {
+        "id": "Normal",
+        "type": "weatherchange",
+        "language": "de",
+        "default": true,
+        "platform": "discord",
+        "template": {
+          "embed": {
+            "title": "⚠️ Wetterwechsel ⚠️",
+            "description": "Das Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies könnte bereits gemeldete Eigenschalften inkl. IV Werten beeinflussen...{{/if}}",
+            "thumbnail": {
+              "url": "{{{imgUrl}}}"
+            },
+            "image": {
+              "url": "{{{staticMap}}}"
+            },
+            "timestamp": "{{nowISO}}",
+            "footer": {
+              "text": "Gebiet: {{areas}}"
+            }
+          }
+        }
+      }   
+]
