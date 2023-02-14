@@ -1,6 +1,6 @@
 [
   {
-    "id": 1,
+    "id": "Normal",
     "type": "monster",
     "language": "en",
     "default": true,
@@ -8,18 +8,18 @@
     "template": {
       "embed": {
         "color": "{{ivcolor}}",
-        "title": "{{#eq bestGreatLeagueRank 1}}🥇 {{else eq bestUltraLeagueRank 1}}🥇 {{else eq bestGreatLeagueRank 2}}🥈 {{else eq bestUltraLeagueRank 2}}🥈 {{else eq bestGreatLeagueRank 3}}🥉 {{else eq bestUltraLeagueRank 3}}🥉 {{/eq}}{{round iv}}% {{name}}{{#if disguisePokemonName}} (disguised as {{disguisePokemonName}}){{/if}}{{#eq id 29}}{{else eq id 32}}{{else}} {{genderData.emoji}}{{/eq}} L{{level}}{{#gte iv 100}}{{else}} ({{atk}}|{{def}}|{{sta}}){{/gte}}{{#if boostemoji}} {{boostemoji}}{{/if}} ⏱ {{time}}",
-        "description": "{{city}}, {{addr}}{{> futureEvent_en}}",
+        "title": "{{#eq bestGreatLeagueRank 1}}🥇 {{else eq bestUltraLeagueRank 1}}🥇 {{else eq bestGreatLeagueRank 2}}🥈 {{else eq bestUltraLeagueRank 2}}🥈 {{else eq bestGreatLeagueRank 3}}🥉 {{else eq bestUltraLeagueRank 3}}🥉 {{/eq}}{{round iv}}% {{fullName}}{{#if disguisePokemonName}} (disguised as {{disguisePokemonName}}){{/if}}{{#eq id 29}}{{else eq id 32}}{{else}} {{genderData.emoji}}{{/eq}} L{{level}}{{#gte iv 100}}{{else}} ({{atk}}|{{def}}|{{sta}}){{/gte}}{{#if boostemoji}} {{boostemoji}}{{/if}} ⏱ {{time}}",
+        "description": "{{zipcode}} {{city}}, {{addr}}{{> futureEvent_en}}",
         "thumbnail": {
           "url": "{{{imgUrlAlt}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
         },
         "fields": [
           {
             "name": "Despawn",
-            "value": "{{time}} ({{tthm}}m{{tths}}s) {{#if weatherChange}}{{weatherChange}}{{/if}}",
+            "value": "{{time}} (<t:{{disappear_time}}:R>) {{#if weatherChange}}{{weatherChange}}{{/if}}{{#unless confirmedTime}}🅾️{{/unless}}",
             "inline": false
           },
           {
@@ -29,72 +29,29 @@
           },
           {
             "name": "Moveset",
-            "value": "{{quickMove}} {{quickMoveEmoji}} | {{chargeMove}} {{chargeMoveEmoji}}",
+            "value": "{{quickMove}} {{{quickMoveEmoji}}} | {{chargeMove}} {{{chargeMoveEmoji}}}",
             "inline": false
           },
           {
             "name": "PVP",
-            "value": "{{> pvplcup_en}}{{> pvpgbl_en}}{{> pvpubl_en}}{{#isFalsey pvpAvailable}}N/A{{/isFalsey}}",
+            "value": "{{#lt (sum (sum pvpLittle.length pvpGreat.length) pvpUltra.length) 3}}{{> pvplcup_en}}{{> pvpgbl_en}}{{> pvpubl_en}}{{else}}{{> pvplcup_pu_en}}{{> pvpgbl_pu_en}}{{> pvpubl_pu_en}}{{/lt}}{{#isFalsey pvpAvailable}}N/A{{/isFalsey}}",
             "inline": false
           },
           {
             "name": "Links",
-            "value": "[PokeMap](https://map.url/@pokemon/{{encounter_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
             "inline": false
           }
-        ]
+        ],
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
+        }
       }
     }
   },
   {
-    "id": 1,
-    "type": "monster",
-    "language": "de",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "color": "{{ivcolor}}",
-        "title": "{{#eq bestGreatLeagueRank 1}}🥇 {{else eq bestUltraLeagueRank 1}}🥇 {{else eq bestGreatLeagueRank 2}}🥈 {{else eq bestUltraLeagueRank 2}}🥈 {{else eq bestGreatLeagueRank 3}}🥉 {{else eq bestUltraLeagueRank 3}}🥉 {{/eq}}{{round iv}}% {{name}}{{#if disguisePokemonName}} (verkleidet als {{disguisePokemonName}}){{/if}}{{#eq id 29}}{{else eq id 32}}{{else}} {{genderData.emoji}}{{/eq}} L{{level}}{{#gte iv 100}}{{else}} ({{atk}}|{{def}}|{{sta}}){{/gte}}{{#if boostemoji}} {{boostemoji}}{{/if}} ⏱ {{time}}",
-        "description": "{{city}}, {{addr}}{{> futureEvent_de}}",
-        "thumbnail": {
-          "url": "{{{imgUrlAlt}}}"
-        },
-        "image": {
-          "url": "{{{staticmap}}}"
-        },
-        "fields": [
-          {
-            "name": "Verschwindet",
-            "value": "{{time}} ({{tthm}}m{{tths}}s) {{#if weatherChange}}{{weatherChange}}{{/if}}",
-            "inline": false
-          },
-          {
-            "name": "Werte",
-            "value": "{{round iv}}% IV ({{atk}}/{{def}}/{{sta}}) | {{cp}} WP (Lvl. {{level}})\nGewicht {{weight}}kg | Größe: {{height}}m{{#if form}}{{#isnt formname 'Normal'}}\nForm: {{formname}}{{/isnt}}{{/if}}",
-            "inline": false
-          },
-          {
-            "name": "Moveset",
-            "value": "{{quickMove}} {{quickMoveEmoji}} | {{chargeMove}} {{chargeMoveEmoji}}",
-            "inline": false
-          },
-          {
-            "name": "PVP",
-            "value": "{{> pvplcup_de}}{{> pvpgbl_de}}{{> pvpubl_de}}{{#isFalsey pvpAvailable}}n.V.{{/isFalsey}}",
-            "inline": false
-          },
-          {
-            "name": "Links",
-            "value": "[PokeMap](https://map.url/@pokemon/{{encounter_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-            "inline": false
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": 1,
+    "id": "Normal",
     "type": "monsterNoIv",
     "language": "en",
     "default": true,
@@ -108,7 +65,7 @@
           "url": "{{{imgUrlAlt}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
         },
         "fields": [
           {
@@ -118,61 +75,33 @@
           },
           {
             "name": "Links",
-            "value": "[PokeMap](https://map.url/@pokemon/{{encounter_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
             "inline": false
           }
-        ]
+        ],
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
+        }
       }
     }
   },
   {
-    "id": 1,
-    "type": "monsterNoIv",
-    "language": "de",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "color": "{{color}}",
-        "title": "{{name}} {{boostemoji}}",
-        "description": "{{city}}, {{addr}}",
-        "thumbnail": {
-          "url": "{{{imgUrlAlt}}}"
-        },
-        "image": {
-          "url": "{{{staticmap}}}"
-        },
-        "fields": [
-          {
-            "name": "Verschwindet",
-            "value": "{{time}} ({{tthm}}m{{tths}}s) {{#if weatherChange}}{{weatherChange}}{{/if}}",
-            "inline": false
-          },
-          {
-            "name": "Links",
-            "value": "[PokeMap](https://map.url/@pokemon/{{encounter_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-            "inline": false
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": 1,
+    "id": "Normal",
     "type": "raid",
     "language": "en",
     "default": true,
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "{{name}} Level {{level}} Raid",
+        "title": "{{fullName}} - {{levelName}} Raid{{#if boosted}} {{{boostWeatherEmoji}}}{{/if}}",
         "description": "{{city}}, {{{gym_name}}} ({{time}})",
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{imgUrlAlt}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
         },
         "fields": [
           {
@@ -192,71 +121,33 @@
           },
           {
             "name": "Links",
-            "value": "[PokeMap](https://map.url/@gym/{{gym_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
             "inline": false
           }
-        ]
+        ],
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
+        }
       }
     }
   },
   {
-    "id": 1,
-    "type": "raid",
-    "language": "de",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "title": "{{name}} Level {{level}} Raid",
-        "description": "{{city}}, {{{gym_name}}} ({{time}})",
-        "color": "{{color}}",
-        "thumbnail": {
-          "url": "{{{imgUrlAlt}}}"
-        },
-        "image": {
-          "url": "{{{staticmap}}}"
-        },
-        "fields": [
-          {
-            "name": "Ende",
-            "value": "{{time}} ({{tthm}}m{{tths}}s)",
-            "inline": false
-          },
-          {
-            "name": "WP",
-            "value": "{{cp}}",
-            "inline": true
-          },
-          {
-            "name": "Moveset",
-            "value": "{{quickMove}} {{quickMoveEmoji}} | {{chargeMove}} {{chargeMoveEmoji}}",
-            "inline": true
-          },
-          {
-            "name": "Links",
-            "value": "[PokeMap](https://map.url/@gym/{{gym_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-            "inline": false
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": 1,
+    "id": "Normal",
     "type": "egg",
     "language": "en",
     "default": true,
     "platform": "discord",
     "template": {
       "embed": {
-        "title": "Level {{level}} Raid-Egg",
-        "description": "{{city}}, {{{gym_name}}} ({{time}})",
+        "title": "A{{#eq level 8}}n Ultra Wormhole opens{{else}} {{levelName}} Egg hatches{{/eq}} soon!",
+        "description": "{{city}}, {{{gymName}}} ({{time}})",
         "color": "{{color}}",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
         },
         "fields": [
           {
@@ -266,47 +157,45 @@
           },
           {
             "name": "Links",
-            "value": "[PokeMap](https://map.url/@gym/{{gym_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+            "value": "[Map]({{{reactMapUrl}}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
             "inline": false
           }
-        ]
+        ],
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
+        }
       }
     }
   },
   {
-    "id": 1,
-    "type": "egg",
-    "language": "de",
+    "id": "Normal",
+    "type": "gym",
+    "language": "en",
     "default": true,
     "platform": "discord",
     "template": {
+      "content": "{{#if (eq teamId oldTeamId)}}{{#if (eq trainerCount '6')}}Gym {{{gymName}}} is fully occupied.{{else}}Free places in gym {{{gymName}}} has changed to {{slotsAvailable}}.{{/if}}{{else}}Control of gym {{{gymName}}} has changed.{{/if}}",
       "embed": {
-        "title": "Level {{level}} Raid-Ei",
-        "description": "{{city}}, {{{gym_name}}} ({{time}})",
+        "title": "{{#if inBattle}}This gym is under attack. {{/if}}Gym change at {{{gymName}}} {{#if previousControlName}}from {{previousControlName}} {{/if}}to {{teamName}}",
+        "url": "{{{reactMapUrl}}}",
+        "description": "Gym: **{{{gymName}}}** {{{teamEmoji}}}\nPlaces available: **{{#eq trainerCount '6'}}full{{else}}{{slotsAvailable}}{{/eq}}**\n\nMaps: [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
         "color": "{{color}}",
         "thumbnail": {
-          "url": "{{{imgUrl}}}"
+          "url": "{{{gymUrl}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
         },
-        "fields": [
-          {
-            "name": "Start",
-            "value": "{{time}} ({{tthm}}m{{tths}}s)",
-            "inline": false
-          },
-          {
-            "name": "Links",
-            "value": "[PokeMap](https://map.url/@gym/{{gym_id}}) | [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-            "inline": false
-          }
-        ]
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
+        }
       }
     }
   },
   {
-    "id": 1,
+    "id": "Normal",
     "type": "quest",
     "language": "en",
     "default": true,
@@ -314,39 +203,23 @@
     "template": {
       "embed": {
         "title": "Pokestop: {{pokestop_name}}",
-        "url": "https://map.url/@pokestop/{{pokestop_id}}",
+        "url": "{{{reactMapUrl}}}",
         "description": "Quest: {{questString}}\nReward: {{rewardString}}\n{{addr}}\n\n{{#if with_ar}}You need an AR mapping task to get the right quest{{else}}Clear your AR mapping task beforehand to get the right quest\n\n{{/if}}{{#if futureEvent}}📅 the event ({{futureEventName}}) {{#eq futureEventTrigger 'start'}}starting{{else}}ending{{/eq}} at {{futureEventTime}}. ⚠️\n\n{{/if}}Maps: [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
         "thumbnail": {
           "url": "{{{imgUrlAlt}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
-        }
-      }
-    }
-  },
-  {
-    "id": 1,
-    "type": "quest",
-    "language": "de",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "title": "Pokestop: {{pokestop_name}}",
-        "url": "https://map.url/@pokestop/{{pokestop_id}}",
-        "description": "Quest: {{questString}}\nBelohnung: {{rewardString}}\n{{addr}}\n\n{{#if with_ar}}Du brauchst eine AR-Kartierungsaufgabe um die richtige Quest zu erhalten{{else}}Lösche vorher deine AR-Kartierungsaufgabe um die richtige Quest zu erhalten\n\n{{/if}}{{#if futureEvent}}📅 das Event ({{futureEventName}}) {{#eq futureEventTrigger 'start'}}startet{{else}}endet{{/eq}} um {{futureEventTime}}. ⚠️\n\n{{/if}}Maps: [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-        "thumbnail": {
-          "url": "{{{imgUrlAlt}}}"
+          "url": "{{{staticMap}}}"
         },
-        "image": {
-          "url": "{{{staticmap}}}"
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
         }
       }
     }
   },
   {
-    "id": 1,
+    "id": "Normal",
     "type": "invasion",
     "language": "en",
     "default": true,
@@ -354,41 +227,51 @@
     "template": {
       "embed": {
         "title": "Team Rocket at {{name}}",
-        "url": "https://map.url/@pokestop/{{pokestop_id}}",
+        "url": "{{{reactMapUrl}}}",
         "color": "{{gruntTypeColor}}",
         "description": "Type:  {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{gruntRewards}}\nEnds: {{time}} in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{addr}}\n[Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
+        },
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
         }
       }
     }
   },
   {
-    "id": 1,
-    "type": "invasion",
-    "language": "de",
+    "id": "Normal",
+    "language": "en",
+    "type": "lure",
     "default": true,
     "platform": "discord",
     "template": {
+      "username": "{{lureTypeName}}",
+      "avatar_url": "https://raw.githubusercontent.com/jms412/PkmnHomeIcons/master/UICONS/pokestop/{{lureTypeId}}{{#if (gt gruntTypeId '0')}}_i{{/if}}.png",
       "embed": {
-        "title": "Team Rocket bei {{name}}",
-        "url": "https://map.url/@pokestop/{{pokestop_id}}",
-        "color": "{{gruntTypeColor}}",
-        "description": "Typ:  {{gruntType}} {{gruntTypeEmoji}}\nGeschlecht: {{genderData.name}}{{genderData.emoji}}\nMögliche Belohnungen: {{gruntRewards}}\nEnde: {{time}} in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAdresse: {{addr}}\n[Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
+        "title": "{{lureTypeName}} at {{{pokestopName}}}",
+        "url": "{{{reactMapUrl}}}",
+        "color": "{{lureTypeColor}}",
+        "description": "**Type:** {{lureTypeName}}\n **Ends at:** {{time}} \n(**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n\n[Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
         "thumbnail": {
           "url": "{{{imgUrl}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
+          "url": "{{{staticMap}}}"
+        },
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
         }
       }
     }
   },
   {
-    "id": 1,
+    "id": "Normal",
     "type": "weatherchange",
     "language": "en",
     "default": true,
@@ -401,218 +284,11 @@
           "url": "{{{imgUrl}}}"
         },
         "image": {
-          "url": "{{{staticmap}}}"
-        }
-      }
-    }
-  },
-  {
-    "id": 1,
-    "type": "weatherchange",
-    "language": "de",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "title": "⚠️ Wetterwechsel ⚠️",
-        "description": "Das Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies könnte bereits gemeldete Eigenschalften inkl. IV Werten beeinflussen...{{/if}}",
-        "thumbnail": {
-          "url": "{{{imgUrl}}}"
-        },
-        "image": {
-          "url": "{{{staticmap}}}"
-        }
-      }
-    }
-  },
-  {
-    "id": 1,
-    "language": "en",
-    "type": "greeting",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "title": "Welcome",
-        "description": "Thank you for registering \n To start, please set a location by replying to this bot with `{{prefix}}location name of place` \n That will set a center point for your scanning circle for most of the other commands.",
-        "fields": [
-          {
-            "name": "**General commands**",
-            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n`{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
-          },
-          {
-            "name": "**_Basic Examples_**",
-            "value": "You probably want to start off with something like these commands. One command at a time. Change the distances (d=metres) to suit yourself. \n`{{prefix}}location 123 Common Road, Town, Region` \n`{{prefix}}track unown azelf mesprit uxie d5000 ` \n`{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka d1500` \n`{{prefix}}raid timburr litwick d1500` \n`{{prefix}}track everything iv100 d1000` \n`{{prefix}}quest silver_pinap_berry d500 clean`"
-          },
-          {
-            "name": "**Monster tracking commands**",
-            "value": "The command needs to include at least one monster and any amount of variables. E.g. \n`{{prefix}}track snorlax lapras d500 iv50 maxiv90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
-          },
-          {
-            "name": "**Raid tracking commands**",
-            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any variables are optional. This command would alert you about snorlax and lapras raids within 500 meters of your location (or inside an added area), if the Gym is controlled by team Instinct. \n`{{prefix}}raid remove klink vileplume`: Remove tracking for klink and vileplume raids"
-          },
-          {
-            "name": "**Raid egg tracking commands**",
-            "value": "`{{prefix}}egg level3 d500 instinct`: Any variables are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}egg remove level3`: Remove tracking for level 3 raid eggs"
-          },
-          {
-            "name": "**Quest tracking commands**",
-            "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n`{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
-          },
-          {
-            "name": "**Invasion tracking commands**",
-            "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n`{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
-          },
-          {
-            "name": "**Areas**",
-            "value": "`{{prefix}}area list`: Lists the possible areas you can add. \n`{{prefix}}location yourArea`: Sets yourArea as your location \n Admin commands: \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
-          },
-          {
-            "name": "**Further info**",
-            "value": "See all details about the commands in [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
-          },
-          {
-            "name": "**How far can I walk in metres/minutes? According to the web...**",
-            "value": "```Metres | Fast | Moderate | Easy Walk \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63```"
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": 1,
-    "language": "de",
-    "type": "greeting",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "title": "Willkommen",
-        "description": "Vielen Dank für deine Registrierung \nUm zu beginnen, lege bitte einen Ort fest, indem du auf diesen Bot mit `{{prefix}}location Name des Ortes` antwortest \nDadurch wird ein Mittelpunkt für deinen Scan-Kreis festgelegt, der für die meisten anderen Befehle gilt.",
-        "fields": [
-          {
-            "name": "**Allgemeine Befehle**",
-            "value": "`{{prefix}}hilfe`: Zeigt diese Nachricht \n`{{prefix}}poracle`: Fügt dich zur Datenbank hinzu und aktiviert das Beobachten\n`{{prefix}}unregister`: Entfernt dich vom Beobachten \n`{{prefix}}stop`: Stoppt vorübergehend die Benachrichtigungen \n`{{prefix}}start`: Aktiviert Benachrichtigungen wieder \n`{{prefix}}status`: Zeigt dir an, worüber du derzeit benachrichtigt werden möchtest. \n Du kannst den meisten Beobachten-Befehlen die Variable `clean` hinzufügen, um den Bot zu veranlassen, den Eintrag zu löschen, nachdem er abgelaufen ist. \nWeitere Optionen für jeden Befehl werden im [vollständigen Handbuch](https://muckelba.github.io/poracleWiki/userguide/) erklärt."
-          },
-          {
-            "name": "**_Grundlegende Beispiele_**",
-            "value": "Wahrscheinlich solltest du mit diesen Befehlen beginnen - ein Befehl nach dem anderen. Änder die Entfernungen (d=Meter) nach Belieben. \n`{{prefix}}standort Südtiroler Platz 5, Stadt, Region` \n`{{prefix}}beobachte icognito tobutz vesprit selfe d5000 ` \n`{{prefix}}beobachte flapteryx milza kaumalat knarksel koknodon kapuno duodino lichtel laternecto riolu flampion d1500` \n`{{prefix}}raid prakitbalk lichtel d1500` \n`{{prefix}}beobachte alle iv100 d1000` \n`{{prefix}}quest silberne_sananabeere d500 clean`"
-          },
-          {
-            "name": "**Monster beobachten Befehle**",
-            "value": "Der Befehl muss mindestens ein Monster und eine beliebige Anzahl von Variablen enthalten. z.B. \n`{{prefix}}beobachte relaxo lapras d500 iv50 maxiv90 wp1000 level15`: Dieser Befehl benachrichtigt dich über Relaxo und Lapras in einem Umkreis von 500 Metern um deinen Standort, mit IV zwischen 50% und 90%, mindestens Level 15 und einem Minimum an WP von 1000. \n`{{prefix}}unbeobachte lapras vileplume`: entfernt das Tracking für Lapras und Vileplume"
-          },
-          {
-            "name": "**Raid beobachten Befehle**",
-            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any variables are optional. This command would alert you about snorlax and lapras raids within 500 meters of your location (or inside an added area), if the Gym is controlled by team Instinct. \n`{{prefix}}raid remove klink vileplume`: Remove tracking for klink and vileplume raids"
-          },
-          {
-            "name": "**Raid-Ei beobachten Befehle**",
-            "value": "`{{prefix}}egg level3 d500 instinct`: Any variables are optional, this command would alert you about level 3 raid eggs within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}egg remove level3`: Remove tracking for level 3 raid eggs"
-          },
-          {
-            "name": "**Quest beobachten Befehle**",
-            "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n`{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
-          },
-          {
-            "name": "**Invasion beobachten Befehle**",
-            "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n`{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
-          },
-          {
-            "name": "**Gebiete**",
-            "value": "`{{prefix}}area list`: Lists the possible areas you can add. \n`{{prefix}}location yourArea`: Sets yourArea as your location \n Admin commands: \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
-          },
-          {
-            "name": "**Weitere Infos**",
-            "value": "Alle Details zu den Befehlen findest du im [vollständigen Handbuch](https://muckelba.github.io/poracleWiki/userguide/)"
-          },
-          {
-            "name": "**Wie weit kann ich in Metern/Minuten gehen? Laut dem Internet...**",
-            "value": "```Meter | Schnell | Mäßig | Spaziergang \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63```"
-          }
-        ]
-      }
-    }
-  },
-  {
-    "id": 1,
-    "type": "gym",
-    "language": "en",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "title": "Gym change at {{{gymName}}} {{#if previousControlName}}from {{previousControlName}} {{/if}}to {{teamName}}",
-        "url": "https://map.url/@gym/{{gymId}}",
-        "description": "Slots available: {{slotsAvailable}}\nMaps: [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-        "color": "{{color}}",
-        "thumbnail": {
-          "url": "{{{gymUrl}}}"
-        }
-      }
-    }
-  },
-  {
-    "id": 1,
-    "type": "gym",
-    "language": "de",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "embed": {
-        "title": "Arenawechsel bei {{{gymName}}} {{#if previousControlName}}von {{previousControlName}} {{/if}}zu {{teamName}}",
-        "url": "https://map.url/@gym/{{gymId}}",
-        "description": "Plätze verfügbar: {{slotsAvailable}}\nMaps: [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-        "color": "{{color}}",
-        "thumbnail": {
-          "url": "{{{gymUrl}}}"
-        }
-      }
-    }
-  },
-  {
-    "id": 1,
-    "language": "en",
-    "type": "lure",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "username": "{{lureTypeName}}",
-      "avatar_url": "https://raw.githubusercontent.com/jms412/PkmnHomeIcons/master/UICONS/pokestop/{{lureTypeId}}{{#if (gt gruntTypeId '0')}}_i{{/if}}.png",
-      "embed": {
-        "title": "{{lureTypeName}} at {{{pokestopName}}}",
-        "url": "https://map.url/@pokestop/{{pokestop_id}}",
-        "color": "{{lureTypeColor}}",
-        "description": "**Type:** {{lureTypeName}}\n **Ends at:** {{time}} \n(**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\n\n[Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-        "thumbnail": {
-          "url": "{{{imgUrl}}}"
-        },
-        "image": {
           "url": "{{{staticMap}}}"
-        }
-      }
-    }
-  },
-  {
-    "id": 1,
-    "language": "de",
-    "type": "lure",
-    "default": true,
-    "platform": "discord",
-    "template": {
-      "username": "{{lureTypeName}}",
-      "avatar_url": "https://raw.githubusercontent.com/jms412/PkmnHomeIcons/master/UICONS/pokestop/{{lureTypeId}}{{#if (gt gruntTypeId '0')}}_i{{/if}}.png",
-      "embed": {
-        "title": "{{lureTypeName}} bei {{{pokestopName}}}",
-        "url": "https://map.url/@pokestop/{{pokestop_id}}",
-        "color": "{{lureTypeColor}}",
-        "description": "Pokestop: **{{{pokestopName}}}**\nTyp: **{{lureTypeName}}**\n⏱️ Modul endet: **<t:{{lure_expiration}}:R>** ({{disappearTime}}h)\n\n[Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>)",
-        "thumbnail": {
-          "url": "{{{imgUrl}}}"
         },
-        "image": {
-          "url": "{{{staticMap}}}"
+        "timestamp": "{{nowISO}}",
+        "footer": {
+          "text": "Area: {{areas}}"
         }
       }
     }
