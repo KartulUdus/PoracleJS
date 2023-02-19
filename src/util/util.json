@@ -913,5 +913,10 @@
 		"southeast": "\u2199\ufe0f",
 		"east": "\u2b05\ufe0f",
 		"northeast": "\u2196\ufe0f"
+	},
+	"pokestopEvent": {
+		"7": "Gold-Stop",
+		"8": "Kecleon",
+		"9": "Pokemon-Contest"
 	}
 }
