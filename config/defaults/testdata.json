@@ -147,7 +147,6 @@
   {
     "type": "pokestop",
     "test": "lure",
-    "location": "current",
     "webhook": {"name":"Memorial Sculpture & Verse","pokestop_id":"0d4b26adbf24446ba893f0aa3f8de337.16","latitude":51.284727,"longitude":1.060694,"updated":1643554276,"last_modified":1643553312,"lure_expiration":1643555112,"lure_id":502,"url":"http://lh3.googleusercontent.com/Ce-yPhm1FwGNbFzaM0ToMESZ57EWx1g8dKXXgEE4o-mmdP0XdsHk2nSEXOBk88H5PIXBHud-b7m6PUUJ3N8Pe_XB98NY"}
   }
 ]
