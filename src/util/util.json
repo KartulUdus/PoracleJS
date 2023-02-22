@@ -582,7 +582,8 @@
 		"0": "{0}",
 		"1": "Mega {0}",
 		"2": "Mega {0} X",
-		"3": "Mega {0} Y"
+		"3": "Mega {0} Y",
+		"4": "Primal {0}"
 	},
 	"evolution": {
 		"0": {
@@ -596,6 +597,9 @@
 		},
 		"3": {
 			"name": "Mega Y"
+		},
+		"4": {
+			"name": "Primal"
 		}
 	},
 	"throwType": {
@@ -861,7 +865,7 @@
 		"7": "Mega Legendary",
 		"8": "Ultra Beast",
 		"9": "Elite",
-		"10": "Unknown",
+		"10": "Primal",
 		"11": "Unknown",
 		"12": "Unknown"
 	},
