@@ -267,6 +267,7 @@ exports.run = async (client, msg, args, options) => {
 					503: 'mossy',
 					504: 'magnetic',
 					505: 'rainy',
+					506: 'sparkly',
 				}
 
 				for (const lure of lures) {
