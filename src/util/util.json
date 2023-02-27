@@ -543,6 +543,11 @@
 			"name": "Rainy Lure",
 			"emoji": "lure-rainy",
 			"color": "03D7FC"
+		},
+		"506": {
+			"name": "Sparkly Lure",
+			"emoji": "lure-sparkly",
+			"color": "FFFF00"
 		}
 	},
 	"genders": {
@@ -875,6 +880,7 @@
 		"lure-mossy": "\uD83C\uDF43",
 		"lure-magnetic": "\uD83E\uDDF2",
 		"lure-rainy": "\uD83D\uDCA7",
+		"lure-sparkly": "\ud83c\udf1f",
 		"gender-male": "\u2642",
 		"gender-female": "\u2640",
 		"gender-none": "\u26a7",
