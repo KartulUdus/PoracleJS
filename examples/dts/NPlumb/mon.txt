@@ -1,7 +1,8 @@
 ⏰ {{time}} ({{tthm}}m {{tths}}s)
 📊 CP {{cp}} | Lvl {{level}} | {{atk}}/{{def}}/{{sta}}{{#and (eq pokemonId 129) (gte weight 13.13)}}
 ⚖️ Big Fish! {{weight}}kg{{/and}}{{#and (eq pokemonId 19) (lte weight 2.41)}}
-⚖️ Tiny Rat! {{weight}}kg{{/and}}
+⚖️ Tiny Rat! {{weight}}kg{{/and}}{{#or (lte size 1) (gte size 5)}}
+📐 {{sizeName}}{{/or}}
 {{#if weatherChange}}
 ⚠️{{weatherCurrentEmoji}} Weather may change {{map 'timeEmoji' weatherChangeTime}}{{weatherNextEmoji}} ({{capitalize weatherNextName}})
 {{/if}}
@@ -9,14 +10,14 @@
 {{#each pvpLittle}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpUserRanking}}
 {{{getEmoji 'little-league'}}}{{this.fullName}} #{{this.rank}} ({{this.cp}}CP Lvl. {{this.levelWithCap}})
 {{#getPowerUpCost ../level this.level}}{{{getEmoji 'stardust'}}}{{addCommas stardust}} & {{{getEmoji 'rarecandy'}}}{{candy}}{{#compare xlCandy '>' 0}} {{{getEmoji 'rarecandyxl'}}} {{xlCandy}}{{/compare}}{{/getPowerUpCost}}
-[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}_false>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/500/overall/{{lowercase this.nameEng}}/>S>)
+[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/500/overall/{{lowercase this.nameEng}}/>S>)
 {{/compare}}{{/if}}{{/each}}{{#each pvpGreat}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpUserRanking}}
 {{{getEmoji 'great-league'}}}{{this.fullName}} #{{this.rank}} ({{this.cp}}CP Lvl. {{this.levelWithCap}})
 {{#getPowerUpCost ../level this.level}}{{{getEmoji 'stardust'}}}{{addCommas stardust}} & {{{getEmoji 'rarecandy'}}}{{candy}}{{#compare xlCandy '>' 0}} {{{getEmoji 'rarecandyxl'}}} {{xlCandy}}{{/compare}}{{/getPowerUpCost}}
-[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=1500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}_false>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/1500/overall/{{lowercase this.nameEng}}/>S>)
+[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=1500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/1500/overall/{{lowercase this.nameEng}}/>S>)
 {{/compare}}{{/if}}{{/each}}{{#each pvpUltra}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpUserRanking}}
 {{{getEmoji 'ultra-league'}}}{{this.fullName}} #{{this.rank}} ({{this.cp}}CP Lvl. {{this.levelWithCap}})
 {{#getPowerUpCost ../level this.level}}{{{getEmoji 'stardust'}}}{{addCommas stardust}} & {{{getEmoji 'rarecandy'}}}{{candy}}{{#compare xlCandy '>' 0}} {{{getEmoji 'rarecandyxl'}}} {{xlCandy}}{{/compare}}{{/getPowerUpCost}}
-[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=2500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}_false>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/2500/overall/{{lowercase this.nameEng}}/>S>)
+[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=2500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/2500/overall/{{lowercase this.nameEng}}/>S>)
 {{/compare}}{{/if}}{{/each}}
-🗺️ [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>) | [PoGoStoke](<https://react.pogostoke.co.uk/id/Pokemon/{{encounterId}}/18>)
+🗺️ [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>) | [YourMap](<https://YourReactMap.url/id/Pokemon/{{encounterId}}/18>)

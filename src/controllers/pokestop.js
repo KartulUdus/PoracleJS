@@ -108,10 +108,13 @@ class Invasion extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.gruntTypeId = 0
-			if (data.incident_grunt_type) {
+			if (data.incident_grunt_type && (data.incident_grunt_type !== 352)) {
 				data.gruntTypeId = data.incident_grunt_type
-			} else if (data.grunt_type) {
+			} else if (data.grunt_type && (data.display_type <= 6)) {
 				data.gruntTypeId = data.grunt_type
+			} else if (data.incident_grunt_type == 352) {
+				data.grunt_type = 0
+				data.display_type = 8
 			}
 
 			data.gruntTypeColor = 'BABABA'
@@ -136,6 +139,15 @@ class Invasion extends Controller {
 					data.gruntType = gruntType.type
 				}
 			}
+
+			// Event invasions
+			if ((data.grunt_type == 0) && (data.display_type >= 7)) {
+				data.gender = 0
+				data.gruntName = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : ''
+				data.gruntType = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type].toLowerCase() : ''
+				data.gruntRewards = ''
+			}
+			data.displayTypeId = data.display_type
 
 			const whoCares = data.poracleTest ? [{
 				...data.poracleTest,
@@ -164,9 +176,15 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if (this.imgUicons) data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
-					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
-					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
+					if ((data.grunt_type == 0) && (data.display_type >= 7)) {
+						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
+						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
+						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId, true, data.display_type)
+					} else {
+						if (this.imgUicons) data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
+						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
+						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.invasionIcon(data.gruntTypeId)
+					}
 
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
@@ -177,7 +195,7 @@ class Invasion extends Controller {
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
 					const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
-					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId'])
+					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'displayTypeId'])
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
@@ -198,6 +216,10 @@ class Invasion extends Controller {
 
 						data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup('grunt-unknown', platform))
 						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
+
+						if ((data.grunt_type == 0) && (data.display_type >= 7)) {
+							data.gruntName = translator.translate(data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : '')
+						}
 
 						// full build
 						if (data.gruntTypeId) {
