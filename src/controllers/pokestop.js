@@ -112,7 +112,7 @@ class Invasion extends Controller {
 				data.gruntTypeId = data.incident_grunt_type
 			} else if (data.grunt_type && (data.display_type <= 6)) {
 				data.gruntTypeId = data.grunt_type
-			} else if (data.incident_grunt_type == 352) {
+			} else if (data.incident_grunt_type === 352) {
 				data.grunt_type = 0
 				data.display_type = 8
 			}
@@ -141,7 +141,7 @@ class Invasion extends Controller {
 			}
 
 			// Event invasions
-			if ((data.grunt_type == 0) && (data.display_type >= 7)) {
+			if ((data.grunt_type === 0) && (data.display_type >= 7)) {
 				data.gender = 0
 				data.gruntName = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : ''
 				data.gruntType = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type].toLowerCase() : ''
@@ -176,7 +176,7 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if ((data.grunt_type == 0) && (data.display_type >= 7)) {
+					if ((data.grunt_type === 0) && (data.display_type >= 7)) {
 						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
 						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId, true, data.display_type)
@@ -217,7 +217,7 @@ class Invasion extends Controller {
 						data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup('grunt-unknown', platform))
 						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
 
-						if ((data.grunt_type == 0) && (data.display_type >= 7)) {
+						if ((data.grunt_type === 0) && (data.display_type >= 7)) {
 							data.gruntName = translator.translate(data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : '')
 						}
 
