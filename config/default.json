@@ -163,7 +163,10 @@
   "geofence": {
       "path": "./config/geofence.json",
       "defaultGeofenceName": "city",               // default fence name if your fence does not have names
-      "defaultGeofenceColor": "#3399ff"
+      "defaultGeofenceColor": "#3399ff",
+      "kojiOptions": {
+        "bearerToken": ""
+      }
   },
 
   //
