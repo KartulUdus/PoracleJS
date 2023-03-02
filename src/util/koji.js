@@ -1,13 +1,14 @@
 const fs = require('fs')
 const { resolve } = require('path')
 const fetch = require('node-fetch')
+const stripJsonComments = require('strip-json-comments')
 
 const { log } = require('../lib/logger')
 
 const config = fs.existsSync(resolve(__dirname, '../../config/local.json'))
-	? JSON.parse(
-		fs.readFileSync(resolve(__dirname, '../../config/local.json')),
-	)
+	? JSON.parse(stripJsonComments(
+		fs.readFileSync(resolve(__dirname, '../../config/local.json')).toString(),
+	))
 	: {}
 
 const getKojiFences = async () => {
