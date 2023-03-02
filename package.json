@@ -22,12 +22,13 @@
   "scripts": {
     "dev": "node .",
     "generate": "node src/util/generateData.js",
+    "koji": "node src/util/koji.js",
     "init": "node src/init/initConfig.js",
-    "latest": "npm run generate latest && node .",
+    "latest": "npm run generate latest && npm run koji && node .",
     "lint": "./node_modules/.bin/eslint ./src --fix",
     "migrateV3": "node src/init/migrateV3.js",
     "prepare": "husky install",
-    "start": "npm run generate && node .",
+    "start": "npm run generate && npm run koji && node .",
     "test": "node test/test"
   },
   "dependencies": {
@@ -75,9 +76,6 @@
     "eslint-plugin-import": "^2.26.0",
     "husky": "^8.0.1",
     "mocha": "^10.0.0"
-  },
-  "engines": {
-    "node": ">=16.6.0"
   },
   "engines": {
     "node": ">=16.6.0"
