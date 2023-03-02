@@ -6,9 +6,9 @@ const stripJsonComments = require('strip-json-comments')
 const { log } = require('../lib/logger')
 
 const config = fs.existsSync(resolve(__dirname, '../../config/local.json'))
-	? stripJsonComments(
+	? JSON.parse(stripJsonComments(
 		fs.readFileSync(resolve(__dirname, '../../config/local.json')).toString(),
-	)
+	))
 	: {}
 
 const getKojiFences = async () => {
