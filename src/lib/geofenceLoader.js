@@ -1,6 +1,7 @@
 const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
+const { log } = require('./logger')
 
 function getGeofenceFromGEOjson(config, rawdata) {
 	if (rawdata.type !== 'FeatureCollection' || !rawdata.features) return
@@ -55,13 +56,17 @@ function getGeofenceFromGEOjson(config, rawdata) {
 }
 
 function readGeofenceFile(config, filename) {
-	let geofence
+	let geofence = []
 
 	try {
 		const geofenceText = stripJsonComments(fs.readFileSync(filename, 'utf8'))
 		geofence = JSON.parse(geofenceText)
 	} catch (err) {
-		throw new Error(`Geofence ${filename} - ${err.message}`)
+		if (filename.includes('http')) {
+			log.warn(`[KŌJI] Cache not found - ${err.message}]`)
+		} else {
+			throw new Error(`Geofence ${filename} - ${err.message}`)
+		}
 	}
 
 	if (geofence.type === 'FeatureCollection') geofence = getGeofenceFromGEOjson(config, geofence)
@@ -70,19 +75,13 @@ function readGeofenceFile(config, filename) {
 }
 
 function readAllGeofenceFiles(config) {
-	let geofence
-
-	if (Array.isArray(config.geofence.path)) {
-		const fence = []
-		for (const fencePath of config.geofence.path) {
-			const localFence = readGeofenceFile(config, path.join(__dirname, `../../${fencePath}`))
-			fence.push(...localFence)
-		}
-		geofence = fence
-	} else {
-		geofence = readGeofenceFile(config, path.join(__dirname, `../../${config.geofence.path}`))
-	}
-
+	const fencePaths = Array.isArray(config.geofence.path) ? config.geofence.path : [config.geofence.path]
+	const geofence = fencePaths.flatMap((fencePath) => readGeofenceFile(
+		config,
+		fencePath.startsWith('http')
+			? path.resolve(__dirname, '../../.cache', `${fencePath.replace(/\//g, '__')}.json`)
+			: path.join(__dirname, `../../${fencePath}`),
+	))
 	return geofence
 }
 
