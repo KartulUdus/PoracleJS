@@ -45,6 +45,11 @@ async function run() {
 			telegramConfigFinished = (!useTelegram || telegramToken.match(telegramRe))
 		}
 		mvpConfig = useTelegram || useDiscord
+
+		if (!mvpConfig) {
+			log.warn('You must use at least one of Discord or Telegram')
+			exit(0)
+		}
 	}
 
 	fs.writeFileSync(path.join(__dirname, '../../config/local.json'), JSON.stringify(config, null, 4))
