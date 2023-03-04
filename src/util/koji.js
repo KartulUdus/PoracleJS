@@ -5,13 +5,27 @@ const stripJsonComments = require('strip-json-comments')
 
 const { log } = require('../lib/logger')
 
-const config = fs.existsSync(resolve(__dirname, '../../config/local.json'))
-	? JSON.parse(stripJsonComments(
-		fs.readFileSync(resolve(__dirname, '../../config/local.json')).toString(),
-	))
-	: {}
+const parseConfigSafe = () => {
+	let config = {}
+	try {
+		if (fs.existsSync(resolve(__dirname, '../../config/local.json'))) {
+			const string = stripJsonComments(
+				fs
+					.readFileSync(resolve(__dirname, '../../config/local.json'))
+					.toString(),
+			)
+			if (string.startsWith('{') && string.endsWith('}')) {
+				config = JSON.parse(string)
+			}
+		}
+		return config
+	} catch (_) {
+		return config
+	}
+}
 
 const getKojiFences = async () => {
+	const config = parseConfigSafe()
 	if (config?.geofence?.kojiOptions?.bearerToken) {
 		const fences = Array.isArray(config.geofence?.path)
 			? config.geofence.path
@@ -30,7 +44,10 @@ const getKojiFences = async () => {
 						.then((res) => res.json())
 						.then((json) => {
 							fs.writeFileSync(
-								resolve(__dirname, `../../.cache/${fencePath.replace(/\//g, '__')}.json`),
+								resolve(
+									__dirname,
+									`../../.cache/${fencePath.replace(/\//g, '__')}.json`,
+								),
 								JSON.stringify(json.data, null, 2),
 								'utf8',
 							)
