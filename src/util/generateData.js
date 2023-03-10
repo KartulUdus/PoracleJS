@@ -19,7 +19,7 @@ const update = async function update() {
 	// Write monsters/moves/items/questTypes
 	try {
 		log.info('Fetching latest Game Master...')
-		const gameMaster = await fetch('https://raw.githubusercontent.com/WatWowMap/Masterfile-Generator/master/master-latest-poracle.json')
+		const gameMaster = await fetch('https://raw.githubusercontent.com/WatWowMap/Masterfile-Generator/master/master-latest-poracle-v2.json')
 
 		log.info('Creating new Game Master...')
 		Object.keys(gameMaster).forEach((category) => {
