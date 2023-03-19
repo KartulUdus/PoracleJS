@@ -244,6 +244,8 @@ exports.run = async (client, msg, args, options) => {
 						const strengths = {}
 						const weaknesses = {}
 
+						message = message.concat(`\n**Pokédex ID:** ${mon.id}\n`);
+
 						for (const type of types) {
 							strengths[type] = []
 							typeInfo[type].strengths.forEach((x) => {
