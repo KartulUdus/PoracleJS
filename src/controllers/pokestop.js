@@ -244,6 +244,7 @@ class Invasion extends Controller {
 								data.gruntType = translator.translate(gruntType.type)
 
 								let gruntRewards = ''
+								let gruntRewardsformNormalised = ''
 								const gruntRewardsList = {}
 								gruntRewardsList.first = { chance: 100, monsters: [] }
 								if (gruntType.encounters && gruntType.encounters.first) {
@@ -256,12 +257,17 @@ class Invasion extends Controller {
 											if (!first) gruntRewards += ', '
 											else first = false
 
-											const firstReward = +fr
-											const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && !mon.form.id)
-											gruntRewards += firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
+											const firstReward = +fr.id
+											const firstRewardForm = +fr.form
+											const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && mon.form.id === firstRewardForm)
+											gruntRewardsformNormalised = firstRewardMonster.form.name === 'Normal' ? '' : (translator.translate(firstRewardMonster.form.name)+' ')
+											gruntRewards += gruntRewardsformNormalised + firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
 											gruntRewardsList.first.monsters.push({
 												id: firstReward,
+												formId: firstRewardForm,
 												name: translator.translate(firstRewardMonster.name),
+												formName: translator.translate(firstRewardMonster.form.name),
+												fullName: gruntRewardsformNormalised + translator.translate(firstRewardMonster.name),
 											})
 										})
 										gruntRewards += '\\n15%: '
@@ -271,13 +277,17 @@ class Invasion extends Controller {
 											if (!first) gruntRewards += ', '
 											else first = false
 
-											const secondReward = +sr
-											const secondRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === secondReward && !mon.form.id)
-
-											gruntRewards += secondRewardMonster ? translator.translate(secondRewardMonster.name) : ''
+											const secondReward = +sr.id
+											const secondRewardForm = +sr.form
+											const secondRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === secondReward && mon.form.id === secondRewardForm)
+											gruntRewardsformNormalised = secondRewardMonster.form.name === 'Normal' ? '' : (translator.translate(secondRewardMonster.form.name)+' ')
+											gruntRewards += gruntRewardsformNormalised + secondRewardMonster ? translator.translate(secondRewardMonster.name) : ''
 											gruntRewardsList.second.monsters.push({
 												id: secondReward,
+												formId: secondRewardForm,
 												name: translator.translate(secondRewardMonster.name),
+												formName: translator.translate(secondRewardMonster.form.name),
+												fullName: gruntRewardsformNormalised + translator.translate(secondRewardMonster.name),
 											})
 										})
 									} else {
@@ -288,12 +298,17 @@ class Invasion extends Controller {
 											if (!first) gruntRewards += ', '
 											else first = false
 
-											const reward = +tr
-											const rewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === reward && !mon.form.id)
-											gruntRewards += rewardMonster ? translator.translate(rewardMonster.name) : ''
+											const reward = +tr.id
+											const rewardForm = +tr.form
+											const rewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === reward && mon.form.id === rewardForm)
+											gruntRewardsformNormalised = rewardMonster.form.name === 'Normal' ? '' : (translator.translate(rewardMonster.form.name)+' ')
+											gruntRewards += gruntRewardsformNormalised + rewardMonster ? translator.translate(rewardMonster.name) : ''
 											gruntRewardsList.first.monsters.push({
 												id: reward,
+												formId: rewardForm,
 												name: translator.translate(rewardMonster.name),
+												formName: translator.translate(rewardMonster.form.name),
+												fullName: gruntRewardsformNormalised + translator.translate(rewardMonster.name),
 											})
 										})
 									}
