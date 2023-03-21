@@ -14,9 +14,7 @@ const parseConfigSafe = () => {
 					.readFileSync(resolve(__dirname, '../../config/local.json'))
 					.toString(),
 			)
-			if (string.startsWith('{') && string.endsWith('}')) {
-				config = JSON.parse(string)
-			}
+			config = JSON.parse(string)
 		}
 		return config
 	} catch (_) {
