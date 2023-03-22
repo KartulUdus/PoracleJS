@@ -507,22 +507,7 @@ class Monster extends Controller {
 					})
 					const jobs = []
 
-					require('./common/nightTime').setNightTime(data, disappearTime)
-
-					data.style = "klokantech-basic";
-
-					if (data.dawnTime && this.config.geocoding.dawnStyle != ''){
-						data.style = this.config.geocoding.dawnStyle;
-					}
-					else if (data.duskTime && this.config.geocoding.duskStyle != ''){
-						data.style = this.config.geocoding.duskStyle;
-					}
-					else if (data.nightTime && this.config.geocoding.nightStyle != ''){
-						data.style = this.config.geocoding.nightStyle;
-					}
-					else {
-						data.style = this.config.geocoding.dayStyle;
-					}
+					require('./common/nightTime').setNightTime(data, disappearTime, this.config)
 
 					if (data.seen_type) {
 						switch (data.seen_type) {

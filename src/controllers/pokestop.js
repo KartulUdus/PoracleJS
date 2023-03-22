@@ -189,22 +189,7 @@ class Invasion extends Controller {
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
 
-					require('./common/nightTime').setNightTime(data, disappearTime)
-
-					data.style = "klokantech-basic";
-
-					if (data.dawnTime && this.config.geocoding.dawnStyle != ''){
-						data.style = this.config.geocoding.dawnStyle;
-					}
-					else if (data.duskTime && this.config.geocoding.duskStyle != ''){
-						data.style = this.config.geocoding.duskStyle;
-					}
-					else if (data.nightTime && this.config.geocoding.nightStyle != ''){
-						data.style = this.config.geocoding.nightStyle;
-					}
-					else {
-						data.style = this.config.geocoding.dayStyle;
-					}
+					require('./common/nightTime').setNightTime(data, disappearTime, this.config)
 
 					// Get current cell weather from cache
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
