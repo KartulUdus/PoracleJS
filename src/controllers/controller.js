@@ -388,8 +388,8 @@ class Controller extends EventEmitter {
 			return 'No Intersection'
 		}
 		else {
-			let random = Math.floor(Math.random() * this.config.geocoding.intersection_users.length);
-			let choice = this.config.geocoding.intersection_users[random];
+			let random = Math.floor(Math.random() * this.config.geocoding.intersectionUsers.length);
+			let choice = this.config.geocoding.intersectionUsers[random];
 
 			var uri = 'http://api.geonames.org/findNearestIntersectionJSON?lat='+latitude+'&lng='+longitude+'&username='+choice;
 
