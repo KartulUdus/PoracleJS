@@ -7,6 +7,8 @@ const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
 const HideUriShortener = require('../lib/hideuriUrlShortener')
 const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
+const YourlsUriShortener = require('../lib/yourlsUrlShortener')
+const axios = require('axios')
 
 const EmojiLookup = require('../lib/emojiLookup')
 
@@ -59,6 +61,9 @@ class Controller extends EventEmitter {
 		switch (this.config.general.shortlinkProvider) {
 			case 'shlink': {
 				return new ShlinkUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general.shortlinkProviderKey, this.config.general.shortlinkProviderDomain)
+			}
+			case 'yourls': {
+				return new YourlsUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general_shortLinkPreoviderKey)
 			}
 			default: {
 				return new HideUriShortener(this.log)
@@ -376,6 +381,36 @@ class Controller extends EventEmitter {
 			if (typeof addr[key] === 'string') addr[key] = this.escapeJsonString(addr[key])
 		}
 		return addr
+	}
+
+	async getIntersection(latitude, longitude) {
+		if (this.config.geocoding.intersection_users == [""]){
+			return 'No Intersection'
+		}
+		else {
+			let random = Math.floor(Math.random() * this.config.geocoding.intersection_users.length);
+			let choice = this.config.geocoding.intersection_users[random];
+
+			var uri = 'http://api.geonames.org/findNearestIntersectionJSON?lat='+latitude+'&lng='+longitude+'&username='+choice;
+
+			try {
+				const result = await axios.get(uri);
+				
+				if (result.status !== 200 || !result.data.intersection) {
+					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
+					return 'No Intersection'
+				}
+				return [result.data.intersection.street1, result.data.intersection.street2]
+		
+			} catch (error) {
+				if (error.response) {
+					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+				} else {
+					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Error: ${error}.`)
+				}
+				return 'No Intersection'
+			}
+		}
 	}
 
 	pointInArea(point) {

@@ -507,7 +507,24 @@ class Monster extends Controller {
 					})
 					const jobs = []
 
+					data.intersection = await this.getIntersection(data.latitude, data.longitude);
+
 					require('./common/nightTime').setNightTime(data, disappearTime)
+
+					data.style = this.config.general.dayStyle;
+
+					if (data.dawnTime && this.config.geocoding.dawnStyle != ''){
+						data.style = this.config.geocoding.dawnStyle;
+					}
+					else if (data.duskTime && this.config.geocoding.duskStyle != ''){
+						data.style = this.config.geocoding.duskStyle;
+					}
+					else if (data.nightTime && this.config.geocoding.nightStyle != ''){
+						data.style = this.config.geocoding.nightStyle;
+					}
+					else {
+						data.style = this.config.geocoding.dayStyle;
+					}
 
 					if (data.seen_type) {
 						switch (data.seen_type) {
@@ -551,8 +568,8 @@ class Monster extends Controller {
 						logReference,
 						data,
 						'monster',
-						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
-						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seenType', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime'],
+						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt', 'style'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seenType', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'style'],
 					)
 					data.staticmap = data.staticMap // deprecated
 

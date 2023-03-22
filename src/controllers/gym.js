@@ -178,7 +178,24 @@ class Gym extends Controller {
 
 					require('./common/nightTime').setNightTime(data, conqueredTime)
 
-					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl'])
+					data.style = this.config.general.dayStyle;
+
+					if (data.dawnTime && this.config.geocoding.dawnStyle != ''){
+						data.style = this.config.geocoding.dawnStyle;
+					}
+					else if (data.duskTime && this.config.geocoding.duskStyle != ''){
+						data.style = this.config.geocoding.duskStyle;
+					}
+					else if (data.nightTime && this.config.geocoding.nightStyle != ''){
+						data.style = this.config.geocoding.nightStyle;
+					}
+					else {
+						data.style = this.config.geocoding.dayStyle;
+					}
+
+					data.intersection = await this.getIntersection(data.latitude, data.longitude);
+
+					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl', 'style'])
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
