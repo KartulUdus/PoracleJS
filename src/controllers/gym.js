@@ -178,7 +178,7 @@ class Gym extends Controller {
 
 					require('./common/nightTime').setNightTime(data, conqueredTime)
 
-					data.intersection = await this.obtainIntersection(data.latitude, data.longitude);
+					data.intersection = await this.obtainIntersection(data.latitude, data.longitude)
 
 					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated

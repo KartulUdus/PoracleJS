@@ -382,9 +382,9 @@ class Controller extends EventEmitter {
 
 	async obtainIntersection(data) {
 		const inte = await this.getIntersection.getIntersection(data.latitude, data.longitude)
-		return inte		
+		return inte
 	}
-	
+
 	pointInArea(point) {
 		if (!this.geofence.length) return []
 		const matchAreas = []

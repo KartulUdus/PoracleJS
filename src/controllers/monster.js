@@ -510,7 +510,7 @@ class Monster extends Controller {
 
 					require('./common/nightTime').setNightTime(data, disappearTime)
 
-					data.intersection = await this.obtainIntersection(data.latitude, data.longitude);
+					data.intersection = await this.obtainIntersection(data.latitude, data.longitude)
 
 					if (data.seen_type) {
 						switch (data.seen_type) {

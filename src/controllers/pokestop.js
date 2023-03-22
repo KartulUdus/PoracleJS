@@ -191,7 +191,7 @@ class Invasion extends Controller {
 
 					require('./common/nightTime').setNightTime(data, disappearTime)
 
-					data.intersection = await this.obtainIntersection(data.latitude, data.longitude);
+					data.intersection = await this.obtainIntersection(data.latitude, data.longitude)
 
 					// Get current cell weather from cache
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
@@ -262,7 +262,7 @@ class Invasion extends Controller {
 											const firstReward = +fr.id
 											const firstRewardForm = +fr.form
 											const firstRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === firstReward && mon.form.id === firstRewardForm)
-											gruntRewardsformNormalised = firstRewardMonster.form.name === 'Normal' ? '' : (translator.translate(firstRewardMonster.form.name)+' ')
+											gruntRewardsformNormalised = firstRewardMonster.form.name === 'Normal' ? '' : (`${translator.translate(firstRewardMonster.form.name)} `)
 											gruntRewards += gruntRewardsformNormalised + firstRewardMonster ? translator.translate(firstRewardMonster.name) : ''
 											gruntRewardsList.first.monsters.push({
 												id: firstReward,
@@ -282,7 +282,7 @@ class Invasion extends Controller {
 											const secondReward = +sr.id
 											const secondRewardForm = +sr.form
 											const secondRewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === secondReward && mon.form.id === secondRewardForm)
-											gruntRewardsformNormalised = secondRewardMonster.form.name === 'Normal' ? '' : (translator.translate(secondRewardMonster.form.name)+' ')
+											gruntRewardsformNormalised = secondRewardMonster.form.name === 'Normal' ? '' : (`${translator.translate(secondRewardMonster.form.name)} `)
 											gruntRewards += gruntRewardsformNormalised + secondRewardMonster ? translator.translate(secondRewardMonster.name) : ''
 											gruntRewardsList.second.monsters.push({
 												id: secondReward,
@@ -303,7 +303,7 @@ class Invasion extends Controller {
 											const reward = +tr.id
 											const rewardForm = +tr.form
 											const rewardMonster = Object.values(this.GameData.monsters).find((mon) => mon.id === reward && mon.form.id === rewardForm)
-											gruntRewardsformNormalised = rewardMonster.form.name === 'Normal' ? '' : (translator.translate(rewardMonster.form.name)+' ')
+											gruntRewardsformNormalised = rewardMonster.form.name === 'Normal' ? '' : (`${translator.translate(rewardMonster.form.name)} `)
 											gruntRewards += gruntRewardsformNormalised + rewardMonster ? translator.translate(rewardMonster.name) : ''
 											gruntRewardsList.first.monsters.push({
 												id: reward,
