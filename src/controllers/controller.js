@@ -7,6 +7,7 @@ const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
 const HideUriShortener = require('../lib/hideuriUrlShortener')
 const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
+const YourlsUriShortener = require('../lib/yourlsUrlShortener')
 
 const EmojiLookup = require('../lib/emojiLookup')
 
@@ -61,7 +62,7 @@ class Controller extends EventEmitter {
 				return new ShlinkUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general.shortlinkProviderKey, this.config.general.shortlinkProviderDomain)
 			}
 			case 'yourls': {
-				return new YourlsUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general_shortLinkPreoviderKey)
+				return new YourlsUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general.shortlinkProviderKey)
 			}
 			default: {
 				return new HideUriShortener(this.log)

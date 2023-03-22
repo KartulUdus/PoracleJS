@@ -19,18 +19,18 @@ class YourlsUriShortener {
 
         } catch (error) {
             if (error.response) {
-                console.log(error.response.data);
+                this.log.warn(error.response.data);
                 if ('message' in error.response.data){
                     if (error.response.data.message.includes('already exists')){
                         return error.response.data.shorturl;
                     }
                 }
                 else{
-                    console.log(`Shortener[yourls]: Failed to shorten. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+                    this.log.warn(`Shortener[yourls]: Failed to shorten. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
                     return url;
                 }
             } else {
-                console.log(`Shortener[yourls]: Failed to shorten. Error: ${error}.`)
+                this.log.warn(`Shortener[yourls]: Failed to shorten. Error: ${error}.`)
                 return url;
             }
         }
