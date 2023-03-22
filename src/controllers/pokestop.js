@@ -191,7 +191,7 @@ class Invasion extends Controller {
 
 					require('./common/nightTime').setNightTime(data, disappearTime)
 
-					data.intersection = await this.getIntersection(data.latitude, data.longitude);
+					data.intersection = await this.obtainIntersection(data.latitude, data.longitude);
 
 					// Get current cell weather from cache
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)

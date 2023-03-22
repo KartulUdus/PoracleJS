@@ -7,7 +7,7 @@ const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
 const HideUriShortener = require('../lib/hideuriUrlShortener')
 const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
-const axios = require('axios')
+const GetIntersection = require('../lib/getIntersection')
 
 const EmojiLookup = require('../lib/emojiLookup')
 
@@ -31,6 +31,7 @@ class Controller extends EventEmitter {
 		this.shinyPossible = eventProviders && eventProviders.shinyPossible
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
+		this.getIntersection = new GetIntersection(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
 		this.imgUicons = this.config.general.imgUrl ? new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log) : null
 		this.imgUiconsAlt = this.config.general.imgUrlAlt ? new Uicons((this.config.general.imagesAlt && this.config.general.imagesAlt[this.constructor.name.toLowerCase()]) || this.config.general.imgUrlAlt, 'png', this.log) : null
@@ -379,36 +380,11 @@ class Controller extends EventEmitter {
 		return addr
 	}
 
-	async getIntersection(latitude, longitude) {
-		if (this.config.geocoding.intersection_users == [""]){
-			return 'No Intersection'
-		}
-		else {
-			let random = Math.floor(Math.random() * this.config.geocoding.intersectionUsers.length);
-			let choice = this.config.geocoding.intersectionUsers[random];
-
-			var uri = 'http://api.geonames.org/findNearestIntersectionJSON?lat='+latitude+'&lng='+longitude+'&username='+choice;
-
-			try {
-				const result = await axios.get(uri);
-
-				if (result.status !== 200 || !result.data.intersection) {
-					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
-					return 'No Intersection'
-				}
-				return [result.data.intersection.street1, result.data.intersection.street2]
-
-			} catch (error) {
-				if (error.response) {
-					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
-				} else {
-					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Error: ${error}.`)
-				}
-				return 'No Intersection'
-			}
-		}
+	async obtainIntersection(data) {
+		const inte = await this.getIntersection.getIntersection(data.latitude, data.longitude)
+		return inte		
 	}
-
+	
 	pointInArea(point) {
 		if (!this.geofence.length) return []
 		const matchAreas = []

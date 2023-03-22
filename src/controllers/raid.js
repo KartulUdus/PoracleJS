@@ -262,7 +262,7 @@ class Raid extends Controller {
 
 						require('./common/nightTime').setNightTime(data, disappearTime)
 
-						data.intersection = await this.getIntersection(data.latitude, data.longitude);
+						data.intersection = await this.obtainIntersection(data.latitude, data.longitude);
 
 						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
 						data.staticmap = data.staticMap // deprecated
