@@ -9,7 +9,7 @@ class YourlsUriShortener {
 
     async getShortlink(url) {
         try {
-            const result = await axios.get('https://taols.ml/yourls-api.php?signature='+this.signature+'&action=shorturl&format=json&url='+encodeURIComponent(url));
+            const result = await axios.get(this.yourlsURL+'yourls-api.php?signature='+this.signature+'&action=shorturl&format=json&url='+encodeURIComponent(url));
             
             if (result.status !== 200) {
 				this.log.warn(`Shortener[yourls]: Failed to shorten ${url}. Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
