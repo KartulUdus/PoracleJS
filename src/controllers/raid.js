@@ -262,7 +262,7 @@ class Raid extends Controller {
 
 						require('./common/nightTime').setNightTime(data, disappearTime)
 
-						data.style = this.config.general.dayStyle;
+						data.style = "klokantech-basic";
 
 						if (data.dawnTime && this.config.geocoding.dawnStyle != ''){
 							data.style = this.config.geocoding.dawnStyle;

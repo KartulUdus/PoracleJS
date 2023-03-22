@@ -449,13 +449,13 @@
       "providerURL": "",
       "forwardOnly": false, // When true, disable reverse geocoding lookup
       "cacheDetail": 3,     // number of decimal places of lon/lat to use while caching geocoding (default 3 - or use 4 for 100x more detail)
-      "intersection_users": [""],
+      "intersection_users": [""], //list of geonames users
     // staticProvider - this is your provider of map tiles; can be tileservercache
     //   (swift tile server - https://github.com/123FLO321/SwiftTileserverCache)
     //   or google,osm,mapbox - staticKey provides an array of keys to use
     //   width/height/zoom/etc provide parameters for these while tileservercache
     //   uses templates (examples provided in tileservercache_templates folder)
-      "dayStyle": "",
+      "dayStyle": "", 
       "dawnStyle": "",
       "duskStyle": "",
       "nightStyle": "",
