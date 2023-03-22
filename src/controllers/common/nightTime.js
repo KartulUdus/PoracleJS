@@ -17,21 +17,17 @@ function setNightTime(data, checkTime, config) {
 	data.dawnTime = checkTime.isBetween(sunriseTime, dawnEndTime)
 	data.duskTime = checkTime.isBetween(duskStartTime, sunsetTime)
 
-	const defaultStyle = "klokantech-basic"
+	const defaultStyle = 'klokantech-basic'
 
-	if (data.dawnTime){
+	if (data.dawnTime) {
 		data.style = config.geocoding.dawnStyle || defaultStyle
-	}
-	else if (data.duskTime){
+	} else if (data.duskTime) {
 		data.style = config.geocoding.duskStyle || defaultStyle
-	}
-	else if (data.nightTime){
+	} else if (data.nightTime) {
 		data.style = config.geocoding.nightStyle || defaultStyle
-	}
-	else {
+	} else {
 		data.style = config.geocoding.dayStyle || defaultStyle
 	}
-
 }
 
 module.exports = { setNightTime }
