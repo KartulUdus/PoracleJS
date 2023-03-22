@@ -72,7 +72,7 @@
      "defaultTemplateName": 1,
     // library of custom DTS templates
       "dtsDictionary": {},
-    // Short link provider - supported hideuri, shlink
+    // Short link provider - supported hideuri, shlink, yourls
       "shortlinkProvider": "hideuri",
       "shortlinkProviderURL": "",
       "shortlinkProviderKey": "",
