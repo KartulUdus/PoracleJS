@@ -60,6 +60,9 @@ class Controller extends EventEmitter {
 			case 'shlink': {
 				return new ShlinkUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general.shortlinkProviderKey, this.config.general.shortlinkProviderDomain)
 			}
+			case 'yourls': {
+				return new YourlsUriShortener(this.log, this.config.general.shortlinkProviderURL, this.config.general_shortLinkPreoviderKey)
+			}
 			default: {
 				return new HideUriShortener(this.log)
 			}
