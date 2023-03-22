@@ -7,6 +7,7 @@ const TileserverPregen = require('../lib/tileserverPregen')
 const replaceAsync = require('../util/stringReplaceAsync')
 const HideUriShortener = require('../lib/hideuriUrlShortener')
 const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
+const axios = require('axios')
 
 const EmojiLookup = require('../lib/emojiLookup')
 
@@ -376,6 +377,36 @@ class Controller extends EventEmitter {
 			if (typeof addr[key] === 'string') addr[key] = this.escapeJsonString(addr[key])
 		}
 		return addr
+	}
+
+	async getIntersection(latitude, longitude) {
+		if (this.config.geocoding.intersection_users == [""]){
+			return 'No Intersection'
+		}
+		else {
+			let random = Math.floor(Math.random() * this.config.geocoding.intersectionUsers.length);
+			let choice = this.config.geocoding.intersectionUsers[random];
+
+			var uri = 'http://api.geonames.org/findNearestIntersectionJSON?lat='+latitude+'&lng='+longitude+'&username='+choice;
+
+			try {
+				const result = await axios.get(uri);
+
+				if (result.status !== 200 || !result.data.intersection) {
+					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
+					return 'No Intersection'
+				}
+				return [result.data.intersection.street1, result.data.intersection.street2]
+
+			} catch (error) {
+				if (error.response) {
+					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+				} else {
+					this.log.warn(`Failed to find intersection for ${latitude}, ${longitude}. Error: ${error}.`)
+				}
+				return 'No Intersection'
+			}
+		}
 	}
 
 	pointInArea(point) {
