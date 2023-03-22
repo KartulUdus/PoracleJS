@@ -262,7 +262,22 @@ class Raid extends Controller {
 
 						require('./common/nightTime').setNightTime(data, disappearTime)
 
-						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
+						data.style = "klokantech-basic";
+
+						if (data.dawnTime && this.config.geocoding.dawnStyle != ''){
+							data.style = this.config.geocoding.dawnStyle;
+						}
+						else if (data.duskTime && this.config.geocoding.duskStyle != ''){
+							data.style = this.config.geocoding.duskStyle;
+						}
+						else if (data.nightTime && this.config.geocoding.nightStyle != ''){
+							data.style = this.config.geocoding.nightStyle;
+						}
+						else {
+							data.style = this.config.geocoding.dayStyle;
+						}
+
+						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl', 'style'])
 						data.staticmap = data.staticMap // deprecated
 						data.types = monster.types.map((type) => type.id)
 

@@ -191,11 +191,26 @@ class Invasion extends Controller {
 
 					require('./common/nightTime').setNightTime(data, disappearTime)
 
+					data.style = "klokantech-basic";
+
+					if (data.dawnTime && this.config.geocoding.dawnStyle != ''){
+						data.style = this.config.geocoding.dawnStyle;
+					}
+					else if (data.duskTime && this.config.geocoding.duskStyle != ''){
+						data.style = this.config.geocoding.duskStyle;
+					}
+					else if (data.nightTime && this.config.geocoding.nightStyle != ''){
+						data.style = this.config.geocoding.nightStyle;
+					}
+					else {
+						data.style = this.config.geocoding.dayStyle;
+					}
+
 					// Get current cell weather from cache
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
 					const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
-					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'displayTypeId'])
+					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'displayTypeId', 'style'])
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
