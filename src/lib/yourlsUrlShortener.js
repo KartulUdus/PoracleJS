@@ -18,7 +18,7 @@ class YourlsUriShortener {
 			return result.data.shorturl
 		} catch (error) {
 			if (error.response) {
-				this.log.warn(error.response.data) 	
+				this.log.warn(error.response.data)
 				if ('message' in error.response.data) {
 					if (error.response.data.message.includes('already exists')) {
 						return error.response.data.shorturl
