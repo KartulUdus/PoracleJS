@@ -9,7 +9,7 @@ class YourlsUriShortener {
 
 	async getShortlink(url) {
 		try {
-			const result = await axios.get(`${this.yourlsURL}yourls-api.php?signature=${this.signature}&action=shorturl&format=json&url=${encodeURIComponent(url)}`)
+			const result = await axios.get(`${this.yourlsUrl}yourls-api.php?signature=${this.signature}&action=shorturl&format=json&url=${encodeURIComponent(url)}`)
 
 			if (result.status !== 200) {
 				this.log.warn(`Shortener[yourls]: Failed to shorten ${url}. Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
@@ -18,7 +18,7 @@ class YourlsUriShortener {
 			return result.data.shorturl
 		} catch (error) {
 			if (error.response) {
-				this.log.warn(error.response.data)
+				this.log.warn(error.response.data) 	
 				if ('message' in error.response.data) {
 					if (error.response.data.message.includes('already exists')) {
 						return error.response.data.shorturl
