@@ -217,7 +217,7 @@ class Invasion extends Controller {
 						data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup('grunt-unknown', platform))
 						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
 
-						if (((data.grunt_type === 0) || !data.grunt_type) && (data.display_type >= 7)) {
+						if ((data.grunt_type === 0) && (data.display_type >= 7)) {
 							data.gruntName = translator.translate(data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : '')
 						}
 
