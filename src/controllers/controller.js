@@ -263,7 +263,7 @@ class Controller extends EventEmitter {
 				break
 			}
 			case 'meme': {
-				data.staticMap = this.memer.getMemes()
+				data.staticMap = await this.memer.getMemes()
 				break
 			}
 			default: {
