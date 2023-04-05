@@ -8,6 +8,7 @@ const replaceAsync = require('../util/stringReplaceAsync')
 const HideUriShortener = require('../lib/hideuriUrlShortener')
 const ShlinkUriShortener = require('../lib/shlinkUrlShortener')
 const YourlsUriShortener = require('../lib/yourlsUrlShortener')
+const GetIntersection = require('../lib/getIntersection')
 
 const EmojiLookup = require('../lib/emojiLookup')
 
@@ -31,6 +32,7 @@ class Controller extends EventEmitter {
 		this.shinyPossible = eventProviders && eventProviders.shinyPossible
 		//		this.controllerData = weatherCacheData || {}
 		this.tileserverPregen = new TileserverPregen(this.config, this.log)
+		this.getIntersection = new GetIntersection(this.config, this.log)
 		this.emojiLookup = new EmojiLookup(GameData.utilData.emojis)
 		this.imgUicons = this.config.general.imgUrl ? new Uicons((this.config.general.images && this.config.general.images[this.constructor.name.toLowerCase()]) || this.config.general.imgUrl, 'png', this.log) : null
 		this.imgUiconsAlt = this.config.general.imgUrlAlt ? new Uicons((this.config.general.imagesAlt && this.config.general.imagesAlt[this.constructor.name.toLowerCase()]) || this.config.general.imgUrlAlt, 'png', this.log) : null
@@ -380,6 +382,11 @@ class Controller extends EventEmitter {
 			if (typeof addr[key] === 'string') addr[key] = this.escapeJsonString(addr[key])
 		}
 		return addr
+	}
+
+	async obtainIntersection(data) {
+		const inte = await this.getIntersection.getIntersection(data.latitude, data.longitude)
+		return inte
 	}
 
 	pointInArea(point) {
