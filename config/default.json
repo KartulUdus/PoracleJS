@@ -453,6 +453,7 @@
       "dawnStyle": "",
       "duskStyle": "",
       "nightStyle": "",
+      "intersectionUsers": [], //list of geonames usernames to use for getting street intersections
     // staticProvider - this is your provider of map tiles; can be tileservercache
     //   (swift tile server - https://github.com/123FLO321/SwiftTileserverCache)
     //   or google,osm,mapbox - staticKey provides an array of keys to use

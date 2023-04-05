@@ -263,6 +263,8 @@ class Raid extends Controller {
 						require('./common/nightTime').setNightTime(data, disappearTime, this.config)
 
 						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl', 'style'])
+						data.intersection = await this.obtainIntersection(data)
+
 						data.staticmap = data.staticMap // deprecated
 						data.types = monster.types.map((type) => type.id)
 
