@@ -512,7 +512,7 @@ class Raid extends Controller {
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
 
-					require('./common/nightTime').setNightTime(data, hatchTime)
+					require('./common/nightTime').setNightTime(data, hatchTime, this.config)
 
 					await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated
