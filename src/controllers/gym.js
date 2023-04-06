@@ -177,8 +177,10 @@ class Gym extends Controller {
 					const jobs = []
 
 					require('./common/nightTime').setNightTime(data, conqueredTime, this.config)
-
+          
 					await this.getStaticMapUrl(logReference, data, 'gym', ['teamId', 'latitude', 'longitude', 'imgUrl', 'style'])
+					data.intersection = await this.obtainIntersection(data)
+          
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {

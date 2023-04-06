@@ -97,6 +97,7 @@ class Invasion extends Controller {
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
+			data.displayTypeId = data.display_type ?? data.incident_display_type ?? 0
 
 			// Stop handling if it already disappeared or is about to go away
 			if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
@@ -110,11 +111,11 @@ class Invasion extends Controller {
 			data.gruntTypeId = 0
 			if (data.incident_grunt_type && (data.incident_grunt_type !== 352)) {
 				data.gruntTypeId = data.incident_grunt_type
-			} else if (data.grunt_type && (data.display_type <= 6)) {
+			} else if (data.grunt_type && (data.displayTypeId <= 6)) {
 				data.gruntTypeId = data.grunt_type
 			} else if (data.incident_grunt_type === 352) {
 				data.grunt_type = 0
-				data.display_type = 8
+				data.displayTypeId = 8
 			}
 
 			data.gruntTypeColor = 'BABABA'
@@ -141,13 +142,12 @@ class Invasion extends Controller {
 			}
 
 			// Event invasions
-			if ((data.grunt_type === 0) && (data.display_type >= 7)) {
+			if (((data.grunt_type === 0) || !data.grunt_type) && (data.displayTypeId >= 7)) {
 				data.gender = 0
-				data.gruntName = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : ''
-				data.gruntType = data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type].toLowerCase() : ''
+				data.gruntName = data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId] ? this.GameData.utilData.pokestopEvent[data.displayTypeId] : ''
+				data.gruntType = data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId] ? this.GameData.utilData.pokestopEvent[data.displayTypeId].toLowerCase() : ''
 				data.gruntRewards = ''
 			}
-			data.displayTypeId = data.display_type
 
 			const whoCares = data.poracleTest ? [{
 				...data.poracleTest,
@@ -176,10 +176,10 @@ class Invasion extends Controller {
 
 			setImmediate(async () => {
 				try {
-					if ((data.grunt_type === 0) && (data.display_type >= 7)) {
-						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
-						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId, true, data.display_type) || this.config.fallbacks?.imgUrlPokestop
-						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId, true, data.display_type)
+					if (((data.grunt_type === 0) || !data.grunt_type) && (data.displayTypeId >= 7)) {
+						if (this.imgUicons) data.imgUrl = await this.imgUicons.pokestopIcon(data.lureTypeId, true, data.displayTypeId) || this.config.fallbacks?.imgUrlPokestop
+						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokestopIcon(data.lureTypeId, true, data.displayTypeId) || this.config.fallbacks?.imgUrlPokestop
+						if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokestopIcon(data.lureTypeId, true, data.displayTypeId)
 					} else {
 						if (this.imgUicons) data.imgUrl = await this.imgUicons.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
 						if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.invasionIcon(data.gruntTypeId) || this.config.fallbacks?.imgUrlPokestop
@@ -190,6 +190,8 @@ class Invasion extends Controller {
 					const jobs = []
 
 					require('./common/nightTime').setNightTime(data, disappearTime, this.config)
+
+					data.intersection = await this.obtainIntersection(data)
 
 					// Get current cell weather from cache
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
@@ -217,8 +219,8 @@ class Invasion extends Controller {
 						data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup('grunt-unknown', platform))
 						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
 
-						if ((data.grunt_type === 0) && (data.display_type >= 7)) {
-							data.gruntName = translator.translate(data.display_type && this.GameData.utilData.pokestopEvent[data.display_type] ? this.GameData.utilData.pokestopEvent[data.display_type] : '')
+						if (((data.grunt_type === 0) || !data.grunt_type) && (data.displayTypeId >= 7)) {
+							data.gruntName = translator.translate(data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId] ? this.GameData.utilData.pokestopEvent[data.displayTypeId] : '')
 						}
 
 						// full build

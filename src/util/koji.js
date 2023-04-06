@@ -14,51 +14,56 @@ const parseConfigSafe = () => {
 					.readFileSync(resolve(__dirname, '../../config/local.json'))
 					.toString(),
 			)
-			if (string.startsWith('{') && string.endsWith('}')) {
-				config = JSON.parse(string)
-			}
+			config = JSON.parse(string)
+		} else {
+			log.warn('[KŌJI] Local.json was not found, skipping')
 		}
 		return config
-	} catch (_) {
+	} catch (e) {
+		log.error('[KŌJI] Could not parse local config', e)
 		return config
 	}
 }
 
 const getKojiFences = async () => {
 	const config = parseConfigSafe()
-	if (config?.geofence?.kojiOptions?.bearerToken) {
-		const fences = Array.isArray(config.geofence?.path)
-			? config.geofence.path
-			: [config.geofence.path]
+	try {
+		if (config?.geofence?.kojiOptions?.bearerToken) {
+			const fences = Array.isArray(config.geofence?.path)
+				? config.geofence.path
+				: [config.geofence.path]
 
-		await Promise.allSettled(
-			fences.map((fencePath) => {
-				if (fencePath.startsWith('http')) {
-					log.info(`[KŌJI] Fetching ${fencePath}...`)
-					return fetch(fencePath, {
-						headers: {
-							Authorization: `Bearer ${config.geofence.kojiOptions.bearerToken}`,
-							'Content-Type': 'application/json',
-						},
-					})
-						.then((res) => res.json())
-						.then((json) => {
-							fs.writeFileSync(
-								resolve(
-									__dirname,
-									`../../.cache/${fencePath.replace(/\//g, '__')}.json`,
-								),
-								JSON.stringify(json.data, null, 2),
-								'utf8',
-							)
+			await Promise.allSettled(
+				fences.map((fencePath) => {
+					if (fencePath.startsWith('http')) {
+						log.info(`[KŌJI] Fetching ${fencePath}...`)
+						return fetch(fencePath, {
+							headers: {
+								Authorization: `Bearer ${config.geofence.kojiOptions.bearerToken}`,
+								'Content-Type': 'application/json',
+							},
 						})
-						.catch((e) => log.warn(`[KŌJI] Could not process ${fencePath}`, e.message))
-				}
-				return null
-			}),
-		)
-	} else {
-		log.info('[KŌJI] Kōji bearer token not found, skipping')
+							.then((res) => res.json())
+							.then((json) => {
+								fs.writeFileSync(
+									resolve(
+										__dirname,
+										`../../.cache/${fencePath.replace(/\//g, '__')}.json`,
+									),
+									JSON.stringify(json.data, null, 2),
+									'utf8',
+								)
+							})
+							.catch((e) => log.warn(`[KŌJI] Could not process ${fencePath}`, e))
+					}
+					return null
+				}),
+			)
+		} else {
+			log.info('[KŌJI] Kōji bearer token not found, skipping')
+		}
+	} catch (e) {
+		log.error('[KŌJI] Could not process Kōji settings', e)
 	}
 }
 
