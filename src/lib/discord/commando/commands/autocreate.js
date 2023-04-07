@@ -69,13 +69,112 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		// switch underscores back in so works for substitution later
+    const subArgs = []
 		for (let x = 0; x < args.length; x++) {
-			args[x] = args[x].replace(/ /g, '_')
+			subArgs[x] = args[x].replace(/ /g, '_')
 		}
 
 		let categoryId
 		if (template.definition.category) {
-			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
+			const categoryOptions = {
+				type: 'GUILD_CATEGORY',
+			}
+
+			const categoryName = format(template.definition.category.categoryName, args)
+
+			// add role permissions
+			let roleId
+			if (template.definition.category.roles) {
+				const roleOverwrites = []
+				for (const role of template.definition.category.roles) {
+					const allowed = []
+					const deny = []
+          const roleNames = guild.roles.cache.map(r => r.name.toLowerCase())
+          const roleIds = guild.roles.cache.map(r => r.id)
+          for (let x = 0; x < roleNames.length; x++) {
+            if ((format(role.name, args)) === roleNames[x]) {
+              roleId = await guild.roles.cache.get(roleIds[x])
+            }
+          }
+          if (!roleId) {
+            roleId = await guild.roles.create({
+              name: (format(role.name, args)),
+              permissions: []
+            })
+          }
+					if (role.view) {
+						allowed.push('VIEW_CHANNEL')
+					} else if (role.view === false) {
+						deny.push('VIEW_CHANNEL')
+					}
+					if (role.viewHistory) {
+						allowed.push('READ_MESSAGE_HISTORY')
+					} else if (role.viewHistory === false) {
+						deny.push('READ_MESSAGE_HISTORY')
+					}
+					if (role.send) {
+						allowed.push('SEND_MESSAGES')
+					} else if (role.send === false) {
+						deny.push('SEND_MESSAGES')
+					}
+					if (role.react) {
+						allowed.push('ADD_REACTIONS')
+					} else if (role.react === false) {
+						deny.push('ADD_REACTIONS')
+					}
+					if (role.pingEveryone) {
+						allowed.push('MENTION_EVERYONE')
+					} else if (role.pingEveryone === false) {
+						deny.push('MENTION_EVERYONE')
+					}
+					if (role.embedLinks) {
+						allowed.push('EMBED_LINKS')
+					} else if (role.embedLinks === false) {
+						deny.push('EMBED_LINKS')
+					}
+					if (role.attachFiles) {
+						allowed.push('ATTACH_FILES')
+					} else if (role.attachFiles === false) {
+						deny.push('ATTACH_FILES')
+					}
+					if (role.externalEmoji) {
+						allowed.push('USE_EXTERNAL_EMOJIS')
+					} else if (role.externalEmoji === false) {
+						deny.push('USE_EXTERNAL_EMOJIS')
+					}
+					if (role.externalStickers) {
+						allowed.push('USE_EXTERNAL_STICKERS')
+					} else if (role.externalStickers === false) {
+						deny.push('USE_EXTERNAL_STICKERS')
+					}
+          if (role.createPublicThreads) {
+						allowed.push('CREATE_PUBLIC_THREADS')
+					} else if (role.createPublicThreads === false) {
+						deny.push('CREATE_PUBLIC_THREADS')
+					}
+          if (role.createPrivateThreads) {
+						allowed.push('CREATE_PRIVATE_THREADS')
+					} else if (role.createPrivateThreads === false) {
+						deny.push('CREATE_PRIVATE_THREADS')
+					}
+          if (role.sendThreads) {
+						allowed.push('SEND_MESSAGES_IN_THREADS')
+					} else if (role.sendThreads === false) {
+						deny.push('SEND_MESSAGES_IN_THREADS')
+					}
+          if (role.slash) {
+						allowed.push('USE_APPLICATION_COMMANDS')
+					} else if (role.slash === false) {
+						deny.push('USE_APPLICATION_COMMANDS')
+					}
+					roleOverwrites.push({ id: roleId, allow: allowed, deny })
+				}
+				categoryOptions.permissionOverwrites = roleOverwrites
+			}
+
+			// create category in discord
+			const category = await guild.channels.create(categoryName, categoryOptions)
+			await msg.reply(`>> Creating ${categoryName}`)
 			categoryId = category.id
 		}
 
@@ -100,7 +199,19 @@ exports.run = async (client, msg, [args]) => {
 				for (const role of channelDefinition.roles) {
 					const allowed = []
 					const deny = []
-					roleId = await guild.roles.cache.get(format(role.id, args))
+          const roleNames = guild.roles.cache.map(r => r.name.toLowerCase())
+          const roleIds = guild.roles.cache.map(r => r.id)
+          for (let x = 0; x < roleNames.length; x++) {
+            if ((format(role.name, args)) === roleNames[x]) {
+              roleId = await guild.roles.cache.get(roleIds[x])
+            }
+          }
+          if (!roleId) {
+            roleId = await guild.roles.create({
+              name: (format(role.name, args)),
+              permissions: []
+            })
+          }
 					if (role.view) {
 						allowed.push('VIEW_CHANNEL')
 					} else if (role.view === false) {
@@ -120,6 +231,51 @@ exports.run = async (client, msg, [args]) => {
 						allowed.push('ADD_REACTIONS')
 					} else if (role.react === false) {
 						deny.push('ADD_REACTIONS')
+					}
+					if (role.pingEveryone) {
+						allowed.push('MENTION_EVERYONE')
+					} else if (role.pingEveryone === false) {
+						deny.push('MENTION_EVERYONE')
+					}
+					if (role.embedLinks) {
+						allowed.push('EMBED_LINKS')
+					} else if (role.embedLinks === false) {
+						deny.push('EMBED_LINKS')
+					}
+					if (role.attachFiles) {
+						allowed.push('ATTACH_FILES')
+					} else if (role.attachFiles === false) {
+						deny.push('ATTACH_FILES')
+					}
+					if (role.externalEmoji) {
+						allowed.push('USE_EXTERNAL_EMOJIS')
+					} else if (role.externalEmoji === false) {
+						deny.push('USE_EXTERNAL_EMOJIS')
+					}
+					if (role.externalStickers) {
+						allowed.push('USE_EXTERNAL_STICKERS')
+					} else if (role.externalStickers === false) {
+						deny.push('USE_EXTERNAL_STICKERS')
+					}
+          if (role.createPublicThreads) {
+						allowed.push('CREATE_PUBLIC_THREADS')
+					} else if (role.createPublicThreads === false) {
+						deny.push('CREATE_PUBLIC_THREADS')
+					}
+          if (role.createPrivateThreads) {
+						allowed.push('CREATE_PRIVATE_THREADS')
+					} else if (role.createPrivateThreads === false) {
+						deny.push('CREATE_PRIVATE_THREADS')
+					}
+          if (role.sendThreads) {
+						allowed.push('SEND_MESSAGES_IN_THREADS')
+					} else if (role.sendThreads === false) {
+						deny.push('SEND_MESSAGES_IN_THREADS')
+					}
+          if (role.slash) {
+						allowed.push('USE_APPLICATION_COMMANDS')
+					} else if (role.slash === false) {
+						deny.push('USE_APPLICATION_COMMANDS')
 					}
 					roleOverwrites.push({ id: roleId, allow: allowed, deny })
 				}
@@ -147,13 +303,13 @@ exports.run = async (client, msg, [args]) => {
 			if (channelType === 'bot') {
 				id = channel.id
 				type = 'discord:channel'
-				name = channel.name
+				name = format(channelDefinition.channelName, subArgs)
 			} else {
-				const webhookName = channel.name
+				const webhookName = format(channelDefinition.channelName, subArgs)
 				const res = await channel.createWebhook('Poracle')
 				id = res.url
 				type = 'webhook'
-				name = channelDefinition.webhookName ? format(channelDefinition.webhookName, args) : webhookName
+				name = channelDefinition.webhookName ? format(channelDefinition.webhookName, subArgs) : webhookName
 			}
 
 			// Create
@@ -167,7 +323,7 @@ exports.run = async (client, msg, [args]) => {
 
 			// Commands
 
-			const commands = channelDefinition.commands.map((x) => format(x, args))
+			const commands = channelDefinition.commands.map((x) => format(x, subArgs))
 
 			const pdm = new PoracleDiscordMessage(client, msg)
 			const pds = new PoracleDiscordState(client)

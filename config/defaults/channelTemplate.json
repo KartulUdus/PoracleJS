@@ -2,17 +2,59 @@
   {
     "name":"newSection",
     "definition":{
-      "category":"{0} Pokemon",
+      "category":{
+        "categoryName":"{0} Pokemon",
+        "roles":[
+          {
+            "name":"{0}",
+            "view": true,
+            "viewHistory": true,
+            "send": false,
+            "react": true,
+            "pingEveryone": false,
+            "embedLinks": false,
+            "attachFiles": false,
+            "externalEmoji": false,
+            "externalStickers": false,
+            "createPublicThreads": false,
+            "createPrivateThreads": false,
+            "sendThreads": false,
+            "slash": false
+          },
+          {
+            "name":"@everyone",
+            "view": false
+          }
+        ]
+      },
       "channels":[
         {
-          "channelName":"{0}-iv100",
-/*
+          "channelName":"{0}-chatroom",
           "roles":[
             {
-              "id":"11111111111111111", "view": true, "viewHistory": true, "send": true, "react": true
+              "name":"{0}",
+              "view": true,
+              "viewHistory": true,
+              "send": true,
+              "react": true,
+              "externalEmoji": true
+            },
+            {
+              "name":"{1}",
+              "view": true,
+              "viewHistory": true,
+              "send": false,
+              "react": true
+            },
+            {
+              "name":"@everyone",
+              "view": false
             }
           ],
-*/
+          "topic": "Chat for {0} users"
+        },
+        {
+          "channelName":"{0}-iv100",
           "topic": "Hundos for {0}",
           "controlType":"bot",
           "commands":[
