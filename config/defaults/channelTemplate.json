@@ -8,18 +8,38 @@
           {
             "name":"{0}",
             "view": true,
+            // Text
             "viewHistory": true,
             "send": false,
             "react": true,
             "pingEveryone": false,
             "embedLinks": false,
             "attachFiles": false,
+            "sendTTS": false,
             "externalEmoji": false,
             "externalStickers": false,
             "createPublicThreads": false,
             "createPrivateThreads": false,
             "sendThreads": false,
-            "slash": false
+            "slashCommands": false,
+            // Voice
+            "connect": false,
+            "speak": false,
+            "autoMic": false,
+            "stream": false,
+            "vcActivities": false,
+            "prioritySpeaker": false,
+            // Admin
+            "createInvite": false,
+            "channels": false,
+            "messages": false,
+            "roles": false,
+            "webhooks": false,
+            "threads": false,
+            "events": false,
+            "mute": false,
+            "deafen": false,
+            "move": false
           },
           {
             "name":"@everyone",
@@ -30,6 +50,8 @@
       "channels":[
         {
           "channelName":"{0}-chatroom",
+          "channelType":"text",
+          "topic": "Chat for {0} users",
           "roles":[
             {
               "name":"{0}",
@@ -50,11 +72,16 @@
               "name":"@everyone",
               "view": false
             }
-          ],
-          "topic": "Chat for {0} users"
+          ]
+        },
+        {
+          "channelName":"{0}-voicechat",
+          "channelType":"voice",
+          "topic": "Voice for {0}"
         },
         {
           "channelName":"{0}-iv100",
+          "channelType":"text",
           "topic": "Hundos for {0}",
           "controlType":"bot",
           "commands":[
@@ -64,6 +91,7 @@
         },
         {
           "channelName":"{0}-UltraRares",
+          "channelType":"text",
           "controlType":"webhook",
           "commands":[
             "area add {0}",
@@ -72,6 +100,7 @@
         },
         {
           "channelName":"{0}-Raids",
+          "channelType":"text",
           "controlType":"webhook",
           "commands":[
             "area add {0}",

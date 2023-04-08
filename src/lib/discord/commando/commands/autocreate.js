@@ -137,6 +137,11 @@ exports.run = async (client, msg, [args]) => {
 					} else if (role.attachFiles === false) {
 						deny.push('ATTACH_FILES')
 					}
+					if (role.sendTTS) {
+						allowed.push('SEND_TTS_MESSAGES')
+					} else if (role.sendTTS === false) {
+						deny.push('SEND_TTS_MESSAGES')
+					}
 					if (role.externalEmoji) {
 						allowed.push('USE_EXTERNAL_EMOJIS')
 					} else if (role.externalEmoji === false) {
@@ -162,10 +167,95 @@ exports.run = async (client, msg, [args]) => {
 					} else if (role.sendThreads === false) {
 						deny.push('SEND_MESSAGES_IN_THREADS')
 					}
-          if (role.slash) {
+          if (role.slashCommands) {
 						allowed.push('USE_APPLICATION_COMMANDS')
-					} else if (role.slash === false) {
+					} else if (role.slashCommands === false) {
 						deny.push('USE_APPLICATION_COMMANDS')
+					}
+          if (role.connect) {
+						allowed.push('CONNECT')
+					} else if (role.connect === false) {
+						deny.push('CONNECT')
+					}
+          if (role.speak) {
+						allowed.push('SPEAK')
+					} else if (role.speak === false) {
+						deny.push('SPEAK')
+					}
+          if (role.autoMic) {
+						allowed.push('USE_VAD')
+					} else if (role.autoMic === false) {
+						deny.push('USE_VAD')
+					}
+          if (role.stream) {
+						allowed.push('STREAM')
+					} else if (role.stream === false) {
+						deny.push('STREAM')
+					}
+/*           if (role.soundboard) {
+						allowed.push('USE_SOUNDBOARD')
+					} else if (role.soundboard === false) {
+						deny.push('USE_SOUNDBOARD')
+					} */ //future use, v9 API
+          if (role.vcActivities) {
+						allowed.push('START_EMBEDDED_ACTIVITIES')
+					} else if (role.vcActivities === false) {
+						deny.push('START_EMBEDDED_ACTIVITIES')
+					}
+          if (role.prioritySpeaker) {
+						allowed.push('PRIORITY_SPEAKER')
+					} else if (role.prioritySpeaker === false) {
+						deny.push('PRIORITY_SPEAKER')
+					}
+          if (role.createInvite) {
+						allowed.push('CREATE_INSTANT_INVITE')
+					} else if (role.createInvite === false) {
+						deny.push('CREATE_INSTANT_INVITE')
+					}
+          if (role.channels) {
+						allowed.push('MANAGE_CHANNELS')
+					} else if (role.channels === false) {
+						deny.push('MANAGE_CHANNELS')
+					}
+          if (role.messages) {
+						allowed.push('MANAGE_MESSAGES')
+					} else if (role.messages === false) {
+						deny.push('MANAGE_MESSAGES')
+					}
+          if (role.roles) {
+						allowed.push('MANAGE_ROLES')
+					} else if (role.roles === false) {
+						deny.push('MANAGE_ROLES')
+					}
+          if (role.webhooks) {
+						allowed.push('MANAGE_WEBHOOKS')
+					} else if (role.webhooks === false) {
+						deny.push('MANAGE_WEBHOOKS')
+					}
+          if (role.threads) {
+						allowed.push('MANAGE_THREADS')
+					} else if (role.threads === false) {
+						deny.push('MANAGE_THREADS')
+					}
+          if (role.events) {
+						allowed.push('MANAGE_EVENTS')
+					} else if (role.events === false) {
+						deny.push('MANAGE_EVENTS')
+					}
+          if (role.mute) {
+						allowed.push('MUTE_MEMBERS')
+					} else if (role.mute === false) {
+						deny.push('MUTE_MEMBERS')
+					}
+          if (role.deafen) {
+						allowed.push('DEAFEN_MEMBERS')
+					} else if (role.deafen === false) {
+						deny.push('DEAFEN_MEMBERS')
+					}
+          if (role.move) {
+						allowed.push('MOVE_MEMBERS')
+					} else if (role.move === false) {
+						deny.push('MOVE_MEMBERS')
 					}
 					roleOverwrites.push({ id: roleId, allow: allowed, deny })
 				}
@@ -179,9 +269,12 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		for (const channelDefinition of template.definition.channels) {
-			const channelOptions = {
-				type: 'GUILD_TEXT',
-			}
+      const channelOptions = {}
+      if (channelDefinition.channelType === "text") {
+        channelOptions.type = 'GUILD_TEXT'
+      } else if (channelDefinition.channelType === "voice") {
+        channelOptions.type = 'GUILD_VOICE'
+      }
 			if (categoryId) {
 				channelOptions.parent = categoryId
 			}
@@ -247,6 +340,11 @@ exports.run = async (client, msg, [args]) => {
 					} else if (role.attachFiles === false) {
 						deny.push('ATTACH_FILES')
 					}
+					if (role.sendTTS) {
+						allowed.push('SEND_TTS_MESSAGES')
+					} else if (role.sendTTS === false) {
+						deny.push('SEND_TTS_MESSAGES')
+					}
 					if (role.externalEmoji) {
 						allowed.push('USE_EXTERNAL_EMOJIS')
 					} else if (role.externalEmoji === false) {
@@ -272,10 +370,95 @@ exports.run = async (client, msg, [args]) => {
 					} else if (role.sendThreads === false) {
 						deny.push('SEND_MESSAGES_IN_THREADS')
 					}
-          if (role.slash) {
+          if (role.slashCommands) {
 						allowed.push('USE_APPLICATION_COMMANDS')
-					} else if (role.slash === false) {
+					} else if (role.slashCommands === false) {
 						deny.push('USE_APPLICATION_COMMANDS')
+					}
+          if (role.connect) {
+						allowed.push('CONNECT')
+					} else if (role.connect === false) {
+						deny.push('CONNECT')
+					}
+          if (role.speak) {
+						allowed.push('SPEAK')
+					} else if (role.speak === false) {
+						deny.push('SPEAK')
+					}
+          if (role.autoMic) {
+						allowed.push('USE_VAD')
+					} else if (role.autoMic === false) {
+						deny.push('USE_VAD')
+					}
+          if (role.stream) {
+						allowed.push('STREAM')
+					} else if (role.stream === false) {
+						deny.push('STREAM')
+					}
+/*           if (role.soundboard) {
+						allowed.push('USE_SOUNDBOARD')
+					} else if (role.soundboard === false) {
+						deny.push('USE_SOUNDBOARD')
+					} */ //future use, v9 API
+          if (role.vcActivities) {
+						allowed.push('START_EMBEDDED_ACTIVITIES')
+					} else if (role.vcActivities === false) {
+						deny.push('START_EMBEDDED_ACTIVITIES')
+					}
+          if (role.prioritySpeaker) {
+						allowed.push('PRIORITY_SPEAKER')
+					} else if (role.prioritySpeaker === false) {
+						deny.push('PRIORITY_SPEAKER')
+					}
+          if (role.createInvite) {
+						allowed.push('CREATE_INSTANT_INVITE')
+					} else if (role.createInvite === false) {
+						deny.push('CREATE_INSTANT_INVITE')
+					}
+          if (role.channels) {
+						allowed.push('MANAGE_CHANNELS')
+					} else if (role.channels === false) {
+						deny.push('MANAGE_CHANNELS')
+					}
+          if (role.messages) {
+						allowed.push('MANAGE_MESSAGES')
+					} else if (role.messages === false) {
+						deny.push('MANAGE_MESSAGES')
+					}
+          if (role.roles) {
+						allowed.push('MANAGE_ROLES')
+					} else if (role.roles === false) {
+						deny.push('MANAGE_ROLES')
+					}
+          if (role.webhooks) {
+						allowed.push('MANAGE_WEBHOOKS')
+					} else if (role.webhooks === false) {
+						deny.push('MANAGE_WEBHOOKS')
+					}
+          if (role.threads) {
+						allowed.push('MANAGE_THREADS')
+					} else if (role.threads === false) {
+						deny.push('MANAGE_THREADS')
+					}
+          if (role.events) {
+						allowed.push('MANAGE_EVENTS')
+					} else if (role.events === false) {
+						deny.push('MANAGE_EVENTS')
+					}
+          if (role.mute) {
+						allowed.push('MUTE_MEMBERS')
+					} else if (role.mute === false) {
+						deny.push('MUTE_MEMBERS')
+					}
+          if (role.deafen) {
+						allowed.push('DEAFEN_MEMBERS')
+					} else if (role.deafen === false) {
+						deny.push('DEAFEN_MEMBERS')
+					}
+          if (role.move) {
+						allowed.push('MOVE_MEMBERS')
+					} else if (role.move === false) {
+						deny.push('MOVE_MEMBERS')
 					}
 					roleOverwrites.push({ id: roleId, allow: allowed, deny })
 				}
@@ -292,15 +475,15 @@ exports.run = async (client, msg, [args]) => {
 				continue
 			}
 
-			const channelType = channelDefinition.controlType
-			await msg.reply(`>> Adding control type: ${channelType}`)
+			const controlType = channelDefinition.controlType
+			await msg.reply(`>> Adding control type: ${controlType}`)
 
 			// register channel in poracle
 			let id
 			let type
 			let name
 
-			if (channelType === 'bot') {
+			if (controlType === 'bot') {
 				id = channel.id
 				type = 'discord:channel'
 				name = format(channelDefinition.channelName, subArgs)
