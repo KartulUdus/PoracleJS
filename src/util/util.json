@@ -818,9 +818,15 @@
 		},
 		"8": {
 			"min": 810,
-			"max": 890,
+			"max": 905,
 			"name": "Galar",
 			"roman": "VIII"
+		},
+		"9": {
+			"min":906,
+			"max":1010,
+			"name": "Paldea",
+			"roman": "IX"
 		}
 	},
 	"genException": {

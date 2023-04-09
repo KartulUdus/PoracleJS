@@ -211,9 +211,9 @@ class Raid extends Controller {
 				data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 				// eslint-disable-next-line prefer-destructuring
 				data.generation = this.GameData.utilData.genException[`${data.pokemon_id}_${data.form}`] || Object.entries(this.GameData.utilData.genData)
-					.find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
-				data.generationNameEng = this.GameData.utilData.genData[data.generation].name
-				data.generationRoman = this.GameData.utilData.genData[data.generation].roman
+					.find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)?.[0]
+				data.generationNameEng = this.GameData.utilData.genData[data.generation]?.name
+				data.generationRoman = this.GameData.utilData.genData[data.generation]?.roman
 
 				data.ex = !!(data.ex_raid_eligible || data.is_ex_raid_eligible)
 				if (data.tth.firstDateWasLater || ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
