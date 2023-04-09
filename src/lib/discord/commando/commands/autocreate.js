@@ -63,7 +63,7 @@ exports.run = async (client, msg, [args]) => {
 
 		const templateName = args.shift()
 
-		const template = channelTemplate.find((x) => x.name.toLowerCase() === templateName)
+		const template = channelTemplate.find((x) => x.name === templateName)
 		if (!template || !template.definition) {
 			return await msg.reply('I can\'t find that channel template! (remember it has to be your first parameter)')
 		}
@@ -89,7 +89,7 @@ exports.run = async (client, msg, [args]) => {
 				for (const role of template.definition.category.roles) {
 					const allowed = []
 					const deny = []
-          const roleNames = guild.roles.cache.map(r => r.name.toLowerCase())
+          const roleNames = guild.roles.cache.map(r => r.name)
           const roleIds = guild.roles.cache.map(r => r.id)
           for (let x = 0; x < roleNames.length; x++) {
             if ((format(role.name, args)) === roleNames[x]) {
@@ -292,7 +292,7 @@ exports.run = async (client, msg, [args]) => {
 				for (const role of channelDefinition.roles) {
 					const allowed = []
 					const deny = []
-          const roleNames = guild.roles.cache.map(r => r.name.toLowerCase())
+          const roleNames = guild.roles.cache.map(r => r.name)
           const roleIds = guild.roles.cache.map(r => r.id)
           for (let x = 0; x < roleNames.length; x++) {
             if ((format(role.name, args)) === roleNames[x]) {
