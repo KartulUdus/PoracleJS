@@ -27,6 +27,7 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const FortController = require('./controllers/fort')
 const GymController = require('./controllers/gym')
 const PokestopLureController = require('./controllers/pokestop_lure')
 const NestController = require('./controllers/nest')
@@ -59,6 +60,7 @@ const questController = new QuestController(logs.controller, knex, cachingGeocod
 const pokestopController = new PokestopController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const nestController = new NestController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const pokestopLureController = new PokestopLureController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const fortController = new FortController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const gymController = new GymController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 
 const monsterAlarmMatch = new MonsterAlarmMatch(logs.controller, knex, config)
@@ -106,6 +108,15 @@ async function processOne(hook) {
 			}
 			case 'lure': {
 				const result = await pokestopLureController.handle(hook.message)
+				if (result) {
+					queueAddition = result
+				} else {
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+				}
+				break
+			}
+			case 'fort_update': {
+				const result = await fortController.handle(hook.message)
 				if (result) {
 					queueAddition = result
 				} else {

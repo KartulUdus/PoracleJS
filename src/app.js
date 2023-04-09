@@ -646,6 +646,19 @@ async function processOne(hook) {
 				}
 				break
 			}
+			case 'fort_update': {
+				const fortId = hook.message.new?.id ?? hook.message.old?.id
+				if (config.general.disableFortUpdate) {
+					fastify.controllerLog.debug(`${fortId}: Fort update was received but set to be ignored in config`)
+					break
+				}
+				if (!hook.message.poracleTest) {
+					fastify.webhooks.info(`fort_update ${JSON.stringify(hook.message)}`)
+					// Caching not relevant, no duplicates
+				}
+				await processHook(hook)
+				break
+			}
 			case 'quest': {
 				if (config.general.disableQuest) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Quest was received but set to be ignored in config`)
