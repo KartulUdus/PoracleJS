@@ -502,7 +502,7 @@ class Quest extends Controller {
 					case questinfo.indexOf('evolve') >= 0:
 						str = `Evolve ${item.target} Pokémon`
 						break
-				    case questinfo.indexOf('catch_weather') >= 0:
+					case questinfo.indexOf('catch_weather') >= 0:
 						str = `Catch ${item.target} Pokémon with Weather Boost`
 						break
 					case questinfo.indexOf('catch_type') >= 0:
