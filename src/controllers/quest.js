@@ -7,11 +7,9 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
-const { questTypes } = require('../lib/GameData')
 
 // const itemList = require('../util/quests/items')
 const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
-const gruntCharacterTypes = ['unset', 'Team Leader(s)', 'Team GO Rocket Grunt(s)', 'Arlo', 'Cliff', 'Sierra', 'Giovanni']
 
 class Quest extends Controller {
 	async questWhoCares(data) {
@@ -389,9 +387,6 @@ class Quest extends Controller {
 		// this.log.error('[DEBUG] Quest : item ', item)
 		let str
 		let tstr = ''
-		const pstr = ''
-		const gstr = ''
-		let raidLevel
 		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
 		} else {
@@ -533,12 +528,14 @@ class Quest extends Controller {
 						} else {
 							str = `Use ${item.target} Berries to Help Catch Pokémon`
 						}
+						break
 					case questinfo.indexOf('gbl') >= 0:
 						if (questinfo.indexOf('win') >= 0) {
 							str = `Win ${item.target} Time(s) in Go Battle League`
 						} else {
 							str = `Battle ${item.target} Time(s) in Go Battle League`
 						}
+						break
 					default:
 						str = 'Unknown Task'
 						break
