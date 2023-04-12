@@ -389,13 +389,13 @@ class Quest extends Controller {
 		// this.log.error('[DEBUG] Quest : item ', item)
 		let str
 		let tstr = ''
-		let pstr = ''
-		let gstr = ''
+		const pstr = ''
+		const gstr = ''
 		let raidLevel
 		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
 		} else {
-			const questinfo = item.quest_title;
+			const questinfo = item.quest_title
 			// this.log.error('[DEBUG] Quest : item[conditions]: ', item.conditions)
 			// this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
 			if (questinfo) {
@@ -403,164 +403,141 @@ class Quest extends Controller {
 					case questinfo.indexOf('win_raid') >= 0:
 						if (questinfo.indexOf('3') >= 0) {
 							str = 'Win a 3 Star Raid or Higher'
-						}
-						else {
-							str = 'Win ' + item.target + ' Raid(s)'
+						} else {
+							str = `Win ${item.target} Raid(s)`
 						}
 						break
 					case questinfo.indexOf('walk_km') >= 0:
-						str = 'Walk ' + item.target + 'km'
+						str = `Walk ${item.target}km`
 						break
 					case questinfo.indexOf('walk_buddy') >= 0:
 						if (questinfo.indexOf('singular') >= 0) {
 							str = 'Earn a Candy Walking With Your Buddy'
-						}
-						else {
-							str = 'Earn ' + item.target + ' Candies Walking With Your Buddy'
+						} else {
+							str = `Earn ${item.target} Candies Walking With Your Buddy`
 						}
 						break
 					case questinfo.indexOf('visit_pokestops') >= 0:
-						str = 'Spin ' + item.target + ' Pokéstop(s) or Gym(s)'
+						str = `Spin ${item.target} Pokéstop(s) or Gym(s)`
 						break
 					case questinfo.indexOf('trade'):
-                                                str = 'Trade ' + item.target + ' Pokémon with a Friend'
+						str = `Trade ${item.target} Pokémon with a Friend`
 						break
 					case questinfo.indexOf('supereffective_charge'):
-                                                str = 'Use ' + item.target + ' Supereffective Charged Attack(s)'
+						str = `Use ${item.target} Supereffective Charged Attack(s)`
 						break
 					case questinfo.indexOf('snapshot_wild') >= 0:
 						if (item.conditions[0].info.pokemon_type_ids) {
 							tstr += `${pokemonTypes[item.conditions[0].info.pokemon_type_ids]}`
-							str = 'Take ' + item.target + ` Snapshot(s) of Wild ${tstr}-type Pokémon`
-						}
-						else {
-                                                        str = 'Take ' + item.target + ' Snapshot(s) of Wild Pokémon'
+							str = `Take ${item.target} Snapshot(s) of Wild ${tstr}-type Pokémon`
+						} else {
+							str = `Take ${item.target} Snapshot(s) of Wild Pokémon`
 						}
 						break
 					case questinfo.indexOf('send_gifts') >= 0:
 						if (questinfo.indexOf('sticker') >= 0) {
-							str = 'Send ' + item.target + ' Gift(s) and add a Sticker to Each'
-						}
-						else {
-                                                        str = 'Send ' + teim.target + ' Gift(s)'
+							str = `Send ${item.target} Gift(s) and add a Sticker to Each`
+						} else {
+							str = `Send ${item.target} Gift(s)`
 						}
 						break
 					case questinfo.indexOf('rockethq') >= 0:
 						if (questinfo.indexOf('grunt') >= 0) {
-							str = 'Defeat ' + item.target + ' Team Rocket Grunt(s)'
-						}
-						else if (questinfo.indexOf('catch') >= 0) {
-							str = 'Catch ' + item.target + ' Shadow Pokémon'
+							str = `Defeat ${item.target} Team Rocket Grunt(s)`
+						} else if (questinfo.indexOf('catch') >= 0) {
+							str = `Catch ${item.target} Shadow Pokémon`
 						}
 						break
 					case questinfo.indexOf('rocket') >= 0:
 						if (questinfo.indexOf('shadow') >= 0) {
-							str = 'Catch ' + item.target + 'Shadow Pokémon'
+							str = `Catch ${item.target}Shadow Pokémon`
 						}
 						break
 					case questinfo.indexOf('power_up') >= 0:
 						if (item.conditions[0].info.pokemon_type_ids) {
-                                                        tstr += `${pokemonTypes[item.conditions[0].info.pokemon_type_ids]}`
-                                                        str = `Power Up ${tstr}-type Pokémon ` + item.target + ' times'
-                                                }
-						else {
-							str = 'Power Up Pokémon ' + item.target + ' times'
+							tstr += `${pokemonTypes[item.conditions[0].info.pokemon_type_ids]}`
+							str = `Power Up ${tstr}-type Pokémon ${item.target} times`
+						} else {
+							str = `Power Up Pokémon ${item.target} times`
 						}
 						break
 					case questinfo.indexOf('land') >= 0:
 						if (questinfo.indexOf('inarow') >= 0) {
 							if (questinfo.indexOf('nice') >= 0) {
 								if (questinfo.indexOf('curveball') >= 0) {
-									str = 'Make ' + quest.target + ' Nice Curveball Throws in a Row' 
+									str = `Make ${item.target} Nice Curveball Throws in a Row`
+								} else {
+									str = `Make ${item.target} Nice Throws in a Row`
 								}
-								else {
-									str = 'Make ' + quest.target + ' Nice Throws in a Row'
-								}
-							}
-							else if (questinfo.indexOf('great') >= 0) {
+							} else if (questinfo.indexOf('great') >= 0) {
 								if (questinfo.indexOf('curveball') >= 0) {
-									str = 'Make ' + quest.target + ' Great Curveball Throws in a Row'
+									str = `Make ${item.target} Great Curveball Throws in a Row`
+								} else {
+									str = `Make ${item.target} Great Throws in a Row`
 								}
-								else {
-									str = 'Make ' + quest.target + ' Great Throws in a Row'
-								}
-							}
-							else if (questinfo.indexOf('excellent') >= 0) {
+							} else if (questinfo.indexOf('excellent') >= 0) {
 								if (questinfo.indexOf('curveball') >= 0) {
-									str = 'Make ' + quest.target + ' Excellent Curveball Throws in a Row'
+									str = `Make ${item.target} Excellent Curveball Throws in a Row`
+								} else {
+									str = `Make ${item.target} Excellent Throws in a Row`
 								}
-								else {
-									str = 'Make ' + quest.target + ' Excellent Throws in a Row'
-								}
+							} else {
+								str = `Make ${item.target} Curveball Throws in a Row`
 							}
-							else {
-								str = 'Make ' + quest.target + ' Curveball Throws in a Row'
-							}
-						}
-						else {
-							if (questinfo.indexOf('nice') >= 0) {
-								str = 'Make ' + quest.target + ' Nice Throw(s)'
-							}
-							else if (questinfo.indexOf('great') >= 0) {
-								str = 'Make ' + quest.target + ' Great Throw(s)'
-							}
-							else {
-								str = 'Make ' + quest.target + ' Excellent Throws(s)'
-							}
+						} else if (questinfo.indexOf('nice') >= 0) {
+							str = `Make ${item.target} Nice Throw(s)`
+						} else if (questinfo.indexOf('great') >= 0) {
+							str = `Make ${item.target} Great Throw(s)`
+						} else {
+							str = `Make ${item.target} Excellent Throws(s)`
 						}
 						break
 					case questinfo.indexOf('hatch') >= 0:
-						str = 'Hatch ' + quest.target + ' Egg(s)';
+						str = `Hatch ${item.target} Egg(s)`
 						break
 					case questinfo.indexOf('feed') >= 0:
 						if (questinfo.indexOf('nanab') >= 0) {
-							str = 'Feed ' + quest.target + ' Nanab Berries to You Buddy'
-						}
-						else if (questinfo.indexOf('buddy') >= 0) {
-							str = 'Feed ' + quest.target + ' Berries to Your Buddy'
-						}
-						else {
-							str = 'Feed ' + quest.target + ' Berries to Your Buddy'
+							str = `Feed ${item.target} Nanab Berries to You Buddy`
+						} else if (questinfo.indexOf('buddy') >= 0) {
+							str = `Feed ${item.target} Berries to Your Buddy`
+						} else {
+							str = `Feed ${item.target} Berries to Your Buddy`
 						}
 						break
 					case questinfo.indexOf('evolve') >= 0:
-						str = 'Evolve ' + quest.target + ' Pokémon'
+						str = `Evolve ${item.target} Pokémon`
 						break
 				        case questinfo.indexOf('catch_weather') >= 0:
-					 	str = 'Catch ' + quest.target + ' Pokémon with Weather Boost'
+					 	str = `Catch ${item.target} Pokémon with Weather Boost`
 						break
 					case questinfo.indexOf('catch_type') >= 0:
 						tstr += `${pokemonTypes[item.conditions[0].info.pokemon_type_ids]}`
-						str = 'Catch ' + quest.target + ` ${tstr}-type Pokémon`
+						str = `Catch ${item.target} ${tstr}-type Pokémon`
 						break
 					case questinfo.indexOf('catch_pokemon') >= 0:
-						str = 'Catch ' + quest.target + ' Pokémon'
+						str = `Catch ${item.target} Pokémon`
 						break
 					case questinfo.indexOf('catch_plural_unique') >= 0:
-						str = 'Catch ' + quest.target + ' unique species of Pokémon'
+						str = `Catch ${item.target} unique species of Pokémon`
 						break
 					case questinfo.indexOf('catch_feed') >= 0:
-						str = 'Use ' + quest.target + ' Berries to Help Catch Pokémon'
+						str = `Use ${item.target} Berries to Help Catch Pokémon`
 						break
 					case questinfo.indexOf('catch_berry') >= 0:
 						if (questinfo.indexOf('razz') >= 0) {
-							str = 'Use ' + quest.target + ' Razz Berries to Help Catch Pokémon'
-						}
-						else if (questinfo.indexOf('pinap') >= 0) {
-							str = 'Use ' + quest.target + ' Pinap Berries to Help Catch Pokémon'
-						}
-						else if (questinfo.indexOf('nanab') >= 0) {
-							str = 'Use ' + quest.target + ' Nanab Berries to Help Catch Pokémon'
-						}
-						else {
-							str = 'Use ' + quest.target + ' Berries to Help Catch Pokémon'
+							str = `Use ${item.target} Razz Berries to Help Catch Pokémon`
+						} else if (questinfo.indexOf('pinap') >= 0) {
+							str = `Use ${item.target} Pinap Berries to Help Catch Pokémon`
+						} else if (questinfo.indexOf('nanab') >= 0) {
+							str = `Use ${item.target} Nanab Berries to Help Catch Pokémon`
+						} else {
+							str = `Use ${item.target} Berries to Help Catch Pokémon`
 						}
 					case questinfo.indexOf('gbl') >= 0:
 						if (questinfo.indexOf('win') >= 0) {
-							str = 'Win ' + quest.target + ' Time(s) in Go Battle League'
-						}
-						else {
-							str = 'Battle ' + quest.target + ' Time(s) in Go Battle League'
+							str = `Win ${item.target} Time(s) in Go Battle League`
+						} else {
+							str = `Battle ${item.target} Time(s) in Go Battle League`
 						}
 					default:
 						str = 'Unknown Task'
@@ -568,12 +545,12 @@ class Quest extends Controller {
 				}
 			}
 		}
-			if (item.target === 1) {
-				str = str.replace('(s)', '').replace('1 ', 'a ').replace(' a times', '').replace('friends', 'friend')
-			} else {
-				str = str.replace('(s)', 's')
-			}
-			str = str.replace('pokémon', 'Pokémon')
+		if (item.target === 1) {
+			str = str.replace('(s)', '').replace('1 ', 'a ').replace(' a times', '').replace('friends', 'friend')
+		} else {
+			str = str.replace('(s)', 's')
+		}
+		str = str.replace('pokémon', 'Pokémon')
 		str = str.replace('Pokemon', 'Pokémon')
 		return str
 	}
