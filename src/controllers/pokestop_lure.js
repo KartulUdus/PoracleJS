@@ -157,7 +157,7 @@ class Lure extends Controller {
 
 					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'lureTypeId', 'style'])
 					data.intersection = await this.obtainIntersection(data)
-          
+
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
