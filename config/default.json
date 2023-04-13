@@ -455,10 +455,6 @@
     //   or google,osm,mapbox - staticKey provides an array of keys to use
     //   width/height/zoom/etc provide parameters for these while tileservercache
     //   uses templates (examples provided in tileservercache_templates folder)
-      "dayStyle": "", 
-      "dawnStyle": "",
-      "duskStyle": "",
-      "nightStyle": "",
       "staticProvider": "none",
       "staticProviderURL": "",
       "tileserverSettings": {

@@ -392,7 +392,7 @@ class Quest extends Controller {
 		} else {
 			const questinfo = item.title
 			// this.log.error('[DEBUG] Quest : item[conditions]: ', item.conditions)
-			//this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
+			// this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
 			if (questinfo) {
 				switch (true) {
 					case questinfo.indexOf('win_raid') >= 0:
@@ -426,12 +426,10 @@ class Quest extends Controller {
 							if (item.conditions[0].info.pokemon_type_ids) {
 								tstr += `${pokemonTypes[item.conditions[0].info.pokemon_type_ids]}`
 								str = `Take ${item.target} Snapshot(s) of Wild ${tstr}-type Pokémon`
-							} 
-							else {
+							} else {
 								str = `Take ${item.target} Snapshot(s) of Wild Pokémon`
 							}
-						}
-						catch {
+						} catch {
 							str = `Take ${item.target} Snapshot(s) of Wild Pokémon`
 						}
 						break
@@ -545,11 +543,9 @@ class Quest extends Controller {
 					case questinfo.indexOf('buddy') >= 0:
 						if (questinfo.indexOf('play') >= 0) {
 							str = `Play With Your Buddy ${item.target} Times`
-						}
-						else if (questinfo.indexOf('affection') >= 0) {
+						} else if (questinfo.indexOf('affection') >= 0) {
 							str = `Earn ${item.target} Hearts With Your Buddy.`
-						}
-						else {
+						} else {
 							str = 'Do Something With Your Buddy'
 						}
 						break
