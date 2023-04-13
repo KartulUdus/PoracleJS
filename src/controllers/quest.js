@@ -385,14 +385,14 @@ class Quest extends Controller {
 
 	async getQuest(item) {
 		// this.log.error('[DEBUG] Quest : item ', item)
-		let str
+		let str = ''
 		let tstr = ''
 		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
 		} else {
-			const questinfo = item.quest_title
+			const questinfo = item.title
 			// this.log.error('[DEBUG] Quest : item[conditions]: ', item.conditions)
-			// this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
+			//this.log.error('[DEBUG] Quest : questinfo: ', questinfo)
 			if (questinfo) {
 				switch (true) {
 					case questinfo.indexOf('win_raid') >= 0:
@@ -422,10 +422,16 @@ class Quest extends Controller {
 						str = `Use ${item.target} Supereffective Charged Attack(s)`
 						break
 					case questinfo.indexOf('snapshot_wild') >= 0:
-						if (item.conditions[0].info.pokemon_type_ids) {
-							tstr += `${pokemonTypes[item.conditions[0].info.pokemon_type_ids]}`
-							str = `Take ${item.target} Snapshot(s) of Wild ${tstr}-type Pokémon`
-						} else {
+						try {
+							if (item.conditions[0].info.pokemon_type_ids) {
+								tstr += `${pokemonTypes[item.conditions[0].info.pokemon_type_ids]}`
+								str = `Take ${item.target} Snapshot(s) of Wild ${tstr}-type Pokémon`
+							} 
+							else {
+								str = `Take ${item.target} Snapshot(s) of Wild Pokémon`
+							}
+						}
+						catch {
 							str = `Take ${item.target} Snapshot(s) of Wild Pokémon`
 						}
 						break
@@ -535,6 +541,20 @@ class Quest extends Controller {
 						} else {
 							str = `Battle ${item.target} Time(s) in Go Battle League`
 						}
+						break
+					case questinfo.indexOf('buddy') >= 0:
+						if (questinfo.indexOf('play') >= 0) {
+							str = `Play With Your Buddy ${item.target} Times`
+						}
+						else if (questinfo.indexOf('affection') >= 0) {
+							str = `Earn ${item.target} Hearts With Your Buddy.`
+						}
+						else {
+							str = 'Do Something With Your Buddy'
+						}
+						break
+					case questinfo.indexOf('catch_special0') >= 0:
+						str = 'Catch a Ditto'
 						break
 					default:
 						str = 'Unknown Task'
