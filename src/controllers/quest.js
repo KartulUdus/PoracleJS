@@ -385,7 +385,7 @@ class Quest extends Controller {
 
 	async getQuest(item) {
 		// this.log.error('[DEBUG] Quest : item ', item)
-		let str = ''
+		let str
 		let tstr = ''
 		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
@@ -556,6 +556,9 @@ class Quest extends Controller {
 						str = 'Unknown Task'
 						break
 				}
+			}
+			else {
+				str = 'Unknown Task'
 			}
 		}
 		if (item.target === 1) {
