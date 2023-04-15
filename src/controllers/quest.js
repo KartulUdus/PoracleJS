@@ -556,8 +556,7 @@ class Quest extends Controller {
 						str = 'Unknown Task'
 						break
 				}
-			}
-			else {
+			} else {
 				str = 'Unknown Task'
 			}
 		}
