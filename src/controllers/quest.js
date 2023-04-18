@@ -383,17 +383,16 @@ class Quest extends Controller {
 
 	async getQuest(item) {
 		let str
-		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
-			str = item.quest_task
-		} else {
-			const questinfo = `quest_title_${item.title}`
-			const questTitle = translations.en.questTitles
-			if (questinfo) {
-				try {
-					str = questTitle[questinfo]
-				} catch {
-					str = 'Unknown Task'
-				}
+		if (item.title) {
+                        item.quest_title = item.title
+                }
+		const questinfo = `quest_title_${item.title}`
+		const questTitle = translations.en.questTitles
+		if (questinfo) {
+			try {
+				str = questTitle[questinfo]
+			} catch {
+				str = 'Unknown Task'
 			}
 		}
 		str = str.replace('{{amount_0}}', item.target)
