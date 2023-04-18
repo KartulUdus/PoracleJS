@@ -9,9 +9,6 @@ const Controller = require('./controller')
 const { log } = require('../lib/logger')
 const { translations } = require('../lib/GameData')
 
-// const itemList = require('../util/quests/items')
-const pokemonTypes = ['unset', 'Normal', 'Fighting', 'Flying', 'Poison', 'Ground', 'Rock', 'Bug', 'Ghost', 'Steel', 'Fire', 'Water', 'Grass', 'Electric', 'Psychic', 'Ice', 'Dragon', 'Dark', 'Fairy']
-
 class Quest extends Controller {
 	async questWhoCares(data) {
 		const { areastring, strictareastring } = this.buildAreaString(data.matched)
@@ -389,13 +386,12 @@ class Quest extends Controller {
 		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
 		} else {
-			const questinfo = 'quest_title_' + item.title
-			const questTitle = translations["en"]["questTitles"]
+			const questinfo = `quest_title_${item.title}`
+			const questTitle = translations.en.questTitles
 			if (questinfo) {
 				try {
 					str = questTitle[questinfo]
-				}
-				catch {
+				} catch {
 					str = 'Unknown Task'
 				}
 			}
