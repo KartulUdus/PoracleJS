@@ -382,17 +382,18 @@ class Quest extends Controller {
 	}
 
 	async getQuest(item) {
-		let str
 		if (item.title) {
-                        item.quest_title = item.title
-                }
+			item.quest_title = item.title
+		}
 		const questinfo = `quest_title_${item.title}`
 		const questTitle = translations.en.questTitles
 		if (questinfo) {
 			try {
 				str = questTitle[questinfo]
-			} catch {
+			} 
+			catch {
 				str = 'Unknown Task'
+				this.log.warn(`Missing Task for ${questinfo}`)
 			}
 		}
 		str = str.replace('{{amount_0}}', item.target)

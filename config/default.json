@@ -80,7 +80,8 @@
     // additional Shortlinks to Pogo Maps in DTS - supported RDM, Reactmap, RocketMAD
       "rdmURL": "",                // https://myRDM.com/
       "reactMapURL": "",           // https://myReactMap.com/
-      "rocketMadURL": ""           // https://myRocketMAD.com/
+      "rocketMadURL": "",           // https://myRocketMAD.com/
+      "unknownQuestString": "" // What to tell users when task for quest is unknown
   },
   //
   // Configuration for the user reconciliation/role check function
