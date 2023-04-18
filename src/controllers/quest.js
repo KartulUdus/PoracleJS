@@ -382,6 +382,7 @@ class Quest extends Controller {
 	}
 
 	async getQuest(item) {
+		let str
 		if (item.title) {
 			item.quest_title = item.title
 		}
@@ -390,8 +391,7 @@ class Quest extends Controller {
 		if (questinfo) {
 			try {
 				str = questTitle[questinfo]
-			} 
-			catch {
+			} catch {
 				str = 'Unknown Task'
 				this.log.warn(`Missing Task for ${questinfo}`)
 			}
