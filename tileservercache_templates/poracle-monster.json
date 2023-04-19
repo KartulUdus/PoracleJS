@@ -1,5 +1,5 @@
 {
-    "style": "#(style)",
+    "style": "klokantech-basic",
     "latitude": #(latitude),
     "longitude": #(longitude),
     "zoom": 15,
