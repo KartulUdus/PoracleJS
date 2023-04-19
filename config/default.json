@@ -72,6 +72,8 @@
      "defaultTemplateName": 1,
     // library of custom DTS templates
       "dtsDictionary": {},
+    // Queststring i18l translation for RDM systems
+      "useRDMQuestString": false,
     // Short link provider - supported hideuri, shlink, yourls
       "shortlinkProvider": "hideuri",
       "shortlinkProviderURL": "",
