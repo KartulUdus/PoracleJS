@@ -253,8 +253,8 @@ class Quest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
-				const questI18lEng = require(path.join(__dirname, `../util/locale/i18n_en.json`))
 				const questI18l = require(path.join(__dirname, `../util/locale/i18n_${language}.json`))
+				const questI18lEng = require(path.join(__dirname, `../util/locale/i18n_en.json`))
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 
