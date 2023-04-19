@@ -258,9 +258,13 @@ class Quest extends Controller {
 				if (platform === 'webhook') platform = 'discord'
 
 				if (data.questStringRaw && this.config.general.useRDMQuestString) {
-					data.questString = questI18l[data.questStringRaw]
-					if (data.title.toLowerCase().includes('_plural') && data.target) {
-						data.questString = data.questString.replace('%{amount_0}', data.target)
+					try {
+						data.questString = questI18l[data.questStringRaw]
+						if (data.title.toLowerCase().includes('_plural') && data.target) {
+							data.questString = data.questString.replace('%{amount_0}', data.target)
+						}
+					} catch {
+						data.questString = questI18l['quest_0']
 					}
 				} else {
 					data.questString = translator.translate(data.questStringEng)
