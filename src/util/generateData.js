@@ -73,6 +73,17 @@ const update = async function update() {
 			} catch (e) {
 				log.warn(`Could not process ${locale}`)
 			}
+			try {
+				const remoteI18lFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/${locale}`)
+				fs.writeFileSync(
+					`./src/util/locale/i18n_${locale}`,
+					JSON.stringify(remoteI18lFiles, null, 2),
+					'utf8',
+				)
+				log.info(`i18n_${locale}`, 'file saved.')
+			} catch (e) {
+				log.warn(`Could not process i18n_${locale}`)
+			}
 		}))
 	} catch (e) {
 		log.warn('Could not generate new locales, using existing...')
