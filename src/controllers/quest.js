@@ -253,6 +253,7 @@ class Quest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
+				const questI18lEng = require(path.join(__dirname, `../util/locale/i18n_en.json`))
 				const questI18l = require(path.join(__dirname, `../util/locale/i18n_${language}.json`))
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
@@ -260,8 +261,10 @@ class Quest extends Controller {
 				if (data.questStringRaw && this.config.general.useRDMQuestString) {
 					try {
 						data.questString = questI18l[data.questStringRaw]
+						data.questStringEng = questI18lEng[data.questStringRaw]
 						if (data.title.toLowerCase().includes('_plural') && data.target) {
 							data.questString = data.questString.replace('%{amount_0}', data.target)
+							data.questStringEng = data.questStringEng.replace('%{amount_0}', data.target)
 						}
 					} catch {
 						data.questString = questI18l['quest_0']
