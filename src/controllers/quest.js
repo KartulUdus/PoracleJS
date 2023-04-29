@@ -387,12 +387,12 @@ class Quest extends Controller {
 			item.quest_title = item.title
 		}
 		const questinfo = `quest_title_${item.title}`
-		const questTitle = translations.en.questTitles
+		const questTitle = translations[this.config.general.locale].questTitles
 		if (questinfo) {
 			try {
 				str = questTitle[questinfo]
 			} catch {
-				str = 'Unknown Task'
+				str = this.config.general.unknownQuestString
 				this.log.warn(`Missing Task for ${questinfo}`)
 			}
 		}
