@@ -23,6 +23,14 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
+    for (const commandText of msg.content.split('\n')) {
+      args = commandText.slice(client.config.discord.prefix.length)
+        .trim()
+        .match(/(".*?"|[^"\s]+)+(?=\s*|\s*$)/g)
+        .map((x) => x.replace(/"/g, ''))
+      args.shift()
+    }
+
 		let { guild } = msg
 
 		let guildIdOverride = args.find((arg) => arg.match(client.re.guildRe))
