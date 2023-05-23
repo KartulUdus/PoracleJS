@@ -70,7 +70,5 @@ const getKojiFences = async () => {
 module.exports.getKojiFences = getKojiFences
 
 if (require.main === module) {
-	getKojiFences().then(() => {
-		log.info('OK')
-	})
+	getKojiFences().then(() => log.info('OK'))
 }
