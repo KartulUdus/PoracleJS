@@ -877,8 +877,11 @@
 		"8": "Ultra Beast",
 		"9": "Elite",
 		"10": "Primal",
-		"11": "Unknown",
-		"12": "Unknown"
+		"11": "Level 1 Shadow",
+		"12": "Level 2 Shadow",
+		"13": "Level 3 Shadow",
+		"14": "Level 4 Shadow",
+		"15": "Shadow Legendary"
 	},
 	"emojis": {
 		"lure-normal": "\ud83d\udccd",
