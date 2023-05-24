@@ -237,8 +237,8 @@ class Invasion extends Controller {
 								if (!data.genderDataEng) {
 									data.genderDataEng = { name: '', emoji: '' }
 								}
-								if (this.GameData.utilData.types[gruntType.type]) {
-									data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[gruntType.type].emoji, platform))
+								if (this.GameData.utilData.types[gruntType.type === 'Metal' ? 'Steel' : gruntType.type]) {
+									data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[gruntType.type === 'Metal' ? 'Steel' : gruntType.type].emoji, platform))
 								}
 								if (gruntType.type in this.GameData.utilData.types) {
 									data.gruntTypeColor = this.GameData.utilData.types[gruntType.type].color
