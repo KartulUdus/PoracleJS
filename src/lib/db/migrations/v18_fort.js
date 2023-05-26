@@ -11,6 +11,10 @@ exports.up = async function migrationUp(knex) {
 		table.integer('distance').notNullable()
 		table.integer('template').notNullable()
 
+		table.string('fort_type').defaultTo('everything').notNullable()
+		table.boolean('include_empty').defaultTo(true).notNullable()
+		table.string('change_types').defaultTo('[]').notNullable()
+
 		//table.unique(['id', 'profile_no', 'lure_id'], 'fort_tracking')
 	})
 

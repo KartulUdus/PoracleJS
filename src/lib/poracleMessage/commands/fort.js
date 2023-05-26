@@ -44,22 +44,26 @@ exports.run = async (client, msg, args, options) => {
 		let distance = 0
 		let template = client.config.general.defaultTemplateName
 		let clean = false
-		let slotChanges = false
+		let includeEmpty = false
 		let battleChanges = false
-		const teams = []
+		const changes = []
 		const pings = msg.getPings()
 
 		let fortType
-		args.forEach((element) => {
-			if (element === 'normal') teams.push(501)
-			else if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
-			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
-			else if (element === 'pokestop' ) fortType = 'pokestop'
-			else if (element === 'gym') fortType = 'gym'
-			else if (element === 'everything') teams.push(...[0, 1, 2, 3])
 
-			else if (element === 'slot changes') slotChanges = true
-			else if (element === 'battle changes') battleChanges = true
+		args.forEach((element) => {
+			if (element.match(client.re.templateRe)) [,, template] = element.match(client.re.templateRe)
+			else if (element.match(client.re.dRe)) [,, distance] = element.match(client.re.dRe)
+			else if (element === 'pokestop') fortType = 'pokestop'
+			else if (element === 'gym') fortType = 'gym'
+			else if (element === 'everything') fortType = 'everything'
+
+			else if (element === 'include empty') includeEmpty = true
+			else if (element === 'location') changes.push('location')
+			else if (element === 'name') changes.push('name')
+			else if (element === 'photo') changes.push('image_url')
+			else if (element === 'removal') changes.push('removal')
+			else if (element === 'new') changes.push('new')
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
@@ -76,25 +80,24 @@ exports.run = async (client, msg, args, options) => {
 			distance = client.config.tracking.defaultDistance
 		}
 
-		if (!teams.length) {
-			return await msg.reply(translator.translate('404 No team types found'))
-		}
+		// if (!teams.length) {
+		// 	return await msg.reply(translator.translate('404 No team types found'))
+		// }
 
 		if (!remove) {
-			const insert = teams.map((teamId) => ({
+			const insert = {
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
 				template: template.toString(),
 				distance: +distance,
 				clean: +clean,
-				team: +teamId,
-				slot_changes: +slotChanges,
-				battle_changes: +battleChanges,
-				gym_id: null,
-			}))
+				fort_type: fortType,
+				include_empty: includeEmpty,
+				change_types: JSON.stringify(changes),
+			}
 
-			const tracked = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
+			const tracked = await client.query.selectAllQuery('forts', { id: target.id, profile_no: currentProfileNo })
 			const updates = []
 			const alreadyPresent = []
 
@@ -111,7 +114,7 @@ exports.run = async (client, msg, args, options) => {
 							insert.splice(i, 1)
 							break
 						case 2:		// One difference (something + uid)
-							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean', 'slot_changes', 'battle_changes'].includes(x))) {
+							if (Object.keys(differences).some((x) => ['distance', 'template', 'clean'].includes(x))) {
 								updates.push({
 									...toInsert,
 									uid: existing.uid,
@@ -131,18 +134,18 @@ exports.run = async (client, msg, args, options) => {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
 				for (const lure of alreadyPresent) {
-					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
 				}
 				for (const lure of updates) {
-					message = message.concat(translator.translate('Updated: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
 				}
 				for (const lure of insert) {
-					message = message.concat(translator.translate('New: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+					message = message.concat(translator.translate('New: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
 				}
 			}
 
 			await client.query.deleteWhereInQuery(
-				'gym',
+				'forts',
 				{
 					id: target.id,
 					profile_no: currentProfileNo,
@@ -153,7 +156,7 @@ exports.run = async (client, msg, args, options) => {
 
 			await client.query.insertQuery('gym', [...insert, ...updates])
 
-			client.log.info(`${logReference}: ${target.name} started tracking gyms ${teams.join(', ')}`)
+			client.log.info(`${logReference}: ${target.name} started tracking for fort updates ${changeTypes.join(', ')}`)
 			await msg.reply(message, { style: 'markdown' })
 
 			reaction = insert.length ? '✅' : reaction
@@ -168,7 +171,7 @@ exports.run = async (client, msg, args, options) => {
 				result += lvlResult
 			}
 			if (commandEverything) {
-				const everythingResult = await client.query.deleteQuery('gym', {
+				const everythingResult = await client.query.deleteQuery('forts', {
 					id: target.id,
 					profile_no: currentProfileNo,
 				})
