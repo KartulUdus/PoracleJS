@@ -186,9 +186,8 @@ function lureRowText(config, translator, GameData, lure) {
 }
 
 function fortUpdateRowText(config, translator, GameData, fortUpdate) {
-	return `${translator.translate('Fort updates')}: **${translator.translate(fortUpdate.fort_type, true)}**${fortUpdate.distance ? ` | ${translator.translate('distance')}: ${fortUpdate.distance}m` : ''} ${fortUpdate.change_types}${fortUpdate.include_empty ? ' including empty changes' :''} ${standardText(config, translator, fortUpdate)}`
+	return `${translator.translate('Fort updates')}: **${translator.translate(fortUpdate.fort_type, true)}**${fortUpdate.distance ? ` | ${translator.translate('distance')}: ${fortUpdate.distance}m` : ''} ${fortUpdate.change_types}${fortUpdate.include_empty ? ' including empty changes' : ''} ${standardText(config, translator, fortUpdate)}`
 }
-
 
 function currentAreaText(translator, geofence, areas) {
 	if (areas.length) {

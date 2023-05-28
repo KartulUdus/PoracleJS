@@ -159,14 +159,14 @@ exports.run = async (client, msg, args, options) => {
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			let result = 0
-			if (teams.length) {
-				const lvlResult = await client.query.deleteWhereInQuery('forts', {
-					id: target.id,
-					profile_no: currentProfileNo,
-				}, teams, 'team')
-				client.log.info(`${logReference}: ${target.name} stopped tracking gym ${teams.join(', ')}`)
-				result += lvlResult
-			}
+			// if (teams.length) {
+			// 	const lvlResult = await client.query.deleteWhereInQuery('forts', {
+			// 		id: target.id,
+			// 		profile_no: currentProfileNo,
+			// 	}, teams, 'team')
+			// 	client.log.info(`${logReference}: ${target.name} stopped tracking gym ${teams.join(', ')}`)
+			// 	result += lvlResult
+			// }
 			if (commandEverything) {
 				const everythingResult = await client.query.deleteQuery('forts', {
 					id: target.id,

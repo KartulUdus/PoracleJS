@@ -15,7 +15,7 @@ exports.up = async function migrationUp(knex) {
 		table.boolean('include_empty').defaultTo(true).notNullable()
 		table.string('change_types').defaultTo('[]').notNullable()
 
-		//table.unique(['id', 'profile_no', 'lure_id'], 'fort_tracking')
+		// table.unique(['id', 'profile_no', 'lure_id'], 'fort_tracking')
 	})
 
 	log.info('Fort watcher migration applied')
