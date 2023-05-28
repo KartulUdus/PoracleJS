@@ -43,9 +43,7 @@ exports.run = async (client, msg, args, options) => {
 
 		let distance = 0
 		let template = client.config.general.defaultTemplateName
-		let clean = false
 		let includeEmpty = false
-		let battleChanges = false
 		const changes = []
 		const pings = msg.getPings()
 
@@ -85,17 +83,16 @@ exports.run = async (client, msg, args, options) => {
 		// }
 
 		if (!remove) {
-			const insert = {
+			const insert = [{
 				id: target.id,
 				profile_no: currentProfileNo,
 				ping: pings,
 				template: template.toString(),
 				distance: +distance,
-				clean: +clean,
 				fort_type: fortType,
 				include_empty: includeEmpty,
 				change_types: JSON.stringify(changes),
-			}
+			}]
 
 			const tracked = await client.query.selectAllQuery('forts', { id: target.id, profile_no: currentProfileNo })
 			const updates = []
@@ -154,16 +151,16 @@ exports.run = async (client, msg, args, options) => {
 				'uid',
 			)
 
-			await client.query.insertQuery('gym', [...insert, ...updates])
+			await client.query.insertQuery('forts', [...insert, ...updates])
 
-			client.log.info(`${logReference}: ${target.name} started tracking for fort updates ${changeTypes.join(', ')}`)
+			client.log.info(`${logReference}: ${target.name} started tracking for fort updates ${changes.join(', ')}`)
 			await msg.reply(message, { style: 'markdown' })
 
 			reaction = insert.length ? '✅' : reaction
 		} else {
 			let result = 0
 			if (teams.length) {
-				const lvlResult = await client.query.deleteWhereInQuery('gym', {
+				const lvlResult = await client.query.deleteWhereInQuery('forts', {
 					id: target.id,
 					profile_no: currentProfileNo,
 				}, teams, 'team')
@@ -194,7 +191,7 @@ exports.run = async (client, msg, args, options) => {
 
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error(`${logReference}: lure command unhappy:`, err)
+		client.log.error(`${logReference}: fort command unhappy:`, err)
 		msg.reply(`There was a problem making these changes, the administrator can find the details with reference ${logReference}`)
 	}
 }

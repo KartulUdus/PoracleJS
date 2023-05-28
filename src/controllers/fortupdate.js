@@ -10,12 +10,17 @@ class FortUpdate extends Controller {
 		const data = obj
 		const { areastring, strictareastring } = this.buildAreaString(data.matched)
 
+		let changestring = '1 = 0 '
+		data.changeTypes.forEach((change) => {
+			changestring = changestring.concat(`or forts.change_types like '%"${change}"%' `)
+		})
+
 		let query = `
-		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, forts.template, forts.distance, forts.clean, forts.ping from forts
-		join humans on (humans.id = nests.id and humans.current_profile_no = nests.profile_no)
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, forts.template, forts.distance, forts.ping from forts
+		join humans on (humans.id = forts.id and humans.current_profile_no = forts.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%forts%') and
-		((nests.pokemon_id = 0 or nests.pokemon_id='${data.pokemon_id}') and nests.min_spawn_avg <= ${data.pokemon_avg}) and
-		(nests.form = ${data.form} or nests.form = 0)
+		((forts.fort_type = 'everthing' or forts.fort_type = '${data.fortType}') and (forts.change_types = '[]' or (${changestring}))
+		${data.isEmpty ? 'and forts.include_empty = 1' : ''})
 		${strictareastring}
 		`
 
@@ -32,10 +37,10 @@ class FortUpdate extends Controller {
 						+ sin( radians(${data.latitude}) )
 						* sin( radians( humans.latitude ) )
 						)
-					) < nests.distance and nests.distance != 0)
+					) < forts.distance and forts.distance != 0)
 					or
 					(
-						nests.distance = 0 and (${areastring})
+						forts.distance = 0 and (${areastring})
 					)
 			)
 			`)
@@ -71,8 +76,8 @@ class FortUpdate extends Controller {
 		try {
 			const logReference = data.nest_id
 
-			data.longitude = data.lon
-			data.latitude = data.lat
+			data.longitude = data.old?.location?.lon || data.new?.location?.lon
+			data.latitude = data.old?.location?.lat || data.new?.location?.lon
 
 			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
@@ -206,7 +211,7 @@ class FortUpdate extends Controller {
 					type: cares.type,
 					name: cares.name,
 					tth: data.tth,
-					clean: cares.clean,
+					clean: false,
 					emoji: data.emoji,
 					logReference,
 					language,
