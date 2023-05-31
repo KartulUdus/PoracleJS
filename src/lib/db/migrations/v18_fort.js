@@ -9,7 +9,7 @@ exports.up = async function migrationUp(knex) {
 		table.integer('profile_no').notNullable().defaultTo(1)
 		table.string('ping').notNullable()
 		table.integer('distance').notNullable()
-		table.integer('template').notNullable()
+		table.text('template').notNullable()
 
 		table.string('fort_type').defaultTo('everything').notNullable()
 		table.boolean('include_empty').defaultTo(true).notNullable()

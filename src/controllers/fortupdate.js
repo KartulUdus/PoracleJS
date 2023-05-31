@@ -19,7 +19,7 @@ class FortUpdate extends Controller {
 		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, forts.template, forts.distance, forts.ping from forts
 		join humans on (humans.id = forts.id and humans.current_profile_no = forts.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%forts%') and
-		((forts.fort_type = 'everthing' or forts.fort_type = '${data.fortType}') and (forts.change_types = '[]' or (${changestring}))
+		((forts.fort_type = 'everything' or forts.fort_type = '${data.fortType}') and (forts.change_types = '[]' or (${changestring}))
 		${data.isEmpty ? 'and forts.include_empty = 1' : ''})
 		${strictareastring}
 		`
@@ -74,10 +74,11 @@ class FortUpdate extends Controller {
 		// const minTth = this.config.general.alertMinimumTime || 0
 
 		try {
-			const logReference = data.nest_id
+			data.id = data.old?.id || data.new?.id
+			const logReference = data.id
 
 			data.longitude = data.old?.location?.lon || data.new?.location?.lon
-			data.latitude = data.old?.location?.lat || data.new?.location?.lon
+			data.latitude = data.old?.location?.lat || data.new?.location?.lat
 
 			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
@@ -118,9 +119,10 @@ class FortUpdate extends Controller {
 			data.changeTypes = []
 			if (data.edit_types) data.changeTypes.push(...data.edit_types)
 			data.changeTypes.push(data.change_type)
-			data.isEmpty = !!(data.new?.name || data.new?.description || data.new?.image_url)
+			data.isEmpty = !(data.new?.name || data.new?.description || data.new?.image_url || data.old?.name)
 
 			data.name = data.new?.name || data.old?.name || 'unknown'
+			data.name = this.escapeJsonString(data.name)
 			data.description = data.new?.description || data.old?.description || 'unknown'
 			data.imgUrl = data.new?.image_url || data.old?.image_url || ''
 
@@ -138,9 +140,9 @@ class FortUpdate extends Controller {
 			}] : await this.fortUpdateWhoCares(data)
 
 			if (whoCares.length) {
-				this.log.info(`${logReference}: Fort Update ${data.name} found in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.info(`${logReference}: Fort Update ${data.fortType} ${data.id} ${data.name} found in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			} else {
-				this.log.verbose(`${logReference}: Fort Update ${data.name} found in areas (${data.matched}) and ${whoCares.length} humans cared.`)
+				this.log.verbose(`${logReference}: Fort Update ${data.fortType} ${data.id} ${data.name} found in areas (${data.matched}) and ${whoCares.length} humans cared.`)
 			}
 
 			let discordCacheBad = true // assume the worst
