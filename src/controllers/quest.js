@@ -139,7 +139,7 @@ class Quest extends Controller {
 				return []
 			}
 
-			if (data.title && this.config.general.useRDMQuestString) {
+			if (data.title && this.config.general.useIngameQuestString) {
 				data.questStringRaw = 'quest_title_' + data.title
 				data.questStringRaw = (data.title != '') ? data.questStringRaw : `quest_0`
 			}
@@ -253,21 +253,21 @@ class Quest extends Controller {
 
 				const language = cares.language || this.config.general.locale
 				const translator = this.translatorFactory.Translator(language)
-				const questI18l = require(path.join(__dirname, `../util/locale/i18n_${language}.json`))
-				const questI18lEng = require(path.join(__dirname, `../util/locale/i18n_en.json`))
+				const questI18n = require(path.join(__dirname, `../util/locale/i18n_${language}.json`))
+				const questI18nEng = require(path.join(__dirname, `../util/locale/i18n_en.json`))
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 
-				if (data.questStringRaw && this.config.general.useRDMQuestString) {
+				if (data.questStringRaw && this.config.general.useIngameQuestString) {
 					try {
-						data.questString = questI18l[data.questStringRaw]
-						data.questStringEng = questI18lEng[data.questStringRaw]
+						data.questString = questI18n[data.questStringRaw]
+						data.questStringEng = questI18nEng[data.questStringRaw]
 						if (data.title.toLowerCase().includes('_plural') && data.target) {
 							data.questString = data.questString.replace('%{amount_0}', data.target)
 							data.questStringEng = data.questStringEng.replace('%{amount_0}', data.target)
 						}
 					} catch {
-						data.questString = questI18l['quest_0']
+						data.questString = questI18n['quest_0']
 					}
 				} else {
 					data.questString = translator.translate(data.questStringEng)
