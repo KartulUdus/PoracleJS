@@ -74,10 +74,10 @@ const update = async function update() {
 				log.warn(`Could not process ${locale}`)
 			}
 			try {
-				const remoteI18lFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/${locale}`)
+				const remoteI18nFiles = await fetch(`https://raw.githubusercontent.com/WatWowMap/pogo-translations/master/static/locales/${locale}`)
 				fs.writeFileSync(
 					`./src/util/locale/i18n_${locale}`,
-					JSON.stringify(remoteI18lFiles, null, 2),
+					JSON.stringify(remoteI18nFiles, null, 2),
 					'utf8',
 				)
 				log.info(`i18n_${locale}`, 'file saved.')
