@@ -1,7 +1,6 @@
 const { diff } = require('deep-object-diff')
 
 const trackedCommand = require('../lib/poracleMessage/commands/tracked')
-const { raidLevels } = require('../util/util.json')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/tracking/raid/:id', options, async (req) => {
@@ -87,7 +86,7 @@ module.exports = async (fastify, options, next) => {
 			let level = 9000
 			if (row.pokemon_id === 9000) {
 				level = +row.level
-				if (row.level === undefined || level < 1 || (level > Math.max(...Object.keys(raidLevels).map((k) => +k)) && level !== 90)) {
+				if (row.level === undefined || level < 1 || (level > Math.max(...Object.keys(fastify.GameData.utilData.raidLevels).map((k) => +k)) && level !== 90)) {
 					throw new Error('Invalid level (must be specified if no pokemon_id')
 				}
 			}

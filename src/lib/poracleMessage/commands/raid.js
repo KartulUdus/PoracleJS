@@ -1,6 +1,5 @@
 const helpCommand = require('./help')
 const trackedCommand = require('./tracked')
-const { raidLevels } = require('../../../util/util.json')
 
 exports.run = async (client, msg, args, options) => {
 	const logReference = Math.random().toString().slice(2, 11)
@@ -103,7 +102,7 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'valor' || element === 'red') team = 2
 			else if (element === 'mystic' || element === 'blue') team = 1
 			else if (element === 'harmony' || element === 'gray') team = 0
-			else if (element === 'everything') Object.keys(raidLevels).forEach((x) => levelSet.add(+x))
+			else if (element === 'everything') Object.keys(client.GameData.utilData.raidLevels).forEach((x) => levelSet.add(+x))
 			else if (element === 'clean') clean = true
 		}
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
