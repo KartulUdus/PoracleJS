@@ -5,19 +5,22 @@ const mutex = new Mutex()
 const uiconsIndex = {}
 const lastRetrieved = {}
 
-function resolvePokemonIcon(availPokemon, imageType, pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, shiny = false) {
+function resolvePokemonIcon(availPokemon, imageType, pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, alignment = 0, shiny = false) {
 	const evolutionSuffixes = evolution ? [`_e${evolution}`, ''] : ['']
 	const formSuffixes = form ? [`_f${form}`, ''] : ['']
 	const costumeSuffixes = costume ? [`_c${costume}`, ''] : ['']
 	const genderSuffixes = gender ? [`_g${gender}`, ''] : ['']
+	const alignmentSuffixes = alignment ? [`_a${alignment}`, ''] : ['']
 	const shinySuffixes = shiny ? ['_s', ''] : ['']
 	for (const evolutionSuffix of evolutionSuffixes) {
 		for (const formSuffix of formSuffixes) {
 			for (const costumeSuffix of costumeSuffixes) {
 				for (const genderSuffix of genderSuffixes) {
-					for (const shinySuffix of shinySuffixes) {
-						const result = `${pokemonId}${evolutionSuffix}${formSuffix}${costumeSuffix}${genderSuffix}${shinySuffix}.${imageType}`
-						if (availPokemon.has(result)) return result
+					for (const alignmentSuffix of alignmentSuffixes) {
+						for (const shinySuffix of shinySuffixes) {
+							const result = `${pokemonId}${evolutionSuffix}${formSuffix}${costumeSuffix}${genderSuffix}${alignmentSuffix}${shinySuffix}.${imageType}`
+							if (availPokemon.has(result)) return result
+						}
 					}
 				}
 			}
@@ -198,9 +201,9 @@ class Uicons {
 		return !!currentSet
 	}
 
-	async pokemonIcon(pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, shiny = false) {
+	async pokemonIcon(pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, alignment = 0, shiny = false) {
 		const currentSet = await getAvailableIcons(this.log, this.url)
-		if (currentSet) return `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, gender, costume, shiny)}`
+		if (currentSet) return `${this.url}/pokemon/${resolvePokemonIcon(currentSet.pokemon, this.imageType, pokemonId, form, evolution, gender, costume, alignment, shiny)}`
 		if (this.fallback) return `${this.url}/pokemon_icon_${pokemonId.toString().padStart(3, '0')}_${form ? form.toString() : '00'}${evolution > 0 ? `_${evolution.toString()}` : ''}.${this.imageType}`
 		return null
 	}
