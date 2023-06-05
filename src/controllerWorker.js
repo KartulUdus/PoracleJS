@@ -198,6 +198,7 @@ function reloadDts() {
 		nestController.setDts(newDts)
 		pokestopLureController.setDts(newDts)
 		gymController.setDts(newDts)
+		fortUpdateController.setDts(newDts)
 		log.info('DTS reloaded')
 	} catch (err) {
 		log.error('Error reloading dts', err)
@@ -214,6 +215,7 @@ function reloadGeofence() {
 		nestController.setGeofence(newGeofence)
 		pokestopLureController.setGeofence(newGeofence)
 		gymController.setGeofence(newGeofence)
+		fortUpdateController.setGeofence(newGeofence)
 		log.info('Geofence reloaded')
 	} catch (err) {
 		log.error('Error reloading geofence', err)
