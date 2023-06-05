@@ -77,8 +77,8 @@ class FortUpdate extends Controller {
 			data.id = data.old?.id || data.new?.id
 			const logReference = data.id
 
-			data.longitude = data.old?.location?.lon || data.new?.location?.lon
-			data.latitude = data.old?.location?.lat || data.new?.location?.lat
+			data.longitude = data.new?.location?.lon || data.old?.location?.lon
+			data.latitude = data.new?.location?.lat || data.old?.location?.lat
 
 			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
