@@ -116,6 +116,11 @@ class FortUpdate extends Controller {
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
 			data.fortType = data.new?.type || data.old?.type || 'unknown'
+			// If this is a change from an empty fort (eg after a GMO), treat it as 'new' in poracle
+			if (data.change_type === 'edit' && !(data.old?.name || data.old?.description || data.old?.image_url)) {
+				data.change_type = 'new'
+			}
+
 			data.changeTypes = []
 			if (data.edit_types) data.changeTypes.push(...data.edit_types)
 			data.changeTypes.push(data.change_type)
