@@ -223,7 +223,7 @@ class FortUpdate extends Controller {
 			data.map_longitude = position.longitude
 			data.map_latitude = position.latitude
 
-			await this.getStaticMapUrl(logReference, data, 'fort-update', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'oldLatitude', 'oldLongitude', 'newLatitude', 'newLongitude'])
+			await this.getStaticMapUrl(logReference, data, 'fort-update', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'isEditLocation', 'oldLatitude', 'oldLongitude', 'newLatitude', 'newLongitude'])
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
