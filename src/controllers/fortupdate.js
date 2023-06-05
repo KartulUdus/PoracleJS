@@ -180,14 +180,9 @@ class FortUpdate extends Controller {
 				this.log.verbose(`${logReference}: Creating fort update alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
-				const translator = this.translatorFactory.Translator(language)
+//				const translator = this.translatorFactory.Translator(language)
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
-
-				// full build
-				data.name = translator.translate(data.nameEng)
-				data.formName = translator.translate(data.formNameEng)
-				data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
 
 				const view = {
 					...geoResult,
