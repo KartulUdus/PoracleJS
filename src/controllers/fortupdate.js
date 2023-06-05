@@ -121,6 +121,46 @@ class FortUpdate extends Controller {
 			data.changeTypes.push(data.change_type)
 			data.isEmpty = !(data.new?.name || data.new?.description || data.new?.image_url || data.old?.name)
 
+			// helpers
+
+			data.isEdit = data.change_type === 'edit'
+			data.isNew = data.change_type === 'new'
+			data.isRemoval = data.change_type === 'removal'
+
+			data.isEditLocation = data.changeTypes.includes('location')
+			data.isEditName = data.changeTypes.includes('name')
+			data.isEditDescription = data.changeTypes.includes('description')
+			data.isEditImageUrl = data.changeTypes.includes('image_url')
+			data.isEditImgUrl = data.isEditImageUrl
+
+			data.oldName = data.old?.name ?? ''
+			data.oldDescription = data.old?.description ?? ''
+			data.oldImageUrl = data.old?.image_url ?? ''
+			data.oldImgUrl = data.oldImageUrl
+			data.oldLatitude = data.old?.location?.lat || 0.0
+			data.oldLongitude = data.old?.location?.lon || 0.0
+
+			data.newName = data.new?.name ?? ''
+			data.newDescription = data.new?.description ?? ''
+			data.newImageUrl = data.new?.image_url ?? ''
+			data.newImgUrl = data.newImageUrl
+			data.newLatitude = data.new?.location?.lat || 0.0
+			data.newLongitude = data.new?.location?.lon || 0.0
+
+			data.fortTypeText = data.fortType === 'pokestop' ? 'Pokestop' : 'Gym'
+			// eslint-disable-next-line default-case
+			switch (data.change_type) {
+				case 'edit':
+					data.changeTypeText = 'Edit'
+					break
+				case 'removal':
+					data.changeTypeText = 'Removal'
+					break
+				case 'new':
+					data.changeTypeText = 'New'
+					break
+			}
+
 			data.name = data.new?.name || data.old?.name || 'unknown'
 			data.name = this.escapeJsonString(data.name)
 			data.description = data.new?.description || data.old?.description || 'unknown'
@@ -128,9 +168,11 @@ class FortUpdate extends Controller {
 
 			if (data.old) {
 				data.old.imgUrl = data.old.image_url
+				data.old.imageUrl = data.old.image_url
 			}
 			if (data.new) {
 				data.new.imgUrl = data.new.image_url
+				data.new.imageUrl = data.new.image_url
 			}
 
 			const whoCares = data.poracleTest ? [{
@@ -164,6 +206,22 @@ class FortUpdate extends Controller {
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 			const jobs = []
+
+			// Attempt to calculate best position for map
+			const markers = []
+			if (data.old?.location?.lat) {
+				markers.push({ latitude: data.old.location.lat, longitude: data.old.location.lon })
+			}
+			if (data.new?.location?.lat) {
+				markers.push({ latitude: data.new.location.lat, longitude: data.new.location.lon })
+			}
+
+			const position = this.tileserverPregen.autoposition({
+				markers,
+			}, 500, 250)
+			data.zoom = Math.min(position.zoom, 16)
+			data.map_longitude = position.longitude
+			data.map_latitude = position.latitude
 
 			await this.getStaticMapUrl(logReference, data, 'fort-update', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'poly_path'])
 			data.staticmap = data.staticMap // deprecated
