@@ -223,7 +223,7 @@ class FortUpdate extends Controller {
 			data.map_longitude = position.longitude
 			data.map_latitude = position.latitude
 
-			await this.getStaticMapUrl(logReference, data, 'fort-update', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'poly_path'])
+			await this.getStaticMapUrl(logReference, data, 'fort-update', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'oldLatitude', 'oldLongitude', 'newLatitude', 'newLongitude'])
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
@@ -238,7 +238,7 @@ class FortUpdate extends Controller {
 				this.log.verbose(`${logReference}: Creating fort update alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 
 				const language = cares.language || this.config.general.locale
-//				const translator = this.translatorFactory.Translator(language)
+				//				const translator = this.translatorFactory.Translator(language)
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 
