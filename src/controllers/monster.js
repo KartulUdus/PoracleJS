@@ -507,7 +507,7 @@ class Monster extends Controller {
 					})
 
 					const jobs = []
-					
+
 					require('./common/nightTime').setNightTime(data, disappearTime)
 
 					data.intersection = await this.obtainIntersection(data)
