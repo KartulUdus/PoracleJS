@@ -507,10 +507,10 @@ class Monster extends Controller {
 					})
 
 					const jobs = []
-
-					data.intersection = await this.obtainIntersection(data.latitude, data.longitude)
-
+					
 					require('./common/nightTime').setNightTime(data, disappearTime)
+
+					data.intersection = await this.obtainIntersection(data)
 
 					if (data.seen_type) {
 						switch (data.seen_type) {

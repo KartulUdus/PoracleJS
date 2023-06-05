@@ -82,5 +82,5 @@ const update = async function update() {
 module.exports.update = update
 
 if (require.main === module) {
-	update().then(() => { log.info('OK') }) 
+	update().then(() => { log.info('OK') })
 }
