@@ -543,6 +543,11 @@
 			"name": "Rainy Lure",
 			"emoji": "lure-rainy",
 			"color": "03D7FC"
+		},
+		"506": {
+			"name": "Sparkly Lure",
+			"emoji": "lure-sparkly",
+			"color": "FFFF00"
 		}
 	},
 	"genders": {
@@ -582,7 +587,8 @@
 		"0": "{0}",
 		"1": "Mega {0}",
 		"2": "Mega {0} X",
-		"3": "Mega {0} Y"
+		"3": "Mega {0} Y",
+		"4": "Primal {0}"
 	},
 	"evolution": {
 		"0": {
@@ -596,6 +602,9 @@
 		},
 		"3": {
 			"name": "Mega Y"
+		},
+		"4": {
+			"name": "Primal"
 		}
 	},
 	"throwType": {
@@ -809,9 +818,15 @@
 		},
 		"8": {
 			"min": 810,
-			"max": 890,
+			"max": 905,
 			"name": "Galar",
 			"roman": "VIII"
+		},
+		"9": {
+			"min":906,
+			"max":1010,
+			"name": "Paldea",
+			"roman": "IX"
 		}
 	},
 	"genException": {
@@ -861,9 +876,12 @@
 		"7": "Mega Legendary",
 		"8": "Ultra Beast",
 		"9": "Elite",
-		"10": "Unknown",
-		"11": "Unknown",
-		"12": "Unknown"
+		"10": "Primal",
+		"11": "Level 1 Shadow",
+		"12": "Level 2 Shadow",
+		"13": "Level 3 Shadow",
+		"14": "Level 4 Shadow",
+		"15": "Shadow Legendary"
 	},
 	"emojis": {
 		"lure-normal": "\ud83d\udccd",
@@ -871,6 +889,7 @@
 		"lure-mossy": "\uD83C\uDF43",
 		"lure-magnetic": "\uD83E\uDDF2",
 		"lure-rainy": "\uD83D\uDCA7",
+		"lure-sparkly": "\ud83c\udf1f",
 		"gender-male": "\u2642",
 		"gender-female": "\u2640",
 		"gender-none": "\u26a7",
@@ -913,5 +932,10 @@
 		"southeast": "\u2199\ufe0f",
 		"east": "\u2b05\ufe0f",
 		"northeast": "\u2196\ufe0f"
+	},
+	"pokestopEvent": {
+		"7": "Gold-Stop",
+		"8": "Kecleon",
+		"9": "Pokemon-Contest"
 	}
 }

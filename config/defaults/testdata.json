@@ -78,6 +78,30 @@
     "webhook":{"latitude":50.94129,"longitude":6.95697,"level":8,"pokemon_id":793,"team_id":3,"cp":48499,"start":1641969560,"end":1641972260,"name":"Kölner Dom","evolution":0,"spawn":1652098045,"move_1":225,"move_2":64,"gym_id":"fc310ff2922e47c09c266914639f6aba.12","url":"http://lh3.googleusercontent.com/SckUbuYToQrnlv5dHpMmO4sP0tBGUqy1y8ghQPsujOqfWMYXkY6K-6g74VrRpwhumCx1ulQUUBIpUC0TiEh5t5I4rg","form":0,"is_ex_raid_eligible":false,"is_exclusive":false,"gender":1,"costume":0}
   },
   {
+    "type": "raid",
+    "test": "egg9",
+    "location": "current",
+    "webhook": {"latitude":50.94812,"longitude":6.94330,"level":9,"pokemon_id":0,"team_id":2,"cp":0,"start":1641972583,"end":1641975283,"name":"Kölnturm","evolution":0,"spawn":1641968983,"move_1":1,"move_2":2,"gym_id":"278c0d39f50d4cffa80fd570b90e5ef6.16","url":"http://lh3.googleusercontent.com/4oEzxUTT-3xUlx8RqhNPudnhueL2DZOfipiSvbQJBmm6sQAgbwoAnM2O9phMB7b5Wfgz2DNjMiIXwQFF4mUDFzGU7gVQ","is_ex_raid_eligible":true,"is_exclusive":false}
+  },
+  {
+    "type": "raid",
+    "test": "level9",
+    "location": "current",
+    "webhook":{"latitude":50.94129,"longitude":6.95697,"level":9,"pokemon_id":720,"team_id":1,"cp":66170,"start":1641969560,"end":1641972260,"name":"Kölner Dom","evolution":0,"spawn":1652098045,"move_1":235,"move_2":70,"gym_id":"fc310ff2922e47c09c266914639f6aba.12","url":"http://lh3.googleusercontent.com/SckUbuYToQrnlv5dHpMmO4sP0tBGUqy1y8ghQPsujOqfWMYXkY6K-6g74VrRpwhumCx1ulQUUBIpUC0TiEh5t5I4rg","form":2652,"is_ex_raid_eligible":true,"is_exclusive":false,"gender":3,"costume":0}
+  },
+  {
+    "type": "raid",
+    "test": "egg10",
+    "location": "current",
+    "webhook": {"latitude":50.94812,"longitude":6.94330,"level":10,"pokemon_id":0,"team_id":1,"cp":0,"start":1641972583,"end":1641975283,"name":"Kölnturm","evolution":0,"spawn":1641968983,"move_1":1,"move_2":2,"gym_id":"278c0d39f50d4cffa80fd570b90e5ef6.16","url":"http://lh3.googleusercontent.com/4oEzxUTT-3xUlx8RqhNPudnhueL2DZOfipiSvbQJBmm6sQAgbwoAnM2O9phMB7b5Wfgz2DNjMiIXwQFF4mUDFzGU7gVQ","is_ex_raid_eligible":true,"is_exclusive":false}
+  },
+  {
+    "type": "raid",
+    "test": "level10",
+    "location": "current",
+    "webhook":{"latitude":50.94129,"longitude":6.95697,"level":10,"pokemon_id":383,"team_id":3,"cp":92860,"start":1641969560,"end":1641972260,"name":"Kölner Dom","evolution":4,"spawn":1652098045,"move_1":253,"move_2":31,"gym_id":"fc310ff2922e47c09c266914639f6aba.12","url":"http://lh3.googleusercontent.com/SckUbuYToQrnlv5dHpMmO4sP0tBGUqy1y8ghQPsujOqfWMYXkY6K-6g74VrRpwhumCx1ulQUUBIpUC0TiEh5t5I4rg","form":0,"is_ex_raid_eligible":true,"is_exclusive":false,"gender":3,"costume":0}
+  },
+  {
     "type": "quest",
     "test": "stardust",
     "webhook": {"pokestop_id":"7d2bd3f5e4564b74a4426fb5521cf758.11","template":"CHALLENGE_BASE_SPIN_S_ITEM","pokestop_name":"Canterbury Bus Station","pokestop_url":"http://lh3.googleusercontent.com/hCU2iQ2B2UrFAeUxNlg0IMA5X0cy1ntn-ly_IKwCjDeDP-MZeS2TWZU695UM7f0vG7MhqREQ8QitO1csxfgy17RpGU4","conditions":[],"type":5,"latitude":51.276593,"longitude":1.082505,"rewards":[{"info":{"amount":500},"type":3}],"target":3,"updated":1643522373,"quest_task":"Spin 3 PokéStops or Gyms","with_ar":true}
@@ -104,7 +128,30 @@
   },
   {
     "type": "pokestop",
+    "test": "kecleon",
+    "location": "current",
+    "webhook": {"grunt_type": 0,"pokestop_name": "Marienkapelle","display_type": 8,"latitude": 50.953489,"longitude": 6.916805,"id": "7579096660076729259","expiration": 1674758744,"character": 0,"pokestop_id": "644161293921391b8a68391071d27252.16","style": 0,"updated": 1674755151,"enabled": true,"url": "http://lh3.googleusercontent.com/PkVozyduG3t4sUEA4M9DVxLbeK0d3Xc-QiM47EGfhzudc_WUdtJFHT9AZGohOF6pB4ZBPavvrj3khyR9OA3FjKbLTxZgJfE1u_c1E5nm","start": 1674755144,"incident_expire_timestamp": 1674758744}
+  },
+  {
+    "type": "pokestop",
+    "test": "goldstop",
+    "location": "current",
+    "webhook": {"longitude": 6.913019,"url": "","pokestop_name": "Rot-wei\u00dfes Haus","updated": 1675433239,"latitude": 50.927246,"pokestop_id": "88e96ce662d9491abd457c26a094896a.16","enabled": true,"start": 1675432732,"expiration": 1675436332,"incident_expire_timestamp": 1675436332,"display_type": 7,"grunt_type": 0,"character": 0,"style": 0,"id": "7493930956149321458"}
+  },
+  {
+    "type": "pokestop",
+    "test": "pokemoncontest",
+    "location": "current",
+    "webhook": {"longitude": 6.913019,"url": "","pokestop_name": "Rot-wei\u00dfes Haus","updated": 1675433239,"latitude": 50.927246,"pokestop_id": "88e96ce662d9491abd457c26a094896a.16","enabled": true,"start": 1675432732,"expiration": 1675436332,"incident_expire_timestamp": 1675436332,"display_type": 9,"grunt_type": 0,"character": 0,"style": 0,"id": "7493930956149321458"}
+  },
+  {
+    "type": "pokestop",
     "test": "lure",
     "webhook": {"name":"Memorial Sculpture & Verse","pokestop_id":"0d4b26adbf24446ba893f0aa3f8de337.16","latitude":51.284727,"longitude":1.060694,"updated":1643554276,"last_modified":1643553312,"lure_expiration":1643555112,"lure_id":502,"url":"http://lh3.googleusercontent.com/Ce-yPhm1FwGNbFzaM0ToMESZ57EWx1g8dKXXgEE4o-mmdP0XdsHk2nSEXOBk88H5PIXBHud-b7m6PUUJ3N8Pe_XB98NY"}
+  },
+  {
+    "type": "pokestop",
+    "test": "sparklylure",
+    "webhook": {"name":"Memorial Sculpture & Verse","pokestop_id":"0d4b26adbf24446ba893f0aa3f8de337.16","latitude":51.284727,"longitude":1.060694,"updated":1643554276,"last_modified":1643553312,"lure_expiration":1643555112,"lure_id":506,"url":"http://lh3.googleusercontent.com/Ce-yPhm1FwGNbFzaM0ToMESZ57EWx1g8dKXXgEE4o-mmdP0XdsHk2nSEXOBk88H5PIXBHud-b7m6PUUJ3N8Pe_XB98NY"}
   }
 ]

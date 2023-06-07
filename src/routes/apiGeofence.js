@@ -218,16 +218,34 @@ module.exports = async (fastify, options, next) => {
 					displayInMatches: inGeofence.displayInMatches ?? true,
 				},
 				geometry: {
-					type: 'Polygon',
-					coordinates: [[]],
+					type: inGeofence.multipath ? 'MultiPolygon' : 'Polygon',
+					coordinates: [],
 				},
 			}
 			const outPath = []
-			for (let j = 0; j < inGeofence.path.length; j++) {
-				const coord = inGeofence.path[j]
-				outPath.push([coord[1], coord[0]])
+			if (inGeofence.multipath) {
+				for (let j = 0; j < inGeofence.multipath.length; j++) {
+					const path = inGeofence.multipath[j]
+					const outSubPath = []
+					for (let k = 0; k < path.length; k++) {
+						const coord = path[k]
+						outSubPath.push([coord[1], coord[0]])
+					}
+					if (outSubPath.at(-1)[0] !== outSubPath[0][0] || outSubPath.at(-1)[1] !== outSubPath[0][1]) {
+						outSubPath.push(outSubPath[0])
+					}
+					outPath.push(outSubPath)
+				}
+			} else {
+				for (let j = 0; j < inGeofence.path.length; j++) {
+					const coord = inGeofence.path[j]
+					outPath.push([coord[1], coord[0]])
+				}
+				if (outPath.at(-1)[0] !== outPath[0][0] || outPath.at(-1)[1] !== outPath[0][1]) {
+					outPath.push(outPath[0])
+				}
 			}
-			outGeofence.geometry.coordinates[0] = outPath
+			outGeofence.geometry.coordinates.push(outPath)
 			outGeoJSON.features.push(outGeofence)
 		}
 

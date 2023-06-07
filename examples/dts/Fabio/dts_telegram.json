@@ -1,0 +1,268 @@
+[
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "monster",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})`{{zipcode}} {{areas}}`\n{{#isnt iv 100}}*{{round iv}}%*{{else}}💯{{/isnt}}` `*{{fullName}}* {{genderData.emoji}} {{shinyPossibleEmoji}}\n{{#if disguisePokemonName}}( 🎭 *{{disguisePokemonName}}*)\n{{/if}}`Loc: `{{addr}}\n⏰` `*{{time}}*` `🔚`(`*{{tthm}}*`m` *{{tths}}*`s)`{{#unless confirmedTime}}🅾️{{/unless}}\n{{#if weatherChange}}{{weatherChange}}\n{{/if}}`CP: `*{{cp}}* (`L`*{{level}}*)` `{{boostemoji}}{{#isnt iv 100}} (*{{atk}}*|*{{def}}*|*{{sta}}*){{/isnt}}\n{{#if pvpAvailable}}\n{{> tg_pvplcup_en}}{{> tg_pvpgbl_en}}{{> tg_pvpubl_en}}{{/if}}`Maps: `[Map]({{{reactMapUrl}}}) | [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "de",
+    "type": "monster",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})`{{zipcode}} {{areas}}`\n{{#isnt iv 100}}*{{round iv}}%*{{else}}💯{{/isnt}}` `*{{fullName}}* {{genderData.emoji}} {{shinyPossibleEmoji}}\n{{#if disguisePokemonName}}( 🎭 *{{disguisePokemonName}}*)\n{{/if}}`Ort: `{{addr}}\n⏰` `*{{time}}*` `🔚`(`*{{tthm}}*`m` *{{tths}}*`s)`{{#unless confirmedTime}}🅾️{{/unless}}\n{{#if weatherChange}}{{weatherChange}}\n{{/if}}`WP: `*{{cp}}* (`L`*{{level}}*)` `{{boostemoji}}{{#isnt iv 100}} (*{{atk}}*|*{{def}}*|*{{sta}}*){{/isnt}}\n{{#if pvpAvailable}}\n{{> tg_pvplcup_de}}{{> tg_pvpgbl_de}}{{> tg_pvpubl_de}}{{/if}}`Maps: `[Map]({{{reactMapUrl}}}) | [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "monsterNoIv",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "?% {{fullName}} {{boostWeatherEmoji}}\nEnds: {{time}}, Time left: {{tthm}}m {{tths}}s\n {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": true,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "de",
+    "type": "monsterNoIv",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "?% {{fullName}} {{boostWeatherEmoji}}\nEnde {{time}}, Restzeit {{tthm}}m {{tths}}s\nAdresse: {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": true,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "raid",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Raid against {{fullName}} has started at {{{gymName}}}! {{#ex}}(Ex){{/ex}}\nCP: {{cp}}, quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n{{name}} lvl{{level}}. End: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "de",
+    "type": "raid",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Raid gegen {{fullName}} hat begonnen bei {{{gymName}}}! {{#ex}}(Ex){{/ex}}\nWP: {{cp}}, Sofort: {{quickMoveName}}, Lade: {{chargeMoveName}}\n{{name}} Lvl{{level}}. Ende: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "egg",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Raid egg level{{level}} at {{{gymName}}} {{#ex}}(Ex){{/ex}}\nHatch at: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "de",
+    "type": "egg",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Raid Ei Level{{level}} bei {{{gymName}}} {{#ex}}(Ex){{/ex}}\nSchlüpft um: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "quest",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Pokestop: {{{pokestopName}}}\nQuest: {{{questString}}}\nReward: {{{rewardString}}} \n {{{addr}}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "de",
+    "type": "quest",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Pokestop: {{{pokestopName}}}\nAufgabe: {{{questString}}}\nBelohnung: {{{rewardString}}}\nAdresse: {{{addr}}}\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "invasion",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Team Rocket at {{{pokestopName}}}\nType: {{gruntType}} {{gruntTypeEmoji}}\nGender: {{genderData.name}}{{genderData.emoji}}\nPossible rewards: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\n Ends: {{time}}, in ({{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s)\nAddress: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "de",
+    "type": "invasion",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})Team Rocket bei {{{pokestopName}}}\nTyp: {{gruntType}} {{gruntTypeEmoji}}\nGeschlecht: {{genderData.name}}{{genderData.emoji}}\nMögliche Belohnungen: {{#compare gruntRewardsList.first.chance '==' 100}}{{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}{{#compare gruntRewardsList.first.chance '<' 100}}\n ‣ {{gruntRewardsList.first.chance}}% : {{#forEach gruntRewardsList.first.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}\n ‣ {{gruntRewardsList.second.chance}}% : {{#forEach gruntRewardsList.second.monsters}}{{this.name}}{{#unless isLast}}, {{/unless}}{{/forEach}}{{/compare}}\nEnde: {{time}}, in ({{#if tthh}}{{tthh}}Std {{/if}}{{tthm}}m {{tths}}s)\nAdresse: {{{addr}}}\n[Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "lure",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "**Lure type:** {{lureTypeName}}\n **Ends:** {{time}} \n**Time left:** {{#if tthh}}{{tthh}}h {{/if}}{{tthm}}m {{tths}}s",
+      "location": true,
+      "webpage_preview": false
+    }
+  },
+  {
+    "id": "Normal",
+    "type": "nest",
+    "language": "en",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})***New Nest : {{name}}***\n{{nestName}}\nFound on {{resetDate}}\nSpawns/hour: {{pokemonSpawnAvg}}",
+      "location": false,
+      "webpage_preview": true
+    }
+  },
+  {
+    "id": "Normal",
+    "type": "gym",
+    "language": "en",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "webpage_preview": false,
+      "location": true,
+      "content": [
+        "***⚠️ Gym change ⚠️***",
+        "\nGym change at {{{gymName}}} {{#if previousControlName}}from {{previousControlName}} {{/if}}to {{teamName}}",
+        "\nSlots available: {{slotsAvailable}}",
+        "\n[Google]({{{mapurl}}}) | [Apple]({{{applemap}}})"
+      ]
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "weatherchange",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})⚠️ Weather change ⚠️\nThe weather for some active Pokémon you are tracking has changed!\n{{#if oldWeatherName}}It went from {{oldWeatherName}} {{oldWeatherEmoji}} to {{else}}It is now {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}The following Pokémon have now changed and will have different stats:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}CP\n{{/each}}{{else}}This could have altered the reported stats and IV...{{/if}}",
+      "webpage_preview": true,
+      "sticker": "",
+      "location": false
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "de",
+    "type": "weatherchange",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "content": "[\u200A]({{{staticMap}}})⚠️ Wetterwechsel ⚠️\nDas Wetter von gemeldeten Pokémon hat sich geändert!\n{{#if oldWeatherName}}Es hat sich geändert von {{oldWeatherName}} {{oldWeatherEmoji}} zu {{else}}Es ist jetzt {{/if}}{{weatherName}} {{weatherEmoji}}\n{{#if activePokemons}}Folgende Pokémon sind betroffen und haben nun geänderte Werte:\n{{#each activePokemons}}**{{this.name}}** {{#isnt this.formName 'Normal'}} {{this.formName}}{{/isnt}} - {{round this.iv}}% - {{this.cp}}WP\n{{/each}}{{else}}Dies hat geänderten Eigenschalften inkl. IV Werten zur Folge...{{/if}}",
+      "webpage_preview": true,
+      "sticker": "",
+      "location": false
+    }
+  },
+  {
+    "id": "Normal",
+    "language": "en",
+    "type": "greeting",
+    "default": true,
+    "platform": "telegram",
+    "template": {
+      "embed": {
+        "title": "Welcome",
+        "description": "Thank you for registering \nPlease set a location `{{prefix}}location name of place` or add ares where to receive alarms from",
+        "fields": [
+          {
+            "name": "***General commands***",
+            "value": "`{{prefix}}help`: Shows this message \n`{{prefix}}poracle`: Adds you to database and enables tracking \n`{{prefix}}unregister`: Removes you from tracking \n`{{prefix}}stop`: Temporarily stops alarms \n`{{prefix}}start`: Re-enables alarms \n`{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from, areas need to be configured by admin \n`{{prefix}}area remove somePlace`: Removes a configured area \n`{{prefix}}tracked`: Shows you what you are currently configured to be notified about. \n You can add the variable `clean` to most of the tracking commands, to make the bot delete the entry after it has expired. \n See more options for each command explained at [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
+          },
+          {
+            "name": "***Basic Examples***",
+            "value": "You probably want to start off with something like these 5 commands. Change the distances (d=metres) to suit yourself. \n`{{prefix}}location 123 Common Road, Town, Region` \n`{{prefix}}track archen axew gible gabite cranidos deino zweilous litwick lampent riolu darumaka unown d1500` \n`{{prefix}}raid timburr litwick d1500` \n`{{prefix}}track everything iv100 d1000` \n`{{prefix}}quest silver_pinap_berry d500 clean`"
+          },
+          {
+            "name": "***Monster tracking commands***",
+            "value": "The command needs to include at least one monster and any amount of filters. E.g. \n`{{prefix}}track snorlax lapras d500 iv50-90 cp1000 level15`: This command would alert you about Snorlax and Lapras within 500 meters of your location, with an IV between 50% - 90%, of at least level 15, and a minimum CP of 1000. \n`{{prefix}}track everything great1-3 greatcp1450 clean`: This alert you about all pvp mons and evolutions in your area, with an rank between 1-3, a minimum final CP of 1450 and clean message after despawn. \n`{{prefix}}untrack lapras vileplume`: will remove tracking for lapras and vileplume"
+          },
+          {
+            "name": "***Raid tracking commands***",
+            "value": "`{{prefix}}raid snorlax lapras d500 instinct`: Any variables are optional, this command would alert you about snorlax and lapras raids within 500 meters of your location or inside an added area. The set filters require the Gym to be controlled by team Instinct \n`{{prefix}}raid remove lapras vileplume`: will remove tracking for lapras and vileplume raids"
+          },
+          {
+            "name": "***Quest tracking commands***",
+            "value": "`{{prefix}}quest porygon pikachu rare_candy silver_pinap_berry d500 clean`: Any variables are optional, this command would alert you about Quests obtainable within 500m of your location with porygon, pikachu, rare candy, or silver pinaps as rewards \n`{{prefix}}quest remove all_items`: Removes tracking for all item based quests. Can also use `all_pokemon` or `stardust`"
+          },
+          {
+            "name": "***Invasion tracking commands***",
+            "value": "`{{prefix}}invasion d500 dragon mixed`: Any variables are optional, this command would alert you about Team Rocket Incidents within 500m of your location if the grunt type was mixed or dragon. You can use any pokemon type name.\n`{{prefix}}invasion remove dragon`: Removes tracking for specified Team Rocket Incidents."
+          },
+          {
+            "name": "***Gym tracking commands***",
+            "value": "`{{prefix}}gym instinct slot_changes`: Any arguments are optional, this command would alert you about gyms inside an added area. The set filters require the Gym to be controlled by team Instinct and slot changes occur\n`{{prefix}}gym remove instinct`: Removes tracking for all gyms controlled by team Instinct."
+          },
+          {
+            "name": "***Areas***",
+            "value": "If your admin has configured areas, these other commands are available: \n`{{prefix}}area list`: lists the possible areas you can add. \n`{{prefix}}location yourArea`: Searches for yourArea and sets it as your location \n`{{prefix}}area add somePlace`: Sets one or multiple areas where to receive alarms from (areas need to be configured by admin) \n`{{prefix}}area remove somePlace`: Removes a configured area"
+          },
+          {
+            "name": "***Further info***",
+            "value": "See all details about the commands in [the full manual](https://muckelba.github.io/poracleWiki/userguide/)"
+          },
+          {
+            "name": "***How far can I walk in metres/minutes? According to the web...***",
+            "value": "`Meters | Fast | Moderate | Easy Walk \n 1000      7       10         13 \n 2000      14      20         25 \n 3000      21      30         38 \n 4000      28      40         50 \n 5000      35      50         63`"
+          }
+        ]
+      }
+    }
+  }
+]

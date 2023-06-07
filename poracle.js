@@ -1,5 +1,3 @@
-require('./src/util/generateData.js').update().then(() =>
-{
-	require('./src/app.js')
-})
-
+require('./src/util/generateData').update()
+	.then(() => require('./src/util/koji').getKojiFences())
+	.then(() => require('./src/app'))

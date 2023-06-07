@@ -367,6 +367,7 @@ class Monster extends Controller {
 						let found = false
 						for (const bestRank of bestRanks) {
 							if (bestRank.cp === details.cp && bestRank.rank === details.rank) {
+								// Probably forcing this to an int would simplify in-memory monster matching
 								bestRank.caps.push(cap)
 								found = true
 								break
@@ -425,6 +426,19 @@ class Monster extends Controller {
 					ping: '',
 					pvp_ranking_worst: 100,
 				}] : await this.monsterWhoCares(data)
+
+				if (this.config.tuning.debugFastMonsters) {
+					const whoCares2 = data.poracleTest ? [{
+						...data.poracleTest,
+						clean: false,
+						ping: '',
+						pvp_ranking_worst: 100,
+					}] : await this.monsterWhoCaresInMemory(data)
+
+					if (whoCares.length !== whoCares2.length) {
+						this.log.warn(`${data.encounter_id}: DB Len=${whoCares.length} Mem=${whoCares2.length} Missing = ${JSON.stringify(whoCares.filter((x) => !whoCares2.some((m) => m.id === x.id)))}`)
+					}
+				}
 			}
 
 			let hrend = process.hrtime(hrstart)
@@ -483,17 +497,20 @@ class Monster extends Controller {
 						}
 					}
 
-					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
-					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
-					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, data.shinyPossible && this.config.general.requestShinyImages)
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, 0, data.shinyPossible && this.config.general.requestShinyImages)
 
 					const geoResult = await this.getAddress({
 						lat: data.latitude,
 						lon: data.longitude,
 					})
+
 					const jobs = []
 
 					require('./common/nightTime').setNightTime(data, disappearTime)
+
+					data.intersection = await this.obtainIntersection(data)
 
 					if (data.seen_type) {
 						switch (data.seen_type) {

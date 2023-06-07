@@ -80,7 +80,7 @@ module.exports = async (fastify, options, next) => {
 
 		const insert = insertReq.map((row) => {
 			const lureId = +row.lure_id
-			if (![0, 501, 502, 503, 504, 505].includes(lureId)) {
+			if (![0, 501, 502, 503, 504, 505, 506].includes(lureId)) {
 				throw new Error('Unrecognised lure_id value')
 			}
 			return {
