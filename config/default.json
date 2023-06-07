@@ -81,7 +81,7 @@
       "rdmURL": "",                // https://myRDM.com/
       "reactMapURL": "",           // https://myReactMap.com/
       "rocketMadURL": "",           // https://myRocketMAD.com/
-      "unknownQuestString": "" // What to tell users when task for quest is unknown
+      "unknownQuestString": "Unknown Task" // What to tell users when task for quest is unknown
   },
   //
   // Configuration for the user reconciliation/role check function

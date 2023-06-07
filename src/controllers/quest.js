@@ -7,7 +7,6 @@ const geoTz = require('geo-tz')
 const moment = require('moment-timezone')
 const Controller = require('./controller')
 const { log } = require('../lib/logger')
-const { translations } = require('../lib/GameData')
 
 class Quest extends Controller {
 	async questWhoCares(data) {
@@ -134,9 +133,9 @@ class Quest extends Controller {
 				return []
 			}
 
-			data.questStringEng = await this.getQuest(data)
+			data.questString = await this.getQuest(data, this.config.general.locale)
 			data.rewardData = await this.getReward(logReference, data)
-			this.log.debug(`${logReference} Quest: data.questString: ${data.questStringEng}, data.rewardData: ${JSON.stringify(data.rewardData)}`)
+			this.log.debug(`${logReference} Quest: data.questString: ${data.questString}, data.rewardData: ${JSON.stringify(data.rewardData)}`)
 			data.dustAmount = data.rewardData.dustAmount
 			data.isShiny = data.rewardData.monsters.length > 0 ? data.rewardData.monsters[0].shiny : 0
 			data.shinyPossible = data.rewardData.monsters.length > 0 ? this.shinyPossible.isShinyPossible(data.rewardData.monsters[0].pokemonId, data.rewardData.monsters[0].formId) : false
@@ -246,8 +245,9 @@ class Quest extends Controller {
 				const translator = this.translatorFactory.Translator(language)
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
-
-				data.questString = translator.translate(data.questStringEng)
+				if (language !== this.config.general.locale) {
+					data.questString = await getQuest(data, language);
+				}
 
 				for (const monster of data.rewardData.monsters) {
 					let monsterName
@@ -381,13 +381,13 @@ class Quest extends Controller {
 		}
 	}
 
-	async getQuest(item) {
+	async getQuest(item, language) {
 		let str
 		if (item.title) {
 			item.quest_title = item.title
 		}
 		const questinfo = `quest_title_${item.title}`
-		const questTitle = translations[this.config.general.locale].questTitles
+		const questTitle = this.GameData.translations[language].questTitles
 		if (questinfo) {
 			try {
 				str = questTitle[questinfo]
