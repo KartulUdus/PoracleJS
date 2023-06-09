@@ -117,7 +117,7 @@ class FortUpdate extends Controller {
 
 			data.fortType = data.new?.type || data.old?.type || 'unknown'
 			// If this is a change from an empty fort (eg after a GMO), treat it as 'new' in poracle
-			if (data.change_type === 'edit' && !(data.old?.name || data.old?.description || data.old?.image_url)) {
+			if (data.change_type === 'edit' && !(data.old?.name || data.old?.description)) {
 				data.change_type = 'new'
 				data.edit_types = null
 			}
@@ -125,7 +125,7 @@ class FortUpdate extends Controller {
 			data.changeTypes = []
 			if (data.edit_types) data.changeTypes.push(...data.edit_types)
 			data.changeTypes.push(data.change_type)
-			data.isEmpty = !(data.new?.name || data.new?.description || data.new?.image_url || data.old?.name)
+			data.isEmpty = !(data.new?.name || data.new?.description || data.old?.name)
 
 			// helpers
 
