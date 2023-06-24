@@ -14,6 +14,35 @@ function format(str, args) {
 	return newStr
 }
 
+function createPermissionOverwrites(guild, roleSettings, args) {
+	return Promise.all(roleSettings.map(async (role) => {
+		const allowed = []
+		const deny = []
+		const roleId = await guild.roles.cache.get(format(role.id, args))
+		if (role.view) {
+			allowed.push('VIEW_CHANNEL')
+		} else if (role.view === false) {
+			deny.push('VIEW_CHANNEL')
+		}
+		if (role.viewHistory) {
+			allowed.push('READ_MESSAGE_HISTORY')
+		} else if (role.viewHistory === false) {
+			deny.push('READ_MESSAGE_HISTORY')
+		}
+		if (role.send) {
+			allowed.push('SEND_MESSAGES')
+		} else if (role.send === false) {
+			deny.push('SEND_MESSAGES')
+		}
+		if (role.react) {
+			allowed.push('ADD_REACTIONS')
+		} else if (role.react === false) {
+			deny.push('ADD_REACTIONS')
+		}
+		return { id: roleId, allow: allowed, deny }
+	}))
+}
+
 exports.run = async (client, msg, [args]) => {
 	try {
 		if (!client.config.discord.admins.includes(msg.author.id)) return
@@ -75,7 +104,12 @@ exports.run = async (client, msg, [args]) => {
 
 		let categoryId
 		if (template.definition.category) {
-			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY' })
+			let categoryPermissionOverwrites = []
+			if (template.definition.roles) {
+				categoryPermissionOverwrites = await createPermissionOverwrites(guild, template.definition.roles, args)
+			}
+
+			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY', permissionOverwrites: categoryPermissionOverwrites })
 			categoryId = category.id
 		}
 
@@ -94,36 +128,8 @@ exports.run = async (client, msg, [args]) => {
 			const channelName = format(channelDefinition.channelName, args)
 
 			// add role permissions
-			let roleId
 			if (channelDefinition.roles) {
-				const roleOverwrites = []
-				for (const role of channelDefinition.roles) {
-					const allowed = []
-					const deny = []
-					roleId = await guild.roles.cache.get(format(role.id, args))
-					if (role.view) {
-						allowed.push('VIEW_CHANNEL')
-					} else if (role.view === false) {
-						deny.push('VIEW_CHANNEL')
-					}
-					if (role.viewHistory) {
-						allowed.push('READ_MESSAGE_HISTORY')
-					} else if (role.viewHistory === false) {
-						deny.push('READ_MESSAGE_HISTORY')
-					}
-					if (role.send) {
-						allowed.push('SEND_MESSAGES')
-					} else if (role.send === false) {
-						deny.push('SEND_MESSAGES')
-					}
-					if (role.react) {
-						allowed.push('ADD_REACTIONS')
-					} else if (role.react === false) {
-						deny.push('ADD_REACTIONS')
-					}
-					roleOverwrites.push({ id: roleId, allow: allowed, deny })
-				}
-				channelOptions.permissionOverwrites = roleOverwrites
+				channelOptions.permissionOverwrites = await createPermissionOverwrites(guild, channelDefinition.roles, args)
 			}
 
 			// create channel in discord
