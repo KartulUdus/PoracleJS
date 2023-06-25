@@ -3,14 +3,17 @@
     "name":"newSection",
     "definition":{
       "category":"{0} Pokemon",
+/*
+      "roles":[
+        {"id":"11111111111111111", "view": true, "viewHistory": true, "send": true, "react": true}
+      ],
+*/
       "channels":[
         {
           "channelName":"{0}-iv100",
 /*
           "roles":[
-            {
-              "id":"11111111111111111", "view": true, "viewHistory": true, "send": true, "react": true
-            }
+            {"id":"11111111111111111", "view": true, "viewHistory": true, "send": true, "react": true}
           ],
 */
           "topic": "Hundos for {0}",

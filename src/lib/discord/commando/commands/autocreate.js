@@ -104,11 +104,7 @@ exports.run = async (client, msg, [args]) => {
 
 		let categoryId
 		if (template.definition.category) {
-			let categoryPermissionOverwrites = []
-			if (template.definition.roles) {
-				categoryPermissionOverwrites = await createPermissionOverwrites(guild, template.definition.roles, args)
-			}
-
+			const categoryPermissionOverwrites = template.definition.roles ? await createPermissionOverwrites(guild, template.definition.roles, args) : []
 			const category = await guild.channels.create(format(template.definition.category, args), { type: 'GUILD_CATEGORY', permissionOverwrites: categoryPermissionOverwrites })
 			categoryId = category.id
 		}
