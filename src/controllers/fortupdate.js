@@ -127,6 +127,18 @@ class FortUpdate extends Controller {
 			data.changeTypes.push(data.change_type)
 			data.isEmpty = !(data.new?.name || data.new?.description || data.old?.name)
 
+			// clean everything
+
+			if (data.new) {
+				if (data.new.name) data.new.name = this.escapeJsonString(data.new.name)
+				if (data.new.description) data.new.description = this.escapeJsonString(data.new.description)
+			}
+
+			if (data.old) {
+				if (data.old.name) data.new.name = this.escapeJsonString(data.old.name)
+				if (data.old.description) data.new.description = this.escapeJsonString(data.old.description)
+			}
+
 			// helpers
 
 			data.isEdit = data.change_type === 'edit'
