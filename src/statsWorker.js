@@ -53,7 +53,6 @@ async function receiveCommand(cmd) {
 		log.debug(`Worker ${workerId}: receiveCommand ${cmd.type}`)
 		if (cmd.type === 'heapdump') {
 			writeHeapSnapshot()
-			return
 		}
 	} catch (err) {
 		log.error(`Worker ${workerId}: receiveCommand failed to process command`, err)

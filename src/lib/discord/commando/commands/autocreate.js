@@ -23,13 +23,13 @@ exports.run = async (client, msg, [args]) => {
 			return await msg.author.send(client.translator.translate('Please run commands in Direct Messages'))
 		}
 
-    for (const commandText of msg.content.split('\n')) {
-      args = commandText.slice(client.config.discord.prefix.length)
-        .trim()
-        .match(/(".*?"|[^"\s]+)+(?=\s*|\s*$)/g)
-        .map((x) => x.replace(/"/g, ''))
-      args.shift()
-    }
+		for (const commandText of msg.content.split('\n')) {
+			args = commandText.slice(client.config.discord.prefix.length)
+				.trim()
+				.match(/(".*?"|[^"\s]+)+(?=\s*|\s*$)/g)
+				.map((x) => x.replace(/"/g, ''))
+			args.shift()
+		}
 
 		let { guild } = msg
 
@@ -77,7 +77,7 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		// switch underscores back in so works for substitution later
-    const subArgs = []
+		const subArgs = []
 		for (let x = 0; x < args.length; x++) {
 			subArgs[x] = args[x].replace(/ /g, '_')
 		}
@@ -97,19 +97,19 @@ exports.run = async (client, msg, [args]) => {
 				for (const role of template.definition.category.roles) {
 					const allowed = []
 					const deny = []
-          const roleNames = guild.roles.cache.map(r => r.name)
-          const roleIds = guild.roles.cache.map(r => r.id)
-          for (let x = 0; x < roleNames.length; x++) {
-            if ((format(role.name, args)) === roleNames[x]) {
-              roleId = await guild.roles.cache.get(roleIds[x])
-            }
-          }
-          if (!roleId) {
-            roleId = await guild.roles.create({
-              name: (format(role.name, args)),
-              permissions: []
-            })
-          }
+					const roleNames = guild.roles.cache.map((r) => r.name)
+					const roleIds = guild.roles.cache.map((r) => r.id)
+					for (let x = 0; x < roleNames.length; x++) {
+						if ((format(role.name, args)) === roleNames[x]) {
+							roleId = await guild.roles.cache.get(roleIds[x])
+						}
+					}
+					if (!roleId) {
+						roleId = await guild.roles.create({
+							name: (format(role.name, args)),
+							permissions: [],
+						})
+					}
 					if (role.view) {
 						allowed.push('VIEW_CHANNEL')
 					} else if (role.view === false) {
@@ -160,107 +160,107 @@ exports.run = async (client, msg, [args]) => {
 					} else if (role.externalStickers === false) {
 						deny.push('USE_EXTERNAL_STICKERS')
 					}
-          if (role.createPublicThreads) {
+					if (role.createPublicThreads) {
 						allowed.push('CREATE_PUBLIC_THREADS')
 					} else if (role.createPublicThreads === false) {
 						deny.push('CREATE_PUBLIC_THREADS')
 					}
-          if (role.createPrivateThreads) {
+					if (role.createPrivateThreads) {
 						allowed.push('CREATE_PRIVATE_THREADS')
 					} else if (role.createPrivateThreads === false) {
 						deny.push('CREATE_PRIVATE_THREADS')
 					}
-          if (role.sendThreads) {
+					if (role.sendThreads) {
 						allowed.push('SEND_MESSAGES_IN_THREADS')
 					} else if (role.sendThreads === false) {
 						deny.push('SEND_MESSAGES_IN_THREADS')
 					}
-          if (role.slashCommands) {
+					if (role.slashCommands) {
 						allowed.push('USE_APPLICATION_COMMANDS')
 					} else if (role.slashCommands === false) {
 						deny.push('USE_APPLICATION_COMMANDS')
 					}
-          if (role.connect) {
+					if (role.connect) {
 						allowed.push('CONNECT')
 					} else if (role.connect === false) {
 						deny.push('CONNECT')
 					}
-          if (role.speak) {
+					if (role.speak) {
 						allowed.push('SPEAK')
 					} else if (role.speak === false) {
 						deny.push('SPEAK')
 					}
-          if (role.autoMic) {
+					if (role.autoMic) {
 						allowed.push('USE_VAD')
 					} else if (role.autoMic === false) {
 						deny.push('USE_VAD')
 					}
-          if (role.stream) {
+					if (role.stream) {
 						allowed.push('STREAM')
 					} else if (role.stream === false) {
 						deny.push('STREAM')
 					}
-/*           if (role.soundboard) {
+					/*           if (role.soundboard) {
 						allowed.push('USE_SOUNDBOARD')
 					} else if (role.soundboard === false) {
 						deny.push('USE_SOUNDBOARD')
-					} */ //future use, v9 API
-          if (role.vcActivities) {
+					} */ // future use, v9 API
+					if (role.vcActivities) {
 						allowed.push('START_EMBEDDED_ACTIVITIES')
 					} else if (role.vcActivities === false) {
 						deny.push('START_EMBEDDED_ACTIVITIES')
 					}
-          if (role.prioritySpeaker) {
+					if (role.prioritySpeaker) {
 						allowed.push('PRIORITY_SPEAKER')
 					} else if (role.prioritySpeaker === false) {
 						deny.push('PRIORITY_SPEAKER')
 					}
-          if (role.createInvite) {
+					if (role.createInvite) {
 						allowed.push('CREATE_INSTANT_INVITE')
 					} else if (role.createInvite === false) {
 						deny.push('CREATE_INSTANT_INVITE')
 					}
-          if (role.channels) {
+					if (role.channels) {
 						allowed.push('MANAGE_CHANNELS')
 					} else if (role.channels === false) {
 						deny.push('MANAGE_CHANNELS')
 					}
-          if (role.messages) {
+					if (role.messages) {
 						allowed.push('MANAGE_MESSAGES')
 					} else if (role.messages === false) {
 						deny.push('MANAGE_MESSAGES')
 					}
-          if (role.roles) {
+					if (role.roles) {
 						allowed.push('MANAGE_ROLES')
 					} else if (role.roles === false) {
 						deny.push('MANAGE_ROLES')
 					}
-          if (role.webhooks) {
+					if (role.webhooks) {
 						allowed.push('MANAGE_WEBHOOKS')
 					} else if (role.webhooks === false) {
 						deny.push('MANAGE_WEBHOOKS')
 					}
-          if (role.threads) {
+					if (role.threads) {
 						allowed.push('MANAGE_THREADS')
 					} else if (role.threads === false) {
 						deny.push('MANAGE_THREADS')
 					}
-          if (role.events) {
+					if (role.events) {
 						allowed.push('MANAGE_EVENTS')
 					} else if (role.events === false) {
 						deny.push('MANAGE_EVENTS')
 					}
-          if (role.mute) {
+					if (role.mute) {
 						allowed.push('MUTE_MEMBERS')
 					} else if (role.mute === false) {
 						deny.push('MUTE_MEMBERS')
 					}
-          if (role.deafen) {
+					if (role.deafen) {
 						allowed.push('DEAFEN_MEMBERS')
 					} else if (role.deafen === false) {
 						deny.push('DEAFEN_MEMBERS')
 					}
-          if (role.move) {
+					if (role.move) {
 						allowed.push('MOVE_MEMBERS')
 					} else if (role.move === false) {
 						deny.push('MOVE_MEMBERS')
@@ -277,12 +277,12 @@ exports.run = async (client, msg, [args]) => {
 		}
 
 		for (const channelDefinition of template.definition.channels) {
-      const channelOptions = {}
-      if (channelDefinition.channelType === "text") {
-        channelOptions.type = 'GUILD_TEXT'
-      } else if (channelDefinition.channelType === "voice") {
-        channelOptions.type = 'GUILD_VOICE'
-      }
+			const channelOptions = {}
+			if (channelDefinition.channelType === 'text') {
+				channelOptions.type = 'GUILD_TEXT'
+			} else if (channelDefinition.channelType === 'voice') {
+				channelOptions.type = 'GUILD_VOICE'
+			}
 			if (categoryId) {
 				channelOptions.parent = categoryId
 			}
@@ -300,19 +300,19 @@ exports.run = async (client, msg, [args]) => {
 				for (const role of channelDefinition.roles) {
 					const allowed = []
 					const deny = []
-          const roleNames = guild.roles.cache.map(r => r.name)
-          const roleIds = guild.roles.cache.map(r => r.id)
-          for (let x = 0; x < roleNames.length; x++) {
-            if ((format(role.name, args)) === roleNames[x]) {
-              roleId = await guild.roles.cache.get(roleIds[x])
-            }
-          }
-          if (!roleId) {
-            roleId = await guild.roles.create({
-              name: (format(role.name, args)),
-              permissions: []
-            })
-          }
+					const roleNames = guild.roles.cache.map((r) => r.name)
+					const roleIds = guild.roles.cache.map((r) => r.id)
+					for (let x = 0; x < roleNames.length; x++) {
+						if ((format(role.name, args)) === roleNames[x]) {
+							roleId = await guild.roles.cache.get(roleIds[x])
+						}
+					}
+					if (!roleId) {
+						roleId = await guild.roles.create({
+							name: (format(role.name, args)),
+							permissions: [],
+						})
+					}
 					if (role.view) {
 						allowed.push('VIEW_CHANNEL')
 					} else if (role.view === false) {
@@ -363,107 +363,107 @@ exports.run = async (client, msg, [args]) => {
 					} else if (role.externalStickers === false) {
 						deny.push('USE_EXTERNAL_STICKERS')
 					}
-          if (role.createPublicThreads) {
+					if (role.createPublicThreads) {
 						allowed.push('CREATE_PUBLIC_THREADS')
 					} else if (role.createPublicThreads === false) {
 						deny.push('CREATE_PUBLIC_THREADS')
 					}
-          if (role.createPrivateThreads) {
+					if (role.createPrivateThreads) {
 						allowed.push('CREATE_PRIVATE_THREADS')
 					} else if (role.createPrivateThreads === false) {
 						deny.push('CREATE_PRIVATE_THREADS')
 					}
-          if (role.sendThreads) {
+					if (role.sendThreads) {
 						allowed.push('SEND_MESSAGES_IN_THREADS')
 					} else if (role.sendThreads === false) {
 						deny.push('SEND_MESSAGES_IN_THREADS')
 					}
-          if (role.slashCommands) {
+					if (role.slashCommands) {
 						allowed.push('USE_APPLICATION_COMMANDS')
 					} else if (role.slashCommands === false) {
 						deny.push('USE_APPLICATION_COMMANDS')
 					}
-          if (role.connect) {
+					if (role.connect) {
 						allowed.push('CONNECT')
 					} else if (role.connect === false) {
 						deny.push('CONNECT')
 					}
-          if (role.speak) {
+					if (role.speak) {
 						allowed.push('SPEAK')
 					} else if (role.speak === false) {
 						deny.push('SPEAK')
 					}
-          if (role.autoMic) {
+					if (role.autoMic) {
 						allowed.push('USE_VAD')
 					} else if (role.autoMic === false) {
 						deny.push('USE_VAD')
 					}
-          if (role.stream) {
+					if (role.stream) {
 						allowed.push('STREAM')
 					} else if (role.stream === false) {
 						deny.push('STREAM')
 					}
-/*           if (role.soundboard) {
+					/*           if (role.soundboard) {
 						allowed.push('USE_SOUNDBOARD')
 					} else if (role.soundboard === false) {
 						deny.push('USE_SOUNDBOARD')
-					} */ //future use, v9 API
-          if (role.vcActivities) {
+					} */ // future use, v9 API
+					if (role.vcActivities) {
 						allowed.push('START_EMBEDDED_ACTIVITIES')
 					} else if (role.vcActivities === false) {
 						deny.push('START_EMBEDDED_ACTIVITIES')
 					}
-          if (role.prioritySpeaker) {
+					if (role.prioritySpeaker) {
 						allowed.push('PRIORITY_SPEAKER')
 					} else if (role.prioritySpeaker === false) {
 						deny.push('PRIORITY_SPEAKER')
 					}
-          if (role.createInvite) {
+					if (role.createInvite) {
 						allowed.push('CREATE_INSTANT_INVITE')
 					} else if (role.createInvite === false) {
 						deny.push('CREATE_INSTANT_INVITE')
 					}
-          if (role.channels) {
+					if (role.channels) {
 						allowed.push('MANAGE_CHANNELS')
 					} else if (role.channels === false) {
 						deny.push('MANAGE_CHANNELS')
 					}
-          if (role.messages) {
+					if (role.messages) {
 						allowed.push('MANAGE_MESSAGES')
 					} else if (role.messages === false) {
 						deny.push('MANAGE_MESSAGES')
 					}
-          if (role.roles) {
+					if (role.roles) {
 						allowed.push('MANAGE_ROLES')
 					} else if (role.roles === false) {
 						deny.push('MANAGE_ROLES')
 					}
-          if (role.webhooks) {
+					if (role.webhooks) {
 						allowed.push('MANAGE_WEBHOOKS')
 					} else if (role.webhooks === false) {
 						deny.push('MANAGE_WEBHOOKS')
 					}
-          if (role.threads) {
+					if (role.threads) {
 						allowed.push('MANAGE_THREADS')
 					} else if (role.threads === false) {
 						deny.push('MANAGE_THREADS')
 					}
-          if (role.events) {
+					if (role.events) {
 						allowed.push('MANAGE_EVENTS')
 					} else if (role.events === false) {
 						deny.push('MANAGE_EVENTS')
 					}
-          if (role.mute) {
+					if (role.mute) {
 						allowed.push('MUTE_MEMBERS')
 					} else if (role.mute === false) {
 						deny.push('MUTE_MEMBERS')
 					}
-          if (role.deafen) {
+					if (role.deafen) {
 						allowed.push('DEAFEN_MEMBERS')
 					} else if (role.deafen === false) {
 						deny.push('DEAFEN_MEMBERS')
 					}
-          if (role.move) {
+					if (role.move) {
 						allowed.push('MOVE_MEMBERS')
 					} else if (role.move === false) {
 						deny.push('MOVE_MEMBERS')
@@ -483,7 +483,7 @@ exports.run = async (client, msg, [args]) => {
 				continue
 			}
 
-			const controlType = channelDefinition.controlType
+			const { controlType } = channelDefinition
 			await msg.reply(`>> Adding control type: ${controlType}`)
 
 			// register channel in poracle

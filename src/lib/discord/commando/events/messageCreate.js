@@ -53,9 +53,9 @@ module.exports = async (client, msg) => {
 
 				// Convert to lower case, translate back to english, and substitute _ for spaces
 
-        args = args.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase()
-          .replace(/_/g, ' '), true)
-          .toLowerCase())
+				args = args.map((arg) => client.translatorFactory.reverseTranslateCommand(arg.toLowerCase()
+					.replace(/_/g, ' '), true)
+					.toLowerCase())
 				const command = args.shift()
 
 				// eslint-disable-next-line no-continue
