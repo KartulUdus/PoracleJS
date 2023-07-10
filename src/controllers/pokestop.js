@@ -120,15 +120,7 @@ class Invasion extends Controller {
 
 			data.gender = 0
 			data.gruntName = ''
-			if (data.displayTypeId = 7) {
-				data.gruntTypeColor = 'B3CA78'
-			} else if (data.displayTypeId = 8) {
-				data.gruntTypeColor = 'F9E418'
-			} else if (data.displayTypeId = 9) {
-				data.gruntTypeColor = '03AEB6'
-			} else {
-				data.gruntTypeColor = 'BABABA'
-			}
+			data.gruntTypeColor = 'BABABA'
 			data.gruntRewards = ''
 			data.gruntRewardsList = {}
 
