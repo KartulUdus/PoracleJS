@@ -142,16 +142,10 @@ class Invasion extends Controller {
 			// Event invasions
 			if (((data.grunt_type === 0) || !data.grunt_type) && (data.displayTypeId >= 7)) {
 				data.gender = 0
-				data.gruntName = data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId] ? this.GameData.utilData.pokestopEvent[data.displayTypeId] : ''
-				data.gruntType = data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId] ? this.GameData.utilData.pokestopEvent[data.displayTypeId].toLowerCase() : ''
+				data.gruntName = data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId].name ? this.GameData.utilData.pokestopEvent[data.displayTypeId].name : ''
+				data.gruntType = data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId].name ? this.GameData.utilData.pokestopEvent[data.displayTypeId].name.toLowerCase() : ''
 				data.gruntRewards = ''
-				if (data.displayTypeId === 7) {
-					data.gruntTypeColor = 'F9E418'
-				} else if (data.displayTypeId === 8) {
-					data.gruntTypeColor = 'B3CA78'
-				} else if (data.displayTypeId === 9) {
-					data.gruntTypeColor = '03AEB6'
-				}
+				data.gruntTypeColor = data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId].color ? this.GameData.utilData.pokestopEvent[data.displayTypeId].color : 'BABABA'
 			}
 
 			const whoCares = data.poracleTest ? [{
@@ -225,7 +219,8 @@ class Invasion extends Controller {
 						require('./common/weather').setGameWeather(data, translator, this.GameData, this.emojiLookup, platform, currentCellWeather)
 
 						if (((data.grunt_type === 0) || !data.grunt_type) && (data.displayTypeId >= 7)) {
-							data.gruntName = translator.translate(data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId] ? this.GameData.utilData.pokestopEvent[data.displayTypeId] : '')
+							data.gruntName = translator.translate(data.displayTypeId && this.GameData.utilData.pokestopEvent[data.displayTypeId].name ? this.GameData.utilData.pokestopEvent[data.displayTypeId].name : '')
+							data.gruntTypeEmoji = translator.translate(this.emojiLookup.lookup(this.GameData.utilData.pokestopEvent[data.displayTypeId].emoji, platform))
 						}
 
 						// full build
