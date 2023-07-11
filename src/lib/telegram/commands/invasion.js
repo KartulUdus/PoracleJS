@@ -1,7 +1,7 @@
 const PoracleTelegramMessage = require('../poracleTelegramMessage')
 const PoracleTelegramState = require('../poracleTelegramState')
 
-const commandLogic = require('../../poracleMessage/commands/invasion')
+const commandLogic = require('../../poracleMessage/commands/incident')
 
 module.exports = async (ctx) => {
 	const { controller, command } = ctx.state
