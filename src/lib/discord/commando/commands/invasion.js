@@ -1,7 +1,7 @@
 const PoracleDiscordMessage = require('../../poracleDiscordMessage')
 const PoracleDiscordState = require('../../poracleDiscordState')
 
-const commandLogic = require('../../../poracleMessage/commands/invasion')
+const commandLogic = require('../../../poracleMessage/commands/incident')
 
 exports.run = async (client, msg, command) => {
 	const pdm = new PoracleDiscordMessage(client, msg)
