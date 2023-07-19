@@ -2,17 +2,86 @@
   {
     "name":"newSection",
     "definition":{
-      "category":"{0} Pokemon",
+      "category":{
+        "categoryName":"{0} Pokemon",
+        "roles":[
+          {
+            "name":"{0}",
+            "view": true,
+            // Text
+            "viewHistory": true,
+            "send": false,
+            "react": true,
+            "pingEveryone": false,
+            "embedLinks": false,
+            "attachFiles": false,
+            "sendTTS": false,
+            "externalEmoji": false,
+            "externalStickers": false,
+            "createPublicThreads": false,
+            "createPrivateThreads": false,
+            "sendThreads": false,
+            "slashCommands": false,
+            // Voice
+            "connect": false,
+            "speak": false,
+            "autoMic": false,
+            "stream": false,
+            "vcActivities": false,
+            "prioritySpeaker": false,
+            // Admin
+            "createInvite": false,
+            "channels": false,
+            "messages": false,
+            "roles": false,
+            "webhooks": false,
+            "threads": false,
+            "events": false,
+            "mute": false,
+            "deafen": false,
+            "move": false
+          },
+          {
+            "name":"@everyone",
+            "view": false
+          }
+        ]
+      },
       "channels":[
         {
-          "channelName":"{0}-iv100",
-/*
+          "channelName":"{0}-chatroom",
+          "channelType":"text",
+          "topic": "Chat for {0} users",
           "roles":[
             {
-              "id":"11111111111111111", "view": true, "viewHistory": true, "send": true, "react": true
+              "name":"{0}",
+              "view": true,
+              "viewHistory": true,
+              "send": true,
+              "react": true,
+              "externalEmoji": true
+            },
+            {
+              "name":"{1}",
+              "view": true,
+              "viewHistory": true,
+              "send": false,
+              "react": true
+            },
+            {
+              "name":"@everyone",
+              "view": false
             }
-          ],
-*/
+          ]
+        },
+        {
+          "channelName":"{0}-voicechat",
+          "channelType":"voice",
+          "topic": "Voice for {0}"
+        },
+        {
+          "channelName":"{0}-iv100",
+          "channelType":"text",
           "topic": "Hundos for {0}",
           "controlType":"bot",
           "commands":[
@@ -22,6 +91,7 @@
         },
         {
           "channelName":"{0}-UltraRares",
+          "channelType":"text",
           "controlType":"webhook",
           "commands":[
             "area add {0}",
@@ -30,6 +100,7 @@
         },
         {
           "channelName":"{0}-Raids",
+          "channelType":"text",
           "controlType":"webhook",
           "commands":[
             "area add {0}",
