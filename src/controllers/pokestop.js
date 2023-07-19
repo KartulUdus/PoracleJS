@@ -189,7 +189,7 @@ class Invasion extends Controller {
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
 
-					require('./common/nightTime').setNightTime(data, disappearTime)
+					require('./common/nightTime').setNightTime(data, disappearTime, this.config)
 
 					data.intersection = await this.obtainIntersection(data)
 
@@ -197,7 +197,7 @@ class Invasion extends Controller {
 					const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
 					const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
 
-					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'displayTypeId'])
+					await this.getStaticMapUrl(logReference, data, 'pokestop', ['latitude', 'longitude', 'imgUrl', 'gruntTypeId', 'displayTypeId', 'style'])
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
