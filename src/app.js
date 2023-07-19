@@ -100,7 +100,7 @@ if (config.discord.enabled) {
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
-	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true)
+	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true, query)
 }
 
 if (config.telegram.enabled) {

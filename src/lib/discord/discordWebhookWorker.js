@@ -11,7 +11,7 @@ const hookRegex = /(?:https?:\/\/|www\.)(?:\([-A-Z0-9+&@#/%=~_|$?!:,.]*\)|[-A-Z0
 const noop = () => {}
 
 class DiscordWebhookWorker {
-	constructor(config, logs, rehydrateTimeouts) {
+	constructor(config, logs, rehydrateTimeouts, query) {
 		this.config = config
 		this.logs = logs
 		this.busy = true
@@ -21,6 +21,7 @@ class DiscordWebhookWorker {
 		this.webhookQueue = []
 		this.rehydrateTimeouts = rehydrateTimeouts
 		this.webhookTimeouts = new NodeCache()
+		this.query = query
 
 		this.queueProcessor = new FairPromiseQueue(this.webhookQueue, this.config.tuning.concurrentDiscordWebhookConnections, ((t) => t.target))
 	}
@@ -160,6 +161,7 @@ class DiscordWebhookWorker {
 			})
 
 			if (res.status < 200 || res.status > 299) {
+				await this.query.incrementQuery('humans', { id: data.target }, 'fails', 1)
 				this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Got ${res.status} ${res.statusText}`)
 				this.logs.discord.warn(`${logReference}: ${JSON.stringify(data.message)}`)
 			} else {
