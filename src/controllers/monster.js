@@ -638,6 +638,7 @@ class Monster extends Controller {
 										form: data.form,
 										name: monster.name,
 										formName: monster.form.name,
+										fullName: data.fullName,
 										iv: data.iv,
 										cp: data.cp,
 										latitude: data.latitude,

@@ -185,6 +185,10 @@ function lureRowText(config, translator, GameData, lure) {
 	return `${translator.translate('Lure type')}: **${translator.translate(typeText, true)}**${lure.distance ? ` | ${translator.translate('distance')}: ${lure.distance}m` : ''} ${standardText(config, translator, lure)}`
 }
 
+function fortUpdateRowText(config, translator, GameData, fortUpdate) {
+	return `${translator.translate('Fort updates')}: **${translator.translate(fortUpdate.fort_type, true)}**${fortUpdate.distance ? ` | ${translator.translate('distance')}: ${fortUpdate.distance}m` : ''} ${fortUpdate.change_types}${fortUpdate.include_empty ? ' including empty changes' : ''} ${standardText(config, translator, fortUpdate)}`
+}
+
 function currentAreaText(translator, geofence, areas) {
 	if (areas.length) {
 		return `${translator.translate('You are currently set to receive alarms in')} ${geofence.filter((x) => areas.includes(x.name.toLowerCase())).map((x) => x.name).join(', ')}`
@@ -200,6 +204,7 @@ exports.invasionRowText = invasionRowText
 exports.nestRowText = nestRowText
 exports.lureRowText = lureRowText
 exports.gymRowText = gymRowText
+exports.fortUpdateRowText = fortUpdateRowText
 exports.currentAreaText = currentAreaText
 
 exports.run = async (client, msg, args, options) => {
@@ -234,6 +239,7 @@ exports.run = async (client, msg, args, options) => {
 		const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 		const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
 		const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
+		const forts = await client.query.selectAllQuery('forts', { id: target.id, profile_no: currentProfileNo })
 		const profile = await client.query.selectOneQuery('profiles', { id: target.id, profile_no: currentProfileNo })
 
 		const blocked = human.blocked_alerts ? JSON.parse(human.blocked_alerts) : []
@@ -373,6 +379,20 @@ exports.run = async (client, msg, args, options) => {
 				for (const gym of gyms) {
 					message = message.concat('\n', await gymRowText(client.config, translator, client.GameData, gym, client.scannerQuery))
 				}
+			}
+		}
+
+		if (!client.config.general.disableFortUpdate) {
+			if (blocked.includes('forts')) {
+				message = message.concat('\n\n', translator.translate('You do not have permission to track fort changes'))
+			} else {
+				if (nests.length) {
+					message = message.concat('\n\n', translator.translate('You\'re tracking the following fort changes:'), '\n')
+				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any fort changes'))
+
+				forts.forEach((fort) => {
+					message = message.concat('\n', fortUpdateRowText(client.config, translator, client.GameData, fort))
+				})
 			}
 		}
 
