@@ -323,7 +323,7 @@ class Weather extends Controller {
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 
-			require('./common/nightTime').setNightTime(data, moment())
+			require('./common/nightTime').setNightTime(data, moment(), this.config)
 
 			if (pregenerateTile && !this.config.weather.showAlteredPokemonStaticMap) {
 				const tileServerOptions = this.tileserverPregen.getConfigForTileType('weather')
