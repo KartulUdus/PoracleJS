@@ -80,6 +80,7 @@ class FortUpdate extends Controller {
 			data.longitude = data.new?.location?.lon || data.old?.location?.lon
 			data.latitude = data.new?.location?.lat || data.old?.location?.lat
 
+			data.fortType = data.new?.type || data.old?.type || 'unknown'
 			Object.assign(data, this.config.general.dtsDictionary)
 			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
 			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
@@ -88,7 +89,7 @@ class FortUpdate extends Controller {
 				data.rdmUrl = `${this.config.general.rdmURL}${!this.config.general.rdmURL.endsWith('/') ? '/' : ''}@${data.latitude}/@${data.longitude}/18`
 			}
 			if (this.config.general.reactMapURL) {
-				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/${data.fortType}/${data.id}/18`
+				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/${data.fortType}s/${data.id}/18`
 			}
 			if (this.config.general.rocketMadURL) {
 				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
@@ -115,7 +116,6 @@ class FortUpdate extends Controller {
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
 
-			data.fortType = data.new?.type || data.old?.type || 'unknown'
 			// If this is a change from an empty fort (eg after a GMO), treat it as 'new' in poracle
 			if (data.change_type === 'edit' && !(data.old?.name || data.old?.description)) {
 				data.change_type = 'new'
