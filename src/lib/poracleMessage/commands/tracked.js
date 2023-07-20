@@ -386,7 +386,7 @@ exports.run = async (client, msg, args, options) => {
 			if (blocked.includes('forts')) {
 				message = message.concat('\n\n', translator.translate('You do not have permission to track fort changes'))
 			} else {
-				if (nests.length) {
+				if (forts.length) {
 					message = message.concat('\n\n', translator.translate('You\'re tracking the following fort changes:'), '\n')
 				} else message = message.concat('\n\n', translator.translate('You\'re not tracking any fort changes'))
 
