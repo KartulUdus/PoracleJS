@@ -1,71 +1,52 @@
 {
-    "grid": [
+    "style": "osm-bright",
+    "latitude": #if(isEditLocation): #(map_latitude) #else: #(latitude) #endif,
+    "longitude": #if(isEditLocation): #(map_longitude) #else: #(longitude) #endif,
+    "zoom": #if(zoom != nil && isEditLocation): #(zoom) #else: 17.5 #endif,
+    "width": 1000,
+    "height": 500,
+    "scale": 1,
+    "markers": [
+    #if(isEditLocation):
+            {
+                #if(fortType == "pokestop"):
+                    "url": "https://github.com/ccev/stopwatcher-icons/raw/master/tileserver/stop_gray.png",
+                #else:
+                    "url": "https://github.com/ccev/stopwatcher-icons/raw/master/tileserver/gym_gray.png",
+                #endif
+                "latitude": #(oldLatitude),
+                "longitude": #(oldLongitude),
+                "width": 48,
+                "height": 48,
+                "y_offset": -24
+            },
+    #elseif(nearbyStops != nil):
+        #for(stop in nearbyStops):
         {
-            "direction": "first",
-            "maps": [
-                {
-                    "direction": "first",
-                    "map": {
-                        "style": "osm-bright",
-                        "latitude": #(lat),
-                        "longitude": #(lon),
-                        "zoom": 16,
-                        "width": 350,
-                        "height": 250,
-                        "scale": 2,
-                        "markers": [
-                            {
-                                "url": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/pokemon_icon_#pad(id, 3)_#if(form > 0):#(form)#else:00#endif.png",
-                                "latitude": #(lat),
-                                "longitude": #(lon),
-                                "width": 20,
-                                "height": 20
-                            }
-                        ],
-                        "circles": [
-                            {
-                                "fill_color": "rgba(255,255,255,0.6)",
-                                "stroke_color": "\#C7C7C7",
-                                "stroke_width": 1,
-                                "latitude": #(lat),
-                                "longitude": #(lon),
-                                "radius": 40
-                            }
-                        ]
-                    }    
-                },
-                {
-                    "direction": "right",
-                    "map": {
-                        "style": "mapbox-sattelite",
-                        "latitude": #(lat),
-                        "longitude": #(lon),
-                        "zoom": 18,
-                        "width": 400,
-                        "height": 500,
-                        "scale": 1,
-                        "markers": [
-                            {
-                                "url": "https://raw.githubusercontent.com/whitewillem/PogoAssets/resized/icons_large/pokemon_icon_#pad(id, 3)_#if(form > 0):#(form)#else:00#endif.png",
-                                "latitude": #(lat),
-                                "longitude": #(lon),
-                                "width": 60,
-                                "height": 60
-                            }
-                        ],
-                        "circles": [
-                            {
-                                "fill_color": "rgba(255,255,255,0.4)",
-                                "stroke_color": "rgba(255,255,255,0.25)",
-                                "stroke_width": 1,
-                                "latitude": #(lat),
-                                "longitude": #(lon),
-                                "radius": 40
-                            }
-                        ]
-                    }
-                }
-            ]
+            #if(stop.type == "gym"):
+                "url": "https://raw.githubusercontent.com/ccev/stopwatcher-icons/master/tileserver/gym_gray.png",
+            #else:
+                "url": "https://raw.githubusercontent.com/ccev/stopwatcher-icons/master/tileserver/stop_gray.png",
+            #endif
+            "latitude": #(stop.latitude),
+            "longitude": #(stop.longitude),
+            "width": 48,
+            "height": 48,
+            "y_offset": -24
+        },
+        #endfor
+    #endif
+        {
+            #if(fortType == "pokestop"):
+                "url": "https://github.com/ccev/stopwatcher-icons/raw/master/tileserver/stop_normal.png",
+            #else:
+                "url": "https://github.com/ccev/stopwatcher-icons/raw/master/tileserver/gym_normal.png",
+            #endif
+            "latitude": #(latitude),
+            "longitude": #(longitude),
+            "width": 64,
+            "height": 64,
+            "y_offset": -32
         }
     ]
 }
