@@ -27,6 +27,7 @@ const MonsterController = require('./controllers/monster')
 const RaidController = require('./controllers/raid')
 const QuestController = require('./controllers/quest')
 const PokestopController = require('./controllers/pokestop')
+const FortUpdateController = require('./controllers/fortupdate')
 const GymController = require('./controllers/gym')
 const PokestopLureController = require('./controllers/pokestop_lure')
 const NestController = require('./controllers/nest')
@@ -59,6 +60,7 @@ const questController = new QuestController(logs.controller, knex, cachingGeocod
 const pokestopController = new PokestopController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const nestController = new NestController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const pokestopLureController = new PokestopLureController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const fortUpdateController = new FortUpdateController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const gymController = new GymController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 
 const monsterAlarmMatch = new MonsterAlarmMatch(logs.controller, knex, config)
@@ -106,6 +108,15 @@ async function processOne(hook) {
 			}
 			case 'lure': {
 				const result = await pokestopLureController.handle(hook.message)
+				if (result) {
+					queueAddition = result
+				} else {
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+				}
+				break
+			}
+			case 'fort_update': {
+				const result = await fortUpdateController.handle(hook.message)
 				if (result) {
 					queueAddition = result
 				} else {
@@ -187,6 +198,7 @@ function reloadDts() {
 		nestController.setDts(newDts)
 		pokestopLureController.setDts(newDts)
 		gymController.setDts(newDts)
+		fortUpdateController.setDts(newDts)
 		log.info('DTS reloaded')
 	} catch (err) {
 		log.error('Error reloading dts', err)
@@ -203,6 +215,7 @@ function reloadGeofence() {
 		nestController.setGeofence(newGeofence)
 		pokestopLureController.setGeofence(newGeofence)
 		gymController.setGeofence(newGeofence)
+		fortUpdateController.setGeofence(newGeofence)
 		log.info('Geofence reloaded')
 	} catch (err) {
 		log.error('Error reloading geofence', err)

@@ -260,11 +260,11 @@ class Raid extends Controller {
 						})
 						const jobs = []
 
-						require('./common/nightTime').setNightTime(data, disappearTime)
+						require('./common/nightTime').setNightTime(data, disappearTime, this.config)
 
+						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl', 'style'])
 						data.intersection = await this.obtainIntersection(data)
 
-						await this.getStaticMapUrl(logReference, data, 'raid', ['pokemon_id', 'latitude', 'longitude', 'form', 'level', 'imgUrl'])
 						data.staticmap = data.staticMap // deprecated
 						data.types = monster.types.map((type) => type.id)
 
@@ -514,7 +514,7 @@ class Raid extends Controller {
 					const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
 					const jobs = []
 
-					require('./common/nightTime').setNightTime(data, hatchTime)
+					require('./common/nightTime').setNightTime(data, hatchTime, this.config)
 
 					await this.getStaticMapUrl(logReference, data, 'raid', ['latitude', 'longitude', 'level', 'imgUrl'])
 					data.staticmap = data.staticMap // deprecated

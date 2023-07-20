@@ -82,6 +82,11 @@ class PoracleDiscordUtil {
 		const roleList = this.client.config.discord.commandSecurity && this.client.config.discord.commandSecurity[command]
 		if (!roleList) return true
 
+		if (this.options && this.options.targetOverride) {
+			// if target has been overrden by an admin, all commands are permitted
+			return true
+		}
+
 		const postUserId = this.msg.msg.author.id
 		if (roleList.includes(postUserId)) {
 			return true

@@ -508,7 +508,7 @@ class Monster extends Controller {
 
 					const jobs = []
 
-					require('./common/nightTime').setNightTime(data, disappearTime)
+					require('./common/nightTime').setNightTime(data, disappearTime, this.config)
 
 					data.intersection = await this.obtainIntersection(data)
 
@@ -554,8 +554,8 @@ class Monster extends Controller {
 						logReference,
 						data,
 						'monster',
-						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt'],
-						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seenType', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime'],
+						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt', 'style'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seenType', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime', 'style'],
 					)
 					data.staticmap = data.staticMap // deprecated
 
@@ -638,6 +638,7 @@ class Monster extends Controller {
 										form: data.form,
 										name: monster.name,
 										formName: monster.form.name,
+										fullName: data.fullName,
 										iv: data.iv,
 										cp: data.cp,
 										latitude: data.latitude,

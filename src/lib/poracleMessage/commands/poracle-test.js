@@ -21,13 +21,14 @@ exports.run = async (client, msg, args, options) => {
 		let template = client.config.general.defaultTemplateName?.toString() ?? '1'
 		let language = client.config.general.locale
 
-		const validHooks = ['pokemon', 'raid', 'pokestop', 'gym', 'nest', 'quest']
+		const validHooks = ['pokemon', 'raid', 'pokestop', 'gym', 'nest', 'quest', 'fort-update']
 
-		const hookType = args[0]
-		if (!validHooks.includes(hookType)) {
+		const hookTypeDisplay = args[0]
+		if (!validHooks.includes(hookTypeDisplay)) {
 			await msg.reply('Hooks supported are: '.concat(validHooks.join(', ')))
 			return
 		}
+		const hookType = hookTypeDisplay.replace(/-/g, '_')
 
 		let testdata
 
@@ -80,8 +81,8 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		if (dataItem.location !== 'keep') {
-			hook.latitude = human.latitude
-			hook.longitude = human.longitude
+			if (hook.latitude) hook.latitude = human.latitude
+			if (hook.longitude) hook.longitude = human.longitude
 		}
 
 		// Freshen test data
@@ -102,6 +103,18 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			case 'quest': {
+				break
+			}
+			case 'fort_update': {
+				if (hook.old?.location) {
+					hook.old.location.lat = human.latitude
+					hook.old.location.lon = human.longitude
+				}
+				if (hook.new?.location) {
+					// Approximately 100m away
+					hook.new.location.lat = human.latitude + 0.001
+					hook.new.location.lon = human.longitude + 0.001
+				}
 				break
 			}
 			case 'gym': {
