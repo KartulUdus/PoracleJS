@@ -1,5 +1,5 @@
 {
-    "style": "osm-bright",
+    "style": "klokantech-basic",
     "latitude": #if(isEditLocation): #(map_latitude) #else: #(latitude) #endif,
     "longitude": #if(isEditLocation): #(map_longitude) #else: #(longitude) #endif,
     "zoom": #if(zoom != nil && isEditLocation): #(zoom) #else: 17.5 #endif,
