@@ -135,8 +135,8 @@ class FortUpdate extends Controller {
 			}
 
 			if (data.old) {
-				if (data.old.name) data.new.name = this.escapeJsonString(data.old.name)
-				if (data.old.description) data.new.description = this.escapeJsonString(data.old.description)
+				if (data.old.name) data.old.name = this.escapeJsonString(data.old.name)
+				if (data.old.description) data.old.description = this.escapeJsonString(data.old.description)
 			}
 
 			// helpers
@@ -241,7 +241,7 @@ class FortUpdate extends Controller {
 			data.map_longitude = position.longitude
 			data.map_latitude = position.latitude
 
-			await this.getStaticMapUrl(logReference, data, 'fort-update', ['map_latitude', 'map_longitude', 'zoom', 'imgUrl', 'isEditLocation', 'oldLatitude', 'oldLongitude', 'newLatitude', 'newLongitude'])
+			await this.getStaticMapUrl(logReference, data, 'fort-update', ['map_latitude', 'map_longitude', 'longitude', 'latitude', 'zoom', 'imgUrl', 'isEditLocation', 'oldLatitude', 'oldLongitude', 'newLatitude', 'newLongitude'])
 			data.staticmap = data.staticMap // deprecated
 
 			for (const cares of whoCares) {
