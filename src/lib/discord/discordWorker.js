@@ -11,7 +11,7 @@ const FairPromiseQueue = require('../FairPromiseQueue')
 const noop = () => { }
 
 class Worker {
-	constructor(token, id, config, logs, rehydrateTimeouts, statusActivity) {
+	constructor(token, id, config, logs, rehydrateTimeouts, statusActivity, query) {
 		this.id = id
 		this.token = token
 		this.config = config
@@ -26,6 +26,7 @@ class Worker {
 		this.queueProcessor = new FairPromiseQueue(this.discordQueue, this.config.tuning.concurrentDiscordDestinationsPerBot, ((entry) => entry.target))
 		this.status = statusActivity.status
 		this.activity = statusActivity.activity
+		this.query = query
 	}
 
 	async start() {
@@ -177,6 +178,7 @@ class Worker {
 			}
 			return true
 		} catch (err) {
+			await this.query.incrementQuery('humans', { id: data.id }, 'fails', 1)
 			this.logs.discord.error(`${data.logReference}: #${this.id} Failed to send Discord alert to ${data.name}`, err, data)
 			this.logs.discord.error(`${data.logReference}: ${JSON.stringify(data)}`)
 		}
@@ -220,6 +222,7 @@ class Worker {
 			}
 			return true
 		} catch (err) {
+			await this.query.incrementQuery('humans', { id: data.id }, 'fails', 1)
 			this.logs.discord.error(`${data.logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL failed to send Discord alert to `, err)
 			this.logs.discord.error(`${data.logReference}: ${JSON.stringify(data)}`)
 		}

@@ -96,7 +96,7 @@ if (config.discord.enabled) {
 		if (config.discord.token[key]) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, (key
 				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity ?? 'PoracleHelper' }
-				: { status: 'available', activity: config.discord.activity ?? 'PoracleJS' })))
+				: { status: 'available', activity: config.discord.activity ?? 'PoracleJS' }), query))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
