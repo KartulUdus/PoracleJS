@@ -158,5 +158,10 @@
     "type": "fort_update",
     "test": "edit",
     "webhook": {"change_type": "edit", "edit_types": ["name", "description"], "new": {"id": "f7430347f5c34facb838be376f16adea.16", "type": "gym", "name": "Journey Through Trees And Time", "description": "A beautiful trip through time, trees, and space", "image_url": "http://lh3.googleusercontent.com/9kWjcud4Eeh4nNC6jv8zBkEr8kuQbW-QY2sKRHQqLrwnxf3drxO5AtR2qsDEjmxz3-h_eTHnQrT3AFl5Xmg2MXVqChh5", "location": {"lat": 51.268716, "lon": 1.013956}}, "old": {"id": "f7430347f5c34facb838be376f16adea.16", "type": "gym", "name": "The old walkway", "description": "An ancient trip through time and space", "image_url": "http://lh3.googleusercontent.com/9kWjcud4Eeh4nNC6jv8zBkEr8kuQbW-QY2sKRHQqLrwnxf3drxO5AtR2qsDEjmxz3-h_eTHnQrT3AFl5Xmg2MXVqChh5", "location": {"lat": 51.268716, "lon": 1.013956}}}
+  },
+  {
+    "type": "fort_update",
+    "test": "new",
+    "webhook": {"change_type": "new", "new": {"id": "0b427e88a3254eeab442d425412e4505.16","type": "pokestop", "name": null, "description": null, "image_url": null, "location": {"lat": -36.842772, "lon": 174.761578 } } }
   }
 ]
