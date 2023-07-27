@@ -135,7 +135,7 @@ class Worker {
 
 	async userAlert(data) {
 		let user = this.client.users.cache.get(data.target)
-		const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
+		const msgDeletionMs = ((data.tth.days * 86400) + (data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 
 		try {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
@@ -189,7 +189,7 @@ class Worker {
 
 			this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending discord message${data.clean ? ' (clean)' : ''}`)
 			const channel = await this.client.channels.fetch(data.target)
-			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000 + this.config.discord.messageDeleteDelay
+			const msgDeletionMs = ((data.tth.days * 86400) + (data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000 + this.config.discord.messageDeleteDelay
 			if (!channel) return this.logs.discord.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL not found`)
 			this.logs.discord.debug(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending discord message`, data.message)
 
