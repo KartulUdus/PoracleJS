@@ -325,6 +325,7 @@ class Invasion extends Controller {
 							...geoResult,
 							...data,
 							time: data.distime,
+							tthd: data.tth.days,
 							tthh: data.tth.hours,
 							tthm: data.tth.minutes,
 							tths: data.tth.seconds,
