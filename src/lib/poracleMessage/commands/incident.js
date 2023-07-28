@@ -29,7 +29,7 @@ exports.run = async (client, msg, args, options) => {
 
 		if (args.length === 0) {
 			await msg.reply(
-				translator.translateFormat('Valid commands are e.g. `{0}invasion giovanni`, `{0}invasion dragon`, `{0}invasion remove everything`', util.prefix),
+				translator.translateFormat('Valid commands are e.g. `{0}incident giovanni`, `{0}incident dragon`, `{0}incident remove everything`', util.prefix),
 				{ style: 'markdown' },
 			)
 			await helpCommand.provideSingleLineHelp(client, msg, util, language, target, commandName)
@@ -37,7 +37,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 
 		const typeArray = Object.values(client.GameData.grunts).map((grunt) => grunt.type.toLowerCase())
-		const eventArray = Object.values(client.GameData.utilData.pokestopEvent).map((x) => x.toLowerCase())
+		const eventArray = Object.values(client.GameData.utilData.pokestopEvent).map((x) => x.name.toLowerCase())
 
 		let reaction = '👌'
 		const remove = !!args.find((arg) => arg === 'remove')
