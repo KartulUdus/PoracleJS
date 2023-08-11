@@ -246,5 +246,47 @@ module.exports = () => {
 		return f.map[value] || f.map[value2]
 	})
 
+	// Title Case : Input: "this is a title" -> Output: "This Is A Title"
+	handlebars.registerHelper('titleCase', (str) => {
+		return str.replace(/\w\S*/g, function(txt) {
+			return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+		});
+	});
+
+	// Sentence Case : Input: "this is a sentence." -> Output: "This is a sentence."
+	handlebars.registerHelper('sentenceCase', (str) => {
+		return str.replace(/[a-z]/i, function(letter) {
+			return letter.toUpperCase();
+		}).trim();
+	});
+
+	// Uppercase : Input: "this is uppercase" -> Output: "THIS IS UPPERCASE"
+	handlebars.registerHelper('upperCase', (str) => {
+		return str.toUpperCase();
+	});
+
+	// Lowercase : Input: "THIS IS LOWERCASE" -> Output: "this is lowercase"
+	handlebars.registerHelper('lowerCase', (str) => {
+		return str.toLowerCase();
+	});
+
+	// Camel Case : Input: "this is camel case" -> Output: "thisIsCamelCase"
+	handlebars.registerHelper('camelCase', (str) => {
+		return str.split(/\W+/).map((word, index) => {
+			if(index === 0) return word.toLowerCase();
+			return word.charAt(0).toUpperCase() + word.substr(1).toLowerCase();
+		}).join('');
+	});
+
+	// Snake Case : Input: "this is snake case" -> Output: "this_is_snake_case"
+	handlebars.registerHelper('snakeCase', (str) => {
+		return str.split(/\W+/).map(word => word.toLowerCase()).join('_');
+	});
+
+	// Kebab Case : Input: "this is kebab case" -> Output: "this-is-kebab-case"
+	handlebars.registerHelper('kebabCase', (str) => {
+		return str.split(/\W+/).map(word => word.toLowerCase()).join('-');
+	});
+
 	return handlebars
 }
