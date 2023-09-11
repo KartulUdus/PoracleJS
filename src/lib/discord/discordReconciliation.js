@@ -498,6 +498,7 @@ class DiscordReconciliation {
 					}
 				}
 			}
+			this.log.verbose(`Userlist: ${JSON.stringify(userList)}`)
 			this.log.verbose(`Reconciliation (Discord) Loading guild id ${guildId} complete with ${memberCount} members...`)
 		}
 
