@@ -47,7 +47,11 @@ class DiscordReconciliation {
 				discordMsgToSend.embeds = [discordMsgToSend.embed]
 				delete discordMsgToSend.embed
 			}
-			await discordUser.send(discordMsgToSend)
+			try {
+				await discordUser.send(discordMsgToSend)
+			} catch (err) {
+				this.log.error(`Reconciliation (Discord) Cannot send welcome message to "${id}"`, err)
+			}
 		}
 	}
 
