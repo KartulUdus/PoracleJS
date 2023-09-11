@@ -456,6 +456,8 @@ class DiscordReconciliation {
 		this.log.verbose('Reconciliation (Discord) Loading all guild users...')
 
 		for (const guildId of this.config.discord.guilds) {
+			this.log.verbose(`Reconciliation (Discord) Loading guild id ${guildId} ...`)
+
 			let guild
 			try {
 				guild = await this.client.guilds.fetch(guildId)
@@ -476,10 +478,12 @@ class DiscordReconciliation {
 				// }
 			}
 			const members = await guild.members.fetch({ force: false })
+			let memberCount = 0
 			for (const member of members.values()) {
 				if (!member.user.bot) {
 					const roleList = []
 
+					memberCount++
 					for (const role of member.roles.cache.values()) {
 						roleList.push(role.id)
 					}
@@ -494,6 +498,7 @@ class DiscordReconciliation {
 					}
 				}
 			}
+			this.log.verbose(`Reconciliation (Discord) Loading guild id ${guildId} complete with ${memberCount} members...`)
 		}
 
 		this.log.verbose('Reconciliation (Discord) Loading all guild users complete...')
