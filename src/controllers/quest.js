@@ -133,7 +133,7 @@ class Quest extends Controller {
 				return []
 			}
 
-			data.questStringEng = await this.getQuest(data, "en")
+			data.questStringEng = await this.getQuest(data, 'en')
 			data.questString = await this.getQuest(data, this.config.general.locale)
 			data.rewardData = await this.getReward(logReference, data)
 			this.log.debug(`${logReference} Quest: data.questString: ${data.questString}, data.rewardData: ${JSON.stringify(data.rewardData)}`)
@@ -396,7 +396,7 @@ class Quest extends Controller {
 						str = str.replace('{{amount_0}}', item.target)
 					}
 				} catch {
-					str = this.GameData.translations[language].questTypes['quest_0']
+					str = this.GameData.translations[language].questTypes.quest_0
 					this.log.warn(`Missing Task for ${questinfo}`)
 				}
 			}
