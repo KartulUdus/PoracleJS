@@ -10,14 +10,14 @@
 {{#each pvpLittle}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpUserRanking}}
 {{{getEmoji 'little-league'}}}{{this.fullName}} #{{this.rank}} ({{this.cp}}CP Lvl. {{this.levelWithCap}})
 {{#getPowerUpCost ../level this.level}}{{{getEmoji 'stardust'}}}{{addCommas stardust}} & {{{getEmoji 'rarecandy'}}}{{candy}}{{#compare xlCandy '>' 0}} {{{getEmoji 'rarecandyxl'}}} {{xlCandy}}{{/compare}}{{/getPowerUpCost}}
-[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/500/overall/{{lowercase this.nameEng}}/>S>)
+[PvP IVs Rank](https://pvpivs.com/?mon={{nameEng}}&r=10&cp=500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}) | [Pvpoke Rank](https://pvpoke.com/rankings/all/500/overall/{{lowercase this.nameEng}}/)
 {{/compare}}{{/if}}{{/each}}{{#each pvpGreat}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpUserRanking}}
 {{{getEmoji 'great-league'}}}{{this.fullName}} #{{this.rank}} ({{this.cp}}CP Lvl. {{this.levelWithCap}})
 {{#getPowerUpCost ../level this.level}}{{{getEmoji 'stardust'}}}{{addCommas stardust}} & {{{getEmoji 'rarecandy'}}}{{candy}}{{#compare xlCandy '>' 0}} {{{getEmoji 'rarecandyxl'}}} {{xlCandy}}{{/compare}}{{/getPowerUpCost}}
-[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=1500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/1500/overall/{{lowercase this.nameEng}}/>S>)
+[PvP IVs Rank](https://pvpivs.com/?mon={{nameEng}}&r=10&cp=1500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}) | [Pvpoke Rank](https://pvpoke.com/rankings/all/1500/overall/{{lowercase this.nameEng}}/)
 {{/compare}}{{/if}}{{/each}}{{#each pvpUltra}}{{#if this.rank}}{{#compare this.rank '<=' ../pvpUserRanking}}
 {{{getEmoji 'ultra-league'}}}{{this.fullName}} #{{this.rank}} ({{this.cp}}CP Lvl. {{this.levelWithCap}})
 {{#getPowerUpCost ../level this.level}}{{{getEmoji 'stardust'}}}{{addCommas stardust}} & {{{getEmoji 'rarecandy'}}}{{candy}}{{#compare xlCandy '>' 0}} {{{getEmoji 'rarecandyxl'}}} {{xlCandy}}{{/compare}}{{/getPowerUpCost}}
-[PvP IVs Rank](<S<https://pvpivs.com/?mon={{nameEng}}&r=10&cp=2500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}>S>) | [Pvpoke Rank](<S<https://pvpoke.com/rankings/all/2500/overall/{{lowercase this.nameEng}}/>S>)
+[PvP IVs Rank](https://pvpivs.com/?mon={{nameEng}}&r=10&cp=2500&max={{cap}}&IVs={{../atk}}_{{../def}}_{{../sta}}) | [Pvpoke Rank](https://pvpoke.com/rankings/all/2500/overall/{{lowercase this.nameEng}}/)
 {{/compare}}{{/if}}{{/each}}
-🗺️ [Google](<S<{{{googleMapUrl}}}>S>) | [Apple](<S<{{{appleMapUrl}}}>S>) | [YourMap](<https://YourReactMap.url/id/Pokemon/{{encounterId}}/18>)
+🗺️ [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}}) | [ReactMap]({{{reactMapUrl}}})
