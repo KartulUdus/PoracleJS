@@ -227,7 +227,9 @@ exports.run = async (client, msg, args, options) => {
 								for (const evolution of mon.evolutions) {
 									monsterList.add(evolution.evoId)
 									const evoMonster = client.GameData.monsters[`${evolution.evoId}_${evolution.id}`]
-									evoAdd(evoMonster)
+									if (evoMonster) {
+										evoAdd(evoMonster)
+									}
 								}
 							}
 						}
