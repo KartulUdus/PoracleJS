@@ -247,12 +247,7 @@ class Quest extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 				if (language !== this.config.general.locale) {
-					if (!Object.keys(this.GameData.translations).includes(language)) {
-						this.log.warn(`Missing language ${language}, fallback to english`)
-						data.questString = await this.getQuest(data, "en")
-					} else {
-						data.questString = await this.getQuest(data, language)
-					}
+					data.questString = await this.getQuest(data, language)
 				}
 
 				for (const monster of data.rewardData.monsters) {
@@ -392,6 +387,10 @@ class Quest extends Controller {
 		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
 		} else {
+			if (!Object.keys(this.GameData.translations).includes(language)) {
+				this.log.warn(`Missing language ${language}, fallback to english`)
+				language = 'en'
+			}
 			const questinfo = `quest_title_${item.title.toLowerCase()}`
 			const questTitle = this.GameData.translations[language].questTitles
 			if (item.title) {
