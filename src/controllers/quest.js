@@ -387,10 +387,7 @@ class Quest extends Controller {
 		if (item.quest_task && !this.config.general.ignoreMADQuestString) {
 			str = item.quest_task
 		} else {
-			if (!Object.keys(this.GameData.translations).includes(language)) {
-				this.log.warn(`Missing language ${language}, fallback to english`)
-				language = 'en'
-			}
+			language = !this.GameData.translations[language] ? 'en' : language
 			const questinfo = `quest_title_${item.title.toLowerCase()}`
 			const questTitle = this.GameData.translations[language].questTitles
 			if (item.title) {
