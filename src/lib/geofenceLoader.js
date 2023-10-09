@@ -2,7 +2,6 @@ const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
 const RBush = require('rbush')
-const inside = require('point-in-polygon')
 const { log } = require('./logger')
 
 function getGeofenceFromGEOjson(config, rawdata) {
@@ -81,16 +80,16 @@ function getBoundingBox(fencePath) {
 
 	for (const point of fencePath) {
 		if (point[0] < minX) {
-			minX = point[0]
+			[minX] = point
 		}
 		if (point[0] > maxX) {
-			maxX = point[0]
+			[maxX] = point
 		}
 		if (point[1] < minY) {
-			minY = point[1]
+			[, minY] = point
 		}
 		if (point[1] > maxY) {
-			maxY = point[1]
+			[, maxY] = point
 		}
 	}
 
