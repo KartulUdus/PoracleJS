@@ -210,7 +210,7 @@ exports.run = async (client, msg, args, options) => {
 							}
 						} else {
 							staticMap = await geofenceTileGenerator.generateGeofenceTile(
-								client.geofence,
+								client.geofence.geofence,
 								client.query.tileserverPregen,
 								area,
 							)
