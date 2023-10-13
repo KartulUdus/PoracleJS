@@ -4,7 +4,7 @@ const DiscordRoleSetter = require('../lib/discord/discordRoleSetter')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/humans/:id', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -45,7 +45,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.get('/api/humans/:id/roles', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -76,7 +76,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/humans/:id/roles/add/:roleId', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -107,7 +107,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/humans/:id/roles/remove/:roleId', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -138,7 +138,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.get('/api/humans/:id/getAdministrationRoles', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -266,7 +266,7 @@ module.exports = async (fastify, options, next) => {
 				admin: result,
 			}
 		} catch (err) {
-			fastify.logger.error(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`, err)
+			fastify.logger.error(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`, err)
 			return {
 				status: 'error',
 				message: 'Exception raised during execution',
@@ -275,7 +275,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.get('/api/humans/:id/checkLocation/:lat/:lon', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -310,7 +310,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/humans/:id/setLocation/:lat/:lon', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -352,7 +352,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/humans/:id/switchProfile/:profile', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -397,7 +397,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/humans/:id/setAreas', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -449,7 +449,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/humans/:id/start', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -481,7 +481,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.post('/api/humans/:id/stop', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
@@ -513,7 +513,7 @@ module.exports = async (fastify, options, next) => {
 	})
 
 	fastify.get('/api/humans/one/:id', options, async (req) => {
-		fastify.logger.info(`API: ${req.ip} ${req.routeConfig.method} ${req.routeConfig.url}`)
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
 		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
