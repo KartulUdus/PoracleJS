@@ -253,6 +253,7 @@ class FortUpdate extends Controller {
 				if (platform === 'webhook') platform = 'discord'
 
 				const now = new Date()
+				const time = moment.tz(now, this.config.locale.time, geoTz.find(data.latitude, data.longitude)[0].toString())
 				const view = {
 					...geoResult,
 					...data,
@@ -260,8 +261,7 @@ class FortUpdate extends Controller {
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
-					time: moment.tz(now, this.config.locale.time, geoTz.find(data.latitude, data.longitude)[0].toString()),
-					now,
+					time: time.format(this.config.locale.time),
 					nowISO: now.toISOString(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
