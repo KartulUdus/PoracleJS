@@ -96,6 +96,13 @@ class FortUpdate extends Controller {
 			}
 			data.name = this.escapeJsonString(data.name)
 
+			const expiration = data.reset_time + (7 * 24 * 60 * 60)
+			data.tth = moment.preciseDiff(Date.now(), expiration * 1000, true)
+			data.disappearDate = moment(expiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.date)
+			data.resetDate = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.date)
+			data.disappearTime = moment(expiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.time)
+			data.resetTime = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.time)
+
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
@@ -251,6 +258,10 @@ class FortUpdate extends Controller {
 				const view = {
 					...geoResult,
 					...data,
+					tthd: data.tth.days,
+					tthh: data.tth.hours,
+					tthm: data.tth.minutes,
+					tths: data.tth.seconds,
 					time: moment.tz(now, this.config.locale.time, geoTz.find(data.latitude, data.longitude)[0].toString()),
 					now,
 					nowISO: now.toISOString(),
