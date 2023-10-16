@@ -70,7 +70,7 @@ exports.run = async (client, msg) => {
 			}
 
 			if (updateRequired) {
-				await client.query.updateQuery('humans', update, { id: msg.author.id })
+				await client.query.updateQuery('humans', update, { id: msg.author.id.toString() })
 				await msg.react('✅')
 			} else {
 				await msg.react('👌')
