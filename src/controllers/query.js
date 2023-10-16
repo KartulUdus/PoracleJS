@@ -130,6 +130,14 @@ class Query {
 		}
 	}
 
+	async incrementQuery(table, where, target, value) {
+		try {
+			return this.db(table).where(where).increment(target, value)
+		} catch (err) {
+			throw { source: 'incrementQuery', error: err }
+		}
+	}
+
 	async countQuery(table, conditions) {
 		try {
 			const result = await this.db.select().from(table).where(conditions).count()

@@ -5,7 +5,7 @@ const SunCalc = require('suncalc')
 
 /* Night time clculations */
 
-function setNightTime(data, checkTime) {
+function setNightTime(data, checkTime, config) {
 	const times = SunCalc.getTimes(checkTime.toDate(), data.latitude, data.longitude)
 	const sunsetTime = moment(times.sunset)
 	const sunriseTime = moment(times.sunrise)
@@ -16,6 +16,18 @@ function setNightTime(data, checkTime) {
 	data.nightTime = !checkTime.isBetween(sunriseTime, sunsetTime)
 	data.dawnTime = checkTime.isBetween(sunriseTime, dawnEndTime)
 	data.duskTime = checkTime.isBetween(duskStartTime, sunsetTime)
+
+	const defaultStyle = 'klokantech-basic'
+
+	if (data.dawnTime) {
+		data.style = config.geocoding.dawnStyle || defaultStyle
+	} else if (data.duskTime) {
+		data.style = config.geocoding.duskStyle || defaultStyle
+	} else if (data.nightTime) {
+		data.style = config.geocoding.nightStyle || defaultStyle
+	} else {
+		data.style = config.geocoding.dayStyle || defaultStyle
+	}
 }
 
 module.exports = { setNightTime }

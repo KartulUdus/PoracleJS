@@ -96,11 +96,11 @@ if (config.discord.enabled) {
 		if (config.discord.token[key]) {
 			discordWorkers.push(new DiscordWorker(config.discord.token[key], key + 1, config, logs, true, (key
 				? { status: config.discord.workerStatus || 'invisible', activity: config.discord.workerActivity ?? 'PoracleHelper' }
-				: { status: 'available', activity: config.discord.activity ?? 'PoracleJS' })))
+				: { status: 'available', activity: config.discord.activity ?? 'PoracleJS' }), query))
 		}
 	}
 	fastify.decorate('discordWorker', discordWorkers[0])
-	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true)
+	discordWebhookWorker = new DiscordWebhookWorker(config, logs, true, query)
 }
 
 if (config.telegram.enabled) {
@@ -644,6 +644,19 @@ async function processOne(hook) {
 						await processHook(hook)
 					}
 				}
+				break
+			}
+			case 'fort_update': {
+				const fortId = hook.message.new?.id ?? hook.message.old?.id
+				if (config.general.disableFortUpdate) {
+					fastify.controllerLog.debug(`${fortId}: Fort update was received but set to be ignored in config`)
+					break
+				}
+				if (!hook.message.poracleTest) {
+					fastify.webhooks.info(`fort_update ${JSON.stringify(hook.message)}`)
+					// Caching not relevant, no duplicates
+				}
+				await processHook(hook)
 				break
 			}
 			case 'quest': {

@@ -321,6 +321,25 @@
       ]
     }
   },
+  {
+    "id": 1,
+    "language": "en",
+    "type": "fort-update",
+    "default": true,
+    "platform": "discord",
+    "template": {
+      "embed": {
+        "title": "{{changeTypeText}} {{fortTypeText}} {{name}}",
+        "description": "{{#if description}}*{{description}}*\n\n{{/if}}{{#if isEditDescription}}**Old Description**\n> {{oldDescription}}\n\n**New Description**\n> {{newDescription}}\n\n{{/if}}{{#if isEditName}}### Old Name\n> {{oldName}}\n\n### New Name\n> {{newName}}\n\n{{/if}}\nMaps: [Google]({{{mapurl}}}) | [Apple]({{{applemap}}})",
+        "thumbnail": {
+          "url": "{{{imgUrl}}}"
+        },
+        "image": {
+          "url": "{{{staticMap}}}"
+        }
+      }
+    }
+  },
 {
   "id": 1,
   "language": "en",

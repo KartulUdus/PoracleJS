@@ -1,7 +1,7 @@
 const PoracleTelegramMessage = require('../poracleTelegramMessage')
 const PoracleTelegramState = require('../poracleTelegramState')
 
-const commandLogic = require('../../poracleMessage/commands/incident')
+const commandLogic = require('../../poracleMessage/commands/fort')
 
 module.exports = async (ctx) => {
 	const { controller, command } = ctx.state
@@ -13,8 +13,10 @@ module.exports = async (ctx) => {
 		const ptm = new PoracleTelegramMessage(ctx)
 		const pts = new PoracleTelegramState(ctx)
 
-		await commandLogic.run(pts, ptm, command.splitArgsArray[0])
+		for (const c of command.splitArgsArray) {
+			await commandLogic.run(pts, ptm, c)
+		}
 	} catch (err) {
-		controller.logs.telegram.error('Invasion command unhappy:', err)
+		controller.logs.telegram.error('Fort command unhappy:', err)
 	}
 }

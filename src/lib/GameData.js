@@ -2,7 +2,7 @@ const fs = require('fs')
 const { log } = require('./logger')
 
 const GameData = { utilData: require('../util/util.json') }
-const neededFiles = ['monsters', 'moves', 'items', 'grunts', 'questTypes', 'types']
+const neededFiles = ['monsters', 'moves', 'items', 'grunts', 'questTypes', 'types', 'translations']
 
 neededFiles.forEach((file) => {
 	try {
