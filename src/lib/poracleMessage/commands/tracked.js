@@ -246,7 +246,7 @@ exports.run = async (client, msg, args, options) => {
 
 		const maplink = `https://maps.google.com/maps?q=${human.latitude},${human.longitude}`
 		if (args.includes('area')) {
-			return msg.reply(currentAreaText(translator, client.geofence, JSON.parse(human.area)))
+			return msg.reply(currentAreaText(translator, client.geofence.geofence, JSON.parse(human.area)))
 		}
 
 		let message = ''
@@ -267,7 +267,7 @@ exports.run = async (client, msg, args, options) => {
 		}
 		await msg.reply(`${adminExplanation}${translator.translate('Your alerts are currently')} **${human.enabled ? `${translator.translate('enabled')}` : `${translator.translate('disabled')}`}**${restartExplanation}${locationText}`, { style: 'markdown' })
 
-		message = message.concat('\n\n', currentAreaText(translator, client.geofence, JSON.parse(human.area)))
+		message = message.concat('\n\n', currentAreaText(translator, client.geofence.geofence, JSON.parse(human.area)))
 
 		if (profile) {
 			message = message.concat('\n\n', `${translator.translate('Your profile is currently set to:')} ${profile.name}`)
