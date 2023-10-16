@@ -919,7 +919,8 @@ async function run() {
 
 			// This splice mechanism replaces array in place (relies on no caching)
 			const newGeofence = require('./lib/geofenceLoader').readAllGeofenceFiles(config)
-			geofence.splice(0, geofence.length, ...newGeofence)
+			geofence.rbush = newGeofence.rbush
+			geofence.geofence = newGeofence.geofence
 		} catch (err) {
 			log.error('Error reloading dts', err)
 		}

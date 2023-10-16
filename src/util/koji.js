@@ -1,7 +1,7 @@
 const fs = require('fs')
 const { resolve } = require('path')
 const fetch = require('node-fetch')
-const stripJsonComments = require('strip-json-comments')
+const json5 = require('json5')
 
 const { log } = require('../lib/logger')
 
@@ -9,12 +9,8 @@ const parseConfigSafe = () => {
 	let config = {}
 	try {
 		if (fs.existsSync(resolve(__dirname, '../../config/local.json'))) {
-			const string = stripJsonComments(
-				fs
-					.readFileSync(resolve(__dirname, '../../config/local.json'))
-					.toString(),
-			)
-			config = JSON.parse(string)
+			const string = fs.readFileSync(resolve(__dirname, '../../config/local.json')).toString()
+			config = json5.parse(string)
 		} else {
 			log.warn('[KŌJI] Local.json was not found, skipping')
 		}
