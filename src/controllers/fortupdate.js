@@ -212,8 +212,6 @@ class FortUpdate extends Controller {
 				return []
 			}
 
-			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
-
 			data.stickerUrl = data.imgUrl
 
 			const geoResult = await this.getAddress({ lat: data.latitude, lon: data.longitude })
