@@ -3,7 +3,7 @@ const moment = require('moment-timezone')
 const Controller = require('./controller')
 
 /**
- * Controller for processing nest webhooks
+ * Controller for processing fort update webhooks
  */
 class FortUpdate extends Controller {
 	async fortUpdateWhoCares(obj) {
@@ -47,7 +47,7 @@ class FortUpdate extends Controller {
 			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 		} else {
 			query = query.concat(`
-				and ((nests.distance = 0 and (${areastring})) or nests.distance > 0)
+				and ((forts.distance = 0 and (${areastring})) or forts.distance > 0)
 			`)
 			//			group by humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, invasion.template, invasion.distance, invasion.clean, invasion.ping
 		}
@@ -96,22 +96,16 @@ class FortUpdate extends Controller {
 			}
 			data.name = this.escapeJsonString(data.name)
 
-			const nestExpiration = data.reset_time + (7 * 24 * 60 * 60)
-			data.tth = moment.preciseDiff(Date.now(), nestExpiration * 1000, true)
-			data.disappearDate = moment(nestExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.date)
+			const expiration = data.reset_time + (7 * 24 * 60 * 60)
+			data.tth = moment.preciseDiff(Date.now(), expiration * 1000, true)
+			data.disappearDate = moment(expiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.date)
 			data.resetDate = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.date)
-			data.disappearTime = moment(nestExpiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.time)
+			data.disappearTime = moment(expiration * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.time)
 			data.resetTime = moment(data.reset_time * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString()).format(this.config.locale.time)
 
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
 			data.distime = data.disappearTime // deprecated
-
-			// Stop handling if it already disappeared or is about to go away
-			// if (data.tth.firstDateWasLater || ((data.tth.days * 24 * 3600) + (data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) < minTth) {
-			// 	this.log.debug(`${data.pokestop_id} Nest already disappeared or is about to go away in: ${data.tth.days}d ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
-			// 	return []
-			// }
 
 			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
 			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
@@ -212,13 +206,11 @@ class FortUpdate extends Controller {
 
 			if (discordCacheBad) {
 				whoCares.forEach((cares) => {
-					this.log.verbose(`${logReference}: Not creating nest alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+					this.log.verbose(`${logReference}: Not creating fort update alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
 				})
 
 				return []
 			}
-
-			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
 
 			data.stickerUrl = data.imgUrl
 
@@ -260,16 +252,17 @@ class FortUpdate extends Controller {
 				let [platform] = cares.type.split(':')
 				if (platform === 'webhook') platform = 'discord'
 
+				const now = new Date()
+				const time = moment.tz(now, this.config.locale.time, geoTz.find(data.latitude, data.longitude)[0].toString())
 				const view = {
 					...geoResult,
 					...data,
-					time: data.distime,
 					tthd: data.tth.days,
 					tthh: data.tth.hours,
 					tthm: data.tth.minutes,
 					tths: data.tth.seconds,
-					now: new Date(),
-					nowISO: new Date().toISOString(),
+					time: time.format(this.config.locale.time),
+					nowISO: now.toISOString(),
 					areas: data.matchedAreas.filter((area) => area.displayInMatches).map((area) => area.name).join(', '),
 				}
 
