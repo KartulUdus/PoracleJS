@@ -527,7 +527,6 @@ class Monster extends Controller {
 								data.seenType = 'lure'
 								break
 							}
-							case 'lure_encounter':
 							case 'encounter':
 							case 'wild': {
 								data.seenType = data.seen_type
