@@ -77,7 +77,7 @@ module.exports = {
 		if (performChecks) {
 			configChecker.checkConfig(config)
 			configChecker.checkDts(dts, config)
-			configChecker.checkGeofence(geofence)
+			configChecker.checkGeofence(geofence.geofence)
 		}
 
 		moment.locale(config.locale.timeformat)

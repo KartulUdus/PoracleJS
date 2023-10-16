@@ -19,7 +19,7 @@ exports.run = async (client, msg, [args]) => {
 			[,, areaName] = areaName.match(client.re.areaRe)
 			areaName = areaName.toLowerCase()
 		}
-		const confAreas = client.geofence.map((area) => area.name.toLowerCase()).sort()
+		const confAreas = client.geofence.geofence.map((area) => area.name.toLowerCase()).sort()
 		const isValidArea = confAreas.filter((x) => areaName === x)
 		if (!isValidArea.length) {
 			areaName = ''

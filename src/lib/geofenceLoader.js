@@ -1,6 +1,7 @@
 const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
+const RBush = require('rbush')
 const { log } = require('./logger')
 
 function getGeofenceFromGEOjson(config, rawdata) {
@@ -74,6 +75,29 @@ function readGeofenceFile(config, filename) {
 	return geofence
 }
 
+function getBoundingBox(fencePath) {
+	let minX = Number.MAX_VALUE; let minY = Number.MAX_VALUE; let maxX = Number.MIN_VALUE; let maxY = Number.MIN_VALUE
+
+	for (const point of fencePath) {
+		if (point[0] < minX) {
+			[minX] = point
+		}
+		if (point[0] > maxX) {
+			[maxX] = point
+		}
+		if (point[1] < minY) {
+			[, minY] = point
+		}
+		if (point[1] > maxY) {
+			[, maxY] = point
+		}
+	}
+
+	return {
+		minX, minY, maxX, maxY,
+	}
+}
+
 function readAllGeofenceFiles(config) {
 	const fencePaths = Array.isArray(config.geofence.path) ? config.geofence.path : [config.geofence.path]
 	const geofence = fencePaths.flatMap((fencePath) => readGeofenceFile(
@@ -82,7 +106,31 @@ function readAllGeofenceFiles(config) {
 			? path.resolve(__dirname, '../../.cache', `${fencePath.replace(/\//g, '__')}.json`)
 			: path.join(__dirname, `../../${fencePath}`),
 	))
-	return geofence
+
+	const tree = new RBush()
+
+	for (const areaObj of geofence) {
+		if (areaObj.path && areaObj.path.length > 0) {
+			tree.insert({
+				...getBoundingBox(areaObj.path),
+				fence: areaObj,
+			})
+		} else if (areaObj.multipath) {
+			for (const p of areaObj.multipath) {
+				if (p.length > 0) {
+					tree.insert({
+						...getBoundingBox(p),
+						fence: areaObj,
+					})
+				}
+			}
+		}
+	}
+
+	return {
+		rbush: tree,
+		geofence,
+	}
 }
 
 module.exports = { readAllGeofenceFiles }

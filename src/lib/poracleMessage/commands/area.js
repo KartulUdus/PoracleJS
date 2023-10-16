@@ -26,7 +26,7 @@ exports.run = async (client, msg, args, options) => {
 			return msg.reply(translator.translate('You do not have permission to execute this command'))
 		}
 
-		let selectableGeofence = client.geofence
+		let selectableGeofence = client.geofence.geofence
 		// Note for Poracle admins we don't remove the userSelectable items
 		// But we do apply the filtering later based on the user/channel that is the target (targetIsAdmin used instead)
 		if (!msg.isFromAdmin) selectableGeofence = selectableGeofence.filter((area) => area.userSelectable ?? true)
@@ -102,7 +102,7 @@ exports.run = async (client, msg, args, options) => {
 				if (areasNotAlreadyInList.length) {
 					await msg.reply(`${translator.translate('Added areas:')} ${areasNotAlreadyInList.map((x) => x.name).join(', ')}`)
 				}
-				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, uniqueNewAreas))
+				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence.geofence, uniqueNewAreas))
 
 				await client.query.updateQuery('profiles', { area: JSON.stringify(uniqueNewAreas) }, {
 					id: target.id,
@@ -136,7 +136,7 @@ exports.run = async (client, msg, args, options) => {
 				if (removeAreasPresent.length) {
 					await msg.reply(`${translator.translate('Removed areas:')} ${removeAreasPresent.map((x) => x.name).join(', ')}`)
 				}
-				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, uniqueNewAreas))
+				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence.geofence, uniqueNewAreas))
 
 				await client.query.updateQuery('profiles', { area: JSON.stringify(uniqueNewAreas) }, { id: target.id, profile_no: currentProfileNo })
 				break
@@ -176,7 +176,7 @@ exports.run = async (client, msg, args, options) => {
 			case 'overview': {
 				if (client.config.geocoding.staticProvider.toLowerCase() === 'tileservercache') {
 					const staticMap = await geofenceTileGenerator.generateGeofenceOverviewTile(
-						client.geofence,
+						client.geofence.geofence,
 						client.query.tileserverPregen,
 						args.length >= 2 ? args : JSON.parse(human.area),
 					)
@@ -210,7 +210,7 @@ exports.run = async (client, msg, args, options) => {
 							}
 						} else {
 							staticMap = await geofenceTileGenerator.generateGeofenceTile(
-								client.geofence,
+								client.geofence.geofence,
 								client.query.tileserverPregen,
 								area,
 							)
@@ -228,7 +228,7 @@ exports.run = async (client, msg, args, options) => {
 				break
 			}
 			default: {
-				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence, JSON.parse(human.area)))
+				await msg.reply(trackedCommand.currentAreaText(translator, client.geofence.geofence, JSON.parse(human.area)))
 
 				await msg.reply(
 					translator.translateFormat('Valid commands are `{0}area list`, `{0}area add <areaname>`, `{0}area remove <areaname>`', util.prefix),
