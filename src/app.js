@@ -538,7 +538,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was received but set to be ignored in config`)
 					break
 				}
-				if (!hook.message.poracleTest) {
+				if (!hook.message.poracleTest && !config.tuning?.disablePokemonCache) {
 					fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
 					const verifiedSpawnTime = (hook.message.verified || hook.message.disappear_time_verified)
 					const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp}`
