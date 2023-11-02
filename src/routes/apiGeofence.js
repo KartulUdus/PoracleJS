@@ -1,4 +1,10 @@
+const { promisify } = require('util')
+const { exec } = require('child_process')
+const path = require('path')
+
 const geofenceTileGenerator = require('../lib/geofenceTileGenerator')
+
+const execAsync = promisify(exec)
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/geofence/:area/map', options, async (req) => {
@@ -225,10 +231,10 @@ module.exports = async (fastify, options, next) => {
 			const outPath = []
 			if (inGeofence.multipath) {
 				for (let j = 0; j < inGeofence.multipath.length; j++) {
-					const path = inGeofence.multipath[j]
+					const geofencePath = inGeofence.multipath[j]
 					const outSubPath = []
-					for (let k = 0; k < path.length; k++) {
-						const coord = path[k]
+					for (let k = 0; k < geofencePath.length; k++) {
+						const coord = geofencePath[k]
 						outSubPath.push([coord[1], coord[0]])
 					}
 					if (outSubPath.at(-1)[0] !== outSubPath[0][0] || outSubPath.at(-1)[1] !== outSubPath[0][1]) {
@@ -253,6 +259,34 @@ module.exports = async (fastify, options, next) => {
 			status: 'ok',
 			geoJSON: outGeoJSON,
 		}
+	})
+
+	fastify.get('/api/geofence/reload', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) {
+			return {
+				webserver: 'unhappy',
+				reason: `ip ${req.ip} not in whitelist`,
+			}
+		}
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) {
+			return {
+				webserver: 'unhappy',
+				reason: `ip ${req.ip} in blacklist`,
+			}
+		}
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		await execAsync(
+			`node ${path.join(__dirname, '../util/koji.js')}`,
+		).catch((err) => fastify.logger.error(err))
+
+		return { status: 'ok' }
 	})
 
 	next()
