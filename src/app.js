@@ -902,8 +902,12 @@ async function run() {
 	setTimeout(processPogoEvents, 30000)
 	setTimeout(processPossibleShiny, 30000)
 
-	let watchGeofence = Array.isArray(config.geofence.path) ? config.geofence.path : [config.geofence.path]
-	watchGeofence = watchGeofence.map((x) => path.join(__dirname, `../${x}`))
+	let watchGeofence = Array.isArray(config.geofence.path)
+		? config.geofence.path
+		: [config.geofence.path]
+	watchGeofence = watchGeofence.map((x) => (x.startsWith('http')
+		? path.join(__dirname, '../.cache', `${x.replace(/\//g, '__')}.json`)
+		: path.join(__dirname, `../${x}`)))
 
 	chokidar.watch(watchGeofence, {
 		awaitWriteFinish: true,
