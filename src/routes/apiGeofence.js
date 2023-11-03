@@ -1,10 +1,5 @@
-const { promisify } = require('util')
-const { exec } = require('child_process')
-const path = require('path')
-
 const geofenceTileGenerator = require('../lib/geofenceTileGenerator')
-
-const execAsync = promisify(exec)
+const { getKojiFences } = require('../util/koji')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/geofence/:area/map', options, async (req) => {
@@ -282,9 +277,7 @@ module.exports = async (fastify, options, next) => {
 			return { status: 'authError', reason: 'incorrect or missing api secret' }
 		}
 
-		await execAsync(
-			`node ${path.join(__dirname, '../util/koji.js')}`,
-		).catch((err) => fastify.logger.error(err))
+		await getKojiFences()
 
 		return { status: 'ok' }
 	})
