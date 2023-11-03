@@ -21,7 +21,7 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		try {
-			const url = await geofenceTileGenerator.generateGeofenceTile(fastify.geofence, fastify.query.tileserverPregen, req.params.area)
+			const url = await geofenceTileGenerator.generateGeofenceTile(fastify.geofence.geofence, fastify.query.tileserverPregen, req.params.area)
 			return {
 				status: 'ok',
 				url,
@@ -141,7 +141,7 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		const areas = {}
-		for (const fence of fastify.geofence) {
+		for (const fence of fastify.geofence.geofence) {
 			areas[fence.name] = require('crypto').createHash('md5').update(JSON.stringify(fence.path)).digest('hex')
 		}
 
@@ -174,7 +174,7 @@ module.exports = async (fastify, options, next) => {
 
 		return {
 			status: 'ok',
-			geofence: fastify.geofence,
+			geofence: fastify.geofence.geofence,
 		}
 	})
 
@@ -203,7 +203,7 @@ module.exports = async (fastify, options, next) => {
 			type: 'FeatureCollection',
 			features: [],
 		}
-		const inGeoJSON = fastify.geofence
+		const inGeoJSON = fastify.geofence.geofence
 
 		for (let i = 0; i < inGeoJSON.length; i++) {
 			const inGeofence = inGeoJSON[i]

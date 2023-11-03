@@ -54,7 +54,7 @@ class ShinyPossible {
 
 		try {
 			if (!this.shinyPossibleMap.map) return false
-			if (formId && `${pokemonId}_${formId}` in this.shinyPossibleMap.map) return true
+			if (`${pokemonId}_${formId}` in this.shinyPossibleMap.map) return true
 			if (pokemonId in this.shinyPossibleMap.map) return true
 
 			return false
