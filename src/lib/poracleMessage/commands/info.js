@@ -240,8 +240,8 @@ exports.run = async (client, msg, args, options) => {
 
 						const mon = monsters[0]
 						const logReference = mon.id
-                        const monEvos = {}
-                        require('../../../util/getEvoData').setEvolutions(monEvos, client.GameData, client.log, logReference, translator, emojiLookup, platform, mon)
+						const monEvos = {}
+						require('../../../util/getEvoData').setEvolutions(monEvos, client.GameData, client.log, logReference, translator, emojiLookup, platform, mon)
 						const typeData = client.GameData.utilData.types
 						const types = mon.types.map((type) => type.name)
 						const strengths = {}
