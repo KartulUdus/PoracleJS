@@ -68,7 +68,7 @@ function setEvolutions(data, GameData, log, logReference, translator, emojiLooku
                     }
             }
     }
-
+    // eslint-disable-next-line no-shadow
     const calcDevolutions = (monster) => {
             if (++totalCount >= 5) {
                     log.error(`${logReference}: Too many possible devolutions ${monster.id}_${monster.form.id}`)
