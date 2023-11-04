@@ -239,6 +239,9 @@ exports.run = async (client, msg, args, options) => {
 						}
 
 						const mon = monsters[0]
+						const logReference = mon.id
+                        const monEvos = {}
+                        require('../../../util/getEvoData').setEvolutions(monEvos, client.GameData, client.log, logReference, translator, emojiLookup, platform, mon)
 						const typeData = client.GameData.utilData.types
 						const types = mon.types.map((type) => type.name)
 						const strengths = {}
@@ -316,19 +319,35 @@ exports.run = async (client, msg, args, options) => {
 							message = message.concat(`\n**${translator.translate('Third Move Cost')}:**\n${mon.thirdMoveCandy} ${translator.translate('Candies')}\n${new Intl.NumberFormat(language).format(mon.thirdMoveStardust)} ${translator.translate('Stardust')}\n`)
 						}
 
-						if (mon.evolutions) {
-							message = message.concat(`\n**${translator.translate('Evolutions')}:**`)
-							for (const evolution of mon.evolutions) {
-								message = message.concat(`\n${translator.translate(`${client.GameData.monsters[`${evolution.evoId}_${evolution.id || 0}`]?.name || 'Unknown'}`)} (${evolution.candyCost} ${translator.translate('Candies')})`)
-								if (evolution.itemRequirement) message = message.concat(`\n- ${translator.translate('Needed Item')}: ${translator.translate(evolution.itemRequirement)}`)
-								if (evolution.mustBeBuddy) message = message.concat(`\n\u2705 ${translator.translate('Must Be Buddy')}`)
-								if (evolution.onlyNighttime) message = message.concat(`\n\u2705 ${translator.translate('Only Nighttime')}`)
-								if (evolution.onlyDaytime) message = message.concat(`\n\u2705 ${translator.translate('Only Daytime')}`)
-								if (evolution.tradeBonus) message = message.concat(`\n\u2705 ${translator.translate('Trade Bonus')}`)
-								message.concat('\n')
-								if (evolution.questRequirement) message = message.concat(`\n${translator.translate('Special Requirement')}: ${translator.translate(evolution.questRequirement.i18n).replace('{{amount}}', evolution.questRequirement.target)}`)
-								message = message.concat('\n')
+						if (monEvos && monEvos.previousEvolutions.length) {
+							message = message.concat(`\n**Previous ${translator.translate('Evolutions')}:**`)
+							for (let i = monEvos.previousEvolutions.length -1; i>= 0; i--) {
+									const evolution = monEvos.previousEvolutions[i]
+									message = message.concat(`\n${translator.translate(`${client.GameData.monsters[`${evolution.id}_${evolution.form || 0}`]?.name || 'Unknown'}`)} (${evolution.candyCost} ${translator.translate('Candies')})`)
+									if (evolution.itemRequirement) message = message.concat(`\n- ${translator.translate('Needed Item')}: ${translator.translate(evolution.itemRequirement)}`)
+									if (evolution.mustBeBuddy) message = message.concat(`\n\u2705 ${translator.translate('Must Be Buddy')}`)
+									if (evolution.onlyNighttime) message = message.concat(`\n\u2705 ${translator.translate('Only Nighttime')}`)
+									if (evolution.onlyDaytime) message = message.concat(`\n\u2705 ${translator.translate('Only Daytime')}`)
+									if (evolution.tradeBonus) message = message.concat(`\n\u2705 ${translator.translate('Trade Bonus')}`)
+									message.concat('\n')
+									if (evolution.questRequirement) message = message.concat(`\n${translator.translate('Special Requirement')}: ${translator.translate(evolution.questRequirement.i18n).replace('{{amount}}', evolution.questRequirement.target)}`)
 							}
+							message = message.concat('\n')
+						}
+
+						if (monEvos && monEvos.evolutions.length) {
+							message = message.concat(`\n**${translator.translate('Evolutions')}:**`)
+							for (const evolution of monEvos.evolutions) {
+									message = message.concat(`\n${translator.translate(`${client.GameData.monsters[`${evolution.id}_${evolution.form || 0}`]?.name || 'Unknown'}`)} (${evolution.candyCost} ${translator.translate('Candies')})`)
+									if (evolution.itemRequirement) message = message.concat(`\n- ${translator.translate('Needed Item')}: ${translator.translate(evolution.itemRequirement)}`)
+									if (evolution.mustBeBuddy) message = message.concat(`\n\u2705 ${translator.translate('Must Be Buddy')}`)
+									if (evolution.onlyNighttime) message = message.concat(`\n\u2705 ${translator.translate('Only Nighttime')}`)
+									if (evolution.onlyDaytime) message = message.concat(`\n\u2705 ${translator.translate('Only Daytime')}`)
+									if (evolution.tradeBonus) message = message.concat(`\n\u2705 ${translator.translate('Trade Bonus')}`)
+									message.concat('\n')
+									if (evolution.questRequirement) message = message.concat(`\n${translator.translate('Special Requirement')}: ${translator.translate(evolution.questRequirement.i18n).replace('{{amount}}', evolution.questRequirement.target)}`)
+							}
+							message = message.concat('\n')
 						}
 
 						message = message.concat('\n💯:\n')
