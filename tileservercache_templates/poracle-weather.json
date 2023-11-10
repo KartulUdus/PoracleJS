@@ -15,7 +15,7 @@
          "latitude": #(pok.latitude),
          "longitude": #(pok.longitude),
          "width": 20,
-         "height": 20,
+         "height": 20
      },
      #endfor
      #endif
