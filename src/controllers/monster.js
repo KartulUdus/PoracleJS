@@ -897,15 +897,13 @@ class Monster extends Controller {
 							const url = this.config.general.scoutURL
 							
 							// Try avoid sending dupes, check current against last used:
-							if (typeof lastScoutLat === 'undefined' || typeof lastScoutLon === 'undefined')  {
-								   const lastScoutLat = data.latitude	// lastScoutLat & Lon not yet defined, set value
-								   const lastScoutLon = data.longitude
-								} else if (data.latitude === lastScoutLat && data.longitude === lastScoutLon) {
+							if (typeof lastcoords === 'undefined' )  {
+								   const lastcoords = coords	// lastcoords not yet defined, set value
+								} else if (lastcoords === coords) {
 								   this.log.info(`[SCOUT] Skipping duplicate attempt with ${coords}`)
 								   break sendscout; 
 								} else {
-								   const lastScoutLat = data.latitude
-								   const lastScoutLon = data.longitude
+								   const lastcoords = coords
 								}
 							
 							try {
