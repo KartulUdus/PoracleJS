@@ -932,7 +932,7 @@ class Monster extends Controller {
 									return null
 								}
 								const scoutResult = result.data
-
+								this.log.info(`[SCOUT] Scout sent successfully!`)
 								return scoutResult
 							} catch (error) {
 								if (error.response) {
