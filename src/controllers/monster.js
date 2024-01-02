@@ -887,13 +887,26 @@ class Monster extends Controller {
 
 						const templateType = (data.iv === -1) ? 'monsterNoIv' : 'monster'
 						
-						if (data.iv === -1 && this.config.general.scoutURL) {
+						sendscout: if (data.iv === -1 && this.config.general.scoutURL) {
+
 						    const coords = JSON.stringify([[parseFloat(data.latitude.toFixed(5)),parseFloat(data.longitude.toFixed(5))]])
 							const headers = {
 									'Content-Type': 'application/json',
 									'X-Dragonite-Secret': this.config.general.dragoniteSecret
 									}
 							const url = this.config.general.scoutURL
+							
+							// Try avoid sending dupes, check current against last used:
+							if (typeof lastScoutLat === 'undefined' || lastScoutLon === 'undefined')  {
+								   const lastScoutLat = data.latitude	// lastScoutLat & Lon not yet defined, set value
+								   const lastScoutLon = data.longitude
+								} else if (data.latitude === lastScoutLat && data.longitude === lastScoutLon) {
+								   this.log.info(`[SCOUT] Skipping duplicate attempt with ${coords}`)
+								   break sendscout; 
+								} else {
+								   const lastScoutLat = data.latitude
+								   const lastScoutLon = data.longitude
+								}
 							
 							try {
 								this.log.info(`[SCOUT] posting to ${url} with ${coords}`)
