@@ -4,6 +4,7 @@ require('moment-precise-range-plugin')
 const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
 const Controller = require('./controller')
+const axios = require('axios')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
@@ -885,6 +886,51 @@ class Monster extends Controller {
 						}
 
 						const templateType = (data.iv === -1) ? 'monsterNoIv' : 'monster'
+						
+						if (data.iv === -1 && this.config.general.scoutURL) {
+						    const coords = JSON.stringify([[parseFloat(data.latitude.toFixed(5)),parseFloat(data.longitude.toFixed(5))]])
+							const headers = {
+									'Content-Type': 'application/json',
+									'X-Dragonite-Secret': this.config.general.dragoniteSecret
+									}
+							const url = this.config.general.scoutURL
+							
+							try {
+								this.log.info(`[SCOUT] posting to ${url} with ${coords}`)
+								const hrstart = process.hrtime()
+								const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
+								const source = axios.CancelToken.source()
+								const timeout = setTimeout(() => {
+									source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
+									// Timeout Logic
+								}, timeoutMs)
+
+								const result = await axios.post(url, coords, {cancelToken: source.token}, {headers: headers})
+								clearTimeout(timeout)
+								if (result.status !== 200) {
+									this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
+									return null
+								}
+								const hrend = process.hrtime(hrstart)
+								const hrendms = hrend[1] / 1000000
+
+								if (result.data.includes('<')) { // check for HTML error response
+									this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
+									return null
+								}
+								const scoutResult = result.data
+
+								return scoutResult
+							} catch (error) {
+								if (error.response) {
+									this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+								} else {
+									this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
+								}
+								return null
+							}
+						}
+						
 						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
 						const work = {
