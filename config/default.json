@@ -81,8 +81,11 @@
     // additional Shortlinks to Pogo Maps in DTS - supported RDM, Reactmap, RocketMAD
       "rdmURL": "",                // https://myRDM.com/
       "reactMapURL": "",           // https://myReactMap.com/
-      "rocketMadURL": ""           // https://myRocketMAD.com/
+      "rocketMadURL": "",          // https://myRocketMAD.com/
+	  "scoutURL": "",              // http://<ip>:<port>/scout
+	  "dragoniteSecret": ""        // Secret for api
   },
+  
   //
   // Configuration for the user reconciliation/role check function
   // The automated check is only enabled if roleCheck is enabled for either telegram or discord (default is off)
@@ -527,6 +530,7 @@
     "concurrentWebhookProcessorsPerWorker": 4,
     "concurrentDiscordDestinationsPerBot": 10,
     "concurrentTelegramDestinationsPerBot": 10,
-    "concurrentDiscordWebhookConnections": 10
+    "concurrentDiscordWebhookConnections": 10,
+	"dragoniteTimeout": 10000
   }
 }
