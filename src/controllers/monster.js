@@ -907,7 +907,7 @@ class Monster extends Controller {
 								}
 							
 							try {
-								this.log.info(`[SCOUT] posting to ${url} with ${coords}`)
+								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords}`)
 								const hrstart = process.hrtime()
 								const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
 								const source = axios.CancelToken.source()
@@ -930,7 +930,7 @@ class Monster extends Controller {
 									return null
 								}
 								const scoutResult = result.data
-								this.log.info(`[SCOUT] Scout sent successfully!`)
+								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
 								return scoutResult
 							} catch (error) {
 								if (error.response) {
