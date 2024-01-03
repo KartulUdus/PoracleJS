@@ -980,7 +980,7 @@ class Monster extends Controller {
 												}
 												const scoutResult = result.data
 												this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout CLUSTER sent successfully!`)
-												return scoutResult
+												
 											} catch (error) {
 												if (error.response) {
 													this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
