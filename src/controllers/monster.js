@@ -946,14 +946,14 @@ class Monster extends Controller {
 							this.log.info(`[SCOUT] Scout clusters: ${this.config.general.scoutClusters}.`)
 							if (this.config.general.scoutClusters) {  //Cluster Scans
 								// Find 6 points around current lat/lon about 70m away from center
-								var degreesPerPoint = 60;
+								var degreesPerPoint = 45;
 								var currentAngle = 0;
 									for(var i=0; i < 6; i++)
 									{
 										// X2 point will be cosine of angle * radius (range)
-										var x2 = data.latitude + Math.cos(currentAngle) * ((70*1.732)/1000);
+										var x2 = data.latitude + Math.cos(currentAngle) * ((70*1.732)/100000);
 										// Y2 point will be sin * range
-										var y2 = data.longitude + Math.sin(currentAngle) * ((70*1.732)/1000);
+										var y2 = data.longitude + Math.sin(currentAngle) * ((70*1.732)/100000);
 										const clusterCoord = JSON.stringify([[parseFloat(x2.toFixed(5)),parseFloat(y2.toFixed(5))]])
 											try {
 												this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER posting to ${url} with ${clusterCoord}`)
