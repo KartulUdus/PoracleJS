@@ -6,6 +6,8 @@ const S2ts = require('nodes2ts')
 const Controller = require('./controller')
 const axios = require('axios')
 
+
+
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
 		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
@@ -939,6 +941,39 @@ class Monster extends Controller {
 									this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
 								}
 								return null
+							}
+							
+							//WIP:  building out cluster scan:  (basic math in place)
+							if (this.config.general.scoutClusters) {
+								
+								function findCluster(lat, long)
+								{
+									// Find 6 points around current lat/lon about 70m away from center
+									var degreesPerPoint = 60;
+									var currentAngle = 0;
+									// The points on the radius will be lat+x2, long+y2
+									var x2;
+									var y2;
+									// Track the points we generate to return at the end
+									var points = [];
+
+									for(var i=0; i < 6; i++)
+									{
+										// X2 point will be cosine of angle * radius (range)
+										x2 = Math.cos(currentAngle) * ((70*1.732)/1000);
+										// Y2 point will be sin * range
+										y2 = Math.sin(currentAngle) * ((70*1.732)/1000);
+										  
+										point={"x":dataLatitude+x2,"y":dataLongitude+y2};
+										
+										// save to our results array
+										points.push(point);
+										// Shift our angle around for the next point
+										currentAngle += degreesPerPoint;
+									}
+									// Return the points we've generated
+									return points;
+								}
 							}
 						}
 						
