@@ -83,7 +83,8 @@
       "reactMapURL": "",           // https://myReactMap.com/
       "rocketMadURL": "",          // https://myRocketMAD.com/
 	  "scoutURL": "",              // http://<ip>:<port>/scout
-	  "dragoniteSecret": ""        // Secret for api
+	  "dragoniteSecret": "",       // Secret for api
+	  "scoutClusters" : false      // Should the scout scan full cluster
   },
   
   //
