@@ -943,38 +943,57 @@ class Monster extends Controller {
 								return null
 							}
 							
-							//WIP:  building out cluster scan:  (basic math in place)
-							if (this.config.general.scoutClusters) {
-								
-								function findCluster(lat, long)
-								{
-									// Find 6 points around current lat/lon about 70m away from center
-									var degreesPerPoint = 60;
-									var currentAngle = 0;
-									// The points on the radius will be lat+x2, long+y2
-									var x2;
-									var y2;
-									// Track the points we generate to return at the end
-									var points = [];
-
+							
+							if (this.config.general.scoutClusters) {  //Cluster Scans
+								// Find 6 points around current lat/lon about 70m away from center
+								var degreesPerPoint = 60;
+								var currentAngle = 0;
 									for(var i=0; i < 6; i++)
 									{
 										// X2 point will be cosine of angle * radius (range)
-										x2 = Math.cos(currentAngle) * ((70*1.732)/1000);
+										var x2 = data.latitude + Math.cos(currentAngle) * ((70*1.732)/1000);
 										// Y2 point will be sin * range
-										y2 = Math.sin(currentAngle) * ((70*1.732)/1000);
-										  
-										point={"x":dataLatitude+x2,"y":dataLongitude+y2};
+										var y2 = data.longitude + Math.sin(currentAngle) * ((70*1.732)/1000);
+										const clusterCoord = JSON.stringify([[parseFloat(x2.toFixed(5)),parseFloat(y2.toFixed(5))]])
+											try {
+												this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER posting to ${url} with ${clusterCoord}`)
+												const hrstart = process.hrtime()
+												const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
+												const source = axios.CancelToken.source()
+												const timeout = setTimeout(() => {
+													source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
+													// Timeout Logic
+												}, timeoutMs)
+
+												const result = await axios.post(url, clusterCoord, {cancelToken: source.token}, {headers: headers})
+												clearTimeout(timeout)
+												if (result.status !== 200) {
+													this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
+													return null
+												}
+												const hrend = process.hrtime(hrstart)
+												const hrendms = hrend[1] / 1000000
+
+												if (result.data.includes('<')) { // check for HTML error response
+													this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
+													return null
+												}
+												const scoutResult = result.data
+												this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout CLUSTER sent successfully!`)
+												return scoutResult
+											} catch (error) {
+												if (error.response) {
+													this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+												} else {
+													this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
+												}
+												return null
+											}										
 										
-										// save to our results array
-										points.push(point);
 										// Shift our angle around for the next point
 										currentAngle += degreesPerPoint;
 									}
-									// Return the points we've generated
-									return points;
 								}
-							}
 						}
 						
 						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
