@@ -606,11 +606,12 @@ class Monster extends Controller {
 					}
 
 					//sendscout blame bigfun
-					sendscout: if (data.iv === -1 && this.config.general.scoutURL) {
+					sendscout: if (data.iv === -1 && this.config.scouts?.scoutURL) {
 						const coords = []
 						coords.push([data.latitude,data.longitude])
-						if (this.config.general.scoutClusters) {  //Cluster Scans
-							// Find 6 points around current lat/lon about 70m away from center
+						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans
+							// Find 6 points around current lat/lon about 70*1.732m away from center
+							// really needs better math here, but this does the trick
 							var degreesPerPoint = 45;
 							var currentAngle = 0;
 							for(var i=0; i < 6; i++) {
@@ -625,15 +626,15 @@ class Monster extends Controller {
 						}
 						const headers = {
 								'Content-Type': 'application/json',
-								'X-Dragonite-Admin-Secret': this.config.general.dragoniteSecret
+								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteSecret
 								}
-						const url = this.config.general.scoutURL
-						this.log.info(`[SCOUT] Scout ready!  Send clusters too? ${this.config.general.scoutClusters}.`)
+						const url = this.config.scouts?.scoutURL
+						this.log.info(`[SCOUT] Scout ready!  Sending clusters too? ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
 						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
 						
 						try {
 							const hrstart = process.hrtime()
-							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
+							const timeoutMs = this.config.scouts?.dragoniteTimeout || 10000
 							const source = axios.CancelToken.source()
 							const timeout = setTimeout(() => {
 								source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
