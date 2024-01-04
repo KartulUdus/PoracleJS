@@ -532,6 +532,6 @@
     "concurrentDiscordDestinationsPerBot": 10,
     "concurrentTelegramDestinationsPerBot": 10,
     "concurrentDiscordWebhookConnections": 10,
-	"dragoniteTimeout": 10000
+    "dragoniteTimeout": 10000
   }
 }
