@@ -960,7 +960,6 @@ class Monster extends Controller {
 										currentAngle += degreesPerPoint;
 									}
 									clusterCoords = JSON.stringify(clusterCoords)
-									this.log.info(`[SCOUT] Cluster sending: ${clusterCoords}.`)
 									try {
 											this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER posting to ${url} with ${clusterCoords}`)
 											const hrstart = process.hrtime()
