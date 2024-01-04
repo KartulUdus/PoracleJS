@@ -894,7 +894,7 @@ class Monster extends Controller {
 						    const coords = JSON.stringify([[parseFloat(data.latitude.toFixed(5)),parseFloat(data.longitude.toFixed(5))]])
 							const headers = {
 									'Content-Type': 'application/json',
-									'X-Dragonite-Secret': this.config.general.dragoniteSecret
+									'X-Dragonite-Admin-Secret': this.config.general.dragoniteSecret
 									}
 							const url = this.config.general.scoutURL
 							
