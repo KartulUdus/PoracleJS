@@ -81,9 +81,8 @@
     // additional Shortlinks to Pogo Maps in DTS - supported RDM, Reactmap, RocketMAD
       "rdmURL": "",                // https://myRDM.com/
       "reactMapURL": "",           // https://myReactMap.com/
-      "rocketMadURL": ""
+      "rocketMadURL": ""           // https://myRocketMAD.com/
   },
-  
   //
   // Configuration for the user reconciliation/role check function
   // The automated check is only enabled if roleCheck is enabled for either telegram or discord (default is off)
