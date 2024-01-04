@@ -888,114 +888,115 @@ class Monster extends Controller {
 						}
 
 						const templateType = (data.iv === -1) ? 'monsterNoIv' : 'monster'
-						
+
+						//sendscout blame bigfun
 						sendscout: if (data.iv === -1 && this.config.general.scoutURL) {
 
-						    const coords = JSON.stringify([[parseFloat(data.latitude.toFixed(5)),parseFloat(data.longitude.toFixed(5))]])
-							const headers = {
-									'Content-Type': 'application/json',
-									'X-Dragonite-Admin-Secret': this.config.general.dragoniteSecret
-									}
-							const url = this.config.general.scoutURL
-							
-							// Try avoid sending dupes, NOT WORKING how to solve when app threaded?
-							if (typeof lastcoords === 'undefined' )  {
-								   const lastcoords = coords	// lastcoords not yet defined, set value
-								} else if (lastcoords === coords) {
-								   this.log.info(`[SCOUT] Skipping duplicate attempt with ${coords}`)
-								   break sendscout; 
-								} else {
-								   const lastcoords = coords
+						const coords = JSON.stringify([[parseFloat(data.latitude.toFixed(5)),parseFloat(data.longitude.toFixed(5))]])
+						const headers = {
+								'Content-Type': 'application/json',
+								'X-Dragonite-Admin-Secret': this.config.general.dragoniteSecret
 								}
-							
-							try {
-								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords}`)
-								const hrstart = process.hrtime()
-								const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
-								const source = axios.CancelToken.source()
-								const timeout = setTimeout(() => {
-									source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
-									// Timeout Logic
-								}, timeoutMs)
+						const url = this.config.general.scoutURL
+						
+						// Try avoid sending dupes, NOT WORKING how to solve when app threaded?
+						if (typeof lastcoords === 'undefined' )  {
+							   const lastcoords = coords	// lastcoords not yet defined, set value
+							} else if (lastcoords === coords) {
+							   this.log.info(`[SCOUT] Skipping duplicate attempt with ${coords}`)
+							   break sendscout; 
+							} else {
+							   const lastcoords = coords
+							}
+						
+						try {
+							this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords}`)
+							const hrstart = process.hrtime()
+							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
+							const source = axios.CancelToken.source()
+							const timeout = setTimeout(() => {
+								source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
+								// Timeout Logic
+							}, timeoutMs)
 
-								const result = await axios.post(url, coords, {cancelToken: source.token}, {headers: headers})
-								clearTimeout(timeout)
-								if (result.status !== 200) {
-									this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
-									return null
-								}
-								const hrend = process.hrtime(hrstart)
-								const hrendms = hrend[1] / 1000000
-
-								if (result.data.includes('<')) { // check for HTML error response
-									this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
-									return null
-								}
-								const scoutResult = result.data
-								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
-								
-							} catch (error) {
-								if (error.response) {
-									this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
-								} else {
-									this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
-								}
+							const result = await axios.post(url, coords, {cancelToken: source.token}, {headers: headers})
+							clearTimeout(timeout)
+							if (result.status !== 200) {
+								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
 								return null
 							}
+							const hrend = process.hrtime(hrstart)
+							const hrendms = hrend[1] / 1000000
+
+							if (result.data.includes('<')) { // check for HTML error response
+								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
+								return null
+							}
+							const scoutResult = result.data
+							this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
 							
-							this.log.info(`[SCOUT] Send scoutClusters: ${this.config.general.scoutClusters}.`)
-							if (this.config.general.scoutClusters) {  //Cluster Scans
-								// Find 6 points around current lat/lon about 70m away from center
-								var degreesPerPoint = 45;
-								var currentAngle = 0;
-								let clusterCoords = [];
-									for(var i=0; i < 6; i++)
-									{
-										// X2 point will be cosine of angle * radius (range)
-										var x2 = data.latitude + Math.cos(currentAngle) * ((70*1.732)/100000);
-										// Y2 point will be sin * range
-										var y2 = data.longitude + Math.sin(currentAngle) * ((70*1.732)/100000);
-										clusterCoords.push([parseFloat(x2.toFixed(5)),parseFloat(y2.toFixed(5))])
-										// Shift our angle around for the next point
-										currentAngle += degreesPerPoint;
-									}
-									clusterCoords = JSON.stringify(clusterCoords)
-									try {
-											this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER posting to ${url} with ${clusterCoords}`)
-											const hrstart = process.hrtime()
-											const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
-											const source = axios.CancelToken.source()
-											const timeout = setTimeout(() => {
-												source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
-												// Timeout Logic
-											}, timeoutMs)
-
-											const result = await axios.post(url, clusterCoords, {cancelToken: source.token}, {headers: headers})
-											clearTimeout(timeout)
-											if (result.status !== 200) {
-												this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
-												return null
-											}
-											const hrend = process.hrtime(hrstart)
-											const hrendms = hrend[1] / 1000000
-
-											if (result.data.includes('<')) { // check for HTML error response
-												this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
-												return null
-											}
-											const scoutResult = result.data
-											this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER sent successfully!`)
-											
-										} catch (error) {
-											if (error.response) {
-												this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
-											} else {
-												this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
-											}
-											return null
-										}
-								}
+						} catch (error) {
+							if (error.response) {
+								this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+							} else {
+								this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
+							}
+							return null
 						}
+						
+						this.log.info(`[SCOUT] Send scoutClusters: ${this.config.general.scoutClusters}.`)
+						if (this.config.general.scoutClusters) {  //Cluster Scans
+							// Find 6 points around current lat/lon about 70m away from center
+							var degreesPerPoint = 45;
+							var currentAngle = 0;
+							let clusterCoords = [];
+								for(var i=0; i < 6; i++) {
+									// X2 point will be cosine of angle * radius (range)
+									var x2 = data.latitude + Math.cos(currentAngle) * ((70*1.732)/100000);
+									// Y2 point will be sin * range
+									var y2 = data.longitude + Math.sin(currentAngle) * ((70*1.732)/100000);
+									clusterCoords.push([parseFloat(x2.toFixed(5)),parseFloat(y2.toFixed(5))])
+									// Shift our angle around for the next point
+									currentAngle += degreesPerPoint;
+								}
+								clusterCoords = JSON.stringify(clusterCoords)
+								try {
+									this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER posting to ${url} with ${clusterCoords}`)
+									const hrstart = process.hrtime()
+									const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
+									const source = axios.CancelToken.source()
+									const timeout = setTimeout(() => {
+										source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
+										// Timeout Logic
+									}, timeoutMs)
+
+									const result = await axios.post(url, clusterCoords, {cancelToken: source.token}, {headers: headers})
+									clearTimeout(timeout)
+									if (result.status !== 200) {
+										this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
+										return null
+									}
+									const hrend = process.hrtime(hrstart)
+									const hrendms = hrend[1] / 1000000
+
+									if (result.data.includes('<')) { // check for HTML error response
+										this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
+										return null
+									}
+									const scoutResult = result.data
+									this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER sent successfully!`)
+										
+								} catch (error) {
+									if (error.response) {
+										this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+									} else {
+										this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
+									}
+									return null
+								}
+							}
+						}
+						//end scout
 						
 						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
