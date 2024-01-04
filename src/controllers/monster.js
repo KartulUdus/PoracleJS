@@ -627,7 +627,7 @@ class Monster extends Controller {
 								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteSecret
 								}
 						const url = this.config.scouts?.scoutURL
-						this.log.info(`[SCOUT] Scout ready!  Sending clusters too? ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
+						this.log.info(`[SCOUT] Scout ready!  Need cell clusters too? ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
 						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
 						
 						try {
