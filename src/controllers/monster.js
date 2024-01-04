@@ -629,7 +629,7 @@ class Monster extends Controller {
 								}
 						const url = this.config.general.scoutURL
 						this.log.info(`[SCOUT] Scout ready!  Send clusters too? ${this.config.general.scoutClusters}.`)
-						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${JSON.stringify(coords)}`)
+						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
 						
 						try {
 							const hrstart = process.hrtime()
