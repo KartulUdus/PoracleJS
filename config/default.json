@@ -82,9 +82,9 @@
       "rdmURL": "",                // https://myRDM.com/
       "reactMapURL": "",           // https://myReactMap.com/
       "rocketMadURL": "",          // https://myRocketMAD.com/
-	  "scoutURL": "",              // http://<ip>:<port>/scout
-	  "dragoniteSecret": "",       // Secret for api
-	  "scoutClusters" : false      // Should the scout scan full cluster
+      "scoutURL": "",              // http://<ip>:<port>/scout
+      "dragoniteSecret": "",       // Secret for dragonite admin api
+      "scoutClusters" : false      // Should the scout scan full cluster (6 extra coords in cell) 
   },
   
   //
