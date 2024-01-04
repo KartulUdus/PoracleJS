@@ -950,7 +950,6 @@ class Monster extends Controller {
 						}
 
 						const templateType = (data.iv === -1) ? 'monsterNoIv' : 'monster'
-
 						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
 						const work = {
