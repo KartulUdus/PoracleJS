@@ -909,7 +909,7 @@ class Monster extends Controller {
 								}
 							
 							try {
-								this.log.info(`[SCOUT] ${data.encounter_id} ${monster.name} posting to ${url} with ${coords}`)
+								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords}`)
 								const hrstart = process.hrtime()
 								const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
 								const source = axios.CancelToken.source()
@@ -943,7 +943,7 @@ class Monster extends Controller {
 								return null
 							}
 							
-							this.log.info(`[SCOUT] Scout clusters: ${this.config.general.scoutClusters}.`)
+							this.log.info(`[SCOUT] Send scoutClusters: ${this.config.general.scoutClusters}.`)
 							if (this.config.general.scoutClusters) {  //Cluster Scans
 								// Find 6 points around current lat/lon about 70m away from center
 								var degreesPerPoint = 45;
@@ -985,7 +985,7 @@ class Monster extends Controller {
 												return null
 											}
 											const scoutResult = result.data
-											this.log.info(`[SCOUT] ${data.encounter_id} ${monster.name} CLUSTER sent successfully!`)
+											this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER sent successfully!`)
 											
 										} catch (error) {
 											if (error.response) {
