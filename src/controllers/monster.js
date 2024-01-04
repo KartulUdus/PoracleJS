@@ -623,14 +623,13 @@ class Monster extends Controller {
 								currentAngle += degreesPerPoint;
 							}
 						}
-						JSON.stringify(coords)
 						const headers = {
 								'Content-Type': 'application/json',
 								'X-Dragonite-Admin-Secret': this.config.general.dragoniteSecret
 								}
 						const url = this.config.general.scoutURL
 						this.log.info(`[SCOUT] Scout ready!  Send clusters too? ${this.config.general.scoutClusters}.`)
-						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords}`)
+						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${JSON.stringify(coords)}`)
 						
 						try {
 							const hrstart = process.hrtime()
