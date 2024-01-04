@@ -539,5 +539,5 @@
     "concurrentDiscordDestinationsPerBot": 10,
     "concurrentTelegramDestinationsPerBot": 10,
     "concurrentDiscordWebhookConnections": 10
-	}
+  }
 }
