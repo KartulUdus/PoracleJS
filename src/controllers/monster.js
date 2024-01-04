@@ -898,7 +898,7 @@ class Monster extends Controller {
 									}
 							const url = this.config.general.scoutURL
 							
-							// Try avoid sending dupes, check current against last used:
+							// Try avoid sending dupes, NOT WORKING how to solve when app threaded?
 							if (typeof lastcoords === 'undefined' )  {
 								   const lastcoords = coords	// lastcoords not yet defined, set value
 								} else if (lastcoords === coords) {
@@ -909,7 +909,7 @@ class Monster extends Controller {
 								}
 							
 							try {
-								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords}`)
+								this.log.info(`[SCOUT] ${data.encounter_id} ${monster.name} posting to ${url} with ${coords}`)
 								const hrstart = process.hrtime()
 								const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
 								const source = axios.CancelToken.source()
@@ -960,7 +960,7 @@ class Monster extends Controller {
 										currentAngle += degreesPerPoint;
 									}
 									clusterCoords = JSON.stringify(clusterCoords)
-									this.log.info(`[SCOUT] Scout cluster sending: ${clusterCoords}.`)
+									this.log.info(`[SCOUT] Cluster sending: ${clusterCoords}.`)
 									try {
 											this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} CLUSTER posting to ${url} with ${clusterCoords}`)
 											const hrstart = process.hrtime()
@@ -985,7 +985,7 @@ class Monster extends Controller {
 												return null
 											}
 											const scoutResult = result.data
-											this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout CLUSTER sent successfully!`)
+											this.log.info(`[SCOUT] ${data.encounter_id} ${monster.name} CLUSTER sent successfully!`)
 											
 										} catch (error) {
 											if (error.response) {
