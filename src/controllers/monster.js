@@ -6,8 +6,6 @@ const S2ts = require('nodes2ts')
 const Controller = require('./controller')
 const axios = require('axios')
 
-
-
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
 		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
