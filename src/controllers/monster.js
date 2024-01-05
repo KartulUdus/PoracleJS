@@ -605,7 +605,7 @@ class Monster extends Controller {
 
 					//sendscout blame bigfun
 					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL) && ((this.config.scouts?.limitScoutRarity <= data.rarityGroup) || (data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2 ))) {
-						this.log.info(`[SCOUT] Scout ready! limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - rarityGroup: ${data.rarityGroup} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
+						this.log.info(`[SCOUT] Readying ${monster.name} rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
 						const coords = []
 						coords.push([data.latitude,data.longitude])
 						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans
