@@ -604,7 +604,8 @@ class Monster extends Controller {
 					}
 
 					//sendscout blame bigfun
-					sendscout: if (data.iv === -1 && this.config.scouts?.scoutURL) {
+					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL) && ((this.config.scouts?.limitScoutRarity <= data.rarityGroup) || (data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2 ))) {
+						this.log.info(`[SCOUT] Scout ready! limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - rarityGroup: ${data.rarityGroup} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
 						const coords = []
 						coords.push([data.latitude,data.longitude])
 						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans
@@ -627,7 +628,6 @@ class Monster extends Controller {
 								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteSecret
 								}
 						const url = this.config.scouts?.scoutURL
-						this.log.info(`[SCOUT] Scout ready!  Need cell clusters too? ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
 						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
 						
 						try {
