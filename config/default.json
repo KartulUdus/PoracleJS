@@ -251,6 +251,7 @@
   	  "scoutURL": "",              // http://<ip>:<port>/scout
 	  "dragoniteSecret": "",       // Secret for drangonite admin api
 	  "scoutClusters": false,      // Should the scout send 6x extra coords for nearby cell alerts
+	  "limitScoutRarity": 0,       // 0=no limit, sends scouts on all noIV alerts; 2=Uncommon and above only, 3=Rare+, 4=Very-Rare+, 5=Ultra-Rare+, 6=Unseen
 	  "dragoniteTimeout": 10000    // ms timeout for scout tuning 
   },
   //
