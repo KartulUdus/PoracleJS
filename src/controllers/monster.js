@@ -603,14 +603,15 @@ class Monster extends Controller {
 						data.futureEventTrigger = event.reason
 					}
 
-					//sendscout blame bigfun
+					//sendscout by bigfun
+					data.scoutResult = ''
 					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL) && ((this.config.scouts?.limitScoutRarity <= data.rarityGroup) || (data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2 )) && (!this.config.scouts?.scoutBlackList.includes(data.pokemonId)) ) {
 						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
 						const coords = []
 						coords.push([data.latitude,data.longitude])
 						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans
 							// Find 6 points around current lat/lon about 70*1.732m away from center
-							// really needs better math here, but this does the trick
+							// really needs better math here, but this does the trick most of the time
 							var degreesPerPoint = 45;
 							var currentAngle = 0;
 							for(var i=0; i < 6; i++) {
@@ -622,6 +623,7 @@ class Monster extends Controller {
 								// Shift our angle around for the next point
 								currentAngle += degreesPerPoint;
 							}
+							data.scoutResult = 'Cluster '
 						}
 						const headers = {
 								'Content-Type': 'application/json',
@@ -652,7 +654,7 @@ class Monster extends Controller {
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
 								return null
 							}
-							const scoutResult = result.data
+							data.scoutResult = data.scoutResult + result.data
 							this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
 							
 						} catch (error) {
@@ -665,6 +667,7 @@ class Monster extends Controller {
 						}
 						
 						}
+						
 					//end scout
 					
 					// Lookup pokestop name if needed
@@ -754,6 +757,7 @@ class Monster extends Controller {
 						data.gameWeatherName = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].name) : ''
 						data.gameWeatherEmoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[currentCellWeather].emoji, platform)) : ''
 						data.formname = data.formName // deprecated
+						data.scoutResult = data.scoutResult
 						data.quickMove = data.quickMoveName // deprecated
 						data.chargeMove = data.chargeMoveName // deprecated
 						data.move1emoji = data.quickMoveEmoji // deprecated
