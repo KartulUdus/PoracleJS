@@ -1,6 +1,6 @@
 {
   "name": "poracle",
-  "version": "4.7.1",
+  "version": "4.8.0",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "keywords": [
     "poracle",
@@ -36,7 +36,7 @@
     "async-mutex": "^0.4.0",
     "axios": "^1.4.0",
     "chokidar": "^3.5.3",
-    "config": "^3.3.9",
+    "config": "^3.3.10",
     "country-code-emoji": "^2.3.0",
     "deep-object-diff": "^1.1.9",
     "discord.js": "^13.16.0",
@@ -80,6 +80,6 @@
     "mocha": "^10.2.0"
   },
   "engines": {
-    "node": ">=18.16.0"
+    "node": ">=20.9.0"
   }
 }
