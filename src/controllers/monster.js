@@ -689,9 +689,7 @@ class Monster extends Controller {
 							}
 							return null
 						}
-						
-						}
-						
+					}
 					//end scout
 					
 					// Lookup pokestop name if needed
