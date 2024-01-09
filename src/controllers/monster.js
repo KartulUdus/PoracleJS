@@ -605,7 +605,7 @@ class Monster extends Controller {
 
 					//sendscout by bigfun
 					data.scoutResult = ''
-					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL && data.seenType != 'wild') && ((this.config.scouts?.limitScoutRarity <= data.rarityGroup) || (data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2 )) && (!this.config.scouts?.scoutBlackList.includes(data.pokemonId)) ) {
+					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL && data.seenType != 'wild' && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2)) {
 						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
 
 						const coords = []
@@ -654,7 +654,7 @@ class Monster extends Controller {
 								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteSecret
 								}
 						const url = this.config.scouts?.scoutURL
-						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(5)},${lon.toFixed(5)}]`).join(', ')}`)
+						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
 						
 						try {
 							const hrstart = process.hrtime()
