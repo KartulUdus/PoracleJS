@@ -1,6 +1,6 @@
 const tracked = require('../lib/poracleMessage/commands/tracked')
 
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/tracking/all/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
@@ -99,6 +99,4 @@ module.exports = async (fastify, options, next) => {
 			profile,
 		}
 	})
-
-	next()
 }
