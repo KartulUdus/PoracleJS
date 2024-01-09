@@ -607,30 +607,54 @@ class Monster extends Controller {
 					data.scoutResult = ''
 					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL) && ((this.config.scouts?.limitScoutRarity <= data.rarityGroup) || (data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2 )) && (!this.config.scouts?.scoutBlackList.includes(data.pokemonId)) ) {
 						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
+
 						const coords = []
 						coords.push([data.latitude,data.longitude])
-						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans
-							// Find 6 points around current lat/lon about 70*1.732m away from center
-							// really needs better math here, but this does the trick most of the time
-							var degreesPerPoint = 45;
-							var currentAngle = 0;
-							for(var i=0; i < 6; i++) {
-								// X2 point will be cosine of angle * radius (range)
-								var x2 = data.latitude + Math.cos(currentAngle) * ((70*1.732)/100000);
-								// Y2 point will be sin * range
-								var y2 = data.longitude + Math.sin(currentAngle) * ((70*1.732)/100000);
-								coords.push([x2,y2])
-								// Shift our angle around for the next point
-								currentAngle += degreesPerPoint;
-							}
+						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans w/ better math thanks to @RPOT
 							data.scoutResult = 'Cluster '
+							function degreesToRadians(degrees) {
+								var radians = degrees % 360;
+								return (radians * Math.PI) / 180;
+							}
+							function radiansToDegrees(radians) {
+								return (radians * 180) / Math.PI;
+							}
+							const earthRadius = 6371.0088;
+
+							//from https://github.com/chrisveness/geodesy/blob/761587cd748bd9f7c9825195eba4a9fc5891b859/latlon-spherical.js#L361
+							function destinationPoint(distance, bearing) {
+								// sinφ2 = sinφ1⋅cosδ + cosφ1⋅sinδ⋅cosθ
+								// tanΔλ = sinθ⋅sinδ⋅cosφ1 / cosδ−sinφ1⋅sinφ2
+								const δ = distance / earthRadius; // angular distance in radians
+								const θ = degreesToRadians(bearing);
+
+								const φ1 = degreesToRadians(data.latitude), λ1 = degreesToRadians(data.longitude);
+
+								const sinφ2 = Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ);
+								const φ2 = Math.asin(sinφ2);
+								const y = Math.sin(θ) * Math.sin(δ) * Math.cos(φ1);
+								const x = Math.cos(δ) - Math.sin(φ1) * sinφ2;
+								const λ2 = λ1 + Math.atan2(y, x);
+
+								const lat2 = radiansToDegrees(φ2);
+								const lon2 = radiansToDegrees(λ2);
+								return [lat2,lon2];
+							}
+
+							const distance = 0.070 * Math.sqrt(3.0);
+							for (var i=0; i<6; i++) {
+								let bearing = i*60.0;
+								let pt2 = destinationPoint(distance,bearing);
+								coords.push(pt2)
+							}						
 						}
+						
 						const headers = {
 								'Content-Type': 'application/json',
 								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteSecret
 								}
 						const url = this.config.scouts?.scoutURL
-						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
+						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(5)},${lon.toFixed(5)}]`).join(', ')}`)
 						
 						try {
 							const hrstart = process.hrtime()
