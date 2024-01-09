@@ -624,7 +624,7 @@ class Monster extends Controller {
 							//from https://github.com/chrisveness/geodesy/blob/761587cd748bd9f7c9825195eba4a9fc5891b859/latlon-spherical.js#L361
 							function destinationPoint(distance, bearing) {
 								// sinφ2 = sinφ1⋅cosδ + cosφ1⋅sinδ⋅cosθ
-								// tanΔλ = sinθ⋅sinδ⋅cosφ1 / cosδ−sinφ1⋅sinφ2
+								// tanΔλ = sinθ⋅sinδ⋅cosφ1 / cosδ−sinφ1⋅sinφ2 / this should be memorized as common knowledge
 								const δ = distance / earthRadius; // angular distance in radians
 								const θ = degreesToRadians(bearing);
 
