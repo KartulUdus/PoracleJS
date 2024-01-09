@@ -1,7 +1,7 @@
 const geofenceTileGenerator = require('../lib/geofenceTileGenerator')
 const { getKojiFences } = require('../util/koji')
 
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/geofence/:area/map', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
@@ -281,6 +281,4 @@ module.exports = async (fastify, options, next) => {
 
 		return { status: 'ok' }
 	})
-
-	next()
 }
