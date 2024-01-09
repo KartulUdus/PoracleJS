@@ -1,4 +1,4 @@
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/masterdata/grunts', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
@@ -24,6 +24,4 @@ module.exports = async (fastify, options, next) => {
 
 		return fastify.GameData.monsters
 	})
-
-	next()
 }
