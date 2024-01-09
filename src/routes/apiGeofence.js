@@ -1,4 +1,5 @@
 const geofenceTileGenerator = require('../lib/geofenceTileGenerator')
+const { getKojiFences } = require('../util/koji')
 
 module.exports = async (fastify, options, next) => {
 	fastify.get('/api/geofence/:area/map', options, async (req) => {
@@ -20,7 +21,7 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		try {
-			const url = await geofenceTileGenerator.generateGeofenceTile(fastify.geofence, fastify.query.tileserverPregen, req.params.area)
+			const url = await geofenceTileGenerator.generateGeofenceTile(fastify.geofence.geofence, fastify.query.tileserverPregen, req.params.area)
 			return {
 				status: 'ok',
 				url,
@@ -140,7 +141,7 @@ module.exports = async (fastify, options, next) => {
 		}
 
 		const areas = {}
-		for (const fence of fastify.geofence) {
+		for (const fence of fastify.geofence.geofence) {
 			areas[fence.name] = require('crypto').createHash('md5').update(JSON.stringify(fence.path)).digest('hex')
 		}
 
@@ -173,7 +174,7 @@ module.exports = async (fastify, options, next) => {
 
 		return {
 			status: 'ok',
-			geofence: fastify.geofence,
+			geofence: fastify.geofence.geofence,
 		}
 	})
 
@@ -202,7 +203,7 @@ module.exports = async (fastify, options, next) => {
 			type: 'FeatureCollection',
 			features: [],
 		}
-		const inGeoJSON = fastify.geofence
+		const inGeoJSON = fastify.geofence.geofence
 
 		for (let i = 0; i < inGeoJSON.length; i++) {
 			const inGeofence = inGeoJSON[i]
@@ -225,10 +226,10 @@ module.exports = async (fastify, options, next) => {
 			const outPath = []
 			if (inGeofence.multipath) {
 				for (let j = 0; j < inGeofence.multipath.length; j++) {
-					const path = inGeofence.multipath[j]
+					const geofencePath = inGeofence.multipath[j]
 					const outSubPath = []
-					for (let k = 0; k < path.length; k++) {
-						const coord = path[k]
+					for (let k = 0; k < geofencePath.length; k++) {
+						const coord = geofencePath[k]
 						outSubPath.push([coord[1], coord[0]])
 					}
 					if (outSubPath.at(-1)[0] !== outSubPath[0][0] || outSubPath.at(-1)[1] !== outSubPath[0][1]) {
@@ -253,6 +254,32 @@ module.exports = async (fastify, options, next) => {
 			status: 'ok',
 			geoJSON: outGeoJSON,
 		}
+	})
+
+	fastify.get('/api/geofence/reload', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) {
+			return {
+				webserver: 'unhappy',
+				reason: `ip ${req.ip} not in whitelist`,
+			}
+		}
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) {
+			return {
+				webserver: 'unhappy',
+				reason: `ip ${req.ip} in blacklist`,
+			}
+		}
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		await getKojiFences()
+
+		return { status: 'ok' }
 	})
 
 	next()

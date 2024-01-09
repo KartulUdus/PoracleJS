@@ -22,7 +22,7 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 
-		let allowedAreas = fastify.geofence.map((x) => x.name.toLowerCase())
+		let allowedAreas = fastify.geofence.geofence.map((x) => x.name.toLowerCase())
 		if (fastify.config.areaSecurity.enabled && !fastify.config.discord.admins.includes(req.params.id)
 		&& !fastify.config.telegram.admins.includes(req.params.id)) {
 			allowedAreas = communityLogic.filterAreas(
@@ -35,7 +35,7 @@ module.exports = async (fastify, options, next) => {
 
 		return {
 			status: 'ok',
-			areas: fastify.geofence.filter((x) => allowedAreas.includes(x.name.toLowerCase())).map((x) => ({
+			areas: fastify.geofence.geofence.filter((x) => allowedAreas.includes(x.name.toLowerCase())).map((x) => ({
 				name: x.name,
 				group: x.group || '',
 				description: x.description || '',
@@ -421,7 +421,7 @@ module.exports = async (fastify, options, next) => {
 		const currentProfileNo = human.current_profile_no
 		const adminTarget = !fastify.config.discord.admins.includes(targetId) || !fastify.config.telegram.admins.includes(targetId)
 
-		let allowedAreas = fastify.geofence
+		let allowedAreas = fastify.geofence.geofence
 		if (!adminTarget) allowedAreas = allowedAreas.filter((area) => (area.userSelectable === undefined || area.userSelectable))
 		allowedAreas = allowedAreas.map((x) => x.name.toLowerCase())
 		if (fastify.config.areaSecurity.enabled && !adminTarget) {

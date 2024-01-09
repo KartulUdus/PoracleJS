@@ -390,9 +390,20 @@ class Controller extends EventEmitter {
 	}
 
 	pointInArea(point) {
-		if (!this.geofence.length) return []
+		if (!this.geofence.geofence.length) return []
+
+		const result = this.geofence.rbush.search({
+			minX: point[0],
+			minY: point[1],
+			maxX: point[0],
+			maxY: point[1],
+		})
+
 		const matchAreas = []
-		for (const areaObj of this.geofence) {
+
+		for (const potential of result) {
+			const areaObj = potential.fence
+
 			if (areaObj.path) {
 				if (inside(point, areaObj.path)) {
 					matchAreas.push({
@@ -416,7 +427,15 @@ class Controller extends EventEmitter {
 				}
 			}
 		}
-		return matchAreas
+
+		const dedupedList = []
+
+		for (const match of matchAreas) {
+			if (!dedupedList.some((x) => x.name === match.name)) {
+				dedupedList.push(match)
+			}
+		}
+		return dedupedList
 	}
 
 	// database methods below

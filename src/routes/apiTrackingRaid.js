@@ -102,7 +102,7 @@ module.exports = async (fastify, options, next) => {
 				team: row.team >= 0 && row.team <= 4 ? row.team : 4, // carefully chosen to get nulls/undefined to 4 but allow 0
 				clean: +defaultTo(+row.clean, 0),
 				level: +level,
-				form: 0,
+				form: +defaultTo(row.form, 0),
 				move: +defaultTo(row.move, 9000),
 				evolution: +defaultTo(row.evolution, 9000),
 				gym_id: row.gym_id ? row.gym_id : null,

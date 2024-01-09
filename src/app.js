@@ -538,7 +538,7 @@ async function processOne(hook) {
 					fastify.controllerLog.debug(`${hook.message.encounter_id}: Wild encounter was received but set to be ignored in config`)
 					break
 				}
-				if (!hook.message.poracleTest) {
+				if (!hook.message.poracleTest && !config.tuning?.disablePokemonCache) {
 					fastify.webhooks.info(`pokemon ${JSON.stringify(hook.message)}`)
 					const verifiedSpawnTime = (hook.message.verified || hook.message.disappear_time_verified)
 					const cacheKey = `${hook.message.encounter_id}${verifiedSpawnTime ? 'T' : 'F'}${hook.message.cp}`
@@ -902,8 +902,12 @@ async function run() {
 	setTimeout(processPogoEvents, 30000)
 	setTimeout(processPossibleShiny, 30000)
 
-	let watchGeofence = Array.isArray(config.geofence.path) ? config.geofence.path : [config.geofence.path]
-	watchGeofence = watchGeofence.map((x) => path.join(__dirname, `../${x}`))
+	let watchGeofence = Array.isArray(config.geofence.path)
+		? config.geofence.path
+		: [config.geofence.path]
+	watchGeofence = watchGeofence.map((x) => (x.startsWith('http')
+		? path.join(__dirname, '../.cache', `${x.replace(/\//g, '__')}.json`)
+		: path.join(__dirname, `../${x}`)))
 
 	chokidar.watch(watchGeofence, {
 		awaitWriteFinish: true,
@@ -919,7 +923,8 @@ async function run() {
 
 			// This splice mechanism replaces array in place (relies on no caching)
 			const newGeofence = require('./lib/geofenceLoader').readAllGeofenceFiles(config)
-			geofence.splice(0, geofence.length, ...newGeofence)
+			geofence.rbush = newGeofence.rbush
+			geofence.geofence = newGeofence.geofence
 		} catch (err) {
 			log.error('Error reloading dts', err)
 		}
