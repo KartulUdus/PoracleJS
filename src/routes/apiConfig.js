@@ -1,6 +1,6 @@
 const { version } = require('../../package.json')
 
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/config/poracleWeb', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
@@ -72,6 +72,4 @@ module.exports = async (fastify, options, next) => {
 			telegram: Object.fromEntries(typesForPlatform('telegram').map((x) => [x, Object.fromEntries(languagesForType('telegram', x).map((y) => [y, templatesForLanguage('telegram', x, y)]))])),
 		}
 	})
-
-	next()
 }
