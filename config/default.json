@@ -1,546 +1,1014 @@
-{
-  // **** This is the Poracle default configuration settings. Do not change this file,
-  // **** It is updated by us when new config parameters are added
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
+require('moment-precise-range-plugin')
+const { S2 } = require('s2-geometry')
+const S2ts = require('nodes2ts')
+const Controller = require('./controller')
+const axios = require('axios')
 
-  // **** Copy any sections you wish to modify your local.json
+class Monster extends Controller {
+	getAlteringWeathers(types, boostStatus) {
+		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
+		const nonBoostingWeathers = [1, 2, 3, 4, 5, 6, 7].filter((weather) => !boostingWeathers.includes(weather))
+		if (boostStatus > 0) return nonBoostingWeathers
+		return boostingWeathers
+	}
 
-  //
-  // Server settings
-  //
-  "server": {
-      "host": "127.0.0.1",        // host name to listen on 127.0.0.1 only localhost; 0.0.0.0 would be in all network interfaces
-      "port": "3030",             // port
-    // ipWhitelist, ipBlacklist - array of whitelisted or blacklisted addresses
-      "ipWhitelist": [],
-      "ipBlacklist": [],
-      "apiSecret": ""             // apiSecret to use for access to Poracle API -- blank API disabled
-  },
-  //
-  // These are general parameters
-  //
-  "general": {
-      "environment": "production",              // leave as 'production'
-      "alertMinimumTime" : 120,                 // time inside which alerts will not be generated (120s - 2mins before expiration no alert)
-      "ignoreLongRaids": false,                 // ignore raids > 47m long to save raid hour/special raid event spam
-    // imgUrl - base url for poracle creation of {{imgUrl}} reference (uicons repository)
-      "imgUrl": "https://raw.githubusercontent.com/nileplumb/PkmnShuffleMap/master/UICONS",
-    // imgUrlAlt - Second base url for poracle creation of {{imgUrlAlt}} reference (uicons repository)
-      "imgUrlAlt": "",
-    // stickerUrl - base url for poracle creation of {{stickerUrl}} reference for telegram webp stickers (uicons repository)
-      "stickerUrl": "https://raw.githubusercontent.com/bbdoc/tgUICONS/main/Shuffle",
-    // images/stickers - override uicons repository for each alert type
-    //  "controllerType": "repositoryUrl"
-    //  controllerType one of monster, gym, nest, invasion, lure, quest, raid, weather
-      "images": {
-      },
-      "stickers": {
-      },
-      "requestShinyImages": false,
-      "populatePokestopName": false,            // [RDM] lookup nearby pokestop names in scanner db for nearby mons
-      "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
-    // disabledCommands - array of commands which will be disabled from use
-      "disabledCommands": [],
-    // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
-    //    invasion hook processing for RDM systems
-      "disablePokemon": false,
-      "disableRaid": false,
-      "disablePokestop": false,
-      "disableInvasion": false,
-      "disableLure": false,
-      "disableQuest": false,
-      "disableWeather": false,
-      "disableNest": false,
-      "disableGym": false,
-      "disableFortUpdate": false,
-    // roleCheckMode (case sensitive)
-    // "ignore" - log and don't delete/disable users once required roles/channel membership are removed
-    // "delete" - delete user from database along with trackings once required role is removed
-    // "disable-user" - disable user once required role is removed and re-enable once it's restored, trackings will remain
-      "roleCheckMode": "ignore",
-    // availableLanguages
-    // - This is an array of available languages that users can swap between using the !language command
-    // - Each language can have it's own call word which pre-sets that language, and you also define the help text
-    // - command so that Poracle can always answer help in native language regardless of the users current settings
-    // An example might be:
-    //         "availableLanguages": {
-    //            "en": {"poracle": "poracle", "help": "help" },
-    //            "de": {"poracle": "dasporacle", "help": "hilfe" },
-    //            "fr": {"poracle": "leporacle", "help": "aide" }
-    //        },
-      "availableLanguages": {
-      },
-     // default template name/number to use when users add new trackings
-     "defaultTemplateName": 1,
-    // library of custom DTS templates
-      "dtsDictionary": {},
-    // Short link provider - supported hideuri, shlink, yourls
-      "shortlinkProvider": "hideuri",
-      "shortlinkProviderURL": "",
-      "shortlinkProviderKey": "",
-      "shortlinkProviderDomain": "",           // if supported, select domain to be used
-    // additional Shortlinks to Pogo Maps in DTS - supported RDM, Reactmap, RocketMAD
-      "rdmURL": "",                // https://myRDM.com/
-      "reactMapURL": "",           // https://myReactMap.com/
-      "rocketMadURL": ""           // https://myRocketMAD.com/
-  },
-  //
-  // Configuration for the user reconciliation/role check function
-  // The automated check is only enabled if roleCheck is enabled for either telegram or discord (default is off)
-  // But these also apply when role changes are seen on discord
-  //
-  "reconciliation": {
-    "discord": {
-      "updateUserNames": false,                // Follow discord username changes
-      "removeInvalidUsers": true,              // Whether users who lose roles should be de-registered on role-check
-      "registerNewUsers": false,               // Whether users who are granted roles are auto-registered on role-check
-      "updateChannelNames": true,              // Whether channel names are kept in sync
-      "updateChannelNotes": false,             // Whether channel notes are updated to contain guild name / category
-      "unregisterMissingChannels": false       // Whether channels that are deleted from discord are removed from database
-    },
-    "telegram": {
-      "updateUserNames": false,                // Follow telegram username changes
-      "removeInvalidUsers": true               // Whether users are automatically removed
-    }
-  },
-  //
-  // Log levels - silly, debug, verbose, info, warn
-  //
-  // Suggestion - start at verbose, info will be a bit less logging. If you are trying to track down an issue
-  // debug has more detail.
-  //
-  "logger": {
-      "consoleLogLevel": "verbose",       // this is the level displayed on the screen (and perhaps in pm2 or systemd logs if you run that way)
-      "logLevel": "verbose",              // this is the log level on disk, affecting all logs
-      "enableLogs": {
-        "webhooks": false,                // turn on hourly webhook log (can be quite large)
-        "discord": true,                  // turn on discord log (for outbound messages to discord users and channels)
-        "telegram": true,                 // turn on telegram log (for outbound messages to telegram users, groups and channels)
-        "pvp": false                      // whether to log pvp info/calculations (at verbose level)
-      },
-      "timingStats": false,               // whether to increase log level of key timing stats to 'verbose' (from debug)
-      "dailyLogLimit": 7,                 // the number of days to keep the daily logs (everything aside from webhooks)
-      "webhookLogLimit": 12               // the number of hours to keep the webhook logs, if enabled
-  },
+	async performQuery(query) {
+		let result = await this.db.raw(query)
+		result = this.returnByDatabaseType(result)
 
-  //
-  // Database connection strings.  client should be mysql (sqlite3 no longer supported).
-  //
-  "database": {
-      "client": "mysql",
-      "conn": {
-          "host": "127.0.0.1",
-          "database": "poracle",
-          "user": "poracleuser",
-          "password": "poraclepassword",
-          "port": 3306
-      },
-      "scannerType": "none",               // Scanner type: can be none, rdm or mad
-      "scanner": {
-          "host": "127.0.0.1",
-          "database": "scannerdb",
-          "user": "scanneruser",
-          "password": "scannerpassword",
-          "port": 3306
-      }
-  },
-  //
-  //
-  "locale": {
-      "timeformat": "en-gb",
-      "time": "LTS",
-      "date": "L",
-    // addressFormat - how an address is consutructed into the {{addr}} tag
-      "addressFormat": "{{{streetName}}} {{streetNumber}}",
-    // language - this is the secondary language that is used for 'alt' translation in dts.  This is rarely used now
-    //   poracle now has multi-lingual support but can be useful for retrieving english language detail for web links
-    //   for example
-      "language": "en"
-  },
+		return result
+	}
 
-  //
-  // Geofence - default format is that created here http://geo.jasparke.net/
-  //   You can also use a geojson file if you would like to share with other tools
-  //
-  "geofence": {
-      "path": "./config/geofence.json",
-      "defaultGeofenceName": "city",               // default fence name if your fence does not have names
-      "defaultGeofenceColor": "#3399ff",
-      "kojiOptions": {
-        "bearerToken": ""
-      }
-  },
+	async monsterWhoCares(data) {
+		const { areastring, strictareastring } = this.buildAreaString(data.matched)
 
-  //
-  // Weather support
-  //
-  "weather": {
-      "weatherChangeAlert": false,                  // To enable or disable the weather change alerts
-      "showAlteredPokemon": false,                  // Track weather changed pokémon to be able to be shown in DTS
-      "showAlteredPokemonStaticMap": false,         // Show weather changed on static map
-      "showAlteredPokemonMaxCount": 10,             // Max number of changed pokémon allowed per alert
-      "enableWeatherForecast": false,               // To enable or disable weather forecast (using accuweather)
-    // AccuWeather API keys - array of keys, poracle will rotate through keys
-      "apiKeyAccuWeather": [""],
-      "apiKeyDayQuota": 50,                         // Maximum API calls allowed per key per day
-      "smartForecast": false,                       // use smart update of weather forecast (pull on demand if no weather data available for a given cell, otherwise will wait for next standard refresh)
-      "localFirstFetchHOD": 3,                      // First hour of the day for the first API call (3am local seems best)
-      "forecastRefreshInterval": 8                  // API call interval
-  },
+		const pvpQueryLimit = this.config.pvp.pvpQueryMaxRank || this.config.pvp.pvpFilterMaxRank || 100
 
-  //
-  // PVP tracking fine tuning
-  // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean
-  //   would match an eevee)
-  //
-  "pvp": {
-      "dataSource": "internal",                      // webhook - from hooks, internal - internal calculator
-      "levelCaps": [50],                            // internal: level caps to be included in internal rank calculations - alternative could be [50, 51]
-      "includeMegaEvolution": false,                // internal: whether to include mega evolutions in rank calculations
-      "littleLeagueCanEvolve": false,               // internal: whether little league mons that are evolved are included
-      "pvpEvolutionDirectTracking": false,          // pvpEvolutionDirectTracking - whether users can track pvp evolutions directly (eg vaporean would match an eevee)
-      "filterByTrack": false,                       // whether new style PVP listings are auto-filtered by user's track requirements
-    // pvpDisplay* - these are variables that will be passed into DTS to allow you to perform
-    //   a filtering calculation
-      "pvpDisplayMaxRank": 10,
-      "pvpDisplayGreatMinCP": 1400,
-      "pvpDisplayUltraMinCP": 2350,
-      "pvpDisplayLittleMinCP": 450,
-    // pvpFilter* - these filters are used as minimums on the track command to help users get
-    //   PVP tracking right and to eliminate unexpectedly large tracks
-      "pvpFilterMaxRank": 10,
-      "pvpFilterGreatMinCP": 1400,
-      "pvpFilterUltraMinCP": 2350,
-      "pvpFilterLittleMinCP": 450
-  },
-  //
-  // tracking configuration - this section contains restrictions around tracking
-  //
-  "tracking": {
-    // everythingFlagPermissions defines how the 'everything' flag is treated by the !track command.
-    //    allow-any: the use of everything is unrestricted, it is recorded as a wildcard, and users can use 'individually' to get individual rows
-    //    allow-and-always-individually: the use of everything is unrestricted and recorded as individual rows for each pokemon tracked
-    //    allow-and-ignore-individually: the use of everything is unrestricted but users can't opt for individual tracking rows
-    //    deny: users cannot track for everything and must track against individual pokemon
-      "everythingFlagPermissions": "allow-any",
-      "defaultDistance": 0,                       // if you are doing distance tracking only (no areas), this is a default for users
-      "maxDistance": 0,                           // restrict users from having too large a tracking circle (0 = no limit)
-      "enableGymBattle": false,                   // allow users to use "battle_changes" option into !gym tracking command
-      "defaultUserTrackingLevelCap": 0            // user default for pvp tracking level cap - 0 all levels
-  },
-  //
-  // stats configuration
-  //
-  "stats": {
-    "maxPokemonId": 1010,              // current max Pokemon Id to consider in lists
-    "minSampleSize": 10000,           // minimum number of Pokemon to process before broadcasting stats to the controllers
-    "pokemonCountToKeep": 8,          // period for stats calculation in hours
-    "rarityRefreshInterval": 5,       // interval for rarity stats broadcast to controllers in minutes
-    "rarityGroup2Uncommon": 1,        // percentage of seen Pokemon to consider Uncommon - 1% of total
-    "rarityGroup3Rare": 0.5,          // percentage of seen Pokemon to consider Rare - 0.5% of total
-    "rarityGroup4VeryRare": 0.03,     // percentage of seen Pokemon to consider Very Rare - 0.03% of total
-    "rarityGroup5UltraRare": 0.01,    // percentage of seen Pokemon to consider Ultra Rare - 0.01% of total
-    // Array of Pokemon ID to exclude from Rare / Very Rare and Ultra Rare lists
-    "excludeFromRare": [1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 69, 70, 71, 72, 73, 74, 75, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 133, 137, 138, 139, 140, 141, 142, 147, 152, 153, 155, 156, 158, 159, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 173, 177, 178, 179, 180, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 198, 199, 200, 202, 203, 204, 206, 207, 208, 209, 210, 211, 213, 214, 215, 216, 218, 219, 220, 223, 224, 225, 226, 227, 228, 231, 232, 234, 246, 252, 253, 255, 256, 258, 259, 261, 262, 263, 264, 265, 270, 271, 273, 274, 276, 277, 278, 279, 280, 283, 284, 285, 286, 287, 288, 293, 294, 295, 296, 299, 300, 301, 302, 303, 304, 305, 307, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 320, 322, 325, 326, 328, 329, 331, 332, 333, 335, 336, 337, 338, 339, 340, 341, 342, 343, 345, 346, 347, 348, 349, 351, 353, 354, 355, 356, 361, 363, 364, 365, 370, 371, 374, 387, 388, 390, 391, 393, 394, 396, 397, 399, 400, 401, 402, 408, 410, 412, 415, 418, 419, 421, 422, 425, 427, 428, 431, 432, 434, 435, 436, 449, 451, 453, 456, 457, 459, 460, 495, 496, 498, 499, 501, 502, 504, 505, 506, 507, 509, 511, 513, 515, 519, 520, 522, 524, 527, 529, 535, 536, 538, 539, 543, 544, 546, 550, 554, 557, 562, 568, 572, 574, 577, 580, 582, 585, 588, 590, 595, 613, 616, 624, 650, 653, 656, 659, 661, 667]
-  },
-  //
-  // Configure Poracle to send scouts to Dragonite
-  // This is triggered only by users monsterNoIV alerts (not all NoIV)
-  // Leave blank to keep disabled
-  //
-  "scouts": {
-  	  "scoutURL": "",              // http://<ip>:<port>/scout
-	  "dragoniteSecret": "",       // Secret for drangonite admin api
-	  "scoutClusters": true,       // Should the scout send 6x extra coords for nearby cell alerts
-	  "limitScoutRarity": 3,       // 0=no limit, sends scouts on all noIV alerts; 2=Uncommon and above only, 3=Rare+, 4=Very-Rare+, 5=Ultra-Rare+, 6=Unseen
-	  //Array of Pokemon ID to exclude from sending scouts
-	  "scoutBlackList": [1, 2, 4, 5, 7, 8, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 66, 67, 69, 70, 71, 72, 73, 74, 75, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 133, 137, 138, 139, 140, 141, 142, 147, 152, 153, 155, 156, 158, 159, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 173, 177, 178, 179, 180, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193, 194, 195, 198, 199, 200, 202, 203, 204, 206, 207, 208, 209, 210, 211, 213, 214, 215, 216, 218, 219, 220, 223, 224, 225, 226, 227, 228, 231, 232, 234, 246, 252, 253, 255, 256, 258, 259, 261, 262, 263, 264, 265, 270, 271, 273, 274, 276, 277, 278, 279, 280, 283, 284, 285, 286, 287, 288, 293, 294, 295, 296, 299, 300, 301, 302, 303, 304, 305, 307, 309, 310, 311, 312, 313, 314, 315, 316, 317, 318, 320, 322, 325, 326, 328, 329, 331, 332, 333, 335, 336, 337, 338, 339, 340, 341, 342, 343, 345, 346, 347, 348, 349, 351, 353, 354, 355, 356, 361, 363, 364, 365, 370, 371, 374, 387, 388, 390, 391, 393, 394, 396, 397, 399, 400, 401, 402, 408, 410, 412, 415, 418, 419, 421, 422, 425, 427, 428, 431, 432, 434, 435, 436, 449, 451, 453, 456, 457, 459, 460, 495, 496, 498, 499, 501, 502, 504, 505, 506, 507, 509, 511, 513, 515, 519, 520, 522, 524, 527, 529, 535, 536, 538, 539, 543, 544, 546, 550, 554, 557, 562, 568, 572, 574, 577, 580, 582, 585, 588, 590, 595, 613, 616, 624, 650, 653, 656, 659, 661, 667], 
-	  "dragoniteTimeout": 10000    // ms timeout for scout tuning 
-  },
-  //
-  // Configure your discord bot(s)
-  //  
-  "discord": {
-      "enabled": true,                                // is discord enabled?
-      "activity": "PoracleJS",                        // Bot Activity
-      "workerStatus": "invisible",                          // Worker Status - available, dnd, idle, invisible
-      "workerActivity": "PoracleJS Helper",           // Worker Activity
-      "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
-      "uploadEmbedImages": false,                     // whether Poracle will retrieve and upload images direct to discord CDN
-    // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
-    //   hours, deleting them if not (note general.roleCheckMode must be set to
-    //   actually carry out the deletions rather than just logging them)
-      "checkRole": false,
-      "checkRoleInterval": 6,
-    // token - array of discord tokens - poracle can support any number of bots for transmitting
-    //   messages but the first will be used as the command controller
-      "token": [""],
-    // guilds - the guilds (servers) that poracle will be on
-      "guilds": [""],
-    // channels - the ids of channels that can be used for the !poracle registration or alternatives by language
-    //  -- note these are not used in multi community (area security) mode
-      "channels": [""],
-    // userRoles - role IDs which will automatically grant poracle access (without registration required). Can be empty
-    //  -- note these are not used in multi community (area security) mode
-      "userRole": [""],
-    // admins - the IDs of admins (those who can add channels using !channel add and perform other admin functions)
-      "admins": [""],
-    // delegatedAdministration - list of channels/webhooks and users who can admin these channels
-    //  for channels the id may be a guild, a category or an individual channel
-    //  eg:
-    //     "delegatedAdministration": {
-    //       "channelTracking": {
-    //          "id": [ "id" ]
-    //        },
-    //        "webhookTracking": {
-    //          "name": ["id" ]
-    //        }
-    //      }
-      "delegatedAdministration": {
+		const result = []
 
-      },
-    // commandSecurity - list commands and users/roles that can execute these commands. If not specified no
-    // security is enforced for a command
-    // Valid permissions that be restricted: monster, pvp, gym, invasion, lure, nest, ...
-    // eg:
-    //   "commandSecurity": {
-    //      "monster": [ "userid", "roleid" ],
-    //      "pvp": [ "roleid" ]
-    //   }
-      "commandSecurity": {
+		// Basic Pokemon
+		result.push(...await this.performQuery(this.buildQuery('Basic', data, strictareastring, areastring, { pokemon_id: data.pokemon_id, form: data.form, includeEverything: true }, 0)))
 
-      },
-      "prefix": "!",                                  // prefix for poracle commands, usually '!'
-    // ivColors - array of 6 color codes for pokemon IV rankings
-      "ivColors": [
-        "#9D9D9D",
-        "#FFFFFF",
-        "#1EFF00",
-        "#0070DD",
-        "#A335EE",
-        "#FF8000"
-    ],
-      "dmLogChannelID": "",                           // an ID of a channel to use to log all poracle commands to (to watch users)
-      "dmLogChannelDeletionTime": 0,                  // time to clean up after (minutes) - 0 do not delete
-      "messageDeleteDelay": 0,                        // extra time to add on to a message 'clean' to leave behind (in ms)
-    // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
-      "unrecognisedCommandMessage": "",
-    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
-      "unregisteredUserMessage": "",
-    // lostRoleMessage - message to send to user when they have lost their role base access
-      "lostRoleMessage": ""
-  },
+		// PVP Pokemon
 
-  //
-  // Telegram settings
-  //
-  "telegram": {
-      "enabled": false,                             // whether telegram is enabled
-    // token - telegram bot token
-      "token": "",
-    // admins - admin user ids (array)
-      "admins": [""],
-    // delegatedAdministration - list of group ids or channel names and users who can admin these
-    //  eg:
-    //     "delegatedAdministration": {
-    //       "channelTracking": {
-    //          "id": [ "id" ],
-    //          "name": [ "id", "id ]
-    //        },
-    //      }
-    "delegatedAdministration": {
+		for (const [league, leagueDataArr] of Object.entries(data.pvpBestRank)) {
+			for (const leagueData of leagueDataArr) {
+				// if rank is good enough
+				if (leagueData.rank <= pvpQueryLimit) {
+					result.push(...await this.performQuery(this.buildQuery(
+						`PVP ${league}`,
+						data,
+						strictareastring,
+						areastring,
+						{
+							pokemon_id: data.pokemon_id,
+							form: data.form,
+							includeEverything: true,
+						},
+						league,
+						leagueData,
+					)))
+				}
+			}
+		}
 
-    },
-    // channels - these are the groups that can be used for registration (it should really
-    //   be called groups...). Note if they don't start with -100 then they may not be
-    //   supergroups yet - google to find out how to make your group one.
-    //   You can get the current group (and your) ids with the /identify command
-    //  -- note these are not used in multi community (area security) mode
-      "channels": [""],
-    // groupWelcomeText - message text (in channel) when someone registers. Users have to
-    //   select the 'start' option on the bot in the telegram client before it can message
-    //   them and this can be used to remind them of that
-      "groupWelcomeText": "Welcome {user}, remember to click on me and 'start bot' to be able to receive messages",
-    // botWelcomeText - message the bot sends to users who register
-      "botWelcomeText": "You are now registered with Poracle",
-    // botGoodbyeMessage - message to send to user when they have lost their access (through reconciliation)
-      "botGoodbyeMessage": "",
-    // unregisteredMessage - message to reply to users who send a DM but are unregistered (default of empty gives a shrug)
-      "unregisteredUserMessage": "",
-    // unrecognisedCommandMessage - message to reply to users who send an unrecognised command in DM
-      "unrecognisedCommandMessage": "",
-    // checkRole - whether to check all telegram users for membership of a registration group
-    //   (every _checkRoleInterval_ hours, deleting them if not (note general.roleCheckMode
-    //   must be set to actually carry out the deletions rather than just logging them)
-      "checkRole": false,
-      "checkRoleInterval": 6,
-      "registerOnStart": false            // Whether auto registration is attempted on /start being issued
-  },
-  //
-  // Alert limits - these are so Poracle can limit the amount of messages sent to a user/channel pro-actively
-  // to avoid individual users hogging the system (or channel explosions during an event)
-  //
-  "alertLimits": {
-    "timingPeriod": 240,          // seconds over which limits should be calculated
-    "dmLimit": 20,                // limit of number of messages a user can receive in the period
-    "channelLimit": 40,           // limit of number of messages a channel/group can receive in the period
-    "maxLimitsBeforeStop": 10,    // number of times user can hit rate limit (within 24hrs) before being stopped
-    "disableOnStop": false,       // whether user should be admin disabled rather than just stopped (require admin assistance for restart)
-    "shameChannel": "",     // name and shame stopped/disabled users to this discord channel
-    // allow override for specific channel ids in - id can be a channel/user id or a webhook name
-    //    "limitOverride": {
-    //        "id": limit,
-    //        "id": limit
-    //    }
-    "limitOverride": {
+		// PVP Evolution mon
 
-    }
-  },
-  //
-  // Area security -- this section allows you to define whether Poracle will restrict access to different
-  // communities based on individual membership. These settings override the relevant roles and channels in the discord/
-  // telegram section above
-  //
-  "areaSecurity": {
-    "enabled": false,                           // Whether area security functions are enabled
-    // strictLocations checks that alerts are coming from the defined locationFence for every alert
-    "strictLocations": false,
-    // List of communities with
-    //    -- allowedAreas - these are fences uses are allowed to !area add
-    //    -- locationFence - the single area used for checking strictLocations against
-    //    -- discord - registration channels and user roles for this community
-    //    -- telegram - membership groups that qualify for access to this community
-    // Example
-    //    "communities": {
-    //      "newyork": {
-    //        "allowedAreas": [
-    //          "manhattan", "bronx", "brooklyn", "queens"
-    //        ],
-    //        "locationFence": "wholenewyork",
-    //        "discord": {
-    //          "channels": [
-    //            "xx"
-    //          ],
-    //          "userRole": [
-    //            "xx"
-    //          ]
-    //        },
-    //        "telegram": {
-    //          "channels": [
-    //          ]
-    //        }
-    //      },
-    //      "chicago": {
-    //        "allowedAreas": [
-    //          "northwest", "southside", "central"
-    //        ],
-    //        "locationFence": "wholechicago",
-    //        "discord": {
-    //          "channels": [
-    //            "xx"
-    //          ],
-    //          "userRole": [
-    //            "xx"
-    //          ]
-    //        },
-    //        "telegram": {
-    //          "channels": [
-    //            "xx"
-    //          ]
-    //        }
-    //      },
-    //
-    "communities": {
+		if (this.config.pvp.pvpEvolutionDirectTracking) {
+			if (Object.keys(data.pvpEvolutionData).length !== 0) {
+				for (const [pokemonId, pvpMon] of Object.entries(data.pvpEvolutionData)) {
+					for (const [league, leagueDataArr] of Object.entries(pvpMon)) {
+						for (const leagueData of leagueDataArr) {
+							// if rank is good enough
+							if (leagueData.rank <= pvpQueryLimit) {
+								result.push(...await this.performQuery(this.buildQuery(
+									`PVPEvo ${league}`,
+									data,
+									strictareastring,
+									areastring,
+									{
+										pokemon_id: pokemonId,
+										form: leagueData.form,
+										includeEverything: false,
+									},
+									league,
+									leagueData,
+								)))
+							}
+						}
+					}
+				}
+			}
+		}
 
-    }
-  },
-  //
-  // geocoding section
-  //
-  "geocoding": {
-    //  provider, providerURL - these are used for address lookups. Can be 'none',
-    //   'nominatim' for a local nominatim installation (recommended) https://github.com/mediagis/nominatim-docker
-    //   or google (geocoding key provides an array of google API keys)
-      "provider": "none",
-      "providerURL": "",
-      "forwardOnly": false, // When true, disable reverse geocoding lookup
-      "cacheDetail": 3,     // number of decimal places of lon/lat to use while caching geocoding (default 3 - or use 4 for 100x more detail)
-      "dayStyle": "", // Names of styles you want to use for different times of day using tileservercache
-      "dawnStyle": "", // Use style: "#(style)" in templates to utilize this config option
-      "duskStyle": "",
-      "nightStyle": "",
-      "intersectionUsers": [], //list of geonames usernames to use for getting street intersections
-    // staticProvider - this is your provider of map tiles; can be tileservercache
-    //   (swift tile server - https://github.com/123FLO321/SwiftTileserverCache)
-    //   or google,osm,mapbox - staticKey provides an array of keys to use
-    //   width/height/zoom/etc provide parameters for these while tileservercache
-    //   uses templates (examples provided in tileservercache_templates folder)
-      "staticProvider": "none",
-      "staticProviderURL": "",
-      "tileserverSettings": {
-        "default": {
-          "type": "staticMap",          // can be staticMap or multiStaticMap - default is unlike to be changed
-          "width": 500,
-          "height": 250,
-          "zoom": 15,
-          "pregenerate": true,
-          "includeStops": false
-        }
-        // add further types to 'override' - type can be monster, raid, pokestop, quest, weather, location, nest, gym
-        // override values can be any of the above fields
-//      ,  "monster": {
-//          "type": "staticMap",
-//          "includeStops": true
-//        }
-      },
-    // geocodingKey - google keys for geolocation - can be more than one in this array and poracle will cycle
-      "geocodingKey":[""],
-    // staticKey - google or mapquest keys for provision of tiles - can be array and poracle will cycle, and parameters to use when requesting tiles
-      "staticKey":[""],
-      "width": 320,
-      "height": 200,
-      "zoom": 15,
-      "spriteHeight": 20,
-      "spriteWidth": 20,
-      "scale": 2,
-      "type": "klokantech-basic"
-  },
-  // fallback urls if something goes wrong
-  "fallbacks": {
-    "staticMap": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/staticMap.png",
-    // Various imgUrl fallbacks
-    "imgUrl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/mon.png",
-    "imgUrlWeather": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/weather.png",
-    "imgUrlEgg": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/uni.png",
-    "imgUrlGym": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/gym.png",
-    "imgUrlPokestop": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/pokestop.png",
-    // Used for pokestop urls in quests
-    "pokestopUrl": "https://raw.githubusercontent.com/KartulUdus/PoracleJS/images/fallback/pokestop.png"
-  },
-  //
-  // Fine tuning.  We do not recommend that you change these settings without talking to us in discord.
-  // But for reference here are some internal settings that can be tunes.
-  // Change these numbers slowl. Remember that inbound performance is not how long it takes to process an individual alert but how your
-  // webhook queue is kept under control; if this clears nicely in between drops from your scanner you are keeping up.  For outbound, a lower number of
-  // concurrent senders will reduce chance of hitting the global rate limit (probably) which is why we haven't defaulted too high here
-  //
-  // maxDatabaseConnections - This is the max number of database connections Poracle can have (per worker)
-  // webhookProcessingWorkers - Number of threads to run inbound webhook workers.  Five is enough for very big systems, going too high is probably
-  //     counter productive so talk to me before playing with this one
-  // concurrentWebhookProcessorsPerWorker - Number of inbound webhooks that can be processed at once per worker thread. Since each requires a database
-  //     connection for a query this should be lower than the maxDatabaseConnections
-  // concurrentDiscordDestinationsPerBot - How many concurrent messages should be queued for sending by the discord.js based bots. Discord rate limits
-  //     by route as well as a global limit so this will message 10 people at once
-  // concurrentTelegramDestinationsPerBot - How many concurrent messages should be queued for sending by the Telegram/telegraf based bots. Telegram rate
-  //     limits by route as well as a global limit so this will message 10 people at once
-  // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
-  //
-  "tuning": {
-    "fastMonsters": false,
-    "maxDatabaseConnections": 15,
-    "webhookProcessingWorkers": 5,
-    "concurrentWebhookProcessorsPerWorker": 4,
-    "concurrentDiscordDestinationsPerBot": 10,
-    "concurrentTelegramDestinationsPerBot": 10,
-    "concurrentDiscordWebhookConnections": 10
-  }
+		return result
+	}
+
+	async monsterWhoCaresInMemory(data) {
+		return this.monsterMatch.monsterWhoCares(data)
+	}
+
+	buildQuery(queryName, data, strictareastring, areastring, pokemonTarget, league, leagueData) {
+		const pokemonQueryString = `(pokemon_id=${pokemonTarget.pokemon_id}${pokemonTarget.includeEverything ? ' or pokemon_id=0' : ''}) and (form = 0 or form = ${pokemonTarget.form})`
+
+		let pvpQueryString = ''
+		const pvpSecurityEnabled = this.config.discord.commandSecurity && this.config.discord.commandSecurity.pvp
+
+		if (!league) {
+			pvpQueryString = 'pvp_ranking_league = 0'
+		} else {
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat('((humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE \'%pvp%\') and (')
+			}
+			pvpQueryString = pvpQueryString.concat(`pvp_ranking_league = ${league} and pvp_ranking_worst >= ${leagueData.rank} and pvp_ranking_best <= ${leagueData.rank} and pvp_ranking_min_cp <= ${leagueData.cp} and (pvp_ranking_cap = 0 ${leagueData.caps && leagueData.caps.length ? `or pvp_ranking_cap IN (${leagueData.caps})` : ''})`)
+
+			if (pvpSecurityEnabled) {
+				pvpQueryString = pvpQueryString.concat('))')
+			}
+		}
+
+		let query = `
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, monsters.template, monsters.distance, monsters.clean, monsters.ping, monsters.pokemon_id, monsters.pvp_ranking_cap, monsters.pvp_ranking_league, monsters.pvp_ranking_worst from monsters
+		join humans on (humans.id = monsters.id and humans.current_profile_no = monsters.profile_no)
+		where humans.enabled = true and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%monster%') and
+		(${pokemonQueryString}) and
+		min_iv<=${data.iv} and
+		max_iv>=${data.iv} and
+		min_time<=${data.tthSeconds} and
+		min_cp<=${data.cp} and
+		max_cp>=${data.cp} and
+		(gender = ${data.gender} or gender = 0) and
+		min_level<=${data.level} and
+		max_level>=${data.level} and
+		atk<=${data.atk} and
+		def<=${data.def} and
+		sta<=${data.sta} and
+		max_atk>=${data.atk} and
+		max_def>=${data.def} and
+		max_sta>=${data.sta} and
+		min_weight<=${data.weight * 1000} and
+		max_weight>=${data.weight * 1000} and
+		rarity<=${data.rarityGroup} and
+		max_rarity>=${data.rarityGroup} and
+		size<=${data.size} and
+		max_size>=${data.size} and
+		(${pvpQueryString})
+		${strictareastring}
+		`
+
+		if (['pg', 'mysql'].includes(this.config.database.client)) {
+			query = query.concat(`
+				and
+				(
+					(
+						monsters.distance != 0 and
+						round(
+							6371000	* acos(
+								cos( radians(${data.latitude}) )
+								* cos( radians( humans.latitude ) )
+								* cos( radians( humans.longitude ) - radians(${data.longitude}) )
+								+ sin( radians(${data.latitude}) )
+								* sin( radians( humans.latitude ) )
+							)
+						) < monsters.distance
+					)
+					or
+					(
+						monsters.distance = 0 and (${areastring})
+					)
+				)
+				`)
+		} else {
+			query = query.concat(`
+					and ((monsters.distance = 0 and (${areastring})) or monsters.distance > 0)
+					`)
+		}
+		this.log.silly(`${data.encounter_id}: Query[${queryName}] ${query}`)
+		return query
+	}
+
+	async handle(obj) {
+		const data = obj
+		try {
+			let hrstart = process.hrtime()
+			const logReference = data.encounter_id
+
+			const minTth = this.config.general.alertMinimumTime || 0
+
+			data.form ??= 0
+			const monster = this.GameData.monsters[`${data.pokemon_id}_${data.form}`] || this.GameData.monsters[`${data.pokemon_id}_0`]
+
+			if (!monster) {
+				this.log.warn(`${data.encounter_id}: Couldn't find monster in:`, data)
+				return
+			}
+
+			const weatherCellId = this.weatherData.getWeatherCellId(data.latitude, data.longitude)
+
+			if (data.weather) {
+				this.weatherData.checkWeatherOnMonster(weatherCellId, data.latitude, data.longitude, data.weather)
+			}
+
+			// Get current cell weather from cache
+			const currentCellWeather = this.weatherData.getCurrentWeatherInCell(weatherCellId)
+
+			const encountered = !(!(['string', 'number'].includes(typeof data.individual_attack) && (+data.individual_attack + 1))
+				|| !(['string', 'number'].includes(typeof data.individual_defense) && (+data.individual_defense + 1))
+				|| !(['string', 'number'].includes(typeof data.individual_stamina) && (+data.individual_stamina + 1)))
+
+			if (data.pokestop_name) data.pokestop_name = this.escapeJsonString(data.pokestop_name)
+			data.pokestopName = data.pokestop_name
+			data.pokemonId = data.pokemon_id
+			data.encounterId = data.encounter_id
+			// eslint-disable-next-line prefer-destructuring
+			data.generation = this.GameData.utilData.genException[`${data.pokemon_id}_${data.form}`] || Object.entries(this.GameData.utilData.genData).find(([, genData]) => data.pokemonId >= genData.min && data.pokemonId <= genData.max)[0]
+			data.generationNameEng = this.GameData.utilData.genData[data.generation].name
+			data.generationRoman = this.GameData.utilData.genData[data.generation].roman
+			data.nameEng = monster.name
+			data.formNameEng = monster.form.name
+			data.formId = data.form
+			data.iv = encountered ? ((data.individual_attack + data.individual_defense + data.individual_stamina) / 0.45).toFixed(2) : -1
+			data.atk = encountered ? data.individual_attack : 0
+			data.def = encountered ? data.individual_defense : 0
+			data.sta = encountered ? data.individual_stamina : 0
+			if (data.base_catch) data.capture_1 = data.base_catch
+			if (data.great_catch) data.capture_2 = data.great_catch
+			if (data.ultra_catch) data.capture_3 = data.ultra_catch
+			if (data.verified) data.disappear_time_verified = data.verified
+			data.catchBase = encountered ? (data.capture_1 * 100).toFixed(2) : 0
+			data.catchGreat = encountered ? (data.capture_2 * 100).toFixed(2) : 0
+			data.catchUltra = encountered ? (data.capture_3 * 100).toFixed(2) : 0
+			data.cp = encountered ? data.cp : 0
+			data.level = encountered ? data.pokemon_level : 0
+			data.quickMoveId = encountered ? data.move_1 : 0
+			data.chargeMoveId = encountered ? data.move_2 : 0
+			data.size = data.size ?? 0
+			data.quickMoveNameEng = encountered && this.GameData.moves[data.quickMoveId] ? this.GameData.moves[data.quickMoveId].name : ''
+			data.chargeMoveNameEng = encountered && this.GameData.moves[data.chargeMoveId] ? this.GameData.moves[data.chargeMoveId].name : ''
+			data.height = encountered && data.height ? data.height.toFixed(2) : 0
+			data.weight = encountered && data.weight ? data.weight.toFixed(2) : 0
+			data.genderDataEng = this.GameData.utilData.genders[data.gender]
+			data.genderNameEng = data.genderDataEng.name
+			if (data.boosted_weather) data.weather = data.boosted_weather
+			if (!data.weather) data.weather = 0
+			Object.assign(data, this.config.general.dtsDictionary)
+			data.appleMapUrl = `https://maps.apple.com/maps?daddr=${data.latitude},${data.longitude}`
+			data.googleMapUrl = `https://maps.google.com/maps?q=${data.latitude},${data.longitude}`
+			data.wazeMapUrl = `https://www.waze.com/ul?ll=${data.latitude},${data.longitude}&navigate=yes&zoom=17`
+			if (this.config.general.rdmURL) {
+				data.rdmUrl = `${this.config.general.rdmURL}${!this.config.general.rdmURL.endsWith('/') ? '/' : ''}@pokemon/${data.encounter_id}`
+			}
+			if (this.config.general.reactMapURL) {
+				data.reactMapUrl = `${this.config.general.reactMapURL}${!this.config.general.reactMapURL.endsWith('/') ? '/' : ''}id/pokemon/${data.encounter_id}`
+			}
+			if (this.config.general.rocketMadURL) {
+				data.rocketMadUrl = `${this.config.general.rocketMadURL}${!this.config.general.rocketMadURL.endsWith('/') ? '/' : ''}?lat=${data.latitude}&lon=${data.longitude}&zoom=18.0`
+			}
+			data.color = this.GameData.utilData.types[monster.types[0].name].color
+			data.ivColor = this.findIvColor(data.iv)
+			data.tthSeconds = data.disappear_time - Date.now() / 1000
+			data.tth = moment.preciseDiff(Date.now(), data.disappear_time * 1000, true)
+			const disappearTime = moment(data.disappear_time * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
+			data.disappearTime = disappearTime.format(this.config.locale.time)
+			data.confirmedTime = data.disappear_time_verified
+			data.distime = data.disappearTime // deprecated
+			data.individual_attack = data.atk // deprecated
+			data.individual_defense = data.def // deprecated
+			data.individual_stamina = data.sta // deprecated
+			data.pokemon_level = data.level // deprecated
+			data.move_1 = data.quickMoveId // deprecated
+			data.move_2 = data.chargeMoveId // deprecated
+			data.applemap = data.appleMapUrl // deprecated
+			data.mapurl = data.googleMapUrl // deprecated
+			data.ivcolor = data.ivColor // deprecated
+			//			data.gif = pokemonGif(Number(data.pokemon_id)) // deprecated
+			data.types = monster.types.map((type) => type.id)
+			data.alteringWeathers = this.getAlteringWeathers(data.types, data.weather)
+			data.rarityGroup = Object.keys(this.statsData.rarityGroups).find((x) => this.statsData.rarityGroups[x].includes(data.pokemonId)) || -1
+			data.rarityNameEng = this.GameData.utilData.rarity[data.rarityGroup] ? this.GameData.utilData.rarity[data.rarityGroup] : ''
+			data.sizeNameEng = data.size && this.GameData.utilData.size[data.size] ? this.GameData.utilData.size[data.size] : ''
+			data.pvpPokemonId = data.pokemon_id
+			data.pvpFormId = data.form
+			data.pvpEvolutionData = {}
+			data.shinyPossible = this.shinyPossible.isShinyPossible(data.pokemonId, data.formId)
+			data.shinyStats = this.statsData.shinyData[data.pokemonId] ? this.statsData.shinyData[data.pokemonId].ratio.toFixed(0) : null
+
+			if (this.config.logger.enableLogs.pvp && data.iv >= 0) {
+				this.log.verbose(`${data.encounter_id}: PVP From hook: "great":${JSON.stringify(data.pvp_rankings_great_league)} "ultra":${JSON.stringify(data.pvp_rankings_ultra_league)} "pvp":${JSON.stringify(data.pvp)}`)
+			}
+
+			if (data.ohbem_pvp) {
+				const pvpData = data.ohbem_pvp
+
+				if (this.config.logger.enableLogs.pvp) {
+					this.log.verbose(`${data.encounter_id}: PVP From ohbem: ${JSON.stringify(pvpData)}`)
+				}
+
+				if (this.config.pvp.dataSource === 'internal') {
+					if (pvpData.great) {
+						data.pvp_rankings_great_league = pvpData.great.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
+					} else delete data.pvp_rankings_great_league
+					if (pvpData.ultra) {
+						data.pvp_rankings_ultra_league = pvpData.ultra.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
+					} else delete data.pvp_rankings_ultra_league
+					if (pvpData.little) {
+						data.pvp_rankings_little_league = pvpData.little.filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
+					} else delete data.pvp_rankings_little_league
+				}
+			} else if (data.pvp) {
+				// For Chuck & new RDM parser
+				for (const league of Object.keys(data.pvp)) {
+					data[`pvp_rankings_${league}_league`] = data.pvp[league].filter((x) => this.config.pvp.includeMegaEvolution || !x.evolution)
+				}
+			}
+
+			data.pvpBestRank = {}
+
+			const capsConsidered = this.config.pvp.levelCaps ?? [50]
+
+			const rankCalculator = (league, leagueData, minCp) => {
+				const best = Object.fromEntries(capsConsidered.map((x) => [x, { rank: 4096, cp: 0 }]))
+
+				if (leagueData) {
+					for (const stats of leagueData) {
+						const caps = []
+						if (!stats.cap && !stats.capped) { // not ohbem
+							caps.push(50)
+						} else if (stats.capped) {
+							caps.push(...capsConsidered.filter((x) => x >= stats.cap))
+						} else {
+							caps.push(stats.cap)
+						}
+
+						for (const cap of caps) {
+							if (!capsConsidered.includes(cap)) {
+								this.log.warn(`${data.encounter_id}: PVP configuration mismatch - unexpected cap ${cap} found in league ${league}`)
+								// eslint-disable-next-line no-continue
+								continue
+							}
+							if (stats.rank && stats.rank < best[cap].rank) {
+								best[cap].rank = stats.rank
+								best[cap].cp = stats.cp || 0
+							} else if (stats.rank && stats.cp && stats.rank === best[cap].rank && stats.cp > best[cap].cp) {
+								best[cap].cp = stats.cp
+							}
+						}
+
+						if (!stats.evolution && this.config.pvp.pvpEvolutionDirectTracking && stats.rank && stats.cp && stats.pokemon !== data.pokemon_id && stats.rank <= this.config.pvp.pvpFilterMaxRank && stats.cp >= minCp) {
+							const newEvo = {
+								rank: stats.rank,
+								percentage: stats.percentage,
+								pokemon: stats.pokemon,
+								form: stats.form || 0,
+								level: stats.level,
+								cp: stats.cp,
+								// eslint-disable-next-line no-nested-ternary
+								caps: stats.capped
+									? capsConsidered.filter((x) => x >= stats.cap)
+									: (stats.cap && capsConsidered.includes(stats.cap) ? [stats.cap] : null),
+							}
+
+							if (data.pvpEvolutionData[stats.pokemon] && data.pvpEvolutionData[stats.pokemon][league]) {
+								data.pvpEvolutionData[stats.pokemon][league].push(newEvo)
+							} else {
+								const leagueStats = {}
+								leagueStats[league] = [newEvo]
+								data.pvpEvolutionData[stats.pokemon] = {
+									...data.pvpEvolutionData[stats.pokemon],
+									...leagueStats,
+								}
+							}
+						}
+					}
+
+					const bestRanks = []
+					for (const [cap, details] of Object.entries(best)) {
+						let found = false
+						for (const bestRank of bestRanks) {
+							if (bestRank.cp === details.cp && bestRank.rank === details.rank) {
+								// Probably forcing this to an int would simplify in-memory monster matching
+								bestRank.caps.push(cap)
+								found = true
+								break
+							}
+						}
+						if (!found) {
+							bestRanks.push({
+								...details,
+								caps: [cap],
+							})
+						}
+					}
+					data.pvpBestRank[league] = bestRanks
+				}
+
+				return {
+					rank: Math.min(...Object.values(best).map((x) => x.rank)),
+					cp: Math.min(...Object.values(best).map((x) => x.cp)),
+				}
+			}
+
+			const ultraPvp = rankCalculator(2500, data.pvp_rankings_ultra_league, this.config.pvp.pvpFilterUltraMinCP)
+			data.bestUltraLeagueRank = ultraPvp.rank
+			data.bestUltraLeagueRankCP = ultraPvp.cp
+
+			const greatPvp = rankCalculator(1500, data.pvp_rankings_great_league, this.config.pvp.pvpFilterGreatMinCP)
+			data.bestGreatLeagueRank = greatPvp.rank
+			data.bestGreatLeagueRankCP = greatPvp.cp
+
+			const littlePvp = rankCalculator(500, data.pvp_rankings_little_league, this.config.pvp.pvpFilterLittleMinCP)
+			data.bestLittleLeagueRank = littlePvp.rank
+			data.bestLittleLeagueRankCP = littlePvp.cp
+
+			// Stop handling if it already disappeared or is about to go away
+			if ((data.tth.firstDateWasLater || data.tthSeconds < minTth)) {
+				this.log.verbose(`${data.encounter_id}: ${monster.name} already disappeared or is about to go away in: ${data.tth.hours}:${data.tth.minutes}:${data.tth.seconds}`)
+				return []
+			}
+
+			data.matchedAreas = this.pointInArea([data.latitude, data.longitude])
+			data.matched = data.matchedAreas.map((x) => x.name.toLowerCase())
+
+			let whoCares
+
+			if (this.config.tuning.fastMonsters) {
+				whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+					pvp_ranking_worst: 100,
+				}] : await this.monsterWhoCaresInMemory(data)
+			} else {
+				whoCares = data.poracleTest ? [{
+					...data.poracleTest,
+					clean: false,
+					ping: '',
+					pvp_ranking_worst: 100,
+				}] : await this.monsterWhoCares(data)
+
+				if (this.config.tuning.debugFastMonsters) {
+					const whoCares2 = data.poracleTest ? [{
+						...data.poracleTest,
+						clean: false,
+						ping: '',
+						pvp_ranking_worst: 100,
+					}] : await this.monsterWhoCaresInMemory(data)
+
+					if (whoCares.length !== whoCares2.length) {
+						this.log.warn(`${data.encounter_id}: DB Len=${whoCares.length} Mem=${whoCares2.length} Missing = ${JSON.stringify(whoCares.filter((x) => !whoCares2.some((m) => m.id === x.id)))}`)
+					}
+				}
+			}
+
+			let hrend = process.hrtime(hrstart)
+			const hrendms = hrend[1] / 1000000
+			if (whoCares.length) {
+				this.log.info(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			} else {
+				this.log.verbose(`${data.encounter_id}: ${monster.name}{${encountered ? `${data.cp}/${data.iv}` : '?'}} appeared at [${data.latitude.toFixed(3)},${data.longitude.toFixed(3)}] areas (${data.matched}) and ${whoCares.length} humans cared. (${hrendms} ms)`)
+			}
+
+			if (!whoCares.length) return []
+
+			setImmediate(async () => {
+				try {
+					hrstart = process.hrtime()
+					let discordCacheBad = true // assume the worst
+					whoCares.forEach((cares) => {
+						if (!this.isRateLimited(cares.id)) discordCacheBad = false
+					})
+
+					if (discordCacheBad) {
+						whoCares.forEach((cares) => {
+							this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${this.getRateLimitTimeToRelease(cares.id)}`)
+						})
+
+						return []
+					}
+
+					const consolidatedAlerts = []
+					for (const alert of whoCares) {
+						let existingAlert = consolidatedAlerts.find((x) => x.id === alert.id)
+						if (!existingAlert) {
+							existingAlert = {
+								...alert,
+								filters: [],
+							}
+							consolidatedAlerts.push(existingAlert)
+						}
+
+						if (alert.pvp_ranking_worst < 4096) {
+							existingAlert.filters.push({
+								pvp_ranking_league: alert.pvp_ranking_league,
+								pvp_ranking_worst: alert.pvp_ranking_worst,
+								pvp_ranking_cap: alert.pvp_ranking_cap,
+							})
+						}
+					}
+
+					if (data.display_pokemon_id && data.display_pokemon_id !== data.pokemon_id) {
+						data.display_form ??= 0
+						const displayMonster = this.GameData.monsters[`${data.display_pokemon_id}_${data.display_form}`] || this.GameData.monsters[`${data.display_pokemon_id}_0`]
+
+						if (displayMonster) {
+							data.disguisePokemonNameEng = displayMonster.name
+							if (displayMonster.form) data.disguideFormNameEng = displayMonster.form.name
+						}
+					}
+
+					if (this.imgUicons) data.imgUrl = await this.imgUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
+					if (this.imgUiconsAlt) data.imgUrlAlt = await this.imgUiconsAlt.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, 0, data.shinyPossible && this.config.general.requestShinyImages) || this.config.fallbacks?.imgUrl
+					if (this.stickerUicons) data.stickerUrl = await this.stickerUicons.pokemonIcon(data.pokemon_id, data.form, 0, data.gender, data.costume, 0, data.shinyPossible && this.config.general.requestShinyImages)
+
+					const geoResult = await this.getAddress({
+						lat: data.latitude,
+						lon: data.longitude,
+					})
+
+					const jobs = []
+
+					require('./common/nightTime').setNightTime(data, disappearTime, this.config)
+
+					data.intersection = await this.obtainIntersection(data)
+
+					if (data.seen_type) {
+						switch (data.seen_type) {
+							case 'nearby_stop': {
+								data.seenType = 'pokestop'
+								break
+							}
+							case 'nearby_cell': {
+								data.seenType = 'cell'
+								break
+							}
+							case 'lure':
+							case 'lure_wild': {
+								data.seenType = 'lure'
+								break
+							}
+							case 'lure_encounter':
+							case 'encounter':
+							case 'wild': {
+								data.seenType = data.seen_type
+								break
+							}
+							default:
+								break
+						}
+					} else if (data.pokestop_id === 'None' && data.spawnpoint_id === 'None') data.seenType = 'cell'
+					else if (data.pokestop_id === 'None') data.seenType = encountered ? 'encounter' : 'wild'
+					else data.seenType = 'pokestop'
+
+					if (data.seenType === 'cell' && !data.cell_coords) {
+						const areaCellKey = S2.latLngToKey(data.latitude, data.longitude, 15)
+						const areaCellId = S2.keyToId(areaCellKey)
+						const s2cell = new S2ts.S2Cell(new S2ts.S2CellId(areaCellId))
+						data.cell_coords = []
+						for (let i = 0; i <= 3; i++) {
+							const vertex = S2ts.S2LatLng.fromPoint(s2cell.getVertex(i))
+							data.cell_coords.push([parseFloat(vertex.latDegrees), parseFloat(vertex.lngDegrees)])
+						}
+					}
+
+					await this.getStaticMapUrl(
+						logReference,
+						data,
+						'monster',
+						['pokemon_id', 'latitude', 'longitude', 'form', 'costume', 'imgUrl', 'imgUrlAlt', 'style'],
+						['pokemon_id', 'display_pokemon_id', 'latitude', 'longitude', 'verified', 'costume', 'form', 'pokemonId', 'generation', 'weather', 'confirmedTime', 'shinyPossible', 'seenType', 'seen_type', 'cell_coords', 'imgUrl', 'imgUrlAlt', 'nightTime', 'duskTime', 'dawnTime', 'style'],
+					)
+					data.staticmap = data.staticMap // deprecated
+
+					// get Weather Forecast information
+
+					const { nextHourTimestamp } = this.weatherData.getWeatherTimes()
+					if (this.config.weather.enableWeatherForecast && data.disappear_time > nextHourTimestamp) {
+						const weatherForecast = await this.weatherData.getWeatherForecast(weatherCellId)
+
+						let pokemonShouldBeBoosted = false
+						let pokemonWillBeBoosted = false
+						const currentBoostedTypes = weatherForecast.current ? this.GameData.utilData.weatherTypeBoost[weatherForecast.current] : []
+						const forecastBoostedTypes = weatherForecast.next ? this.GameData.utilData.weatherTypeBoost[weatherForecast.next] : []
+						if (weatherForecast.current > 0 && currentBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0) pokemonShouldBeBoosted = true
+						if (weatherForecast.next > 0 && ((data.weather > 0 && weatherForecast.next !== data.weather) || (weatherForecast.current > 0 && weatherForecast.next !== weatherForecast.current) || (pokemonShouldBeBoosted && data.weather === 0))) {
+							const weatherChangeTime = moment((data.disappear_time - (data.disappear_time % 3600)) * 1000)
+								.tz(geoTz.find(data.latitude, data.longitude)[0]
+									.toString())
+								.format(this.config.locale.time)
+								.slice(0, -3)
+							pokemonWillBeBoosted = forecastBoostedTypes.filter((boostedType) => data.types.includes(boostedType)).length > 0 ? 1 : 0
+							if (data.weather > 0 && !pokemonWillBeBoosted || data.weather === 0 && pokemonWillBeBoosted) {
+								weatherForecast.current = data.weather > 0 ? data.weather : weatherForecast.current
+								if (pokemonShouldBeBoosted && data.weather === 0) {
+									data.weatherCurrent = 0
+								} else {
+									data.weatherCurrent = weatherForecast.current
+								}
+								data.weatherChangeTime = weatherChangeTime
+								data.weatherNext = weatherForecast.next
+							}
+						}
+						this.log.debug(`${logReference}: Pokemon ${data.pokemon_id} cell: ${weatherCellId} types ${JSON.stringify(data.types)} weather ${data.weather} Forecast ${weatherForecast.current} [boosted ${pokemonShouldBeBoosted} ${JSON.stringify(currentBoostedTypes)}] next ${weatherForecast.next} [boosted ${pokemonWillBeBoosted} ${JSON.stringify(forecastBoostedTypes)}]`)
+					}
+
+					/* Future event processing */
+					const event = this.eventParser.eventChangesSpawn(moment()
+						.unix(), data.disappear_time, data.latitude, data.longitude)
+					if (event) {
+						data.futureEvent = true
+						data.futureEventTime = event.time
+						data.futureEventName = event.name
+						data.futureEventTrigger = event.reason
+					}
+
+					//sendscout by bigfun
+					data.scoutResult = ''
+					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL && (data.seenType != 'wild' || (data.seenType == 'wild' && this.config.scouts?.scoutWild)) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2)) {
+						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
+
+						const coords = []
+						coords.push([data.latitude,data.longitude])
+						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans w/ better math thanks to @RPOT
+							data.scoutResult = 'Cluster '
+							function degreesToRadians(degrees) {
+								var radians = degrees % 360;
+								return (radians * Math.PI) / 180;
+							}
+							function radiansToDegrees(radians) {
+								return (radians * 180) / Math.PI;
+							}
+							const earthRadius = 6371.0088;
+
+							//from https://github.com/chrisveness/geodesy/blob/761587cd748bd9f7c9825195eba4a9fc5891b859/latlon-spherical.js#L361
+							function destinationPoint(distance, bearing) {
+								// sinφ2 = sinφ1⋅cosδ + cosφ1⋅sinδ⋅cosθ
+								// tanΔλ = sinθ⋅sinδ⋅cosφ1 / cosδ−sinφ1⋅sinφ2 / this should be memorized as common knowledge
+								const δ = distance / earthRadius; // angular distance in radians
+								const θ = degreesToRadians(bearing);
+
+								const φ1 = degreesToRadians(data.latitude), λ1 = degreesToRadians(data.longitude);
+
+								const sinφ2 = Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ);
+								const φ2 = Math.asin(sinφ2);
+								const y = Math.sin(θ) * Math.sin(δ) * Math.cos(φ1);
+								const x = Math.cos(δ) - Math.sin(φ1) * sinφ2;
+								const λ2 = λ1 + Math.atan2(y, x);
+
+								const lat2 = radiansToDegrees(φ2);
+								const lon2 = radiansToDegrees(λ2);
+								return [lat2,lon2];
+							}
+
+							const distance = 0.070 * Math.sqrt(3.0);
+							for (var i=0; i<6; i++) {
+								let bearing = i*60.0;
+								let pt2 = destinationPoint(distance,bearing);
+								coords.push(pt2)
+							}						
+						}
+						
+						const headers = {
+								'Content-Type': 'application/json',
+								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteSecret
+								}
+						const url = this.config.scouts?.scoutURL
+						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
+						
+						try {
+							const hrstart = process.hrtime()
+							const timeoutMs = this.config.scouts?.dragoniteTimeout || 10000
+							const source = axios.CancelToken.source()
+							const timeout = setTimeout(() => {
+								source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
+								// Timeout Logic
+							}, timeoutMs)
+
+							const result = await axios.post(url, coords, {cancelToken: source.token}, {headers: headers})
+							clearTimeout(timeout)
+							if (result.status !== 200) {
+								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
+								return null
+							}
+							const hrend = process.hrtime(hrstart)
+							const hrendms = hrend[1] / 1000000
+
+							if (result.data.includes('<')) { // check for HTML error response
+								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
+								return null
+							}
+							data.scoutResult = data.scoutResult + result.data
+							this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
+							
+						} catch (error) {
+							if (error.response) {
+								this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+							} else {
+								this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
+							}
+							return null
+						}
+					}
+					//end scout
+					
+					// Lookup pokestop name if needed
+					if (this.config.general.populatePokestopName && !data.pokestopName && data.pokestop_id && this.scannerQuery) {
+						data.pokestopName = this.escapeJsonString(await this.scannerQuery.getPokestopName(data.pokestop_id))
+					}
+
+					for (const cares of consolidatedAlerts) {
+						this.log.debug(`${logReference}: Creating monster alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
+
+						const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
+						if (rateLimitTtr) {
+							this.log.verbose(`${logReference}: Not creating monster alert (Rate limit) for ${cares.type} ${cares.id} ${cares.name} Time to release: ${rateLimitTtr}`)
+							// eslint-disable-next-line no-continue
+							continue
+						}
+						this.log.verbose(`${logReference}: Creating monster alert for ${cares.type} ${cares.id} ${cares.name} ${cares.language} ${cares.template}`)
+
+						if (this.config.weather.weatherChangeAlert) {
+							// Emit event so we can tell weather controller (different worker) about the pokemon being monitored
+
+							this.emit('userCares', {
+								target: {
+									id: cares.id,
+									name: cares.name,
+									type: cares.type,
+									clean: cares.clean,
+									ping: cares.ping,
+									template: cares.template,
+									language: cares.language,
+								},
+								weatherCellId,
+								caresUntil: data.disappear_time,
+								pokemon: encountered
+									? {
+										pokemon_id: data.pokemon_id,
+										form: data.form,
+										name: monster.name,
+										formName: monster.form.name,
+										fullName: data.fullName,
+										iv: data.iv,
+										cp: data.cp,
+										latitude: data.latitude,
+										longitude: data.longitude,
+										disappear_time: data.disappear_time,
+										alteringWeathers: data.alteringWeathers,
+									} : null,
+
+							})
+						}
+
+						const language = cares.language || this.config.general.locale
+						const translator = this.translatorFactory.Translator(language)
+						let [platform] = cares.type.split(':')
+						if (platform === 'webhook') platform = 'discord'
+
+						data.name = translator.translate(monster.name)
+						data.formName = translator.translate(monster.form.name)
+						if (data.disguisePokemonNameEng) data.disguisePokemonName = translator.translate(data.disguisePokemonNameEng)
+						if (data.disguiseFormNameEng) data.disguiseFormName = translator.translate(data.disguiseFormNameEng)
+
+						data.formNormalisedEng = data.formNameEng === 'Normal' ? '' : data.formNameEng
+						data.formNormalised = translator.translate(data.formNormalisedEng)
+
+						data.fullNameEng = data.nameEng.concat(data.formNormalisedEng ? ' ' : '', data.formNormalisedEng)
+						data.fullName = data.name.concat(data.formNormalised ? ' ' : '', data.formNormalised)
+
+						data.genderData = {
+							name: translator.translate(data.genderDataEng.name),
+							emoji: translator.translate(this.emojiLookup.lookup(data.genderDataEng.emoji, platform)),
+						}
+						data.genderName = data.genderData.name
+						data.genderEmoji = data.genderData.emoji
+						data.shinyPossibleEmoji = data.shinyPossible ? translator.translate(this.emojiLookup.lookup('shiny', platform)) : ''
+						data.rarityName = translator.translate(data.rarityNameEng)
+						data.sizeName = translator.translate(data.sizeNameEng)
+						data.quickMoveName = encountered && this.GameData.moves[data.quickMoveId] ? translator.translate(this.GameData.moves[data.quickMoveId].name) : ''
+						data.quickMoveEmoji = this.GameData.moves[data.quickMoveId] && this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.quickMoveId].type].emoji, platform)) : ''
+						data.chargeMoveName = encountered && this.GameData.moves[data.chargeMoveId] ? translator.translate(this.GameData.moves[data.chargeMoveId].name) : ''
+						data.chargeMoveEmoji = this.GameData.moves[data.chargeMoveId] && this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[this.GameData.moves[data.chargeMoveId].type].emoji, platform)) : ''
+						data.boosted = !!data.weather
+						data.generationName = translator.translate(data.generationNameEng)
+						data.boostWeatherId = data.weather ? data.weather : ''
+						data.boostWeatherName = data.weather ? translator.translate(this.GameData.utilData.weather[data.weather].name) : ''
+						data.boostWeatherEmoji = data.weather ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weather].emoji, platform)) : ''
+						data.gameWeatherId = this.GameData.utilData.weather[currentCellWeather] ? currentCellWeather : ''
+						data.gameWeatherName = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].name) : ''
+						data.gameWeatherEmoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[currentCellWeather].emoji, platform)) : ''
+						data.formname = data.formName // deprecated
+						data.scoutResult = data.scoutResult
+						data.quickMove = data.quickMoveName // deprecated
+						data.chargeMove = data.chargeMoveName // deprecated
+						data.move1emoji = data.quickMoveEmoji // deprecated
+						data.move2emoji = data.chargeMoveEmoji // deprecated
+						data.boost = data.boostWeatherName // deprecated
+						data.boostemoji = data.boostWeatherEmoji // deprecated
+						data.gameweather = data.gameWeatherName // deprecated
+						data.gameweatheremoji = data.gameWeatherEmoji // deprecated
+						if (data.weatherNext) {
+							if (!data.weatherCurrent) {
+								data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherNext].emoji, platform))}`
+								data.weatherCurrentName = translator.translate('unknown')
+								data.weatherCurrentEmoji = '❓'
+							} else {
+								data.weatherChange = `⚠️ ${translator.translate('Possible weather change at')} ${data.weatherChangeTime} : ${translator.translate(this.GameData.utilData.weather[data.weatherCurrent].name)} ${translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherCurrent].emoji, platform))} ➡️ ${translator.translate(this.GameData.utilData.weather[data.weatherNext].name)} ${translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherNext].emoji, platform))}`
+								data.weatherCurrentName = translator.translate(this.GameData.utilData.weather[data.weatherCurrent].name)
+								data.weatherCurrentEmoji = translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherCurrent].emoji, platform))
+							}
+							data.weatherNextName = translator.translate(this.GameData.utilData.weather[data.weatherNext].name)
+							data.weatherNextEmoji = translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[data.weatherNext].emoji, platform))
+						}
+
+						const e = []
+						const n = []
+						monster.types.forEach((type) => {
+							e.push(translator.translate(this.emojiLookup.lookup(this.GameData.utilData.types[type.name].emoji, platform)))
+							n.push(type.name)
+						})
+						data.emoji = e
+						data.typeNameEng = n
+						data.typeName = data.typeNameEng.map((type) => translator.translate(type))
+							.join(', ')
+						data.emojiString = e.join('')
+						data.typeEmoji = data.emojiString
+
+						require('./common/evolutionCalculator').setEvolutions(data, this.GameData, this.log, logReference, translator, this.emojiLookup, platform, monster)
+
+						const createPvpDisplay = (leagueCap, leagueData, maxRank, minCp) => {
+							const displayList = []
+							for (const rank of leagueData) {
+								if (rank.rank <= maxRank
+									&& rank.cp >= minCp) {
+									const displayRank = {}
+
+									displayRank.rank = +rank.rank
+									displayRank.formId = +rank.form || 0
+									displayRank.evolution = rank.evolution
+									displayRank.level = +rank.level
+									displayRank.cap = rank.cap
+									displayRank.capped = rank.capped
+									displayRank.levelWithCap = displayRank.cap && !displayRank.capped ? `${displayRank.level}/${displayRank.cap}` : displayRank.level
+									displayRank.cp = rank.cp
+									displayRank.pokemonId = +rank.pokemon
+									displayRank.percentage = rank.percentage <= 1 ? (rank.percentage * 100).toFixed(2) : rank.percentage.toFixed(2)
+
+									let monsterName
+									let formName
+									let stats
+
+									let mon = this.GameData.monsters[`${displayRank.pokemonId}_${displayRank.formId}`]
+									if (!mon) {
+										mon = this.GameData.monsters[`${displayRank.pokemonId}_0`]
+										if (!mon) {
+											monsterName = `${translator.translate('Unknown monster')} ${displayRank.pokemonId}`
+											stats = {
+												baseAttack: 0,
+												baseDefense: 0,
+												baseStamina: 0,
+											}
+										} else {
+											monsterName = mon.name
+											stats = monster.stats
+										}
+										formName = `${displayRank.formId}`
+									} else {
+										monsterName = mon.name
+										formName = mon.form.name
+										if (formName === undefined || formName === 'Normal') formName = ''
+										stats = monster.stats
+									}
+									displayRank.baseStats = stats
+									displayRank.nameEng = monsterName
+									displayRank.formEng = formName
+									displayRank.name = translator.translate(monsterName)
+									displayRank.form = translator.translate(formName)
+									if (displayRank.evolution) {
+										displayRank.fullNameEng = translator.format(
+											this.GameData.utilData.megaName[displayRank.evolution],
+											displayRank.nameEng.concat(displayRank.formEng ? ' ' : '', displayRank.formEng),
+										)
+										displayRank.fullName = translator.translateFormat(
+											this.GameData.utilData.megaName[displayRank.evolution],
+											displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form),
+										)
+									} else {
+										displayRank.fullNameEng = displayRank.nameEng.concat(displayRank.formEng ? ' ' : '', displayRank.formEng)
+										displayRank.fullName = displayRank.name.concat(displayRank.form ? ' ' : '', displayRank.form)
+									}
+
+									displayRank.matchesUserTrack = false
+									if (cares.filters.length) {
+										displayRank.passesFilter = false
+										for (const filter of cares.filters) {
+											if ((filter.pvp_ranking_league === leagueCap || filter.pvp_ranking_league === 0)
+											&& (filter.pvp_ranking_cap === 0 || filter.pvp_ranking_cap === displayRank.cap || displayRank.capped)
+											&& (filter.pvp_ranking_worst >= displayRank.rank)) {
+												displayRank.passesFilter = true
+												displayRank.matchesUserTrack = true
+											}
+										}
+									} else {
+										displayRank.passesFilter = true
+									}
+									if (!this.config.pvp.filterByTrack || displayRank.passesFilter) {
+										displayList.push(displayRank)
+									}
+								}
+							}
+							return displayList.length ? displayList : null
+						}
+
+						const calculateBestInfo = (ranks) => {
+							if (!ranks) return null
+
+							const best = {
+								rank: 4096,
+								list: [],
+							}
+
+							for (const result of ranks) {
+								if (result.rank === best.rank) {
+									best.list.push(result)
+								} else if (result.rank < best.rank) {
+									best.rank = result.rank
+									best.list = [result]
+								}
+							}
+
+							best.name = Array.from(new Set(best.list.map((x) => x.fullName))).join(', ')
+							best.nameEng = Array.from(new Set(best.list.map((x) => x.fullNameEng))).join(', ')
+							return best
+						}
+
+						data.pvpGreat = data.pvp_rankings_great_league ? createPvpDisplay(1500, data.pvp_rankings_great_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayGreatMinCP) : null
+						data.pvpGreatBest = calculateBestInfo(data.pvpGreat)
+
+						data.pvpUltra = data.pvp_rankings_ultra_league ? createPvpDisplay(2500, data.pvp_rankings_ultra_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayUltraMinCP) : null
+						data.pvpUltraBest = calculateBestInfo(data.pvpUltra)
+
+						data.pvpLittle = data.pvp_rankings_little_league ? createPvpDisplay(500, data.pvp_rankings_little_league, this.config.pvp.pvpDisplayMaxRank, this.config.pvp.pvpDisplayLittleMinCP) : null
+						data.pvpLittleBest = calculateBestInfo(data.pvpLittle)
+
+						data.pvpAvailable = data.pvpGreat !== null || data.pvpUltra !== null || data.pvpLittle !== null
+						data.userHasPvpTracks = !!cares.filters.length
+
+						data.distance = cares.longitude ? this.getDistance({
+							lat: cares.latitude,
+							lon: cares.longitude,
+						}, {
+							lat: data.latitude,
+							lon: data.longitude,
+						}) : ''
+
+						const bearing = cares.longitude ? this.getBearing({
+							lat: cares.latitude,
+							lon: cares.longitude,
+						}, {
+							lat: data.latitude,
+							lon: data.longitude,
+						}) : null
+
+						data.bearing = bearing?.toFixed(0) ?? ''
+						data.bearingEmoji = bearing ? this.emojiLookup.lookup(this.getBearingEmoji(data.bearing), platform) : ''
+
+						const view = {
+							...geoResult,
+							...data,
+							id: data.pokemon_id,
+							baseStats: monster.stats,
+							time: data.disappearTime,
+							tthh: data.tth.hours,
+							tthm: data.tth.minutes,
+							tths: data.tth.seconds,
+							now: new Date(),
+							nowISO: new Date().toISOString(),
+							pvpUserRanking: cares.pvp_ranking_worst === 4096 ? 0 : cares.pvp_ranking_worst,
+							areas: data.matchedAreas.filter((area) => area.displayInMatches)
+								.map((area) => area.name)
+								.join(', '),
+							pvpDisplayMaxRank: this.config.pvp.pvpDisplayMaxRank,
+							pvpDisplayGreatMinCP: this.config.pvp.pvpDisplayGreatMinCP,
+							pvpDisplayUltraMinCP: this.config.pvp.pvpDisplayUltraMinCP,
+							pvpDisplayLittleMinCP: this.config.pvp.pvpDisplayLittleMinCP,
+						}
+
+						const templateType = (data.iv === -1) ? 'monsterNoIv' : 'monster'
+						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
+
+						const work = {
+							lat: data.latitude.toString()
+								.substring(0, 8),
+							lon: data.longitude.toString()
+								.substring(0, 8),
+							message,
+							target: cares.id,
+							type: cares.type,
+							name: cares.name,
+							tth: data.tth,
+							clean: cares.clean,
+							emoji: data.emoji,
+							logReference,
+							language,
+						}
+						jobs.push(work)
+					}
+					hrend = process.hrtime(hrstart)
+					const hrendprocessing = hrend[1] / 1000000
+					this.log.verbose(`${data.encounter_id}: ${monster.name} appeared and ${whoCares.length}/${consolidatedAlerts.length} humans cared [end]. (${hrendms} ms sql + ${hrendprocessing} ms processing dts)`)
+
+					this.emit('postMessage', jobs)
+				} catch (e) {
+					this.log.error(`${data.encounter_id}: Can't seem to handle monster (user cared): `, e, data)
+				}
+			})
+			return []
+		} catch (e) {
+			this.log.error(`${data.encounter_id}: Can't seem to handle monster: `, e, data)
+		}
+	}
 }
+
+module.exports = Monster
