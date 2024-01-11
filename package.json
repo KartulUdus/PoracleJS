@@ -32,7 +32,7 @@
     "test": "node test/test"
   },
   "dependencies": {
-    "@budibase/handlebars-helpers": "^0.11.8",
+    "@budibase/handlebars-helpers": "^0.12.0",
     "async-mutex": "^0.4.0",
     "axios": "^1.4.0",
     "chokidar": "^3.5.3",
