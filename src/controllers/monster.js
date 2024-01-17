@@ -607,7 +607,7 @@ class Monster extends Controller {
 					data.scoutResult = ''
 					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL && (data.seenType != 'wild' || (data.seenType =='wild' && this.config.scouts?.scoutWild)) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2)) {
 						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
-
+                        let noScout = false
 						const coords = []
 						coords.push([data.latitude,data.longitude])
 						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans w/ better math thanks to @RPOT
@@ -651,17 +651,19 @@ class Monster extends Controller {
 						
 						const headers = {
 								'Content-Type': 'application/json',
-								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteSecret
+								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteAdminSecret
 								}
 						const url = this.config.scouts?.scoutURL
 						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
 						
 						try {
 							const hrstart = process.hrtime()
-							const timeoutMs = this.config.scouts?.dragoniteTimeout || 10000
+							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
 							const source = axios.CancelToken.source()
 							const timeout = setTimeout(() => {
 								source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
+								data.scoutResult = 'Scout Timeout - Check logs!'
+								noScout = true
 								// Timeout Logic
 							}, timeoutMs)
 
@@ -669,25 +671,32 @@ class Monster extends Controller {
 							clearTimeout(timeout)
 							if (result.status !== 200) {
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
-								return null
+								data.scoutResult = 'Scout Failed - Check logs!'
+								noScout = true
 							}
 							const hrend = process.hrtime(hrstart)
 							const hrendms = hrend[1] / 1000000
 
 							if (result.data.includes('<')) { // check for HTML error response
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
-								return null
+								data.scoutResult = 'Scout Failed - Check logs!'
+								noScout = true
 							}
+							
+							if (!noScout) {
+							this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`) 
 							data.scoutResult = data.scoutResult + result.data
-							this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
+							}
 							
 						} catch (error) {
 							if (error.response) {
 								this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+								data.scoutResult = 'Scout Error - Check logs!'
 							} else {
 								this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
+								data.scoutResult = 'Scout NoResponse - Check logs!'
 							}
-							return null
+							noScout = true
 						}
 					}
 					//end scout
