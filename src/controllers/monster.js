@@ -3,8 +3,8 @@ const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
-const Controller = require('./controller')
 const axios = require('axios')
+const Controller = require('./controller')
 
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
@@ -603,59 +603,60 @@ class Monster extends Controller {
 						data.futureEventTrigger = event.reason
 					}
 
-					//sendscout by bigfun
+					// sendscout by bigfun
 					data.scoutResult = ''
-					sendscout: if ((data.iv === -1 && this.config.scouts?.scoutURL && (data.seenType != 'wild' || (data.seenType =='wild' && this.config.scouts?.scoutWild)) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup == -1 && this.config.scouts?.limitScoutRarity < 2)) {
-						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType == 'cell')}.`)
-                        let noScout = false
+					if ((data.iv === -1 && this.config.scouts?.scoutURL && (data.seenType !== 'wild' || (data.seenType === 'wild' && this.config.scouts?.scoutWild)) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup === -1 && this.config.scouts?.limitScoutRarity < 2)) {
+						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType === 'cell')}.`)
+						let noScout = false
 						const coords = []
-						coords.push([data.latitude,data.longitude])
-						if (this.config.scouts?.scoutClusters && data.seenType == 'cell') {  //Cluster Scans w/ better math thanks to @RPOT
+						coords.push([data.latitude, data.longitude])
+						if (this.config.scouts?.scoutClusters && data.seenType === 'cell') { // Cluster Scans w/ better math thanks to @RPOT
 							data.scoutResult = 'Cluster '
 							function degreesToRadians(degrees) {
-								var radians = degrees % 360;
-								return (radians * Math.PI) / 180;
+								const radians = degrees % 360
+								return (radians * Math.PI) / 180
 							}
 							function radiansToDegrees(radians) {
-								return (radians * 180) / Math.PI;
+								return (radians * 180) / Math.PI
 							}
-							const earthRadius = 6371.0088;
+							const earthRadius = 6371.0088
 
-							//from https://github.com/chrisveness/geodesy/blob/761587cd748bd9f7c9825195eba4a9fc5891b859/latlon-spherical.js#L361
+							// from https://github.com/chrisveness/geodesy/blob/761587cd748bd9f7c9825195eba4a9fc5891b859/latlon-spherical.js#L361
 							function destinationPoint(distance, bearing) {
 								// sinφ2 = sinφ1⋅cosδ + cosφ1⋅sinδ⋅cosθ
 								// tanΔλ = sinθ⋅sinδ⋅cosφ1 / cosδ−sinφ1⋅sinφ2 / this should be memorized as common knowledge
-								const δ = distance / earthRadius; // angular distance in radians
-								const θ = degreesToRadians(bearing);
+								const δ = distance / earthRadius // angular distance in radians
+								const θ = degreesToRadians(bearing)
 
-								const φ1 = degreesToRadians(data.latitude), λ1 = degreesToRadians(data.longitude);
+								const φ1 = degreesToRadians(data.latitude); const
+									λ1 = degreesToRadians(data.longitude)
 
-								const sinφ2 = Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ);
-								const φ2 = Math.asin(sinφ2);
-								const y = Math.sin(θ) * Math.sin(δ) * Math.cos(φ1);
-								const x = Math.cos(δ) - Math.sin(φ1) * sinφ2;
-								const λ2 = λ1 + Math.atan2(y, x);
+								const sinφ2 = Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ)
+								const φ2 = Math.asin(sinφ2)
+								const y = Math.sin(θ) * Math.sin(δ) * Math.cos(φ1)
+								const x = Math.cos(δ) - Math.sin(φ1) * sinφ2
+								const λ2 = λ1 + Math.atan2(y, x)
 
-								const lat2 = radiansToDegrees(φ2);
-								const lon2 = radiansToDegrees(λ2);
-								return [lat2,lon2];
+								const lat2 = radiansToDegrees(φ2)
+								const lon2 = radiansToDegrees(λ2)
+								return [lat2, lon2]
 							}
 
-							const distance = 0.070 * Math.sqrt(3.0);
-							for (var i=0; i<6; i++) {
-								let bearing = i*60.0;
-								let pt2 = destinationPoint(distance,bearing);
+							const distance = 0.070 * Math.sqrt(3.0)
+							for (let i = 0; i < 6; i++) {
+								const bearing = i * 60.0
+								const pt2 = destinationPoint(distance, bearing)
 								coords.push(pt2)
-							}						
+							}
 						}
-						
+
 						const headers = {
-								'Content-Type': 'application/json',
-								'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteAdminSecret
-								}
+							'Content-Type': 'application/json',
+							'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteAdminSecret,
+						}
 						const url = this.config.scouts?.scoutURL
-						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat,lon])=>`[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
-						
+						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat, lon]) => `[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
+
 						try {
 							const hrstart = process.hrtime()
 							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
@@ -667,7 +668,7 @@ class Monster extends Controller {
 								// Timeout Logic
 							}, timeoutMs)
 
-							const result = await axios.post(url, coords, {cancelToken: source.token}, {headers: headers})
+							const result = await axios.post(url, coords, { cancelToken: source.token }, { headers })
 							clearTimeout(timeout)
 							if (result.status !== 200) {
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
@@ -682,12 +683,11 @@ class Monster extends Controller {
 								data.scoutResult = 'Scout Failed - Check logs!'
 								noScout = true
 							}
-							
+
 							if (!noScout) {
-							this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`) 
-							data.scoutResult = data.scoutResult + result.data
+								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
+								data.scoutResult += result.data
 							}
-							
 						} catch (error) {
 							if (error.response) {
 								this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
@@ -699,8 +699,8 @@ class Monster extends Controller {
 							noScout = true
 						}
 					}
-					//end scout
-					
+					// end scout
+
 					// Lookup pokestop name if needed
 					if (this.config.general.populatePokestopName && !data.pokestopName && data.pokestop_id && this.scannerQuery) {
 						data.pokestopName = this.escapeJsonString(await this.scannerQuery.getPokestopName(data.pokestop_id))
