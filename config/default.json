@@ -536,7 +536,6 @@
   // concurrentTelegramDestinationsPerBot - How many concurrent messages should be queued for sending by the Telegram/telegraf based bots. Telegram rate
   //     limits by route as well as a global limit so this will message 10 people at once
   // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
-  // dragoniteTimeout - ms timeout for scout tuning against Dragonite
   //
   "tuning": {
     "fastMonsters": false,
@@ -545,7 +544,6 @@
     "concurrentWebhookProcessorsPerWorker": 4,
     "concurrentDiscordDestinationsPerBot": 10,
     "concurrentTelegramDestinationsPerBot": 10,
-    "concurrentDiscordWebhookConnections": 10,
-    "dragoniteTimeout": 10000
+    "concurrentDiscordWebhookConnections": 10
   }
 }
