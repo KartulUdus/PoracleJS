@@ -607,7 +607,6 @@ class Monster extends Controller {
 					data.scoutResult = ''
 					if ((data.iv === -1 && this.config.scouts?.scoutURL && (data.seenType !== 'wild' || (data.seenType === 'wild' && this.config.scouts?.scoutWild)) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup === -1 && this.config.scouts?.limitScoutRarity < 2)) {
 						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType === 'cell')}.`)
-						let noScout = false
 						const coords = []
 						coords.push([data.latitude, data.longitude])
 						if (this.config.scouts?.scoutClusters && data.seenType === 'cell') { // Cluster Scans w/ better math thanks to @RPOT
@@ -664,7 +663,6 @@ class Monster extends Controller {
 							const timeout = setTimeout(() => {
 								source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
 								data.scoutResult = 'Scout Timeout - Check logs!'
-								noScout = true
 								// Timeout Logic
 							}, timeoutMs)
 
@@ -673,18 +671,17 @@ class Monster extends Controller {
 							if (result.status !== 200) {
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
 								data.scoutResult = 'Scout Failed - Check logs!'
-								noScout = true
 							}
 							const hrend = process.hrtime(hrstart)
 							const hrendms = hrend[1] / 1000000
+							this.client.log.debug(`[SCOUT] Command Processor Dragonite execution time ${hrendms}ms`)
 
 							if (result.data.includes('<')) { // check for HTML error response
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
 								data.scoutResult = 'Scout Failed - Check logs!'
-								noScout = true
 							}
 
-							if (!noScout) {
+							if (!data.scoutResult.includes('Check logs!')) {
 								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
 								data.scoutResult += result.data
 							}
@@ -696,7 +693,6 @@ class Monster extends Controller {
 								this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
 								data.scoutResult = 'Scout NoResponse - Check logs!'
 							}
-							noScout = true
 						}
 					}
 					// end scout
@@ -788,7 +784,6 @@ class Monster extends Controller {
 						data.gameWeatherName = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.GameData.utilData.weather[currentCellWeather].name) : ''
 						data.gameWeatherEmoji = this.GameData.utilData.weather[currentCellWeather] ? translator.translate(this.emojiLookup.lookup(this.GameData.utilData.weather[currentCellWeather].emoji, platform)) : ''
 						data.formname = data.formName // deprecated
-						data.scoutResult = data.scoutResult
 						data.quickMove = data.quickMoveName // deprecated
 						data.chargeMove = data.chargeMoveName // deprecated
 						data.move1emoji = data.quickMoveEmoji // deprecated
