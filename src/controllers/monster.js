@@ -6,6 +6,38 @@ const S2ts = require('nodes2ts')
 const axios = require('axios')
 const Controller = require('./controller')
 
+// scout cluster functions with better math, thanks @RPOT
+function degreesToRadians(degrees) {
+	const radians = degrees % 360
+	return (radians * Math.PI) / 180
+}
+function radiansToDegrees(radians) {
+	return (radians * 180) / Math.PI
+}
+const earthRadius = 6371.0088
+// from https://github.com/chrisveness/geodesy/blob/761587cd748bd9f7c9825195eba4a9fc5891b859/latlon-spherical.js#L361
+function destinationPoint(ptScout, distance, bearing) {
+	const latScout = ptScout[0]
+	const lonScout = ptScout[1]
+	// sinφ2 = sinφ1⋅cosδ + cosφ1⋅sinδ⋅cosθ
+	// tanΔλ = sinθ⋅sinδ⋅cosφ1 / cosδ−sinφ1⋅sinφ2 / this should be memorized as common knowledge
+	const δ = distance / earthRadius // angular distance in radians
+	const θ = degreesToRadians(bearing)
+
+	const φ1 = degreesToRadians(latScout); const
+		λ1 = degreesToRadians(lonScout)
+
+	const sinφ2 = Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ)
+	const φ2 = Math.asin(sinφ2)
+	const y = Math.sin(θ) * Math.sin(δ) * Math.cos(φ1)
+	const x = Math.cos(δ) - Math.sin(φ1) * sinφ2
+	const λ2 = λ1 + Math.atan2(y, x)
+
+	const lat2 = radiansToDegrees(φ2)
+	const lon2 = radiansToDegrees(λ2)
+	return [lat2, lon2]
+}
+
 class Monster extends Controller {
 	getAlteringWeathers(types, boostStatus) {
 		const boostingWeathers = types.map((type) => parseInt(Object.keys(this.GameData.utilData.weatherTypeBoost).find((key) => this.GameData.utilData.weatherTypeBoost[key].includes(type)), 10))
@@ -603,47 +635,20 @@ class Monster extends Controller {
 						data.futureEventTrigger = event.reason
 					}
 
-					// sendscout by bigfun
+					// sendscout by BigFun
 					data.scoutResult = ''
 					if ((data.iv === -1 && this.config.scouts?.scoutURL && (data.seenType !== 'wild' || (data.seenType === 'wild' && this.config.scouts?.scoutWild)) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup === -1 && this.config.scouts?.limitScoutRarity < 2)) {
 						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType === 'cell')}.`)
+
 						const coords = []
 						coords.push([data.latitude, data.longitude])
-						if (this.config.scouts?.scoutClusters && data.seenType === 'cell') { // Cluster Scans w/ better math thanks to @RPOT
+						if (this.config.scouts?.scoutClusters && data.seenType === 'cell') { // Cluster Scans
 							data.scoutResult = 'Cluster '
-							function degreesToRadians(degrees) {
-								const radians = degrees % 360
-								return (radians * Math.PI) / 180
-							}
-							function radiansToDegrees(radians) {
-								return (radians * 180) / Math.PI
-							}
-							const earthRadius = 6371.0088
-
-							// from https://github.com/chrisveness/geodesy/blob/761587cd748bd9f7c9825195eba4a9fc5891b859/latlon-spherical.js#L361
-							function destinationPoint(distance, bearing) {
-								// sinφ2 = sinφ1⋅cosδ + cosφ1⋅sinδ⋅cosθ
-								// tanΔλ = sinθ⋅sinδ⋅cosφ1 / cosδ−sinφ1⋅sinφ2 / this should be memorized as common knowledge
-								const δ = distance / earthRadius // angular distance in radians
-								const θ = degreesToRadians(bearing)
-
-								const φ1 = degreesToRadians(data.latitude); const
-									λ1 = degreesToRadians(data.longitude)
-
-								const sinφ2 = Math.sin(φ1) * Math.cos(δ) + Math.cos(φ1) * Math.sin(δ) * Math.cos(θ)
-								const φ2 = Math.asin(sinφ2)
-								const y = Math.sin(θ) * Math.sin(δ) * Math.cos(φ1)
-								const x = Math.cos(δ) - Math.sin(φ1) * sinφ2
-								const λ2 = λ1 + Math.atan2(y, x)
-
-								const lat2 = radiansToDegrees(φ2)
-								const lon2 = radiansToDegrees(λ2)
-								return [lat2, lon2]
-							}
+							const ptScout = [data.latitude, data.longitude]
 							const distance = 0.070 * Math.sqrt(3.0)
 							for (let i = 0; i < 6; i++) {
 								const bearing = i * 60.0
-								const pt2 = destinationPoint(distance, bearing)
+								const pt2 = destinationPoint(ptScout, distance, bearing)
 								coords.push(pt2)
 							}
 						}
