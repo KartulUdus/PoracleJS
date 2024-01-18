@@ -640,7 +640,6 @@ class Monster extends Controller {
 								const lon2 = radiansToDegrees(λ2)
 								return [lat2, lon2]
 							}
-
 							const distance = 0.070 * Math.sqrt(3.0)
 							for (let i = 0; i < 6; i++) {
 								const bearing = i * 60.0
@@ -674,7 +673,7 @@ class Monster extends Controller {
 							}
 							const hrendScout = process.hrtime(hrstartScout)
 							const hrendmsScout = hrendScout[1] / 1000000
-							this.client.log.debug(`[SCOUT] Command Processor Dragonite execution time ${hrendmsScout}ms`)
+							this.log.debug(`[SCOUT] Command Processor Dragonite execution time ${hrendmsScout}ms`)
 
 							if (result.data.includes('<')) { // check for HTML error response
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
