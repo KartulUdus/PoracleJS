@@ -657,7 +657,7 @@ class Monster extends Controller {
 						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat, lon]) => `[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
 
 						try {
-							const hrstart = process.hrtime()
+							const hrstartScout = process.hrtime()
 							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
 							const source = axios.CancelToken.source()
 							const timeout = setTimeout(() => {
@@ -672,9 +672,9 @@ class Monster extends Controller {
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
 								data.scoutResult = 'Scout Failed - Check logs!'
 							}
-							const hrend = process.hrtime(hrstart)
-							const hrendms = hrend[1] / 1000000
-							this.client.log.debug(`[SCOUT] Command Processor Dragonite execution time ${hrendms}ms`)
+							const hrendScout = process.hrtime(hrstartScout)
+							const hrendmsScout = hrendScout[1] / 1000000
+							this.client.log.debug(`[SCOUT] Command Processor Dragonite execution time ${hrendmsScout}ms`)
 
 							if (result.data.includes('<')) { // check for HTML error response
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
