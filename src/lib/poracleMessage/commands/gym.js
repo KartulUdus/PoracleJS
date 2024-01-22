@@ -204,7 +204,7 @@ exports.run = async (client, msg, args, options) => {
 
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error(`${logReference}: lure command unhappy:`, err)
+		client.log.error(`${logReference}: gym command unhappy:`, err)
 		msg.reply(`There was a problem making these changes, the administrator can find the details with reference ${logReference}`)
 	}
 }
