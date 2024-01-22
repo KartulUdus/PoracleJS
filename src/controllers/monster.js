@@ -637,8 +637,9 @@ class Monster extends Controller {
 
 					// sendscout by BigFun
 					data.scoutResult = ''
-					const dontScoutTypes = ['wild', 'encounter', 'lure_wild', 'lure_encounter']
-					if ((data.iv === -1 && this.config.scouts?.scoutURL && (!dontScoutTypes.includes(data.seenType) || (data.seenType === 'wild' && this.config.scouts?.scoutWild)) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup === -1 && this.config.scouts?.limitScoutRarity < 2)) {
+					const dontScoutTypes = ['encounter', 'lure_wild', 'lure_encounter']
+					if (!this.config.scouts?.scoutWild) { dontScoutTypes.push('wild') }
+					if ((data.iv === -1 && this.config.scouts?.scoutURL && !dontScoutTypes.includes(data.seenType) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup === -1 && this.config.scouts?.limitScoutRarity < 2)) {
 						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType === 'cell')}.`)
 
 						const coords = []
