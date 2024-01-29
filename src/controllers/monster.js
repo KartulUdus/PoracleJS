@@ -677,7 +677,7 @@ class Monster extends Controller {
 						}
 
 						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat, lon]) => `[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
-						this.log.debug(`[SCOUT] Full JSON Body: ${JSON.stringify(scoutData)}`)
+						this.log.debug(`[SCOUT] Full JSON Body to Post: ${JSON.stringify(scoutData)}`)
 						try {
 							const hrstartScout = process.hrtime()
 							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
@@ -705,6 +705,7 @@ class Monster extends Controller {
 
 							if (!data.scoutResult.includes('Check logs!')) {
 								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
+								this.log.debug(`[SCOUT] Full JSON Response: ${JSON.stringify(result.data)}`)
 								data.scoutResult += 'Queued'
 							}
 						} catch (error) {
