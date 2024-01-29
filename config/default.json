@@ -251,7 +251,7 @@
   //  (There is an UNTESTED config option to use your Dragonite Admin API key only if you need to use Dragonite-Admin for security.) 
   //
   "scouts": {
-  	  "scoutURL": "",              // http://<ip>:<port>/scout - Dragonite Scout API location 
+  	  "scoutURL": "",              // http://<ip>:<port>/scout/v2 - Dragonite Scout API location
 	  "dragoniteAdminSecret": "",  // If need, your Dragonite Admin API Key. ONLY needed for Drangonite-Admin setup.  Leave blank if using Dragonite's scout API directly.  
 	  "scoutClusters": true,       // Should the scout send 6x extra coords for nearby cell alerts
 	  "limitScoutRarity": 3,       // 0=no limit, sends scouts on all noIV alerts; 2=Uncommon and above only, 3=Rare+, 4=Very-Rare+, 5=Ultra-Rare+, 6=Unseen
