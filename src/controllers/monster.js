@@ -660,8 +660,24 @@ class Monster extends Controller {
 							'X-Dragonite-Admin-Secret': this.config.scouts?.dragoniteAdminSecret,
 						}
 						const url = this.config.scouts?.scoutURL
-						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat, lon]) => `[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
+						let scoutData = {}
+						if (this.config.scouts?.scoutURL.includes('/v2')) {
+							scoutData = {
+								username: 'poracle',
+								locations: coords,
+								options: {
+									routes: false,
+									showcases: false,
+									pokemon: true,
+									gmf: false,
+								},
+							}
+						} else {
+							scoutData = coords
+						}
 
+						// this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat, lon]) => `[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
+						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${JSON.stringify(scoutData)}`)
 						try {
 							const hrstartScout = process.hrtime()
 							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
@@ -672,7 +688,7 @@ class Monster extends Controller {
 								// Timeout Logic
 							}, timeoutMs)
 
-							const result = await axios.post(url, coords, { cancelToken: source.token }, { headers })
+							const result = await axios.post(url, scoutData, { cancelToken: source.token }, { headers })
 							clearTimeout(timeout)
 							if (result.status !== 200) {
 								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
