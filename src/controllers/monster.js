@@ -705,7 +705,7 @@ class Monster extends Controller {
 
 							if (!data.scoutResult.includes('Check logs!')) {
 								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
-								data.scoutResult += result.data
+								data.scoutResult += 'Queued'
 							}
 						} catch (error) {
 							if (error.response) {
