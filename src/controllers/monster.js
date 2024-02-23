@@ -705,7 +705,7 @@ class Monster extends Controller {
 
 							if (!data.scoutResult.includes('Check logs!')) {
 								data.scoutResult += 'Queued'
-								this.log.info(`${data.encounter_id}: [SCOUT] -> ${monster.name}(${data.pokemonId}) nearby ${data.seenType} no iv (${data.matched}) - Scout ${data.scoutResult}!`)
+								this.log.info(`${data.encounter_id}: [SCOUT] ${monster.name}(${data.pokemonId}) nearby ${data.seenType} no iv (${data.matched}) - Scout ${data.scoutResult}!`)
 								this.log.debug(`${data.encounter_id}: [SCOUT] Full JSON Response: ${JSON.stringify(result.data)}`)
 							}
 						} catch (error) {
