@@ -640,7 +640,7 @@ class Monster extends Controller {
 					const dontScoutTypes = ['encounter', 'lure_wild', 'lure_encounter']
 					if (!this.config.scouts?.scoutWild) { dontScoutTypes.push('wild') }
 					if ((data.iv === -1 && this.config.scouts?.scoutURL && !dontScoutTypes.includes(data.seenType) && !this.config.scouts?.scoutBlackList.includes(data.pokemonId)) && (this.config.scouts?.limitScoutRarity <= data.rarityGroup || data.rarityGroup === -1 && this.config.scouts?.limitScoutRarity < 2)) {
-						this.log.info(`[SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType === 'cell')}.`)
+						this.log.verbose(`${data.encounter_id}: [SCOUT] Readying ${monster.name}(${data.pokemonId}) rarityGroup: ${data.rarityGroup} - limitScoutRarity: ${this.config.scouts?.limitScoutRarity} - Clusters: ${(this.config.scouts?.scoutClusters && data.seenType === 'cell')}.`)
 
 						const coords = []
 						coords.push([data.latitude, data.longitude])
@@ -676,14 +676,14 @@ class Monster extends Controller {
 							scoutData = coords
 						}
 
-						this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} posting to ${url} with ${coords.map(([lat, lon]) => `[${lat.toFixed(3)},${lon.toFixed(3)}]`).join(', ')}`)
-						this.log.debug(`[SCOUT] Full JSON Body to Post: ${JSON.stringify(scoutData)}`)
+						this.log.verbose(`${data.encounter_id}: [SCOUT] ${monster.name} posting to ${url} with ${coords.map(([lat, lon]) => `[${lat.toFixed(4)},${lon.toFixed(4)}]`).join(', ')}`)
+						this.log.debug(`${data.encounter_id}: [SCOUT] Full JSON Body to Post: ${JSON.stringify(scoutData)}`)
 						try {
 							const hrstartScout = process.hrtime()
 							const timeoutMs = this.config.tuning.dragoniteTimeout || 10000
 							const source = axios.CancelToken.source()
 							const timeout = setTimeout(() => {
-								source.cancel(`[SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
+								source.cancel(`${data.encounter_id}: [SCOUT] Timeout waiting for scout response - ${timeoutMs}ms`)
 								data.scoutResult = 'Scout Timeout - Check logs!'
 								// Timeout Logic
 							}, timeoutMs)
@@ -691,29 +691,29 @@ class Monster extends Controller {
 							const result = await axios.post(url, scoutData, { cancelToken: source.token }, { headers })
 							clearTimeout(timeout)
 							if (result.status !== 200) {
-								this.log.warn(`[SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
+								this.log.warn(`${data.encounter_id}: [SCOUT] Failed Scout Attempt: Got ${result.status}. Error: ${result.data ? result.data.reason : '?'}.`)
 								data.scoutResult = 'Scout Failed - Check logs!'
 							}
 							const hrendScout = process.hrtime(hrstartScout)
 							const hrendmsScout = hrendScout[1] / 1000000
-							this.log.debug(`[SCOUT] Command Processor Dragonite execution time ${hrendmsScout}ms`)
+							this.log.debug(`${data.encounter_id}: [SCOUT] Command Processor Dragonite execution time ${hrendmsScout}ms`)
 
 							if (result.data.includes('<')) { // check for HTML error response
-								this.log.warn(`[SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
+								this.log.warn(`${data.encounter_id}: [SCOUT] Failed Scout Attempt: Got invalid response from Dragonite - ${result.data}`)
 								data.scoutResult = 'Scout Failed - Check logs!'
 							}
 
 							if (!data.scoutResult.includes('Check logs!')) {
-								this.log.info(`[SCOUT] ${data.encounter_id}: ${monster.name} Scout sent successfully!`)
-								this.log.debug(`[SCOUT] Full JSON Response: ${JSON.stringify(result.data)}`)
 								data.scoutResult += 'Queued'
+								this.log.info(`${data.encounter_id}: [SCOUT] -> ${monster.name}(${data.pokemonId}) nearby ${data.seenType} no iv (${data.matched}) - Scout ${data.scoutResult}!`)
+								this.log.debug(`${data.encounter_id}: [SCOUT] Full JSON Response: ${JSON.stringify(result.data)}`)
 							}
 						} catch (error) {
 							if (error.response) {
-								this.log.warn(`[SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
+								this.log.warn(`${data.encounter_id}: [SCOUT] Scout Error - Got ${error.response.status}. Error: ${error.response.data ? error.response.data.reason : '?'}.`)
 								data.scoutResult = 'Scout Error - Check logs!'
 							} else {
-								this.log.warn(`[SCOUT] Scout NoResponse Error: ${error}.`)
+								this.log.warn(`${data.encounter_id}: [SCOUT] Scout NoResponse Error: ${error}.`)
 								data.scoutResult = 'Scout NoResponse - Check logs!'
 							}
 						}
