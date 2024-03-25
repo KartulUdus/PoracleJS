@@ -15,7 +15,7 @@ It allows for high end-user configurability using discord `!commands` or telegra
 - [Discord](https://discord.gg/AathPCp) - Place for #help and #announcments  
 
 ### Install
-- [Install NodeJS](https://nodejs.org/en/) version 18
+- [Install NodeJS](https://nodejs.org/en/) version 20
 - [Create a discord bot and invite it to your server](https://muckelba.github.io/poracleWiki/discordbot.html)
 
 ```bash
