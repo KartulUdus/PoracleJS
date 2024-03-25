@@ -36,12 +36,12 @@
       "stickers": {
       },
       "requestShinyImages": false,
-      "populatePokestopName": false,            // [RDM] lookup nearby pokestop names in scanner db for nearby mons
+      "populatePokestopName": false,            // [RDM/Golbat] lookup nearby pokestop names in scanner db for nearby mons
       "locale": "en",                           // default locale for Poracle - eg en, fr, de, it, ru
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
     // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
-    //    invasion hook processing for RDM systems
+    //    invasion hook processing for RDM/Golbat systems
       "disablePokemon": false,
       "disableRaid": false,
       "disablePokestop": false,
