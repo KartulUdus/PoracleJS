@@ -1,5 +1,5 @@
 const fs = require('fs')
-const Fetch = require('node-fetch')
+const Fetch = require('node-fetch-native')
 
 const { log } = require('../lib/logger')
 

@@ -609,6 +609,7 @@ async function processOne(hook) {
 				fastify.webhooks.info(`pokestop(${hook.type}) ${JSON.stringify(hook.message)}`)
 				const incidentExpiration = hook.message.incident_expiration ?? hook.message.incident_expire_timestamp
 				const lureExpiration = hook.message.lure_expiration
+				const incidentConfirmed = hook.message.confirmed
 				if (!lureExpiration && !incidentExpiration) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
@@ -629,8 +630,24 @@ async function processOne(hook) {
 					}
 				}
 
-				if (incidentExpiration && !config.general.disableInvasion) {
+				if (incidentExpiration && !config.general.disableInvasion && !config.general.disableNotConfirmedInvasion) {
 					const cacheKey = `${hook.message.pokestop_id}I${incidentExpiration}`
+
+					if (fastify.cache.get(cacheKey) && !hook.message.poracleTest) {
+						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
+					} else {
+						// Set cache expiry to calculated invasion expiry time + 5 minutes to cope with near misses
+						const secondsRemaining = Math.max((incidentExpiration * 1000 - Date.now()) / 1000, 0) + 300
+
+						fastify.cache.set(cacheKey, 'x', secondsRemaining)
+
+						hook.type = 'invasion'
+						await processHook(hook)
+					}
+				}
+
+				if (incidentConfirmed && !config.general.disableInvasion && config.general.confirmedInvasion) {
+					const cacheKey = `${hook.message.pokestop_id}I${incidentExpiration}H02`
 
 					if (fastify.cache.get(cacheKey) && !hook.message.poracleTest) {
 						fastify.controllerLog.debug(`${hook.message.pokestop_id}: Invasion was sent again too soon, ignoring`)
