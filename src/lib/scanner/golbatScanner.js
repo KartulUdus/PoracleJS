@@ -4,6 +4,23 @@ class GolbatScanner {
 	}
 
 	// eslint-disable-next-line camelcase
+	async getGymName(gym_id) {
+		try {
+			for (const db of this.dbs) {
+				const row = await db.select('name')
+					.from('gym')
+					// eslint-disable-next-line camelcase
+					.where({ id: gym_id })
+					.first()
+				if (row) return row.name
+			}
+			return null
+		} catch (err) {
+			throw { source: 'getGymName', error: err }
+		}
+	}
+
+	// eslint-disable-next-line camelcase
 	async getPokestopName(pokestop_id) {
 		try {
 			for (const db of this.dbs) {
