@@ -610,6 +610,7 @@ async function processOne(hook) {
 				const incidentExpiration = hook.message.incident_expiration ?? hook.message.incident_expire_timestamp
 				const lureExpiration = hook.message.lure_expiration
 				const incidentConfirmed = hook.message.confirmed
+				const incidentDisplayType = hook.message.display_type
 				if (!lureExpiration && !incidentExpiration) {
 					fastify.controllerLog.debug(`${hook.message.pokestop_id}: Pokestop received but no invasion or lure information, ignoring`)
 					break
@@ -630,7 +631,7 @@ async function processOne(hook) {
 					}
 				}
 
-				if (incidentExpiration && !config.general.disableInvasion && !config.general.disableNotConfirmedInvasion) {
+				if (incidentExpiration && !config.general.disableInvasion && (!config.general.disableNotConfirmedInvasion || incidentDisplayType > '6')) {
 					const cacheKey = `${hook.message.pokestop_id}I${incidentExpiration}`
 
 					if (fastify.cache.get(cacheKey) && !hook.message.poracleTest) {
