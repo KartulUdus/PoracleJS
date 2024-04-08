@@ -631,7 +631,7 @@ async function processOne(hook) {
 					}
 				}
 
-				if (incidentExpiration && !config.general.disableInvasion && (!config.general.disableNotConfirmedInvasion || incidentDisplayType > '6')) {
+				if (incidentExpiration && !config.general.disableInvasion && (!config.general.disableUnconfirmedInvasion || incidentDisplayType > '6')) {
 					const cacheKey = `${hook.message.pokestop_id}I${incidentExpiration}`
 
 					if (fastify.cache.get(cacheKey) && !hook.message.poracleTest) {
@@ -647,7 +647,7 @@ async function processOne(hook) {
 					}
 				}
 
-				if (incidentConfirmed && !config.general.disableInvasion && config.general.confirmedInvasion) {
+				if (incidentConfirmed && !config.general.disableInvasion && config.general.processConfirmedInvasionLineups) {
 					const cacheKey = `${hook.message.pokestop_id}I${incidentExpiration}H02`
 
 					if (fastify.cache.get(cacheKey) && !hook.message.poracleTest) {
