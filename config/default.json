@@ -53,8 +53,8 @@
       "disableGym": false,
       "disableFortUpdate": false,
     //    invasion hook processing for Golbat systems
-      "confirmedInvasion": false,
-      "disableNotConfirmedInvasion": false,
+      "processConfirmedInvasionLineups": false,
+      "disableUnconfirmedInvasion": false,
     // roleCheckMode (case sensitive)
     // "ignore" - log and don't delete/disable users once required roles/channel membership are removed
     // "delete" - delete user from database along with trackings once required role is removed
