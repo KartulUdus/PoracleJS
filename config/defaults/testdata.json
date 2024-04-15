@@ -202,5 +202,11 @@
     "test": "new",
     "location": "current",
     "webhook": {"change_type": "new", "new": {"id": "0b427e88a3254eeab442d425412e4505.16","type": "pokestop", "name": null, "description": null, "image_url": null, "location": {"lat": 50.982116, "lon": 6.933164 }}}
+  },
+  {
+    "type": "fort_update",
+    "test": "remove",
+    "location": "current",
+    "webhook": {"change_type": "removal", "old": {"id": "f7430347f5c34facb838be376f16adea.16", "type": "pokestop", "name": "Journey Through Trees And Time", "description": null, "image_url": "http://lh3.googleusercontent.com/VSBh5Q5W6z5LHBLDFQqBNtCTBxqe0HAy4H9W_Um2_AVUg8Rh40u1tYteSc2TVLtPAd4v7c83umdTh6RUVNpOkACjt9saHNj6a_2XYRsGYg", "location": {"lat": 50.975598, "lon": 6.942527}}}
   }
 ]
