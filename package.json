@@ -1,6 +1,6 @@
 {
   "name": "poracle",
-  "version": "4.8.0",
+  "version": "4.8.2",
   "description": "Webhook processing and personalised discord|telegram alarms",
   "keywords": [
     "poracle",
@@ -32,8 +32,8 @@
     "test": "node test/test"
   },
   "dependencies": {
-    "@budibase/handlebars-helpers": "^0.11.8",
-    "async-mutex": "^0.4.0",
+    "@budibase/handlebars-helpers": "^0.13.1",
+    "async-mutex": "^0.5.0",
     "axios": "^1.4.0",
     "chokidar": "^3.5.3",
     "config": "^3.3.10",
@@ -55,7 +55,7 @@
     "moment-timezone": "^0.5.43",
     "mysql2": "^3.3.3",
     "node-cache": "^5.1.2",
-    "node-fetch": "^2.6.11",
+    "node-fetch-native": "^1.2.0",
     "node-geocoder": "^4.2.0",
     "node-schedule": "^2.1.0",
     "nodes2ts": "^3.0.0",
@@ -68,7 +68,7 @@
     "suncalc": "^1.9.0",
     "telegraf": "^4.12.0",
     "winston": "^3.9.0",
-    "winston-daily-rotate-file": "^4.7.1"
+    "winston-daily-rotate-file": "^5.0.0"
   },
   "devDependencies": {
     "ajv": "^8.12.0",
@@ -76,10 +76,10 @@
     "eslint": "^8.41.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.0",
-    "husky": "^8.0.3",
+    "husky": "^9.0.11",
     "mocha": "^10.2.0"
   },
   "engines": {
-    "node": ">=18.16.0"
+    "node": ">=20.9.0"
   }
 }
