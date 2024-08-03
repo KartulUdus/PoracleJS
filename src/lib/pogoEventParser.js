@@ -44,10 +44,10 @@ class PogoEventParser {
 	 * @param events
 	 */
 	loadEvents(events) {
-		try{
+		try {
 			// create filtered pokemon spawn event list
 			// for now, only filter by eventType until spawn information is available
-			var filteredEvents = []
+			let filteredEvents = []
 			for (const event of events.filter((x) => x.eventType === 'community-day' || x.eventType === 'pokemon-spotlight-hour')) {
 				filteredEvents.push(event)
 			}
@@ -56,7 +56,7 @@ class PogoEventParser {
 			// create filtered quest event list
 			// for now, only filter by eventType until field research task information is available
 			filteredEvents = []
-			for (const event of events.filter((x) => x.eventType === 'community-day' )) {
+			for (const event of events.filter((x) => x.eventType === 'community-day')) {
 				filteredEvents.push(event)
 			}
 			this.questEvents = filteredEvents
