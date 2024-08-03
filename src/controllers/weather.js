@@ -413,8 +413,13 @@ class Weather extends Controller {
 				data.weatherEmoji = data.weatherEmojiEng ? translator.translate(data.weatherEmojiEng) : ''
 				if (this.config.weather.showAlteredPokemon && data.activePokemons) {
 					data.activePokemons.map((pok) => {
+						pok.nameEng = pok.name
 						pok.name = translator.translate(pok.name)
+						pok.formNameEng = pok.formName
+						pok.formNormalisedEng = pok.formNameEng === 'Normal' ? '' : pok.formNameEng
+						pok.formNormalised = translator.translate(pok.formNormalisedEng)
 						pok.formName = translator.translate(pok.formName)
+						pok.fullNameEng = pok.nameEng.concat(pok.formNormalisedEng ? ' ' : '', pok.formNormalisedEng)
 					})
 				}
 
