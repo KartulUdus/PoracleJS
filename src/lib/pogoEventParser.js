@@ -86,14 +86,14 @@ class PogoEventParser {
 					return {
 						reason: 'start',
 						name: event.name,
-						time: event.start.split(' ')[1],
+						time: moment(event.start).format('HH:mm'),
 					}
 				}
 				if (startTime < eventEnd && eventEnd < disappearTime) {
 					return {
 						reason: 'end',
 						name: event.name,
-						time: event.end.split(' ')[1],
+						time: moment(event.end).format('HH:mm'),
 					}
 				}
 			}
@@ -123,14 +123,14 @@ class PogoEventParser {
 					return {
 						reason: 'start',
 						name: event.name,
-						time: event.start.split(' ')[1],
+						time: moment(event.start).format('HH:mm'),
 					}
 				}
 				if (startTime < eventEnd && eventEnd < disappearTime) {
 					return {
 						reason: 'end',
 						name: event.name,
-						time: event.end.split(' ')[1],
+						time: moment(event.end).format('HH:mm'),
 					}
 				}
 			}
