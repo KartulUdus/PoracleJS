@@ -9,6 +9,8 @@ const moment = require('moment-timezone')
 class PogoEventParser {
 	constructor(log) {
 		this.log = log
+		this.spawnEvents = []
+		this.questEvents = []
 	}
 
 	/**
@@ -25,7 +27,7 @@ class PogoEventParser {
 			// Timeout Logic
 		}, timeoutMs)
 
-		const url = 'https://raw.githubusercontent.com/ccev/pogoinfo/v2/active/events.json'
+		const url = 'https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json'
 		const result = await axios({
 			method: 'get',
 			url,
@@ -42,7 +44,25 @@ class PogoEventParser {
 	 * @param events
 	 */
 	loadEvents(events) {
-		this.events = events
+		try {
+			// create filtered pokemon spawn event list
+			// for now, only filter by eventType until spawn information is available
+			let filteredEvents = []
+			for (const event of events.filter((x) => x.eventType === 'community-day' || x.eventType === 'pokemon-spotlight-hour')) {
+				filteredEvents.push(event)
+			}
+			this.spawnEvents = filteredEvents
+
+			// create filtered quest event list
+			// for now, only filter by eventType until field research task information is available
+			filteredEvents = []
+			for (const event of events.filter((x) => x.eventType === 'community-day')) {
+				filteredEvents.push(event)
+			}
+			this.questEvents = filteredEvents
+		} catch (err) {
+			this.log.error('PogoEvents: Error creating filtered spawn and quest event lists', err)
+		}
 	}
 
 	/**
@@ -54,26 +74,26 @@ class PogoEventParser {
 	 * @returns {{reason: string, name, time}}
 	 */
 	eventChangesSpawn(startTime, disappearTime, lat, lon) {
-		if (!this.events) return
+		if (!this.spawnEvents) return
 
 		try {
 			const tz = geoTz.find(lat, lon)[0].toString()
 
-			for (const event of this.events.filter((x) => (x.spawns && x.spawns.length) || x.type === 'community-day' || x.type === 'spotlight-hour')) {
+			for (const event of this.spawnEvents) {
 				const eventStart = moment.tz(event.start, tz).unix()
 				const eventEnd = moment.tz(event.end, tz).unix()
 				if (startTime < eventStart && eventStart < disappearTime) {
 					return {
 						reason: 'start',
 						name: event.name,
-						time: event.start.split(' ')[1],
+						time: moment(event.start).format('HH:mm'),
 					}
 				}
 				if (startTime < eventEnd && eventEnd < disappearTime) {
 					return {
 						reason: 'end',
 						name: event.name,
-						time: event.end.split(' ')[1],
+						time: moment(event.end).format('HH:mm'),
 					}
 				}
 			}
@@ -91,26 +111,26 @@ class PogoEventParser {
 	 * @returns {{reason: string, name, time}}
 	 */
 	eventChangesQuest(startTime, disappearTime, lat, lon) {
-		if (!this.events) return
+		if (!this.questEvents) return
 
 		try {
 			const tz = geoTz.find(lat, lon)[0].toString()
 
-			for (const event of this.events.filter((x) => x.has_quests)) {
+			for (const event of this.questEvents) {
 				const eventStart = moment.tz(event.start, tz).unix()
 				const eventEnd = moment.tz(event.end, tz).unix()
 				if (startTime < eventStart && eventStart < disappearTime) {
 					return {
 						reason: 'start',
 						name: event.name,
-						time: event.start.split(' ')[1],
+						time: moment(event.start).format('HH:mm'),
 					}
 				}
 				if (startTime < eventEnd && eventEnd < disappearTime) {
 					return {
 						reason: 'end',
 						name: event.name,
-						time: event.end.split(' ')[1],
+						time: moment(event.end).format('HH:mm'),
 					}
 				}
 			}

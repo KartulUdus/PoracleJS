@@ -27,7 +27,7 @@
     "latest": "npm run generate latest && npm run koji && node .",
     "lint": "./node_modules/.bin/eslint ./src --fix",
     "migrateV3": "node src/init/migrateV3.js",
-    "prepare": "husky install",
+    "prepare": "husky",
     "start": "npm run generate && npm run koji && node .",
     "test": "node test/test"
   },

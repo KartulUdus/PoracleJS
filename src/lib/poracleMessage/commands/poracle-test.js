@@ -1,6 +1,8 @@
 const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
+const geoTz = require('geo-tz')
+const moment = require('moment-timezone')
 
 exports.run = async (client, msg, args, options) => {
 	try {
@@ -51,13 +53,22 @@ exports.run = async (client, msg, args, options) => {
 
 			return await msg.reply(message)
 		}
-
+		// Create extra command argument 'disapeardt' RegEx for 'poracle-test' command.
+		// Added here instead of regex.js, because there is no use in other commands.
+		// datetime format: "YYYY-MM-DDTHH:mm:ss" e.g. 2024-08-13T23:01:00
+		const disapeardtReStr = '^(disapeardt):?([2][0][0-9][0-9]-([0][0-9]|[1][0-2])-([0-2][0-9]|[3][0-1])t([0-1][0-9]|[2][0-3]):[0-5][0-9]:[0-5][0-9])'
+		const disapeardtRe = RegExp(disapeardtReStr, 'i')
+		let disapearTimeOverwrite = null
+		// check and handle additional arguments used by 'poracle-test' command
 		for (let i = args.length - 1; i >= 0; i--) {
 			if (args[i].match(client.re.templateRe)) {
 				[, , template] = args[i].match(client.re.templateRe)
 				args.splice(i, 1)
 			} else if (args[i].match(client.re.languageRe)) {
 				[, , language] = args[i].match(client.re.languageRe)
+				args.splice(i, 1)
+			} else if (args[i].match(disapeardtRe)) {
+				[, , disapearTimeOverwrite] = args[i].match(disapeardtRe)
 				args.splice(i, 1)
 			}
 		}
@@ -88,7 +99,15 @@ exports.run = async (client, msg, args, options) => {
 		// Freshen test data
 		switch (hookType) {
 			case 'pokemon': {
-				hook.disappear_time = Date.now() / 1000 + 10 * 60
+				if (disapearTimeOverwrite !== null) {
+					// get timezone of pokemon location
+					const tz = geoTz.find(hook.latitude, hook.longitude)[0].toString()
+					// calculate timestamp based on provided time as localtime matching to pokemon location
+					// disapearTimeOverwrite string was converted to lowwercase so we need to change back to upper case ('t' -> 'T')
+					hook.disappear_time = moment.tz(disapearTimeOverwrite.toUpperCase(), tz).unix()
+				} else {
+					hook.disappear_time = Date.now() / 1000 + 10 * 60
+				}
 				break
 			}
 			case 'raid': {
