@@ -27,7 +27,7 @@ class PogoEventParser {
 			// Timeout Logic
 		}, timeoutMs)
 
-		const url = 'https://raw.githubusercontent.com/bigfoott/ScrapedDuck/data/events.json'
+		const url = 'https://raw.githubusercontent.com/hamster007Github/ScrapedDuck/data/events.json'
 		const result = await axios({
 			method: 'get',
 			url,
@@ -48,7 +48,7 @@ class PogoEventParser {
 			// create filtered pokemon spawn event list
 			// for now, only filter by eventType until spawn information is available
 			let filteredEvents = []
-			for (const event of events.filter((x) => x.eventType === 'community-day' || x.eventType === 'pokemon-spotlight-hour')) {
+			for (const event of events.filter((x) => x.eventType === 'community-day' || x.eventType === 'pokemon-spotlight-hour' || x.extraData.generic.hasSpawns)) {
 				filteredEvents.push(event)
 			}
 			this.spawnEvents = filteredEvents
@@ -56,7 +56,7 @@ class PogoEventParser {
 			// create filtered quest event list
 			// for now, only filter by eventType until field research task information is available
 			filteredEvents = []
-			for (const event of events.filter((x) => x.eventType === 'community-day')) {
+			for (const event of events.filter((x) => x.eventType === 'community-day' || x.extraData.generic.hasFieldResearchTasks)) {
 				filteredEvents.push(event)
 			}
 			this.questEvents = filteredEvents
