@@ -45,6 +45,7 @@ async function getAvailableIcons(log, baseUrl) {
 							const uicons = new UICONS(baseUrl)
 							uicons.init(response.data)
 							uiconsIndex[baseUrl] = uicons
+							currentSet = uiconsIndex[baseUrl]
 							break
 						}
 						default: {
