@@ -146,6 +146,8 @@ module.exports = async (fastify, options) => {
 				}
 			}
 
+			if (req.query.suppressMessage) message = ''
+
 			await fastify.query.deleteWhereInQuery(
 				'quest',
 				{
@@ -174,10 +176,12 @@ module.exports = async (fastify, options) => {
 				language,
 			}]
 
-			data.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
+			if (message) {
+				data.forEach((job) => {
+					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+				})
+			}
 
 			return {
 				status: 'ok',
