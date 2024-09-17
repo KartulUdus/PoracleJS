@@ -151,7 +151,7 @@ module.exports = async (fastify, options) => {
 				'uid',
 			)
 
-			await fastify.query.insertQuery('nests', [...insert, ...updates])
+			const newUids = await fastify.query.insertQuery('nests', [...insert, ...updates], 'uid')
 
 			// Send message to user
 
@@ -179,6 +179,10 @@ module.exports = async (fastify, options) => {
 			return {
 				status: 'ok',
 				message,
+				newUids,
+				alreadyPresent: alreadyPresent.length,
+				updates: updates.length,
+				insert: insert.length,
 			}
 		} catch (err) {
 			fastify.logger.error(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`, err)

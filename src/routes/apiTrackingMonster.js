@@ -218,11 +218,15 @@ module.exports = async (fastify, options) => {
 			// 'uid')
 			// await fastify.query.insertQuery('monsters', [...insert, ...updates])
 
+			let newUids = []
+
 			if (insert.length) {
-				await fastify.query.insertQuery('monsters', insert)
+				const result = await fastify.query.insertQuery('monsters', insert, 'uid')
+				if (result) newUids = [...newUids, ...result]
 			}
 			for (const row of updates) {
 				await fastify.query.updateQuery('monsters', row, { uid: row.uid })
+				newUids.push(row.uid)
 			}
 
 			// Send message to user
@@ -253,6 +257,10 @@ module.exports = async (fastify, options) => {
 			return {
 				status: 'ok',
 				message,
+				newUids,
+				alreadyPresent: alreadyPresent.length,
+				updates: updates.length,
+				insert: insert.length,
 			}
 		} catch (err) {
 			fastify.logger.error(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`, err)
