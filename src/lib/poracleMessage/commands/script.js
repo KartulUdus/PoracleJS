@@ -70,7 +70,7 @@ exports.run = async (client, msg, args, options) => {
 					mincp: ['min_cp', 0],
 					macxp: ['max_cp', 9000],
 					level: ['min_level', 0],
-					maxlevel: ['max_level', 40],
+					maxlevel: ['max_level', 50],
 					atk: ['atk', 0],
 					def: ['def', 0],
 					sta: ['sta', 0],
