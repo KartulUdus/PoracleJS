@@ -128,7 +128,7 @@ module.exports = async (fastify, options) => {
 				min_cp: +defaultTo(row.min_cp, 0),
 				max_cp: +defaultTo(row.max_cp, 9000),
 				min_level: +defaultTo(row.min_level, 0),
-				max_level: +defaultTo(row.max_level, 50),
+				max_level: +defaultTo(row.max_level, 55),
 				atk: +defaultTo(row.atk, 0),
 				def: +defaultTo(row.def, 0),
 				sta: +defaultTo(row.sta, 0),
