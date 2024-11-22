@@ -143,6 +143,8 @@ module.exports = async (fastify, options) => {
 				}
 			}
 
+			if (req.query.suppressMessage) message = ''
+
 			await fastify.query.deleteWhereInQuery(
 				'invasion',
 				{
@@ -153,7 +155,7 @@ module.exports = async (fastify, options) => {
 				'uid',
 			)
 
-			await fastify.query.insertQuery('invasion', [...insert, ...updates])
+			const newUids = await fastify.query.insertQuery('invasion', [...insert, ...updates], 'uid')
 
 			// Send message to user
 
@@ -171,14 +173,20 @@ module.exports = async (fastify, options) => {
 				language,
 			}]
 
-			data.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
+			if (message) {
+				data.forEach((job) => {
+					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+				})
+			}
 
 			return {
 				status: 'ok',
 				message,
+				newUids,
+				alreadyPresent: alreadyPresent.length,
+				updates: updates.length,
+				insert: insert.length,
 			}
 		} catch (err) {
 			fastify.logger.error(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`, err)

@@ -482,10 +482,14 @@ class Controller extends EventEmitter {
 		}
 	}
 
-	async insertQuery(table, values) {
+	async insertQuery(table, values, returning = undefined) {
 		if (Array.isArray(values) && !values.length) return
 		try {
-			return await this.db.insert(values).into(table)
+			const statement = this.db.insert(values).into(table)
+			if (returning) {
+				statement.returning(returning)
+			}
+			return await statement
 		} catch (err) {
 			throw { source: 'insertQuery', error: err }
 		}
