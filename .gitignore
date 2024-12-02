@@ -2,6 +2,7 @@ logs/*
 config/*.json
 config/customMaps/*
 config/dts/*.json
+config/filters/*.json
 docker-compose.yml
 .cache/*
 .idea
