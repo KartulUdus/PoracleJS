@@ -63,22 +63,65 @@ class Weather extends Controller {
 	}
 
 	// eslint-disable-next-line class-methods-use-this
-	mapPoGoWeather(weatherIcon) {
-		const mapping = {
-			1: [1, 2, 30, 33, 34],
-			2: [12, 15, 18, 26, 29],
-			3: [3, 4, 14, 17, 21, 35, 36, 39, 41],
-			4: [5, 6, 7, 8, 13, 16, 20, 23, 37, 38, 40, 42],
-			5: [32],
-			6: [19, 22, 24, 25, 31, 43, 44],
-			7: [11],
+	mapPoGoWeather(data) {
+		// https://github.com/5310/discord-bot-castform/issues/2#issuecomment-1687783087
+		// https://docs.google.com/spreadsheets/d/1v51qbI1egh6eBTk-NTaRy3Qlx2Y2v9kDYqmvHlmntJE/edit
+		let icon
+		switch (data.WeatherIcon) {
+			case 1:
+			case 2:
+			case 33:
+			case 34:
+				icon = 1
+				break
+			case 3:
+			case 4:
+			case 35:
+			case 36:
+				icon = 3
+				break
+			case 5:
+			case 6:
+			case 7:
+			case 8:
+			case 37:
+			case 38:
+				icon = 4
+				break
+			case 11:
+				return 7
+			case 12:
+			case 15:
+			case 18:
+			case 26:
+			case 29:
+				return 2
+			case 13:
+			case 16:
+			case 20:
+			case 23:
+			case 40:
+			case 42:
+				return 4
+			case 14:
+			case 17:
+			case 21:
+			case 39:
+			case 41:
+				return 3
+			case 19:
+			case 22:
+			case 24:
+			case 25:
+			case 43:
+			case 44:
+				return 6
+			case 32:
+				return 5
+			default:
+				return 0
 		}
-		for (const [index, map] of Object.entries(mapping)) {
-			if (map.indexOf(weatherIcon) !== -1) {
-				return parseInt(index, 10)
-			}
-		}
-		return 0
+		return data.Wind.Speed.Value > 20 || data.WindGust.Speed.Value > 30 ? 5 : icon
 	}
 
 	// eslint-disable-next-line class-methods-use-this
@@ -166,14 +209,14 @@ class Weather extends Controller {
 				if (apiKeyWeatherInfo) {
 					try {
 						// Fetch new weather information
-						const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}`
+						const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}&details=true&metric=true`
 						this.log.debug(`${id}: Fetching AccuWeather Forecast ${url}`)
 
 						let logString = ''
 						const weatherInfo = await axios.get(url)
 						for (const forecast in Object.entries(weatherInfo.data)) {
 							if (weatherInfo.data[forecast].EpochDateTime > currentHourTimestamp) {
-								const pogoWeather = this.mapPoGoWeather(weatherInfo.data[forecast].WeatherIcon)
+								const pogoWeather = this.mapPoGoWeather(weatherInfo.data[forecast])
 								const epoch = weatherInfo.data[forecast].EpochDateTime
 								data[epoch] = pogoWeather
 								logString = logString.concat(`${moment.unix(epoch).format('HH:mm')} = ${pogoWeather} `)
