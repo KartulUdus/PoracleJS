@@ -1,4 +1,4 @@
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.post('/api/postMessage', options, async (req, reply) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
@@ -34,5 +34,4 @@ module.exports = async (fastify, options, next) => {
 
 		if (!reply.sent) return { status: 'ok' }
 	})
-	next()
 }

@@ -3,7 +3,7 @@ const { diff } = require('deep-object-diff')
 const trackedCommand = require('../lib/poracleMessage/commands/tracked')
 const { raidLevels } = require('../util/util.json')
 
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/tracking/egg/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
@@ -220,6 +220,4 @@ module.exports = async (fastify, options, next) => {
 			status: 'ok',
 		}
 	})
-
-	next()
 }

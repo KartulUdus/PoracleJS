@@ -41,7 +41,7 @@
     // disabledCommands - array of commands which will be disabled from use
       "disabledCommands": [],
     // disableXXX - disables individual hook processing for particular scanner webhook types.  disablePokestop disables
-    //    invasion hook processing for RDM systems
+    //    invasion hook processing for RDM/Golbat systems
       "disablePokemon": false,
       "disableRaid": false,
       "disablePokestop": false,
@@ -52,6 +52,9 @@
       "disableNest": false,
       "disableGym": false,
       "disableFortUpdate": false,
+    //    invasion hook processing for Golbat systems
+      "processConfirmedInvasionLineups": false,
+      "disableUnconfirmedInvasion": false,
     // roleCheckMode (case sensitive)
     // "ignore" - log and don't delete/disable users once required roles/channel membership are removed
     // "delete" - delete user from database along with trackings once required role is removed
@@ -134,7 +137,7 @@
           "password": "poraclepassword",
           "port": 3306
       },
-      "scannerType": "none",               // Scanner type: can be none, rdm or mad
+      "scannerType": "none",               // Scanner type: can be none, golbat, rdm or mad
       "scanner": {
           "host": "127.0.0.1",
           "database": "scannerdb",

@@ -103,7 +103,7 @@ class DiscordWebhookWorker {
 			delete data.message.embed
 		}
 		try {
-			const msgDeletionMs = ((data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
+			const msgDeletionMs = ((data.tth.days * 86400) + (data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000
 
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 

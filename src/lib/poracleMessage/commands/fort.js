@@ -130,14 +130,14 @@ exports.run = async (client, msg, args, options) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
-				for (const lure of alreadyPresent) {
-					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+				for (const fort of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, fort, client.scannerQuery), '\n')
 				}
-				for (const lure of updates) {
-					message = message.concat(translator.translate('Updated: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+				for (const fort of updates) {
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, fort, client.scannerQuery), '\n')
 				}
-				for (const lure of insert) {
-					message = message.concat(translator.translate('New: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+				for (const fort of insert) {
+					message = message.concat(translator.translate('New: '), await trackedCommand.fortUpdateRowText(client.config, translator, client.GameData, fort, client.scannerQuery), '\n')
 				}
 			}
 

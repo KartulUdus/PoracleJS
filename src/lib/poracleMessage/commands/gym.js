@@ -143,14 +143,14 @@ exports.run = async (client, msg, args, options) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', util.prefix, translator.translate('tracked'))
 			} else {
-				for (const lure of alreadyPresent) {
-					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+				for (const gym of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, gym, client.scannerQuery), '\n')
 				}
-				for (const lure of updates) {
-					message = message.concat(translator.translate('Updated: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+				for (const gym of updates) {
+					message = message.concat(translator.translate('Updated: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, gym, client.scannerQuery), '\n')
 				}
-				for (const lure of insert) {
-					message = message.concat(translator.translate('New: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, lure, client.scannerQuery), '\n')
+				for (const gym of insert) {
+					message = message.concat(translator.translate('New: '), await trackedCommand.gymRowText(client.config, translator, client.GameData, gym, client.scannerQuery), '\n')
 				}
 			}
 
@@ -204,7 +204,7 @@ exports.run = async (client, msg, args, options) => {
 
 		await msg.react(reaction)
 	} catch (err) {
-		client.log.error(`${logReference}: lure command unhappy:`, err)
+		client.log.error(`${logReference}: gym command unhappy:`, err)
 		msg.reply(`There was a problem making these changes, the administrator can find the details with reference ${logReference}`)
 	}
 }

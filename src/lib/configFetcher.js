@@ -48,7 +48,7 @@ function getKnex(conf) {
 }
 
 function getScannerKnex(conf) {
-	if (conf.database.scannerType === 'mad' || conf.database.scannerType === 'rdm') {
+	if (conf.database.scannerType === 'mad' || conf.database.scannerType === 'rdm' || conf.database.scannerType === 'golbat') {
 		return !Array.isArray(conf.database.scanner)
 			? [Knex({
 				client: 'mysql2',

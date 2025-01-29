@@ -398,7 +398,7 @@ exports.run = async (client, msg, args, options) => {
 			min_cp: +(parameterValues.cp?.min ?? 0),
 			max_cp: +(parameterValues.cp?.max ?? parameterValues.maxcp ?? 9000),
 			min_level: +(parameterValues.level?.min ?? 0),
-			max_level: +(parameterValues.level?.max ?? parameterValues.maxlevel ?? 40),
+			max_level: +(parameterValues.level?.max ?? parameterValues.maxlevel ?? 55),
 			atk: +(parameterValues.atk?.min ?? 0),
 			max_atk: +(parameterValues.atk?.max ?? parameterValues.maxatk ?? 15),
 			def: +(parameterValues.def?.min ?? 0),

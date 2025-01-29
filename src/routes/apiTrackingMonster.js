@@ -3,7 +3,7 @@ const { diff } = require('deep-object-diff')
 const trackedCommand = require('../lib/poracleMessage/commands/tracked')
 const tracked = require('../lib/poracleMessage/commands/tracked')
 
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/tracking/pokemon/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
@@ -128,7 +128,7 @@ module.exports = async (fastify, options, next) => {
 				min_cp: +defaultTo(row.min_cp, 0),
 				max_cp: +defaultTo(row.max_cp, 9000),
 				min_level: +defaultTo(row.min_level, 0),
-				max_level: +defaultTo(row.max_level, 40),
+				max_level: +defaultTo(row.max_level, 55),
 				atk: +defaultTo(row.atk, 0),
 				def: +defaultTo(row.def, 0),
 				sta: +defaultTo(row.sta, 0),
@@ -276,6 +276,4 @@ module.exports = async (fastify, options, next) => {
 			status: 'ok',
 		}
 	})
-
-	next()
 }

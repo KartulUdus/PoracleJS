@@ -1,6 +1,6 @@
 const ProfileLogic = require('../lib/profileLogic')
 
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/profiles/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
@@ -192,6 +192,4 @@ module.exports = async (fastify, options, next) => {
 			}
 		}
 	})
-
-	next()
 }

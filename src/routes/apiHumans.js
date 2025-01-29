@@ -2,7 +2,7 @@ const communityLogic = require('../lib/communityLogic')
 const DiscordUtil = require('../lib/discord/discordUtil')
 const DiscordRoleSetter = require('../lib/discord/discordRoleSetter')
 
-module.exports = async (fastify, options, next) => {
+module.exports = async (fastify, options) => {
 	fastify.get('/api/humans/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
@@ -536,6 +536,4 @@ module.exports = async (fastify, options, next) => {
 			human,
 		}
 	})
-
-	next()
 }
