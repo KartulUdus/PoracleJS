@@ -11,6 +11,18 @@ const Controller = require('./controller')
 const weatherKeyCache = pcache.load('weatherKeyCache', path.join(__dirname, '../../.cache'))
 const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))
 
+const accuWeatherOptions = {
+	headers: { 'User-Agent': 'Mozilla/5.0 (Linux x86_64)' },
+}
+const accuWeatherWebApiOptions = {
+	...accuWeatherOptions,
+	maxRedirects: 0,
+	validateStatus: (status) => status === 302,
+}
+const weatherForecastRegexp = /^\/en\/([^/]*\/[^/]*\/[^/]*)\/weather-forecast\/([^?]*)/
+const hourlyWeatherForecastRegexp = /^https:\/\/www\.accuweather\.com\/en\/([^/]*\/[^/]*\/[^/]*)\/hourly-weather-forecast\//
+const hourlyHtmlRegexp = /<div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="\/images\/weathericons\/(\d+).svg".*?(\d+) km\/h.*?(\d+) km\/h/s
+
 class Weather extends Controller {
 	constructor(log, db, geocoder, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
 		super(log, db, geocoder, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache, null, null, null)
@@ -133,6 +145,84 @@ class Weather extends Controller {
 		})
 	}
 
+	async getLocationKey(id) {
+		const latlng = S2.idToLatLng(id)
+		const apiKeyWeatherLocation = await this.getLaziestWeatherKey()
+		if (apiKeyWeatherLocation) {
+			try {
+				// Fetch location information
+				const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${apiKeyWeatherLocation}&q=${latlng.lat}%2C${latlng.lng}`
+				this.log.debug(`${id}: Fetching AccuWeather location ${url}`)
+
+				const weatherLocation = await axios.get(url)
+				return [weatherLocation.data.Key, null]
+			} catch (err) {
+				this.log.error(`${id}: Fetching AccuWeather location errored with: ${err}`)
+			}
+		} else {
+			this.log.info(`${id}: no AccuWeather API key available - trying fallback`)
+		}
+		try {
+			const url = `https://www.accuweather.com/web-api/three-day-redirect?lat=${latlng.lat}&lon=${latlng.lng}`
+			const webApi = await axios.get(url, accuWeatherWebApiOptions)
+			const match = weatherForecastRegexp.exec(webApi.headers.location)
+			if (match) return [match[1], match[2]]
+			this.log.error(`${id}: fallback failed: ${webApi}`)
+		} catch (err) {
+			this.log.error(`${id}: fallback failed with ${err}`)
+		}
+		return [null, null]
+	}
+
+	async requestWeather(id, data, currentHourTimestamp) {
+		const apiKeyWeatherInfo = await this.getLaziestWeatherKey()
+		const parseEntry = (forecast) => {
+			if (forecast.EpochDateTime <= currentHourTimestamp) return null
+			const pogoWeather = this.mapPoGoWeather(forecast)
+			const epoch = forecast.EpochDateTime
+			data[epoch] = pogoWeather
+			return `${moment.unix(epoch).format('HH:mm')} = ${pogoWeather} `
+		}
+		if (apiKeyWeatherInfo) {
+			try {
+				// Fetch new weather information
+				const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}&details=true&metric=true`
+				this.log.debug(`${id}: Fetching AccuWeather Forecast ${url}`)
+
+				const weatherInfo = await axios.get(url)
+				const logString = Object.values(weatherInfo.data).map(parseEntry).filter((i) => i).join(' ')
+				this.log.verbose(`${id}: Accuweather forecast [GMT] ${logString}`)
+				return true
+			} catch (err) {
+				this.log.error(`${id}: Fetching AccuWeather weather info [${apiKeyWeatherInfo.substring(0, 5)}...] errored with: ${err}`)
+			}
+		} else {
+			this.log.warn(`${id}: Couldn't fetch weather forecast - no API key available - trying fallback`)
+		}
+		// fallback scraping mode: same effect but wind speeds are rounded to integers
+		try {
+			const url = `https://www.accuweather.com/en/${data.locationDescription || 'a/b/c'}/hourly-weather-forecast/${data.location}?unit=c`
+			const forecast = await axios.get(url, accuWeatherOptions)
+			if (!data.locationDescription) {
+				const match = hourlyWeatherForecastRegexp.exec(forecast.request.res.responseURL)
+				if (match) data.locationDescription = match[1]; else {
+					this.log.warn(`${id}: unexpected responseURL ${forecast.request.res.responseURL}`)
+				}
+			}
+			const logString = forecast.data.matchAll(hourlyHtmlRegexp).map((match) => parseEntry({
+				EpochDateTime: parseInt(match[1]),
+				WeatherIcon: parseInt(match[2]),
+				Wind: {Speed: {Value: parseInt(match[3])}},
+				WindGust: {Speed: {Value: parseInt(match[4])}},
+			})).filter((i) => i).join(' ')
+			this.log.verbose(`${id}: Accuweather fallback forecast [GMT] ${logString}`)
+			return true
+		} catch (err) {
+			this.log.error(`${id}: Fallback AccuWeather weather info errored with: ${err}`)
+		}
+		return false
+	}
+
 	/**
 	 * Get weather forecast
 	 * @param weatherObject
@@ -171,26 +261,13 @@ class Weather extends Controller {
 			data.lastForecastLoad = currentHourTimestamp	// Indicate we have tried a forecast
 
 			if (!Object.keys(data).length || !data.location) {
-				const latlng = S2.idToLatLng(id)
-				const apiKeyWeatherLocation = await this.getLaziestWeatherKey()
-				if (apiKeyWeatherLocation) {
-					try {
-						// Fetch location information
-						const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${apiKeyWeatherLocation}&q=${latlng.lat}%2C${latlng.lng}`
-						this.log.debug(`${id}: Fetching AccuWeather location ${url}`)
-
-						const weatherLocation = await axios.get(url)
-						data.location = weatherLocation.data.Key
-					} catch (err) {
-						this.log.error(`${id}: Fetching AccuWeather location errored with: ${err}`)
-						this.broadcastWeather()
-						return
-					}
-				} else {
-					this.log.info(`${id}: Couldn't fetch weather location - no API key available`)
+				const [locationKey, locationDescription] = await this.getLocationKey(id)
+				if (locationKey === null) {
 					this.broadcastWeather()
 					return
 				}
+				data.location = locationKey
+				if (locationDescription) data.locationDescription = locationDescription
 			}
 
 			if (!data[currentHourTimestamp]) {
@@ -204,35 +281,10 @@ class Weather extends Controller {
 			) {
 				// Delete old weather information
 				this.expireWeatherCell(data, currentHourTimestamp)
-
-				const apiKeyWeatherInfo = await this.getLaziestWeatherKey()
-				if (apiKeyWeatherInfo) {
-					try {
-						// Fetch new weather information
-						const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}&details=true&metric=true`
-						this.log.debug(`${id}: Fetching AccuWeather Forecast ${url}`)
-
-						let logString = ''
-						const weatherInfo = await axios.get(url)
-						for (const forecast in Object.entries(weatherInfo.data)) {
-							if (weatherInfo.data[forecast].EpochDateTime > currentHourTimestamp) {
-								const pogoWeather = this.mapPoGoWeather(weatherInfo.data[forecast])
-								const epoch = weatherInfo.data[forecast].EpochDateTime
-								data[epoch] = pogoWeather
-								logString = logString.concat(`${moment.unix(epoch).format('HH:mm')} = ${pogoWeather} `)
-							}
-						}
-						this.log.verbose(`${id}: Accuweather forecast [GMT] ${logString}`)
-
-						data.forecastTimeout = forecastTimeout
-						data.lastCurrentWeatherCheck = currentHourTimestamp
-					} catch (err) {
-						this.log.error(`${id}: Fetching AccuWeather weather info [${apiKeyWeatherInfo.substring(0, 5)}...] errored with: ${err}`)
-					}
-				} else {
-					this.log.warn(`${id}: Couldn't fetch weather forecast - no API key available`)
+				if (await this.requestWeather(id, data, currentHourTimestamp)) {
+					data.forecastTimeout = forecastTimeout
+					data.lastCurrentWeatherCheck = currentHourTimestamp
 				}
-
 				this.broadcastWeather()
 				this.saveCache()
 			} else {
