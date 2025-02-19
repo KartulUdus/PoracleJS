@@ -20,7 +20,7 @@ const accuWeatherWebApiOptions = {
 	validateStatus: (status) => status === 302,
 }
 const weatherForecastRegexp = /^\/en\/([^/]*\/[^/]*\/[^/]*)\/weather-forecast\/([^?]*)/
-const hourlyWeatherForecastRegexp = /^https:\/\/www\.accuweather\.com\/en\/([^/]*\/[^/]*\/[^/]*)\/hourly-weather-forecast\//
+const hourlyWeatherForecastRegexp = /^\/en\/([^/]*\/[^/]*\/[^/]*)\/hourly-weather-forecast\//
 const hourlyHtmlRegexp = /<div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="\/images\/weathericons\/(\d+).svg".*?(\d+) km\/h.*?(\d+) km\/h/gs
 
 class Weather extends Controller {
@@ -204,9 +204,9 @@ class Weather extends Controller {
 			const url = `https://www.accuweather.com/en/${data.locationDescription || 'a/b/c'}/hourly-weather-forecast/${data.location}?unit=c`
 			const forecast = await axios.get(url, accuWeatherOptions)
 			if (!data.locationDescription) {
-				const match = hourlyWeatherForecastRegexp.exec(forecast.request.res.responseURL)
+				const match = hourlyWeatherForecastRegexp.exec(forecast.request.path)
 				if (match) data.locationDescription = match[1]; else {
-					this.log.warn(`${id}: unexpected responseURL ${forecast.request.res.responseURL}`)
+					this.log.warn(`${id}: unexpected responseURL ${forecast.request.path}`)
 				}
 			}
 			const logString = Array.from(forecast.data.matchAll(hourlyHtmlRegexp)).map((match) => parseEntry({
