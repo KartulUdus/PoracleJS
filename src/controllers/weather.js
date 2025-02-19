@@ -21,7 +21,7 @@ const accuWeatherWebApiOptions = {
 }
 const weatherForecastRegexp = /^\/en\/([^/]*\/[^/]*\/[^/]*)\/weather-forecast\/([^?]*)/
 const hourlyWeatherForecastRegexp = /^https:\/\/www\.accuweather\.com\/en\/([^/]*\/[^/]*\/[^/]*)\/hourly-weather-forecast\//
-const hourlyHtmlRegexp = /<div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="\/images\/weathericons\/(\d+).svg".*?(\d+) km\/h.*?(\d+) km\/h/s
+const hourlyHtmlRegexp = /<div id="(\d+)" data-qa="\1" class="accordion-item hour".*?data-src="\/images\/weathericons\/(\d+).svg".*?(\d+) km\/h.*?(\d+) km\/h/gs
 
 class Weather extends Controller {
 	constructor(log, db, geocoder, scannerQuery, config, dts, geofence, GameData, discordCache, translatorFactory, mustache) {
@@ -166,7 +166,7 @@ class Weather extends Controller {
 			const url = `https://www.accuweather.com/web-api/three-day-redirect?lat=${latlng.lat}&lon=${latlng.lng}`
 			const webApi = await axios.get(url, accuWeatherWebApiOptions)
 			const match = weatherForecastRegexp.exec(webApi.headers.location)
-			if (match) return [match[1], match[2]]
+			if (match) return [match[2], match[1]]
 			this.log.error(`${id}: fallback failed: ${webApi}`)
 		} catch (err) {
 			this.log.error(`${id}: fallback failed with ${err}`)
@@ -209,11 +209,11 @@ class Weather extends Controller {
 					this.log.warn(`${id}: unexpected responseURL ${forecast.request.res.responseURL}`)
 				}
 			}
-			const logString = forecast.data.matchAll(hourlyHtmlRegexp).map((match) => parseEntry({
+			const logString = Array.from(forecast.data.matchAll(hourlyHtmlRegexp)).map((match) => parseEntry({
 				EpochDateTime: parseInt(match[1]),
 				WeatherIcon: parseInt(match[2]),
-				Wind: {Speed: {Value: parseInt(match[3])}},
-				WindGust: {Speed: {Value: parseInt(match[4])}},
+				Wind: { Speed: { Value: parseInt(match[3]) } },
+				WindGust: { Speed: { Value: parseInt(match[4]) } },
 			})).filter((i) => i).join(' ')
 			this.log.verbose(`${id}: Accuweather fallback forecast [GMT] ${logString}`)
 			return true
