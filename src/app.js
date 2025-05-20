@@ -589,12 +589,50 @@ async function processOne(hook) {
 					fastify.webhooks.info(`raid ${JSON.stringify(hook.message)}`)
 					const cacheKey = `${hook.message.gym_id}${hook.message.end}${hook.message.pokemon_id}`
 
-					if (fastify.cache.get(cacheKey)) {
+					const raidDetails = fastify.cache.get(cacheKey)
+					let rsvpDifference = false
+					const oldRsvpsLen = raidDetails?.rsvps?.length ?? 0
+					const newRsvpsLen = hook.message.rsvps?.length ?? 0
+					if (newRsvpsLen > oldRsvpsLen) {
+						rsvpDifference = true
+					} else if (raidDetails && raidDetails.rsvps && hook.message.rsvps) {
+						// Allow for old timeslots to have disappeared, so only compare the
+						// new ones present
+						for (let x = 0; x < newRsvpsLen; x++) {
+							const newRsvp = hook.message.rsvps[x]
+
+							let found = false
+							for (const oldRsvp of raidDetails.rsvps) {
+								if (newRsvp.timeslot === oldRsvp.timeslot) {
+									found = true
+									if (newRsvp.going_count !== oldRsvp.going_count
+											|| newRsvp.maybe_count !== oldRsvp.maybe_count) {
+										rsvpDifference = true
+									}
+									break
+								}
+							}
+
+							if (found) {
+								if (rsvpDifference) break
+							} else {
+								// timeslot was not in old rsvps
+								rsvpDifference = true
+								break
+							}
+						}
+					}
+
+					if (raidDetails && !rsvpDifference) {
 						fastify.controllerLog.debug(`${hook.message.gym_id}: Raid was sent again too soon, ignoring`)
 						break
 					}
 
-					fastify.cache.set(cacheKey, 'x')
+					hook.message.firstNotification = !raidDetails
+
+					fastify.cache.set(cacheKey, {
+						rsvps: hook.message.rsvps,
+					})
 				}
 
 				await processHook(hook)

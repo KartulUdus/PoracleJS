@@ -66,13 +66,23 @@ async function raidRowText(config, translator, GameData, raid, scannerQuery) {
 	let gymNameText = null
 	if (raid.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(raid.gym_id) || raid.gym_id : raid.gym_id
 
+	let rsvpText = ''
+	switch (raid.rsvp_changes) {
+		case 0:	rsvpText = translator.translate('without rsvp updates')
+			break
+		case 1: rsvpText = translator.translate('including rsvp updates')
+			break
+		case 2: rsvpText = translator.translate('rsvp only')
+			break
+		default: break
+	}
 	const moveName = raid.move !== 9000 && GameData.moves[raid.move] ? `${translator.translate(GameData.moves[raid.move].name)}/${translator.translate(GameData.moves[raid.move].type)}` : ''
 
 	if (+raid.pokemon_id === 9000) {
-		return `**${raid.level === 90 ? translator.translate('All level') : `${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level}`} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${moveName ? ` | ${translator.translate('with move')} ${moveName}` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}${raid.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
+		return `**${raid.level === 90 ? translator.translate('All level') : `${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${raid.level}`} ${translator.translate('raids')}** ${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${moveName ? ` | ${translator.translate('with move')} ${moveName}` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}${raid.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''} ${rsvpText}`
 	}
 
-	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${moveName ? ` | ${translator.translate('with move')} ${moveName}` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}${raid.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
+	return `**${monsterName}**${formName ? ` ${translator.translate('form')}: ${formName}` : ''}${raid.distance ? ` | ${translator.translate('distance')}: ${raid.distance}m` : ''}${moveName ? ` | ${translator.translate('with move')} ${moveName}` : ''}${raid.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${raid.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, raid)}${raid.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''} ${rsvpText}`
 }
 
 async function gymRowText(config, translator, GameData, gym, scannerQuery) {
@@ -107,7 +117,18 @@ async function eggRowText(config, translator, GameData, egg, scannerQuery) {
 	let gymNameText = null
 	if (egg.gym_id) gymNameText = scannerQuery ? await scannerQuery.getGymName(egg.gym_id) || egg.gym_id : egg.gym_id
 
-	return `**${egg.level === 90 ? translator.translate('All level') : `${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level}`} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, egg)}${egg.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''}`
+	let rsvpText = ''
+	switch (egg.rsvp_changes) {
+		case 0:	rsvpText = translator.translate('without rsvp updates')
+			break
+		case 1: rsvpText = translator.translate('including rsvp updates')
+			break
+		case 2: rsvpText = translator.translate('rsvp only')
+			break
+		default: break
+	}
+
+	return `**${egg.level === 90 ? translator.translate('All level') : `${translator.translate('level').charAt(0).toUpperCase() + translator.translate('level').slice(1)} ${egg.level}`} ${translator.translate('eggs')}** ${egg.distance ? ` | ${translator.translate('distance')}: ${egg.distance}m` : ''} ${egg.team === 4 ? '' : ` | ${translator.translate('controlled by')} ${raidTeam}`}${egg.exclusive ? ` | ${translator.translate('must be an EX Gym')}` : ''} ${standardText(config, translator, egg)}${egg.gym_id ? ` ${translator.translate('at gym ')} ${gymNameText}` : ''} ${rsvpText}`
 }
 
 function questRowText(config, translator, GameData, quest) {
