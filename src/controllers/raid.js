@@ -287,7 +287,7 @@ class Raid extends Controller {
 								continue
 							}
 
-							if (cares.rsvp_changes === 2 && !data.rsvps || data.rsvps?.length === 0) {
+							if (cares.rsvp_changes === 2 && (!data.rsvps || data.rsvps?.length === 0)) {
 								this.log.debug(`${logReference}: Not creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template} - only rsvp changes`, cares)
 								// eslint-disable-next-line no-continue
 								continue
@@ -548,7 +548,7 @@ class Raid extends Controller {
 							continue
 						}
 
-						if (cares.rsvp_changes === 2 && !data.rsvps || data.rsvps?.length === 0) {
+						if (cares.rsvp_changes === 2 && (!data.rsvps || data.rsvps?.length === 0)) {
 							this.log.debug(`${logReference}: Not creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template} - only rsvp changes`, cares)
 							// eslint-disable-next-line no-continue
 							continue
