@@ -189,13 +189,20 @@ class Raid extends Controller {
 				return []
 			}
 
+			const unixMsNow = new Date().getTime()
+
 			if (data.rsvps) {
+				const newRsvps = []
 				for (const rsvp of data.rsvps) {
-					rsvp.timeSlot = Math.ceil(rsvp.timeslot / 1000)
-					rsvp.time = moment(rsvp.timeslot).tz(timezone).format(this.config.locale.time)
-					rsvp.goingCount = rsvp.going_count || 0
-					rsvp.maybeCount = rsvp.maybe_count || 0
+					if (rsvp.timeslot > unixMsNow) {
+						rsvp.timeSlot = Math.ceil(rsvp.timeslot / 1000)
+						rsvp.time = moment(rsvp.timeslot).tz(timezone).format(this.config.locale.time)
+						rsvp.goingCount = rsvp.going_count || 0
+						rsvp.maybeCount = rsvp.maybe_count || 0
+						newRsvps.push(rsvp)
+					}
 				}
+				data.rsvps = newRsvps
 			}
 
 			if (data.pokemon_id) {
