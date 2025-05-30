@@ -99,7 +99,7 @@ module.exports = async (fastify, options) => {
 			for (let i = insert.length - 1; i >= 0; i--) {
 				const toInsert = insert[i]
 
-				for (const existing of tracked.filter((x) => x.lure_id === toInsert.lure_id)) {
+				for (const existing of tracked.filter((x) => x.pokemon_id === toInsert.pokemon_id)) {
 					const differences = diff(existing, toInsert)
 
 					switch (Object.keys(differences).length) {
@@ -128,14 +128,14 @@ module.exports = async (fastify, options) => {
 			if ((alreadyPresent.length + updates.length + insert.length) > 50) {
 				message = translator.translateFormat('I have made a lot of changes. See {0}{1} for details', '!', /* util.prefix, */ translator.translate('tracked'))
 			} else {
-				for (const lure of alreadyPresent) {
-					message = message.concat(translator.translate('Unchanged: '), trackedCommand.nestRowText(fastify.config, translator, fastify.GameData, lure), '\n')
+				for (const i of alreadyPresent) {
+					message = message.concat(translator.translate('Unchanged: '), trackedCommand.nestRowText(fastify.config, translator, fastify.GameData, i), '\n')
 				}
-				for (const lure of updates) {
-					message = message.concat(translator.translate('Updated: '), trackedCommand.nestRowText(fastify.config, translator, fastify.GameData, lure), '\n')
+				for (const i of updates) {
+					message = message.concat(translator.translate('Updated: '), trackedCommand.nestRowText(fastify.config, translator, fastify.GameData, i), '\n')
 				}
-				for (const lure of insert) {
-					message = message.concat(translator.translate('New: '), trackedCommand.nestRowText(fastify.config, translator, fastify.GameData, lure), '\n')
+				for (const i of insert) {
+					message = message.concat(translator.translate('New: '), trackedCommand.nestRowText(fastify.config, translator, fastify.GameData, i), '\n')
 				}
 			}
 
