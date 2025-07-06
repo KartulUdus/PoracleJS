@@ -45,6 +45,7 @@ exports.run = async (client, msg, args, options) => {
 		let team = 4
 		let template = client.config.general.defaultTemplateName
 		let clean = false
+		let rsvpChanges = 0
 		const levelSet = new Set()
 		const pings = msg.getPings()
 
@@ -59,6 +60,9 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'harmony' || element === 'gray') team = 0
 			else if (element === 'everything') Object.keys(client.GameData.utilData.raidLevels).forEach((x) => levelSet.add(+x))
 			else if (element === 'clean') clean = true
+			else if (element === 'no rsvp') rsvpChanges = 0
+			else if (element === 'rsvp') rsvpChanges = 1
+			else if (element === 'rsvp only') rsvpChanges = 2
 		})
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
@@ -93,6 +97,7 @@ exports.run = async (client, msg, args, options) => {
 				clean: +clean,
 				level: +lvl,
 				gym_id: null,
+				rsvp_changes: +rsvpChanges,
 			}))
 
 			const tracked = await client.query.selectAllQuery('egg', { id: target.id, profile_no: currentProfileNo })

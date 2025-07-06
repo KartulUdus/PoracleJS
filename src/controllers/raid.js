@@ -9,7 +9,7 @@ class Raid extends Controller {
 		const { areastring, strictareastring } = this.buildAreaString(data.matched)
 
 		let query = `
-		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping from raid
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, raid.template, raid.distance, raid.clean, raid.ping, raid.rsvp_changes from raid
 		join humans on (humans.id = raid.id and humans.current_profile_no = raid.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%raid%') and
 		(pokemon_id=${data.pokemon_id} or (pokemon_id=9000 and (raid.level=${data.level} or raid.level=90))) and
@@ -72,7 +72,7 @@ class Raid extends Controller {
 		const { areastring, strictareastring } = this.buildAreaString(data.matched)
 
 		let query = `
-		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping from egg
+		select humans.id, humans.name, humans.type, humans.language, humans.latitude, humans.longitude, egg.template, egg.distance, egg.clean, egg.ping, egg.rsvp_changes from egg
 		join humans on (humans.id = egg.id and humans.current_profile_no = egg.profile_no)
 		where humans.enabled = 1 and humans.admin_disable = false and (humans.blocked_alerts IS NULL OR humans.blocked_alerts NOT LIKE '%egg%') and
 		(egg.level = ${data.level} or egg.level = 90) and
@@ -165,7 +165,8 @@ class Raid extends Controller {
 			data.gymColor = this.GameData.utilData.teams[data.team_id].color
 			data.ex = !!(data.ex_raid_eligible ?? data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url || data.url || ''
-			const disappearTime = moment(data.end * 1000).tz(geoTz.find(data.latitude, data.longitude)[0].toString())
+			const timezone = geoTz.find(data.latitude, data.longitude)[0].toString()
+			const disappearTime = moment(data.end * 1000).tz(timezone)
 			data.disappearTime = disappearTime.format(this.config.locale.time)
 			data.applemap = data.appleMapUrl // deprecated
 			data.mapurl = data.googleMapUrl // deprecated
@@ -186,6 +187,22 @@ class Raid extends Controller {
 				&& (data.end - data.start) > 47 * 60) {
 				this.log.verbose(`${this.logReference}: Raid/Egg on ${data.gymName} will be longer than 47 minutes - ignored`)
 				return []
+			}
+
+			const unixMsNow = new Date().getTime()
+
+			if (data.rsvps) {
+				const newRsvps = []
+				for (const rsvp of data.rsvps) {
+					if (rsvp.timeslot > unixMsNow) {
+						rsvp.timeSlot = Math.ceil(rsvp.timeslot / 1000)
+						rsvp.time = moment(rsvp.timeslot).tz(timezone).format(this.config.locale.time)
+						rsvp.goingCount = rsvp.going_count || 0
+						rsvp.maybeCount = rsvp.maybe_count || 0
+						newRsvps.push(rsvp)
+					}
+				}
+				data.rsvps = newRsvps
 			}
 
 			if (data.pokemon_id) {
@@ -271,6 +288,18 @@ class Raid extends Controller {
 						await require('./common/weather').calculateForecastImpact(data, this.GameData, weatherCellId, this.weatherData, data.end, this.config)
 
 						for (const cares of whoCares) {
+							if (cares.rsvp_changes === 0 && !data.firstNotification) {
+								this.log.debug(`${logReference}: Not creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template} - no rsvp changes`, cares)
+								// eslint-disable-next-line no-continue
+								continue
+							}
+
+							if (cares.rsvp_changes === 2 && (!data.rsvps || data.rsvps?.length === 0)) {
+								this.log.debug(`${logReference}: Not creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template} - only rsvp changes`, cares)
+								// eslint-disable-next-line no-continue
+								continue
+							}
+
 							this.log.debug(`${logReference}: Creating raid alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 
 							const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
@@ -520,6 +549,17 @@ class Raid extends Controller {
 					data.staticmap = data.staticMap // deprecated
 
 					for (const cares of whoCares) {
+						if (cares.rsvp_changes === 0 && !data.firstNotification) {
+							this.log.debug(`${logReference}: Not creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template} - no rsvp changes`, cares)
+							// eslint-disable-next-line no-continue
+							continue
+						}
+
+						if (cares.rsvp_changes === 2 && (!data.rsvps || data.rsvps?.length === 0)) {
+							this.log.debug(`${logReference}: Not creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template} - only rsvp changes`, cares)
+							// eslint-disable-next-line no-continue
+							continue
+						}
 						this.log.debug(`${logReference}: Creating egg alert for ${cares.id} ${cares.name} ${cares.type} ${cares.language} ${cares.template}`, cares)
 						const rateLimitTtr = this.getRateLimitTimeToRelease(cares.id)
 						if (rateLimitTtr) {

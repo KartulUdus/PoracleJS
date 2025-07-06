@@ -51,6 +51,7 @@ exports.run = async (client, msg, args, options) => {
 		let clean = false
 		const evolution = 9000
 		let move = 9000
+		let rsvpChanges = 0
 		const levelSet = new Set()
 		const pings = msg.getPings()
 		const formNames = args.filter((arg) => arg.match(client.re.formRe)).map((arg) => client.translatorFactory.reverseTranslateCommand(arg.match(client.re.formRe)[2], true).toLowerCase())
@@ -104,6 +105,9 @@ exports.run = async (client, msg, args, options) => {
 			else if (element === 'harmony' || element === 'gray') team = 0
 			else if (element === 'everything') Object.keys(client.GameData.utilData.raidLevels).forEach((x) => levelSet.add(+x))
 			else if (element === 'clean') clean = true
+			else if (element === 'no rsvp') rsvpChanges = 0
+			else if (element === 'rsvp') rsvpChanges = 1
+			else if (element === 'rsvp only') rsvpChanges = 2
 		}
 		if (client.config.tracking.defaultDistance !== 0 && distance === 0 && !msg.isFromAdmin) distance = client.config.tracking.defaultDistance
 		if (client.config.tracking.maxDistance !== 0 && distance > client.config.tracking.maxDistance && !msg.isFromAdmin) distance = client.config.tracking.maxDistance
@@ -141,6 +145,7 @@ exports.run = async (client, msg, args, options) => {
 				evolution: +evolution,
 				move: +move,
 				gym_id: null,
+				rsvp_changes: +rsvpChanges,
 			}))
 
 			levels.forEach((level) => {
@@ -159,6 +164,7 @@ exports.run = async (client, msg, args, options) => {
 					evolution: +evolution,
 					move: +move,
 					gym_id: null,
+					rsvp_changes: +rsvpChanges,
 				})
 			})
 
