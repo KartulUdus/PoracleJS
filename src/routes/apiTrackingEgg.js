@@ -100,6 +100,7 @@ module.exports = async (fastify, options) => {
 				clean: +defaultTo(row.clean, 0),
 				level: +level,
 				gym_id: row.gym_id ? row.gym_id : null,
+				rsvp_changes: row.rsvp_changes >= 0 && row.rsvp_changes <= 2 ? row.rsvp_changes : 0,
 			}
 		})
 
