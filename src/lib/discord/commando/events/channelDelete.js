@@ -6,6 +6,12 @@ module.exports = async (client, channel) => {
 			await client.query.deleteQuery('monsters', { id: channel.id })
 			await client.query.deleteQuery('raid', { id: channel.id })
 			await client.query.deleteQuery('quest', { id: channel.id })
+			await client.query.deleteQuery('lures', { id: channel.id })
+			await client.query.deleteQuery('gym', { id: channel.id })
+			await client.query.deleteQuery('invasion', { id: channel.id })
+			await client.query.deleteQuery('nests', { id: channel.id })
+			await client.query.deleteQuery('forts', { id: channel.id })
+			await client.query.deleteQuery('weather', { id: channel.id })
 			await client.query.deleteQuery('humans', { id: channel.id })
 			client.logs.discord.log({
 				level: 'debug',
