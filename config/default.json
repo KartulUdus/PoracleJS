@@ -526,8 +526,8 @@
   // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
   //
   "tuning": {
-    "fastMonsters": false,
-    "disablePokemonCache": false,
+    "fastMonsters": true,
+    "disablePokemonCache": true,
     "maxDatabaseConnections": 15,
     "webhookProcessingWorkers": 5,
     "concurrentWebhookProcessorsPerWorker": 4,
