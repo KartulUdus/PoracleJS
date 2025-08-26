@@ -106,6 +106,7 @@ module.exports = async (fastify, options) => {
 				move: +defaultTo(row.move, 9000),
 				evolution: +defaultTo(row.evolution, 9000),
 				gym_id: row.gym_id ? row.gym_id : null,
+				rsvp_changes: row.rsvp_changes >= 0 && row.rsvp_changes <= 2 ? row.rsvp_changes : 0,
 			}
 		})
 
