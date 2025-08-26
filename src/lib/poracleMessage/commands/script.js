@@ -28,7 +28,7 @@ exports.run = async (client, msg, args, options) => {
 
 		if (!args.length) {
 			await msg.reply(
-				translator.translateFormat('Valid commands are e.g. `{0}script everything`, `{0}script pokemon raids eggs quest lures invasion nests gym`, `{0}script everything allprofiles`, `{0}script everything link`', util.prefix),
+				translator.translateFormat('Valid commands are e.g. `{0}script everything`, `{0}script pokemon raids eggs quest lures invasion nests gym forts`, `{0}script everything allprofiles`, `{0}script everything link`', util.prefix),
 				{ style: 'markdown' },
 			)
 			return
@@ -60,6 +60,7 @@ exports.run = async (client, msg, args, options) => {
 			const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 			const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
 			const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
+			const forts = await client.query.selectAllQuery('forts', { id: target.id, profile_no: currentProfileNo })
 
 			const gender = ['', 'male', 'female', 'genderless']
 
