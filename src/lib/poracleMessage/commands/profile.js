@@ -241,7 +241,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 			case 'copyto': {
 				const currentName = profiles.find((profile) => profile.profile_no === currentProfileNo).name
-				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests']
+				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests', 'forts']
 				const valid = []
 				const invalid = []
 
