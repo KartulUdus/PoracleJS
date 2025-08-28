@@ -60,7 +60,7 @@ exports.run = async (client, msg, args, options) => {
 			const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 			const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
 			const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
-			const forts = await client.query.selectAllQuery('fort', { id: target.id, profile_no: currentProfileNo })
+			const forts = await client.query.selectAllQuery('forts', { id: target.id, profile_no: currentProfileNo })
 
 			const gender = ['', 'male', 'female', 'genderless']
 
@@ -259,7 +259,7 @@ exports.run = async (client, msg, args, options) => {
 				}
 			}
 
-			if (everything || args.includes('fort')) {
+			if (everything || args.includes('forts')) {
 				const fortParameters = {
 					template: ['template', client.config.general.defaultTemplateName.toString()],
 					d: ['distance', 0],
