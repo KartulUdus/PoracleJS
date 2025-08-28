@@ -135,6 +135,7 @@ class DiscordReconciliation {
 			await this.query.deleteQuery('invasion', { id: user.id })
 			await this.query.deleteQuery('nests', { id: user.id })
 			await this.query.deleteQuery('forts', { id: user.id })
+			await this.query.deleteQuery('maxbattle', { id: user.id })
 			await this.query.deleteQuery('weather', { id: user.id })
 			await this.query.deleteQuery('profiles', { id: user.id })
 			await this.query.deleteQuery('humans', { id: user.id })
@@ -219,7 +220,7 @@ class DiscordReconciliation {
 			let blocked = null
 			if (this.config.discord.commandSecurity && Object.keys(this.config.discord.commandSecurity).length) {
 				const blockedList = []
-				for (const command of ['raid', 'monster', 'gym', 'specificgym', 'lure', 'nest', 'egg', 'invasion', 'pvp']) {
+				for (const command of ['raid', 'monster', 'gym', 'specificgym', 'lure', 'nest', 'egg', 'invasion', 'pvp', 'maxbattle']) {
 					const permissions = this.config.discord.commandSecurity[command]
 					if (permissions && !permissions.includes(id) && !permissions.some((x) => roleList.includes(x))) {
 						blockedList.push(command)
