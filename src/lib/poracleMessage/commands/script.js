@@ -259,6 +259,23 @@ exports.run = async (client, msg, args, options) => {
 				}
 			}
 
+			if (everything || args.includes('fort')) {
+				const fortParameters = {
+					template: ['template', client.config.general.defaultTemplateName.toString()],
+					d: ['distance', 0],
+				}
+				for (const fort of forts) {
+					message += `${prefix}fort ${fort.fort_type}`
+
+					if (fort.include_empty) message += ' include_empty'
+					for (const [param, [dbFieldName, defaultValue]] of Object.entries(fortParameters)) {
+						if (fort[dbFieldName] !== defaultValue) message += ` ${param}:${ford[dbFieldName]}`
+					}
+
+					message += '\n'
+				}
+			}
+
 			if (everything || args.includes('lures')) {
 				const lureParameters = {
 					template: ['template', client.config.general.defaultTemplateName.toString()],
