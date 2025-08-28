@@ -5,21 +5,24 @@ const mutex = new Mutex()
 const uiconsIndex = {}
 const lastRetrieved = {}
 
-function resolvePokemonIcon(availPokemon, imageType, pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, alignment = 0, shiny = false) {
+function resolvePokemonIcon(availPokemon, imageType, pokemonId, form = 0, evolution = 0, gender = 0, costume = 0, alignment = 0, shiny = false, bread = 0) {
 	const evolutionSuffixes = evolution ? [`_e${evolution}`, ''] : ['']
 	const formSuffixes = form ? [`_f${form}`, ''] : ['']
 	const costumeSuffixes = costume ? [`_c${costume}`, ''] : ['']
 	const genderSuffixes = gender ? [`_g${gender}`, ''] : ['']
 	const alignmentSuffixes = alignment ? [`_a${alignment}`, ''] : ['']
 	const shinySuffixes = shiny ? ['_s', ''] : ['']
-	for (const evolutionSuffix of evolutionSuffixes) {
-		for (const formSuffix of formSuffixes) {
-			for (const costumeSuffix of costumeSuffixes) {
-				for (const genderSuffix of genderSuffixes) {
-					for (const alignmentSuffix of alignmentSuffixes) {
-						for (const shinySuffix of shinySuffixes) {
-							const result = `${pokemonId}${evolutionSuffix}${formSuffix}${costumeSuffix}${genderSuffix}${alignmentSuffix}${shinySuffix}.${imageType}`
-							if (availPokemon.has(result)) return result
+	const breadSuffixes = bread ? [`_b${bread}`, ''] : ['']
+	for (const breadSuffix of breadSuffixes) {
+		for (const evolutionSuffix of evolutionSuffixes) {
+			for (const formSuffix of formSuffixes) {
+				for (const costumeSuffix of costumeSuffixes) {
+					for (const genderSuffix of genderSuffixes) {
+						for (const alignmentSuffix of alignmentSuffixes) {
+							for (const shinySuffix of shinySuffixes) {
+								const result = `${pokemonId}${breadSuffix}${evolutionSuffix}${formSuffix}${costumeSuffix}${genderSuffix}${alignmentSuffix}${shinySuffix}.${imageType}`
+								if (availPokemon.has(result)) return result
+							}
 						}
 					}
 				}
