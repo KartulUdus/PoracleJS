@@ -883,6 +883,15 @@
 		"14": "Level 4 Shadow",
 		"15": "Shadow Legendary"
 	},
+	"maxbattleLevels": {
+		"1": "1 Star Max Battle",
+		"2": "2 Star Max Battle",
+		"3": "3 Star Max Battle",
+		"4": "4 Star Max Battle",
+		"5": "Legendary Max Battle",
+		"7": "Gigantamax Battle",
+		"8": "Legendary Gigantamax Battle"
+	},
 	"emojis": {
 		"lure-normal": "\ud83d\udccd",
 		"lure-glacial": "\u2744",
