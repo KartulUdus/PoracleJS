@@ -36,6 +36,7 @@ exports.run = async (client, msg, args, options) => {
 			await client.query.deleteQuery('gym', { id: t })
 			await client.query.deleteQuery('invasion', { id: t })
 			await client.query.deleteQuery('nests', { id: t })
+			await client.query.deleteQuery('maxbattle', { id: t })
 			await client.query.deleteQuery('weather', { id: t })
 			await client.query.deleteQuery('humans', { id: t })
 			await client.query.deleteQuery('profiles', { id: t })
