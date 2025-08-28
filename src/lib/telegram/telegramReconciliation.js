@@ -69,6 +69,7 @@ class TelegramReconciliation {
 			await this.query.deleteQuery('invasion', { id: user.id })
 			await this.query.deleteQuery('nests', { id: user.id })
 			await this.query.deleteQuery('forts', { id: user.id })
+			await this.query.deleteQuery('maxbattle', { id: user.id })
 			await this.query.deleteQuery('weather', { id: user.id })
 			await this.query.deleteQuery('profiles', { id: user.id })
 			await this.query.deleteQuery('humans', { id: user.id })
