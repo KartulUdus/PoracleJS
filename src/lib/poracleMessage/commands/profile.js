@@ -120,6 +120,7 @@ exports.run = async (client, msg, args, options) => {
 					await client.query.deleteQuery('gym', { id: target.id, profile_no: profileNo })
 					await client.query.deleteQuery('invasion', { id: target.id, profile_no: profileNo })
 					await client.query.deleteQuery('nests', { id: target.id, profile_no: profileNo })
+					await client.query.deleteQuery('maxbattle', { id: target.id, profile_no: profileNo })
 					await client.query.deleteQuery('weather', { id: target.id, profile_no: profileNo })
 				}
 
@@ -241,7 +242,7 @@ exports.run = async (client, msg, args, options) => {
 			}
 			case 'copyto': {
 				const currentName = profiles.find((profile) => profile.profile_no === currentProfileNo).name
-				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests', 'forts']
+				const categories = ['monsters', 'raid', 'egg', 'quest', 'invasion', 'weather', 'lures', 'gym', 'nests', 'forts', 'maxbattle']
 				const valid = []
 				const invalid = []
 
