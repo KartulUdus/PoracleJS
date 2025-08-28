@@ -145,6 +145,44 @@
 {
   "id": 1,
   "language": "en",
+  "type": "maxbattle",
+  "default": true,
+  "platform": "discord",
+  "template": {
+    "embed": {
+      "title": "{{levelName}} against {{fullName}} has started at Powerstation {{{stationName}}}!",
+      "description": "quick: {{quickMoveName}}, charge: {{chargeMoveName}} \n Maps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+      "color": "{{color}}",
+      "thumbnail": {
+        "url": "{{{imgUrl}}}"
+      },
+      "author": {
+        "name": "{{fullName}} {{levelName}} maxbattle. End: {{time}} in {{tthm}}m {{tths}}s",
+        "icon_url": "{{{imgUrl}}}"
+      },
+      "image": {
+        "url": "{{{staticMap}}}"
+      }
+    }
+  }
+},
+{
+  "id": 1,
+  "language": "en",
+  "type": "maxbattle",
+  "default": true,
+  "platform": "telegram",
+  "template": {
+    "content": "{{levelName}} against {{fullName}} has started at Powerstation {{{stationName}}}! \nquick: {{quickMoveName}}, charge: {{chargeMoveName}} \nEnd: {{time}} in {{tthm}}m {{tths}}s\nMaps: [Google]({{{googleMapUrl}}}) | [Apple]({{{appleMapUrl}}})",
+    "parse_mode": "Markdown",
+    "sticker": "{{{stickerUrl}}}",
+    "location": true,
+    "webpage_preview": true
+  }
+},
+{
+  "id": 1,
+  "language": "en",
   "type": "quest",
   "default": true,
   "platform": "discord",
