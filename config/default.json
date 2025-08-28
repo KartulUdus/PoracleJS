@@ -52,6 +52,7 @@
       "disableNest": false,
       "disableGym": false,
       "disableFortUpdate": false,
+      "disableMaxBattle": false,
     //    invasion hook processing for Golbat systems
       "processConfirmedInvasionLineups": false,
       "disableUnconfirmedInvasion": false,
