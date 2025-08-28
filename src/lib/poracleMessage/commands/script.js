@@ -137,6 +137,8 @@ exports.run = async (client, msg, args, options) => {
 					}
 					if (raid.team !== 4) message += ` team:${raidTeams[raid.team]}`
 					if (raid.exclusive) message += ' ex'
+					if (raid.rsvp_changes == 1) message += ' rsvp'
+					if (raid.rsvp_changes == 2) message += ' rsvp_only'
 					if (raid.clean) message += ' clean'
 
 					message += '\n'
@@ -158,6 +160,8 @@ exports.run = async (client, msg, args, options) => {
 					}
 					if (egg.team !== 4) message += ` team:${raidTeams[egg.team]}`
 					if (egg.exclusive) message += ' ex'
+					if (egg.rsvp_changes == 1) message += ' rsvp'
+					if (egg.rsvp_changes == 2) message += ' rsvp_only'
 					if (egg.clean) message += ' clean'
 
 					message += '\n'
