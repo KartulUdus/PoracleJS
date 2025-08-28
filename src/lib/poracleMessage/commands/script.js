@@ -60,7 +60,7 @@ exports.run = async (client, msg, args, options) => {
 			const lures = await client.query.selectAllQuery('lures', { id: target.id, profile_no: currentProfileNo })
 			const nests = await client.query.selectAllQuery('nests', { id: target.id, profile_no: currentProfileNo })
 			const gyms = await client.query.selectAllQuery('gym', { id: target.id, profile_no: currentProfileNo })
-			const forts = await client.query.selectAllQuery('forts', { id: target.id, profile_no: currentProfileNo })
+			const forts = await client.query.selectAllQuery('fort', { id: target.id, profile_no: currentProfileNo })
 
 			const gender = ['', 'male', 'female', 'genderless']
 
@@ -269,7 +269,7 @@ exports.run = async (client, msg, args, options) => {
 
 					if (fort.include_empty) message += ' include_empty'
 					for (const [param, [dbFieldName, defaultValue]] of Object.entries(fortParameters)) {
-						if (fort[dbFieldName] !== defaultValue) message += ` ${param}:${ford[dbFieldName]}`
+						if (fort[dbFieldName] !== defaultValue) message += ` ${param}:${fort[dbFieldName]}`
 					}
 
 					message += '\n'
