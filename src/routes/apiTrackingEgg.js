@@ -84,25 +84,40 @@ module.exports = async (fastify, options) => {
 
 		const defaultTo = ((value, x) => ((value === undefined) ? x : value))
 
-		const insert = insertReq.map((row) => {
-			const level = +row.level
-			if (row.level === undefined || level < 1 || (level > Math.max(...Object.keys(raidLevels).map((k) => +k)) && level !== 90)) {
-				throw new Error('Invalid level')
+		const insert = []
+
+		for (const row of insertReq) {
+			// Handle both single level and array of levels
+			let levels = row.level
+			if (!Array.isArray(levels)) {
+				levels = [levels]
 			}
-			return {
-				id,
-				profile_no: currentProfileNo,
-				ping: '',
-				template: (row.template || fastify.config.general.defaultTemplateName).toString(),
-				exclusive: +defaultTo(row.exclusive, 0),
-				distance: +defaultTo(row.distance, 0),
-				team: row.team >= 0 && row.team <= 4 ? row.team : 4, // carefully chosen to get nulls/undefined to 4 but allow 0
-				clean: +defaultTo(row.clean, 0),
-				level: +level,
-				gym_id: row.gym_id ? row.gym_id : null,
-				rsvp_changes: row.rsvp_changes >= 0 && row.rsvp_changes <= 2 ? row.rsvp_changes : 0,
+
+			// Validate all levels
+			for (const levelValue of levels) {
+				const level = +levelValue
+				if (levelValue === undefined || level < 1 || (level > Math.max(...Object.keys(raidLevels).map((k) => +k)) && level !== 90)) {
+					throw new Error(`Invalid level: ${levelValue}`)
+				}
 			}
-		})
+
+			// Create an entry for each level
+			for (const levelValue of levels) {
+				insert.push({
+					id,
+					profile_no: currentProfileNo,
+					ping: '',
+					template: (row.template || fastify.config.general.defaultTemplateName).toString(),
+					exclusive: +defaultTo(row.exclusive, 0),
+					distance: +defaultTo(row.distance, 0),
+					team: row.team >= 0 && row.team <= 4 ? row.team : 4, // carefully chosen to get nulls/undefined to 4 but allow 0
+					clean: +defaultTo(row.clean, 0),
+					level: +levelValue,
+					gym_id: row.gym_id ? row.gym_id : null,
+					rsvp_changes: row.rsvp_changes >= 0 && row.rsvp_changes <= 2 ? row.rsvp_changes : 0,
+				})
+			}
+		}
 
 		try {
 			const tracked = await fastify.query.selectAllQuery('egg', { id, profile_no: currentProfileNo })

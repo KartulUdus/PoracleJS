@@ -82,33 +82,77 @@ module.exports = async (fastify, options) => {
 
 		const defaultTo = ((value, x) => ((value === undefined) ? x : value))
 
-		const insert = insertReq.map((row) => {
-			let level = 9000
-			if (row.pokemon_id === 9000) {
-				level = +row.level
-				if (row.level === undefined || level < 1 || (level > Math.max(...Object.keys(fastify.GameData.utilData.raidLevels).map((k) => +k)) && level !== 90)) {
-					throw new Error('Invalid level (must be specified if no pokemon_id')
+		const insert = []
+
+		for (const row of insertReq) {
+			// Handle pokemon_form array: [{"pokemon_id": .., "form": ..}, ..]
+			if (row.pokemon_form && Array.isArray(row.pokemon_form)) {
+				for (const pokemonForm of row.pokemon_form) {
+					if (!pokemonForm || typeof pokemonForm !== 'object' || pokemonForm.pokemon_id === undefined || pokemonForm.form === undefined) {
+						throw new Error('pokemon_form entries must be objects with pokemon_id and form properties')
+					}
+					insert.push({
+						id,
+						profile_no: currentProfileNo,
+						ping: '',
+						template: (row.template || fastify.config.general.defaultTemplateName).toString(),
+						pokemon_id: +pokemonForm.pokemon_id,
+						exclusive: +defaultTo(row.exclusive, 0),
+						distance: +defaultTo(row.distance, 0),
+						team: row.team >= 0 && row.team <= 4 ? row.team : 4,
+						clean: +defaultTo(+row.clean, 0),
+						level: 9000, // Default for pokemon raids
+						form: +pokemonForm.form,
+						move: +defaultTo(row.move, 9000),
+						evolution: +defaultTo(row.evolution, 9000),
+						gym_id: row.gym_id ? row.gym_id : null,
+						rsvp_changes: row.rsvp_changes >= 0 && row.rsvp_changes <= 2 ? row.rsvp_changes : 0,
+					})
+				}
+			} else {
+				// Handle traditional single pokemon_id/form or level-based raids
+				let levels = []
+				if (row.pokemon_id === 9000 || row.pokemon_id === undefined) {
+					// Level-based raid (egg)
+					if (row.level !== undefined) {
+						levels = Array.isArray(row.level) ? row.level : [row.level]
+						// Validate all levels
+						for (const levelValue of levels) {
+							const level = +levelValue
+							if (level < 1 || (level > Math.max(...Object.keys(fastify.GameData.utilData.raidLevels).map((k) => +k)) && level !== 90)) {
+								throw new Error(`Invalid level: ${levelValue}`)
+							}
+						}
+					} else {
+						throw new Error('Level must be specified if no pokemon_id')
+					}
+				} else {
+					// Pokemon-specific raid
+					levels = [9000] // Default level for pokemon raids
+				}
+
+				// Create entries for each level
+				for (const levelValue of levels) {
+					insert.push({
+						id,
+						profile_no: currentProfileNo,
+						ping: '',
+						template: (row.template || fastify.config.general.defaultTemplateName).toString(),
+						pokemon_id: +defaultTo(row.pokemon_id, 9000),
+						exclusive: +defaultTo(row.exclusive, 0),
+						distance: +defaultTo(row.distance, 0),
+						team: row.team >= 0 && row.team <= 4 ? row.team : 4,
+						clean: +defaultTo(+row.clean, 0),
+						level: +levelValue,
+						form: +defaultTo(row.form, 0),
+						move: +defaultTo(row.move, 9000),
+						evolution: +defaultTo(row.evolution, 9000),
+						gym_id: row.gym_id ? row.gym_id : null,
+						rsvp_changes: row.rsvp_changes >= 0 && row.rsvp_changes <= 2 ? row.rsvp_changes : 0,
+					})
 				}
 			}
-
-			return {
-				id,
-				profile_no: currentProfileNo,
-				ping: '',
-				template: (row.template || fastify.config.general.defaultTemplateName).toString(),
-				pokemon_id: +defaultTo(row.pokemon_id, 9000),
-				exclusive: +defaultTo(row.exclusive, 0),
-				distance: +defaultTo(row.distance, 0),
-				team: row.team >= 0 && row.team <= 4 ? row.team : 4, // carefully chosen to get nulls/undefined to 4 but allow 0
-				clean: +defaultTo(+row.clean, 0),
-				level: +level,
-				form: +defaultTo(row.form, 0),
-				move: +defaultTo(row.move, 9000),
-				evolution: +defaultTo(row.evolution, 9000),
-				gym_id: row.gym_id ? row.gym_id : null,
-				rsvp_changes: row.rsvp_changes >= 0 && row.rsvp_changes <= 2 ? row.rsvp_changes : 0,
-			}
-		})
+		}
 
 		try {
 			const tracked = await fastify.query.selectAllQuery('raid', { id, profile_no: currentProfileNo })
