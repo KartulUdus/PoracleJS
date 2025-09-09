@@ -155,26 +155,27 @@ module.exports = async (fastify, options) => {
 
 			await fastify.query.insertQuery('lures', [...insert, ...updates])
 
-			// Send message to user
+			// Send message to user (unless silent parameter is set)
+			if (!req.query.silent) {
+				const data = [{
+					lat: 0,
+					lon: 0,
+					message: { content: message },
+					target: human.id,
+					type: human.type,
+					name: human.name,
+					tth: { hours: 1, minutes: 0, seconds: 0 },
+					clean: false,
+					emoji: '',
+					logReference: 'WebApi',
+					language,
+				}]
 
-			const data = [{
-				lat: 0,
-				lon: 0,
-				message: { content: message },
-				target: human.id,
-				type: human.type,
-				name: human.name,
-				tth: { hours: 1, minutes: 0, seconds: 0 },
-				clean: false,
-				emoji: '',
-				logReference: 'WebApi',
-				language,
-			}]
-
-			data.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
+				data.forEach((job) => {
+					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+				})
+			}
 
 			return {
 				status: 'ok',
