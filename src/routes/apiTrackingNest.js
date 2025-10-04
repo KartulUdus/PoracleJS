@@ -22,7 +22,7 @@ module.exports = async (fastify, options) => {
 			}
 		}
 
-		const nest = await fastify.query.selectAllQuery('nests', { id: req.params.id, profile_no: req.params.profile_no || human.current_profile_no })
+		const nest = await fastify.query.selectAllQuery('nests', { id: req.params.id, profile_no: req.query.profile_no || human.current_profile_no })
 
 		return {
 			status: 'ok',
@@ -71,7 +71,7 @@ module.exports = async (fastify, options) => {
 		const language = human.language || fastify.config.general.locale
 		const translator = fastify.translatorFactory.Translator(language)
 		const { id } = req.params
-		const currentProfileNo = req.params.profile_no || human.current_profile_no
+		const currentProfileNo = req.query.profile_no || human.current_profile_no
 
 		let insertReq = req.body
 		if (!Array.isArray(insertReq)) insertReq = [insertReq]

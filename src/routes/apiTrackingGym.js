@@ -24,7 +24,7 @@ module.exports = async (fastify, options) => {
 		const language = human.language || fastify.config.general.locale
 		const translator = fastify.translatorFactory.Translator(language)
 
-		const gyms = await fastify.query.selectAllQuery('gym', { id: req.params.id, profile_no: req.params.profile_no || human.current_profile_no })
+		const gyms = await fastify.query.selectAllQuery('gym', { id: req.params.id, profile_no: req.query.profile_no || human.current_profile_no })
 
 		const gymWithDesc = await Promise.all(gyms.map(async (row) => ({ ...row, description: await trackedCommand.gymRowText(fastify.config, translator, fastify.GameData, row, fastify.scannerQuery) })))
 
@@ -75,7 +75,7 @@ module.exports = async (fastify, options) => {
 		const language = human.language || fastify.config.general.locale
 		const translator = fastify.translatorFactory.Translator(language)
 		const { id } = req.params
-		const currentProfileNo = req.params.profile_no || human.current_profile_no
+		const currentProfileNo = req.query.profile_no || human.current_profile_no
 
 		let insertReq = req.body
 		if (!Array.isArray(insertReq)) insertReq = [insertReq]
