@@ -549,10 +549,10 @@ module.exports = async (fastify, options) => {
 		}
 
 		// Validate required fields
-		if (!req.body.id || !req.body.type || !req.body.name) {
+		if (!req.body.id || !req.body.name) {
 			return {
 				status: 'error',
-				message: 'Missing required fields: id, type, and name are required',
+				message: 'Missing required fields: id and name are required',
 			}
 		}
 
