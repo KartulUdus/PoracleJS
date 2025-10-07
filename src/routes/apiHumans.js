@@ -536,4 +536,64 @@ module.exports = async (fastify, options) => {
 			human,
 		}
 	})
+
+	fastify.post('/api/humans', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		// Validate required fields
+		if (!req.body.id || !req.body.type || !req.body.name) {
+			return {
+				status: 'error',
+				message: 'Missing required fields: id, type, and name are required',
+			}
+		}
+
+		// Check if user already exists
+		const existingUser = await fastify.query.selectOneQuery('humans', { id: req.body.id })
+
+		if (existingUser) {
+			return {
+				status: 'error',
+				message: 'User already exists',
+			}
+		}
+
+		// Create new user
+		const newUser = {
+			id: req.body.id,
+			type: req.body.type || 'discord:user',
+			name: req.body.name,
+			enabled: req.body.enabled || 1,
+			area: req.body.area || '[]',
+			latitude: req.body.latitude || 0.0,
+			longitude: req.body.longitude || 0.0,
+			admin_disable: req.body.admin_disable || 0,
+			language: req.body.language || 'en',
+			community_membership: '[]',
+			area_restriction: null,
+			notes: req.body.notes || null,
+		}
+
+		// Handle community membership
+		if (req.body.community) {
+			newUser.community_membership = JSON.stringify([req.body.community.toLowerCase()])
+			newUser.area_restriction = JSON.stringify(communityLogic.calculateLocationRestrictions(fastify.config, [req.body.community]))
+		}
+
+		await fastify.query.insertQuery('humans', newUser)
+
+		return {
+			status: 'ok',
+			message: 'User created successfully',
+			human: newUser,
+		}
+	})
 }
