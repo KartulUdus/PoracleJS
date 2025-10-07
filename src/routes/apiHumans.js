@@ -590,6 +590,23 @@ module.exports = async (fastify, options) => {
 
 		await fastify.query.insertQuery('humans', newUser)
 
+		// Handle profile creation if profile_name is provided
+		if (req.body.profile_name && req.body.profile_name !== '') {
+			const existingProfile = await fastify.query.selectOneQuery('profiles', { id: req.body.id, profile_no: 1 })
+
+			if (!existingProfile) {
+				await fastify.query.insertQuery('profiles', {
+					id: req.body.id,
+					profile_no: 1,
+					name: req.body.profile_name,
+					area: '[]',
+					latitude: 0.0,
+					longitude: 0.0,
+					active_hours: '[]',
+				})
+			}
+		}
+
 		return {
 			status: 'ok',
 			message: 'User created successfully',
