@@ -579,7 +579,7 @@ module.exports = async (fastify, options) => {
 			language: req.body.language || 'en',
 			community_membership: '[]',
 			area_restriction: null,
-			notes: req.body.notes || null,
+			notes: req.body.notes || '',
 		}
 
 		// Handle community membership
