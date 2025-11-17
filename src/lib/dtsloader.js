@@ -1,6 +1,6 @@
-const stripJsonComments = require('strip-json-comments')
 const path = require('path')
 const fs = require('fs')
+const stripJsonComments = require('strip-json-comments')
 
 function readDtsFiles() {
 	let localDts = []

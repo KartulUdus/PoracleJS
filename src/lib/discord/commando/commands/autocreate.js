@@ -1,6 +1,6 @@
-const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
+const stripJsonComments = require('strip-json-comments')
 const { Permissions } = require('discord.js')
 const PoracleDiscordMessage = require('../../poracleDiscordMessage')
 const PoracleDiscordState = require('../../poracleDiscordState')

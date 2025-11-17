@@ -541,11 +541,13 @@ module.exports = async (fastify, options) => {
 		}
 
 		const adminDisabledState = req.body.state ? 1 : 0
+		const disabledDate = adminDisabledState === 1 ? fastify.query.dbNow() : null
 
 		await fastify.query.updateQuery(
 			'humans',
 			{
 				admin_disable: adminDisabledState,
+				disabled_date: disabledDate,
 			},
 			{ id: req.params.id },
 		)

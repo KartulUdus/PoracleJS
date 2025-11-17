@@ -1,6 +1,6 @@
+const cp = require('child_process')
 const inside = require('point-in-polygon')
 const NodeGeocoder = require('node-geocoder')
-const cp = require('child_process')
 const TileserverPregen = require('../lib/tileserverPregen')
 
 class Query {
