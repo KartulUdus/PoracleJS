@@ -512,6 +512,50 @@ module.exports = async (fastify, options) => {
 		}
 	})
 
+	fastify.post('/api/humans/:id/adminDisabled', options, async (req) => {
+		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
+
+		if (fastify.config.server.ipWhitelist.length && !fastify.config.server.ipWhitelist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} not in whitelist` }
+		if (fastify.config.server.ipBlacklist.length && fastify.config.server.ipBlacklist.includes(req.ip)) return { webserver: 'unhappy', reason: `ip ${req.ip} in blacklist` }
+
+		const secret = req.headers['x-poracle-secret']
+		if (!secret || !fastify.config.server.apiSecret || secret !== fastify.config.server.apiSecret) {
+			return { status: 'authError', reason: 'incorrect or missing api secret' }
+		}
+
+		const human = await fastify.query.selectOneQuery('humans', { id: req.params.id })
+
+		if (!human) {
+			return {
+				status: 'error',
+				message: 'User not found',
+			}
+		}
+
+		// Validate the state parameter
+		if (req.body.state === undefined || req.body.state === null) {
+			return {
+				status: 'error',
+				message: 'Missing required field: state',
+			}
+		}
+
+		const adminDisabledState = req.body.state ? 1 : 0
+
+		await fastify.query.updateQuery(
+			'humans',
+			{
+				admin_disable: adminDisabledState,
+			},
+			{ id: req.params.id },
+		)
+
+		return {
+			status: 'ok',
+			admin_disabled: adminDisabledState,
+		}
+	})
+
 	fastify.get('/api/humans/one/:id', options, async (req) => {
 		fastify.logger.info(`API: ${req.ip} ${req.routeOptions.method} ${req.routeOptions.url}`)
 
