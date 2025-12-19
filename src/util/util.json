@@ -588,7 +588,8 @@
 		"1": "Mega {0}",
 		"2": "Mega {0} X",
 		"3": "Mega {0} Y",
-		"4": "Primal {0}"
+		"4": "Primal {0}",
+		"5": "Mega {0} Z"
 	},
 	"evolution": {
 		"0": {
@@ -605,6 +606,9 @@
 		},
 		"4": {
 			"name": "Primal"
+		},
+		"5": {
+			"name": "Mega Z"
 		}
 	},
 	"throwType": {
