@@ -255,6 +255,7 @@
       "workerActivity": "PoracleJS Helper",           // Worker Activity
       "disableAutoGreetings": false,                  // whether Poracle will greet users who are assigned a role and get permission to use the bot
       "uploadEmbedImages": false,                     // whether Poracle will retrieve and upload images direct to discord CDN
+      "dynamicRsvpEditing": true,                     // whether Poracle will edit existing raid messages when RSVP counts change instead of sending new messages
     // checkRole - whether to check all discord users for role membership (every _checkRoleInterval_
     //   hours, deleting them if not (note general.roleCheckMode must be set to
     //   actually carry out the deletions rather than just logging them)
@@ -512,8 +513,6 @@
   // webhook queue is kept under control; if this clears nicely in between drops from your scanner you are keeping up.  For outbound, a lower number of
   // concurrent senders will reduce chance of hitting the global rate limit (probably) which is why we haven't defaulted too high here
   //
-  // fastMonsters - Eliminate SQL lookups for monster matching by activating in memory pokemon matching
-  // disablePokemonCache - The impact of this will be that poracle uses a lot less memory
   // maxDatabaseConnections - This is the max number of database connections Poracle can have (per worker)
   // webhookProcessingWorkers - Number of threads to run inbound webhook workers.  Five is enough for very big systems, going too high is probably
   //     counter productive so talk to me before playing with this one
@@ -526,8 +525,7 @@
   // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
   //
   "tuning": {
-    "fastMonsters": true,
-    "disablePokemonCache": true,
+    "fastMonsters": false,
     "maxDatabaseConnections": 15,
     "webhookProcessingWorkers": 5,
     "concurrentWebhookProcessorsPerWorker": 4,

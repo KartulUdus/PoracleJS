@@ -21,6 +21,7 @@ class DiscordWebhookWorker {
 		this.webhookQueue = []
 		this.rehydrateTimeouts = rehydrateTimeouts
 		this.webhookTimeouts = new NodeCache()
+		this.raidMessageCache = new NodeCache()
 		this.query = query
 
 		this.queueProcessor = new FairPromiseQueue(this.webhookQueue, this.config.tuning.concurrentDiscordWebhookConnections, ((t) => t.target))
@@ -107,6 +108,70 @@ class DiscordWebhookWorker {
 
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
+			// Check if this is an RSVP update for an existing raid message
+			if (data.raidMessageKey && this.config.discord.dynamicRsvpEditing) {
+				const existingMsg = this.raidMessageCache.get(data.raidMessageKey)
+				if (existingMsg && existingMsg.messageId) {
+					this.logs.discord.info(`${logReference}: http(s)> ${data.name} WEBHOOK Editing raid message (RSVP update)`)
+					try {
+						const editUrl = `${data.target}/messages/${existingMsg.messageId}`
+						const timeoutMs = this.config.tuning.discordTimeout || 10000
+
+						const res = await this.retrySender(`${logReference} (edit)`, async () => {
+							let uploadData = data.message
+							let headers = null
+
+							if (this.config.discord.uploadEmbedImages && data.message.embeds && data.message.embeds.length && data.message.embeds[0].image && data.message.embeds[0].image.url) {
+								const copyMessage = JSON.parse(JSON.stringify(data.message))
+								const imageUrl = copyMessage.embeds[0].image.url
+								copyMessage.embeds[0].image.url = 'attachment://map.png'
+
+								const response = await axios.get(imageUrl, { responseType: 'arraybuffer' })
+								const buffer = Buffer.from(response.data, 'utf-8')
+
+								const formData = new FormData()
+								formData.append('payload_json', JSON.stringify(copyMessage))
+								formData.append('file', buffer, 'map.png')
+
+								headers = formData.getHeaders()
+								uploadData = formData
+							}
+
+							const source = axios.CancelToken.source()
+							const timeout = setTimeout(() => {
+								source.cancel(`Timeout waiting for response - ${timeoutMs}ms`)
+							}, timeoutMs)
+
+							const result = await axios({
+								method: 'patch',
+								url: editUrl,
+								data: uploadData,
+								headers,
+								validateStatus: ((status) => status < 500),
+								cancelToken: source.token,
+							})
+
+							clearTimeout(timeout)
+							return result
+						})
+
+						if (res.status >= 200 && res.status <= 299) {
+							this.logs.discord.info(`${logReference}: ${data.name} WEBHOOK Edit successful (status ${res.status})`)
+							return true
+						} else if (res.status === 404) {
+							this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Message not found (404), will send new message`)
+							this.raidMessageCache.del(data.raidMessageKey)
+						} else {
+							this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Edit failed (status ${res.status}), will send new message`)
+							this.raidMessageCache.del(data.raidMessageKey)
+						}
+					} catch (editErr) {
+						this.logs.discord.warn(`${logReference}: ${data.name} WEBHOOK Failed to edit message, will send new message`, editErr)
+						this.raidMessageCache.del(data.raidMessageKey)
+					}
+				}
+			}
+
 			this.logs.discord.info(`${logReference}: http(s)> ${data.name} WEBHOOK Sending discord message`)
 			this.logs.discord.debug(`${logReference}: http(s)> ${data.name} WEBHOOK Sending discord message to ${data.target}`, data.message)
 
@@ -169,6 +234,20 @@ class DiscordWebhookWorker {
 			}
 			this.logs.discord.silly(`${logReference}: ${data.name} WEBHOOK results ${data.target} ${res.statusText} ${res.status}`, res.headers)
 
+			// Store message ID for future RSVP edits
+			if (data.raidMessageKey && this.config.discord.dynamicRsvpEditing && res.status === 200) {
+				const msgId = res.data.id
+				const ttl = Math.max((data.raidEndTime * 1000 - Date.now()) / 1000 + 600, 60)
+				this.raidMessageCache.set(data.raidMessageKey, {
+					messageId: msgId,
+					targetType: 'webhook',
+					webhookUrl: data.target,
+					gymId: data.gymId,
+					endTime: data.raidEndTime,
+					pokemonId: data.pokemonId,
+				}, ttl)
+			}
+
 			if (data.clean && res.status === 200) {
 				const msgId = res.data.id
 				this.webhookTimeouts.set(msgId, data.target, Math.floor(msgDeletionMs / 1000) + 1)
@@ -197,7 +276,14 @@ class DiscordWebhookWorker {
 	async saveTimeouts() {
 		// eslint-disable-next-line no-underscore-dangle
 		this.webhookTimeouts._checkData(false)
-		return fsp.writeFile('.cache/cleancache-webhookWorker.json', JSON.stringify(this.webhookTimeouts.data), 'utf8')
+		const cleanPromise = fsp.writeFile('.cache/cleancache-webhookWorker.json', JSON.stringify(this.webhookTimeouts.data), 'utf8')
+
+		// Also save raid cache
+		// eslint-disable-next-line no-underscore-dangle
+		this.raidMessageCache._checkData(false)
+		const raidPromise = fsp.writeFile('.cache/raidmessage-webhookWorker.json', JSON.stringify(this.raidMessageCache.data), 'utf8')
+
+		return Promise.all([cleanPromise, raidPromise])
 	}
 
 	async deleteMessage(logReference, hookName, hookUrl, msgId) {
@@ -272,6 +358,37 @@ class DiscordWebhookWorker {
 				}
 			} catch (err) {
 				this.logs.log.info(`Error processing historic deletes ${err}`)
+			}
+		}
+
+		// Also load raid cache
+		await this.loadRaidCache()
+	}
+
+	async loadRaidCache() {
+		let loaddatatxt
+
+		try {
+			loaddatatxt = await fsp.readFile('.cache/raidmessage-webhookWorker.json', 'utf8')
+		} catch {
+			return
+		}
+
+		const now = Date.now()
+
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn('Raid message cache for webhookWorker contains invalid data - ignoring')
+			return
+		}
+
+		for (const key of Object.keys(data)) {
+			const msgData = data[key]
+			if (msgData.t > now) {
+				const newTtl = Math.floor((msgData.t - now) / 1000)
+				this.raidMessageCache.set(key, msgData.v, newTtl)
 			}
 		}
 	}
