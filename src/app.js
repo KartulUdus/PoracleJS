@@ -180,10 +180,14 @@ function handleShutdown() {
 	const workerSaves = []
 	for (const worker of discordWorkers) {
 		workerSaves.push(worker.saveTimeouts())
+		workerSaves.push(worker.saveRaidCache())
 	}
 	if (telegram) workerSaves.push(telegram.saveTimeouts())
 	if (telegramChannel) workerSaves.push(telegramChannel.saveTimeouts())
-	if (discordWebhookWorker) workerSaves.push(discordWebhookWorker.saveTimeouts())
+	if (discordWebhookWorker) {
+		workerSaves.push(discordWebhookWorker.saveTimeouts())
+		workerSaves.push(discordWebhookWorker.saveRaidCache())
+	}
 
 	gymCache.save(true)
 	Promise.all(workerSaves)

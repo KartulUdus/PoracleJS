@@ -472,6 +472,8 @@ class Raid extends Controller {
 							const templateType = 'raid'
 							const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
+							const raidMessageKey = `${data.gym_id}:${data.end}:${data.pokemon_id}:${cares.type}:${cares.id}`
+
 							const work = {
 								lat: data.latitude.toString()
 									.substring(0, 8),
@@ -486,6 +488,10 @@ class Raid extends Controller {
 								emoji: data.emoji,
 								logReference,
 								language,
+								raidMessageKey,
+								gymId: data.gym_id,
+								raidEndTime: data.end,
+								pokemonId: data.pokemon_id,
 							}
 							jobs.push(work)
 						}
@@ -599,6 +605,8 @@ class Raid extends Controller {
 						const templateType = 'egg'
 						const message = await this.createMessage(logReference, templateType, platform, cares.template, language, cares.ping, view)
 
+						const raidMessageKey = `${data.gym_id}:${data.end}:${data.pokemon_id}:${cares.type}:${cares.id}`
+
 						const work = {
 							lat: data.latitude.toString().substring(0, 8),
 							lon: data.longitude.toString().substring(0, 8),
@@ -611,6 +619,10 @@ class Raid extends Controller {
 							emoji: data.emoji,
 							logReference,
 							language,
+							raidMessageKey,
+							gymId: data.gym_id,
+							raidEndTime: data.end,
+							pokemonId: data.pokemon_id,
 						}
 						jobs.push(work)
 					}
