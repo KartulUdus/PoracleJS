@@ -513,6 +513,8 @@
   // webhook queue is kept under control; if this clears nicely in between drops from your scanner you are keeping up.  For outbound, a lower number of
   // concurrent senders will reduce chance of hitting the global rate limit (probably) which is why we haven't defaulted too high here
   //
+  // fastMonsters - Eliminate SQL lookups for monster matching by activating in memory pokemon matching
+  // disablePokemonCache - The impact of this will be that poracle uses a lot less memory
   // maxDatabaseConnections - This is the max number of database connections Poracle can have (per worker)
   // webhookProcessingWorkers - Number of threads to run inbound webhook workers.  Five is enough for very big systems, going too high is probably
   //     counter productive so talk to me before playing with this one
@@ -525,7 +527,8 @@
   // concurrentDiscordWebhookConnections - How many concurrent discord webhook destinations to send to at once
   //
   "tuning": {
-    "fastMonsters": false,
+    "fastMonsters": true,
+    "disablePokemonCache": true,
     "maxDatabaseConnections": 15,
     "webhookProcessingWorkers": 5,
     "concurrentWebhookProcessorsPerWorker": 4,
