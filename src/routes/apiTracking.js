@@ -31,6 +31,7 @@ module.exports = async (fastify, options) => {
 		const nest = await fastify.query.selectAllQuery('nests', { id, profile_no: currentProfileNo })
 		const gym = await fastify.query.selectAllQuery('gym', { id, profile_no: currentProfileNo })
 		const profile = await fastify.query.selectOneQuery('profiles', { id, profile_no: currentProfileNo })
+		const maxbattle = await fastify.query.selectAllQuery('maxbattle', { id, profile_no: currentProfileNo })
 
 		return {
 			status: 'ok',
@@ -44,6 +45,7 @@ module.exports = async (fastify, options) => {
 			nest,
 			quest,
 			profile,
+			maxbattle,
 		}
 	})
 
@@ -77,6 +79,7 @@ module.exports = async (fastify, options) => {
 		const nest = await fastify.query.selectAllQuery('nests', { id })
 		const gym = await fastify.query.selectAllQuery('gym', { id })
 		const profile = await fastify.query.selectAllQuery('profiles', { id })
+		const maxbattle = await fastify.query.selectAllQuery('maxbattle', { id })
 
 		const language = human.language || fastify.config.general.locale
 		const translator = fastify.translatorFactory.Translator(language)
@@ -97,6 +100,7 @@ module.exports = async (fastify, options) => {
 			nest,
 			quest,
 			profile,
+			maxbattle,
 		}
 	})
 }

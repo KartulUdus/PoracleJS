@@ -31,6 +31,7 @@ const FortUpdateController = require('./controllers/fortupdate')
 const GymController = require('./controllers/gym')
 const PokestopLureController = require('./controllers/pokestop_lure')
 const NestController = require('./controllers/nest')
+const MaxbattleController = require('./controllers/maxbattle')
 const ControllerWeatherManager = require('./controllers/weatherData')
 const StatsData = require('./controllers/statsData')
 const CachingGeocoder = require('./lib/cachingGeocoder')
@@ -62,6 +63,7 @@ const nestController = new NestController(logs.controller, knex, cachingGeocoder
 const pokestopLureController = new PokestopLureController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const fortUpdateController = new FortUpdateController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 const gymController = new GymController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
+const maxbattleController = new MaxbattleController(logs.controller, knex, cachingGeocoder, scannerQuery, config, dts, geofence, GameData, rateLimitedUserCache, translatorFactory, mustache, controllerWeatherManager, statsData, eventParsers)
 
 const monsterAlarmMatch = new MonsterAlarmMatch(logs.controller, knex, config)
 
@@ -143,6 +145,15 @@ async function processOne(hook) {
 				}
 				break
 			}
+			case 'max_battle': {
+				const result = await maxbattleController.handle(hook.message)
+				if (result) {
+					queueAddition = result
+				} else {
+					log.error(`Worker ${workerId}: Missing result from ${hook.type} processor`, { data: hook.message })
+				}
+				break
+			}
 			case 'nest': {
 				const result = await nestController.handle(hook.message)
 				if (result) {
@@ -199,6 +210,7 @@ function reloadDts() {
 		pokestopLureController.setDts(newDts)
 		gymController.setDts(newDts)
 		fortUpdateController.setDts(newDts)
+		maxbattleController.setDts(newDts)
 		log.info('DTS reloaded')
 	} catch (err) {
 		log.error('Error reloading dts', err)
@@ -216,6 +228,7 @@ function reloadGeofence() {
 		pokestopLureController.setGeofence(newGeofence)
 		gymController.setGeofence(newGeofence)
 		fortUpdateController.setGeofence(newGeofence)
+		maxbattleController.setGeofence(newGeofence)
 		log.info('Geofence reloaded')
 	} catch (err) {
 		log.error('Error reloading geofence', err)
@@ -326,6 +339,7 @@ if (!isMainThread) {
 	pokestopController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
 	pokestopLureController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
 	gymController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
+	maxbattleController.on('postMessage', (jobs) => queuePort.postMessage({ queue: jobs }))
 
 	monsterAlarmMatch.loadData().catch(() => {})
 	setInterval(currentStatus, 60000)

@@ -208,5 +208,23 @@
     "test": "remove",
     "location": "current",
     "webhook": {"change_type": "removal", "old": {"id": "f7430347f5c34facb838be376f16adea.16", "type": "pokestop", "name": "Journey Through Trees And Time", "description": null, "image_url": "http://lh3.googleusercontent.com/VSBh5Q5W6z5LHBLDFQqBNtCTBxqe0HAy4H9W_Um2_AVUg8Rh40u1tYteSc2TVLtPAd4v7c83umdTh6RUVNpOkACjt9saHNj6a_2XYRsGYg", "location": {"lat": 50.975598, "lon": 6.942527}}}
+  },
+  {
+    "type": "max_battle",
+    "test": "level3",
+    "location": "current",
+    "webhook": {"battle_end": 1745982000, "battle_level": 3, "battle_pokemon_alignment": 0, "battle_pokemon_bread_mode": 1, "battle_pokemon_costume": 0, "battle_pokemon_form": 0, "battle_pokemon_gender": 3, "battle_pokemon_id": 615, "battle_pokemon_move_1": 217, "battle_pokemon_move_2": 116, "battle_start": 1745780400, "end_time": 1745982000, "is_battle_available": true, "latitude": 50.942951, "longitude": 6.871009, "name": "Stahlwand", "start_time": 1745722800, "id": "f0797fd357ff4122ab935b5b154fedf0.16", "total_stationed_gmax": 0, "total_stationed_pokemon": 0, "updated": 1745850039}
+  },
+  {
+    "type": "max_battle",
+    "test": "level1",
+    "location": "current",
+    "webhook": {"battle_end": 1745895600, "battle_level": 1, "battle_pokemon_alignment": 0, "battle_pokemon_bread_mode": 1, "battle_pokemon_costume": 0, "battle_pokemon_form": 0, "battle_pokemon_gender": 2, "battle_pokemon_id": 831, "battle_pokemon_move_1": 221, "battle_pokemon_move_2": 333, "battle_start": 1745778600, "end_time": 1745895600, "is_battle_available": true, "latitude": 50.998899, "longitude": 6.939451, "name": "Parkour Movement", "start_time": 1745636400, "id": "bb161a9eff2a47c291df2906a02f11de.23", "total_stationed_gmax": 0, "total_stationed_pokemon": 0, "updated": 1745850055}
+  },
+  {
+    "type": "max_battle",
+    "test":"gmax",
+    "location":"keep",
+    "webhook":{"battle_end": 1745859600, "battle_level": 7, "battle_pokemon_alignment": 0, "battle_pokemon_bread_mode": 2, "battle_pokemon_costume": 0, "battle_pokemon_form": 815, "battle_pokemon_gender": 1, "battle_pokemon_id": 68, "battle_pokemon_move_1": 243, "battle_pokemon_move_2": 64, "battle_start": 1745856000, "end_time": 1746068400, "is_battle_available": true, "latitude": 50.964694, "longitude": 6.953887, "name": "Taqsim Patisserie", "start_time": 1745809200, "station_id": "4f949bb0bc9244e6b46e9e665c050970.23", "total_stationed_gmax": 3, "total_stationed_pokemon": 8, "updated": 1745857449}
   }
 ]

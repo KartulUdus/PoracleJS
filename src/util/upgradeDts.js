@@ -101,6 +101,9 @@ for (const entry of dts) {
 		case 'invasion':
 			replacementType = null
 			break
+		case 'maxbattle':
+			replacementType = null
+			break
 		case 'quest':
 			replacementType = quest
 			break
