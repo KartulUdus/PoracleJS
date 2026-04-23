@@ -134,6 +134,7 @@ exports.run = async (client, msg, args, options) => {
 			genderless: '^genderless$',
 			clean: '^clean$',
 			ping: '^<@.*',			// will not be used but stops it being listed as invalid parameter
+			verified_only: '^verified$',
 		}
 
 		if (!disableEverythingTracking || msg.isFromAdmin) parameterDefinition.everything = '^everything$'
@@ -421,6 +422,7 @@ exports.run = async (client, msg, args, options) => {
 			size: +size,
 			max_size: +maxSize,
 			min_time: +(parameterValues.t ?? 0),
+			verified_only: +(parameterValues.verified_only ?? 0),
 		}))
 		if (!insert.length) {
 			return await msg.reply(translator.translate('404 No monsters found'))
@@ -443,7 +445,7 @@ exports.run = async (client, msg, args, options) => {
 						insert.splice(i, 1)
 						break
 					case 2:		// One difference (something + uid)
-						if (Object.keys(differences).some((x) => ['min_iv', 'distance', 'template', 'clean'].includes(x))) {
+						if (Object.keys(differences).some((x) => ['min_iv', 'distance', 'template', 'clean', 'verified_only'].includes(x))) {
 							updates.push({
 								...toInsert,
 								uid: existing.uid,

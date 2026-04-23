@@ -160,6 +160,7 @@ class MonsterAlarmMatch {
 				if (+data.iv < monster.min_iv) continue
 				if (+data.iv > monster.max_iv) continue
 				if (+data.tthSeconds < monster.min_time) continue
+				if (monster.verified_only && monster.verified_only !== +data.confirmedTime) continue
 				if (+data.cp < monster.min_cp) continue
 				if (+data.cp > monster.max_cp) continue
 				if (monster.gender && monster.gender !== +data.gender) continue

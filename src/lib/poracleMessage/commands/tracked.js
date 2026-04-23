@@ -12,6 +12,10 @@ function standardText(config, translator, row) {
 		text = text.concat(` ${translator.translate('clean')}`)
 	}
 
+	if (row.verified_only) {
+		text = text.concat(` ${translator.translate('verified')}`)
+	}
+
 	return text
 }
 

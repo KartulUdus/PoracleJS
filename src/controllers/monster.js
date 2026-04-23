@@ -116,6 +116,7 @@ class Monster extends Controller {
 		min_iv<=${data.iv} and
 		max_iv>=${data.iv} and
 		min_time<=${data.tthSeconds} and
+		(verified_only = ${data.confirmedTime} or verified_only = 0) and
 		min_cp<=${data.cp} and
 		max_cp>=${data.cp} and
 		(gender = ${data.gender} or gender = 0) and
@@ -416,6 +417,7 @@ class Monster extends Controller {
 				whoCares = data.poracleTest ? [{
 					...data.poracleTest,
 					clean: false,
+					verified_only: false,
 					ping: '',
 					pvp_ranking_worst: 100,
 				}] : await this.monsterWhoCaresInMemory(data)
@@ -423,6 +425,7 @@ class Monster extends Controller {
 				whoCares = data.poracleTest ? [{
 					...data.poracleTest,
 					clean: false,
+					verified_only: false,
 					ping: '',
 					pvp_ranking_worst: 100,
 				}] : await this.monsterWhoCares(data)
@@ -431,6 +434,7 @@ class Monster extends Controller {
 					const whoCares2 = data.poracleTest ? [{
 						...data.poracleTest,
 						clean: false,
+						verified_only: false,
 						ping: '',
 						pvp_ranking_worst: 100,
 					}] : await this.monsterWhoCaresInMemory(data)
@@ -627,6 +631,7 @@ class Monster extends Controller {
 									name: cares.name,
 									type: cares.type,
 									clean: cares.clean,
+									verified_only: cares.verified_only,
 									ping: cares.ping,
 									template: cares.template,
 									language: cares.language,
@@ -898,6 +903,7 @@ class Monster extends Controller {
 							name: cares.name,
 							tth: data.tth,
 							clean: cares.clean,
+							verified_only: cares.verified_only,
 							emoji: data.emoji,
 							logReference,
 							language,
