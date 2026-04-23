@@ -8,6 +8,7 @@ docker-compose.yml
 .idea/*
 .vscode
 *.heapsnapshot
+/src/util/translations.json
 
 nominatimData/*
 !nominatimData/.gitkeep
