@@ -22,6 +22,7 @@ class Worker {
 		this.client = {}
 		this.rehydrateTimeouts = rehydrateTimeouts
 		this.discordMessageTimeouts = new NodeCache()
+		this.raidMessageCache = new NodeCache()
 		this.discordQueue = []
 		this.queueProcessor = new FairPromiseQueue(this.discordQueue, this.config.tuning.concurrentDiscordDestinationsPerBot, ((entry) => entry.target))
 		this.status = statusActivity.status
@@ -141,6 +142,41 @@ class Worker {
 		try {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
+			// Check if this is an RSVP update for an existing raid message
+			if (data.raidMessageKey && this.config.discord.dynamicRsvpEditing) {
+				const existingMsg = this.raidMessageCache.get(data.raidMessageKey)
+				if (existingMsg && existingMsg.messageId) {
+					this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Editing raid message (RSVP update)`)
+					try {
+						const channel = user || await this.client.users.fetch(data.target)
+						const dmChannel = await channel.createDM()
+						const message = await dmChannel.messages.fetch(existingMsg.messageId)
+
+						if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
+							const { url } = data.message.embed.image
+							data.message.embed.image.url = 'attachment://map.png'
+							data.message.files = [{ attachment: url, name: 'map.png' }]
+						}
+
+						const startTime = performance.now()
+						if (data.message.embed) {
+							data.message.embeds = [data.message.embed]
+							delete data.message.embed
+						}
+
+						await message.edit(data.message)
+						const endTime = performance.now();
+						this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Edit successful (${(endTime - startTime).toFixed(1)} ms)`)
+
+						return true
+					} catch (editErr) {
+						this.logs.discord.warn(`${logReference}: #${this.id} Failed to edit message ${existingMsg.messageId}, will send new message`, editErr)
+						// Fall through to send new message
+						this.raidMessageCache.del(data.raidMessageKey)
+					}
+				}
+			}
+
 			this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER Sending discord message${data.clean ? ' (clean)' : ''}`)
 
 			if (!user) {
@@ -166,6 +202,19 @@ class Worker {
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} USER (${endTime - startTime} ms)`)
 
+			// Store message ID for future RSVP edits
+			if (data.raidMessageKey && this.config.discord.dynamicRsvpEditing) {
+				const ttl = Math.max((data.raidEndTime * 1000 - Date.now()) / 1000 + 600, 60) // raid end + 10 min
+				this.raidMessageCache.set(data.raidMessageKey, {
+					messageId: msg.id,
+					targetType: 'user',
+					targetId: data.target,
+					gymId: data.gymId,
+					endTime: data.raidEndTime,
+					pokemonId: data.pokemonId,
+				}, ttl)
+			}
+
 			if (data.clean) {
 				setTimeout(async () => {
 					try {
@@ -189,6 +238,45 @@ class Worker {
 		try {
 			const logReference = data.logReference ? data.logReference : 'Unknown'
 
+			// Check if this is an RSVP update for an existing raid message
+			if (data.raidMessageKey && this.config.discord.dynamicRsvpEditing) {
+				const existingMsg = this.raidMessageCache.get(data.raidMessageKey)
+				if (existingMsg && existingMsg.messageId) {
+					this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Editing raid message (RSVP update)`)
+					try {
+						const channel = await this.client.channels.fetch(data.target)
+						if (!channel) {
+							this.logs.discord.warn(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL not found`)
+							this.raidMessageCache.del(data.raidMessageKey)
+						} else {
+							const message = await channel.messages.fetch(existingMsg.messageId)
+
+							if (this.config.discord.uploadEmbedImages && data.message.embed && data.message.embed.image && data.message.embed.image.url) {
+								const { url } = data.message.embed.image
+								data.message.embed.image.url = 'attachment://map.png'
+								data.message.files = [{ attachment: url, name: 'map.png' }]
+							}
+
+							const startTime = performance.now()
+							if (data.message.embed) {
+								data.message.embeds = [data.message.embed]
+								delete data.message.embed
+							}
+
+							await message.edit(data.message)
+							const endTime = performance.now();
+							this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Edit successful (${(endTime - startTime).toFixed(1)} ms)`)
+
+							return true
+						}
+					} catch (editErr) {
+						this.logs.discord.warn(`${logReference}: #${this.id} Failed to edit channel message ${existingMsg.messageId}, will send new message`, editErr)
+						// Fall through to send new message
+						this.raidMessageCache.del(data.raidMessageKey)
+					}
+				}
+			}
+
 			this.logs.discord.info(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL Sending discord message${data.clean ? ' (clean)' : ''}`)
 			const channel = await this.client.channels.fetch(data.target)
 			const msgDeletionMs = ((data.tth.days * 86400) + (data.tth.hours * 3600) + (data.tth.minutes * 60) + data.tth.seconds) * 1000 + this.config.discord.messageDeleteDelay
@@ -209,6 +297,19 @@ class Worker {
 			const msg = await channel.send(data.message)
 			const endTime = performance.now();
 			(this.config.logger.timingStats ? this.logs.discord.verbose : this.logs.discord.debug)(`${logReference}: #${this.id} -> ${data.name} ${data.target} CHANNEL (${endTime - startTime} ms)`)
+
+			// Store message ID for future RSVP edits
+			if (data.raidMessageKey && this.config.discord.dynamicRsvpEditing) {
+				const ttl = Math.max((data.raidEndTime * 1000 - Date.now()) / 1000 + 600, 60) // raid end + 10 min
+				this.raidMessageCache.set(data.raidMessageKey, {
+					messageId: msg.id,
+					targetType: 'channel',
+					targetId: data.target,
+					gymId: data.gymId,
+					endTime: data.raidEndTime,
+					pokemonId: data.pokemonId,
+				}, ttl)
+			}
 
 			if (data.clean) {
 				setTimeout(async () => {
@@ -280,7 +381,14 @@ class Worker {
 
 		// eslint-disable-next-line no-underscore-dangle
 		this.discordMessageTimeouts._checkData(false)
-		return fsp.writeFile(`.cache/cleancache-discord-${this.client.user.tag}.json`, JSON.stringify(this.discordMessageTimeouts.data), 'utf8')
+		const cleanPromise = fsp.writeFile(`.cache/cleancache-discord-${this.client.user.tag}.json`, JSON.stringify(this.discordMessageTimeouts.data), 'utf8')
+
+		// Also save raid cache
+		// eslint-disable-next-line no-underscore-dangle
+		this.raidMessageCache._checkData(false)
+		const raidPromise = fsp.writeFile(`.cache/raidmessage-discord-${this.client.user.tag}.json`, JSON.stringify(this.raidMessageCache.data), 'utf8')
+
+		return Promise.all([cleanPromise, raidPromise])
 	}
 
 	async loadTimeouts() {
@@ -327,6 +435,37 @@ class Worker {
 				}
 			} catch (err) {
 				this.logs.log.info(`Error processing historic deletes ${err}`)
+			}
+		}
+
+		// Also load raid cache
+		await this.loadRaidCache()
+	}
+
+	async loadRaidCache() {
+		let loaddatatxt
+
+		try {
+			loaddatatxt = await fsp.readFile(`.cache/raidmessage-discord-${this.client.user.tag}.json`, 'utf8')
+		} catch {
+			return
+		}
+
+		const now = Date.now()
+
+		let data
+		try {
+			data = JSON.parse(loaddatatxt)
+		} catch {
+			this.logs.log.warn(`Raid message cache for discord tag ${this.client.user.tag} contains invalid data - ignoring`)
+			return
+		}
+
+		for (const key of Object.keys(data)) {
+			const msgData = data[key]
+			if (msgData.t > now) {
+				const newTtl = Math.floor((msgData.t - now) / 1000)
+				this.raidMessageCache.set(key, msgData.v, newTtl)
 			}
 		}
 	}
