@@ -3,6 +3,7 @@ const moment = require('moment-timezone')
 require('moment-precise-range-plugin')
 
 const Controller = require('./controller')
+const CampfireLink = require('./common/campfireLink')
 
 class Raid extends Controller {
 	async raidWhoCares(data) {
@@ -165,6 +166,7 @@ class Raid extends Controller {
 			data.gymColor = this.GameData.utilData.teams[data.team_id].color
 			data.ex = !!(data.ex_raid_eligible ?? data.is_ex_raid_eligible)
 			data.gymUrl = data.gym_url || data.url || ''
+			data.campfireUrl = CampfireLink.generate(data)
 			const timezone = geoTz.find(data.latitude, data.longitude)[0].toString()
 			const disappearTime = moment(data.end * 1000).tz(timezone)
 			data.disappearTime = disappearTime.format(this.config.locale.time)
