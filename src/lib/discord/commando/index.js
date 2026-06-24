@@ -1,10 +1,10 @@
+const { EventEmitter } = require('events')
+const fs = require('fs')
 const {
 	Client,
 	Intents,
 	Options,
 } = require('discord.js')
-const { EventEmitter } = require('events')
-const fs = require('fs')
 const { S2 } = require('s2-geometry')
 const mustache = require('handlebars')
 const hastebin = require('hastebin-gen')

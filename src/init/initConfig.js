@@ -1,7 +1,7 @@
-const config = require('config')
 const path = require('path')
-const reader = require('readline-sync')
 const fs = require('fs')
+const config = require('config')
+const reader = require('readline-sync')
 const { log } = require('../lib/logger')
 
 const discordRe = /[ODMN][A-Za-z\d]{23}\.[\w-]{6}\.[\w-]{27}/g

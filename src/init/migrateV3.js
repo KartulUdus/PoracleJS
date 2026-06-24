@@ -1,6 +1,6 @@
+const path = require('path')
 const Knex = require('knex')
 const config = require('config')
-const path = require('path')
 const reader = require('readline-sync')
 const { log } = require('../lib/logger')
 const Daptcha = require('./daptcha')

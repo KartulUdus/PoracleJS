@@ -1,6 +1,6 @@
-const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
+const stripJsonComments = require('strip-json-comments')
 
 exports.run = async (client, msg, args, options) => {
 	try {

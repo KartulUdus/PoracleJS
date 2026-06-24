@@ -1,8 +1,8 @@
+const path = require('path')
 const moment = require('moment-timezone')
 const axios = require('axios')
 const { S2 } = require('s2-geometry')
 const S2ts = require('nodes2ts')
-const path = require('path')
 const pcache = require('flat-cache')
 const { Mutex } = require('async-mutex')
 require('moment-precise-range-plugin')
@@ -176,10 +176,14 @@ class Weather extends Controller {
 				if (apiKeyWeatherLocation) {
 					try {
 						// Fetch location information
-						const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?apikey=${apiKeyWeatherLocation}&q=${latlng.lat}%2C${latlng.lng}`
+						const url = `https://dataservice.accuweather.com/locations/v1/cities/geoposition/search?q=${latlng.lat}%2C${latlng.lng}`
 						this.log.debug(`${id}: Fetching AccuWeather location ${url}`)
 
-						const weatherLocation = await axios.get(url)
+						const weatherLocation = await axios.get(url, {
+							headers: {
+								Authorization: `Bearer ${apiKeyWeatherLocation}`,
+							},
+						})
 						data.location = weatherLocation.data.Key
 					} catch (err) {
 						this.log.error(`${id}: Fetching AccuWeather location errored with: ${err}`)
@@ -209,11 +213,15 @@ class Weather extends Controller {
 				if (apiKeyWeatherInfo) {
 					try {
 						// Fetch new weather information
-						const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?apikey=${apiKeyWeatherInfo}&details=true&metric=true`
+						const url = `https://dataservice.accuweather.com/forecasts/v1/hourly/12hour/${data.location}?details=true&metric=true`
 						this.log.debug(`${id}: Fetching AccuWeather Forecast ${url}`)
 
 						let logString = ''
-						const weatherInfo = await axios.get(url)
+						const weatherInfo = await axios.get(url, {
+							headers: {
+								Authorization: `Bearer ${apiKeyWeatherInfo}`,
+							},
+						})
 						for (const forecast in Object.entries(weatherInfo.data)) {
 							if (weatherInfo.data[forecast].EpochDateTime > currentHourTimestamp) {
 								const pogoWeather = this.mapPoGoWeather(weatherInfo.data[forecast])

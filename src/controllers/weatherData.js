@@ -1,7 +1,7 @@
-const { S2 } = require('s2-geometry')
 const EventEmitter = require('events')
 
 const path = require('path')
+const { S2 } = require('s2-geometry')
 const pcache = require('flat-cache')
 
 const weatherCache = pcache.load('weatherCache', path.join(__dirname, '../../.cache'))

@@ -1,6 +1,6 @@
-const stripJsonComments = require('strip-json-comments')
 const fs = require('fs')
 const path = require('path')
+const stripJsonComments = require('strip-json-comments')
 
 function registerPartials(handlebars) {
 	const filename = path.join(__dirname, '../../config/partials.json')

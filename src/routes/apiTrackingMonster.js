@@ -25,7 +25,7 @@ module.exports = async (fastify, options) => {
 			}
 		}
 
-		const monsters = await fastify.query.selectAllQuery('monsters', { id: req.params.id, profile_no: human.current_profile_no })
+		const monsters = await fastify.query.selectAllQuery('monsters', { id: req.params.id, profile_no: req.query.profile_no || human.current_profile_no })
 
 		return {
 			status: 'ok',
@@ -101,7 +101,7 @@ module.exports = async (fastify, options) => {
 		const language = human.language || fastify.config.general.locale
 		const translator = fastify.translatorFactory.Translator(language)
 		const { id } = req.params
-		const currentProfileNo = human.current_profile_no
+		const currentProfileNo = req.query.profile_no || human.current_profile_no
 
 		let insertReq = req.body
 		if (!Array.isArray(insertReq)) insertReq = [insertReq]
@@ -223,26 +223,27 @@ module.exports = async (fastify, options) => {
 				await fastify.query.updateQuery('monsters', row, { uid: row.uid })
 			}
 
-			// Send message to user
+			// Send message to user (unless silent parameter is set)
+			if (!req.query.silent) {
+				const data = [{
+					lat: 0,
+					lon: 0,
+					message: { content: message },
+					target: human.id,
+					type: human.type,
+					name: human.name,
+					tth: { hours: 1, minutes: 0, seconds: 0 },
+					clean: false,
+					emoji: '',
+					logReference: 'WebApi',
+					language,
+				}]
 
-			const data = [{
-				lat: 0,
-				lon: 0,
-				message: { content: message },
-				target: human.id,
-				type: human.type,
-				name: human.name,
-				tth: { hours: 1, minutes: 0, seconds: 0 },
-				clean: false,
-				emoji: '',
-				logReference: 'WebApi',
-				language,
-			}]
-
-			data.forEach((job) => {
-				if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
-				if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
-			})
+				data.forEach((job) => {
+					if (['discord:user', 'discord:channel', 'webhook'].includes(job.type)) fastify.discordQueue.push(job)
+					if (['telegram:user', 'telegram:channel'].includes(job.type)) fastify.telegramQueue.push(job)
+				})
+			}
 
 			if (fastify.triggerReloadAlerts) fastify.triggerReloadAlerts()
 

@@ -19,7 +19,7 @@ module.exports = async (fastify, options) => {
 				message: 'User not found',
 			}
 		}
-		const currentProfileNo = human.current_profile_no
+		const currentProfileNo = req.query.profile_no || human.current_profile_no
 		const { id } = req.params
 
 		const pokemon = await fastify.query.selectAllQuery('monsters', { id, profile_no: currentProfileNo })

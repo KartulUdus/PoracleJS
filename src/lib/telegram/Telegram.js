@@ -1,9 +1,9 @@
 const { EventEmitter } = require('events')
 const fs = require('fs')
 const fsp = require('fs').promises
+const { performance } = require('perf_hooks')
 const NodeCache = require('node-cache')
 const mustache = require('handlebars')
-const { performance } = require('perf_hooks')
 const emojiStrip = require('../../util/emojiStrip')
 const FairPromiseQueue = require('../FairPromiseQueue')
 

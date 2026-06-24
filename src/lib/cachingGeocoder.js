@@ -1,9 +1,9 @@
 /* eslint-disable max-classes-per-file */
+const { performance } = require('perf_hooks')
+const path = require('path')
 const NodeGeocoder = require('node-geocoder')
 const pcache = require('flat-cache')
-const { performance } = require('perf_hooks')
 const emojiFlags = require('country-code-emoji')
-const path = require('path')
 const NominatimGeocoder = require('./nominatimGeocoder')
 
 class NominatimGeocoderConverter extends NominatimGeocoder {
