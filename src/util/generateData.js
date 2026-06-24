@@ -34,18 +34,17 @@ const update = async function update() {
 	}
 
 	// Write grunts
-	if (process.argv[2] === 'latest') {
-		try {
-			log.info('Fetching latest invasions...')
-			fs.writeFileSync(
-				'./src/util/grunts.json',
-				await fetch('https://raw.githubusercontent.com/WatWowMap/event-info/main/grunts/formatted.json'),
-				'utf8',
-			)
-			log.info('Latest grunts saved...')
-		} catch (e) {
+	try {
+		log.info('Fetching latest invasions...')
+		const gruntFile = await fetch('https://raw.githubusercontent.com/WatWowMap/event-info/main/grunts/formatted.json')
+		fs.writeFileSync(
+			'./src/util/grunts.json',
+			JSON.stringify(gruntFile, null, 2),
+			'utf8',
+		)
+		log.info('Latest grunts saved...')
+	} catch (e) {
 			log.warn('Could not generate new invasions, using existing...')
-		}
 	}
 
 	// Write locales
